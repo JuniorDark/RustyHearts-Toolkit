@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="RHGMTool.Views.GearFrameUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:RHGMTool.Views"
+             xmlns:vm="clr-namespace:RHGMTool.ViewModels"
+             mc:Ignorable="d"
+             Template="{StaticResource lb_def_box01}"
+             d:DesignHeight="600" d:DesignWidth="300">
+
+    <Grid x:Name="gearGrid" Margin="-22,-22,-22,-22" VerticalAlignment="Top" Width="300" MaxHeight="600">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" MinHeight="40"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" MinHeight="40"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" MinHeight="40"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <!-- ItemName -->
+        <TextBlock x:Name="tbItemName" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="1,3,0,0">
+            <TextBlock Text="{Binding EnchantLevel, StringFormat=' +{0}'}" d:Text="+10" Foreground="#06EBE8" Grid.Row="0">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding EnchantLevel}" Value="0">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+        </TextBlock>
+            <Run Text="{Binding ItemName}" Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}" d:Text="Item Name" d:Foreground="White"/>
+        </TextBlock>
+        <!-- Category and SubCategory -->
+        <TextBlock x:Name="lbCategory" Text="{Binding Category}" d:Text="Category" Foreground="White" Margin="10,0,118,0" Grid.Row="1" VerticalAlignment="Center"/>
+        <TextBlock x:Name="lbSubCategory" Text="{Binding SubCategory}" Foreground="White" d:Text="Sub Category" d:Foreground="White" Style="{StaticResource ArialMS}" Grid.Row="1" Margin="-225,0,10,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <!-- ReqLevel and JobClass -->
+        <TextBlock x:Name="lbReqLevel" Text="{Binding RequiredLevel}" d:Text="Required Level: 1" Foreground="#FFA9A9A9" Margin="10,0,118,0" Grid.Row="2" VerticalAlignment="Top"/>
+        <TextBlock x:Name="lbJobClass" Text="{Binding JobClass}" d:Text="Natasha" Margin="-250,0,10,0" Style="{StaticResource ArialMS}" Foreground="#FFA9A9A9" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <!-- Attribute and Rank -->
+        <TextBlock x:Name="lbAttribute" Text="{Binding ReconstructionMax}" d:Text="Attribute Item (2 Times/2 Times)" Foreground="White" Margin="10,1,0,0" Grid.Row="3" VerticalAlignment="Top"/>
+        <TextBlock x:Name="lbRank" Text="{Binding Rank}" d:Text="Rank : 5th Rank" Margin="-210,0,10,0" Foreground="White" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <!-- ItemTrade and Weight -->
+        <TextBlock x:Name="lbItemTrade" Text="{Binding ItemTrade}" d:Text="Trade Unavailable" Foreground="#FF8B0000" Margin="10,1,0,0" Grid.Row="4" />
+        <TextBlock x:Name="lbWeight" Text="{Binding Weight}" d:Text="0,001Kg" Foreground="White" Margin="-250,0,10,0" Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Right" />
+        <!-- Durability and Value -->
+        <TextBlock x:Name="lbDurability" Text="{Binding Durability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" d:Text="Durability: 1000/1000" Foreground="White" Margin="10,1,0,0" Grid.Row="5" />
+        <TextBlock x:Name="lbValue" Text="{Binding SellValue}" d:Text="1000000 Gold" Foreground="White" Margin="-215,0,10,0" Grid.Row="5" VerticalAlignment="Center" HorizontalAlignment="Right" />
+        <!-- MainStat1 and MainStat2 -->
+        <TextBlock x:Name="lbMainStat1" Text="{Binding MainStat1}" d:Text="Physical Damage +0~0" Foreground="White" Margin="10,5,0,0" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <TextBlock x:Name="lbMainStat2" Text="{Binding MainStat2}" d:Text="Magic Damage +0~0" Foreground="White" Margin="10,26,0,0" Grid.Row="6" HorizontalAlignment="Left" VerticalAlignment="Top" />
+        <!-- SetName -->
+        <TextBlock x:Name="lbSetName" Text="{Binding SetName}" d:Text="Set Name" Foreground="White" Margin="10,0,0,0" Grid.Row="7" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+        <!-- FixedBuff and its children -->
+        <TextBlock x:Name="lbFixedBuff" Text="{Binding FixedBuff}" d:Text="[Fixed Buff]" Foreground="White" Margin="10,0,0,0" Grid.Row="8" VerticalAlignment="Top" Visibility="{Binding IsFixedBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="TextBlock_IsVisibleChanged"/>
+        <TextBlock x:Name="lbFixedBuff01" Text="{Binding FixedBuff01}" Foreground="{Binding FixedBuff01Color, Converter={StaticResource StringToBrushConverter}}" d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage." d:Foreground="White" Margin="10,0,0,0" Grid.Row="9" TextWrapping="Wrap" Visibility="{Binding IsFixedBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="TextBlock_IsVisibleChanged" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto"/>
+        <TextBlock x:Name="lbFixedBuff02" Text="{Binding FixedBuff02}" Foreground="{Binding FixedBuff02Color, Converter={StaticResource StringToBrushConverter}}" d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage." d:Foreground="White" Margin="10,0,0,0" Grid.Row="10" TextWrapping="Wrap" HorizontalAlignment="Left" Visibility="{Binding IsFixedBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="TextBlock_IsVisibleChanged" VerticalAlignment="Top" Height="Auto"/>
+        <!-- RandomBuff and its children -->
+        <TextBlock x:Name="lbRandomBuff" Text="{Binding RandomBuff}" d:Text="[Random Buff]" Foreground="White" Margin="10,0,0,0" Grid.Row="11" VerticalAlignment="Top" Visibility="{Binding IsRandomBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="TextBlock_IsVisibleChanged"/>
+        <TextBlock x:Name="lbRandomBuff01" Text="{Binding RandomBuff01}" Foreground="{Binding RandomBuff01Color, Converter={StaticResource StringToBrushConverter}}" d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage." d:Foreground="White" Margin="10,0,0,0" Grid.Row="12" TextWrapping="Wrap" HorizontalAlignment="Left" Visibility="{Binding IsRandomBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="TextBlock_IsVisibleChanged" VerticalAlignment="Top" Height="Auto"/>
+        <TextBlock x:Name="lbRandomBuff02" Text="{Binding RandomBuff02}" Foreground="{Binding RandomBuff02Color, Converter={StaticResource StringToBrushConverter}}" d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage." d:Foreground="White" Margin="10,0,0,0" Grid.Row="13" TextWrapping="Wrap" HorizontalAlignment="Left" Visibility="{Binding IsRandomBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="TextBlock_IsVisibleChanged" VerticalAlignment="Top" Height="Auto"/>
+        <TextBlock x:Name="lbRandomBuff03" Text="{Binding RandomBuff03}" Foreground="{Binding RandomBuff03Color, Converter={StaticResource StringToBrushConverter}}" d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage." d:Foreground="White" Margin="10,0,0,0" Grid.Row="14" TextWrapping="Wrap" HorizontalAlignment="Left" Visibility="{Binding IsRandomBuff03Visible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="TextBlock_IsVisibleChanged" VerticalAlignment="Top" Height="Auto"/>
+        <!-- SocketBuff and its children -->
+        <TextBlock x:Name="lbSocketBuff" Text="{Binding SocketBuff}" d:Text="[Socket]" Foreground="White" Margin="10,0,0,0" Grid.Row="15" Visibility="{Binding IsSocketBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="TextBlock_IsVisibleChanged" VerticalAlignment="Top"/>
+        <TextBlock x:Name="lbSocketBuff01" Text="{Binding SocketBuff01}" Foreground="{Binding SocketBuff01Color, Converter={StaticResource StringToBrushConverter}}" d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage." d:Foreground="White" Margin="10,0,0,0" Grid.Row="16" TextWrapping="Wrap" HorizontalAlignment="Left" Visibility="{Binding IsSocketBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="TextBlock_IsVisibleChanged" VerticalAlignment="Top" Height="Auto"/>
+        <TextBlock x:Name="lbSocketBuff02" Text="{Binding SocketBuff02}" Foreground="{Binding SocketBuff02Color, Converter={StaticResource StringToBrushConverter}}" d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage." d:Foreground="White" Margin="10,0,0,0" Grid.Row="17" TextWrapping="Wrap" HorizontalAlignment="Left" Visibility="{Binding IsSocketBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="TextBlock_IsVisibleChanged" VerticalAlignment="Top" Height="Auto"/>
+        <TextBlock x:Name="lbSocketBuff03" Text="{Binding SocketBuff03}" Foreground="{Binding SocketBuff03Color, Converter={StaticResource StringToBrushConverter}}" d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage." d:Foreground="White" Margin="10,0,0,0" Grid.Row="18" TextWrapping="Wrap" HorizontalAlignment="Left" Visibility="{Binding IsSocketBuff03Visible, Converter={StaticResource BoolToVisibilityConverter}}" IsVisibleChanged="TextBlock_IsVisibleChanged" VerticalAlignment="Top" Height="Auto"/>
+        <TextBlock x:Name="lbPetFood" Text="{Binding PetFood}" Foreground="{Binding PetFoodColor, Converter={StaticResource StringToBrushConverter}}" d:Text="This item cannot be used as Pet Food" d:Foreground="Red" Margin="10,0,0,0" Grid.Row="19" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
+    </Grid>
+</UserControl>

@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ControlTemplate x:Key="NumericUpDownTemplate" TargetType="{x:Type TextBox}">
+        <Grid Height="100">
+            <TextBox x:Name="part_TextBox" Template="{DynamicResource lb_textbox}" Text="{Binding Value,ElementName=part_Scrollbar,StringFormat={}{0:F0},Mode=TwoWay}" MaxLength="11" VerticalAlignment="Center" VerticalContentAlignment="Center" FontSize="12" Height="38" Foreground="Gold"/>
+            <ScrollBar x:Name="part_Scrollbar" Style="{DynamicResource CustomScrollBarStyle}" Orientation="Vertical" Minimum="0" Maximum="1000" BorderBrush="{x:Null}" SmallChange="1" Height="32" Margin="8,4,2,4" VerticalAlignment="Stretch" Grid.Column="1" HorizontalAlignment="Right">
+                
+            </ScrollBar>
+        </Grid>
+    </ControlTemplate>
+</ResourceDictionary>

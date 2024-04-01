@@ -1,0 +1,100 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- lb_def_box04 -->
+    <ControlTemplate x:Key="lb_def_box04" TargetType="ContentControl">
+        <Grid>
+            <!-- Corners -->
+            <Image Source="/Assets/images/window/lb_def_box04/lb_def_box04_01.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Image Source="/Assets/images/window/lb_def_box04/lb_def_box04_03.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top" />
+            <Image Source="/Assets/images/window/lb_def_box04/lb_def_box04_07.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+            <Image Source="/Assets/images/window/lb_def_box04/lb_def_box04_09.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+
+            <!-- Edges -->
+            <Image Source="/Assets/images/window/lb_def_box04/lb_def_box04_02.png" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="9,0,9,0" Height="9" Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_02.png" Stretch="None" TileMode="Tile" Viewport="0,0,1,0.25" ViewportUnits="Absolute"/>
+                </Image.OpacityMask>
+            </Image>
+
+            <Image Source="/Assets/images/window/lb_def_box04/lb_def_box04_08.png" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="9,0,9,0" Height="9" Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_08.png" Stretch="None" TileMode="Tile" Viewport="0,0,1,0.25" ViewportUnits="Absolute"/>
+                </Image.OpacityMask>
+            </Image>
+
+            <Image Source="/Assets/images/window/lb_def_box04/lb_def_box04_04.png" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,9,0,9" Width="9" Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_04.png" Stretch="None" TileMode="Tile" Viewport="0,0,0.25,1" ViewportUnits="Absolute"/>
+                </Image.OpacityMask>
+            </Image>
+
+            <Image Source="/Assets/images/window/lb_def_box04/lb_def_box04_06.png" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,9,0,9" Width="9" Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_06.png" Stretch="None" TileMode="Tile" Viewport="0,0,0.25,1" ViewportUnits="Absolute"/>
+                </Image.OpacityMask>
+            </Image>
+
+            <!-- Center -->
+            <Image Source="/Assets/images/window/lb_def_box04/lb_def_box04_05.png" Stretch="UniformToFill" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="9,9,9,9" />
+
+            <!-- Content -->
+            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="9,9,9,9" />
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="CustomDataGridTemplate" TargetType="DataGrid">
+        <Border 
+        BorderBrush="{TemplateBinding BorderBrush}"
+        BorderThickness="{TemplateBinding BorderThickness}"
+        Padding="{TemplateBinding Padding}">
+            <ContentControl Template="{StaticResource lb_def_box04}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <!-- Header Row -->
+                            <RowDefinition Height="*"/>
+                            <!-- Data Rows -->
+                        </Grid.RowDefinitions>
+
+                        <!-- Headers -->
+                        <DataGridColumnHeadersPresenter Grid.Row="0" 
+                                                     VerticalAlignment="Center"
+                                                     HorizontalAlignment="Center"/>
+
+                        <!-- DataGrid Rows -->
+                        <ItemsPresenter Grid.Row="1"/>
+                    </Grid>
+                </ScrollViewer>
+            </ContentControl>
+        </Border>
+    </ControlTemplate>
+
+
+    <!-- Style for DataGridCell -->
+    <Style TargetType="DataGridCell">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Gold"/>
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="Blue"/>
+                <Setter Property="Foreground" Value="Gold"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Style for DataGridColumnHeader -->
+    <Style TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="Blue"/>
+        <Setter Property="Foreground" Value="Gold"/>
+    </Style>
+
+    <!-- Style for DataGridRow -->
+    <Style TargetType="DataGridRow">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Gold"/>
+    </Style>
+    
+</ResourceDictionary>

@@ -1,0 +1,62 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- lb_def_button02 -->
+    <ControlTemplate x:Key="lb_def_button02_normal" TargetType="Button">
+        <Grid>
+            <!-- Corners -->
+            <Image Source="/Assets/images/button/lb_def_button02/lb_def_button02_01.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Image Source="/Assets/images/button/lb_def_button02/lb_def_button02_03.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top" />
+
+            <!-- Edges -->
+            <Image Source="/Assets/images/button/lb_def_button02/lb_def_button02_02.png" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="26,0,26,0" Height="26" Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush ImageSource="/Assets/images/button/lb_def_button02/lb_def_button02_02.png" Stretch="None" TileMode="Tile" Viewport="0,0,1,0.25" ViewportUnits="Absolute"/>
+                </Image.OpacityMask>
+            </Image>
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+    </ControlTemplate>
+    <ControlTemplate x:Key="lb_def_button02_hover" TargetType="Button">
+        <Grid>
+            <!-- Corners -->
+            <Image Source="/Assets/images/button/lb_def_button02/lb_def_button02_04.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Image Source="/Assets/images/button/lb_def_button02/lb_def_button02_06.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top" />
+
+            <!-- Edges -->
+            <Image Source="/Assets/images/button/lb_def_button02/lb_def_button02_05.png" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="26,0,26,0" Height="26" Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush ImageSource="/Assets/images/button/lb_def_button02/lb_def_button02_05.png" Stretch="None" TileMode="Tile" Viewport="0,0,1,0.25" ViewportUnits="Absolute"/>
+                </Image.OpacityMask>
+            </Image>
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+    </ControlTemplate>
+    <ControlTemplate x:Key="lb_def_button02_down" TargetType="Button">
+        <Grid>
+            <!-- Corners -->
+            <Image Source="/Assets/images/button/lb_def_button02/lb_def_button02_07.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            <Image Source="/Assets/images/button/lb_def_button02/lb_def_button02_09.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top" />
+
+            <!-- Edges -->
+            <Image Source="/Assets/images/button/lb_def_button02/lb_def_button02_08.png" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="26,0,26,0" Height="26" Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush ImageSource="/Assets/images/button/lb_def_button02/lb_def_button02_08.png" Stretch="None" TileMode="Tile" Viewport="0,0,1,0.25" ViewportUnits="Absolute"/>
+                </Image.OpacityMask>
+            </Image>
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+    </ControlTemplate>
+
+    <Style x:Key="lb_def_button02" TargetType="Button">
+        <Setter Property="Template" Value="{StaticResource lb_def_button02_normal}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Template" Value="{StaticResource lb_def_button02_hover}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Template" Value="{StaticResource lb_def_button02_down}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+</ResourceDictionary>
