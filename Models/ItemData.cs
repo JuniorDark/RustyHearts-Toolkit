@@ -11,6 +11,7 @@
         public int Weight { get; set; }
         public int LevelLimit { get; set; }
         public int ItemTrade { get; set; }
+        public int OverlapCnt { get; set; }
         public int Durability { get; set; }
         public int Defense { get; set; }
         public int MagicDefense { get; set; }

@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:RHGMTool.Utilities">
     <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    <local:IncrementConverter x:Key="IncrementConverter"/>
     <local:StringToBrushConverter x:Key="StringToBrushConverter"/>
     <local:VisibilityToHeightConverter x:Key="VisibilityToHeightConverter"/>
 </ResourceDictionary>

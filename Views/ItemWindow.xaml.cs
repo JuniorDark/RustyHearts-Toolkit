@@ -52,6 +52,7 @@ namespace RHGMTool.Views
                 FixOptionValue01 = 80,
                 ReconstructionMax = 2,
                 Durability = 10000,
+                OverlapCnt = 999,
                 SetId = 1002
 
 

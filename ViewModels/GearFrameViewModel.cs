@@ -117,6 +117,7 @@ namespace RHGMTool.ViewModels
                 Weight = Gear.Weight > 0 ? $"{Gear.Weight / 1000.0:0.000}Kg" : "";
                 SetName = Gear.SetId != 0 ? _gMDbService.GetSetName(Gear.SetId) : "";
                 ReconstructionMax = Gear.ReconstructionMax > 0 ? $"Attribute Item ({Gear.ReconstructionMax} Times/{Gear.ReconstructionMax} Times)" : "";
+                OverlapCnt = Gear.OverlapCnt;
                 FixedBuff = $"[Fixed Buff]";
                 RandomBuff = $"[Random Buff]";
                 (FixedBuff01, FixedBuff01Color) = GetOptionName(Gear.FixOption00, Gear.FixOptionValue00);
@@ -142,6 +143,7 @@ namespace RHGMTool.ViewModels
                 OnPropertyChanged(nameof(Weight));
                 OnPropertyChanged(nameof(SetName));
                 OnPropertyChanged(nameof(ReconstructionMax));
+                OnPropertyChanged(nameof(OverlapCnt));
                 OnPropertyChanged(nameof(FixedBuff));
                 OnPropertyChanged(nameof(FixedBuff01));
                 OnPropertyChanged(nameof(FixedBuff02));
@@ -286,6 +288,22 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        private int _overlapCnt;
+
+        public int OverlapCnt
+        {
+            get { return _overlapCnt; }
+            set
+            {
+                if (_overlapCnt != value)
+                {
+                    _overlapCnt = value;
+                    OnPropertyChanged(nameof(OverlapCnt));
+
+                }
+            }
+        }
+
         private int _enchantLevel;
 
         public int EnchantLevel
@@ -355,7 +373,6 @@ namespace RHGMTool.ViewModels
                     _randomOption01 = value;
                     OnPropertyChanged(nameof(RandomOption01));
                     UpdateRandomBuff();
-                    UpdateRandomBuffVisibility();
                 }
             }
         }
@@ -386,8 +403,6 @@ namespace RHGMTool.ViewModels
                     _randomOption02 = value;
                     OnPropertyChanged(nameof(RandomOption02));
                     UpdateRandomBuff();
-                    UpdateRandomBuffVisibility();
-                    UpdateRandomBuffValue();
                 }
             }
         }
@@ -418,7 +433,6 @@ namespace RHGMTool.ViewModels
                     _randomOption03 = value;
                     OnPropertyChanged(nameof(RandomOption03));
                     UpdateRandomBuff();
-                    UpdateRandomBuffVisibility();
                 }
             }
         }
@@ -584,29 +598,91 @@ namespace RHGMTool.ViewModels
                 {
                     _randomOption01MaxValue = value;
                     OnPropertyChanged(nameof(RandomOption01MaxValue));
+
+                    if (RandomOption01Value > value)
+                        RandomOption01Value = value;
                 }
             }
         }
 
-        private void UpdateRandomBuffVisibility()
+        private int _randomOption02MinValue;
+        public int RandomOption02MinValue
+        {
+            get { return _randomOption02MinValue; }
+            set
+            {
+                if (_randomOption02MinValue != value)
+                {
+                    _randomOption02MinValue = value;
+                    OnPropertyChanged(nameof(RandomOption02MinValue));
+                }
+            }
+        }
+
+        private int _randomOption02MaxValue;
+        public int RandomOption02MaxValue
+        {
+            get { return _randomOption02MaxValue; }
+            set
+            {
+                if (_randomOption02MaxValue != value)
+                {
+                    _randomOption02MaxValue = value;
+                    OnPropertyChanged(nameof(RandomOption02MaxValue));
+
+                    if (RandomOption02Value > value)
+                        RandomOption02Value = value;
+                }
+            }
+        }
+
+        private int _randomOption03MinValue;
+        public int RandomOption03MinValue
+        {
+            get { return _randomOption03MinValue; }
+            set
+            {
+                if (_randomOption03MinValue != value)
+                {
+                    _randomOption03MinValue = value;
+                    OnPropertyChanged(nameof(RandomOption03MinValue));
+                }
+            }
+        }
+
+        private int _randomOption03MaxValue;
+        public int RandomOption03MaxValue
+        {
+            get { return _randomOption03MaxValue; }
+            set
+            {
+                if (_randomOption03MaxValue != value)
+                {
+                    _randomOption03MaxValue = value;
+                    OnPropertyChanged(nameof(RandomOption03MaxValue));
+
+                    if (RandomOption03Value > value)
+                        RandomOption03Value = value;
+                }
+            }
+        }
+
+        private void UpdateRandomBuff()
         {
             IsRandomBuffVisible = OptionCountMax > 0;
             IsRandomBuff01Visible = RandomOption01 != 0 && OptionCountMax > 0;
             IsRandomBuff02Visible = RandomOption02 != 0 && OptionCountMax > 1;
             IsRandomBuff03Visible = RandomOption03 != 0 && OptionCountMax > 2;
-        }
 
-        private void UpdateRandomBuff()
-        {
             (RandomBuff01, RandomBuff01Color) = RandomOption01 != 0 ? GetOptionName(RandomOption01, RandomOption01Value) : ("No Buff", "White");
             (RandomBuff02, RandomBuff02Color) = RandomOption02 != 0 ? GetOptionName(RandomOption02, RandomOption02Value) : ("No Buff", "White");
             (RandomBuff03, RandomBuff03Color) = RandomOption03 != 0 ? GetOptionName(RandomOption03, RandomOption03Value) : ("No Buff", "White");
+
+            (RandomOption01MinValue, RandomOption01MaxValue) = _gMDbService.GetOptionValue(RandomOption01);
+            (RandomOption02MinValue, RandomOption02MaxValue) = _gMDbService.GetOptionValue(RandomOption02);
+            (RandomOption03MinValue, RandomOption03MaxValue) = _gMDbService.GetOptionValue(RandomOption03);
         }
 
-        private void UpdateRandomBuffValue()
-        {
-            (RandomOption01MinValue, RandomOption01MaxValue) = _gMDbService.GetOptionValue(RandomOption01);
-        }
 
         private string? _socketBuff;
         public string? SocketBuff
@@ -629,7 +705,6 @@ namespace RHGMTool.ViewModels
                 {
                     _socketCountMax = value;
                     OnPropertyChanged(nameof(SocketCountMax));
-                    UpdateSocketBuffVisibility();
                     UpdateSocketBuff();
                     SocketBuff = $"Socket: {value}";
                 }
@@ -647,7 +722,6 @@ namespace RHGMTool.ViewModels
                     _socketOption01 = value;
                     OnPropertyChanged(nameof(SocketOption01));
                     UpdateSocketBuff();
-                    UpdateSocketBuffVisibility();
                 }
             }
         }
@@ -677,8 +751,7 @@ namespace RHGMTool.ViewModels
                 {
                     _socketOption02 = value;
                     OnPropertyChanged(nameof(SocketOption02));
-                    UpdateSocketBuff();
-                    UpdateSocketBuffVisibility();
+                    UpdateSocketBuff();;
                 }
             }
         }
@@ -709,7 +782,6 @@ namespace RHGMTool.ViewModels
                     _socketOption03 = value;
                     OnPropertyChanged(nameof(SocketOption03));
                     UpdateSocketBuff();
-                    UpdateSocketBuffVisibility();
                 }
             }
         }
@@ -884,21 +956,115 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        private void UpdateSocketBuffVisibility()
+        private int _socketOption01MinValue;
+        public int SocketOption01MinValue
         {
-            IsSocketBuffVisible = SocketCountMax > 0;
-            IsSocketBuff01Visible =  SocketCountMax > 0;
-            IsSocketBuff02Visible =  SocketCountMax > 1;
-            IsSocketBuff03Visible = SocketCountMax > 2;
+            get { return _socketOption01MinValue; }
+            set
+            {
+                if (_socketOption01MinValue != value)
+                {
+                    _socketOption01MinValue = value;
+                    OnPropertyChanged(nameof(SocketOption01MinValue));
+                }
+            }
         }
+
+        private int _socketOption01MaxValue;
+        public int SocketOption01MaxValue
+        {
+            get { return _socketOption01MaxValue; }
+            set
+            {
+                if (_socketOption01MaxValue != value)
+                {
+                    _socketOption01MaxValue = value;
+                    OnPropertyChanged(nameof(SocketOption01MaxValue));
+                    if (SocketOption01Value > value)
+                        SocketOption01Value = value;
+                }
+            }
+        }
+
+        private int _socketOption02MinValue;
+        public int SocketOption02MinValue
+        {
+            get { return _socketOption02MinValue; }
+            set
+            {
+                if (_socketOption02MinValue != value)
+                {
+                    _socketOption02MinValue = value;
+                    OnPropertyChanged(nameof(SocketOption02MinValue));
+                }
+            }
+        }
+
+        private int _socketOption02MaxValue;
+        public int SocketOption02MaxValue
+        {
+            get { return _socketOption02MaxValue; }
+            set
+            {
+                if (_socketOption02MaxValue != value)
+                {
+                    _socketOption02MaxValue = value;
+                    OnPropertyChanged(nameof(SocketOption02MaxValue));
+                    if (SocketOption02Value > value)
+                        SocketOption02Value = value;
+                }
+            }
+        }
+
+        private int _socketOption03MinValue;
+        public int SocketOption03MinValue
+        {
+            get { return _socketOption03MinValue; }
+            set
+            {
+                if (_socketOption03MinValue != value)
+                {
+                    _socketOption03MinValue = value;
+                    OnPropertyChanged(nameof(SocketOption03MinValue));
+                }
+            }
+        }
+
+        private int _socketOption03MaxValue;
+        public int SocketOption03MaxValue
+        {
+            get { return _socketOption03MaxValue; }
+            set
+            {
+                if (_socketOption03MaxValue != value)
+                {
+                    _socketOption03MaxValue = value;
+                    OnPropertyChanged(nameof(SocketOption03MaxValue));
+
+                    if (SocketOption03Value > value)
+                        SocketOption03Value = value;
+                }
+            }
+        }
+
 
         private void UpdateSocketBuff()
         {
+            IsSocketBuffVisible = SocketCountMax > 0;
+            IsSocketBuff01Visible = SocketCountMax > 0;
+            IsSocketBuff02Visible = SocketCountMax > 1;
+            IsSocketBuff03Visible = SocketCountMax > 2;
+
             // Get socket buff and its color based on the SocketOption and SocketColor
             (SocketBuff01, SocketBuff01Color) = SocketOption01 != 0 ? GetOptionName(SocketOption01, SocketOption01Value) : FrameData.SetSocketColor(Socket01Color);
             (SocketBuff02, SocketBuff02Color) = SocketOption02 != 0 ? GetOptionName(SocketOption02, SocketOption02Value) : FrameData.SetSocketColor(Socket02Color);
             (SocketBuff03, SocketBuff03Color) = SocketOption03 != 0 ? GetOptionName(SocketOption03, SocketOption03Value) : FrameData.SetSocketColor(Socket03Color);
+
+            (SocketOption01MinValue, SocketOption01MaxValue) = _gMDbService.GetOptionValue(SocketOption01);
+            (SocketOption02MinValue, SocketOption02MaxValue) = _gMDbService.GetOptionValue(SocketOption02);
+            (SocketOption03MinValue, SocketOption03MaxValue) = _gMDbService.GetOptionValue(SocketOption03);
         }
+
 
     }
 }
