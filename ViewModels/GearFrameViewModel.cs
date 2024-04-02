@@ -25,6 +25,10 @@ namespace RHGMTool.ViewModels
             _gMDbService = new GMDbService(_databaseService);
             InitializeItemDataTables();
             PopulateOptionItems();
+            PopulateItemTypeItems();
+            PopulateClassItems();
+            PopulateBranchItems();
+            PopulateSocketColorItems();
         }
 
         #region Datatables
@@ -84,6 +88,114 @@ namespace RHGMTool.ViewModels
 
         #endregion
 
+        #region Comboboxes Lists
+
+        private List<NameID>? _itemTypeItems;
+        public List<NameID>? ItemTypeItems
+        {
+            get { return _itemTypeItems; }
+            set
+            {
+                if (_itemTypeItems != value)
+                {
+                    _itemTypeItems = value;
+                    OnPropertyChanged(nameof(ItemTypeItems));
+                }
+            }
+        }
+
+        private void PopulateItemTypeItems()
+        {
+            try
+            {
+                ItemTypeItems = EnumService.GetEnumItems<ItemType>();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private List<NameID>? _classItems;
+        public List<NameID>? ClassItems
+        {
+            get { return _classItems; }
+            set
+            {
+                if (_classItems != value)
+                {
+                    _classItems = value;
+                    OnPropertyChanged(nameof(ClassItems));
+                }
+            }
+        }
+
+        private void PopulateClassItems()
+        {
+            try
+            {
+                ClassItems = EnumService.GetEnumItems<CharClass>();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private List<NameID>? _branchItems;
+        public List<NameID>? BranchItems
+        {
+            get { return _branchItems; }
+            set
+            {
+                if (_branchItems != value)
+                {
+                    _branchItems = value;
+                    OnPropertyChanged(nameof(BranchItems));
+                }
+            }
+        }
+
+        private void PopulateBranchItems()
+        {
+            try
+            {
+                BranchItems = EnumService.GetEnumItems<Branch>();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private List<NameID>? _socketColorItems;
+        public List<NameID>? SocketColorItems
+        {
+            get { return _socketColorItems; }
+            set
+            {
+                if (_socketColorItems != value)
+                {
+                    _socketColorItems = value;
+                    OnPropertyChanged(nameof(SocketColorItems));
+                }
+            }
+        }
+
+        private void PopulateSocketColorItems()
+        {
+            try
+            {
+                SocketColorItems = EnumService.GetSocketColorItems();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        #endregion
+
         #region GearData
 
         private ItemData? _gear;
@@ -108,16 +220,38 @@ namespace RHGMTool.ViewModels
                 ItemNameColor = FrameData.GetBranchColor(Gear.Branch);
                 Category = _gMDbService.GetCategoryName(Gear.Category);
                 SubCategory = _gMDbService.GetSubCategoryName(Gear.SubCategory);
-                UpdateMainStat();
+                if (Gear.Type == "Armor")
+                {
+                    MainStat1 = $"Physical Defense +{Gear.Defense}";
+                    MainStat2 = $"Magic Defense +{Gear.MagicDefense}";
+                }
+                else if (Gear.Type == "Weapon")
+                {
+                    (int PhysicalAttackMin, int PhysicalAttackMax, int MagicAttackMin, int MagicAttackMax) = _gMDbService.GetWeaponStats(Gear.JobClass, Gear.WeaponID00);
+                    MainStat1 = $"Physical Damage +{PhysicalAttackMin}~{PhysicalAttackMax}";
+                    MainStat2 = $"Magic Damage +{MagicAttackMin}~{MagicAttackMax}";
+                }
+                else
+                {
+                    MainStat1 = "";
+                    MainStat2 = "";
+                }
                 SellValue = Gear.SellPrice > 0 ? $"{Gear.SellPrice:N0} Gold" : "";
                 RequiredLevel = $"Required Level: {Gear.LevelLimit}";
                 ItemTrade = Gear.ItemTrade == 0 ? "Trade Unavailable" : "";
-                Durability = Gear.Durability > 0 ? $"Durability: {Gear.Durability / 100}/{Gear.Durability / 100}" : "";
+                Durability = Gear.Durability;
+                MaxDurability = Gear.Durability;
+                DurabilityValue = Gear.Durability > 0 ? $"Durability: {Gear.Durability / 100}/{MaxDurability / 100}" : "";
                 JobClass = Gear.JobClass > 0 ? GetEnumDescription((CharClass)Gear.JobClass) : "";
+                WeightValue = Gear.Weight;
                 Weight = Gear.Weight > 0 ? $"{Gear.Weight / 1000.0:0.000}Kg" : "";
                 SetName = Gear.SetId != 0 ? _gMDbService.GetSetName(Gear.SetId) : "";
-                ReconstructionMax = Gear.ReconstructionMax > 0 ? $"Attribute Item ({Gear.ReconstructionMax} Times/{Gear.ReconstructionMax} Times)" : "";
+                ReconstructionValue = Gear.ReconstructionMax;
+                ReconstructionMax = Gear.ReconstructionMax;
+                Reconstruction = Gear.ReconstructionMax > 0 ? $"Attribute Item ({Gear.ReconstructionMax} Times/{Gear.ReconstructionMax} Times)" : "";
                 OverlapCnt = Gear.OverlapCnt;
+                OptionCountMax = Gear.OptionCountMax;
+                SocketCountMax = Gear.SocketCountMax;
                 FixedBuff = $"[Fixed Buff]";
                 RandomBuff = $"[Random Buff]";
                 (FixedBuff01, FixedBuff01Color) = GetOptionName(Gear.FixOption00, Gear.FixOptionValue00);
@@ -139,10 +273,14 @@ namespace RHGMTool.ViewModels
                 OnPropertyChanged(nameof(RequiredLevel));
                 OnPropertyChanged(nameof(ItemTrade));
                 OnPropertyChanged(nameof(Durability));
+                OnPropertyChanged(nameof(MaxDurability));
                 OnPropertyChanged(nameof(JobClass));
                 OnPropertyChanged(nameof(Weight));
                 OnPropertyChanged(nameof(SetName));
+                OnPropertyChanged(nameof(ReconstructionValue));
                 OnPropertyChanged(nameof(ReconstructionMax));
+                OnPropertyChanged(nameof(OptionCountMax));
+                OnPropertyChanged(nameof(SocketCountMax));
                 OnPropertyChanged(nameof(OverlapCnt));
                 OnPropertyChanged(nameof(FixedBuff));
                 OnPropertyChanged(nameof(FixedBuff01));
@@ -167,34 +305,6 @@ namespace RHGMTool.ViewModels
             return (formattedOption, colorHex);
         }
 
-        private void UpdateMainStat()
-        {
-            if (Gear != null)
-            {
-                if (Gear.Type == "Armor")
-                {
-                    MainStat1 = $"Physical Defense +{Gear.Defense}";
-                    MainStat2 = $"Magic Defense +{Gear.MagicDefense}";
-                }
-                else if (Gear.Type == "Weapon")
-                {
-                    (int PhysicalAttackMin, int PhysicalAttackMax, int MagicAttackMin, int MagicAttackMax) = _gMDbService.GetWeaponStats(Gear.JobClass, Gear.WeaponID00);
-                    MainStat1 = $"Physical Damage +{PhysicalAttackMin}~{PhysicalAttackMax}";
-                    MainStat2 = $"Magic Damage +{MagicAttackMin}~{MagicAttackMax}";
-                }
-                else
-                {
-                    MainStat1 = "";
-                    MainStat2 = "";
-                }
-            }
-        }
-
-        public void UpdateSocketCount(int count)
-        {
-            SocketCount = $"Socket: {count}";
-        }
-
         #endregion
 
         // Properties for UI elements
@@ -205,9 +315,8 @@ namespace RHGMTool.ViewModels
         public string? SellValue { get; private set; }
         public string? RequiredLevel { get; private set; }
         public string? ItemTrade { get; private set; }
-        public string? ReconstructionMax { get; set; }
         public string? JobClass { get; private set; }
-        public string? Weight { get; set; }
+
         public string? SetName { get; private set; }
         public string? PetFood { get; private set; }
         public string? PetFoodColor { get; private set; }
@@ -221,11 +330,10 @@ namespace RHGMTool.ViewModels
         public string? Type { get; set; }
         public int WeaponID00 { get; private set; }
 
-        public string? Durability { get; set; }
-        public string? Reconstruction { get; set; }
+
         public int SocketCountMin { get; set; }
         public int OptionCountMin { get; set; }
-        public int OptionCountMax { get; set; }
+
 
 
         private string? _itemName;
@@ -252,20 +360,129 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        private string? _socketCount;
-        public string? SocketCount
+        private string? _weight;
+
+        public string? Weight
         {
-            get { return _socketCount; }
-            private set
+            get { return _weight; }
+            set
             {
-                _socketCount = value;
-                OnPropertyChanged(nameof(SocketCount));
+                _weight = value;
+                OnPropertyChanged(nameof(Weight));
+            }
+        }
+
+        private int _weightValue;
+
+        public int WeightValue
+        {
+            get { return _weightValue; }
+            set
+            {
+                _weightValue = value;
+                OnPropertyChanged(nameof(WeightValue));
+                Weight = $"{value / 1000.0:0.000}Kg";
+            }
+        }
+
+        private string? _durabilityValue;
+
+        public string? DurabilityValue
+        {
+            get { return _durabilityValue; }
+            set
+            {
+                _durabilityValue = value;
+                OnPropertyChanged(nameof(DurabilityValue));
+            }
+        }
+
+        private int _durability;
+
+        public int Durability
+        {
+            get { return _durability; }
+            set
+            {
+                if (_durability != value)
+                {
+                    _durability = value;
+                    OnPropertyChanged(nameof(Durability));
+                    DurabilityValue = $"Durability: {Durability / 100}/{MaxDurability / 100}";
+                }
+            }
+        }
+
+        private int _maxDurability;
+
+        public int MaxDurability
+        {
+            get { return _maxDurability; }
+            set
+            {
+                if (_maxDurability != value)
+                {
+                    _maxDurability = value;
+                    OnPropertyChanged(nameof(MaxDurability));
+                    DurabilityValue = $"Durability: {Durability / 100}/{MaxDurability / 100}";
+
+                    // Update Durability if it's greater than MaxDurability
+                    if (Durability > MaxDurability)
+                        Durability = MaxDurability;
+                }
+            }
+        }
+
+
+        private string? _reconstruction;
+
+        public string? Reconstruction
+        {
+            get { return _reconstruction; }
+            set
+            {
+                _reconstruction = value;
+                OnPropertyChanged(nameof(Reconstruction));
+            }
+        }
+
+        private int _reconstructionValue;
+
+        public int ReconstructionValue
+        {
+            get { return _reconstructionValue; }
+            set
+            {
+                if (_reconstructionValue != value)
+                {
+                    _reconstructionValue = value;
+                    OnPropertyChanged(nameof(ReconstructionValue));
+                    Reconstruction = $"Attribute Item ({value} Times/{ReconstructionMax} Times)";
+                }
+                
+            }
+        }
+
+        private int _reconstructionMax;
+
+        public int ReconstructionMax
+        {
+            get { return _reconstructionMax; }
+            set
+            {
+                if (_reconstructionMax != value)
+                {
+                    _reconstructionMax = value;
+                    OnPropertyChanged(nameof(ReconstructionMax));
+                    Reconstruction = $"Attribute Item ({value} Times/{value} Times)";
+                }
             }
         }
 
         private int _rankValue;
         public int RankValue
         {
+            get { return _rankValue; }
             set
             {
                 if (_rankValue != value)
@@ -359,6 +576,31 @@ namespace RHGMTool.ViewModels
                     _isFixedBuff02Visible = value;
                     OnPropertyChanged(nameof(IsFixedBuff02Visible));
                 }
+            }
+        }
+
+        private int _optionCount;
+        public int OptionCount
+        {
+            get { return _optionCount; }
+            set
+            {
+                _optionCount = value;
+                OnPropertyChanged(nameof(OptionCount));
+                UpdateRandomBuff();
+            }
+        }
+
+        private int _OptionCountMax;
+        public int OptionCountMax
+        {
+            get { return _OptionCountMax; }
+            set
+            {
+                _OptionCountMax = value;
+                OnPropertyChanged(nameof(OptionCountMax));
+                UpdateRandomBuff();
+
             }
         }
 
@@ -681,6 +923,10 @@ namespace RHGMTool.ViewModels
             (RandomOption01MinValue, RandomOption01MaxValue) = _gMDbService.GetOptionValue(RandomOption01);
             (RandomOption02MinValue, RandomOption02MaxValue) = _gMDbService.GetOptionValue(RandomOption02);
             (RandomOption03MinValue, RandomOption03MaxValue) = _gMDbService.GetOptionValue(RandomOption03);
+
+            RandomOption01Value = RandomOption01 != 0 ? RandomOption01Value : 0;
+            RandomOption02Value = RandomOption02 != 0 ? RandomOption02Value : 0;
+            RandomOption03Value = RandomOption03 != 0 ? RandomOption03Value : 0;
         }
 
 
@@ -692,6 +938,19 @@ namespace RHGMTool.ViewModels
             {
                 _socketBuff = value;
                 OnPropertyChanged(nameof(SocketBuff));
+            }
+        }
+
+        private int _socketCount;
+        public int SocketCount
+        {
+            get { return _socketCount; }
+            set
+            {
+                _socketCount = value;
+                OnPropertyChanged(nameof(SocketCount));
+                UpdateSocketBuff();
+                SocketBuff = $"Socket: {value}";
             }
         }
 
@@ -751,7 +1010,7 @@ namespace RHGMTool.ViewModels
                 {
                     _socketOption02 = value;
                     OnPropertyChanged(nameof(SocketOption02));
-                    UpdateSocketBuff();;
+                    UpdateSocketBuff(); ;
                 }
             }
         }
@@ -1050,10 +1309,10 @@ namespace RHGMTool.ViewModels
 
         private void UpdateSocketBuff()
         {
-            IsSocketBuffVisible = SocketCountMax > 0;
-            IsSocketBuff01Visible = SocketCountMax > 0;
-            IsSocketBuff02Visible = SocketCountMax > 1;
-            IsSocketBuff03Visible = SocketCountMax > 2;
+            IsSocketBuffVisible = SocketCountMax > 0 && SocketCount > 0;
+            IsSocketBuff01Visible = SocketCountMax > 0 && SocketCount > 0;
+            IsSocketBuff02Visible = SocketCountMax > 1 && SocketCount > 1;
+            IsSocketBuff03Visible = SocketCountMax > 2 && SocketCount > 2;
 
             // Get socket buff and its color based on the SocketOption and SocketColor
             (SocketBuff01, SocketBuff01Color) = SocketOption01 != 0 ? GetOptionName(SocketOption01, SocketOption01Value) : FrameData.SetSocketColor(Socket01Color);
@@ -1063,6 +1322,11 @@ namespace RHGMTool.ViewModels
             (SocketOption01MinValue, SocketOption01MaxValue) = _gMDbService.GetOptionValue(SocketOption01);
             (SocketOption02MinValue, SocketOption02MaxValue) = _gMDbService.GetOptionValue(SocketOption02);
             (SocketOption03MinValue, SocketOption03MaxValue) = _gMDbService.GetOptionValue(SocketOption03);
+
+            SocketOption01Value = SocketOption01 != 0 ? SocketOption01Value : 0;
+            SocketOption02Value = SocketOption02 != 0 ? SocketOption02Value : 0;
+            SocketOption03Value = SocketOption03 != 0 ? SocketOption03Value : 0;
+
         }
 
 

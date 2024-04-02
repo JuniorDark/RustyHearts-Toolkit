@@ -147,12 +147,6 @@
     <None Remove="Assets\images\equipment_slot\lb_equipment_slot_21.png" />
     <None Remove="Assets\images\labelbg.png" />
     <None Remove="Assets\images\lb_ac_icon.png" />
-    <None Remove="Assets\images\lb_ac_icon_06_socket_a.png" />
-    <None Remove="Assets\images\lb_ac_icon_06_socket_all.png" />
-    <None Remove="Assets\images\lb_ac_icon_06_socket_b.png" />
-    <None Remove="Assets\images\lb_ac_icon_06_socket_g.png" />
-    <None Remove="Assets\images\lb_ac_icon_06_socket_r.png" />
-    <None Remove="Assets\images\lb_ac_icon_06_socket_y.png" />
     <None Remove="Assets\images\lb_ac_icon_gold.png" />
     <None Remove="Assets\images\lb_book04_image.png" />
     <None Remove="Assets\images\lb_close_button05.png" />
@@ -188,6 +182,12 @@
     <None Remove="Assets\images\lb_mail_paper.png" />
     <None Remove="Assets\images\MainForm.png" />
     <None Remove="Assets\images\question_icon.png" />
+    <None Remove="Assets\images\socket_a.png" />
+    <None Remove="Assets\images\socket_all.png" />
+    <None Remove="Assets\images\socket_b.png" />
+    <None Remove="Assets\images\socket_g.png" />
+    <None Remove="Assets\images\socket_r.png" />
+    <None Remove="Assets\images\socket_y.png" />
     <None Remove="Assets\images\window\Center.png" />
     <None Remove="Assets\images\window\CharacterForm.png" />
     <None Remove="Assets\images\window\CharacterFrame.png" />
@@ -373,12 +373,12 @@
     <Resource Include="Assets\images\equipment_slot\lb_equipment_slot_20.png" />
     <Resource Include="Assets\images\equipment_slot\lb_equipment_slot_21.png" />
     <Resource Include="Assets\images\lb_ac_icon.png" />
-    <Resource Include="Assets\images\lb_ac_icon_06_socket_a.png" />
-    <Resource Include="Assets\images\lb_ac_icon_06_socket_all.png" />
-    <Resource Include="Assets\images\lb_ac_icon_06_socket_b.png" />
-    <Resource Include="Assets\images\lb_ac_icon_06_socket_g.png" />
-    <Resource Include="Assets\images\lb_ac_icon_06_socket_r.png" />
-    <Resource Include="Assets\images\lb_ac_icon_06_socket_y.png" />
+    <Resource Include="Assets\images\socket_a.png" />
+    <Resource Include="Assets\images\socket_all.png" />
+    <Resource Include="Assets\images\socket_b.png" />
+    <Resource Include="Assets\images\socket_g.png" />
+    <Resource Include="Assets\images\socket_r.png" />
+    <Resource Include="Assets\images\socket_y.png" />
     <Resource Include="Assets\images\lb_ac_icon_gold.png" />
     <Resource Include="Assets\images\lb_icon_slot_00normal.png" />
     <Resource Include="Assets\images\lb_icon_slot_01magic.png" />
@@ -436,10 +436,6 @@
     <Resource Include="Assets\images\window\red02\EdgeRight.png" />
     <Resource Include="Assets\images\window\red02\EdgeTop.png" />
     <Resource Include="Fonts\Arial Unicode MS.ttf" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>

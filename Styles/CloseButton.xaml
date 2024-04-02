@@ -1,22 +1,24 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- lb_close_button -->
+    <!--  lb_close_button  -->
     <ControlTemplate x:Key="lb_close_button" TargetType="Button">
         <Grid>
-            <!-- Background Image -->
-            <Image x:Name="BackgroundImage" Source="/Assets/buttons/lb_close/close_button_normal.png" Stretch="None"/>
-            <!-- Content Presenter -->
-            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <!--  Background Image  -->
+            <Image
+                x:Name="BackgroundImage"
+                Source="/Assets/buttons/lb_close/close_button_normal.png"
+                Stretch="None" />
+            <!--  Content Presenter  -->
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
         </Grid>
         <ControlTemplate.Triggers>
-            <!-- Mouse Over Trigger -->
+            <!--  Mouse Over Trigger  -->
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="BackgroundImage" Property="Source" Value="/Assets/buttons/lb_close/close_button_hover.png"/>
+                <Setter TargetName="BackgroundImage" Property="Source" Value="/Assets/buttons/lb_close/close_button_hover.png" />
             </Trigger>
-            <!-- Pressed Trigger -->
+            <!--  Pressed Trigger  -->
             <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="BackgroundImage" Property="Source" Value="/Assets/buttons/lb_close/close_button_down.png"/>
+                <Setter TargetName="BackgroundImage" Property="Source" Value="/Assets/buttons/lb_close/close_button_down.png" />
             </Trigger>
         </ControlTemplate.Triggers>
 

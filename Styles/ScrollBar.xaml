@@ -1,30 +1,29 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!-- RepeatButton Up Arrow -->
-    <ImageBrush x:Key="RepeatButtonUpArrowNormal" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_02.png"/>
-    <ImageBrush x:Key="RepeatButtonUpArrowHover" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_01.png"/>
-    <ImageBrush x:Key="RepeatButtonUpArrowPressed" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_03.png"/>
-    <ImageBrush x:Key="RepeatButtonUpArrowDisabled" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_04.png"/>
+    <!--  RepeatButton Up Arrow  -->
+    <ImageBrush x:Key="RepeatButtonUpArrowNormal" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_02.png" />
+    <ImageBrush x:Key="RepeatButtonUpArrowHover" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_01.png" />
+    <ImageBrush x:Key="RepeatButtonUpArrowPressed" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_03.png" />
+    <ImageBrush x:Key="RepeatButtonUpArrowDisabled" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_04.png" />
 
-    <!-- RepeatButton Down Arrow -->
-    <ImageBrush x:Key="RepeatButtonDownArrowNormal" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_02.png"/>
-    <ImageBrush x:Key="RepeatButtonDownArrowHover" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_01.png"/>
-    <ImageBrush x:Key="RepeatButtonDownArrowPressed" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_03.png"/>
-    <ImageBrush x:Key="RepeatButtonDownArrowDisabled" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_04.png"/>
+    <!--  RepeatButton Down Arrow  -->
+    <ImageBrush x:Key="RepeatButtonDownArrowNormal" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_02.png" />
+    <ImageBrush x:Key="RepeatButtonDownArrowHover" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_01.png" />
+    <ImageBrush x:Key="RepeatButtonDownArrowPressed" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_03.png" />
+    <ImageBrush x:Key="RepeatButtonDownArrowDisabled" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_04.png" />
 
-    <!-- Thumb -->
-    <ImageBrush x:Key="ThumbNormalTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_04_01.png"/>
-    <ImageBrush x:Key="ThumbNormalMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_04_02.png"/>
-    <ImageBrush x:Key="ThumbNormalBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_04_03.png"/>
+    <!--  Thumb  -->
+    <ImageBrush x:Key="ThumbNormalTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_04_01.png" />
+    <ImageBrush x:Key="ThumbNormalMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_04_02.png" />
+    <ImageBrush x:Key="ThumbNormalBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_04_03.png" />
 
-    <ImageBrush x:Key="ThumbHoverTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_03_01.png"/>
-    <ImageBrush x:Key="ThumbHoverMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_03_02.png"/>
-    <ImageBrush x:Key="ThumbHoverBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_03_03.png"/>
+    <ImageBrush x:Key="ThumbHoverTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_03_01.png" />
+    <ImageBrush x:Key="ThumbHoverMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_03_02.png" />
+    <ImageBrush x:Key="ThumbHoverBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_03_03.png" />
 
-    <ImageBrush x:Key="ThumbPressedTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_01.png"/>
-    <ImageBrush x:Key="ThumbPressedMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_02.png"/>
-    <ImageBrush x:Key="ThumbPressedBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_03.png"/>
+    <ImageBrush x:Key="ThumbPressedTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_01.png" />
+    <ImageBrush x:Key="ThumbPressedMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_02.png" />
+    <ImageBrush x:Key="ThumbPressedBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_03.png" />
 
     <Style x:Key="CustomScrollBarStyle" TargetType="{x:Type ScrollBar}">
         <Setter Property="Template">
@@ -32,50 +31,63 @@
                 <ControlTemplate TargetType="{x:Type ScrollBar}">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <!-- Thumb -->
+                        <!--  Thumb  -->
                         <Track Grid.Row="1">
                             <Track.DecreaseRepeatButton>
-                                <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0"/>
+                                <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" />
                             </Track.DecreaseRepeatButton>
                             <Track.Thumb>
-                                <Thumb Background="Gold"/>
+                                <Thumb Background="Gold" />
                             </Track.Thumb>
                             <Track.IncreaseRepeatButton>
-                                <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0"/>
+                                <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" />
                             </Track.IncreaseRepeatButton>
                         </Track>
 
-                        <!-- Repeat buttons -->
-                        <RepeatButton x:Name="PART_LineUpButton" Command="ScrollBar.LineUpCommand" Content="Up">
+                        <!--  Repeat buttons  -->
+                        <RepeatButton
+                            x:Name="PART_LineUpButton"
+                            Command="ScrollBar.LineUpCommand"
+                            Content="Up">
                             <RepeatButton.Template>
                                 <ControlTemplate TargetType="{x:Type RepeatButton}">
-                                    <Image x:Name="UpArrowImage" Source="/Assets/buttons/lb_scroll/lb_scroll01_01_02.png" Stretch="None"/>
+                                    <Image
+                                        x:Name="UpArrowImage"
+                                        Source="/Assets/buttons/lb_scroll/lb_scroll01_01_02.png"
+                                        Stretch="None" />
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="UpArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_01_01.png"/>
+                                            <Setter TargetName="UpArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_01_01.png" />
                                         </Trigger>
                                         <Trigger Property="IsPressed" Value="True">
-                                            <Setter TargetName="UpArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_01_03.png"/>
+                                            <Setter TargetName="UpArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_01_03.png" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
                             </RepeatButton.Template>
                         </RepeatButton>
-                        <RepeatButton x:Name="PART_LineDownButton" Command="ScrollBar.LineDownCommand" Content="Down" Grid.Row="2">
+                        <RepeatButton
+                            x:Name="PART_LineDownButton"
+                            Grid.Row="2"
+                            Command="ScrollBar.LineDownCommand"
+                            Content="Down">
                             <RepeatButton.Template>
                                 <ControlTemplate TargetType="{x:Type RepeatButton}">
-                                    <Image x:Name="DownArrowImage" Source="/Assets/buttons/lb_scroll/lb_scroll01_02_02.png" Stretch="None"/>
+                                    <Image
+                                        x:Name="DownArrowImage"
+                                        Source="/Assets/buttons/lb_scroll/lb_scroll01_02_02.png"
+                                        Stretch="None" />
                                     <ControlTemplate.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter TargetName="DownArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_02_01.png"/>
+                                            <Setter TargetName="DownArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_02_01.png" />
                                         </Trigger>
                                         <Trigger Property="IsPressed" Value="True">
-                                            <Setter TargetName="DownArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_02_03.png"/>
+                                            <Setter TargetName="DownArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_02_03.png" />
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>

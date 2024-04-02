@@ -1,55 +1,123 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="WindowStyle" TargetType="Window">
         <Style.Triggers>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsRandomBuffVisible}" Value="False"/>
-                    <Condition Binding="{Binding IsSocketBuffVisible}" Value="False"/>
+                    <Condition Binding="{Binding IsRandomBuffVisible}" Value="False" />
+                    <Condition Binding="{Binding IsSocketBuffVisible}" Value="False" />
                 </MultiDataTrigger.Conditions>
-                <Setter Property="Height" Value="465"/>
+                <Setter Property="Height" Value="465" />
             </MultiDataTrigger>
         </Style.Triggers>
     </Style>
-    <!-- red02 -->
+    <!--  red02  -->
     <ControlTemplate x:Key="RHWindowRed02Template" TargetType="ContentControl">
         <Grid>
-            <!-- Corners -->
-            <Image Source="/Assets/images/window/red02/CornerTopLeft.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top" />
-            <Image Source="/Assets/images/window/red02/CornerTopRight.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top" />
-            <Image Source="/Assets/images/window/red02/CornerBottomLeft.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
-            <Image Source="/Assets/images/window/red02/CornerBottomRight.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+            <!--  Corners  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/red02/CornerTopLeft.png"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/red02/CornerTopRight.png"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/red02/CornerBottomLeft.png"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/red02/CornerBottomRight.png"
+                Stretch="None" />
 
-            <!-- Edges -->
-            <Image Source="/Assets/images/window/red02/EdgeTop.png" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="80,0,80,0" Height="80" Stretch="Fill">
+            <!--  Edges  -->
+            <Image
+                Height="80"
+                Margin="80,0,80,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/red02/EdgeTop.png"
+                Stretch="Fill">
                 <Image.OpacityMask>
-                    <ImageBrush ImageSource="/Assets/images/window/red02/EdgeTop.png" Stretch="None" TileMode="Tile" Viewport="0,0,1,0.25" ViewportUnits="Absolute"/>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/red02/EdgeTop.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
                 </Image.OpacityMask>
             </Image>
 
-            <Image Source="/Assets/images/window/red02/EdgeBottom.png" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" Margin="80,0,80,0" Height="80" Stretch="Fill">
+            <Image
+                Height="80"
+                Margin="80,0,80,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/red02/EdgeBottom.png"
+                Stretch="Fill">
                 <Image.OpacityMask>
-                    <ImageBrush ImageSource="/Assets/images/window/red02/EdgeBottom.png" Stretch="None" TileMode="Tile" Viewport="0,0,1,0.25" ViewportUnits="Absolute"/>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/red02/EdgeBottom.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
                 </Image.OpacityMask>
             </Image>
 
-            <Image Source="/Assets/images/window/red02/EdgeLeft.png" HorizontalAlignment="Left" VerticalAlignment="Stretch" Margin="0,80,0,80" Width="80" Stretch="Fill">
+            <Image
+                Width="80"
+                Margin="0,80,0,80"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/red02/EdgeLeft.png"
+                Stretch="Fill">
                 <Image.OpacityMask>
-                    <ImageBrush ImageSource="/Assets/images/window/red02/EdgeLeft.png" Stretch="None" TileMode="Tile" Viewport="0,0,0.25,1" ViewportUnits="Absolute"/>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/red02/EdgeLeft.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,0.25,1"
+                        ViewportUnits="Absolute" />
                 </Image.OpacityMask>
             </Image>
 
-            <Image Source="/Assets/images/window/red02/EdgeRight.png" HorizontalAlignment="Right" VerticalAlignment="Stretch" Margin="0,80,0,80" Width="80" Stretch="Fill">
+            <Image
+                Width="80"
+                Margin="0,80,0,80"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/red02/EdgeRight.png"
+                Stretch="Fill">
                 <Image.OpacityMask>
-                    <ImageBrush ImageSource="/Assets/images/window/red02/EdgeRight.png" Stretch="None" TileMode="Tile" Viewport="0,0,0.25,1" ViewportUnits="Absolute"/>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/red02/EdgeRight.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,0.25,1"
+                        ViewportUnits="Absolute" />
                 </Image.OpacityMask>
             </Image>
 
-            <!-- Center -->
-            <Image Source="/Assets/images/window/red02/Center.png" Stretch="UniformToFill" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="80,80,80,80" />
+            <!--  Center  -->
+            <Image
+                Margin="80,80,80,80"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/red02/Center.png"
+                Stretch="UniformToFill" />
 
-            <!-- Content -->
-            <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="80,80,80,80" />
+            <!--  Content  -->
+            <ContentPresenter
+                Margin="80,80,80,80"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Content="{TemplateBinding Content}" />
         </Grid>
     </ControlTemplate>
 </ResourceDictionary>

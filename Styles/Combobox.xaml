@@ -1,51 +1,100 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!-- lb_combobox -->
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--  lb_combobox  -->
     <ControlTemplate x:Key="lb_combobox" TargetType="ComboBox">
         <Grid>
-            <!-- Corners -->
-            <Image Source="/Assets/buttons/lb_combo/lb_combo02_01.png" Stretch="None" HorizontalAlignment="Left" VerticalAlignment="Top" />
-            <Image Source="/Assets/buttons/lb_combo/lb_combo02_03.png" Stretch="None" HorizontalAlignment="Right" VerticalAlignment="Top" />
+            <!--  Corners  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_combo/lb_combo02_01.png"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_combo/lb_combo02_03.png"
+                Stretch="None" />
 
-            <!-- Edges -->
-            <Image Source="/Assets/buttons/lb_combo/lb_combo02_02.png" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="24,0,24,0" Height="24" Stretch="Fill">
+            <!--  Edges  -->
+            <Image
+                Height="24"
+                Margin="24,0,24,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_combo/lb_combo02_02.png"
+                Stretch="Fill">
                 <Image.OpacityMask>
-                    <ImageBrush ImageSource="/Assets/buttons/lb_combo/lb_combo02_02.png" Stretch="None" TileMode="Tile" Viewport="0,0,1,0.25" ViewportUnits="Absolute"/>
+                    <ImageBrush
+                        ImageSource="/Assets/buttons/lb_combo/lb_combo02_02.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
                 </Image.OpacityMask>
             </Image>
 
-            <!-- ContentPresenter for displaying selected item -->
-            <ContentPresenter Content="{TemplateBinding SelectionBoxItem}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,0,32,0" />
+            <!--  ContentPresenter for displaying selected item  -->
+            <ContentPresenter
+                Margin="8,0,32,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Content="{TemplateBinding SelectionBoxItem}" />
 
-            <!-- Custom button for dropdown/arrow -->
-            <ToggleButton x:Name="PART_DropdownButton" Width="19" Height="20" Margin="0,0,6,0" HorizontalAlignment="Right" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}">
+            <!--  Custom button for dropdown/arrow  -->
+            <ToggleButton
+                x:Name="PART_DropdownButton"
+                Width="19"
+                Height="20"
+                Margin="0,0,6,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}">
                 <ToggleButton.Template>
                     <ControlTemplate TargetType="ToggleButton">
-                        <Border Background="{TemplateBinding Background}"
+                        <Border
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Padding="{TemplateBinding Padding}">
-                            <Image x:Name="ArrowImage" Source="/Assets/buttons/lb_combo/lb_combo02_04.png" Stretch="None"/>
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <Image
+                                x:Name="ArrowImage"
+                                Source="/Assets/buttons/lb_combo/lb_combo02_04.png"
+                                Stretch="None" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="ArrowImage" Property="Source" Value="/Assets/buttons/lb_combo/lb_combo02_07.png"/>
+                                <Setter TargetName="ArrowImage" Property="Source" Value="/Assets/buttons/lb_combo/lb_combo02_07.png" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="ArrowImage" Property="Source" Value="/Assets/buttons/lb_combo/lb_combo02_05.png"/>
+                                <Setter TargetName="ArrowImage" Property="Source" Value="/Assets/buttons/lb_combo/lb_combo02_05.png" />
                             </Trigger>
                             <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="ArrowImage" Property="Source" Value="/Assets/buttons/lb_combo/lb_combo02_06.png"/>
+                                <Setter TargetName="ArrowImage" Property="Source" Value="/Assets/buttons/lb_combo/lb_combo02_06.png" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </ToggleButton.Template>
             </ToggleButton>
 
-            <!-- Popup to display items -->
-            <Popup x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
-                <Grid x:Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                    <Border x:Name="DropDownBorder" BorderThickness="1" BorderBrush="#000" Background="#FF252220">
+            <!--  Popup to display items  -->
+            <Popup
+                x:Name="Popup"
+                AllowsTransparency="True"
+                Focusable="False"
+                IsOpen="{TemplateBinding IsDropDownOpen}"
+                Placement="Bottom"
+                PopupAnimation="Slide">
+                <Grid
+                    x:Name="DropDown"
+                    MinWidth="{TemplateBinding ActualWidth}"
+                    MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                    SnapsToDevicePixels="True">
+                    <Border
+                        x:Name="DropDownBorder"
+                        Background="#FF252220"
+                        BorderBrush="#000"
+                        BorderThickness="1">
                         <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
                             <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                         </ScrollViewer>
@@ -56,14 +105,17 @@
     </ControlTemplate>
 
     <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
-        <Setter Property="Foreground" Value="Gold"/>
-        <!-- Default text color -->
+        <Setter Property="Foreground" Value="Gold" />
+        <!--  Default text color  -->
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="Gray"/>
-                <!-- Gray out the text when disabled -->
+                <Setter Property="Foreground" Value="Gray" />
+                <!--  Gray out the text when disabled  -->
             </Trigger>
         </Style.Triggers>
     </Style>
+
+
+
 
 </ResourceDictionary>

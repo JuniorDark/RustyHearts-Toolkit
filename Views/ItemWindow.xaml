@@ -1,249 +1,897 @@
 ﻿<Window
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:vm="clr-namespace:RHGMTool.ViewModels"
-        xmlns:local="clr-namespace:RHGMTool.Views"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit" x:Class="RHGMTool.Views.ItemWindow" 
-        mc:Ignorable="d"
-        vm:WindowBehaviors.EnableDragMove="True"
-        vm:WindowBehaviors.EnableDoubleClickMaximize="True"
-        Title="Item" Width="1280" Height="720" ResizeMode="CanResizeWithGrip" WindowStyle="None" WindowStartupLocation="CenterScreen" AllowsTransparency="True" Background="Transparent" MinWidth="1280" MinHeight="720" Icon="/Assets/ico/gm.ico">
+    x:Class="RHGMTool.Views.ItemWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:RHGMTool.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:RHGMTool.ViewModels"
+    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+    Title="Item"
+    Width="1280"
+    Height="720"
+    MinWidth="1280"
+    MinHeight="720"
+    vm:WindowBehaviors.EnableDragMove="True"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="/Assets/ico/gm.ico"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
     <Window.DataContext>
-        <vm:GearFrameViewModel/>
+        <vm:GearFrameViewModel />
     </Window.DataContext>
     <ContentControl Template="{StaticResource RHWindowRed02Template}">
         <Grid Margin="-70,-70,-65,-60">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="114*"/>
+                <RowDefinition />
+                <RowDefinition Height="114*" />
             </Grid.RowDefinitions>
-            <Label x:Name="lbTitle" Content="Item" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" FontSize="16" FontWeight="Bold" Height="31" Width="191" Grid.RowSpan="2" Margin="0,-5,0,0"/>
-            <Button x:Name="btnSearch" Style="{StaticResource lb_def_button02}" Content="Search" VerticalAlignment="Top" Margin="235,418,900,0" Width="120" Height="26" Foreground="White" Grid.Row="1"/>
-            <Button x:Name="btnClose" Content="" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,1,0,0" Height="19" Width="19" Template="{StaticResource lb_close_button}" Grid.RowSpan="2" vm:WindowBehaviors.CloseWindowOnClick="True"/>
-            <ComboBox x:Name="cmbSubCategory" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="180,568,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" SelectedIndex="0" Height="24">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-                <ComboBoxItem Content="None"/>
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="3"/>
-            </ComboBox>
-            <CheckBox Template="{StaticResource lb_checkbox}" Style="{StaticResource CheckBoxStyle}" Content="CheckBox" HorizontalAlignment="Left" Margin="377,422,0,0" Grid.Row="1" VerticalAlignment="Top">
+            <Label
+                x:Name="lbTitle"
+                Grid.RowSpan="2"
+                Width="191"
+                Height="31"
+                Margin="0,-5,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Content="Item"
+                FontSize="16"
+                FontWeight="Bold"
+                Foreground="White" />
+            <Button
+                x:Name="btnSearch"
+                Grid.Row="1"
+                Width="120"
+                Height="26"
+                Margin="235,418,900,0"
+                VerticalAlignment="Top"
+                Content="Search"
+                Foreground="White"
+                Style="{StaticResource lb_def_button02}" />
+            <Button
+                x:Name="btnClose"
+                Grid.RowSpan="2"
+                Width="19"
+                Height="19"
+                Margin="0,1,0,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                vm:WindowBehaviors.CloseWindowOnClick="True"
+                Content=""
+                Template="{StaticResource lb_close_button}" />
+            <ComboBox
+                x:Name="cmbSubCategory"
+                Grid.Row="1"
+                Width="136"
+                Height="24"
+                Margin="180,568,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                IsReadOnly="True"
+                SelectedIndex="0"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <CheckBox
+                Grid.Row="1"
+                Margin="180,502,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Content="CheckBox"
+                Style="{StaticResource CheckBoxStyle}"
+                Template="{StaticResource lb_checkbox}">
                 <CheckBox.Background>
-                    <ImageBrush/>
+                    <ImageBrush />
                 </CheckBox.Background>
             </CheckBox>
-            <TextBox x:Name="tbSearch" Text="Item Name/ID" Template="{StaticResource lb_textbox}" IsEnabled="{Binding IsTextBoxEnabled}" Foreground="Gold" Margin="20,416,1025,0" VerticalAlignment="Top" Height="31" Width="210" Grid.Row="1"/>
-            <!-- Gold Label -->
-            <Label Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="180,538,956,0" HorizontalContentAlignment="Center" Height="25" Foreground="Gold" Content="Sub Category"/>
-            <!-- Gold IntegerUpDown -->
-            <ComboBox x:Name="cmbItemBranch" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="180,624,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" SelectedIndex="0" Height="24">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-                <ComboBoxItem Content="None"/>
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="3"/>
+            <TextBox
+                x:Name="tbSearch"
+                Grid.Row="1"
+                Width="210"
+                Height="31"
+                Margin="20,416,1025,0"
+                VerticalAlignment="Top"
+                Foreground="Gold"
+                Template="{StaticResource lb_textbox}"
+                Text="Item Name/ID" />
+            <!--  Gold Label  -->
+            <Label
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="180,538,956,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Sub Category"
+                Foreground="Gold" />
+            <!--  Gold IntegerUpDown  -->
+            <ComboBox
+                x:Name="cmbItemBranch"
+                Grid.Row="1"
+                Width="136"
+                Height="24"
+                Margin="180,624,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                IsReadOnly="True"
+                ItemsSource="{Binding BranchItems}"
+                SelectedIndex="0"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="180,594,956,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Quality"
+                Foreground="Gold" />
+            <ComboBox
+                x:Name="cmbItemCategory"
+                Grid.Row="1"
+                Width="136"
+                Height="24"
+                Margin="10,568,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                IsReadOnly="True"
+                SelectedIndex="0"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="10,538,1126,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Category"
+                Foreground="Gold" />
+            <ComboBox
+                x:Name="cmbJobClass"
+                Grid.Row="1"
+                Width="136"
+                Height="24"
+                Margin="10,624,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                IsReadOnly="True"
+                ItemsSource="{Binding ClassItems}"
+                SelectedIndex="0"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="10,594,1126,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Class"
+                Foreground="Gold" />
+            <ComboBox
+                x:Name="cmbItemType"
+                Grid.Row="1"
+                Width="136"
+                Height="24"
+                Margin="10,499,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                IsReadOnly="True"
+                ItemsSource="{Binding ItemTypeItems}"
+                SelectedIndex="0"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="10,469,1126,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Item Type"
+                Foreground="Gold" />
+            <DataGrid
+                x:Name="dataGridView"
+                Grid.Row="1"
+                Margin="0,29,844,290"
+                d:ItemsSource="{d:SampleData ItemCount=10}"
+                ColumnWidth="Auto"
+                Foreground="Gold"
+                Template="{StaticResource CustomDataGridTemplate}" />
+            <Label
+                x:Name="lbDurability"
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="796,29,340,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Durability"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numDurability"
+                Grid.Row="1"
+                Margin="796,54,340,609"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="{Binding MaxDurability, Converter={StaticResource IncrementConverter}}"
+                Maximum="{Binding MaxDurability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Minimum="1"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding Durability, Mode=TwoWay}" />
+            <Label
+                x:Name="lbMaxDurability"
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="928,29,208,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Max Durability"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numMaxDurability"
+                Grid.Row="1"
+                Margin="928,54,208,609"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="{Binding MaxDurability, Converter={StaticResource IncrementConverter}}"
+                Maximum="100000"
+                Minimum="1"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding MaxDurability, Mode=TwoWay}" />
+            <Label
+                x:Name="lbWeight"
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="1070,29,66,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Weight"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numWeight"
+                Grid.Row="1"
+                Margin="1070,54,66,609"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="1"
+                Maximum="200000"
+                Minimum="1"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding WeightValue, Mode=TwoWay}" />
+            <Label
+                x:Name="lbEnchant"
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="796,80,340,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Enchant Level"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numEnchantLevel"
+                Grid.Row="1"
+                Margin="796,105,340,558"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="1"
+                Maximum="20"
+                Minimum="0"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding EnchantLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                x:Name="lbRank"
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="928,80,208,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Rank"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numRank"
+                Grid.Row="1"
+                Margin="928,105,208,558"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="1"
+                Maximum="5"
+                Minimum="1"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding RankValue, Mode=TwoWay}" />
+            <Label
+                x:Name="lbSocketCount"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="911,313,225,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Socket Count"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numSocketCount"
+                Grid.Row="1"
+                Margin="911,339,224,325"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="1"
+                Maximum="{Binding SocketCountMax, Mode=TwoWay}"
+                Minimum="{Binding SocketCountMin, Mode=TwoWay}"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding SocketCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Label
+                x:Name="lbCurrentAttribute"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="1070,79,66,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Current Attribute"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numReconstruction"
+                Grid.Row="1"
+                Margin="1070,105,65,559"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="1"
+                Maximum="{Binding ReconstructionMax, Mode=TwoWay}"
+                Minimum="0"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding ReconstructionValue, Mode=TwoWay}" />
+            <Label
+                x:Name="lbAmount"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="794,623,341,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Amount"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numAmount"
+                Grid.Row="1"
+                Margin="794,649,341,15"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="1"
+                Maximum="{Binding OverlapCnt, Mode=TwoWay}"
+                Minimum="1"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="1" />
+            <ComboBox
+                x:Name="cbOptionCode1"
+                Grid.Row="1"
+                Width="250"
+                Height="24"
+                Margin="795,166,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                DisplayMemberPath="Name"
+                IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                IsEnabledChanged="ComboBox_IsEnabledChanged"
+                IsReadOnly="True"
+                ItemsSource="{Binding OptionItems}"
+                SelectedValue="{Binding RandomOption01, Mode=TwoWay}"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                x:Name="lbRandomOption1"
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="795,137,341,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Random Option 1"
+                Foreground="Gold" />
+            <ComboBox
+                x:Name="cbOptionCode2"
+                Grid.Row="1"
+                Width="250"
+                Height="24"
+                Margin="795,217,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                DisplayMemberPath="Name"
+                IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                IsEnabledChanged="ComboBox_IsEnabledChanged"
+                IsReadOnly="True"
+                ItemsSource="{Binding OptionItems}"
+                SelectedValue="{Binding RandomOption02, Mode=TwoWay}"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                x:Name="lbRandomOption2"
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="795,192,341,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Random Option 2"
+                Foreground="Gold" />
+            <ComboBox
+                x:Name="cbOptionCode3"
+                Grid.Row="1"
+                Width="250"
+                Height="24"
+                Margin="794,267,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                DisplayMemberPath="Name"
+                IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                IsEnabledChanged="ComboBox_IsEnabledChanged"
+                IsReadOnly="True"
+                ItemsSource="{Binding OptionItems}"
+                SelectedValue="{Binding RandomOption03, Mode=TwoWay}"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                x:Name="lbRandomOption3"
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="794,244,342,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Random Option 3"
+                Foreground="Gold" />
+            <Label
+                x:Name="lbRandomOptionValue1"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="1070,140,66,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Random Option Value 1"
+                FontSize="10"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numOptionValue1"
+                Grid.Row="1"
+                Margin="1069,166,66,498"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="{Binding RandomOption01MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                Maximum="{Binding RandomOption01MaxValue, Mode=TwoWay}"
+                Minimum="{Binding RandomOption01MinValue, Mode=TwoWay}"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding RandomOption01Value, Mode=TwoWay}" />
+            <Label
+                x:Name="lbRandomOptionValue2"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="1070,191,66,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Random Option Value 2"
+                FontSize="10"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numOptionValue2"
+                Grid.Row="1"
+                Margin="1070,217,65,447"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="{Binding RandomOption02MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                Maximum="{Binding RandomOption02MaxValue, Mode=TwoWay}"
+                Minimum="{Binding RandomOption02MinValue, Mode=TwoWay}"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding RandomOption02Value, Mode=TwoWay}" />
+            <Label
+                x:Name="lbRandomOptionValue3"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="1069,241,67,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Random Option Value 3"
+                FontSize="10"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numOptionValue3"
+                Grid.Row="1"
+                Margin="1069,267,66,397"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="{Binding RandomOption03MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                Maximum="{Binding RandomOption03MaxValue, Mode=TwoWay}"
+                Minimum="{Binding RandomOption03MinValue, Mode=TwoWay}"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding RandomOption03Value, Mode=TwoWay}" />
+            <ComboBox
+                x:Name="cbSocketCode1"
+                Grid.Row="1"
+                Width="250"
+                Height="24"
+                Margin="842,414,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                DisplayMemberPath="Name"
+                IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                IsEnabledChanged="ComboBox_IsEnabledChanged"
+                IsReadOnly="True"
+                ItemsSource="{Binding OptionItems}"
+                SelectedValue="{Binding SocketOption01, Mode=TwoWay}"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                x:Name="lbSocketOption1"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="850,389,287,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Socket Option 1"
+                Foreground="Gold" />
+            <ComboBox
+                x:Name="cbSocketCode2"
+                Grid.Row="1"
+                Width="250"
+                Height="24"
+                Margin="844,468,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                DisplayMemberPath="Name"
+                IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                IsEnabledChanged="ComboBox_IsEnabledChanged"
+                IsReadOnly="True"
+                ItemsSource="{Binding OptionItems}"
+                SelectedValue="{Binding SocketOption02, Mode=TwoWay}"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                x:Name="lbSocketOption2"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="848,443,287,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Socket Option 2"
+                Foreground="Gold" />
+            <ComboBox
+                x:Name="cbSocketCode3"
+                Grid.Row="1"
+                Width="250"
+                Height="24"
+                Margin="842,519,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                DisplayMemberPath="Name"
+                IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                IsEnabledChanged="ComboBox_IsEnabledChanged"
+                IsReadOnly="True"
+                ItemsSource="{Binding OptionItems}"
+                SelectedValue="{Binding SocketOption03, Mode=TwoWay}"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                x:Name="lbSocketOption3"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="842,494,293,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Socket Option 3"
+                Foreground="Gold" />
+            <Label
+                x:Name="lbSocketOptionValue1"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="1109,389,27,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Socket Option Value 1"
+                FontSize="10"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numSocketValue1"
+                Grid.Row="1"
+                Margin="1109,415,26,249"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="{Binding SocketOption01MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                Maximum="{Binding SocketOption01MaxValue, Mode=TwoWay}"
+                Minimum="{Binding SocketOption01MinValue, Mode=TwoWay}"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding SocketOption01Value, Mode=TwoWay}" />
+            <Label
+                x:Name="lbSocketOptionValue2"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="1110,443,26,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Socket Option Value 2"
+                FontSize="10"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numSocketValue2"
+                Grid.Row="1"
+                Margin="1110,469,25,195"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="{Binding SocketOption02MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                Maximum="{Binding SocketOption02MaxValue, Mode=TwoWay}"
+                Minimum="{Binding SocketOption02MinValue, Mode=TwoWay}"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding SocketOption02Value, Mode=TwoWay}" />
+            <Label
+                x:Name="lbSocketOptionValue3"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="1110,494,26,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Socket Option Value 3"
+                FontSize="10"
+                Foreground="Gold" />
+            <xctk:IntegerUpDown
+                x:Name="numSocketValue3"
+                Grid.Row="1"
+                Margin="1110,520,25,144"
+                AllowTextInput="False"
+                Background="#FF0E0B08"
+                BorderBrush="#FF161109"
+                CultureInfo=""
+                DefaultValue="0"
+                Foreground="Gold"
+                FormatString="N0"
+                Increment="{Binding SocketOption03MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                Maximum="{Binding SocketOption03MaxValue, Mode=TwoWay}"
+                Minimum="{Binding SocketOption03MinValue, Mode=TwoWay}"
+                Text="0"
+                TextAlignment="Left"
+                UpdateValueOnEnterKey="False"
+                Value="{Binding SocketOption03Value, Mode=TwoWay}" />
+            <Label
+                x:Name="lbSelectedItem"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="908,601,228,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Selected Item"
+                Foreground="Gold" />
+            <ComboBox
+                x:Name="cbSocketColor1"
+                Grid.Row="1"
+                Width="100"
+                Height="54"
+                Margin="736,413,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                IsReadOnly="True"
+                ItemsSource="{Binding SocketColorItems}"
+                SelectedValuePath="ImagePath"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Image
+                                Width="30"
+                                Height="30"
+                                Source="{Binding ImagePath}" />
+                            <TextBlock Margin="5,0,0,0" Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <ComboBox.ItemContainerStyle>
+                    <Style TargetType="ComboBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ComboBox.ItemContainerStyle>
             </ComboBox>
-            <Label Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="180,594,956,0" HorizontalContentAlignment="Center" Height="25" Foreground="Gold" Content="Quality"/>
-            <ComboBox x:Name="cmbItemCategory" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="10,568,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" SelectedIndex="0" Height="24">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-                <ComboBoxItem Content="None"/>
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="3"/>
-            </ComboBox>
-            <Label Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="10,538,1126,0" HorizontalContentAlignment="Center" Height="25" Foreground="Gold" Content="Category"/>
-            <ComboBox x:Name="cmbJobClass" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="10,624,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" SelectedIndex="0" Height="24">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-                <ComboBoxItem Content="None"/>
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="3"/>
-            </ComboBox>
-            <Label Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="10,594,1126,0" HorizontalContentAlignment="Center" Height="25" Foreground="Gold" Content="Class"/>
-            <ComboBox x:Name="cmbItemType" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="10,499,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" SelectedIndex="0" Height="24">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-                <ComboBoxItem Content="None"/>
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="3"/>
-            </ComboBox>
-            <Label Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="10,469,1126,0" HorizontalContentAlignment="Center" Height="25" Foreground="Gold" Content="Item Type"/>
-            <DataGrid x:Name="dataGridView" ColumnWidth="Auto" Template="{StaticResource CustomDataGridTemplate}" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=10}" Margin="0,29,844,290" Foreground="Gold"/>
-            <Label x:Name="lbDurability" Content="Durability" Foreground="Gold" Margin="796,29,340,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="25" Grid.Row="1"/>
-            <xctk:IntegerUpDown x:Name="numDurability" Foreground="Gold" Background="#FF0E0B08" Margin="796,54,340,609" FormatString="N0" Value="{Binding Durability, Mode=TwoWay}" Increment="1" Minimum="0" Maximum="200000" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <Label x:Name="lbMaxDurability" Content="Max Durability" Foreground="Gold" Margin="928,29,208,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="25" Grid.Row="1"/>
-            <xctk:IntegerUpDown x:Name="numMaxDurability" Foreground="Gold" Background="#FF0E0B08" Margin="928,54,208,609" FormatString="N0" Value="0" Increment="1" Maximum="200000" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <Label x:Name="lbWeight" Content="Weight" Foreground="Gold" Margin="1070,29,66,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="25" Grid.Row="1"/>
-            <xctk:IntegerUpDown x:Name="numWeight" Foreground="Gold" Background="#FF0E0B08" Margin="1070,54,66,609" FormatString="N0" Value="{Binding Weight, Mode=TwoWay}" Increment="1" Minimum="1" Maximum="200000" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <Label x:Name="lbEnchant" Content="Enchant Level" Foreground="Gold" Margin="796,80,340,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="25" Grid.Row="1"/>
-            <xctk:IntegerUpDown x:Name="numEnchantLevel" Foreground="Gold" Background="#FF0E0B08" Margin="796,105,340,558" FormatString="N0" Value="{Binding EnchantLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Increment="1" Minimum="0" Maximum="20" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <Label x:Name="lbRank" Content="Rank" Foreground="Gold" Margin="928,80,208,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="25" Grid.Row="1"/>
-            <xctk:IntegerUpDown x:Name="numRank" Foreground="Gold" Background="#FF0E0B08" Margin="928,105,208,558" FormatString="N0" Value="{Binding RankValue, Mode=TwoWay}" Increment="1" Minimum="1" Maximum="5" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <Label x:Name="lbSocketCount" Content="Socket Count" Foreground="Gold" Margin="792,229,344,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="26" Grid.Row="1"/>
-            <xctk:IntegerUpDown x:Name="numSocketCount" Foreground="Gold" Background="#FF0E0B08" Margin="792,255,344,409" FormatString="N0" Value="{Binding SocketCountMax, Mode=TwoWay}" Increment="1" Minimum="{Binding SocketCountMin, Mode=TwoWay}" Maximum="{Binding SocketCountMax, Mode=TwoWay}" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left" />
-            <TextBox x:Name="tbSocketCount" Text="0" Template="{StaticResource lb_textbox}" IsEnabled="{Binding IsTextBoxEnabled}" Foreground="Gold" Margin="928,249,228,0" VerticalAlignment="Top" Height="32" Grid.Row="1"/>
-            <Label x:Name="lbMaxSocket" Content="Max Socket" Foreground="Gold" Margin="928,224,208,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="25" Grid.Row="1"/>
-            <Label x:Name="lbCurrentAttribute" Content="Current Attribute" Foreground="Gold" Margin="792,154,344,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="26" Grid.Row="1"/>
-            <xctk:IntegerUpDown x:Name="numReconstructionMax" Foreground="Gold" Background="#FF0E0B08" Margin="792,180,343,484" FormatString="N0" Value="0" Increment="1" Maximum="200000" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <TextBox x:Name="tbReconNum" Text="0" Template="{StaticResource lb_textbox}" IsEnabled="{Binding IsTextBoxEnabled}" Foreground="Gold" Margin="928,174,227,0" VerticalAlignment="Top" Height="32" Grid.Row="1"/>
-            <Label x:Name="lbMaxAttribute" Content="Max Attribute" Foreground="Gold" Margin="928,149,208,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="25" Grid.Row="1"/>
-            <Label x:Name="lbAmount" Content="Amount" Foreground="Gold" Margin="760,580,376,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="26" Grid.Row="1"/>
-            <xctk:IntegerUpDown x:Name="numAmount" Foreground="Gold" Background="#FF0E0B08" Margin="760,606,376,58" FormatString="N0" Value="1" Increment="1" Minimum="1" Maximum="{Binding OverlapCnt, Mode=TwoWay}" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <ComboBox x:Name="cbOptionCode1" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="780,334,0,0" Grid.Row="1" VerticalAlignment="Top" Width="148" IsReadOnly="True" Height="24" ItemsSource="{Binding OptionItems}"
-          DisplayMemberPath="Name"
-          SelectedValuePath="ID"
-          SelectedValue="{Binding RandomOption01, Mode=TwoWay}"
-          SelectedIndex="0">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
 
-            </ComboBox>
-            <Label x:Name="lbRandomOption1" Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="792,304,344,0" HorizontalContentAlignment="Center" Height="25" Foreground="Gold" Content="Random Option 1"/>
-            <ComboBox x:Name="cbOptionCode2" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="941,334,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" Height="24"
-                      ItemsSource="{Binding OptionItems}"
-          DisplayMemberPath="Name"
-          SelectedValuePath="ID"
-          SelectedValue="{Binding RandomOption02, Mode=TwoWay}"
-            SelectedIndex="0">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-            </ComboBox>
-            <Label x:Name="lbRandomOption2" Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="941,304,195,0" HorizontalContentAlignment="Center" Height="25" Foreground="Gold" Content="Random Option 2"/>
-            <ComboBox x:Name="cbOptionCode3" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="1086,334,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" Height="24" ItemsSource="{Binding OptionItems}"
-          DisplayMemberPath="Name"
-          SelectedValuePath="ID"
-          SelectedValue="{Binding RandomOption03, Mode=TwoWay}"
-            SelectedIndex="0">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-            </ComboBox>
-            <Label x:Name="lbRandomOption3" Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="1086,304,50,0" HorizontalContentAlignment="Center" Height="25" Foreground="Gold" Content="Random Option 3"/>
-            <Label x:Name="lbRandomOptionValue1" Content="Random Option Value 1" Foreground="Gold" Margin="800,363,335,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="26" Grid.Row="1" FontSize="10"/>
-            <xctk:IntegerUpDown x:Name="numOptionValue1" Foreground="Gold" Background="#FF0E0B08" Margin="800,389,335,275" FormatString="N0" Value="{Binding RandomOption01Value, Mode=TwoWay}" Increment="{Binding RandomOption01MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}" Minimum="{Binding RandomOption01MinValue, Mode=TwoWay}" Maximum="{Binding RandomOption01MaxValue, Mode=TwoWay}" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <Label x:Name="lbRandomOptionValue2" Content="Random Option Value 2" Foreground="Gold" Margin="949,363,187,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="26" Grid.Row="1" FontSize="10"/>
-            <xctk:IntegerUpDown x:Name="numOptionValue2" Foreground="Gold" Background="#FF0E0B08" Margin="949,389,186,275" FormatString="N0" Value="{Binding RandomOption02Value, Mode=TwoWay}" Increment="{Binding RandomOption02MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}" Minimum="{Binding RandomOption02MinValue, Mode=TwoWay}" Maximum="{Binding RandomOption02MaxValue, Mode=TwoWay}" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <Label x:Name="lbRandomOptionValue3" Content="Random Option Value 3" Foreground="Gold" Margin="1094,363,42,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="26" Grid.Row="1" FontSize="10"/>
-            <xctk:IntegerUpDown x:Name="numOptionValue3" Foreground="Gold" Background="#FF0E0B08" Margin="1094,389,41,275" FormatString="N0" Value="{Binding RandomOption03Value, Mode=TwoWay}" Increment="{Binding RandomOption03MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}" Minimum="{Binding RandomOption03MinValue, Mode=TwoWay}" Maximum="{Binding RandomOption03MaxValue, Mode=TwoWay}" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <ComboBox x:Name="cbSocketCode1" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="792,487,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" Height="24" ItemsSource="{Binding OptionItems}"
-          DisplayMemberPath="Name"
-          SelectedValuePath="ID"
-          SelectedValue="{Binding SocketOption01, Mode=TwoWay}"
-          SelectedIndex="0">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-            </ComboBox>
-            <Label x:Name="lbRandomOption1_Copy" Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="792,462,344,0" HorizontalContentAlignment="Center" Height="26" Foreground="Gold" Content="Socket Option 1"/>
-            <ComboBox x:Name="cbSocketCode2" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="941,487,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" Height="24" ItemsSource="{Binding OptionItems}"
-          DisplayMemberPath="Name"
-          SelectedValuePath="ID"
-          SelectedValue="{Binding SocketOption02, Mode=TwoWay}"
-          SelectedIndex="0">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-            </ComboBox>
-            <Label x:Name="lbRandomOption2_Copy" Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="941,462,195,0" HorizontalContentAlignment="Center" Height="26" Foreground="Gold" Content="Random Option 2"/>
-            <ComboBox x:Name="cbSocketCode3" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="1086,487,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" Height="24" ItemsSource="{Binding OptionItems}"
-          DisplayMemberPath="Name"
-          SelectedValuePath="ID"
-          SelectedValue="{Binding SocketOption03, Mode=TwoWay}"
-          SelectedIndex="0">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-            </ComboBox>
-            <Label x:Name="lbRandomOption3_Copy" Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="1086,462,50,0" HorizontalContentAlignment="Center" Height="26" Foreground="Gold" Content="Random Option 1"/>
-            <Label x:Name="lbSocketOptionValue1" Content="Socket Option Value 1" Foreground="Gold" Margin="800,516,336,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="26" Grid.Row="1" FontSize="10"/>
-            <xctk:IntegerUpDown x:Name="numSocketValue1" Foreground="Gold" Background="#FF0E0B08" Margin="800,542,335,122" FormatString="N0" Value="{Binding SocketOption01Value, Mode=TwoWay}" Increment="{Binding SocketOption01MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}" Minimum="{Binding SocketOption01MinValue, Mode=TwoWay}" Maximum="{Binding SocketOption01MaxValue, Mode=TwoWay}" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <Label x:Name="lbSocketOptionValue2" Content="Socket Option Value 2" Foreground="Gold" Margin="949,516,187,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="26" Grid.Row="1" FontSize="10"/>
-            <xctk:IntegerUpDown x:Name="numSocketValue2" Foreground="Gold" Background="#FF0E0B08" Margin="949,542,186,122" FormatString="N0" Value="{Binding SocketOption02Value, Mode=TwoWay}" Increment="{Binding SocketOption02MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}" Minimum="{Binding SocketOption02MinValue, Mode=TwoWay}" Maximum="{Binding SocketOption02MaxValue, Mode=TwoWay}" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <Label x:Name="lbSocketOptionValue3" Content="Socket Option Value 3" Foreground="Gold" Margin="1094,516,42,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="26" Grid.Row="1" FontSize="10"/>
-            <xctk:IntegerUpDown x:Name="numSocketValue3" Foreground="Gold" Background="#FF0E0B08" Margin="1094,542,41,122" FormatString="N0" Value="{Binding SocketOption03Value, Mode=TwoWay}" Increment="{Binding SocketOption03MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}" Minimum="{Binding SocketOption03MinValue, Mode=TwoWay}" Maximum="{Binding SocketOption03MaxValue, Mode=TwoWay}" Grid.Row="1" BorderBrush="#FF161109" AllowTextInput="False" CultureInfo="" DefaultValue="0" UpdateValueOnEnterKey="False" Text="0" TextAlignment="Left"/>
-            <Label x:Name="lbSelectedItem" Content="Selected Item" Foreground="Gold" Margin="908,601,228,0" VerticalAlignment="Top" HorizontalContentAlignment="Center" Width="119" Height="26" Grid.Row="1"/>
-            <ComboBox x:Name="cbSocketColor1" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="792,437,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" SelectedIndex="0" Height="24">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-                <ComboBoxItem Content="None"/>
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="3"/>
-            </ComboBox>
-            <Label x:Name="lbSocketColor1" Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="792,412,344,0" HorizontalContentAlignment="Center" Height="26" Foreground="Gold" Content="Socket Color 1"/>
-            <ComboBox x:Name="cbSocketColor2" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="941,437,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" SelectedIndex="0" Height="24">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-                <ComboBoxItem Content="None"/>
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="3"/>
-            </ComboBox>
-            <Label x:Name="lbSocketColor2" Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="941,412,195,0" HorizontalContentAlignment="Center" Height="26" Foreground="Gold" Content="Socket Color 2"/>
-            <ComboBox x:Name="cbSocketColor3" Template="{StaticResource lb_combobox}" Style="{StaticResource ComboBoxStyle}" HorizontalAlignment="Left" Margin="1086,437,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" IsReadOnly="True" SelectedIndex="0" Height="24">
-                <ComboBox.BorderBrush>
-                    <ImageBrush/>
-                </ComboBox.BorderBrush>
-                <ComboBox.Background>
-                    <ImageBrush/>
-                </ComboBox.Background>
-                <ComboBoxItem Content="None"/>
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="3"/>
-            </ComboBox>
-            <Label x:Name="lbSocketColor3" Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="1086,412,50,0" HorizontalContentAlignment="Center" Height="26" Foreground="Gold" Content="Socket Color 3"/>
-            <Image x:Name="pbItemIcon" Margin="946,627,259,0" VerticalAlignment="Top" Source="/Assets/images/lb_ac_icon.png" Stretch="None" Grid.Row="1"/>
-            <Label x:Name="lbTotal" Width="119" VerticalAlignment="Top" Grid.Row="1" Margin="5,391,1131,0" HorizontalContentAlignment="Center" Height="25" Foreground="Gold" Content="Total Items"/>
-            <local:GearFrameUserControl x:Name="gearFrame" DataContext="{Binding}" HorizontalAlignment="Left" Margin="423,30,0,0" Grid.Row="1" VerticalAlignment="Top" Width="300" Height="600"/>
 
+
+            <Label
+                x:Name="lbSocketColor1"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="736,388,399,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Socket Color 1"
+                Foreground="Gold" />
+            <ComboBox
+                x:Name="cbSocketColor2"
+                Grid.Row="1"
+                Width="100"
+                Height="24"
+                Margin="736,467,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                IsReadOnly="True"
+                ItemsSource="{Binding SocketColorItems}"
+                SelectedIndex="0"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                x:Name="lbSocketColor2"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="736,442,400,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Socket Color 2"
+                Foreground="Gold" />
+            <ComboBox
+                x:Name="cbSocketColor3"
+                Grid.Row="1"
+                Width="100"
+                Height="24"
+                Margin="736,519,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                IsReadOnly="True"
+                ItemsSource="{Binding SocketColorItems}"
+                SelectedIndex="0"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                x:Name="lbSocketColor3"
+                Grid.Row="1"
+                Width="119"
+                Height="26"
+                Margin="736,494,399,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Socket Color 3"
+                Foreground="Gold" />
+            <Image
+                x:Name="pbItemIcon"
+                Grid.Row="1"
+                Margin="946,627,259,0"
+                VerticalAlignment="Top"
+                Source="/Assets/images/lb_ac_icon.png"
+                Stretch="None" />
+            <Label
+                x:Name="lbTotal"
+                Grid.Row="1"
+                Width="119"
+                Height="25"
+                Margin="5,391,1131,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Total Items"
+                Foreground="Gold" />
+            <local:GearFrameUserControl
+                x:Name="gearFrame"
+                Grid.Row="1"
+                Width="300"
+                Height="600"
+                Margin="423,30,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                DataContext="{Binding}" />
         </Grid>
     </ContentControl>
 </Window>
