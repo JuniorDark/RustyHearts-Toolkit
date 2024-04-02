@@ -1,22 +1,22 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ControlTemplate x:Key="lb_textbox" TargetType="{x:Type TextBox}">
-    <Grid>
-        <!-- lb_def_box04 template for the textbox -->
-        <ContentControl Template="{StaticResource lb_def_box04}">
-            <TextBox Text="{TemplateBinding Text}"
-                     Background="Transparent"
-                     BorderThickness="0"
-                     Padding="0"
-                     Foreground="{TemplateBinding Foreground}"
-                     IsReadOnly="{TemplateBinding IsReadOnly}"
-                     IsEnabled="{TemplateBinding IsEnabled}"
-                     CaretBrush="White"
-                     VerticalContentAlignment="Top"
-                     TextWrapping="Wrap"
-                     MinHeight="31"/>
-        </ContentControl>
-    </Grid>
-</ControlTemplate>
+        <Grid>
+            <!--  lb_def_box04 template for the textbox  -->
+            <ContentControl Template="{StaticResource lb_def_box04}">
+                <TextBox
+                    MinHeight="31"
+                    Padding="0"
+                    VerticalContentAlignment="Top"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    CaretBrush="White"
+                    Foreground="{TemplateBinding Foreground}"
+                    IsEnabled="{TemplateBinding IsEnabled}"
+                    IsReadOnly="{TemplateBinding IsReadOnly}"
+                    Text="{TemplateBinding Text}"
+                    TextWrapping="Wrap" />
+            </ContentControl>
+        </Grid>
+    </ControlTemplate>
 
 </ResourceDictionary>

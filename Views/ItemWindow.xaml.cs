@@ -46,6 +46,8 @@ namespace RHGMTool.Views
                 SellPrice = 4000095,
                 PetFood = 0,
                 JobClass = 1,
+                OptionCountMax = 3,
+                SocketCountMax = 2,
                 FixOption00 = 1707,
                 FixOptionValue00 = 100,
                 FixOption01 = 1707,
@@ -69,14 +71,13 @@ namespace RHGMTool.Views
             gearFrameViewModel.Gear = item;
             gearFrameViewModel.EnchantLevel = 1;
             gearFrameViewModel.RankValue = 5;
-            gearFrameViewModel.OptionCountMax = 3;
+            gearFrameViewModel.SocketCount = 2;
             gearFrameViewModel.RandomOption01 = 1707;
             gearFrameViewModel.RandomOption01Value = 100;
             gearFrameViewModel.RandomOption02 = 1707;
             gearFrameViewModel.RandomOption02Value = 100;
             gearFrameViewModel.RandomOption03 = 1707;
             gearFrameViewModel.RandomOption03Value = 100;
-            gearFrameViewModel.SocketCountMax = 3;
             gearFrameViewModel.Socket01Color = 4;
             gearFrameViewModel.Socket02Color = 3;
             gearFrameViewModel.Socket03Color = 2;
@@ -88,6 +89,22 @@ namespace RHGMTool.Views
             gearFrameViewModel.SocketOption03Value = 500;
 
         }
+
+        private void ComboBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender is ComboBox comboBox)
+            {
+                if (!(bool)e.NewValue)
+                {
+                    if (comboBox.Items.Count > 0)
+                    {
+                        comboBox.SelectedIndex = 0;
+                    }
+                }
+
+            }
+        }
+
 
         //        #region Template Configuration
         //        public void SetTemplateData(MailTemplateData data, int itemIndex)
