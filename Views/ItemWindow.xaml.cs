@@ -3,6 +3,9 @@ using RHGMTool.ViewModels;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using Xceed.Wpf.Toolkit;
 
 namespace RHGMTool.Views
 {
@@ -15,13 +18,13 @@ namespace RHGMTool.Views
         private readonly ToolTip pictureBoxToolTip = new();
         #endregion
 
-        private readonly GearFrameViewModel _viewModel;
+        private readonly FrameViewModel _viewModel;
         private readonly DataTable? itemDataTable;
 
         public ItemWindow()
         {
             InitializeComponent();
-            _viewModel = new GearFrameViewModel();
+            _viewModel = new FrameViewModel();
             DataContext = _viewModel;
             itemDataTable = ItemDataTable.CachedItemDataTable;
             dataGridView.ItemsSource = itemDataTable?.DefaultView;
@@ -47,7 +50,7 @@ namespace RHGMTool.Views
                 PetFood = 0,
                 JobClass = 1,
                 OptionCountMax = 3,
-                SocketCountMax = 2,
+                SocketCountMax = 3,
                 FixOption00 = 1707,
                 FixOptionValue00 = 100,
                 FixOption01 = 1707,
@@ -104,6 +107,9 @@ namespace RHGMTool.Views
 
             }
         }
+
+        
+
 
 
         //        #region Template Configuration

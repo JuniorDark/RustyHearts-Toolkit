@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Documents;
 using System.Windows.Media;
-using static RHGMTool.Utilities.EnumMapper;
+using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.ViewModels
 {

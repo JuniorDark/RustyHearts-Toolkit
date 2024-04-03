@@ -1,7 +1,7 @@
 ﻿using RHGMTool.Models;
 using System.Data;
 using System.Data.SQLite;
-using static RHGMTool.Utilities.EnumMapper;
+using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.Services
 {

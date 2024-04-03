@@ -21,7 +21,7 @@
         <DropShadowEffect/>
     </Window.Effect>
     <Window.DataContext>
-        <vm:GearFrameViewModel/>
+        <vm:FrameViewModel/>
     </Window.DataContext>
     <Grid x:Name="gearGrid" Margin="-22,-22,-22,-22" VerticalAlignment="Top" Width="300" MaxHeight="600">
         <Grid.RowDefinitions>

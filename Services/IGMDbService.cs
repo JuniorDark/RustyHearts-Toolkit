@@ -1,5 +1,5 @@
 ﻿using RHGMTool.Models;
-using static RHGMTool.Utilities.EnumMapper;
+using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.Services
 {

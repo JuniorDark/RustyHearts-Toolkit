@@ -4,11 +4,13 @@ using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using static RHGMTool.Utilities.EnumMapper;
+using System.Windows.Input;
+using Xceed.Wpf.Toolkit;
+using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.ViewModels
 {
-    public class GearFrameViewModel : INotifyPropertyChanged
+    public class FrameViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
@@ -16,16 +18,37 @@ namespace RHGMTool.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public ICommand IncrementCommand { get; } = new RelayCommand(Increment);
+
+        public ICommand DecrementCommand { get; } = new RelayCommand(Decrement);
+
+        private static void Increment(object parameter)
+        {
+            if (parameter is IntegerUpDown integerUpDown)
+            {
+                integerUpDown.Value++;
+            }
+        }
+
+        private static void Decrement(object parameter)
+        {
+            if (parameter is IntegerUpDown integerUpDown)
+            {
+                integerUpDown.Value--;
+            }
+        }
+
         private readonly SqLiteDatabaseService _databaseService;
         private readonly GMDbService _gMDbService;
 
-        public GearFrameViewModel()
+        public FrameViewModel()
         {
             _databaseService = new SqLiteDatabaseService();
             _gMDbService = new GMDbService(_databaseService);
             InitializeItemDataTables();
             PopulateOptionItems();
             PopulateItemTypeItems();
+            PopulateCategoryItems((ItemType)1);
             PopulateClassItems();
             PopulateBranchItems();
             PopulateSocketColorItems();
@@ -52,7 +75,7 @@ namespace RHGMTool.ViewModels
         {
             cachedDataTable = new DataTable();
             cachedDataTable.Columns.Add("ItemType", typeof(ItemType)); // Add a column for ItemType
-            cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, ItemType.Item, "itemlist");
+            cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, EnumService.ItemType.Item, "itemlist");
             //cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, ItemType.Costume, "itemlist_costume");
             //cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, ItemType.Armor, "itemlist_armor");
             //cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, ItemType.Weapon, "itemlist_weapon");
@@ -82,13 +105,135 @@ namespace RHGMTool.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
         #endregion
 
-        #region Comboboxes Lists
+        #region Comboboxes
+
+        private List<NameID>? _categoryItems;
+        public List<NameID>? CategoryItems
+        {
+            get { return _categoryItems; }
+            set
+            {
+                if (_categoryItems != value)
+                {
+                    _categoryItems = value;
+                    OnPropertyChanged(nameof(CategoryItems));
+                }
+            }
+        }
+
+        private List<NameID>? _subCategoryItems;
+        public List<NameID>? SubCategoryItems
+        {
+            get { return _subCategoryItems; }
+            set
+            {
+                if (_subCategoryItems != value)
+                {
+                    _subCategoryItems = value;
+                    OnPropertyChanged(nameof(SubCategoryItems));
+                }
+            }
+        }
+
+        private void PopulateCategoryItems(ItemType itemType)
+        {
+            try
+            {
+                CategoryItems = new List<NameID>(_gMDbService.GetCategoryItems(itemType, false));
+                SubCategoryItems = new List<NameID>(_gMDbService.GetCategoryItems(itemType, true));
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private int _itemType;
+
+        public int ItemType
+        {
+            get { return _itemType; }
+            set
+            {
+                if (_itemType != value)
+                {
+                    _itemType = value;
+                    OnPropertyChanged(nameof(ItemType));
+                    PopulateCategoryItems((ItemType)value);
+
+                }
+            }
+        }
+
+        private int _itemCategory;
+
+        public int ItemCategory
+        {
+            get { return _itemCategory; }
+            set
+            {
+                if (_itemCategory != value)
+                {
+                    _itemCategory = value;
+                    OnPropertyChanged(nameof(ItemCategory));
+
+                }
+            }
+        }
+
+        private int _itemSubCategory;
+
+        public int ItemSubCategory
+        {
+            get { return _itemSubCategory; }
+            set
+            {
+                if (_itemSubCategory != value)
+                {
+                    _itemSubCategory = value;
+                    OnPropertyChanged(nameof(ItemSubCategory));
+
+                }
+            }
+        }
+
+        private int _itemClass;
+
+        public int ItemClass
+        {
+            get { return _itemClass; }
+            set
+            {
+                if (_itemClass != value)
+                {
+                    _itemClass = value;
+                    OnPropertyChanged(nameof(ItemClass));
+
+                }
+            }
+        }
+
+        private int _itemBranch;
+
+        public int ItemBranch
+        {
+            get { return _itemBranch; }
+            set
+            {
+                if (_itemBranch != value)
+                {
+                    _itemBranch = value;
+                    OnPropertyChanged(nameof(ItemBranch));
+
+                }
+            }
+        }
 
         private List<NameID>? _itemTypeItems;
         public List<NameID>? ItemTypeItems
@@ -108,11 +253,11 @@ namespace RHGMTool.ViewModels
         {
             try
             {
-                ItemTypeItems = EnumService.GetEnumItems<ItemType>();
+                ItemTypeItems = GetEnumItems<ItemType>();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -134,11 +279,11 @@ namespace RHGMTool.ViewModels
         {
             try
             {
-                ClassItems = EnumService.GetEnumItems<CharClass>();
+                ClassItems = GetEnumItems<CharClass>();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -160,11 +305,11 @@ namespace RHGMTool.ViewModels
         {
             try
             {
-                BranchItems = EnumService.GetEnumItems<Branch>();
+                BranchItems = GetEnumItems<Branch>();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -186,11 +331,11 @@ namespace RHGMTool.ViewModels
         {
             try
             {
-                SocketColorItems = EnumService.GetSocketColorItems();
+                SocketColorItems = GetSocketColorItems();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -604,6 +749,8 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        #region Random Option
+
         private int _randomOption01;
         public int RandomOption01
         {
@@ -928,7 +1075,9 @@ namespace RHGMTool.ViewModels
             RandomOption02Value = RandomOption02 != 0 ? RandomOption02Value : 0;
             RandomOption03Value = RandomOption03 != 0 ? RandomOption03Value : 0;
         }
+        #endregion
 
+        #region Socket
 
         private string? _socketBuff;
         public string? SocketBuff
@@ -1190,6 +1339,7 @@ namespace RHGMTool.ViewModels
             {
                 _socket01Color = value;
                 OnPropertyChanged(nameof(Socket01Color));
+                UpdateSocketBuff();
             }
         }
 
@@ -1201,6 +1351,7 @@ namespace RHGMTool.ViewModels
             {
                 _socket02Color = value;
                 OnPropertyChanged(nameof(Socket02Color));
+                UpdateSocketBuff();
             }
         }
 
@@ -1212,6 +1363,7 @@ namespace RHGMTool.ViewModels
             {
                 _socket03Color = value;
                 OnPropertyChanged(nameof(Socket03Color));
+                UpdateSocketBuff();
             }
         }
 
@@ -1306,7 +1458,6 @@ namespace RHGMTool.ViewModels
             }
         }
 
-
         private void UpdateSocketBuff()
         {
             IsSocketBuffVisible = SocketCountMax > 0 && SocketCount > 0;
@@ -1329,6 +1480,6 @@ namespace RHGMTool.ViewModels
 
         }
 
-
+        #endregion
     }
 }

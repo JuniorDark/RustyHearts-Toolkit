@@ -10,16 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace RHGMTool.Views
+namespace RHGMTool.Views.Controls
 {
     /// <summary>
-    /// Interaction logic for MailTest.xaml
+    /// Interaction logic for Checkbox.xaml
     /// </summary>
-    public partial class MailTest : Window
+    public partial class Checkbox : UserControl
     {
-        public MailTest()
+        public Checkbox()
         {
             InitializeComponent();
         }

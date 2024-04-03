@@ -1,12 +1,17 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <!--  Define images as resources  -->
+    <BitmapImage x:Key="lb_close_Normal" UriSource="/Assets/buttons/lb_close/close_button_normal.png" />
+    <BitmapImage x:Key="lb_close_Hover" UriSource="/Assets/buttons/lb_close/close_button_hover.png" />
+    <BitmapImage x:Key="lb_close_Down" UriSource="/Assets/buttons/lb_close/close_button_down.png" />
+
     <!--  lb_close_button  -->
     <ControlTemplate x:Key="lb_close_button" TargetType="Button">
         <Grid>
             <!--  Background Image  -->
             <Image
                 x:Name="BackgroundImage"
-                Source="/Assets/buttons/lb_close/close_button_normal.png"
+                Source="{StaticResource lb_close_Normal}"
                 Stretch="None" />
             <!--  Content Presenter  -->
             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -14,11 +19,11 @@
         <ControlTemplate.Triggers>
             <!--  Mouse Over Trigger  -->
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter TargetName="BackgroundImage" Property="Source" Value="/Assets/buttons/lb_close/close_button_hover.png" />
+                <Setter TargetName="BackgroundImage" Property="Source" Value="{StaticResource lb_close_Hover}" />
             </Trigger>
             <!--  Pressed Trigger  -->
             <Trigger Property="IsPressed" Value="True">
-                <Setter TargetName="BackgroundImage" Property="Source" Value="/Assets/buttons/lb_close/close_button_down.png" />
+                <Setter TargetName="BackgroundImage" Property="Source" Value="{StaticResource lb_close_Down}" />
             </Trigger>
         </ControlTemplate.Triggers>
 

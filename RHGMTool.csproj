@@ -54,6 +54,9 @@
     <None Remove="Assets\buttons\lb_close\close_button_down.png" />
     <None Remove="Assets\buttons\lb_close\close_button_hover.png" />
     <None Remove="Assets\buttons\lb_close\close_button_normal.png" />
+    <None Remove="Assets\buttons\lb_combo\lb_combo01_01.png" />
+    <None Remove="Assets\buttons\lb_combo\lb_combo01_02.png" />
+    <None Remove="Assets\buttons\lb_combo\lb_combo01_03.png" />
     <None Remove="Assets\buttons\lb_combo\lb_combo02_01.png" />
     <None Remove="Assets\buttons\lb_combo\lb_combo02_02.png" />
     <None Remove="Assets\buttons\lb_combo\lb_combo02_03.png" />
@@ -289,6 +292,9 @@
     <Resource Include="Assets\buttons\lb_close\close_button_down.png" />
     <Resource Include="Assets\buttons\lb_close\close_button_hover.png" />
     <Resource Include="Assets\buttons\lb_close\close_button_normal.png" />
+    <Resource Include="Assets\buttons\lb_combo\lb_combo01_01.png" />
+    <Resource Include="Assets\buttons\lb_combo\lb_combo01_02.png" />
+    <Resource Include="Assets\buttons\lb_combo\lb_combo01_03.png" />
     <Resource Include="Assets\buttons\lb_combo\lb_combo02_01.png" />
     <Resource Include="Assets\buttons\lb_combo\lb_combo02_02.png" />
     <Resource Include="Assets\buttons\lb_combo\lb_combo02_03.png" />
