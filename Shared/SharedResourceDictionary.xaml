@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:RHGMTool.Utilities">
     <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    <local:EmptyStringToDefaultConverter x:Key="EmptyStringToDefaultConverter" />
     <local:EnabledToSelectedIndexConverter x:Key="EnabledToSelectedIndexConverter" />
     <local:GreaterOrEqualConverter x:Key="GreaterOrEqualConverter" />
     <local:IncrementConverter x:Key="IncrementConverter" />

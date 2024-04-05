@@ -1,15 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style x:Key="WindowStyle" TargetType="Window">
-        <Style.Triggers>
-            <MultiDataTrigger>
-                <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding IsRandomBuffVisible}" Value="False" />
-                    <Condition Binding="{Binding IsSocketBuffVisible}" Value="False" />
-                </MultiDataTrigger.Conditions>
-                <Setter Property="Height" Value="465" />
-            </MultiDataTrigger>
-        </Style.Triggers>
-    </Style>
+
     <!--  red02  -->
     <ControlTemplate x:Key="RHWindowRed02Template" TargetType="ContentControl">
         <Grid>
@@ -71,6 +61,7 @@
             </Image>
 
             <Image
+                x:Name="EdgeLeft"
                 Width="80"
                 Margin="0,80,0,80"
                 HorizontalAlignment="Left"
@@ -88,6 +79,7 @@
             </Image>
 
             <Image
+                x:Name="EdgeRight"
                 Width="80"
                 Margin="0,80,0,80"
                 HorizontalAlignment="Right"
@@ -106,6 +98,7 @@
 
             <!--  Center  -->
             <Image
+                x:Name="Center"
                 Margin="80,80,80,80"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"

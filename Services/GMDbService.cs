@@ -20,32 +20,34 @@ namespace RHGMTool.Services
         {
             try
             {
-                DataTable itemDataTable = new();
-
                 string query = GetItemQuery(itemTableName);
 
                 using (var adapter = new SQLiteDataAdapter(query, _connection))
                 {
-                    adapter.Fill(itemDataTable);
+                    // Use parameterized queries if possible
+                    adapter.SelectCommand.Parameters.AddWithValue("@ItemType", itemType);
+
+                    adapter.Fill(dataTable);
                 }
 
                 // Add a column for ItemType and set its value
-                itemDataTable.Columns.Add("ItemType", typeof(ItemType));
-                foreach (DataRow row in itemDataTable.Rows)
+                if (!dataTable.Columns.Contains("ItemType"))
+                {
+                    dataTable.Columns.Add("ItemType", typeof(ItemType));
+                }
+                foreach (DataRow row in dataTable.Rows)
                 {
                     row["ItemType"] = itemType;
                 }
 
-                // Merge the current itemDataTable into the cachedDataTable
-                dataTable.Merge(itemDataTable);
+                return dataTable;
             }
             catch (Exception ex)
             {
                 throw new Exception("Error creating ItemDataTable.", ex);
             }
-
-            return dataTable;
         }
+
 
         private static string GetItemQuery(string itemTableName)
         {

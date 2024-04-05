@@ -11,7 +11,7 @@
                 Source="/Assets/buttons/lb_checkbox/lb_checkbox01.png"
                 Stretch="None" />
             <TextBlock
-                x:Name="ContentText"
+                x:Name="ContentTb"
                 Grid.Column="1"
                 VerticalAlignment="Center"
                 Text="{TemplateBinding Content}" />
@@ -37,7 +37,7 @@
                         <BlurEffect Radius="2" />
                     </Setter.Value>
                 </Setter>
-                <Setter TargetName="ContentText" Property="Foreground" Value="Gray" />
+                <Setter TargetName="ContentTb" Property="Foreground" Value="Gray" />
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>

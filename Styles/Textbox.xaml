@@ -4,6 +4,7 @@
             <!--  lb_def_box04 template for the textbox  -->
             <ContentControl Template="{StaticResource lb_def_box04}">
                 <TextBox
+                    x:Name="lb_Tb"
                     MinHeight="31"
                     Padding="0"
                     VerticalContentAlignment="Top"

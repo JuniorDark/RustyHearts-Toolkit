@@ -3,9 +3,6 @@ using RHGMTool.ViewModels;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Input;
-using Xceed.Wpf.Toolkit;
 
 namespace RHGMTool.Views
 {
@@ -27,12 +24,12 @@ namespace RHGMTool.Views
             _viewModel = new FrameViewModel();
             DataContext = _viewModel;
             itemDataTable = ItemDataTable.CachedItemDataTable;
-            dataGridView.ItemsSource = itemDataTable?.DefaultView;
-            
+            //dataGridView.ItemsSource = itemDataTable?.DefaultView;
+
             UpdateItemFrameValues();
         }
 
-        private static ItemData ExtractItemFromRow()
+        private void UpdateItemFrameValues()
         {
             ItemData item = new()
             {
@@ -47,7 +44,7 @@ namespace RHGMTool.Views
                 ItemTrade = 0,
                 Branch = 6,
                 SellPrice = 4000095,
-                PetFood = 0,
+                PetFood = 1,
                 JobClass = 1,
                 OptionCountMax = 3,
                 SocketCountMax = 3,
@@ -63,24 +60,17 @@ namespace RHGMTool.Views
 
             };
 
-            return item;
-        }
-
-        private void UpdateItemFrameValues()
-        {
-            ItemData item = ExtractItemFromRow();
-
             var gearFrameViewModel = _viewModel;
             gearFrameViewModel.Gear = item;
             gearFrameViewModel.EnchantLevel = 1;
             gearFrameViewModel.RankValue = 5;
-            gearFrameViewModel.SocketCount = 2;
             gearFrameViewModel.RandomOption01 = 1707;
-            gearFrameViewModel.RandomOption01Value = 100;
+            gearFrameViewModel.RandomOption01Value = 10;
             gearFrameViewModel.RandomOption02 = 1707;
-            gearFrameViewModel.RandomOption02Value = 100;
+            gearFrameViewModel.RandomOption02Value = 20;
             gearFrameViewModel.RandomOption03 = 1707;
-            gearFrameViewModel.RandomOption03Value = 100;
+            gearFrameViewModel.RandomOption03Value = 30;
+            gearFrameViewModel.SocketCount = 3;
             gearFrameViewModel.Socket01Color = 4;
             gearFrameViewModel.Socket02Color = 3;
             gearFrameViewModel.Socket03Color = 2;
@@ -108,7 +98,26 @@ namespace RHGMTool.Views
             }
         }
 
-        
+
+        private void dataGridView_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            // Hide all columns except for nID, wszDesc, and szIconName
+            if (e.PropertyName != "nID" && e.PropertyName != "wszDesc" && e.PropertyName != "szIconName")
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                // Rename columns
+                if (e.PropertyName == "nID")
+                    e.Column.Header = "ID";
+                else if (e.PropertyName == "wszDesc")
+                    e.Column.Header = "Description";
+                else if (e.PropertyName == "szIconName")
+                    e.Column.Header = "Icon Name";
+            }
+        }
+
 
 
 

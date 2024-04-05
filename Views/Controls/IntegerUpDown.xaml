@@ -1,0 +1,141 @@
+﻿<UserControl
+    x:Class="RHGMTool.Views.IntegerUpDown"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="root"
+    MinHeight="24"
+    MaxWidth="200"
+    MaxHeight="24"
+    d:DesignHeight="24"
+    d:DesignWidth="100"
+    mc:Ignorable="d">
+    <Border>
+        <Grid>
+            <!--  Box  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="{StaticResource lb_combobox_Left02}"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="{StaticResource lb_combobox_Right02}"
+                Stretch="None" />
+            <Image
+                Height="24"
+                Margin="24,0,24,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="{StaticResource lb_combobox_Center02}"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="{StaticResource lb_combobox_Center02}"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <!--  Arrows  -->
+            <RepeatButton
+                x:Name="PART_RepeatButtonUp"
+                Margin="0,-3,-10,0"
+                Padding="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Click="Increment_Click"
+                Focusable="False">
+                <RepeatButton.Template>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Image
+                            x:Name="Arrow"
+                            Width="16"
+                            Height="16"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Source="{StaticResource lb_ArrowUp}" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Arrow" Property="Source" Value="{StaticResource lb_ArrowUpHover}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Arrow" Property="Source" Value="{StaticResource lb_ArrowUpDown}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Arrow" Property="Source" Value="{StaticResource lb_ArrowUpDisabled}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </RepeatButton.Template>
+            </RepeatButton>
+
+            <RepeatButton
+                x:Name="PART_RepeatButtonDown"
+                Margin="0,0,-10,-1"
+                Padding="0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Click="Decrement_Click"
+                Focusable="False">
+                <RepeatButton.Template>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Image
+                            x:Name="Arrow"
+                            Width="16"
+                            Height="16"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Source="{StaticResource lb_ArrowDown}" />
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Arrow" Property="Source" Value="{StaticResource lb_ArrowDownHover}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Arrow" Property="Source" Value="{StaticResource lb_ArrowDownDown}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Arrow" Property="Source" Value="{StaticResource lb_ArrowDownDisabled}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </RepeatButton.Template>
+            </RepeatButton>
+
+            <!--  TextBox  -->
+            <TextBox
+                x:Name="PART_TextBox"
+                Margin="2,0,7,0"
+                Padding="0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                d:Text="0"
+                Background="Transparent"
+                BorderBrush="#FF161109"
+                BorderThickness="0"
+                CaretBrush="White"
+                Foreground="Gold"
+                KeyUp="TextBox_KeyUp"
+                LostFocus="TextBox_LostFocus"
+                PreviewKeyDown="TextBox_PreviewKeyDown"
+                PreviewTextInput="TextBox_PreviewTextInput"
+                TextAlignment="Center"
+                TextChanged="TextBox_TextChanged">
+                <TextBox.Text>
+                    <Binding
+                        Converter="{StaticResource EmptyStringToDefaultConverter}"
+                        ElementName="root"
+                        Mode="TwoWay"
+                        Path="Value"
+                        UpdateSourceTrigger="PropertyChanged" />
+                </TextBox.Text>
+            </TextBox>
+        </Grid>
+    </Border>
+</UserControl>

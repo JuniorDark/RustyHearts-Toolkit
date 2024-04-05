@@ -4,8 +4,6 @@ using System.ComponentModel;
 using System.Data;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using System.Windows.Input;
-using Xceed.Wpf.Toolkit;
 using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.ViewModels
@@ -18,26 +16,6 @@ namespace RHGMTool.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public ICommand IncrementCommand { get; } = new RelayCommand(Increment);
-
-        public ICommand DecrementCommand { get; } = new RelayCommand(Decrement);
-
-        private static void Increment(object parameter)
-        {
-            if (parameter is IntegerUpDown integerUpDown)
-            {
-                integerUpDown.Value++;
-            }
-        }
-
-        private static void Decrement(object parameter)
-        {
-            if (parameter is IntegerUpDown integerUpDown)
-            {
-                integerUpDown.Value--;
-            }
-        }
-
         private readonly SqLiteDatabaseService _databaseService;
         private readonly GMDbService _gMDbService;
 
@@ -46,6 +24,7 @@ namespace RHGMTool.ViewModels
             _databaseService = new SqLiteDatabaseService();
             _gMDbService = new GMDbService(_databaseService);
             InitializeItemDataTables();
+            PopulateItemDataItems();
             PopulateOptionItems();
             PopulateItemTypeItems();
             PopulateCategoryItems((ItemType)1);
@@ -60,7 +39,7 @@ namespace RHGMTool.ViewModels
             ItemDataTable.CachedItemDataTable = GetCachedDataTable();
         }
 
-        private DataTable? cachedDataTable;
+        public DataTable? cachedDataTable;
         public DataTable? GetCachedDataTable()
         {
             if (cachedDataTable == null)
@@ -75,10 +54,36 @@ namespace RHGMTool.ViewModels
         {
             cachedDataTable = new DataTable();
             cachedDataTable.Columns.Add("ItemType", typeof(ItemType)); // Add a column for ItemType
-            cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, EnumService.ItemType.Item, "itemlist");
+            //cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, EnumService.ItemType.Item, "itemlist");
             //cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, ItemType.Costume, "itemlist_costume");
             //cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, ItemType.Armor, "itemlist_armor");
-            //cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, ItemType.Weapon, "itemlist_weapon");
+            cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, EnumService.ItemType.Weapon, "itemlist_weapon");
+        }
+
+        private DataTable? _itemDataItems;
+        public DataTable? ItemDataItems
+        {
+            get { return _itemDataItems; }
+            set
+            {
+                if (_itemDataItems != value)
+                {
+                    _itemDataItems = value;
+                    OnPropertyChanged(nameof(ItemDataItems));
+                }
+            }
+        }
+
+        private void PopulateItemDataItems()
+        {
+            try
+            {
+                ItemDataItems = cachedDataTable;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
         #endregion
 
@@ -105,7 +110,7 @@ namespace RHGMTool.ViewModels
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -147,10 +152,21 @@ namespace RHGMTool.ViewModels
             {
                 CategoryItems = new List<NameID>(_gMDbService.GetCategoryItems(itemType, false));
                 SubCategoryItems = new List<NameID>(_gMDbService.GetCategoryItems(itemType, true));
+
+                if (CategoryItems.Count > 0)
+                {
+                    ItemCategorySelectedIndex = 0;
+                    OnPropertyChanged(nameof(ItemCategorySelectedIndex));
+                }
+                if (SubCategoryItems.Count > 0)
+                {
+                    ItemSubCategorySelectedIndex = 0;
+                    OnPropertyChanged(nameof(ItemSubCategorySelectedIndex));
+                }
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -166,6 +182,22 @@ namespace RHGMTool.ViewModels
                     _itemType = value;
                     OnPropertyChanged(nameof(ItemType));
                     PopulateCategoryItems((ItemType)value);
+
+                }
+            }
+        }
+
+        private int _itemTypeSelectedIndex;
+
+        public int ItemTypeSelectedIndex
+        {
+            get { return _itemTypeSelectedIndex; }
+            set
+            {
+                if (_itemTypeSelectedIndex != value)
+                {
+                    _itemTypeSelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemTypeSelectedIndex));
 
                 }
             }
@@ -187,6 +219,22 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        private int _itemCategorySelectedIndex;
+
+        public int ItemCategorySelectedIndex
+        {
+            get { return _itemCategorySelectedIndex; }
+            set
+            {
+                if (_itemCategorySelectedIndex != value)
+                {
+                    _itemCategorySelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemCategorySelectedIndex));
+
+                }
+            }
+        }
+
         private int _itemSubCategory;
 
         public int ItemSubCategory
@@ -198,6 +246,22 @@ namespace RHGMTool.ViewModels
                 {
                     _itemSubCategory = value;
                     OnPropertyChanged(nameof(ItemSubCategory));
+
+                }
+            }
+        }
+
+        private int _itemSubCategorySelectedIndex;
+
+        public int ItemSubCategorySelectedIndex
+        {
+            get { return _itemSubCategorySelectedIndex; }
+            set
+            {
+                if (_itemSubCategorySelectedIndex != value)
+                {
+                    _itemSubCategorySelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemSubCategorySelectedIndex));
 
                 }
             }
@@ -219,6 +283,22 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        private int _itemClassSelectedIndex;
+
+        public int ItemClassSelectedIndex
+        {
+            get { return _itemClassSelectedIndex; }
+            set
+            {
+                if (_itemClassSelectedIndex != value)
+                {
+                    _itemClassSelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemClassSelectedIndex));
+
+                }
+            }
+        }
+
         private int _itemBranch;
 
         public int ItemBranch
@@ -230,6 +310,22 @@ namespace RHGMTool.ViewModels
                 {
                     _itemBranch = value;
                     OnPropertyChanged(nameof(ItemBranch));
+
+                }
+            }
+        }
+
+        private int _itemBranchSelectedIndex;
+
+        public int ItemBranchSelectedIndex
+        {
+            get { return _itemBranchSelectedIndex; }
+            set
+            {
+                if (_itemBranchSelectedIndex != value)
+                {
+                    _itemBranchSelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemBranchSelectedIndex));
 
                 }
             }
@@ -254,10 +350,16 @@ namespace RHGMTool.ViewModels
             try
             {
                 ItemTypeItems = GetEnumItems<ItemType>();
+
+                if (ItemTypeItems.Count > 0)
+                {
+                    ItemTypeSelectedIndex = 0;
+                    OnPropertyChanged(nameof(ItemTypeSelectedIndex));
+                }
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -280,10 +382,16 @@ namespace RHGMTool.ViewModels
             try
             {
                 ClassItems = GetEnumItems<CharClass>();
+
+                if (ClassItems.Count > 0)
+                {
+                    ItemClassSelectedIndex = 0;
+                    OnPropertyChanged(nameof(ItemClassSelectedIndex));
+                }
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -306,10 +414,16 @@ namespace RHGMTool.ViewModels
             try
             {
                 BranchItems = GetEnumItems<Branch>();
+
+                if (BranchItems.Count > 0)
+                {
+                    ItemBranchSelectedIndex = 0;
+                    OnPropertyChanged(nameof(ItemBranchSelectedIndex));
+                }
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -335,7 +449,7 @@ namespace RHGMTool.ViewModels
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -574,6 +688,9 @@ namespace RHGMTool.ViewModels
                     // Update Durability if it's greater than MaxDurability
                     if (Durability > MaxDurability)
                         Durability = MaxDurability;
+
+                    if (Durability < MaxDurability)
+                        Durability = MaxDurability;
                 }
             }
         }
@@ -781,6 +898,22 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        private int _randomOption01SelectedIndex;
+
+        public int RandomOption01SelectedIndex
+        {
+            get { return _randomOption01SelectedIndex; }
+            set
+            {
+                if (_randomOption01SelectedIndex != value)
+                {
+                    _randomOption01SelectedIndex = value;
+                    OnPropertyChanged(nameof(RandomOption01SelectedIndex));
+
+                }
+            }
+        }
+
         private int _randomOption02;
         public int RandomOption02
         {
@@ -811,6 +944,22 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        private int _randomOption02SelectedIndex;
+
+        public int RandomOption02SelectedIndex
+        {
+            get { return _randomOption02SelectedIndex; }
+            set
+            {
+                if (_randomOption02SelectedIndex != value)
+                {
+                    _randomOption02SelectedIndex = value;
+                    OnPropertyChanged(nameof(RandomOption02SelectedIndex));
+
+                }
+            }
+        }
+
         private int _randomOption03;
         public int RandomOption03
         {
@@ -837,6 +986,22 @@ namespace RHGMTool.ViewModels
                     _randomOption03Value = value;
                     OnPropertyChanged(nameof(RandomOption03Value));
                     UpdateRandomBuff();
+                }
+            }
+        }
+
+        private int _randomOption03SelectedIndex;
+
+        public int RandomOption03SelectedIndex
+        {
+            get { return _randomOption03SelectedIndex; }
+            set
+            {
+                if (_randomOption03SelectedIndex != value)
+                {
+                    _randomOption03SelectedIndex = value;
+                    OnPropertyChanged(nameof(RandomOption03SelectedIndex));
+
                 }
             }
         }
@@ -1059,9 +1224,9 @@ namespace RHGMTool.ViewModels
         private void UpdateRandomBuff()
         {
             IsRandomBuffVisible = OptionCountMax > 0;
-            IsRandomBuff01Visible = RandomOption01 != 0 && OptionCountMax > 0;
-            IsRandomBuff02Visible = RandomOption02 != 0 && OptionCountMax > 1;
-            IsRandomBuff03Visible = RandomOption03 != 0 && OptionCountMax > 2;
+            IsRandomBuff01Visible = OptionCountMax > 0;
+            IsRandomBuff02Visible = OptionCountMax > 1;
+            IsRandomBuff03Visible = OptionCountMax > 2;
 
             (RandomBuff01, RandomBuff01Color) = RandomOption01 != 0 ? GetOptionName(RandomOption01, RandomOption01Value) : ("No Buff", "White");
             (RandomBuff02, RandomBuff02Color) = RandomOption02 != 0 ? GetOptionName(RandomOption02, RandomOption02Value) : ("No Buff", "White");
@@ -1074,6 +1239,10 @@ namespace RHGMTool.ViewModels
             RandomOption01Value = RandomOption01 != 0 ? RandomOption01Value : 0;
             RandomOption02Value = RandomOption02 != 0 ? RandomOption02Value : 0;
             RandomOption03Value = RandomOption03 != 0 ? RandomOption03Value : 0;
+
+            RandomOption01Value = RandomOption01 != 0 && RandomOption01Value == 0 ? RandomOption01MaxValue : RandomOption01Value;
+            RandomOption02Value = RandomOption02 != 0 && RandomOption02Value == 0 ? RandomOption02MaxValue : RandomOption02Value;
+            RandomOption03Value = RandomOption03 != 0 && RandomOption03Value == 0 ? RandomOption03MaxValue : RandomOption03Value;
         }
         #endregion
 
@@ -1149,6 +1318,22 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        private int _socketOption01SelectedIndex;
+
+        public int SocketOption01SelectedIndex
+        {
+            get { return _socketOption01SelectedIndex; }
+            set
+            {
+                if (_socketOption01SelectedIndex != value)
+                {
+                    _socketOption01SelectedIndex = value;
+                    OnPropertyChanged(nameof(SocketOption01SelectedIndex));
+
+                }
+            }
+        }
+
         private int _socketOption02;
         public int SocketOption02
         {
@@ -1179,6 +1364,22 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        private int _socketOption02SelectedIndex;
+
+        public int SocketOption02SelectedIndex
+        {
+            get { return _socketOption02SelectedIndex; }
+            set
+            {
+                if (_socketOption02SelectedIndex != value)
+                {
+                    _socketOption02SelectedIndex = value;
+                    OnPropertyChanged(nameof(SocketOption02SelectedIndex));
+
+                }
+            }
+        }
+
         private int _socketOption03;
         public int SocketOption03
         {
@@ -1205,6 +1406,22 @@ namespace RHGMTool.ViewModels
                     _socketOption03Value = value;
                     OnPropertyChanged(nameof(SocketOption03Value));
                     UpdateSocketBuff();
+                }
+            }
+        }
+
+        private int _socketOption03SelectedIndex;
+
+        public int SocketOption03SelectedIndex
+        {
+            get { return _socketOption03SelectedIndex; }
+            set
+            {
+                if (_socketOption03SelectedIndex != value)
+                {
+                    _socketOption03SelectedIndex = value;
+                    OnPropertyChanged(nameof(SocketOption03SelectedIndex));
+
                 }
             }
         }
@@ -1460,10 +1677,10 @@ namespace RHGMTool.ViewModels
 
         private void UpdateSocketBuff()
         {
-            IsSocketBuffVisible = SocketCountMax > 0 && SocketCount > 0;
-            IsSocketBuff01Visible = SocketCountMax > 0 && SocketCount > 0;
-            IsSocketBuff02Visible = SocketCountMax > 1 && SocketCount > 1;
-            IsSocketBuff03Visible = SocketCountMax > 2 && SocketCount > 2;
+            IsSocketBuffVisible = SocketCount > 0;
+            IsSocketBuff01Visible = SocketCount > 0;
+            IsSocketBuff02Visible = SocketCount > 1;
+            IsSocketBuff03Visible = SocketCount > 2;
 
             // Get socket buff and its color based on the SocketOption and SocketColor
             (SocketBuff01, SocketBuff01Color) = SocketOption01 != 0 ? GetOptionName(SocketOption01, SocketOption01Value) : FrameData.SetSocketColor(Socket01Color);
@@ -1477,6 +1694,10 @@ namespace RHGMTool.ViewModels
             SocketOption01Value = SocketOption01 != 0 ? SocketOption01Value : 0;
             SocketOption02Value = SocketOption02 != 0 ? SocketOption02Value : 0;
             SocketOption03Value = SocketOption03 != 0 ? SocketOption03Value : 0;
+
+            SocketOption01Value = SocketOption01 != 0 && SocketOption01Value == 0 ? SocketOption01MaxValue : SocketOption01Value;
+            SocketOption02Value = SocketOption02 != 0 && SocketOption02Value == 0 ? SocketOption02MaxValue : SocketOption02Value;
+            SocketOption03Value = SocketOption03 != 0 && SocketOption03Value == 0 ? SocketOption03MaxValue : SocketOption03Value;
 
         }
 

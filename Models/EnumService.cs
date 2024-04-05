@@ -9,6 +9,11 @@ namespace RHGMTool.Models
         {
             List<NameID> enumItems = [];
 
+            if (typeof(T) != typeof(ItemType))
+            {
+                enumItems.Add(new NameID { ID = 0, Name = "All" });
+            }
+
             foreach (T enumValue in Enum.GetValues(typeof(T)))
             {
                 string description = GetEnumDescription(enumValue);

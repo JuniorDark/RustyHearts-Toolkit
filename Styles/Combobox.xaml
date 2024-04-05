@@ -30,6 +30,7 @@
 
             <!--  Center  -->
             <Image
+                x:Name="Center"
                 Height="24"
                 Margin="24,0,24,0"
                 HorizontalAlignment="Stretch"
@@ -98,7 +99,7 @@
                 Focusable="False"
                 IsOpen="{TemplateBinding IsDropDownOpen}"
                 Placement="Bottom"
-                PopupAnimation="Slide">
+                PopupAnimation="Fade">
                 <Grid
                     x:Name="DropDown"
                     MinWidth="{TemplateBinding ActualWidth}"
@@ -135,11 +136,13 @@
         <Grid>
             <!--  Corners  -->
             <Image
+                x:Name="Left"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Source="{StaticResource lb_combobox_Left01}"
                 Stretch="None" />
             <Image
+                x:Name="Right"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Source="{StaticResource lb_combobox_Right01}"

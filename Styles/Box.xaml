@@ -135,7 +135,7 @@
             <Image
                 Margin="23,23,23,23"
                 HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
+                VerticalAlignment="Center"
                 Source="/Assets/images/window/lb_def_box01/lb_def_box01_base05.png"
                 Stretch="Fill">
                 <Image.OpacityMask>

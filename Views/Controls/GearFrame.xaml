@@ -6,6 +6,9 @@
     xmlns:local="clr-namespace:RHGMTool.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:RHGMTool.ViewModels"
+    x:Name="Frame"
+    Height="Auto"
+    MaxHeight="600"
     d:DesignHeight="600"
     d:DesignWidth="300"
     Template="{StaticResource lb_def_box01}"
@@ -196,7 +199,6 @@
             VerticalAlignment="Top"
             d:Text="[Fixed Buff]"
             Foreground="White"
-            IsVisibleChanged="TextBlock_IsVisibleChanged"
             Text="{Binding FixedBuff}"
             Visibility="{Binding IsFixedBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
@@ -209,7 +211,6 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding FixedBuff01Color, Converter={StaticResource StringToBrushConverter}}"
-            IsVisibleChanged="TextBlock_IsVisibleChanged"
             Text="{Binding FixedBuff01}"
             TextWrapping="Wrap"
             Visibility="{Binding IsFixedBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -223,7 +224,6 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding FixedBuff02Color, Converter={StaticResource StringToBrushConverter}}"
-            IsVisibleChanged="TextBlock_IsVisibleChanged"
             Text="{Binding FixedBuff02}"
             TextWrapping="Wrap"
             Visibility="{Binding IsFixedBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -235,7 +235,6 @@
             VerticalAlignment="Top"
             d:Text="[Random Buff]"
             Foreground="White"
-            IsVisibleChanged="TextBlock_IsVisibleChanged"
             Text="{Binding RandomBuff}"
             Visibility="{Binding IsRandomBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
@@ -248,7 +247,6 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding RandomBuff01Color, Converter={StaticResource StringToBrushConverter}}"
-            IsVisibleChanged="TextBlock_IsVisibleChanged"
             Text="{Binding RandomBuff01}"
             TextWrapping="Wrap"
             Visibility="{Binding IsRandomBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -262,7 +260,6 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding RandomBuff02Color, Converter={StaticResource StringToBrushConverter}}"
-            IsVisibleChanged="TextBlock_IsVisibleChanged"
             Text="{Binding RandomBuff02}"
             TextWrapping="Wrap"
             Visibility="{Binding IsRandomBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -276,7 +273,6 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding RandomBuff03Color, Converter={StaticResource StringToBrushConverter}}"
-            IsVisibleChanged="TextBlock_IsVisibleChanged"
             Text="{Binding RandomBuff03}"
             TextWrapping="Wrap"
             Visibility="{Binding IsRandomBuff03Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -288,7 +284,6 @@
             VerticalAlignment="Top"
             d:Text="[Socket]"
             Foreground="White"
-            IsVisibleChanged="TextBlock_IsVisibleChanged"
             Text="{Binding SocketBuff}"
             Visibility="{Binding IsSocketBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
@@ -301,7 +296,6 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding SocketBuff01Color, Converter={StaticResource StringToBrushConverter}}"
-            IsVisibleChanged="TextBlock_IsVisibleChanged"
             Text="{Binding SocketBuff01}"
             TextWrapping="Wrap"
             Visibility="{Binding IsSocketBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -315,7 +309,6 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding SocketBuff02Color, Converter={StaticResource StringToBrushConverter}}"
-            IsVisibleChanged="TextBlock_IsVisibleChanged"
             Text="{Binding SocketBuff02}"
             TextWrapping="Wrap"
             Visibility="{Binding IsSocketBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
@@ -329,7 +322,6 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding SocketBuff03Color, Converter={StaticResource StringToBrushConverter}}"
-            IsVisibleChanged="TextBlock_IsVisibleChanged"
             Text="{Binding SocketBuff03}"
             TextWrapping="Wrap"
             Visibility="{Binding IsSocketBuff03Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
