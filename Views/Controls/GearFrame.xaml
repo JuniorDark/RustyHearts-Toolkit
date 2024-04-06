@@ -134,7 +134,7 @@
             Grid.Row="4"
             Margin="10,1,0,0"
             d:Text="Trade Unavailable"
-            Foreground="#FF8B0000"
+            Foreground="#e75151"
             Text="{Binding ItemTrade}" />
         <TextBlock
             x:Name="lbWeight"
@@ -331,7 +331,7 @@
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
-            d:Foreground="Red"
+            d:Foreground="#e75151"
             d:Text="This item cannot be used as Pet Food"
             Foreground="{Binding PetFoodColor, Converter={StaticResource StringToBrushConverter}}"
             Text="{Binding PetFood}" />

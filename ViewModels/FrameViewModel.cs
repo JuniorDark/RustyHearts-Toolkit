@@ -1,9 +1,9 @@
 ﻿using RHGMTool.Models;
 using RHGMTool.Services;
 using System.ComponentModel;
-using System.Data;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Data;
 using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.ViewModels
@@ -18,12 +18,25 @@ namespace RHGMTool.ViewModels
 
         private readonly SqLiteDatabaseService _databaseService;
         private readonly GMDbService _gMDbService;
+        private readonly ItemDataManager _itemDataManager;
+
+        private ICollectionView _itemDataView;
+        public ICollectionView ItemDataView
+        {
+            get { return _itemDataView; }
+            set
+            {
+                _itemDataView = value;
+                OnPropertyChanged(nameof(ItemDataView));
+            }
+        }
 
         public FrameViewModel()
         {
             _databaseService = new SqLiteDatabaseService();
             _gMDbService = new GMDbService(_databaseService);
-            InitializeItemDataTables();
+            _itemDataManager = new ItemDataManager();
+            
             PopulateItemDataItems();
             PopulateOptionItems();
             PopulateItemTypeItems();
@@ -31,39 +44,19 @@ namespace RHGMTool.ViewModels
             PopulateClassItems();
             PopulateBranchItems();
             PopulateSocketColorItems();
+            _itemDataView = CollectionViewSource.GetDefaultView(ItemDataItems);
+            _itemDataView.Filter = FilterItems;
         }
 
-        #region Datatables
-        private void InitializeItemDataTables()
-        {
-            ItemDataTable.CachedItemDataTable = GetCachedDataTable();
-        }
+        #region Item Data List
 
-        public DataTable? cachedDataTable;
-        public DataTable? GetCachedDataTable()
+        private List<ItemData>? _itemDataItems;
+        public List<ItemData>? ItemDataItems
         {
-            if (cachedDataTable == null)
+            get
             {
-                InitializeCachedDataTable();
+                return _itemDataItems;
             }
-
-            return cachedDataTable;
-        }
-
-        private void InitializeCachedDataTable()
-        {
-            cachedDataTable = new DataTable();
-            cachedDataTable.Columns.Add("ItemType", typeof(ItemType)); // Add a column for ItemType
-            //cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, EnumService.ItemType.Item, "itemlist");
-            //cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, ItemType.Costume, "itemlist_costume");
-            //cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, ItemType.Armor, "itemlist_armor");
-            cachedDataTable = _gMDbService.CreateCachedItemDataTable(cachedDataTable, EnumService.ItemType.Weapon, "itemlist_weapon");
-        }
-
-        private DataTable? _itemDataItems;
-        public DataTable? ItemDataItems
-        {
-            get { return _itemDataItems; }
             set
             {
                 if (_itemDataItems != value)
@@ -78,16 +71,20 @@ namespace RHGMTool.ViewModels
         {
             try
             {
-                ItemDataItems = cachedDataTable;
+                if (_itemDataManager.CachedItemDataList == null)
+                {
+                    _itemDataManager.InitializeItemDataList();
+                    _itemDataItems = _itemDataManager.CachedItemDataList;
+                }
+
+                ItemDataItems = _itemDataManager.CachedItemDataList;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        #endregion
 
-        #region Options
         private List<NameID>? _optionItems;
         public List<NameID>? OptionItems
         {
@@ -117,6 +114,54 @@ namespace RHGMTool.ViewModels
         #endregion
 
         #region Comboboxes
+
+        private bool FilterItems(object obj)
+        {
+            if (obj is ItemData item)
+            {
+                if (_itemType != 0 && item.ItemType != _itemType)
+                    return false;
+
+                if (_itemCategory != 0 && item.Category != _itemCategory)
+                    return false;
+
+                if (_itemSubCategory != 0 && item.SubCategory != _itemSubCategory)
+                    return false;
+
+                if (_itemClass != 0 && item.JobClass != _itemClass)
+                    return false;
+
+                if (_itemBranch != 0 && item.Branch != _itemBranch)
+                    return false;
+
+                if (!string.IsNullOrEmpty(SearchText))
+                {
+                    // You can adjust the condition to match any part of the ID or Name
+                    if (item.ID.ToString().Contains(SearchText) ||
+                        item.Name.Contains(SearchText))
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        private string? _searchText;
+        public string? SearchText
+        {
+            get { return _searchText; }
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged(nameof(SearchText));
+                // Update the filter whenever the search text changes
+                _itemDataView.Refresh();
+            }
+        }
 
         private List<NameID>? _categoryItems;
         public List<NameID>? CategoryItems
@@ -182,7 +227,7 @@ namespace RHGMTool.ViewModels
                     _itemType = value;
                     OnPropertyChanged(nameof(ItemType));
                     PopulateCategoryItems((ItemType)value);
-
+                    _itemDataView.Refresh();
                 }
             }
         }
@@ -214,7 +259,7 @@ namespace RHGMTool.ViewModels
                 {
                     _itemCategory = value;
                     OnPropertyChanged(nameof(ItemCategory));
-
+                    _itemDataView.Refresh();
                 }
             }
         }
@@ -246,7 +291,7 @@ namespace RHGMTool.ViewModels
                 {
                     _itemSubCategory = value;
                     OnPropertyChanged(nameof(ItemSubCategory));
-
+                    _itemDataView.Refresh();
                 }
             }
         }
@@ -278,7 +323,7 @@ namespace RHGMTool.ViewModels
                 {
                     _itemClass = value;
                     OnPropertyChanged(nameof(ItemClass));
-
+                    _itemDataView.Refresh();
                 }
             }
         }
@@ -310,7 +355,7 @@ namespace RHGMTool.ViewModels
                 {
                     _itemBranch = value;
                     OnPropertyChanged(nameof(ItemBranch));
-
+                    _itemDataView.Refresh();
                 }
             }
         }
@@ -453,12 +498,12 @@ namespace RHGMTool.ViewModels
             }
         }
 
+
         #endregion
 
         #region GearData
 
         private ItemData? _gear;
-
         public ItemData? Gear
         {
             get { return _gear; }
@@ -477,14 +522,15 @@ namespace RHGMTool.ViewModels
                 // Update UI elements based on Gear data
                 ItemName = Gear.Name;
                 ItemNameColor = FrameData.GetBranchColor(Gear.Branch);
+                IconName = Gear.IconName;
                 Category = _gMDbService.GetCategoryName(Gear.Category);
                 SubCategory = _gMDbService.GetSubCategoryName(Gear.SubCategory);
-                if (Gear.Type == "Armor")
+                if (Gear.ItemType == 3)
                 {
                     MainStat1 = $"Physical Defense +{Gear.Defense}";
                     MainStat2 = $"Magic Defense +{Gear.MagicDefense}";
                 }
-                else if (Gear.Type == "Weapon")
+                else if (Gear.ItemType == 4)
                 {
                     (int PhysicalAttackMin, int PhysicalAttackMax, int MagicAttackMin, int MagicAttackMax) = _gMDbService.GetWeaponStats(Gear.JobClass, Gear.WeaponID00);
                     MainStat1 = $"Physical Damage +{PhysicalAttackMin}~{PhysicalAttackMax}";
@@ -507,10 +553,11 @@ namespace RHGMTool.ViewModels
                 SetName = Gear.SetId != 0 ? _gMDbService.GetSetName(Gear.SetId) : "";
                 ReconstructionValue = Gear.ReconstructionMax;
                 ReconstructionMax = Gear.ReconstructionMax;
-                Reconstruction = Gear.ReconstructionMax > 0 ? $"Attribute Item ({Gear.ReconstructionMax} Times/{Gear.ReconstructionMax} Times)" : "";
+                Reconstruction = Gear.ReconstructionMax > 0 && Gear.ItemTrade != 0 ? $"Attribute Item ({Gear.ReconstructionMax} Times/{Gear.ReconstructionMax} Times)" : "Bound item (Binds when acquired)";
                 OverlapCnt = Gear.OverlapCnt;
                 OptionCountMax = Gear.OptionCountMax;
                 SocketCountMax = Gear.SocketCountMax;
+                SocketCount = Gear.SocketCountMax;
                 FixedBuff = $"[Fixed Buff]";
                 RandomBuff = $"[Random Buff]";
                 (FixedBuff01, FixedBuff01Color) = GetOptionName(Gear.FixOption00, Gear.FixOptionValue00);
@@ -524,6 +571,7 @@ namespace RHGMTool.ViewModels
                 PetFoodColor = Gear.PetFood == 0 ? "#e75151" : "#eed040";
 
                 // Raise PropertyChanged for all properties
+                OnPropertyChanged(nameof(IconName));
                 OnPropertyChanged(nameof(Category));
                 OnPropertyChanged(nameof(SubCategory));
                 OnPropertyChanged(nameof(MainStat1));
@@ -539,6 +587,7 @@ namespace RHGMTool.ViewModels
                 OnPropertyChanged(nameof(ReconstructionValue));
                 OnPropertyChanged(nameof(ReconstructionMax));
                 OnPropertyChanged(nameof(OptionCountMax));
+                OnPropertyChanged(nameof(SocketCount));
                 OnPropertyChanged(nameof(SocketCountMax));
                 OnPropertyChanged(nameof(OverlapCnt));
                 OnPropertyChanged(nameof(FixedBuff));
@@ -564,9 +613,8 @@ namespace RHGMTool.ViewModels
             return (formattedOption, colorHex);
         }
 
-        #endregion
-
         // Properties for UI elements
+        public string? IconName { get; private set; }
         public string? Category { get; private set; }
         public string? SubCategory { get; private set; }
         public string? MainStat1 { get; private set; }
@@ -588,11 +636,6 @@ namespace RHGMTool.ViewModels
         public string? Description { get; private set; }
         public string? Type { get; set; }
         public int WeaponID00 { get; private set; }
-
-
-        public int SocketCountMin { get; set; }
-        public int OptionCountMin { get; set; }
-
 
 
         private string? _itemName;
@@ -721,7 +764,7 @@ namespace RHGMTool.ViewModels
                     OnPropertyChanged(nameof(ReconstructionValue));
                     Reconstruction = $"Attribute Item ({value} Times/{ReconstructionMax} Times)";
                 }
-                
+
             }
         }
 
@@ -865,6 +908,8 @@ namespace RHGMTool.ViewModels
 
             }
         }
+
+        #endregion
 
         #region Random Option
 

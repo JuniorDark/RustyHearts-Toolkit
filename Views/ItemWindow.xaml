@@ -23,6 +23,10 @@
     <Window.DataContext>
         <vm:FrameViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <!--  Define a CollectionViewSource  -->
+        <CollectionViewSource x:Key="ItemDataViewSource" Source="{Binding ItemDataItems}" />
+    </Window.Resources>
     <ContentControl Template="{StaticResource RHWindowRed02Template}">
         <Grid Margin="-70,-70,-65,-60">
             <Grid.RowDefinitions>
@@ -46,7 +50,7 @@
                 Grid.Row="1"
                 Width="120"
                 Height="26"
-                Margin="235,418,900,0"
+                Margin="228,422,907,0"
                 VerticalAlignment="Top"
                 Content="Search"
                 Foreground="White"
@@ -67,7 +71,7 @@
                 Grid.Row="1"
                 Width="145"
                 Height="24"
-                Margin="190,520,0,0"
+                Margin="190,521,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 IsReadOnly="True"
@@ -80,10 +84,11 @@
             <CheckBox
                 x:Name="cbTest"
                 Grid.Row="1"
-                Margin="240,449,0,0"
+                Margin="240,472,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Content="CheckBox"
+                RenderTransformOrigin="1.023,2.105"
                 Style="{StaticResource CheckBoxStyle}"
                 Template="{StaticResource lb_checkbox}" />
             <TextBox
@@ -95,14 +100,14 @@
                 VerticalAlignment="Top"
                 Foreground="Gold"
                 Template="{StaticResource lb_textbox}"
-                Text="Item Name/ID" />
+                Text="{Binding SearchText, Mode=TwoWay}" />
             <!--  Gold Label  -->
             <Label
                 x:Name="lbSubCategory"
                 Grid.Row="1"
                 Width="119"
                 Height="25"
-                Margin="180,500,956,0"
+                Margin="180,499,956,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Sub Category"
@@ -128,7 +133,7 @@
                 Grid.Row="1"
                 Width="119"
                 Height="25"
-                Margin="180,541,956,0"
+                Margin="180,540,956,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Quality"
@@ -153,7 +158,7 @@
                 Grid.Row="1"
                 Width="119"
                 Height="25"
-                Margin="10,500,1126,0"
+                Margin="10,499,1126,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Category"
@@ -178,7 +183,7 @@
                 Grid.Row="1"
                 Width="119"
                 Height="25"
-                Margin="10,541,1126,0"
+                Margin="10,540,1126,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Class"
@@ -211,13 +216,45 @@
             <DataGrid
                 x:Name="dataGridView"
                 Grid.Row="1"
+                MaxWidth="410"
+                MaxHeight="365"
                 Margin="0,29,844,290"
                 d:ItemsSource="{d:SampleData ItemCount=10}"
-                AutoGeneratingColumn="dataGridView_AutoGeneratingColumn"
+                AutoGenerateColumns="False"
+                CanUserAddRows="False"
                 ColumnWidth="Auto"
                 EnableColumnVirtualization="True"
-                Foreground="Gold"
-                ItemsSource="{Binding ItemDataItems}" />
+                EnableRowVirtualization="True"
+                HeadersVisibility="Column"
+                ItemsSource="{Binding ItemDataItems}"
+                Loaded="dataGridView_Loaded"
+                SelectionChanged="dataGridView_SelectionChanged"
+                SelectionMode="Single">
+                <DataGrid.Background>
+                    <ImageBrush />
+                </DataGrid.Background>
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Binding="{Binding ID}"
+                        Header="ID"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Name}"
+                        Header="Name"
+                        IsReadOnly="True" />
+                    <DataGridTemplateColumn Header="Icon" IsReadOnly="True">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image
+                                    Width="36"
+                                    Height="36"
+                                    Source="{Binding IconName, Converter={StaticResource IconNameToImageSourceConverter}}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
             <Label
                 x:Name="lbDurability"
                 Grid.Row="1"
@@ -293,7 +330,7 @@
                 Grid.Row="1"
                 Width="119"
                 Height="26"
-                Margin="794,599,341,0"
+                Margin="810,611,325,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Amount"
@@ -532,16 +569,14 @@
                 Content="Socket Option Value 3"
                 FontSize="10"
                 Foreground="Gold" />
-            <Label
+            <TextBlock
                 x:Name="lbSelectedItem"
                 Grid.Row="1"
-                Width="119"
-                Height="26"
-                Margin="908,601,228,0"
+                Width="Auto"
+                Margin="998,638,45,0"
                 VerticalAlignment="Top"
-                HorizontalContentAlignment="Center"
-                Content="Selected Item"
-                Foreground="Gold" />
+                Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}"
+                Text="{Binding ItemName}" />
             <ComboBox
                 x:Name="cbSocketColor1"
                 Grid.Row="1"
@@ -623,22 +658,34 @@
                 Content="Socket Color 3"
                 Foreground="Gold" />
             <Image
-                x:Name="imgItemIcon"
+                x:Name="imgItemIconEmpty"
                 Grid.Row="1"
                 Margin="946,627,259,0"
                 VerticalAlignment="Top"
                 Source="/Assets/images/lb_ac_icon.png"
                 Stretch="None" />
-            <Label
+            <Image
+                x:Name="imgItemIcon"
+                Grid.Row="1"
+                Margin="946,631,259,0"
+                VerticalAlignment="Top"
+                Source="{Binding IconName, Converter={StaticResource IconNameToImageSourceConverter}}"
+                Stretch="None" />
+            <TextBlock
                 x:Name="lbTotalItem"
                 Grid.Row="1"
-                Width="119"
                 Height="25"
-                Margin="5,391,1131,0"
+                Margin="13,396,993,0"
                 VerticalAlignment="Top"
-                HorizontalContentAlignment="Center"
-                Content="Total Items"
-                Foreground="Gold" />
+                d:Text="Showing {0}/{1} Items"
+                Foreground="Gold">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="Showing {0}/{1} Items">
+                        <Binding ElementName="dataGridView" Path="Items.Count" />
+                        <Binding Path="ItemDataItems.Count" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
             <local:GearFrameUserControl
                 x:Name="gearFrame"
                 Grid.Row="1"
@@ -652,7 +699,7 @@
                 x:Name="intAmount"
                 Grid.Row="1"
                 Height="26"
-                Margin="794,625,339,33"
+                Margin="810,637,323,21"
                 Increment="1"
                 Maximum="{Binding OverlapCnt, Mode=TwoWay}"
                 Minimum="1"
@@ -663,6 +710,7 @@
                 Height="26"
                 Margin="1110,502,25,156"
                 Increment="{Binding SocketOption03MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                 Maximum="{Binding SocketOption03MaxValue, Mode=TwoWay}"
                 Minimum="{Binding SocketOption03MinValue, Mode=TwoWay}"
                 Value="{Binding SocketOption03Value, Mode=TwoWay}" />
@@ -672,6 +720,7 @@
                 Height="26"
                 Margin="1110,442,25,216"
                 Increment="{Binding SocketOption02MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                 Maximum="{Binding SocketOption02MaxValue, Mode=TwoWay}"
                 Minimum="{Binding SocketOption02MinValue, Mode=TwoWay}"
                 Value="{Binding SocketOption02Value, Mode=TwoWay}" />
@@ -681,6 +730,7 @@
                 Height="26"
                 Margin="1109,384,25,274"
                 Increment="{Binding SocketOption01MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                 Maximum="{Binding SocketOption01MaxValue, Mode=TwoWay}"
                 Minimum="{Binding SocketOption01MinValue, Mode=TwoWay}"
                 Value="{Binding SocketOption01Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -691,7 +741,7 @@
                 Margin="911,339,206,319"
                 Increment="1"
                 Maximum="{Binding SocketCountMax, Mode=TwoWay}"
-                Minimum="{Binding SocketCountMin, Mode=TwoWay}"
+                Minimum="0"
                 Value="{Binding SocketCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <local:IntegerUpDown
                 x:Name="intOptionValue3"
@@ -699,6 +749,7 @@
                 Height="26"
                 Margin="1109,243,25,415"
                 Increment="{Binding RandomOption03MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                 Maximum="{Binding RandomOption03MaxValue, Mode=TwoWay}"
                 Minimum="{Binding RandomOption03MinValue, Mode=TwoWay}"
                 Value="{Binding RandomOption03Value, Mode=TwoWay}" />
@@ -708,23 +759,27 @@
                 Height="26"
                 Margin="1109,203,25,455"
                 Increment="{Binding RandomOption02MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                 Maximum="{Binding RandomOption02MaxValue, Mode=TwoWay}"
                 Minimum="{Binding RandomOption02MinValue, Mode=TwoWay}"
                 Value="{Binding RandomOption02Value, Mode=TwoWay}" />
             <local:IntegerUpDown
                 x:Name="intOptionValue1"
                 Grid.Row="1"
+                Width="121"
                 Height="26"
-                Margin="1109,154,26,494"
+                Margin="1109,159,25,499"
                 Increment="{Binding RandomOption01MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                 Maximum="{Binding RandomOption01MaxValue, Mode=TwoWay}"
                 Minimum="{Binding RandomOption01MinValue, Mode=TwoWay}"
                 Value="{Binding RandomOption01Value, Mode=TwoWay}" />
             <local:IntegerUpDown
                 x:Name="intReconstruction"
                 Grid.Row="1"
+                Width="120"
                 Height="26"
-                Margin="1070,101,55,557"
+                Margin="1070,101,65,557"
                 Increment="1"
                 Maximum="{Binding ReconstructionMax, Mode=TwoWay}"
                 Minimum="0"

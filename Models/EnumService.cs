@@ -154,7 +154,7 @@ namespace RHGMTool.Models
             [Description("Unique")]
             Unique = 4,
             [Description("Epic")]
-            Epic = 5
+            Epic = 6
         }
 
         public static IEnumerable<int> MapBranchIndexToValues(int branchIndex)

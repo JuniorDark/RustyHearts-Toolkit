@@ -6,6 +6,7 @@
     <local:EmptyStringToDefaultConverter x:Key="EmptyStringToDefaultConverter" />
     <local:EnabledToSelectedIndexConverter x:Key="EnabledToSelectedIndexConverter" />
     <local:GreaterOrEqualConverter x:Key="GreaterOrEqualConverter" />
+    <local:IconNameToImageSourceConverter x:Key="IconNameToImageSourceConverter" />
     <local:IncrementConverter x:Key="IncrementConverter" />
     <local:StringToBrushConverter x:Key="StringToBrushConverter" />
     <local:VisibilityToHeightConverter x:Key="VisibilityToHeightConverter" />

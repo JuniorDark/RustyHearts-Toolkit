@@ -16,44 +16,69 @@ namespace RHGMTool.Services
             _connection = _databaseService.OpenSQLiteConnection();
         }
 
-        public DataTable CreateCachedItemDataTable(DataTable dataTable, ItemType itemType, string itemTableName)
+        public List<ItemData> GetItemDataList(ItemType itemType, string itemTableName)
         {
+            List<ItemData> itemList = [];
+
             try
             {
                 string query = GetItemQuery(itemTableName);
 
-                using (var adapter = new SQLiteDataAdapter(query, _connection))
-                {
-                    // Use parameterized queries if possible
-                    adapter.SelectCommand.Parameters.AddWithValue("@ItemType", itemType);
+                using var command = new SQLiteCommand(query, _connection);
 
-                    adapter.Fill(dataTable);
-                }
+                command.Parameters.AddWithValue("@ItemType", itemType);
 
-                // Add a column for ItemType and set its value
-                if (!dataTable.Columns.Contains("ItemType"))
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
                 {
-                    dataTable.Columns.Add("ItemType", typeof(ItemType));
-                }
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    row["ItemType"] = itemType;
-                }
+                    // Map database fields to ItemData properties
+                    ItemData item = new()
+                    {
+                        ID = Convert.ToInt32(reader["nID"]),
+                        Name = reader["wszDesc"].ToString(),
+                        Description = reader["wszItemDescription"].ToString(),
+                        ItemType = (int)itemType,
+                        WeaponID00 = Convert.ToInt32(reader["nWeaponID00"]),
+                        Category = Convert.ToInt32(reader["nCategory"]),
+                        SubCategory = Convert.ToInt32(reader["nSubCategory"]),
+                        Weight = Convert.ToInt32(reader["nWeight"]),
+                        LevelLimit = Convert.ToInt32(reader["nLevelLimit"]),
+                        ItemTrade = Convert.ToInt32(reader["nItemTrade"]),
+                        OverlapCnt = Convert.ToInt32(reader["nOverlapCnt"]),
+                        Durability = Convert.ToInt32(reader["nDurability"]),
+                        Defense = Convert.ToInt32(reader["nDefense"]),
+                        MagicDefense = Convert.ToInt32(reader["nMagicDefense"]),
+                        Branch = Convert.ToInt32(reader["nBranch"]),
+                        OptionCountMax = Convert.ToInt32(reader["nOptionCountMax"]),
+                        SocketCountMax = Convert.ToInt32(reader["nSocketCountMax"]),
+                        ReconstructionMax = Convert.ToInt32(reader["nReconstructionMax"]),
+                        SellPrice = Convert.ToInt32(reader["nSellPrice"]),
+                        PetFood = Convert.ToInt32(reader["nPetEatGroup"]),
+                        JobClass = Convert.ToInt32(reader["nJobClass"]),
+                        SetId = Convert.ToInt32(reader["nSetId"]),
+                        FixOption00 = Convert.ToInt32(reader["nFixOption00"]),
+                        FixOptionValue00 = Convert.ToInt32(reader["nFixOptionValue00"]),
+                        FixOption01 = Convert.ToInt32(reader["nFixOption01"]),
+                        FixOptionValue01 = Convert.ToInt32(reader["nFixOptionValue01"]),
+                        IconName = reader["szIconName"].ToString()
+                    };
 
-                return dataTable;
+                    itemList.Add(item);
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error creating ItemDataTable.", ex);
+                throw new Exception("Error retrieving ItemData from the database.", ex);
             }
-        }
 
+            return itemList;
+        }
 
         private static string GetItemQuery(string itemTableName)
         {
             return $@"
-            SELECT i.nID, i.nWeaponID00, i.szIconName, i.nCategory, i.nSubCategory, i.nBranch, i.nSocketCountMin, i.nSocketCountMax, i.nReconstructionMax, i.nJobClass, i.nLevelLimit, 
-                i.nItemTrade, i.nOverlapCnt, i.nDurability, i.nDefense, i.nMagicDefense, i.nWeight, i.nSellPrice, i.nOptionCountMin, i.nOptionCountMax, i.nSetId, i.nFixOption00, i.nFixOptionValue00, i.nFixOption01, i.nFixOptionValue01, i.nPetEatGroup,
+            SELECT i.nID, i.nWeaponID00, i.szIconName, i.nCategory, i.nSubCategory, i.nBranch, i.nSocketCountMax, i.nReconstructionMax, i.nJobClass, i.nLevelLimit, 
+                i.nItemTrade, i.nOverlapCnt, i.nDurability, i.nDefense, i.nMagicDefense, i.nWeight, i.nSellPrice, i.nOptionCountMax, i.nSetId, i.nFixOption00, i.nFixOptionValue00, i.nFixOption01, i.nFixOptionValue01, i.nPetEatGroup,
                 s.wszDesc, s.wszItemDescription
             FROM {itemTableName} i
             LEFT JOIN {itemTableName}_string s ON i.nID = s.nID";

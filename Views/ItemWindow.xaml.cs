@@ -1,6 +1,5 @@
 ﻿using RHGMTool.Models;
 using RHGMTool.ViewModels;
-using System.Data;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -16,72 +15,21 @@ namespace RHGMTool.Views
         #endregion
 
         private readonly FrameViewModel _viewModel;
-        private readonly DataTable? itemDataTable;
 
         public ItemWindow()
         {
             InitializeComponent();
             _viewModel = new FrameViewModel();
             DataContext = _viewModel;
-            itemDataTable = ItemDataTable.CachedItemDataTable;
-            //dataGridView.ItemsSource = itemDataTable?.DefaultView;
 
-            UpdateItemFrameValues();
         }
 
-        private void UpdateItemFrameValues()
+        private void UpdateItemFrameValues(ItemData? item)
         {
-            ItemData item = new()
-            {
-                Name = "Anelas The 'Other'",
-                Description = "Test",
-                Type = "Weapon",
-                WeaponID00 = 6162051,
-                Category = 5,
-                SubCategory = 1,
-                Weight = 2000,
-                LevelLimit = 50,
-                ItemTrade = 0,
-                Branch = 6,
-                SellPrice = 4000095,
-                PetFood = 1,
-                JobClass = 1,
-                OptionCountMax = 3,
-                SocketCountMax = 3,
-                FixOption00 = 1707,
-                FixOptionValue00 = 100,
-                FixOption01 = 1707,
-                FixOptionValue01 = 80,
-                ReconstructionMax = 2,
-                Durability = 10000,
-                OverlapCnt = 999,
-                SetId = 1002
-
-
-            };
-
-            var gearFrameViewModel = _viewModel;
-            gearFrameViewModel.Gear = item;
-            gearFrameViewModel.EnchantLevel = 1;
-            gearFrameViewModel.RankValue = 5;
-            gearFrameViewModel.RandomOption01 = 1707;
-            gearFrameViewModel.RandomOption01Value = 10;
-            gearFrameViewModel.RandomOption02 = 1707;
-            gearFrameViewModel.RandomOption02Value = 20;
-            gearFrameViewModel.RandomOption03 = 1707;
-            gearFrameViewModel.RandomOption03Value = 30;
-            gearFrameViewModel.SocketCount = 3;
-            gearFrameViewModel.Socket01Color = 4;
-            gearFrameViewModel.Socket02Color = 3;
-            gearFrameViewModel.Socket03Color = 2;
-            gearFrameViewModel.SocketOption01 = 1707;
-            gearFrameViewModel.SocketOption01Value = 50;
-            gearFrameViewModel.SocketOption02 = 1707;
-            gearFrameViewModel.SocketOption02Value = 500;
-            gearFrameViewModel.SocketOption03 = 1707;
-            gearFrameViewModel.SocketOption03Value = 500;
-
+            var frameViewModel = _viewModel;
+            frameViewModel.Gear = item;
         }
+
 
         private void ComboBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -98,26 +46,23 @@ namespace RHGMTool.Views
             }
         }
 
-
-        private void dataGridView_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        private void dataGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            // Hide all columns except for nID, wszDesc, and szIconName
-            if (e.PropertyName != "nID" && e.PropertyName != "wszDesc" && e.PropertyName != "szIconName")
+            if (_viewModel != null && dataGridView.SelectedItem != null)
             {
-                e.Cancel = true;
-            }
-            else
-            {
-                // Rename columns
-                if (e.PropertyName == "nID")
-                    e.Column.Header = "ID";
-                else if (e.PropertyName == "wszDesc")
-                    e.Column.Header = "Description";
-                else if (e.PropertyName == "szIconName")
-                    e.Column.Header = "Icon Name";
+                ItemData? selectedItem = dataGridView.SelectedItem as ItemData;
+
+                UpdateItemFrameValues(selectedItem);
             }
         }
 
+        private void dataGridView_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (dataGridView.Items.Count > 0)
+            {
+                dataGridView.SelectedItem = dataGridView.Items[0];
+            }
+        }
 
 
 
