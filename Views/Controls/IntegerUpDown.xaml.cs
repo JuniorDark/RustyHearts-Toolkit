@@ -56,6 +56,16 @@ namespace RHGMTool.Views
             control.PART_TextBox.Text = e.NewValue.ToString();
         }
 
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+
+            if (e.Property == MinimumProperty || e.Property == MaximumProperty)
+            {
+                UpdateButtonStates();
+            }
+        }
+
         private void Increment_Click(object sender, RoutedEventArgs e)
         {
             Value += Increment;

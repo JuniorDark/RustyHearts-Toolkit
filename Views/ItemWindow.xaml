@@ -6,7 +6,6 @@
     xmlns:local="clr-namespace:RHGMTool.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:RHGMTool.ViewModels"
-    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="Item"
     Width="1280"
     Height="720"
@@ -29,13 +28,9 @@
     </Window.Resources>
     <ContentControl Template="{StaticResource RHWindowRed02Template}">
         <Grid Margin="-70,-70,-65,-60">
-            <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition Height="114*" />
-            </Grid.RowDefinitions>
+
             <Label
                 x:Name="lbTitle"
-                Grid.RowSpan="2"
                 Width="191"
                 Height="31"
                 Margin="0,-5,0,0"
@@ -46,18 +41,16 @@
                 FontWeight="Bold"
                 Foreground="White" />
             <Button
-                x:Name="btnSearch"
-                Grid.Row="1"
+                x:Name="btnSelectItem"
                 Width="120"
                 Height="26"
-                Margin="228,422,907,0"
+                Margin="655,646,480,0"
                 VerticalAlignment="Top"
-                Content="Search"
+                Content="Add"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
             <Button
                 x:Name="btnClose"
-                Grid.RowSpan="2"
                 Width="19"
                 Height="19"
                 Margin="0,1,0,0"
@@ -68,7 +61,6 @@
                 Template="{StaticResource lb_close_button}" />
             <ComboBox
                 x:Name="cmbSubCategory"
-                Grid.Row="1"
                 Width="145"
                 Height="24"
                 Margin="190,521,0,0"
@@ -83,8 +75,7 @@
                 Template="{StaticResource lb_combobox}" />
             <CheckBox
                 x:Name="cbTest"
-                Grid.Row="1"
-                Margin="240,472,0,0"
+                Margin="749,592,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Content="CheckBox"
@@ -93,18 +84,17 @@
                 Template="{StaticResource lb_checkbox}" />
             <TextBox
                 x:Name="tbSearch"
-                Grid.Row="1"
                 Width="210"
-                Height="31"
-                Margin="10,420,1035,0"
+                Height="32"
+                Margin="81,429,964,0"
                 VerticalAlignment="Top"
+                CaretBrush="White"
                 Foreground="Gold"
+                Tag="Search Name/ID"
                 Template="{StaticResource lb_textbox}"
-                Text="{Binding SearchText, Mode=TwoWay}" />
-            <!--  Gold Label  -->
+                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Label
                 x:Name="lbSubCategory"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="180,499,956,0"
@@ -112,10 +102,8 @@
                 HorizontalContentAlignment="Center"
                 Content="Sub Category"
                 Foreground="Gold" />
-            <!--  Gold IntegerUpDown  -->
             <ComboBox
                 x:Name="cmbItemBranch"
-                Grid.Row="1"
                 Width="145"
                 Height="24"
                 Margin="190,561,0,0"
@@ -130,7 +118,6 @@
                 Template="{StaticResource lb_combobox}" />
             <Label
                 x:Name="lbQuality"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="180,540,956,0"
@@ -140,7 +127,6 @@
                 Foreground="Gold" />
             <ComboBox
                 x:Name="cmbItemCategory"
-                Grid.Row="1"
                 Width="145"
                 Height="24"
                 Margin="10,523,0,0"
@@ -155,7 +141,6 @@
                 Template="{StaticResource lb_combobox}" />
             <Label
                 x:Name="lbCategory"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="10,499,1126,0"
@@ -165,7 +150,6 @@
                 Foreground="Gold" />
             <ComboBox
                 x:Name="cmbJobClass"
-                Grid.Row="1"
                 Width="145"
                 Height="24"
                 Margin="10,561,0,0"
@@ -180,7 +164,6 @@
                 Template="{StaticResource lb_combobox}" />
             <Label
                 x:Name="lbClass"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="10,540,1126,0"
@@ -190,7 +173,6 @@
                 Foreground="Gold" />
             <ComboBox
                 x:Name="cmbItemType"
-                Grid.Row="1"
                 Width="145"
                 Height="24"
                 Margin="10,482,0,0"
@@ -198,14 +180,13 @@
                 VerticalAlignment="Top"
                 IsReadOnly="True"
                 ItemsSource="{Binding ItemTypeItems}"
-                SelectedIndex="{Binding ItemTypeSelectedIndex}"
-                SelectedValue="{Binding ItemType, Mode=TwoWay}"
+                SelectedIndex="{Binding ItemKindSelectedIndex}"
+                SelectedValue="{Binding ItemKind, Mode=TwoWay}"
                 SelectedValuePath="ID"
                 Style="{StaticResource ComboBoxStyle}"
                 Template="{StaticResource lb_combobox}" />
             <Label
                 x:Name="lbItemType"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="10,458,1126,0"
@@ -215,21 +196,27 @@
                 Foreground="Gold" />
             <DataGrid
                 x:Name="dataGridView"
-                Grid.Row="1"
                 MaxWidth="410"
                 MaxHeight="365"
-                Margin="0,29,844,290"
-                d:ItemsSource="{d:SampleData ItemCount=10}"
+                Margin="4,26,840,293"
                 AutoGenerateColumns="False"
+                BorderBrush="#FF0F0D0A"
                 CanUserAddRows="False"
                 ColumnWidth="Auto"
                 EnableColumnVirtualization="True"
                 EnableRowVirtualization="True"
                 HeadersVisibility="Column"
                 ItemsSource="{Binding ItemDataItems}"
-                Loaded="dataGridView_Loaded"
-                SelectionChanged="dataGridView_SelectionChanged"
+                Loaded="DataGridView_Loaded"
+                SelectionChanged="DataGridView_SelectionChanged"
                 SelectionMode="Single">
+                <DataGrid.Resources>
+                    <!--  Customize selection colors  -->
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Blue" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="White" />
+                </DataGrid.Resources>
                 <DataGrid.Background>
                     <ImageBrush />
                 </DataGrid.Background>
@@ -242,7 +229,43 @@
                         Width="*"
                         Binding="{Binding Name}"
                         Header="Name"
-                        IsReadOnly="True" />
+                        IsReadOnly="True">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="Foreground" Value="White" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Branch}" Value="0">
+                                        <Setter Property="Foreground" Value="White" />
+                                        <!--  Set foreground color for Branch 0  -->
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Branch}" Value="1">
+                                        <Setter Property="Foreground" Value="White" />
+                                        <!--  Set foreground color for Branch 1  -->
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Branch}" Value="2">
+                                        <Setter Property="Foreground" Value="#2adf00" />
+                                        <!--  Set foreground color for Branch 2  -->
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Branch}" Value="3">
+                                        <Setter Property="Foreground" Value="#2adf00" />
+                                        <!--  Set foreground color for Branch 3  -->
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Branch}" Value="4">
+                                        <Setter Property="Foreground" Value="#009cff" />
+                                        <!--  Set foreground color for Branch 4  -->
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Branch}" Value="5">
+                                        <Setter Property="Foreground" Value="#eed040" />
+                                        <!--  Set foreground color for Branch 5  -->
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Branch}" Value="6">
+                                        <Setter Property="Foreground" Value="#d200f8" />
+                                        <!--  Set foreground color for Branch 6  -->
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
                     <DataGridTemplateColumn Header="Icon" IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -257,7 +280,6 @@
             </DataGrid>
             <Label
                 x:Name="lbDurability"
-                Grid.Row="1"
                 Width="119"
                 Height="24"
                 Margin="783,37,353,0"
@@ -267,7 +289,6 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbMaxDurability"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="928,40,208,0"
@@ -277,7 +298,6 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbWeight"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="1070,40,66,0"
@@ -287,7 +307,6 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbEnchant"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="796,80,340,0"
@@ -297,7 +316,6 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbRank"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="928,80,208,0"
@@ -307,7 +325,6 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbSocketCount"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="911,313,225,0"
@@ -317,17 +334,15 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbCurrentAttribute"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
-                Margin="1070,79,66,0"
+                Margin="1070,82,66,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Current Attribute"
                 Foreground="Gold" />
             <Label
                 x:Name="lbAmount"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="810,611,325,0"
@@ -337,7 +352,6 @@
                 Foreground="Gold" />
             <ComboBox
                 x:Name="cbOptionCode1"
-                Grid.Row="1"
                 Width="300"
                 Height="24"
                 Margin="790,163,0,0"
@@ -355,7 +369,6 @@
                 Template="{StaticResource lb_combobox}" />
             <Label
                 x:Name="lbRandomOption1"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="797,142,339,0"
@@ -365,7 +378,6 @@
                 Foreground="Gold" />
             <ComboBox
                 x:Name="cbOptionCode2"
-                Grid.Row="1"
                 Width="300"
                 Height="24"
                 Margin="790,203,0,0"
@@ -383,7 +395,6 @@
                 Template="{StaticResource lb_combobox}" />
             <Label
                 x:Name="lbRandomOption2"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="797,181,339,0"
@@ -393,7 +404,6 @@
                 Foreground="Gold" />
             <ComboBox
                 x:Name="cbOptionCode3"
-                Grid.Row="1"
                 Width="300"
                 Height="24"
                 Margin="790,242,0,0"
@@ -411,7 +421,6 @@
                 Template="{StaticResource lb_combobox}" />
             <Label
                 x:Name="lbRandomOption3"
-                Grid.Row="1"
                 Width="119"
                 Height="25"
                 Margin="797,222,339,0"
@@ -421,7 +430,6 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbRandomOptionValue1"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="1103,139,33,0"
@@ -432,7 +440,6 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbRandomOptionValue2"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="1103,179,33,0"
@@ -443,7 +450,6 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbRandomOptionValue3"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="1103,219,33,0"
@@ -454,7 +460,6 @@
                 Foreground="Gold" />
             <ComboBox
                 x:Name="cbSocketCode1"
-                Grid.Row="1"
                 Width="245"
                 Height="24"
                 Margin="850,383,0,0"
@@ -472,7 +477,6 @@
                 Template="{StaticResource lb_combobox}" />
             <Label
                 x:Name="lbSocketOption1"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="850,363,286,0"
@@ -482,7 +486,6 @@
                 Foreground="Gold" />
             <ComboBox
                 x:Name="cbSocketCode2"
-                Grid.Row="1"
                 Width="244"
                 Height="24"
                 Margin="850,442,0,0"
@@ -500,7 +503,6 @@
                 Template="{StaticResource lb_combobox}" />
             <Label
                 x:Name="lbSocketOption2"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="848,422,287,0"
@@ -510,7 +512,6 @@
                 Foreground="Gold" />
             <ComboBox
                 x:Name="cbSocketCode3"
-                Grid.Row="1"
                 Width="244"
                 Height="24"
                 Margin="850,500,0,0"
@@ -528,7 +529,6 @@
                 Template="{StaticResource lb_combobox}" />
             <Label
                 x:Name="lbSocketOption3"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="850,481,286,0"
@@ -538,7 +538,6 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbSocketOptionValue1"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="1099,362,37,0"
@@ -549,7 +548,6 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbSocketOptionValue2"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="1099,416,37,0"
@@ -560,7 +558,6 @@
                 Foreground="Gold" />
             <Label
                 x:Name="lbSocketOptionValue3"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="1100,478,36,0"
@@ -571,7 +568,6 @@
                 Foreground="Gold" />
             <TextBlock
                 x:Name="lbSelectedItem"
-                Grid.Row="1"
                 Width="Auto"
                 Margin="998,638,45,0"
                 VerticalAlignment="Top"
@@ -579,7 +575,6 @@
                 Text="{Binding ItemName}" />
             <ComboBox
                 x:Name="cbSocketColor1"
-                Grid.Row="1"
                 Width="48"
                 Height="44"
                 Margin="769,373,0,0"
@@ -594,10 +589,8 @@
                 SelectedValuePath="ID"
                 Style="{StaticResource ComboBoxStyle}"
                 Template="{StaticResource lb_combobox_image}" />
-
             <Label
                 x:Name="lbSocketColor1"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="737,349,399,0"
@@ -607,7 +600,6 @@
                 Foreground="Gold" />
             <ComboBox
                 x:Name="cbSocketColor2"
-                Grid.Row="1"
                 Width="48"
                 Height="44"
                 Margin="769,432,0,0"
@@ -623,7 +615,6 @@
                 Template="{StaticResource lb_combobox_image}" />
             <Label
                 x:Name="lbSocketColor2"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="736,410,399,0"
@@ -633,7 +624,6 @@
                 Foreground="Gold" />
             <ComboBox
                 x:Name="cbSocketColor3"
-                Grid.Row="1"
                 Width="48"
                 Height="44"
                 Margin="769,491,0,0"
@@ -649,7 +639,6 @@
                 Template="{StaticResource lb_combobox_image}" />
             <Label
                 x:Name="lbSocketColor3"
-                Grid.Row="1"
                 Width="119"
                 Height="26"
                 Margin="736,467,400,0"
@@ -659,21 +648,18 @@
                 Foreground="Gold" />
             <Image
                 x:Name="imgItemIconEmpty"
-                Grid.Row="1"
                 Margin="946,627,259,0"
                 VerticalAlignment="Top"
                 Source="/Assets/images/lb_ac_icon.png"
                 Stretch="None" />
             <Image
                 x:Name="imgItemIcon"
-                Grid.Row="1"
                 Margin="946,631,259,0"
                 VerticalAlignment="Top"
                 Source="{Binding IconName, Converter={StaticResource IconNameToImageSourceConverter}}"
                 Stretch="None" />
             <TextBlock
                 x:Name="lbTotalItem"
-                Grid.Row="1"
                 Height="25"
                 Margin="13,396,993,0"
                 VerticalAlignment="Top"
@@ -688,16 +674,15 @@
             </TextBlock>
             <local:GearFrameUserControl
                 x:Name="gearFrame"
-                Grid.Row="1"
                 Width="300"
                 Height="600"
                 Margin="428,30,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
+                Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=3|4}"
                 DataContext="{Binding}" />
             <local:IntegerUpDown
                 x:Name="intAmount"
-                Grid.Row="1"
                 Height="26"
                 Margin="810,637,323,21"
                 Increment="1"
@@ -706,7 +691,6 @@
                 Value="1" />
             <local:IntegerUpDown
                 x:Name="intSocketValue3"
-                Grid.Row="1"
                 Height="26"
                 Margin="1110,502,25,156"
                 Increment="{Binding SocketOption03MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
@@ -716,7 +700,6 @@
                 Value="{Binding SocketOption03Value, Mode=TwoWay}" />
             <local:IntegerUpDown
                 x:Name="intSocketValue2"
-                Grid.Row="1"
                 Height="26"
                 Margin="1110,442,25,216"
                 Increment="{Binding SocketOption02MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
@@ -726,7 +709,6 @@
                 Value="{Binding SocketOption02Value, Mode=TwoWay}" />
             <local:IntegerUpDown
                 x:Name="intSocketValue1"
-                Grid.Row="1"
                 Height="26"
                 Margin="1109,384,25,274"
                 Increment="{Binding SocketOption01MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
@@ -736,7 +718,6 @@
                 Value="{Binding SocketOption01Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <local:IntegerUpDown
                 x:Name="intSocketCount"
-                Grid.Row="1"
                 Height="26"
                 Margin="911,339,206,319"
                 Increment="1"
@@ -745,7 +726,6 @@
                 Value="{Binding SocketCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <local:IntegerUpDown
                 x:Name="intOptionValue3"
-                Grid.Row="1"
                 Height="26"
                 Margin="1109,243,25,415"
                 Increment="{Binding RandomOption03MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
@@ -755,7 +735,6 @@
                 Value="{Binding RandomOption03Value, Mode=TwoWay}" />
             <local:IntegerUpDown
                 x:Name="intOptionValue2"
-                Grid.Row="1"
                 Height="26"
                 Margin="1109,203,25,455"
                 Increment="{Binding RandomOption02MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
@@ -765,7 +744,6 @@
                 Value="{Binding RandomOption02Value, Mode=TwoWay}" />
             <local:IntegerUpDown
                 x:Name="intOptionValue1"
-                Grid.Row="1"
                 Width="121"
                 Height="26"
                 Margin="1109,159,25,499"
@@ -776,7 +754,6 @@
                 Value="{Binding RandomOption01Value, Mode=TwoWay}" />
             <local:IntegerUpDown
                 x:Name="intReconstruction"
-                Grid.Row="1"
                 Width="120"
                 Height="26"
                 Margin="1070,101,65,557"
@@ -786,39 +763,37 @@
                 Value="{Binding ReconstructionValue, Mode=TwoWay}" />
             <local:IntegerUpDown
                 x:Name="intRank"
-                Grid.Row="1"
                 Width="120"
                 Height="26"
                 Margin="930,102,205,556"
                 Increment="1"
+                IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                 Maximum="5"
                 Minimum="1"
                 Value="{Binding RankValue, Mode=TwoWay}" />
             <local:IntegerUpDown
                 x:Name="intEnchantLevel"
-                Grid.Row="1"
                 Width="120"
                 Height="26"
                 Margin="790,103,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Increment="1"
+                IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                 Maximum="20"
                 Minimum="0"
                 Value="{Binding EnchantLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <local:IntegerUpDown
                 x:Name="intWeight"
-                Grid.Row="1"
                 Width="120"
                 Height="26"
                 Margin="1070,61,65,597"
-                Increment="1"
+                Increment="100"
                 Maximum="200000"
                 Minimum="1"
                 Value="{Binding WeightValue, Mode=TwoWay}" />
             <local:IntegerUpDown
                 x:Name="intMaxDurability"
-                Grid.Row="1"
                 Width="120"
                 Height="26"
                 Margin="930,61,205,597"
@@ -828,7 +803,6 @@
                 Value="{Binding MaxDurability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <local:IntegerUpDown
                 x:Name="intDurability"
-                Grid.Row="1"
                 Width="120"
                 Height="26"
                 Margin="789,60,346,598"
@@ -836,6 +810,37 @@
                 Maximum="{Binding MaxDurability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Minimum="1"
                 Value="{Binding Durability, Mode=TwoWay}" />
+            <ComboBox
+                x:Name="cmbItemTrade"
+                Width="145"
+                Height="24"
+                Margin="190,480,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                IsReadOnly="True"
+                ItemsSource="{Binding ItemTradeStatusItems}"
+                SelectedIndex="{Binding ItemTradeStatusSelectedIndex}"
+                SelectedValue="{Binding ItemTradeStatus, Mode=TwoWay}"
+                SelectedValuePath="ID"
+                Style="{StaticResource ComboBoxStyle}"
+                Template="{StaticResource lb_combobox}" />
+            <Label
+                x:Name="lbItemTrade"
+                Width="119"
+                Height="25"
+                Margin="172,458,964,0"
+                VerticalAlignment="Top"
+                HorizontalContentAlignment="Center"
+                Content="Item Trade"
+                Foreground="Gold" />
+            <local:ItemFrame
+                Width="300"
+                Height="400"
+                Margin="428,30,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=1}"
+                DataContext="{Binding}" />
         </Grid>
     </ContentControl>
 </Window>

@@ -73,7 +73,7 @@
         </TextBlock>
         <!--  Category and SubCategory  -->
         <TextBlock
-            x:Name="lbCategory"
+            x:Name="tbCategory"
             Grid.Row="1"
             Margin="10,0,118,0"
             VerticalAlignment="Center"
@@ -81,7 +81,7 @@
             Foreground="White"
             Text="{Binding Category}" />
         <TextBlock
-            x:Name="lbSubCategory"
+            x:Name="tbSubCategory"
             Grid.Row="1"
             Margin="-225,0,10,0"
             HorizontalAlignment="Right"
@@ -93,7 +93,7 @@
             Text="{Binding SubCategory}" />
         <!--  ReqLevel and JobClass  -->
         <TextBlock
-            x:Name="lbReqLevel"
+            x:Name="tbReqLevel"
             Grid.Row="2"
             Margin="10,0,118,0"
             VerticalAlignment="Top"
@@ -101,7 +101,7 @@
             Foreground="#FFA9A9A9"
             Text="{Binding RequiredLevel}" />
         <TextBlock
-            x:Name="lbJobClass"
+            x:Name="tbJobClass"
             Grid.Row="2"
             Margin="-250,0,10,0"
             HorizontalAlignment="Right"
@@ -112,7 +112,7 @@
             Text="{Binding JobClass}" />
         <!--  Attribute and Rank  -->
         <TextBlock
-            x:Name="lbAttribute"
+            x:Name="tbAttribute"
             Grid.Row="3"
             Margin="10,1,0,0"
             VerticalAlignment="Top"
@@ -120,7 +120,7 @@
             Foreground="White"
             Text="{Binding Reconstruction}" />
         <TextBlock
-            x:Name="lbRank"
+            x:Name="tbRank"
             Grid.Row="3"
             Margin="-210,0,10,0"
             HorizontalAlignment="Right"
@@ -130,14 +130,14 @@
             Text="{Binding Rank}" />
         <!--  ItemTrade and Weight  -->
         <TextBlock
-            x:Name="lbItemTrade"
+            x:Name="tbItemTrade"
             Grid.Row="4"
             Margin="10,1,0,0"
             d:Text="Trade Unavailable"
             Foreground="#e75151"
             Text="{Binding ItemTrade}" />
         <TextBlock
-            x:Name="lbWeight"
+            x:Name="tbWeight"
             Grid.Row="4"
             Margin="-250,0,10,0"
             HorizontalAlignment="Right"
@@ -147,14 +147,14 @@
             Text="{Binding Weight}" />
         <!--  Durability and Value  -->
         <TextBlock
-            x:Name="lbDurability"
+            x:Name="tbDurability"
             Grid.Row="5"
             Margin="10,1,0,0"
             d:Text="Durability: 1000/1000"
             Foreground="White"
             Text="{Binding DurabilityValue}" />
         <TextBlock
-            x:Name="lbValue"
+            x:Name="tbValue"
             Grid.Row="5"
             Margin="-215,0,10,0"
             HorizontalAlignment="Right"
@@ -162,28 +162,19 @@
             d:Text="1000000 Gold"
             Foreground="White"
             Text="{Binding SellValue}" />
-        <!--  MainStat1 and MainStat2  -->
+        <!--  MainStat  -->
         <TextBlock
-            x:Name="lbMainStat1"
+            x:Name="tbMainStat"
             Grid.Row="6"
             Margin="10,5,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
-            d:Text="Physical Damage +0~0"
+            d:Text="Physical Damage +0~0&#x0a;Magic Damage +0~0"
             Foreground="White"
-            Text="{Binding MainStat1}" />
-        <TextBlock
-            x:Name="lbMainStat2"
-            Grid.Row="6"
-            Margin="10,26,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Text="Magic Damage +0~0"
-            Foreground="White"
-            Text="{Binding MainStat2}" />
+            Text="{Binding MainStat}" />
         <!--  SetName  -->
         <TextBlock
-            x:Name="lbSetName"
+            x:Name="tbSetName"
             Grid.Row="7"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
@@ -193,7 +184,7 @@
             Text="{Binding SetName}" />
         <!--  FixedBuff and its children  -->
         <TextBlock
-            x:Name="lbFixedBuff"
+            x:Name="tbFixedBuff"
             Grid.Row="8"
             Margin="10,0,0,0"
             VerticalAlignment="Top"
@@ -202,7 +193,7 @@
             Text="{Binding FixedBuff}"
             Visibility="{Binding IsFixedBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="lbFixedBuff01"
+            x:Name="tbFixedBuff01"
             Grid.Row="9"
             Height="Auto"
             Margin="10,0,0,0"
@@ -215,7 +206,7 @@
             TextWrapping="Wrap"
             Visibility="{Binding IsFixedBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="lbFixedBuff02"
+            x:Name="tbFixedBuff02"
             Grid.Row="10"
             Height="Auto"
             Margin="10,0,0,0"
@@ -229,7 +220,7 @@
             Visibility="{Binding IsFixedBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <!--  RandomBuff and its children  -->
         <TextBlock
-            x:Name="lbRandomBuff"
+            x:Name="tbRandomBuff"
             Grid.Row="11"
             Margin="10,0,0,0"
             VerticalAlignment="Top"
@@ -238,7 +229,7 @@
             Text="{Binding RandomBuff}"
             Visibility="{Binding IsRandomBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="lbRandomBuff01"
+            x:Name="tbRandomBuff01"
             Grid.Row="12"
             Height="Auto"
             Margin="10,0,0,0"
@@ -251,7 +242,7 @@
             TextWrapping="Wrap"
             Visibility="{Binding IsRandomBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="lbRandomBuff02"
+            x:Name="tbRandomBuff02"
             Grid.Row="13"
             Height="Auto"
             Margin="10,0,0,0"
@@ -264,7 +255,7 @@
             TextWrapping="Wrap"
             Visibility="{Binding IsRandomBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="lbRandomBuff03"
+            x:Name="tbRandomBuff03"
             Grid.Row="14"
             Height="Auto"
             Margin="10,0,0,0"
@@ -278,7 +269,7 @@
             Visibility="{Binding IsRandomBuff03Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <!--  SocketBuff and its children  -->
         <TextBlock
-            x:Name="lbSocketBuff"
+            x:Name="tbSocketBuff"
             Grid.Row="15"
             Margin="10,0,0,0"
             VerticalAlignment="Top"
@@ -287,7 +278,7 @@
             Text="{Binding SocketBuff}"
             Visibility="{Binding IsSocketBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="lbSocketBuff01"
+            x:Name="tbSocketBuff01"
             Grid.Row="16"
             Height="Auto"
             Margin="10,0,0,0"
@@ -300,7 +291,7 @@
             TextWrapping="Wrap"
             Visibility="{Binding IsSocketBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="lbSocketBuff02"
+            x:Name="tbSocketBuff02"
             Grid.Row="17"
             Height="Auto"
             Margin="10,0,0,0"
@@ -313,7 +304,7 @@
             TextWrapping="Wrap"
             Visibility="{Binding IsSocketBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="lbSocketBuff03"
+            x:Name="tbSocketBuff03"
             Grid.Row="18"
             Height="Auto"
             Margin="10,0,0,0"
@@ -326,7 +317,7 @@
             TextWrapping="Wrap"
             Visibility="{Binding IsSocketBuff03Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="lbPetFood"
+            x:Name="tbPetFood"
             Grid.Row="19"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"

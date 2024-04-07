@@ -1,21 +1,31 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ControlTemplate x:Key="lb_textbox" TargetType="{x:Type TextBox}">
-        <Grid>
+        <Grid Background="Transparent">
             <!--  lb_def_box04 template for the textbox  -->
             <ContentControl Template="{StaticResource lb_def_box04}">
-                <TextBox
-                    x:Name="lb_Tb"
-                    MinHeight="31"
-                    Padding="0"
-                    VerticalContentAlignment="Top"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    CaretBrush="White"
-                    Foreground="{TemplateBinding Foreground}"
-                    IsEnabled="{TemplateBinding IsEnabled}"
-                    IsReadOnly="{TemplateBinding IsReadOnly}"
-                    Text="{TemplateBinding Text}"
-                    TextWrapping="Wrap" />
+                <Grid>
+                    <!--  Actual TextBox content  -->
+                    <ScrollViewer x:Name="PART_ContentHost" />
+
+                    <!--  Background text  -->
+                    <TextBlock
+                        Margin="5,0"
+                        VerticalAlignment="Center"
+                        Foreground="Gray"
+                        IsHitTestVisible="False"
+                        Text="{TemplateBinding Tag}">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Value="">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
             </ContentControl>
         </Grid>
     </ControlTemplate>

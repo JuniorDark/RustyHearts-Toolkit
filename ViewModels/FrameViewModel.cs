@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Media;
 using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.ViewModels
@@ -18,31 +20,30 @@ namespace RHGMTool.ViewModels
 
         private readonly SqLiteDatabaseService _databaseService;
         private readonly GMDbService _gMDbService;
+        private readonly FrameData _frameData;
         private readonly ItemDataManager _itemDataManager;
-
-        private ICollectionView _itemDataView;
-        public ICollectionView ItemDataView
-        {
-            get { return _itemDataView; }
-            set
-            {
-                _itemDataView = value;
-                OnPropertyChanged(nameof(ItemDataView));
-            }
-        }
+        private readonly System.Timers.Timer searchTimer;
 
         public FrameViewModel()
         {
             _databaseService = new SqLiteDatabaseService();
             _gMDbService = new GMDbService(_databaseService);
+            _frameData = new FrameData();
             _itemDataManager = new ItemDataManager();
-            
+            searchTimer = new()
+            {
+                Interval = 500,
+                AutoReset = false
+            };
+            searchTimer.Elapsed += SearchTimerElapsed;
+
             PopulateItemDataItems();
             PopulateOptionItems();
             PopulateItemTypeItems();
-            PopulateCategoryItems((ItemType)1);
+            PopulateCategoryItems(ItemType.Item);
             PopulateClassItems();
             PopulateBranchItems();
+            PopulateItemTradeStatusItems();
             PopulateSocketColorItems();
             _itemDataView = CollectionViewSource.GetDefaultView(ItemDataItems);
             _itemDataView.Filter = FilterItems;
@@ -113,13 +114,25 @@ namespace RHGMTool.ViewModels
 
         #endregion
 
-        #region Comboboxes
+        #region CollectionView
+
+        private ICollectionView _itemDataView;
+        public ICollectionView ItemDataView
+        {
+            get { return _itemDataView; }
+            set
+            {
+                _itemDataView = value;
+                OnPropertyChanged(nameof(ItemDataView));
+            }
+        }
 
         private bool FilterItems(object obj)
         {
             if (obj is ItemData item)
             {
-                if (_itemType != 0 && item.ItemType != _itemType)
+                //combobox filter
+                if (_itemKind != 0 && item.Type != _itemKind)
                     return false;
 
                 if (_itemCategory != 0 && item.Category != _itemCategory)
@@ -134,14 +147,21 @@ namespace RHGMTool.ViewModels
                 if (_itemBranch != 0 && item.Branch != _itemBranch)
                     return false;
 
+                if (_itemTradeStatus != 2 && item.ItemTrade != _itemTradeStatus)
+                    return false;
+
+                // text search filter
                 if (!string.IsNullOrEmpty(SearchText))
                 {
-                    // You can adjust the condition to match any part of the ID or Name
-                    if (item.ID.ToString().Contains(SearchText) ||
-                        item.Name.Contains(SearchText))
-                    {
+                    string searchText = SearchText.ToLower();
+
+                    // Check if either item ID or item Name contains the search text
+                    if (!string.IsNullOrEmpty(item.ID.ToString()) && item.ID.ToString().Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
                         return true;
-                    }
+
+                    if (!string.IsNullOrEmpty(item.Name) && item.Name.Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+
                     return false;
                 }
 
@@ -149,19 +169,31 @@ namespace RHGMTool.ViewModels
             }
             return false;
         }
-
+        
         private string? _searchText;
         public string? SearchText
         {
             get { return _searchText; }
             set
             {
-                _searchText = value;
-                OnPropertyChanged(nameof(SearchText));
-                // Update the filter whenever the search text changes
-                _itemDataView.Refresh();
+                if (_searchText != value)
+                {
+                    _searchText = value;
+                    OnPropertyChanged(nameof(SearchText));
+                    searchTimer.Stop();
+                    searchTimer.Start();
+                }
             }
         }
+
+        private void SearchTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(_itemDataView.Refresh);
+        }
+
+        #endregion
+
+        #region Comboboxes
 
         private List<NameID>? _categoryItems;
         public List<NameID>? CategoryItems
@@ -215,34 +247,34 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        private int _itemType;
+        private int _itemKind;
 
-        public int ItemType
+        public int ItemKind
         {
-            get { return _itemType; }
+            get { return _itemKind; }
             set
             {
-                if (_itemType != value)
+                if (_itemKind != value)
                 {
-                    _itemType = value;
-                    OnPropertyChanged(nameof(ItemType));
+                    _itemKind = value;
+                    OnPropertyChanged(nameof(ItemKind));
                     PopulateCategoryItems((ItemType)value);
                     _itemDataView.Refresh();
                 }
             }
         }
 
-        private int _itemTypeSelectedIndex;
+        private int _itemKindSelectedIndex;
 
-        public int ItemTypeSelectedIndex
+        public int ItemKindSelectedIndex
         {
-            get { return _itemTypeSelectedIndex; }
+            get { return _itemKindSelectedIndex; }
             set
             {
-                if (_itemTypeSelectedIndex != value)
+                if (_itemKindSelectedIndex != value)
                 {
-                    _itemTypeSelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemTypeSelectedIndex));
+                    _itemKindSelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemKindSelectedIndex));
 
                 }
             }
@@ -398,8 +430,8 @@ namespace RHGMTool.ViewModels
 
                 if (ItemTypeItems.Count > 0)
                 {
-                    ItemTypeSelectedIndex = 0;
-                    OnPropertyChanged(nameof(ItemTypeSelectedIndex));
+                    ItemKindSelectedIndex = 0;
+                    OnPropertyChanged(nameof(ItemKindSelectedIndex));
                 }
             }
             catch (Exception ex)
@@ -472,6 +504,73 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        private int _itemTradeStatus;
+
+        public int ItemTradeStatus
+        {
+            get { return _itemTradeStatus; }
+            set
+            {
+                if (_itemTradeStatus != value)
+                {
+                    _itemTradeStatus = value;
+                    OnPropertyChanged(nameof(ItemTradeStatus));
+                    _itemDataView.Refresh();
+                }
+            }
+        }
+
+        private int _itemTradeStatusSelectedIndex;
+
+        public int ItemTradeStatusSelectedIndex
+        {
+            get { return _itemTradeStatusSelectedIndex; }
+            set
+            {
+                if (_itemTradeStatusSelectedIndex != value)
+                {
+                    _itemTradeStatusSelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemTradeStatusSelectedIndex));
+
+                }
+            }
+        }
+
+        private List<NameID>? _ItemTradeStatusItems;
+        public List<NameID>? ItemTradeStatusItems
+        {
+            get { return _ItemTradeStatusItems; }
+            set
+            {
+                if (_ItemTradeStatusItems != value)
+                {
+                    _ItemTradeStatusItems = value;
+                    OnPropertyChanged(nameof(ItemTradeStatusItems));
+                }
+            }
+        }
+
+        private void PopulateItemTradeStatusItems()
+        {
+            try
+            {
+                ItemTradeStatusItems =
+                [
+                    new NameID { ID = 2, Name = "All" },
+                    new NameID { ID = 1, Name = "Tradeable" },
+                    new NameID { ID = 0, Name = "Untradeable" }
+                ];
+
+                ItemTradeStatusSelectedIndex = 0;
+                OnPropertyChanged(nameof(ItemTradeStatusSelectedIndex));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
         private List<NameID>? _socketColorItems;
         public List<NameID>? SocketColorItems
         {
@@ -498,84 +597,96 @@ namespace RHGMTool.ViewModels
             }
         }
 
-
         #endregion
 
-        #region GearData
+        #region ItemData
 
-        private ItemData? _gear;
-        public ItemData? Gear
+        // Properties for UI elements
+        public string? IconName { get; private set; }
+        public string? Category { get; private set; }
+        public string? SubCategory { get; private set; }
+        public string? MainStat { get; private set; }
+        public string? SellValue { get; private set; }
+        public string? RequiredLevel { get; private set; }
+        public string? ItemTrade { get; private set; }
+        public string? JobClass { get; private set; }
+
+        public string? SetName { get; private set; }
+        public string? PetFood { get; private set; }
+        public string? PetFoodColor { get; private set; }
+        public string? FixedBuff { get; set; }
+        public string? FixedBuff01 { get; set; }
+        public string? FixedBuff02 { get; set; }
+        public string? FixedBuff01Color { get; set; }
+        public string? FixedBuff02Color { get; set; }
+        public string? RandomBuff { get; set; }
+        public string? Description { get; private set; }
+        public int Type { get; set; }
+        public int WeaponID00 { get; private set; }
+
+        private ItemData? _item;
+        public ItemData? Item
         {
-            get { return _gear; }
+            get { return _item; }
             set
             {
-                _gear = value;
+                _item = value;
                 OnPropertyChanged();
-                UpdateGearData();
+                UpdateItemData();
             }
         }
 
-        private void UpdateGearData()
+        // Update UI elements based on Item data
+        private void UpdateItemData()
         {
-            if (Gear != null)
+            if (Item != null)
             {
-                // Update UI elements based on Gear data
-                ItemName = Gear.Name;
-                ItemNameColor = FrameData.GetBranchColor(Gear.Branch);
-                IconName = Gear.IconName;
-                Category = _gMDbService.GetCategoryName(Gear.Category);
-                SubCategory = _gMDbService.GetSubCategoryName(Gear.SubCategory);
-                if (Gear.ItemType == 3)
-                {
-                    MainStat1 = $"Physical Defense +{Gear.Defense}";
-                    MainStat2 = $"Magic Defense +{Gear.MagicDefense}";
-                }
-                else if (Gear.ItemType == 4)
-                {
-                    (int PhysicalAttackMin, int PhysicalAttackMax, int MagicAttackMin, int MagicAttackMax) = _gMDbService.GetWeaponStats(Gear.JobClass, Gear.WeaponID00);
-                    MainStat1 = $"Physical Damage +{PhysicalAttackMin}~{PhysicalAttackMax}";
-                    MainStat2 = $"Magic Damage +{MagicAttackMin}~{MagicAttackMax}";
-                }
-                else
-                {
-                    MainStat1 = "";
-                    MainStat2 = "";
-                }
-                SellValue = Gear.SellPrice > 0 ? $"{Gear.SellPrice:N0} Gold" : "";
-                RequiredLevel = $"Required Level: {Gear.LevelLimit}";
-                ItemTrade = Gear.ItemTrade == 0 ? "Trade Unavailable" : "";
-                Durability = Gear.Durability;
-                MaxDurability = Gear.Durability;
-                DurabilityValue = Gear.Durability > 0 ? $"Durability: {Gear.Durability / 100}/{MaxDurability / 100}" : "";
-                JobClass = Gear.JobClass > 0 ? GetEnumDescription((CharClass)Gear.JobClass) : "";
-                WeightValue = Gear.Weight;
-                Weight = Gear.Weight > 0 ? $"{Gear.Weight / 1000.0:0.000}Kg" : "";
-                SetName = Gear.SetId != 0 ? _gMDbService.GetSetName(Gear.SetId) : "";
-                ReconstructionValue = Gear.ReconstructionMax;
-                ReconstructionMax = Gear.ReconstructionMax;
-                Reconstruction = Gear.ReconstructionMax > 0 && Gear.ItemTrade != 0 ? $"Attribute Item ({Gear.ReconstructionMax} Times/{Gear.ReconstructionMax} Times)" : "Bound item (Binds when acquired)";
-                OverlapCnt = Gear.OverlapCnt;
-                OptionCountMax = Gear.OptionCountMax;
-                SocketCountMax = Gear.SocketCountMax;
-                SocketCount = Gear.SocketCountMax;
+                ItemName = Item.Name;
+                ItemNameColor = FrameData.GetBranchColor(Item.Branch);
+                IconName = Item.IconName;
+                FormatRichTextBoxDescription(Item.Description);
+                Category = _gMDbService.GetCategoryName(Item.Category);
+                SubCategory = _gMDbService.GetSubCategoryName(Item.SubCategory);
+                Type = Item.Type;
+                MainStat = _frameData.FormatMainStat(Item.Type, Item.Defense, Item.MagicDefense, Item.JobClass, Item.WeaponID00);
+
+                SellValue = FrameData.FormatSellValue(Item.SellPrice);
+                RequiredLevel = FrameData.FormatRequiredLevel(Item.LevelLimit);
+                ItemTrade = FrameData.FormatItemTrade(Item.ItemTrade);
+                DurabilityValue = FrameData.FormatDurabilityValue(Item.Type, Item.Durability, MaxDurability);
+                Weight = FrameData.FormatWeight(Item.Weight);
+                Reconstruction = FrameData.FormatReconstruction(Item.Type, Item.ReconstructionMax, Item.ItemTrade);
+                PetFood = FrameData.FormatPetFood(Item.PetFood);
+                PetFoodColor = FrameData.FormatPetFoodColor(Item.PetFood);
+
+                Durability = Item.Durability;
+                MaxDurability = Item.Durability;
+
+                JobClass = Item.JobClass > 0 ? GetEnumDescription((CharClass)Item.JobClass) : "";
+                WeightValue = Item.Weight;
+                SetName = Item.SetId != 0 ? _gMDbService.GetSetName(Item.SetId) : "";
+                ReconstructionValue = Item.ReconstructionMax;
+                ReconstructionMax = Item.ReconstructionMax;
+
+                OverlapCnt = Item.OverlapCnt;
+                OptionCountMax = Item.Category == 19 ? 1 : Item.OptionCountMax;
+                SocketCountMax = Item.SocketCountMax;
+                SocketCount = Item.SocketCountMax;
                 FixedBuff = $"[Fixed Buff]";
                 RandomBuff = $"[Random Buff]";
-                (FixedBuff01, FixedBuff01Color) = GetOptionName(Gear.FixOption00, Gear.FixOptionValue00);
-                (FixedBuff02, FixedBuff02Color) = GetOptionName(Gear.FixOption01, Gear.FixOptionValue01);
+                (FixedBuff01, FixedBuff01Color) = _frameData.GetOptionName(Item.FixOption00, Item.FixOptionValue00);
+                (FixedBuff02, FixedBuff02Color) = _frameData.GetOptionName(Item.FixOption01, Item.FixOptionValue01);
 
-                IsFixedBuffVisible = Gear.FixOption00 != 0 && Gear.FixOption01 != 0;
-                IsFixedBuff01Visible = Gear.FixOption00 != 0;
-                IsFixedBuff02Visible = Gear.FixOption01 != 0;
-
-                PetFood = Gear.PetFood == 0 ? "This item cannot be used as Pet Food" : "This item can be used as Pet Food";
-                PetFoodColor = Gear.PetFood == 0 ? "#e75151" : "#eed040";
+                IsFixedBuffVisible = Item.FixOption00 != 0 && Item.FixOption01 != 0;
+                IsFixedBuff01Visible = Item.FixOption00 != 0;
+                IsFixedBuff02Visible = Item.FixOption01 != 0;
 
                 // Raise PropertyChanged for all properties
                 OnPropertyChanged(nameof(IconName));
                 OnPropertyChanged(nameof(Category));
                 OnPropertyChanged(nameof(SubCategory));
-                OnPropertyChanged(nameof(MainStat1));
-                OnPropertyChanged(nameof(MainStat2));
+                OnPropertyChanged(nameof(Type));
+                OnPropertyChanged(nameof(MainStat));
                 OnPropertyChanged(nameof(SellValue));
                 OnPropertyChanged(nameof(RequiredLevel));
                 OnPropertyChanged(nameof(ItemTrade));
@@ -602,41 +713,68 @@ namespace RHGMTool.ViewModels
 
         }
 
-        public (string option, string color) GetOptionName(int option, int optionValue)
+        private static readonly string[] separator = ["<BR>", "<br>", "<Br>"];
+
+        private void FormatRichTextBoxDescription(string? description)
         {
-            string fixedOption = _gMDbService.GetOptionName(option);
-            (int secTime, float value, int maxValue) = _gMDbService.GetOptionValues(option);
+            if (string.IsNullOrEmpty(description))
+            {
+                // Clear the rich text box content if the description is empty
+                RichTextBoxContent = null;
+                return;
+            }
 
-            string colorHex = FrameData.GetColorFromOption(fixedOption);
-            string formattedOption = FrameData.FormatNameID(fixedOption, $"{optionValue}", $"{secTime}", $"{value}", maxValue);
+            // Create a FlowDocument to hold the rich text content
+            FlowDocument flowDocument = new();
 
-            return (formattedOption, colorHex);
+            // Split the description into parts based on line breaks ("<BR>", "<br>", "<Br>")
+            string[] parts = description.Split(separator, StringSplitOptions.None);
+
+            foreach (string part in parts)
+            {
+                if (part.StartsWith("<COLOR:"))
+                {
+                    // Extract the color value from the tag, e.g., "<COLOR:06EBE8>"
+                    int tagEnd = part.IndexOf('>');
+                    if (tagEnd != -1)
+                    {
+                        string colorTag = part[7..tagEnd];
+                        string text = part[(tagEnd + 1)..];
+
+                        Run run = new(text)
+                        {
+                            Foreground = (Brush?)new BrushConverter().ConvertFromString("#" + colorTag.ToLower())
+                        };
+
+                        flowDocument.Blocks.Add(new Paragraph(run));
+                    }
+                }
+                else
+                {
+                    // Create a Run element for the part with default color
+                    Run run = new(part);
+
+                    // Add the Run element to the FlowDocument
+                    flowDocument.Blocks.Add(new Paragraph(run));
+                }
+            }
+
+            // Set the FlowDocument as the content of the RichTextBox
+            RichTextBoxContent = flowDocument;
         }
 
-        // Properties for UI elements
-        public string? IconName { get; private set; }
-        public string? Category { get; private set; }
-        public string? SubCategory { get; private set; }
-        public string? MainStat1 { get; private set; }
-        public string? MainStat2 { get; private set; }
-        public string? SellValue { get; private set; }
-        public string? RequiredLevel { get; private set; }
-        public string? ItemTrade { get; private set; }
-        public string? JobClass { get; private set; }
+        // Property to bind to the RichTextBox content
+        private FlowDocument? _richTextBoxContent;
 
-        public string? SetName { get; private set; }
-        public string? PetFood { get; private set; }
-        public string? PetFoodColor { get; private set; }
-        public string? FixedBuff { get; set; }
-        public string? FixedBuff01 { get; set; }
-        public string? FixedBuff02 { get; set; }
-        public string? FixedBuff01Color { get; set; }
-        public string? FixedBuff02Color { get; set; }
-        public string? RandomBuff { get; set; }
-        public string? Description { get; private set; }
-        public string? Type { get; set; }
-        public int WeaponID00 { get; private set; }
-
+        public FlowDocument? RichTextBoxContent
+        {
+            get { return _richTextBoxContent; }
+            set
+            {
+                _richTextBoxContent = value;
+                OnPropertyChanged(nameof(RichTextBoxContent));
+            }
+        }
 
         private string? _itemName;
 
@@ -1273,9 +1411,9 @@ namespace RHGMTool.ViewModels
             IsRandomBuff02Visible = OptionCountMax > 1;
             IsRandomBuff03Visible = OptionCountMax > 2;
 
-            (RandomBuff01, RandomBuff01Color) = RandomOption01 != 0 ? GetOptionName(RandomOption01, RandomOption01Value) : ("No Buff", "White");
-            (RandomBuff02, RandomBuff02Color) = RandomOption02 != 0 ? GetOptionName(RandomOption02, RandomOption02Value) : ("No Buff", "White");
-            (RandomBuff03, RandomBuff03Color) = RandomOption03 != 0 ? GetOptionName(RandomOption03, RandomOption03Value) : ("No Buff", "White");
+            (RandomBuff01, RandomBuff01Color) = RandomOption01 != 0 ? _frameData.GetOptionName(RandomOption01, RandomOption01Value) : ("No Buff", "White");
+            (RandomBuff02, RandomBuff02Color) = RandomOption02 != 0 ? _frameData.GetOptionName(RandomOption02, RandomOption02Value) : ("No Buff", "White");
+            (RandomBuff03, RandomBuff03Color) = RandomOption03 != 0 ? _frameData.GetOptionName(RandomOption03, RandomOption03Value) : ("No Buff", "White");
 
             (RandomOption01MinValue, RandomOption01MaxValue) = _gMDbService.GetOptionValue(RandomOption01);
             (RandomOption02MinValue, RandomOption02MaxValue) = _gMDbService.GetOptionValue(RandomOption02);
@@ -1728,9 +1866,9 @@ namespace RHGMTool.ViewModels
             IsSocketBuff03Visible = SocketCount > 2;
 
             // Get socket buff and its color based on the SocketOption and SocketColor
-            (SocketBuff01, SocketBuff01Color) = SocketOption01 != 0 ? GetOptionName(SocketOption01, SocketOption01Value) : FrameData.SetSocketColor(Socket01Color);
-            (SocketBuff02, SocketBuff02Color) = SocketOption02 != 0 ? GetOptionName(SocketOption02, SocketOption02Value) : FrameData.SetSocketColor(Socket02Color);
-            (SocketBuff03, SocketBuff03Color) = SocketOption03 != 0 ? GetOptionName(SocketOption03, SocketOption03Value) : FrameData.SetSocketColor(Socket03Color);
+            (SocketBuff01, SocketBuff01Color) = SocketOption01 != 0 ? _frameData.GetOptionName(SocketOption01, SocketOption01Value) : FrameData.SetSocketColor(Socket01Color);
+            (SocketBuff02, SocketBuff02Color) = SocketOption02 != 0 ? _frameData.GetOptionName(SocketOption02, SocketOption02Value) : FrameData.SetSocketColor(Socket02Color);
+            (SocketBuff03, SocketBuff03Color) = SocketOption03 != 0 ? _frameData.GetOptionName(SocketOption03, SocketOption03Value) : FrameData.SetSocketColor(Socket03Color);
 
             (SocketOption01MinValue, SocketOption01MaxValue) = _gMDbService.GetOptionValue(SocketOption01);
             (SocketOption02MinValue, SocketOption02MaxValue) = _gMDbService.GetOptionValue(SocketOption02);

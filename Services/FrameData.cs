@@ -4,6 +4,15 @@ namespace RHGMTool.Services
 {
     public class FrameData
     {
+        private readonly SqLiteDatabaseService _databaseService;
+        private readonly GMDbService _gMDbService;
+
+        public FrameData()
+        {
+            _databaseService = new SqLiteDatabaseService();
+            _gMDbService = new GMDbService(_databaseService);
+        }
+
         public static string GetBranchColor(int branch)
         {
             return branch switch
@@ -43,6 +52,85 @@ namespace RHGMTool.Services
                 _ => ("Unprocessed Gem Socket", "White"),
             };
         }
+
+        public (string option, string color) GetOptionName(int option, int optionValue)
+        {
+            string fixedOption = _gMDbService.GetOptionName(option);
+            (int secTime, float value, int maxValue) = _gMDbService.GetOptionValues(option);
+
+            string colorHex = GetColorFromOption(fixedOption);
+            string formattedOption = FormatNameID(fixedOption, $"{optionValue}", $"{secTime}", $"{value}", maxValue);
+
+            return (formattedOption, colorHex);
+        }
+
+        public string FormatMainStat(int itemType, int physicalStat, int magicStat, int jobClass, int weaponId)
+        {
+            string mainStat = "";
+
+            if ((ItemType)itemType == ItemType.Armor && physicalStat > 0 && magicStat > 0)
+            {
+                mainStat = $"Physical Defense +{physicalStat}\nMagic Defense +{magicStat}";
+            }
+            else if ((ItemType)itemType == ItemType.Weapon)
+            {
+                (int physicalAttackMin, int physicalAttackMax, int magicAttackMin, int magicAttackMax) = _gMDbService.GetWeaponStats(jobClass, weaponId);
+                mainStat = $"Physical Damage +{physicalAttackMin}~{physicalAttackMax}\nMagic Damage +{magicAttackMin}~{magicAttackMax}";
+            }
+
+            return mainStat;
+        }
+
+        public static string FormatSellValue(int sellPrice)
+        {
+            return sellPrice > 0 ? $"{sellPrice:N0} Gold" : "";
+        }
+
+        public static string FormatRequiredLevel(int levelLimit)
+        {
+            return $"Required Level: {levelLimit}";
+        }
+
+        public static string FormatItemTrade(int itemTrade)
+        {
+            return itemTrade == 0 ? "Trade Unavailable" : "";
+        }
+
+        public static string FormatDurabilityValue(int itemType, int durability, int maxDurability)
+        {
+            if (itemType == 1 || itemType == 2)
+            {
+                return "";
+            }
+
+            return durability > 0 ? $"Durability: {durability / 100}/{maxDurability / 100}" : "";
+        }
+
+        public static string FormatWeight(int weight)
+        {
+            return weight > 0 ? $"{weight / 1000.0:0.000}Kg" : "";
+        }
+
+        public static string FormatReconstruction(int itemType, int reconstructionMax, int itemTrade)
+        {
+            if (itemType == 1 || itemType == 2)
+            {
+                return "";
+            }
+
+            return reconstructionMax > 0 && itemTrade != 0 ? $"Attribute Item ({reconstructionMax} Times/{reconstructionMax} Times)" : "Bound item (Binds when acquired)";
+        }
+
+        public static string FormatPetFood(int petFood)
+        {
+            return petFood == 0 ? "This item cannot be used as Pet Food" : "This item can be used as Pet Food";
+        }
+
+        public static string FormatPetFoodColor(int petFood)
+        {
+            return petFood == 0 ? "#e75151" : "#eed040";
+        }
+
 
         private const string ColorTagStart = "<COLOR:";
         private const string ColorTagEnd = ">";

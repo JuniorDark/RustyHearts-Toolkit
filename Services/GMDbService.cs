@@ -1,5 +1,4 @@
 ﻿using RHGMTool.Models;
-using System.Data;
 using System.Data.SQLite;
 using static RHGMTool.Models.EnumService;
 
@@ -37,7 +36,7 @@ namespace RHGMTool.Services
                         ID = Convert.ToInt32(reader["nID"]),
                         Name = reader["wszDesc"].ToString(),
                         Description = reader["wszItemDescription"].ToString(),
-                        ItemType = (int)itemType,
+                        Type = (int)itemType,
                         WeaponID00 = Convert.ToInt32(reader["nWeaponID00"]),
                         Category = Convert.ToInt32(reader["nCategory"]),
                         SubCategory = Convert.ToInt32(reader["nSubCategory"]),
@@ -92,7 +91,6 @@ namespace RHGMTool.Services
             {
                 string query = "SELECT nID, wszDescNoColor FROM itemoptionlist";
                 using var optionReader = _databaseService.ExecuteReader(query, _connection);
-
                 optionItems.Add(new NameID { ID = 0, Name = "None" });
 
                 while (optionReader.Read())
@@ -100,7 +98,9 @@ namespace RHGMTool.Services
                     int id = optionReader.GetInt32(0);
                     string name = optionReader.GetString(1);
 
-                    optionItems.Add(new NameID { ID = id, Name = name });
+                    string formattedName = $"({id}) {name}";
+
+                    optionItems.Add(new NameID { ID = id, Name = formattedName });
                 }
             }
             catch (Exception ex)

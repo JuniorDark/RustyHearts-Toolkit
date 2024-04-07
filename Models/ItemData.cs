@@ -5,7 +5,7 @@
         public string? Name { get; set; }
         public string? Description { get; set; }
         public string? IconName { get; set; }
-        public int ItemType { get; set; }
+        public int Type { get; set; }
         public int ID { get; set; }
         public int WeaponID00 { get; set; }
         public int Category { get; set; }

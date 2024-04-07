@@ -150,9 +150,9 @@ namespace RHGMTool.Models
             [Description("Magic")]
             Magic = 2,
             [Description("Rare")]
-            Rare = 3,
+            Rare = 4,
             [Description("Unique")]
-            Unique = 4,
+            Unique = 5,
             [Description("Epic")]
             Epic = 6
         }
