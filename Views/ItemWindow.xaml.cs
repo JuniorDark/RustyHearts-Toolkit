@@ -19,6 +19,7 @@ namespace RHGMTool.Views
             InitializeComponent();
             _viewModel = new FrameViewModel();
             DataContext = _viewModel;
+            cmbItemType.SelectedIndex = 1;
             cmbItemTrade.SelectedIndex = 0;
         }
 
@@ -51,10 +52,7 @@ namespace RHGMTool.Views
 
                 UpdateItemFrameValues(selectedItem);
             }
-            if (dataGridView.Items.Count > 0)
-            {
-                dataGridView.SelectedItem = dataGridView.Items[0];
-            }
+            
         }
 
         private void DataGridView_Loaded(object sender, RoutedEventArgs e)

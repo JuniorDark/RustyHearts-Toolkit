@@ -43,10 +43,10 @@ namespace RHGMTool.Services
             return (SocketColor)colorId switch
             {
                 SocketColor.None => ("Unprocessed Gem Socket", "White"),
-                SocketColor.Red => ("Processed Red Gem Socket", "Red"),
-                SocketColor.Blue => ("Processed Blue Gem Socket", "Blue"),
-                SocketColor.Yellow => ("Processed Yellow Gem Socket", "Yellow"),
-                SocketColor.Green => ("Processed Green Gem Socket", "Green"),
+                SocketColor.Red => ("Processed Red Gem Socket", "#cc3300"),
+                SocketColor.Blue => ("Processed Blue Gem Socket", "#0000ff"),
+                SocketColor.Yellow => ("Processed Yellow Gem Socket", "#cccc00"),
+                SocketColor.Green => ("Processed Green Gem Socket", "#339900"),
                 SocketColor.Colorless => ("Processed Colorless Socket", "Gray"),
                 SocketColor.Gray => ("Processed Gray Socket", "Gray"),
                 _ => ("Unprocessed Gem Socket", "White"),

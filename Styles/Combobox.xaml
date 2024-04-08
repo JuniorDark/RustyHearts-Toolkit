@@ -13,6 +13,195 @@
     <BitmapImage x:Key="lb_combobox_ArrowDisabled" UriSource="/Assets/buttons/lb_combo/lb_combo02_07.png" />
 
 
+    <!--  RepeatButton Up Arrow  -->
+    <ImageBrush x:Key="RepeatButtonUpArrowNormal" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_02.png" />
+    <ImageBrush x:Key="RepeatButtonUpArrowHover" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_01.png" />
+    <ImageBrush x:Key="RepeatButtonUpArrowPressed" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_03.png" />
+    <ImageBrush x:Key="RepeatButtonUpArrowDisabled" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_01_04.png" />
+
+    <!--  RepeatButton Down Arrow  -->
+    <ImageBrush x:Key="RepeatButtonDownArrowNormal" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_02.png" />
+    <ImageBrush x:Key="RepeatButtonDownArrowHover" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_01.png" />
+    <ImageBrush x:Key="RepeatButtonDownArrowPressed" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_03.png" />
+    <ImageBrush x:Key="RepeatButtonDownArrowDisabled" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_02_04.png" />
+
+    <!--  Thumb  -->
+    <ImageBrush x:Key="ThumbNormalTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_04_01.png" />
+    <ImageBrush x:Key="ThumbNormalMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll_normal.png" />
+    <ImageBrush x:Key="ThumbNormalBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_04_03.png" />
+
+    <ImageBrush x:Key="ThumbHoverTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_03_01.png" />
+    <ImageBrush x:Key="ThumbHoverMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll_hover.png" />
+    <ImageBrush x:Key="ThumbHoverBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_03_03.png" />
+
+    <ImageBrush x:Key="ThumbPressedTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_01.png" />
+    <ImageBrush x:Key="ThumbPressedMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll_down.png" />
+    <ImageBrush x:Key="ThumbPressedBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_03.png" />
+
+    <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontFamily" Value="{StaticResource ArialUnicodeMS}" />
+        <Setter Property="FontSize" Value="11" />
+        <!--  Default text color  -->
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="Gray" />
+                <!--  Gray out the text when disabled  -->
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="CustomScrollBarThumb" TargetType="Thumb">
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Background" Value="{StaticResource ThumbNormalMiddle}" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Width" Value="15" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Thumb">
+                    <Grid>
+                        <Border
+                            x:Name="PART_Thumb"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="0,0,0,0" />
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Thumb" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbNormalMiddle}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="MouseOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Thumb" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbHoverMiddle}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PART_Thumb" Storyboard.TargetProperty="Background">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbPressedMiddle}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+
+    <Style x:Key="CustomScrollBarStyle" TargetType="{x:Type ScrollBar}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollBar}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <Track Grid.Row="1" IsDirectionReversed="True">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" />
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource CustomScrollBarThumb}" />
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" />
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+
+                        <!--  Repeat buttons  -->
+                        <RepeatButton
+                            x:Name="PART_LineUpButton"
+                            Command="ScrollBar.LineUpCommand"
+                            Content="Up">
+                            <RepeatButton.Template>
+                                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                    <Image
+                                        x:Name="UpArrowImage"
+                                        Source="/Assets/buttons/lb_scroll/lb_scroll01_01_02.png"
+                                        Stretch="None" />
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="UpArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_01_01.png" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="UpArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_01_03.png" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </RepeatButton.Template>
+                        </RepeatButton>
+                        <RepeatButton
+                            x:Name="PART_LineDownButton"
+                            Grid.Row="2"
+                            Command="ScrollBar.LineDownCommand"
+                            Content="Down">
+                            <RepeatButton.Template>
+                                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                    <Image
+                                        x:Name="DownArrowImage"
+                                        Source="/Assets/buttons/lb_scroll/lb_scroll01_02_02.png"
+                                        Stretch="None" />
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="DownArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_02_01.png" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="DownArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_02_03.png" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </RepeatButton.Template>
+                        </RepeatButton>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--  ScrollViewer Style  -->
+    <Style x:Key="CustomScrollViewer" TargetType="ScrollViewer">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ScrollViewer">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <ScrollContentPresenter Grid.Column="0" />
+                        <ScrollBar
+                            Name="PART_VerticalScrollBar"
+                            Grid.Column="1"
+                            Width="15"
+                            Margin="0,0,0,0"
+                            Maximum="{TemplateBinding ScrollableHeight}"
+                            Style="{StaticResource CustomScrollBarStyle}"
+                            ViewportSize="1280"
+                            Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                            Value="{TemplateBinding VerticalOffset}" />
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!--  lb_combobox  -->
     <ControlTemplate x:Key="lb_combobox" TargetType="ComboBox">
         <Grid>
@@ -49,8 +238,8 @@
 
             <!--  ContentPresenter for displaying selected item  -->
             <ContentPresenter
-                Margin="8,0,32,0"
-                HorizontalAlignment="Center"
+                Margin="8,0,28,0"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Content="{TemplateBinding SelectionBoxItem}" />
 
@@ -99,7 +288,7 @@
                 Focusable="False"
                 IsOpen="{TemplateBinding IsDropDownOpen}"
                 Placement="Bottom"
-                PopupAnimation="Fade">
+                PopupAnimation="Slide">
                 <Grid
                     x:Name="DropDown"
                     MinWidth="{TemplateBinding ActualWidth}"
@@ -110,8 +299,11 @@
                         Background="#FF252220"
                         BorderBrush="#000"
                         BorderThickness="1">
-                        <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
-                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                        <ScrollViewer
+                            Margin="4,6,4,6"
+                            SnapsToDevicePixels="True"
+                            Style="{StaticResource CustomScrollViewer}">
+                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
                         </ScrollViewer>
                     </Border>
                 </Grid>
@@ -119,17 +311,6 @@
         </Grid>
     </ControlTemplate>
 
-
-    <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
-        <Setter Property="Foreground" Value="Gold" />
-        <!--  Default text color  -->
-        <Style.Triggers>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="Gray" />
-                <!--  Gray out the text when disabled  -->
-            </Trigger>
-        </Style.Triggers>
-    </Style>
 
 
     <ControlTemplate x:Key="lb_combobox_image" TargetType="ComboBox">

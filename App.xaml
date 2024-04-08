@@ -8,7 +8,7 @@
 
         <ResourceDictionary>
 
-            <FontFamily x:Key="ArialUnicodeMS">/Fonts/#Arial Unicode MS</FontFamily>
+            <FontFamily x:Key="ArialUnicodeMS">pack://application:,,,/Fonts/#Arial Unicode MS</FontFamily>
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Shared/SharedResourceDictionary.xaml" />

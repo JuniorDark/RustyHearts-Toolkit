@@ -4,8 +4,6 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Media;
 using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.ViewModels
@@ -47,6 +45,7 @@ namespace RHGMTool.ViewModels
             PopulateSocketColorItems();
             _itemDataView = CollectionViewSource.GetDefaultView(ItemDataItems);
             _itemDataView.Filter = FilterItems;
+
         }
 
         #region Item Data List
@@ -619,9 +618,7 @@ namespace RHGMTool.ViewModels
         public string? FixedBuff02 { get; set; }
         public string? FixedBuff01Color { get; set; }
         public string? FixedBuff02Color { get; set; }
-        public string? RandomBuff { get; set; }
-        public string? Description { get; private set; }
-        public int Type { get; set; }
+
         public int WeaponID00 { get; private set; }
 
         private ItemData? _item;
@@ -644,7 +641,7 @@ namespace RHGMTool.ViewModels
                 ItemName = Item.Name;
                 ItemNameColor = FrameData.GetBranchColor(Item.Branch);
                 IconName = Item.IconName;
-                FormatRichTextBoxDescription(Item.Description);
+                Description = Item.Description;
                 Category = _gMDbService.GetCategoryName(Item.Category);
                 SubCategory = _gMDbService.GetSubCategoryName(Item.SubCategory);
                 Type = Item.Type;
@@ -669,11 +666,11 @@ namespace RHGMTool.ViewModels
                 ReconstructionMax = Item.ReconstructionMax;
 
                 OverlapCnt = Item.OverlapCnt;
-                OptionCountMax = Item.Category == 19 ? 1 : Item.OptionCountMax;
+                OptionCountMax = Item.Type == 3 || Item.Type == 4 ? Item.OptionCountMax : (Item.Type == 1 && Item.Category == 29 ? 1 : 0);
                 SocketCountMax = Item.SocketCountMax;
                 SocketCount = Item.SocketCountMax;
-                FixedBuff = $"[Fixed Buff]";
-                RandomBuff = $"[Random Buff]";
+                FixedBuff =  $"[Fixed Buff]";
+                RandomBuff = Item.Category == 29 ? $"[Buff]" : $"[Random Buff]";
                 (FixedBuff01, FixedBuff01Color) = _frameData.GetOptionName(Item.FixOption00, Item.FixOptionValue00);
                 (FixedBuff02, FixedBuff02Color) = _frameData.GetOptionName(Item.FixOption01, Item.FixOptionValue01);
 
@@ -685,6 +682,7 @@ namespace RHGMTool.ViewModels
                 OnPropertyChanged(nameof(IconName));
                 OnPropertyChanged(nameof(Category));
                 OnPropertyChanged(nameof(SubCategory));
+                OnPropertyChanged(nameof(Description));
                 OnPropertyChanged(nameof(Type));
                 OnPropertyChanged(nameof(MainStat));
                 OnPropertyChanged(nameof(SellValue));
@@ -713,69 +711,6 @@ namespace RHGMTool.ViewModels
 
         }
 
-        private static readonly string[] separator = ["<BR>", "<br>", "<Br>"];
-
-        private void FormatRichTextBoxDescription(string? description)
-        {
-            if (string.IsNullOrEmpty(description))
-            {
-                // Clear the rich text box content if the description is empty
-                RichTextBoxContent = null;
-                return;
-            }
-
-            // Create a FlowDocument to hold the rich text content
-            FlowDocument flowDocument = new();
-
-            // Split the description into parts based on line breaks ("<BR>", "<br>", "<Br>")
-            string[] parts = description.Split(separator, StringSplitOptions.None);
-
-            foreach (string part in parts)
-            {
-                if (part.StartsWith("<COLOR:"))
-                {
-                    // Extract the color value from the tag, e.g., "<COLOR:06EBE8>"
-                    int tagEnd = part.IndexOf('>');
-                    if (tagEnd != -1)
-                    {
-                        string colorTag = part[7..tagEnd];
-                        string text = part[(tagEnd + 1)..];
-
-                        Run run = new(text)
-                        {
-                            Foreground = (Brush?)new BrushConverter().ConvertFromString("#" + colorTag.ToLower())
-                        };
-
-                        flowDocument.Blocks.Add(new Paragraph(run));
-                    }
-                }
-                else
-                {
-                    // Create a Run element for the part with default color
-                    Run run = new(part);
-
-                    // Add the Run element to the FlowDocument
-                    flowDocument.Blocks.Add(new Paragraph(run));
-                }
-            }
-
-            // Set the FlowDocument as the content of the RichTextBox
-            RichTextBoxContent = flowDocument;
-        }
-
-        // Property to bind to the RichTextBox content
-        private FlowDocument? _richTextBoxContent;
-
-        public FlowDocument? RichTextBoxContent
-        {
-            get { return _richTextBoxContent; }
-            set
-            {
-                _richTextBoxContent = value;
-                OnPropertyChanged(nameof(RichTextBoxContent));
-            }
-        }
-
         private string? _itemName;
 
         public string? ItemName
@@ -797,6 +732,37 @@ namespace RHGMTool.ViewModels
             {
                 _itemNameColor = value;
                 OnPropertyChanged(nameof(ItemNameColor));
+            }
+        }
+
+        private string? _description;
+
+        public string? Description
+        {
+            get { return _description; }
+            set
+            {
+                if (_description != value)
+                {
+                    _description = value;
+                    OnPropertyChanged(nameof(Description));
+
+                }
+            }
+        }
+
+        private int _type;
+
+        public int Type
+        {
+            get { return _type; }
+            set
+            {
+                if (_type != value)
+                {
+                    _type = value;
+                    OnPropertyChanged(nameof(Type));
+                }
             }
         }
 
@@ -1040,16 +1006,34 @@ namespace RHGMTool.ViewModels
             get { return _OptionCountMax; }
             set
             {
-                _OptionCountMax = value;
-                OnPropertyChanged(nameof(OptionCountMax));
-                UpdateRandomBuff();
 
+                if (_OptionCountMax != value)
+                {
+                    _OptionCountMax = value;
+                    OnPropertyChanged(nameof(OptionCountMax));
+                    UpdateRandomBuff();
+                }
+                
             }
         }
 
         #endregion
 
         #region Random Option
+
+        private string? _randomBuff;
+        public string? RandomBuff
+        {
+            get { return _randomBuff; }
+            private set
+            {
+                if (_randomBuff != value)
+                {
+                    _randomBuff = value;
+                    OnPropertyChanged(nameof(RandomBuff));
+                }
+            }
+        }
 
         private int _randomOption01;
         public int RandomOption01
@@ -1406,10 +1390,21 @@ namespace RHGMTool.ViewModels
 
         private void UpdateRandomBuff()
         {
-            IsRandomBuffVisible = OptionCountMax > 0;
-            IsRandomBuff01Visible = OptionCountMax > 0;
-            IsRandomBuff02Visible = OptionCountMax > 1;
-            IsRandomBuff03Visible = OptionCountMax > 2;
+            if (Item != null)
+            {
+                IsRandomBuffVisible = Item.Type != 1 && OptionCountMax > 0 || Item.Category == 29 && OptionCountMax > 0;
+                IsRandomBuff01Visible = Item.Type != 1 && OptionCountMax > 0 || Item.Category == 29 && OptionCountMax > 0;
+                IsRandomBuff02Visible = OptionCountMax > 1;
+                IsRandomBuff03Visible = OptionCountMax > 2;
+            }
+            else
+            {
+                IsRandomBuffVisible = OptionCountMax > 0;
+                IsRandomBuff01Visible = OptionCountMax > 0;
+                IsRandomBuff02Visible = OptionCountMax > 1;
+                IsRandomBuff03Visible = OptionCountMax > 2;
+            }
+            
 
             (RandomBuff01, RandomBuff01Color) = RandomOption01 != 0 ? _frameData.GetOptionName(RandomOption01, RandomOption01Value) : ("No Buff", "White");
             (RandomBuff02, RandomBuff02Color) = RandomOption02 != 0 ? _frameData.GetOptionName(RandomOption02, RandomOption02Value) : ("No Buff", "White");

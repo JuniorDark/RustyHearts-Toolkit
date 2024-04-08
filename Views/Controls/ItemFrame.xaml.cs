@@ -16,5 +16,6 @@ namespace RHGMTool.Views
             _viewModel = new FrameViewModel();
             DataContext = _viewModel;
         }
+
     }
 }

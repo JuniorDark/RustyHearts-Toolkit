@@ -5,6 +5,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:RHGMTool.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+    xmlns:ut="clr-namespace:RHGMTool.Utilities"
     xmlns:vm="clr-namespace:RHGMTool.ViewModels"
     x:Name="Frame"
     Height="Auto"
@@ -164,10 +166,10 @@
             VerticalAlignment="Top"
             d:Text="[Buff]"
             Foreground="White"
-            Text="{Binding FixedBuff}"
-            Visibility="{Binding IsFixedBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Text="{Binding RandomBuff}"
+            Visibility="{Binding IsRandomBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="tbFixedBuff01"
+            x:Name="tbBuff01"
             Grid.Row="7"
             Height="Auto"
             Margin="10,0,0,0"
@@ -175,26 +177,24 @@
             VerticalAlignment="Top"
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding FixedBuff01Color, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding FixedBuff01}"
+            Foreground="{Binding RandomBuff01Color, Converter={StaticResource StringToBrushConverter}}"
+            Text="{Binding RandomBuff01}"
             TextWrapping="Wrap"
-            Visibility="{Binding IsFixedBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding IsRandomBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <RichTextBox
             x:Name="rtbDescription"
             Grid.Row="8"
-            Width="300"
+            Width="290"
             Height="180"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
+            ut:RichTextBoxHelper.FormattedText="{Binding Description}"
+            Background="Transparent"
             BorderThickness="0"
             FontFamily="{StaticResource ArialUnicodeMS}"
-            FontSize="10"
+            FontSize="12"
             Foreground="White"
-            IsReadOnly="True">
-            <RichTextBox.Background>
-                <ImageBrush />
-            </RichTextBox.Background>
-        </RichTextBox>
+            IsReadOnly="True" />
         <TextBlock
             x:Name="tbPetFood"
             Grid.Row="19"
@@ -205,6 +205,5 @@
             d:Text="This item cannot be used as Pet Food"
             Foreground="{Binding PetFoodColor, Converter={StaticResource StringToBrushConverter}}"
             Text="{Binding PetFood}" />
-
     </Grid>
 </UserControl>

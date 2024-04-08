@@ -81,6 +81,8 @@
     <None Remove="Assets\buttons\lb_scroll\lb_scroll01_05_01.png" />
     <None Remove="Assets\buttons\lb_scroll\lb_scroll01_05_02.png" />
     <None Remove="Assets\buttons\lb_scroll\lb_scroll01_05_03.png" />
+    <None Remove="Assets\buttons\lb_scroll\lb_scroll_down.png" />
+    <None Remove="Assets\buttons\lb_scroll\lb_scroll_hover.png" />
     <None Remove="Assets\buttons\lb_scroll\lb_scroll_normal.png" />
     <None Remove="Assets\icon\icons8-eye-16.png" />
     <None Remove="Assets\icon\icon_cashtitle.png" />
@@ -319,6 +321,8 @@
     <Resource Include="Assets\buttons\lb_scroll\lb_scroll01_05_01.png" />
     <Resource Include="Assets\buttons\lb_scroll\lb_scroll01_05_02.png" />
     <Resource Include="Assets\buttons\lb_scroll\lb_scroll01_05_03.png" />
+    <Resource Include="Assets\buttons\lb_scroll\lb_scroll_down.png" />
+    <Resource Include="Assets\buttons\lb_scroll\lb_scroll_hover.png" />
     <Resource Include="Assets\buttons\lb_scroll\lb_scroll_normal.png" />
     <Resource Include="Assets\icon\icons8-eye-16.png" />
     <Resource Include="Assets\icon\icon_cashtitle.png" />
@@ -441,7 +445,9 @@
     <Resource Include="Assets\images\window\red02\EdgeLeft.png" />
     <Resource Include="Assets\images\window\red02\EdgeRight.png" />
     <Resource Include="Assets\images\window\red02\EdgeTop.png" />
-    <Resource Include="Fonts\Arial Unicode MS.ttf" />
+    <Resource Include="Fonts\Arial Unicode MS.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
