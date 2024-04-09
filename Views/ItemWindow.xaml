@@ -63,7 +63,7 @@
                 x:Name="cmbSubCategory"
                 Width="145"
                 Height="24"
-                Margin="190,521,0,0"
+                Margin="190,582,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 IsReadOnly="True"
@@ -84,9 +84,9 @@
                 Template="{StaticResource lb_checkbox}" />
             <TextBox
                 x:Name="tbSearch"
-                Width="210"
-                Height="32"
-                Margin="81,429,964,0"
+                Width="212"
+                Height="34"
+                Margin="79,491,964,0"
                 VerticalAlignment="Top"
                 CaretBrush="White"
                 Foreground="Gold"
@@ -97,7 +97,7 @@
                 x:Name="lbSubCategory"
                 Width="119"
                 Height="25"
-                Margin="180,499,956,0"
+                Margin="180,560,956,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Sub Category"
@@ -106,7 +106,7 @@
                 x:Name="cmbItemBranch"
                 Width="145"
                 Height="24"
-                Margin="190,561,0,0"
+                Margin="190,622,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 IsReadOnly="True"
@@ -120,7 +120,7 @@
                 x:Name="lbQuality"
                 Width="119"
                 Height="25"
-                Margin="180,540,956,0"
+                Margin="180,601,956,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Quality"
@@ -129,7 +129,7 @@
                 x:Name="cmbItemCategory"
                 Width="145"
                 Height="24"
-                Margin="10,523,0,0"
+                Margin="10,584,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 IsReadOnly="True"
@@ -143,7 +143,7 @@
                 x:Name="lbCategory"
                 Width="119"
                 Height="25"
-                Margin="10,499,1126,0"
+                Margin="10,560,1126,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Category"
@@ -152,7 +152,7 @@
                 x:Name="cmbJobClass"
                 Width="145"
                 Height="24"
-                Margin="10,561,0,0"
+                Margin="10,622,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 IsReadOnly="True"
@@ -166,7 +166,7 @@
                 x:Name="lbClass"
                 Width="119"
                 Height="25"
-                Margin="10,540,1126,0"
+                Margin="10,601,1126,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Class"
@@ -175,7 +175,7 @@
                 x:Name="cmbItemType"
                 Width="145"
                 Height="24"
-                Margin="10,482,0,0"
+                Margin="10,543,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 IsReadOnly="True"
@@ -189,16 +189,16 @@
                 x:Name="lbItemType"
                 Width="119"
                 Height="25"
-                Margin="10,458,1126,0"
+                Margin="10,519,1126,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Item Type"
                 Foreground="Gold" />
             <DataGrid
                 x:Name="dataGridView"
-                MaxWidth="410"
-                MaxHeight="365"
-                Margin="4,26,840,293"
+                MaxWidth="440"
+                MaxHeight="426"
+                Margin="5,30,850,237"
                 AutoGenerateColumns="False"
                 BorderBrush="#FF0F0D0A"
                 CanUserAddRows="False"
@@ -206,22 +206,28 @@
                 EnableColumnVirtualization="True"
                 EnableRowVirtualization="True"
                 HeadersVisibility="Column"
+                HorizontalGridLinesBrush="White"
                 ItemsSource="{Binding ItemDataItems}"
                 Loaded="DataGridView_Loaded"
                 SelectionChanged="DataGridView_SelectionChanged"
-                SelectionMode="Single">
+                SelectionMode="Single"
+                Template="{StaticResource CustomDataGridTemplate}"
+                VerticalGridLinesBrush="White">
                 <DataGrid.Resources>
                     <!--  Customize selection colors  -->
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="White" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Blue" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="White" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkBlue" />
                 </DataGrid.Resources>
+                <DataGrid.Foreground>
+                    <ImageBrush />
+                </DataGrid.Foreground>
                 <DataGrid.Background>
                     <ImageBrush />
                 </DataGrid.Background>
+
                 <DataGrid.Columns>
                     <DataGridTextColumn
+                        Width="60"
                         Binding="{Binding ID}"
                         Header="ID"
                         IsReadOnly="True" />
@@ -277,6 +283,7 @@
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
+
             </DataGrid>
             <Label
                 x:Name="lbDurability"
@@ -654,14 +661,16 @@
                 Stretch="None" />
             <Image
                 x:Name="imgItemIcon"
+                Width="36"
+                Height="36"
                 Margin="946,631,259,0"
                 VerticalAlignment="Top"
                 Source="{Binding IconName, Converter={StaticResource IconNameToImageSourceConverter}}"
-                Stretch="None" />
+                Stretch="Fill" />
             <TextBlock
                 x:Name="lbTotalItem"
                 Height="25"
-                Margin="13,396,993,0"
+                Margin="8,466,998,0"
                 VerticalAlignment="Top"
                 d:Text="Showing {0}/{1} Items"
                 Foreground="Gold">
@@ -676,11 +685,11 @@
                 x:Name="gearFrame"
                 Width="300"
                 Height="600"
-                Margin="428,30,0,0"
+                Margin="410,31,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=3|4}"
-                DataContext="{Binding}" />
+                DataContext="{Binding}"
+                Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=3|4}" />
             <local:IntegerUpDown
                 x:Name="intAmount"
                 Height="26"
@@ -814,7 +823,7 @@
                 x:Name="cmbItemTrade"
                 Width="145"
                 Height="24"
-                Margin="190,480,0,0"
+                Margin="190,541,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 IsReadOnly="True"
@@ -828,7 +837,7 @@
                 x:Name="lbItemTrade"
                 Width="119"
                 Height="25"
-                Margin="172,458,964,0"
+                Margin="172,519,964,0"
                 VerticalAlignment="Top"
                 HorizontalContentAlignment="Center"
                 Content="Item Trade"
@@ -836,11 +845,19 @@
             <local:ItemFrame
                 Width="300"
                 Height="400"
-                Margin="428,30,0,0"
+                Margin="410,31,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=1}"
-                DataContext="{Binding}" />
+                DataContext="{Binding}"
+                Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=1}" />
+            <local:CostumeFrame
+                Width="300"
+                Height="400"
+                Margin="410,31,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                DataContext="{Binding}"
+                Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=2}" />
         </Grid>
     </ContentControl>
 </Window>

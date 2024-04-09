@@ -36,54 +36,55 @@ namespace RHGMTool.Utilities
             }
         }
 
-        private static readonly string[] separator = ["<BR>", "<br>", "<Br>"];
-
         private static FlowDocument FormatRichTextBoxDescription(string description)
         {
             FlowDocument document = new();
-            List<string> parts = new(description.Split(separator, StringSplitOptions.None));
+            string[] separators = ["<BR>", "<br>", "<Br>"];
+            string[] parts = description.Split(separators, StringSplitOptions.None);
 
             foreach (string part in parts)
             {
                 Paragraph paragraph = new();
-                string text = part;
+                string[] colorSeparator = ["</COLOR>", "<COLOR>"];
+                string[] colorParts = part.Split(colorSeparator, StringSplitOptions.None);
 
-                if (part.StartsWith("<COLOR:"))
+                foreach (string colorPart in colorParts)
                 {
-                    int tagEnd = part.IndexOf('>');
-                    if (tagEnd != -1)
+                    int startTagIndex = colorPart.IndexOf("<COLOR:");
+                    if (startTagIndex != -1)
                     {
-                        string colorTag = part[7..tagEnd];
-                        Color customColor = (Color)ColorConverter.ConvertFromString("#" + colorTag.ToLower());
-
-                        int closingTagIndex = part.IndexOf("</COLOR>", tagEnd, StringComparison.OrdinalIgnoreCase);
-                        if (closingTagIndex != -1)
+                        string textBeforeColor = colorPart[..startTagIndex];
+                        paragraph.Inlines.Add(new Run(textBeforeColor));
+                        int endTagIndex = colorPart.IndexOf('>', startTagIndex);
+                        if (endTagIndex != -1)
                         {
-                            text = part.Substring(tagEnd + 1, closingTagIndex - tagEnd - 1); // Extract text between color tags
-                        }
-                        else
-                        {
-                            closingTagIndex = part.IndexOf("<COLOR>", tagEnd, StringComparison.OrdinalIgnoreCase);
-                            if (closingTagIndex != -1)
+                            string colorTag = colorPart.Substring(startTagIndex + 7, endTagIndex - startTagIndex - 7);
+                            if (!string.IsNullOrEmpty(colorTag))
                             {
-                                text = part.Substring(tagEnd + 1, closingTagIndex - tagEnd - 1); // Extract text between color tags
-                            }
-                            else
-                            {
-                                text = part[(tagEnd + 1)..]; // Extract text after color tag
+                                colorTag = colorTag.PadRight(6, '0');
+                                Color customColor;
+                                try
+                                {
+                                    customColor = (Color)ColorConverter.ConvertFromString("#" + colorTag.ToLower());
+                                }
+                                catch (FormatException)
+                                {
+                                    customColor = Colors.White;
+                                }
+
+                                string textAfterColor = colorPart[(endTagIndex + 1)..];
+                                Run run = new(textAfterColor)
+                                {
+                                    Foreground = new SolidColorBrush(customColor)
+                                };
+                                paragraph.Inlines.Add(run);
                             }
                         }
-
-                        Run run = new(text)
-                        {
-                            Foreground = new SolidColorBrush(customColor)
-                        };
-                        paragraph.Inlines.Add(run);
                     }
-                }
-                else
-                {
-                    paragraph.Inlines.Add(new Run(text));
+                    else
+                    {
+                        paragraph.Inlines.Add(new Run(colorPart));
+                    }
                 }
 
                 document.Blocks.Add(paragraph);
@@ -91,9 +92,6 @@ namespace RHGMTool.Utilities
 
             return document;
         }
-
-
-
 
     }
 }

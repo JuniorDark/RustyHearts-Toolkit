@@ -19,7 +19,7 @@ namespace RHGMTool.Views
             InitializeComponent();
             _viewModel = new FrameViewModel();
             DataContext = _viewModel;
-            cmbItemType.SelectedIndex = 1;
+            cmbItemType.SelectedIndex = 0;
             cmbItemTrade.SelectedIndex = 0;
         }
 
