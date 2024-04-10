@@ -27,7 +27,10 @@
                         VerticalAlignment="Center" />
 
                     <!--  ScrollViewer for DataGrid content  -->
-                    <ScrollViewer Grid.Row="1" Focusable="false" HorizontalScrollBarVisibility="Disabled">
+                    <ScrollViewer
+                        Grid.Row="1"
+                        Focusable="false"
+                        HorizontalScrollBarVisibility="Disabled">
                         <ScrollViewer.Resources>
                             <Style BasedOn="{StaticResource CustomScrollBarStyle}" TargetType="ScrollBar" />
                         </ScrollViewer.Resources>

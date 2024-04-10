@@ -73,7 +73,7 @@
             VerticalAlignment="Center"
             d:Text="Category"
             Foreground="White"
-            Text="{Binding Category}" />
+            Text="{Binding CategoryText}" />
         <TextBlock
             x:Name="tbSubCategory"
             Grid.Row="1"
@@ -84,7 +84,7 @@
             d:Text="Sub Category"
             Foreground="White"
             Style="{StaticResource ArialMS}"
-            Text="{Binding SubCategory}" />
+            Text="{Binding SubCategoryText}" />
         <!--  ReqLevel and JobClass  -->
         <TextBlock
             x:Name="tbReqLevel"
@@ -93,7 +93,7 @@
             VerticalAlignment="Center"
             d:Text="Required Level: 1"
             Foreground="#FFA9A9A9"
-            Text="{Binding RequiredLevel}" />
+            Text="{Binding RequiredLevelText}" />
         <TextBlock
             x:Name="tbJobClass"
             Grid.Row="2"
@@ -103,14 +103,14 @@
             d:Text="Natasha"
             Foreground="#FFA9A9A9"
             Style="{StaticResource ArialMS}"
-            Text="{Binding JobClass}" />
+            Text="{Binding JobClassText}" />
         <TextBlock
             x:Name="tbItemTrade"
             Grid.Row="3"
             Margin="10,1,0,0"
             d:Text="Trade Unavailable"
             Foreground="#e75151"
-            Text="{Binding ItemTrade}" VerticalAlignment="Top" />
+            Text="{Binding ItemTradeText}" VerticalAlignment="Top" />
         <TextBlock
             x:Name="tbWeight"
             Grid.Row="3"
@@ -119,7 +119,7 @@
             VerticalAlignment="Center"
             d:Text="0,001Kg"
             Foreground="White"
-            Text="{Binding Weight}" />
+            Text="{Binding WeightText}" />
         <!--  Durability and Value  -->
         <TextBlock
             x:Name="tbValue"
@@ -129,19 +129,19 @@
             VerticalAlignment="Center"
             d:Text="1000000 Gold"
             Foreground="White"
-            Text="{Binding SellValue}" />
-        <!--  Buff  -->
+            Text="{Binding SellValueText}" />
+        <!--  Option  -->
         <TextBlock
-            x:Name="tbBuff"
+            x:Name="tbOption"
             Grid.Row="5"
             Margin="10,0,0,0"
             VerticalAlignment="Top"
-            d:Text="[Buff]"
+            d:Text="[Option]"
             Foreground="White"
-            Text="{Binding RandomBuff}"
-            Visibility="{Binding IsRandomBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Text="{Binding RandomOption}"
+            Visibility="{Binding IsRandomOptionVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="tbBuff01"
+            x:Name="tbOption01"
             Grid.Row="6"
             Height="Auto"
             Margin="10,0,0,0"
@@ -149,10 +149,10 @@
             VerticalAlignment="Top"
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding RandomBuff01Color, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding RandomBuff01}"
+            Foreground="{Binding RandomOption01Color, Converter={StaticResource StringToBrushConverter}}"
+            Text="{Binding RandomOption01Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding IsRandomBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding IsRandomOption01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <RichTextBox
             x:Name="rtbDescription"
             Grid.Row="7"
@@ -176,6 +176,6 @@
             d:Foreground="#e75151"
             d:Text="This item cannot be used as Pet Food"
             Foreground="{Binding PetFoodColor, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding PetFood}" />
+            Text="{Binding PetFoodText}" />
     </Grid>
 </UserControl>

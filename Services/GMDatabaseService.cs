@@ -4,12 +4,12 @@ using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.Services
 {
-    public class GMDbService : IGMDbService
+    public class GMDatabaseService : IGMDatabaseService
     {
         private readonly ISqLiteDatabaseService _databaseService;
         private readonly SQLiteConnection _connection;
 
-        public GMDbService(ISqLiteDatabaseService databaseService)
+        public GMDatabaseService(ISqLiteDatabaseService databaseService)
         {
             _databaseService = databaseService;
             _connection = _databaseService.OpenSQLiteConnection();

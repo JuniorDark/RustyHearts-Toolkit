@@ -3,7 +3,7 @@ using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.Services
 {
-    public interface IGMDbService
+    public interface IGMDatabaseService
     {
         List<NameID> GetOptionItems();
         (int minValue, int maxValue) GetOptionValue(int itemID);

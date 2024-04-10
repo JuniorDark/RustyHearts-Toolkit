@@ -2,18 +2,18 @@
 
 namespace RHGMTool.Services
 {
-    public class FrameData
+    public class FrameService : IFrameService
     {
-        private readonly SqLiteDatabaseService _databaseService;
-        private readonly GMDbService _gMDbService;
+        private readonly ISqLiteDatabaseService _databaseService;
+        private readonly GMDatabaseService _gmDatabaseService;
 
-        public FrameData()
+        public FrameService()
         {
             _databaseService = new SqLiteDatabaseService();
-            _gMDbService = new GMDbService(_databaseService);
+            _gmDatabaseService = new GMDatabaseService(_databaseService);
         }
 
-        public static string GetBranchColor(int branch)
+        public string GetBranchColor(int branch)
         {
             return branch switch
             {
@@ -25,7 +25,7 @@ namespace RHGMTool.Services
             };
         }
 
-        public static string GetRankText(int rank)
+        public string GetRankText(int rank)
         {
             return rank switch
             {
@@ -38,30 +38,65 @@ namespace RHGMTool.Services
             };
         }
 
-        public static (string text, string color) SetSocketColor(int colorId)
+        public string GetSocketText(int colorId)
         {
-            return (SocketColor)colorId switch
+            return ((SocketColor)colorId) switch
             {
-                SocketColor.None => ("Unprocessed Gem Socket", "White"),
-                SocketColor.Red => ("Processed Red Gem Socket", "#cc3300"),
-                SocketColor.Blue => ("Processed Blue Gem Socket", "#0000ff"),
-                SocketColor.Yellow => ("Processed Yellow Gem Socket", "#cccc00"),
-                SocketColor.Green => ("Processed Green Gem Socket", "#339900"),
-                SocketColor.Colorless => ("Processed Colorless Socket", "Gray"),
-                SocketColor.Gray => ("Processed Gray Socket", "Gray"),
-                _ => ("Unprocessed Gem Socket", "White"),
+                SocketColor.None => "Unprocessed Gem Socket",
+                SocketColor.Red => "Processed Red Gem Socket",
+                SocketColor.Blue => "Processed Blue Gem Socket",
+                SocketColor.Yellow => "Processed Yellow Gem Socket",
+                SocketColor.Green => "Processed Green Gem Socket",
+                SocketColor.Colorless => "Processed Colorless Socket",
+                SocketColor.Gray => "Processed Gray Socket",
+                _ => "Unprocessed Gem Socket",
             };
         }
 
-        public (string option, string color) GetOptionName(int option, int optionValue)
+        public string GetSocketColor(int colorId)
         {
-            string fixedOption = _gMDbService.GetOptionName(option);
-            (int secTime, float value, int maxValue) = _gMDbService.GetOptionValues(option);
+            return ((SocketColor)colorId) switch
+            {
+                SocketColor.None => "White",
+                SocketColor.Red => "#cc3300",
+                SocketColor.Blue => "#0000ff",
+                SocketColor.Yellow => "#cccc00",
+                SocketColor.Green => "#339900",
+                SocketColor.Colorless => "Gray",
+                SocketColor.Gray => "Gray",
+                _ => "White",
+            };
+        }
 
-            string colorHex = GetColorFromOption(fixedOption);
+
+        public string GetOptionName(int option, int optionValue)
+        {
+            string fixedOption = _gmDatabaseService.GetOptionName(option);
+            (int secTime, float value, int maxValue) = _gmDatabaseService.GetOptionValues(option);
+
             string formattedOption = FormatNameID(fixedOption, $"{optionValue}", $"{secTime}", $"{value}", maxValue);
 
-            return (formattedOption, colorHex);
+            return option != 0 ? formattedOption : "No Buff";
+        }
+
+        public string GetColorFromOption(int option)
+        {
+            string optionName = _gmDatabaseService.GetOptionName(option);
+
+            int startIndex = optionName.IndexOf(ColorTagStart);
+
+            if (startIndex != -1)
+            {
+                int endIndex = optionName.IndexOf('>', startIndex);
+
+                if (endIndex != -1)
+                {
+                    string colorHex = optionName.Substring(startIndex + 7, endIndex - startIndex - 7);
+                    return "#" + colorHex;
+                }
+            }
+
+            return "#ffffff";
         }
 
         public string FormatMainStat(int itemType, int physicalStat, int magicStat, int jobClass, int weaponId)
@@ -72,72 +107,63 @@ namespace RHGMTool.Services
             {
                 mainStat = $"Physical Defense +{physicalStat}\nMagic Defense +{magicStat}";
             }
+
             else if ((ItemType)itemType == ItemType.Weapon)
             {
-                (int physicalAttackMin, int physicalAttackMax, int magicAttackMin, int magicAttackMax) = _gMDbService.GetWeaponStats(jobClass, weaponId);
+                (int physicalAttackMin, int physicalAttackMax, int magicAttackMin, int magicAttackMax) = _gmDatabaseService.GetWeaponStats(jobClass, weaponId);
                 mainStat = $"Physical Damage +{physicalAttackMin}~{physicalAttackMax}\nMagic Damage +{magicAttackMin}~{magicAttackMax}";
             }
 
             return mainStat;
         }
 
-        public static string FormatSellValue(int sellPrice)
+        public string FormatSellValue(int sellPrice)
         {
             return sellPrice > 0 ? $"{sellPrice:N0} Gold" : "";
         }
 
-        public static string FormatRequiredLevel(int levelLimit)
+        public string FormatRequiredLevel(int levelLimit)
         {
             return $"Required Level: {levelLimit}";
         }
 
-        public static string FormatItemTrade(int itemTrade)
+        public string FormatItemTrade(int itemTrade)
         {
             return itemTrade == 0 ? "Trade Unavailable" : "";
         }
 
-        public static string FormatDurabilityValue(int itemType, int durability, int maxDurability)
+        public string FormatDurability(int durability, int maxDurability)
         {
-            if (itemType == 1 || itemType == 2)
-            {
-                return "";
-            }
-
             return durability > 0 ? $"Durability: {durability / 100}/{maxDurability / 100}" : "";
         }
 
-        public static string FormatWeight(int weight)
+        public string FormatWeight(int weight)
         {
             return weight > 0 ? $"{weight / 1000.0:0.000}Kg" : "";
         }
 
-        public static string FormatReconstruction(int itemType, int reconstructionMax, int itemTrade)
+        public string FormatReconstruction(int reconstructionMax, int itemTrade)
         {
-            if (itemType == 1 || itemType == 2)
-            {
-                return "";
-            }
-
             return reconstructionMax > 0 && itemTrade != 0 ? $"Attribute Item ({reconstructionMax} Times/{reconstructionMax} Times)" : "Bound item (Binds when acquired)";
         }
 
-        public static string FormatPetFood(int petFood)
+        public string FormatPetFood(int petFood)
         {
             return petFood == 0 ? "This item cannot be used as Pet Food" : "This item can be used as Pet Food";
         }
 
-        public static string FormatPetFoodColor(int petFood)
+        public string FormatPetFoodColor(int petFood)
         {
             return petFood == 0 ? "#e75151" : "#eed040";
         }
 
-
+        
         private const string ColorTagStart = "<COLOR:";
         private const string ColorTagEnd = ">";
         private const string ColorTagClose = "</COLOR>";
         private const string LineBreakTag = "<br>";
 
-        public static string FormatNameID(string option, string replacement01, string replacement02, string replacement03, int maxValue)
+        public string FormatNameID(string option, string replacement01, string replacement02, string replacement03, int maxValue)
         {
             option = RemoveColorTags(option);
 
@@ -265,23 +291,7 @@ namespace RHGMTool.Services
             return input;
         }
 
-        public static string GetColorFromOption(string option)
-        {
-            int startIndex = option.IndexOf(ColorTagStart);
-
-            if (startIndex != -1)
-            {
-                int endIndex = option.IndexOf('>', startIndex);
-
-                if (endIndex != -1)
-                {
-                    string colorHex = option.Substring(startIndex + 7, endIndex - startIndex - 7);
-                    return "#" + colorHex;
-                }
-            }
-
-            return "#ffffff";
-        }
+        
 
     }
 }

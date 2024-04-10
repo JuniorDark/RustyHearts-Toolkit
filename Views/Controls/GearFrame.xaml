@@ -79,7 +79,7 @@
             VerticalAlignment="Center"
             d:Text="Category"
             Foreground="White"
-            Text="{Binding Category}" />
+            Text="{Binding CategoryText}" />
         <TextBlock
             x:Name="tbSubCategory"
             Grid.Row="1"
@@ -90,7 +90,7 @@
             d:Text="Sub Category"
             Foreground="White"
             Style="{StaticResource ArialMS}"
-            Text="{Binding SubCategory}" />
+            Text="{Binding SubCategoryText}" />
         <!--  ReqLevel and JobClass  -->
         <TextBlock
             x:Name="tbReqLevel"
@@ -99,7 +99,7 @@
             VerticalAlignment="Top"
             d:Text="Required Level: 1"
             Foreground="#FFA9A9A9"
-            Text="{Binding RequiredLevel}" />
+            Text="{Binding RequiredLevelText}" />
         <TextBlock
             x:Name="tbJobClass"
             Grid.Row="2"
@@ -109,7 +109,7 @@
             d:Text="Natasha"
             Foreground="#FFA9A9A9"
             Style="{StaticResource ArialMS}"
-            Text="{Binding JobClass}" />
+            Text="{Binding JobClassText}" />
         <!--  Attribute and Rank  -->
         <TextBlock
             x:Name="tbAttribute"
@@ -118,7 +118,7 @@
             VerticalAlignment="Top"
             d:Text="Attribute Item (2 Times/2 Times)"
             Foreground="White"
-            Text="{Binding Reconstruction}" />
+            Text="{Binding ReconstructionText}" />
         <TextBlock
             x:Name="tbRank"
             Grid.Row="3"
@@ -127,7 +127,7 @@
             VerticalAlignment="Center"
             d:Text="Rank : 5th Rank"
             Foreground="White"
-            Text="{Binding Rank}" />
+            Text="{Binding RankText}" />
         <!--  ItemTrade and Weight  -->
         <TextBlock
             x:Name="tbItemTrade"
@@ -135,7 +135,7 @@
             Margin="10,1,0,0"
             d:Text="Trade Unavailable"
             Foreground="#e75151"
-            Text="{Binding ItemTrade}" />
+            Text="{Binding ItemTradeText}" />
         <TextBlock
             x:Name="tbWeight"
             Grid.Row="4"
@@ -144,7 +144,7 @@
             VerticalAlignment="Center"
             d:Text="0,001Kg"
             Foreground="White"
-            Text="{Binding Weight}" />
+            Text="{Binding WeightText}" />
         <!--  Durability and Value  -->
         <TextBlock
             x:Name="tbDurability"
@@ -152,7 +152,7 @@
             Margin="10,1,0,0"
             d:Text="Durability: 1000/1000"
             Foreground="White"
-            Text="{Binding DurabilityValue}" />
+            Text="{Binding DurabilityText}" />
         <TextBlock
             x:Name="tbValue"
             Grid.Row="5"
@@ -161,7 +161,7 @@
             VerticalAlignment="Center"
             d:Text="1000000 Gold"
             Foreground="White"
-            Text="{Binding SellValue}" />
+            Text="{Binding SellValueText}" />
         <!--  MainStat  -->
         <TextBlock
             x:Name="tbMainStat"
@@ -171,7 +171,7 @@
             VerticalAlignment="Top"
             d:Text="Physical Damage +0~0&#x0a;Magic Damage +0~0"
             Foreground="White"
-            Text="{Binding MainStat}" />
+            Text="{Binding MainStatText}" />
         <!--  SetName  -->
         <TextBlock
             x:Name="tbSetName"
@@ -181,19 +181,19 @@
             VerticalAlignment="Center"
             d:Text="Set Name"
             Foreground="White"
-            Text="{Binding SetName}" />
-        <!--  FixedBuff and its children  -->
+            Text="{Binding SetNameText}" />
+        <!--  FixedOption and its children  -->
         <TextBlock
-            x:Name="tbFixedBuff"
+            x:Name="tbFixedOption"
             Grid.Row="8"
             Margin="10,0,0,0"
             VerticalAlignment="Top"
             d:Text="[Fixed Buff]"
             Foreground="White"
-            Text="{Binding FixedBuff}"
-            Visibility="{Binding IsFixedBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Text="{Binding FixedOption}"
+            Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
         <TextBlock
-            x:Name="tbFixedBuff01"
+            x:Name="tbFixedOption01"
             Grid.Row="9"
             Height="Auto"
             Margin="10,0,0,0"
@@ -201,12 +201,12 @@
             VerticalAlignment="Top"
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding FixedBuff01Color, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding FixedBuff01}"
+            Foreground="{Binding FixedOption01Color, Converter={StaticResource StringToBrushConverter}}"
+            Text="{Binding FixedOption01Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding IsFixedBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}"  />
         <TextBlock
-            x:Name="tbFixedBuff02"
+            x:Name="tbFixedOption02"
             Grid.Row="10"
             Height="Auto"
             Margin="10,0,0,0"
@@ -214,22 +214,22 @@
             VerticalAlignment="Top"
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding FixedBuff02Color, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding FixedBuff02}"
+            Foreground="{Binding FixedOption02Color, Converter={StaticResource StringToBrushConverter}}"
+            Text="{Binding FixedOption02Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding IsFixedBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
-        <!--  RandomBuff and its children  -->
+            Visibility="{Binding FixedOption02, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}"  />
+        <!--  RandomOption and its children  -->
         <TextBlock
-            x:Name="tbRandomBuff"
+            x:Name="tbRandomOption"
             Grid.Row="11"
             Margin="10,0,0,0"
             VerticalAlignment="Top"
-            d:Text="[Random Buff]"
+            d:Text="[Random Option]"
             Foreground="White"
-            Text="{Binding RandomBuff}"
-            Visibility="{Binding IsRandomBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Text="{Binding RandomOption}"
+            Visibility="{Binding IsRandomOptionVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
         <TextBlock
-            x:Name="tbRandomBuff01"
+            x:Name="tbRandomOption01"
             Grid.Row="12"
             Height="Auto"
             Margin="10,0,0,0"
@@ -237,12 +237,12 @@
             VerticalAlignment="Top"
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding RandomBuff01Color, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding RandomBuff01}"
+            Foreground="{Binding RandomOption01Color, Converter={StaticResource StringToBrushConverter}}"
+            Text="{Binding RandomOption01Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding IsRandomBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <TextBlock
-            x:Name="tbRandomBuff02"
+            x:Name="tbRandomOption02"
             Grid.Row="13"
             Height="Auto"
             Margin="10,0,0,0"
@@ -250,12 +250,12 @@
             VerticalAlignment="Top"
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding RandomBuff02Color, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding RandomBuff02}"
+            Foreground="{Binding RandomOption02Color, Converter={StaticResource StringToBrushConverter}}"
+            Text="{Binding RandomOption02Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding IsRandomBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
         <TextBlock
-            x:Name="tbRandomBuff03"
+            x:Name="tbRandomOption03"
             Grid.Row="14"
             Height="Auto"
             Margin="10,0,0,0"
@@ -263,22 +263,22 @@
             VerticalAlignment="Top"
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding RandomBuff03Color, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding RandomBuff03}"
+            Foreground="{Binding RandomOption03Color, Converter={StaticResource StringToBrushConverter}}"
+            Text="{Binding RandomOption03Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding IsRandomBuff03Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
-        <!--  SocketBuff and its children  -->
+            Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
+        <!--  SocketOption and its children  -->
         <TextBlock
-            x:Name="tbSocketBuff"
+            x:Name="tbSocketOption"
             Grid.Row="15"
             Margin="10,0,0,0"
             VerticalAlignment="Top"
             d:Text="[Socket]"
             Foreground="White"
-            Text="{Binding SocketBuff}"
-            Visibility="{Binding IsSocketBuffVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Text="{Binding SocketOption}"
+            Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <TextBlock
-            x:Name="tbSocketBuff01"
+            x:Name="tbSocketOption01"
             Grid.Row="16"
             Height="Auto"
             Margin="10,0,0,0"
@@ -286,12 +286,12 @@
             VerticalAlignment="Top"
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding SocketBuff01Color, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding SocketBuff01}"
+            Foreground="{Binding SocketOption01Color, Converter={StaticResource StringToBrushConverter}}"
+            Text="{Binding SocketOption01Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding IsSocketBuff01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <TextBlock
-            x:Name="tbSocketBuff02"
+            x:Name="tbSocketOption02"
             Grid.Row="17"
             Height="Auto"
             Margin="10,0,0,0"
@@ -299,12 +299,12 @@
             VerticalAlignment="Top"
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding SocketBuff02Color, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding SocketBuff02}"
+            Foreground="{Binding SocketOption02Color, Converter={StaticResource StringToBrushConverter}}"
+            Text="{Binding SocketOption02Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding IsSocketBuff02Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
         <TextBlock
-            x:Name="tbSocketBuff03"
+            x:Name="tbSocketOption03"
             Grid.Row="18"
             Height="Auto"
             Margin="10,0,0,0"
@@ -312,10 +312,10 @@
             VerticalAlignment="Top"
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding SocketBuff03Color, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding SocketBuff03}"
+            Foreground="{Binding SocketOption03Color, Converter={StaticResource StringToBrushConverter}}"
+            Text="{Binding SocketOption03Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding IsSocketBuff03Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
         <TextBlock
             x:Name="tbPetFood"
             Grid.Row="19"
@@ -325,6 +325,6 @@
             d:Foreground="#e75151"
             d:Text="This item cannot be used as Pet Food"
             Foreground="{Binding PetFoodColor, Converter={StaticResource StringToBrushConverter}}"
-            Text="{Binding PetFood}" />
+            Text="{Binding PetFoodText}" />
     </Grid>
 </UserControl>

@@ -16,17 +16,17 @@ namespace RHGMTool.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private readonly SqLiteDatabaseService _databaseService;
-        private readonly GMDbService _gMDbService;
-        private readonly FrameData _frameData;
+        private readonly ISqLiteDatabaseService _databaseService;
+        private readonly GMDatabaseService _gmDatabaseService;
+        private readonly FrameService _frameService;
         private readonly ItemDataManager _itemDataManager;
         private readonly System.Timers.Timer searchTimer;
 
         public FrameViewModel()
         {
             _databaseService = new SqLiteDatabaseService();
-            _gMDbService = new GMDbService(_databaseService);
-            _frameData = new FrameData();
+            _gmDatabaseService = new GMDatabaseService(_databaseService);
+            _frameService = new FrameService();
             _itemDataManager = new ItemDataManager();
             searchTimer = new()
             {
@@ -37,12 +37,13 @@ namespace RHGMTool.ViewModels
 
             PopulateItemDataItems();
             PopulateOptionItems();
-            PopulateItemTypeItems();
-            PopulateCategoryItems(ItemType.Item);
-            PopulateClassItems();
-            PopulateBranchItems();
-            PopulateItemTradeStatusItems();
             PopulateSocketColorItems();
+            PopulateItemTypeItemsFilter();
+            PopulateCategoryItemsFilter(ItemType.Item);
+            PopulateClassItemsFilter();
+            PopulateBranchItemsFilter();
+            PopulateItemTradeItemsFilter();
+            
             _itemDataView = CollectionViewSource.GetDefaultView(ItemDataItems);
             _itemDataView.Filter = FilterItems;
 
@@ -102,7 +103,7 @@ namespace RHGMTool.ViewModels
         {
             try
             {
-                OptionItems = new List<NameID>(_gMDbService.GetOptionItems());
+                OptionItems = new List<NameID>(_gmDatabaseService.GetOptionItems());
             }
             catch (Exception ex)
             {
@@ -130,22 +131,22 @@ namespace RHGMTool.ViewModels
             if (obj is ItemData item)
             {
                 //combobox filter
-                if (_itemKind != 0 && item.Type != _itemKind)
+                if (_itemTypeFilter != 0 && item.Type != _itemTypeFilter)
                     return false;
 
-                if (_itemCategory != 0 && item.Category != _itemCategory)
+                if (_itemCategoryFilter != 0 && item.Category != _itemCategoryFilter)
                     return false;
 
-                if (_itemSubCategory != 0 && item.SubCategory != _itemSubCategory)
+                if (_itemSubCategoryFilter != 0 && item.SubCategory != _itemSubCategoryFilter)
                     return false;
 
-                if (_itemClass != 0 && item.JobClass != _itemClass)
+                if (_itemClassFilter != 0 && item.JobClass != _itemClassFilter)
                     return false;
 
-                if (_itemBranch != 0 && item.Branch != _itemBranch)
+                if (_itemBranchFilter != 0 && item.Branch != _itemBranchFilter)
                     return false;
 
-                if (_itemTradeStatus != 2 && item.ItemTrade != _itemTradeStatus)
+                if (_itemTradeFilter != 2 && item.ItemTrade != _itemTradeFilter)
                     return false;
 
                 // text search filter
@@ -191,52 +192,52 @@ namespace RHGMTool.ViewModels
 
         #endregion
 
-        #region Comboboxes
+        #region Comboboxes Filter
 
-        private List<NameID>? _categoryItems;
-        public List<NameID>? CategoryItems
+        private List<NameID>? _categoryFilterItems;
+        public List<NameID>? CategoryItemsFilter
         {
-            get { return _categoryItems; }
+            get { return _categoryFilterItems; }
             set
             {
-                if (_categoryItems != value)
+                if (_categoryFilterItems != value)
                 {
-                    _categoryItems = value;
-                    OnPropertyChanged(nameof(CategoryItems));
+                    _categoryFilterItems = value;
+                    OnPropertyChanged(nameof(CategoryItemsFilter));
                 }
             }
         }
 
-        private List<NameID>? _subCategoryItems;
-        public List<NameID>? SubCategoryItems
+        private List<NameID>? _subCategoryItemsFilter;
+        public List<NameID>? SubCategoryItemsFilter
         {
-            get { return _subCategoryItems; }
+            get { return _subCategoryItemsFilter; }
             set
             {
-                if (_subCategoryItems != value)
+                if (_subCategoryItemsFilter != value)
                 {
-                    _subCategoryItems = value;
-                    OnPropertyChanged(nameof(SubCategoryItems));
+                    _subCategoryItemsFilter = value;
+                    OnPropertyChanged(nameof(SubCategoryItemsFilter));
                 }
             }
         }
 
-        private void PopulateCategoryItems(ItemType itemType)
+        private void PopulateCategoryItemsFilter(ItemType itemType)
         {
             try
             {
-                CategoryItems = new List<NameID>(_gMDbService.GetCategoryItems(itemType, false));
-                SubCategoryItems = new List<NameID>(_gMDbService.GetCategoryItems(itemType, true));
+                CategoryItemsFilter = new List<NameID>(_gmDatabaseService.GetCategoryItems(itemType, false));
+                SubCategoryItemsFilter = new List<NameID>(_gmDatabaseService.GetCategoryItems(itemType, true));
 
-                if (CategoryItems.Count > 0)
+                if (CategoryItemsFilter.Count > 0)
                 {
-                    ItemCategorySelectedIndex = 0;
-                    OnPropertyChanged(nameof(ItemCategorySelectedIndex));
+                    ItemCategoryFilterSelectedIndex = 0;
+                    OnPropertyChanged(nameof(ItemCategoryFilterSelectedIndex));
                 }
-                if (SubCategoryItems.Count > 0)
+                if (SubCategoryItemsFilter.Count > 0)
                 {
-                    ItemSubCategorySelectedIndex = 0;
-                    OnPropertyChanged(nameof(ItemSubCategorySelectedIndex));
+                    ItemSubCategoryFilterSelectedIndex = 0;
+                    OnPropertyChanged(nameof(ItemSubCategoryFilterSelectedIndex));
                 }
             }
             catch (Exception ex)
@@ -245,191 +246,191 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        private int _itemKind;
+        private int _itemTypeFilter;
 
-        public int ItemKind
+        public int ItemTypeFilter
         {
-            get { return _itemKind; }
+            get { return _itemTypeFilter; }
             set
             {
-                if (_itemKind != value)
+                if (_itemTypeFilter != value)
                 {
-                    _itemKind = value;
-                    OnPropertyChanged(nameof(ItemKind));
-                    PopulateCategoryItems((ItemType)value);
+                    _itemTypeFilter = value;
+                    OnPropertyChanged(nameof(ItemTypeFilter));
+                    PopulateCategoryItemsFilter((ItemType)value);
                     _itemDataView.Refresh();
                 }
             }
         }
 
-        private int _itemKindSelectedIndex;
+        private int _itemTypeFilterSelectedIndex;
 
-        public int ItemKindSelectedIndex
+        public int ItemTypeFilterSelectedIndex
         {
-            get { return _itemKindSelectedIndex; }
+            get { return _itemTypeFilterSelectedIndex; }
             set
             {
-                if (_itemKindSelectedIndex != value)
+                if (_itemTypeFilterSelectedIndex != value)
                 {
-                    _itemKindSelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemKindSelectedIndex));
+                    _itemTypeFilterSelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemTypeFilterSelectedIndex));
 
                 }
             }
         }
 
-        private int _itemCategory;
+        private int _itemCategoryFilter;
 
-        public int ItemCategory
+        public int ItemCategoryFilter
         {
-            get { return _itemCategory; }
+            get { return _itemCategoryFilter; }
             set
             {
-                if (_itemCategory != value)
+                if (_itemCategoryFilter != value)
                 {
-                    _itemCategory = value;
-                    OnPropertyChanged(nameof(ItemCategory));
+                    _itemCategoryFilter = value;
+                    OnPropertyChanged(nameof(ItemCategoryFilter));
                     _itemDataView.Refresh();
                 }
             }
         }
 
-        private int _itemCategorySelectedIndex;
+        private int _itemCategoryFilterSelectedIndex;
 
-        public int ItemCategorySelectedIndex
+        public int ItemCategoryFilterSelectedIndex
         {
-            get { return _itemCategorySelectedIndex; }
+            get { return _itemCategoryFilterSelectedIndex; }
             set
             {
-                if (_itemCategorySelectedIndex != value)
+                if (_itemCategoryFilterSelectedIndex != value)
                 {
-                    _itemCategorySelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemCategorySelectedIndex));
+                    _itemCategoryFilterSelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemCategoryFilterSelectedIndex));
 
                 }
             }
         }
 
-        private int _itemSubCategory;
+        private int _itemSubCategoryFilter;
 
-        public int ItemSubCategory
+        public int ItemSubCategoryFilter
         {
-            get { return _itemSubCategory; }
+            get { return _itemSubCategoryFilter; }
             set
             {
-                if (_itemSubCategory != value)
+                if (_itemSubCategoryFilter != value)
                 {
-                    _itemSubCategory = value;
-                    OnPropertyChanged(nameof(ItemSubCategory));
+                    _itemSubCategoryFilter = value;
+                    OnPropertyChanged(nameof(ItemSubCategoryFilter));
                     _itemDataView.Refresh();
                 }
             }
         }
 
-        private int _itemSubCategorySelectedIndex;
+        private int _itemSubCategoryFilterSelectedIndex;
 
-        public int ItemSubCategorySelectedIndex
+        public int ItemSubCategoryFilterSelectedIndex
         {
-            get { return _itemSubCategorySelectedIndex; }
+            get { return _itemSubCategoryFilterSelectedIndex; }
             set
             {
-                if (_itemSubCategorySelectedIndex != value)
+                if (_itemSubCategoryFilterSelectedIndex != value)
                 {
-                    _itemSubCategorySelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemSubCategorySelectedIndex));
+                    _itemSubCategoryFilterSelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemSubCategoryFilterSelectedIndex));
 
                 }
             }
         }
 
-        private int _itemClass;
+        private int _itemClassFilter;
 
-        public int ItemClass
+        public int ItemClassFilter
         {
-            get { return _itemClass; }
+            get { return _itemClassFilter; }
             set
             {
-                if (_itemClass != value)
+                if (_itemClassFilter != value)
                 {
-                    _itemClass = value;
-                    OnPropertyChanged(nameof(ItemClass));
+                    _itemClassFilter = value;
+                    OnPropertyChanged(nameof(ItemClassFilter));
                     _itemDataView.Refresh();
                 }
             }
         }
 
-        private int _itemClassSelectedIndex;
+        private int _itemClassFilterSelectedIndex;
 
-        public int ItemClassSelectedIndex
+        public int ItemClassFilterSelectedIndex
         {
-            get { return _itemClassSelectedIndex; }
+            get { return _itemClassFilterSelectedIndex; }
             set
             {
-                if (_itemClassSelectedIndex != value)
+                if (_itemClassFilterSelectedIndex != value)
                 {
-                    _itemClassSelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemClassSelectedIndex));
+                    _itemClassFilterSelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemClassFilterSelectedIndex));
 
                 }
             }
         }
 
-        private int _itemBranch;
+        private int _itemBranchFilter;
 
-        public int ItemBranch
+        public int ItemBranchFilter
         {
-            get { return _itemBranch; }
+            get { return _itemBranchFilter; }
             set
             {
-                if (_itemBranch != value)
+                if (_itemBranchFilter != value)
                 {
-                    _itemBranch = value;
-                    OnPropertyChanged(nameof(ItemBranch));
+                    _itemBranchFilter = value;
+                    OnPropertyChanged(nameof(ItemBranchFilter));
                     _itemDataView.Refresh();
                 }
             }
         }
 
-        private int _itemBranchSelectedIndex;
+        private int _itemBranchFilterSelectedIndex;
 
-        public int ItemBranchSelectedIndex
+        public int ItemBranchFilterSelectedIndex
         {
-            get { return _itemBranchSelectedIndex; }
+            get { return _itemBranchFilterSelectedIndex; }
             set
             {
-                if (_itemBranchSelectedIndex != value)
+                if (_itemBranchFilterSelectedIndex != value)
                 {
-                    _itemBranchSelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemBranchSelectedIndex));
+                    _itemBranchFilterSelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemBranchFilterSelectedIndex));
 
                 }
             }
         }
 
-        private List<NameID>? _itemTypeItems;
-        public List<NameID>? ItemTypeItems
+        private List<NameID>? _itemTypeItemsFilter;
+        public List<NameID>? ItemTypeItemsFilter
         {
-            get { return _itemTypeItems; }
+            get { return _itemTypeItemsFilter; }
             set
             {
-                if (_itemTypeItems != value)
+                if (_itemTypeItemsFilter != value)
                 {
-                    _itemTypeItems = value;
-                    OnPropertyChanged(nameof(ItemTypeItems));
+                    _itemTypeItemsFilter = value;
+                    OnPropertyChanged(nameof(ItemTypeItemsFilter));
                 }
             }
         }
 
-        private void PopulateItemTypeItems()
+        private void PopulateItemTypeItemsFilter()
         {
             try
             {
-                ItemTypeItems = GetEnumItems<ItemType>();
+                ItemTypeItemsFilter = GetEnumItems<ItemType>();
 
-                if (ItemTypeItems.Count > 0)
+                if (ItemTypeItemsFilter.Count > 0)
                 {
-                    ItemKindSelectedIndex = 0;
-                    OnPropertyChanged(nameof(ItemKindSelectedIndex));
+                    ItemTypeFilterSelectedIndex = 0;
+                    OnPropertyChanged(nameof(ItemTypeFilterSelectedIndex));
                 }
             }
             catch (Exception ex)
@@ -438,30 +439,30 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        private List<NameID>? _classItems;
-        public List<NameID>? ClassItems
+        private List<NameID>? _classItemsFilter;
+        public List<NameID>? ClassItemsFilter
         {
-            get { return _classItems; }
+            get { return _classItemsFilter; }
             set
             {
-                if (_classItems != value)
+                if (_classItemsFilter != value)
                 {
-                    _classItems = value;
-                    OnPropertyChanged(nameof(ClassItems));
+                    _classItemsFilter = value;
+                    OnPropertyChanged(nameof(ClassItemsFilter));
                 }
             }
         }
 
-        private void PopulateClassItems()
+        private void PopulateClassItemsFilter()
         {
             try
             {
-                ClassItems = GetEnumItems<CharClass>();
+                ClassItemsFilter = GetEnumItems<CharClass>();
 
-                if (ClassItems.Count > 0)
+                if (ClassItemsFilter.Count > 0)
                 {
-                    ItemClassSelectedIndex = 0;
-                    OnPropertyChanged(nameof(ItemClassSelectedIndex));
+                    ItemClassFilterSelectedIndex = 0;
+                    OnPropertyChanged(nameof(ItemClassFilterSelectedIndex));
                 }
             }
             catch (Exception ex)
@@ -470,30 +471,30 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        private List<NameID>? _branchItems;
-        public List<NameID>? BranchItems
+        private List<NameID>? _branchItemsFilter;
+        public List<NameID>? BranchItemsFilter
         {
-            get { return _branchItems; }
+            get { return _branchItemsFilter; }
             set
             {
-                if (_branchItems != value)
+                if (_branchItemsFilter != value)
                 {
-                    _branchItems = value;
-                    OnPropertyChanged(nameof(BranchItems));
+                    _branchItemsFilter = value;
+                    OnPropertyChanged(nameof(BranchItemsFilter));
                 }
             }
         }
 
-        private void PopulateBranchItems()
+        private void PopulateBranchItemsFilter()
         {
             try
             {
-                BranchItems = GetEnumItems<Branch>();
+                BranchItemsFilter = GetEnumItems<Branch>();
 
-                if (BranchItems.Count > 0)
+                if (BranchItemsFilter.Count > 0)
                 {
-                    ItemBranchSelectedIndex = 0;
-                    OnPropertyChanged(nameof(ItemBranchSelectedIndex));
+                    ItemBranchFilterSelectedIndex = 0;
+                    OnPropertyChanged(nameof(ItemBranchFilterSelectedIndex));
                 }
             }
             catch (Exception ex)
@@ -502,65 +503,65 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        private int _itemTradeStatus;
+        private int _itemTradeFilter;
 
-        public int ItemTradeStatus
+        public int ItemTradeFilter
         {
-            get { return _itemTradeStatus; }
+            get { return _itemTradeFilter; }
             set
             {
-                if (_itemTradeStatus != value)
+                if (_itemTradeFilter != value)
                 {
-                    _itemTradeStatus = value;
-                    OnPropertyChanged(nameof(ItemTradeStatus));
+                    _itemTradeFilter = value;
+                    OnPropertyChanged(nameof(ItemTradeFilter));
                     _itemDataView.Refresh();
                 }
             }
         }
 
-        private int _itemTradeStatusSelectedIndex;
+        private int _itemTradeFilterSelectedIndex;
 
-        public int ItemTradeStatusSelectedIndex
+        public int ItemTradeFilterSelectedIndex
         {
-            get { return _itemTradeStatusSelectedIndex; }
+            get { return _itemTradeFilterSelectedIndex; }
             set
             {
-                if (_itemTradeStatusSelectedIndex != value)
+                if (_itemTradeFilterSelectedIndex != value)
                 {
-                    _itemTradeStatusSelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemTradeStatusSelectedIndex));
+                    _itemTradeFilterSelectedIndex = value;
+                    OnPropertyChanged(nameof(ItemTradeFilterSelectedIndex));
 
                 }
             }
         }
 
-        private List<NameID>? _ItemTradeStatusItems;
-        public List<NameID>? ItemTradeStatusItems
+        private List<NameID>? _itemTradeFilterItems;
+        public List<NameID>? ItemTradeItemsFilter
         {
-            get { return _ItemTradeStatusItems; }
+            get { return _itemTradeFilterItems; }
             set
             {
-                if (_ItemTradeStatusItems != value)
+                if (_itemTradeFilterItems != value)
                 {
-                    _ItemTradeStatusItems = value;
-                    OnPropertyChanged(nameof(ItemTradeStatusItems));
+                    _itemTradeFilterItems = value;
+                    OnPropertyChanged(nameof(ItemTradeItemsFilter));
                 }
             }
         }
 
-        private void PopulateItemTradeStatusItems()
+        private void PopulateItemTradeItemsFilter()
         {
             try
             {
-                ItemTradeStatusItems =
+                ItemTradeItemsFilter =
                 [
                     new NameID { ID = 2, Name = "All" },
                     new NameID { ID = 1, Name = "Tradeable" },
                     new NameID { ID = 0, Name = "Untradeable" }
                 ];
 
-                ItemTradeStatusSelectedIndex = 0;
-                OnPropertyChanged(nameof(ItemTradeStatusSelectedIndex));
+                ItemTradeFilterSelectedIndex = 0;
+                OnPropertyChanged(nameof(ItemTradeFilterSelectedIndex));
             }
             catch (Exception ex)
             {
@@ -617,74 +618,67 @@ namespace RHGMTool.ViewModels
             if (Item != null)
             {
                 ItemName = Item.Name;
-                ItemNameColor = FrameData.GetBranchColor(Item.Branch);
+                ItemBranch = Item.Branch;
                 IconName = Item.IconName;
                 Description = Item.Description;
-                Category = _gMDbService.GetCategoryName(Item.Category);
-                SubCategory = _gMDbService.GetSubCategoryName(Item.SubCategory);
-                Type = Item.Type;
-                MainStat = _frameData.FormatMainStat(Item.Type, Item.Defense, Item.MagicDefense, Item.JobClass, Item.WeaponID00);
-
-                SellValue = FrameData.FormatSellValue(Item.SellPrice);
-                RequiredLevel = FrameData.FormatRequiredLevel(Item.LevelLimit);
-                ItemTrade = FrameData.FormatItemTrade(Item.ItemTrade);
-                DurabilityValue = FrameData.FormatDurabilityValue(Item.Type, Item.Durability, MaxDurability);
-                Weight = FrameData.FormatWeight(Item.Weight);
-                Reconstruction = FrameData.FormatReconstruction(Item.Type, Item.ReconstructionMax, Item.ItemTrade);
-                PetFood = FrameData.FormatPetFood(Item.PetFood);
-                PetFoodColor = FrameData.FormatPetFoodColor(Item.PetFood);
-
+                ItemTrade = Item.ItemTrade;
                 Durability = Item.Durability;
                 MaxDurability = Item.Durability;
-
-                JobClass = Item.JobClass > 0 ? GetEnumDescription((CharClass)Item.JobClass) : "";
-                WeightValue = Item.Weight;
-                SetName = Item.SetId != 0 ? _gMDbService.GetSetName(Item.SetId) : "";
-                ReconstructionValue = Item.ReconstructionMax;
+                Weight = Item.Weight;
+                Reconstruction = Item.ReconstructionMax;
                 ReconstructionMax = Item.ReconstructionMax;
-
                 OverlapCnt = Item.OverlapCnt;
-                OptionCountMax = Item.Type == 2 || Item.Type == 3 || Item.Type == 4 ? Item.OptionCountMax : (Item.Type == 1 && Item.Category == 29 ? 1 : 0);
+                Type = Item.Type;
+                Category = Item.Category;
+                SubCategory = Item.SubCategory;
+                JobClass = Item.JobClass;
+                Defense = Item.Defense;
+                MagicDefense = Item.MagicDefense;
+                WeaponID00 = Item.WeaponID00;
+                SellPrice = Item.SellPrice;
+                RequiredLevel = Item.LevelLimit;
+                SetId = Item.SetId;
+                PetFood = Item.PetFood;
+                FixedOption01 = Item.FixOption00;
+                FixedOption01Value = Item.FixOptionValue00;
+                FixedOption02 = Item.FixOption01;
+                FixedOption02Value = Item.FixOptionValue01;
+                OptionCountMax = Item.Type != 1 ? Item.OptionCountMax : (Item.Type == 1 && Item.Category == 29 ? 1 : 0);
                 SocketCountMax = Item.SocketCountMax;
                 SocketCount = Item.SocketCountMax;
-                FixedBuff =  $"[Fixed Buff]";
-                RandomBuff = Item.Category == 29 ? $"[Buff]" : (Item.Type != 1 || Item.Type != 3 ? $"[Random Buff]" : "") ;
-                (FixedBuff01, FixedBuff01Color) = _frameData.GetOptionName(Item.FixOption00, Item.FixOptionValue00);
-                (FixedBuff02, FixedBuff02Color) = _frameData.GetOptionName(Item.FixOption01, Item.FixOptionValue01);
 
-                IsFixedBuffVisible = Item.FixOption00 != 0 && Item.FixOption01 != 0;
-                IsFixedBuff01Visible = Item.FixOption00 != 0;
-                IsFixedBuff02Visible = Item.FixOption01 != 0;
 
                 // Raise PropertyChanged for all properties
+                OnPropertyChanged(nameof(ItemName));
+                OnPropertyChanged(nameof(ItemBranch));
                 OnPropertyChanged(nameof(IconName));
-                OnPropertyChanged(nameof(Category));
-                OnPropertyChanged(nameof(SubCategory));
                 OnPropertyChanged(nameof(Description));
-                OnPropertyChanged(nameof(Type));
-                OnPropertyChanged(nameof(MainStat));
-                OnPropertyChanged(nameof(SellValue));
-                OnPropertyChanged(nameof(RequiredLevel));
                 OnPropertyChanged(nameof(ItemTrade));
                 OnPropertyChanged(nameof(Durability));
                 OnPropertyChanged(nameof(MaxDurability));
-                OnPropertyChanged(nameof(JobClass));
                 OnPropertyChanged(nameof(Weight));
-                OnPropertyChanged(nameof(SetName));
-                OnPropertyChanged(nameof(ReconstructionValue));
+                OnPropertyChanged(nameof(Reconstruction));
                 OnPropertyChanged(nameof(ReconstructionMax));
-                OnPropertyChanged(nameof(OptionCountMax));
-                OnPropertyChanged(nameof(SocketCount));
-                OnPropertyChanged(nameof(SocketCountMax));
                 OnPropertyChanged(nameof(OverlapCnt));
-                OnPropertyChanged(nameof(FixedBuff));
-                OnPropertyChanged(nameof(FixedBuff01));
-                OnPropertyChanged(nameof(FixedBuff02));
-                OnPropertyChanged(nameof(FixedBuff01Color));
-                OnPropertyChanged(nameof(FixedBuff02Color));
-                OnPropertyChanged(nameof(RandomBuff));
+                OnPropertyChanged(nameof(Type));
+                OnPropertyChanged(nameof(Category));
+                OnPropertyChanged(nameof(SubCategory));
+                OnPropertyChanged(nameof(JobClass));
+                OnPropertyChanged(nameof(Defense));
+                OnPropertyChanged(nameof(MagicDefense));
+                OnPropertyChanged(nameof(WeaponID00));
+                OnPropertyChanged(nameof(SellPrice));
+                OnPropertyChanged(nameof(RequiredLevel));
+                OnPropertyChanged(nameof(SetId));
                 OnPropertyChanged(nameof(PetFood));
-                OnPropertyChanged(nameof(PetFoodColor));
+                OnPropertyChanged(nameof(FixedOption01));
+                OnPropertyChanged(nameof(FixedOption01Value));
+                OnPropertyChanged(nameof(FixedOption02));
+                OnPropertyChanged(nameof(FixedOption02Value));
+                OnPropertyChanged(nameof(OptionCountMax));
+                OnPropertyChanged(nameof(SocketCountMax));
+                OnPropertyChanged(nameof(SocketCount));
+
             }
 
         }
@@ -704,17 +698,37 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        private string? _itemNameColor;
-
         public string? ItemNameColor
         {
-            get { return _itemNameColor; }
+            get { return _frameService.GetBranchColor(ItemBranch); }
+        }
+
+        private int _itemBranch;
+
+        public int ItemBranch
+        {
+            get { return _itemBranch; }
             set
             {
-                if (_itemNameColor != value)
+                if (_itemBranch != value)
                 {
-                    _itemNameColor = value;
+                    _itemBranch = value;
+                    OnPropertyChanged(nameof(ItemBranch));
                     OnPropertyChanged(nameof(ItemNameColor));
+                }
+            }
+        }
+
+        private string? _iconName;
+        public string? IconName
+        {
+            get { return _iconName; }
+            private set
+            {
+                if (_iconName != value)
+                {
+                    _iconName = value;
+                    OnPropertyChanged(nameof(IconName));
                 }
             }
         }
@@ -745,13 +759,14 @@ namespace RHGMTool.ViewModels
                 {
                     _type = value;
                     OnPropertyChanged(nameof(Type));
+                    OnPropertyChanged(nameof(RandomOption));
                 }
             }
         }
 
-        private string? _weight;
+        private int _weight;
 
-        public string? Weight
+        public int Weight
         {
             get { return _weight; }
             set
@@ -760,39 +775,14 @@ namespace RHGMTool.ViewModels
                 {
                     _weight = value;
                     OnPropertyChanged(nameof(Weight));
+                    OnPropertyChanged(nameof(WeightText));
                 }
             }
         }
 
-        private int _weightValue;
-
-        public int WeightValue
+        public string? WeightText
         {
-            get { return _weightValue; }
-            set
-            {
-                if (_weightValue != value)
-                {
-                    _weightValue = value;
-                    OnPropertyChanged(nameof(WeightValue));
-                    Weight = $"{value / 1000.0:0.000}Kg";
-                }
-            }
-        }
-
-        private string? _durabilityValue;
-
-        public string? DurabilityValue
-        {
-            get { return _durabilityValue; }
-            set
-            {
-                if (_durabilityValue != value)
-                {
-                    _durabilityValue = value;
-                    OnPropertyChanged(nameof(DurabilityValue));
-                }
-            }
+            get { return _frameService.FormatWeight(Weight); }
         }
 
         private int _durability;
@@ -806,9 +796,14 @@ namespace RHGMTool.ViewModels
                 {
                     _durability = value;
                     OnPropertyChanged(nameof(Durability));
-                    DurabilityValue = $"Durability: {Durability / 100}/{MaxDurability / 100}";
+                    OnPropertyChanged(nameof(DurabilityText));
                 }
             }
+        }
+
+        public string? DurabilityText
+        {
+            get { return _frameService.FormatDurability(Durability, MaxDurability); }
         }
 
         private int _maxDurability;
@@ -822,7 +817,7 @@ namespace RHGMTool.ViewModels
                 {
                     _maxDurability = value;
                     OnPropertyChanged(nameof(MaxDurability));
-                    DurabilityValue = $"Durability: {Durability / 100}/{MaxDurability / 100}";
+                    OnPropertyChanged(nameof(DurabilityText));
 
                     if (Durability > MaxDurability)
                         Durability = MaxDurability;
@@ -833,30 +828,18 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        private string? _reconstruction;
+        private int _reconstruction;
 
-        public string? Reconstruction
+        public int Reconstruction
         {
             get { return _reconstruction; }
             set
             {
-                _reconstruction = value;
-                OnPropertyChanged(nameof(Reconstruction));
-            }
-        }
-
-        private int _reconstructionValue;
-
-        public int ReconstructionValue
-        {
-            get { return _reconstructionValue; }
-            set
-            {
-                if (_reconstructionValue != value)
+                if (_reconstruction != value)
                 {
-                    _reconstructionValue = value;
-                    OnPropertyChanged(nameof(ReconstructionValue));
-                    Reconstruction = $"Attribute Item ({value} Times/{ReconstructionMax} Times)";
+                    _reconstruction = value;
+                    OnPropertyChanged(nameof(Reconstruction));
+                    OnPropertyChanged(nameof(ReconstructionText));
                 }
 
             }
@@ -873,38 +856,34 @@ namespace RHGMTool.ViewModels
                 {
                     _reconstructionMax = value;
                     OnPropertyChanged(nameof(ReconstructionMax));
-                    Reconstruction = $"Attribute Item ({value} Times/{value} Times)";
+                    OnPropertyChanged(nameof(ReconstructionText));
                 }
             }
         }
 
-        private int _rankValue;
-        public int RankValue
+        public string? ReconstructionText
         {
-            get { return _rankValue; }
-            set
-            {
-                if (_rankValue != value)
-                {
-                    _rankValue = value;
-                    OnPropertyChanged(nameof(RankValue));
-                    Rank = FrameData.GetRankText(value);
-                }
-            }
+            get { return _frameService.FormatReconstruction(ReconstructionMax, ItemTrade); }
         }
 
-        private string? _rank;
-        public string? Rank
+        private int _rank = 1;
+        public int Rank
         {
             get { return _rank; }
-            private set
+            set
             {
                 if (_rank != value)
                 {
                     _rank = value;
                     OnPropertyChanged(nameof(Rank));
+                    OnPropertyChanged(nameof(RankText));
                 }
             }
+        }
+
+        public string? RankText
+        {
+            get { return _frameService.GetRankText(Rank); }
         }
 
 
@@ -940,23 +919,9 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        // Properties for UI elements
-        private string? _iconName;
-        public string? IconName
-        {
-            get { return _iconName; }
-            private set
-            {
-                if (_iconName != value)
-                {
-                    _iconName = value;
-                    OnPropertyChanged(nameof(IconName));
-                }
-            }
-        }
 
-        private string? _category;
-        public string? Category
+        private int _category;
+        public int Category
         {
             get { return _category; }
             private set
@@ -965,12 +930,19 @@ namespace RHGMTool.ViewModels
                 {
                     _category = value;
                     OnPropertyChanged(nameof(Category));
+                    OnPropertyChanged(nameof(CategoryText));
+                    OnPropertyChanged(nameof(RandomOption));
                 }
             }
         }
 
-        private string? _subCategory;
-        public string? SubCategory
+        public string? CategoryText
+        {
+            get { return _gmDatabaseService.GetCategoryName(Category); }
+        }
+
+        private int _subCategory;
+        public int SubCategory
         {
             get { return _subCategory; }
             private set
@@ -979,188 +951,43 @@ namespace RHGMTool.ViewModels
                 {
                     _subCategory = value;
                     OnPropertyChanged(nameof(SubCategory));
+                    OnPropertyChanged(nameof(SubCategoryText));
                 }
             }
         }
 
-        private string? _mainStat;
-        public string? MainStat
+        public string? SubCategoryText
         {
-            get { return _mainStat; }
+            get { return _gmDatabaseService.GetSubCategoryName(SubCategory); }
+        }
+
+        private int _defense;
+        public int Defense
+        {
+            get { return _defense; }
             private set
             {
-                if (_mainStat != value)
+                if (_defense != value)
                 {
-                    _mainStat = value;
-                    OnPropertyChanged(nameof(MainStat));
+                    _defense = value;
+                    OnPropertyChanged(nameof(Defense));
+                    OnPropertyChanged(nameof(MainStatText));
                 }
             }
         }
 
-        private string? _sellValue;
-        public string? SellValue
+
+        private int _magicDefense;
+        public int MagicDefense
         {
-            get { return _sellValue; }
+            get { return _magicDefense; }
             private set
             {
-                if (_sellValue != value)
+                if (_magicDefense != value)
                 {
-                    _sellValue = value;
-                    OnPropertyChanged(nameof(SellValue));
-                }
-            }
-        }
-
-        private string? _requiredLevel;
-        public string? RequiredLevel
-        {
-            get { return _requiredLevel; }
-            private set
-            {
-                if (_requiredLevel != value)
-                {
-                    _requiredLevel = value;
-                    OnPropertyChanged(nameof(RequiredLevel));
-                }
-            }
-        }
-
-        private string? _itemTrade;
-        public string? ItemTrade
-        {
-            get { return _itemTrade; }
-            private set
-            {
-                if (_itemTrade != value)
-                {
-                    _itemTrade = value;
-                    OnPropertyChanged(nameof(ItemTrade));
-                }
-            }
-        }
-
-        private string? _jobClass;
-        public string? JobClass
-        {
-            get { return _jobClass; }
-            private set
-            {
-                if (_jobClass != value)
-                {
-                    _jobClass = value;
-                    OnPropertyChanged(nameof(JobClass));
-                }
-            }
-        }
-
-        private string? _setName;
-        public string? SetName
-        {
-            get { return _setName; }
-            private set
-            {
-                if (_setName != value)
-                {
-                    _setName = value;
-                    OnPropertyChanged(nameof(SetName));
-                }
-            }
-        }
-
-        private string? _petFood;
-        public string? PetFood
-        {
-            get { return _petFood; }
-            private set
-            {
-                if (_petFood != value)
-                {
-                    _petFood = value;
-                    OnPropertyChanged(nameof(PetFood));
-                }
-            }
-        }
-
-        private string? _petFoodColor;
-        public string? PetFoodColor
-        {
-            get { return _petFoodColor; }
-            private set
-            {
-                if (_petFoodColor != value)
-                {
-                    _petFoodColor = value;
-                    OnPropertyChanged(nameof(PetFoodColor));
-                }
-            }
-        }
-
-        private string? _fixedBuff;
-        public string? FixedBuff
-        {
-            get { return _fixedBuff; }
-            set
-            {
-                if (_fixedBuff != value)
-                {
-                    _fixedBuff = value;
-                    OnPropertyChanged(nameof(FixedBuff));
-                }
-            }
-        }
-
-        private string? _fixedBuff01;
-        public string? FixedBuff01
-        {
-            get { return _fixedBuff01; }
-            set
-            {
-                if (_fixedBuff01 != value)
-                {
-                    _fixedBuff01 = value;
-                    OnPropertyChanged(nameof(FixedBuff01));
-                }
-            }
-        }
-
-        private string? _fixedBuff02;
-        public string? FixedBuff02
-        {
-            get { return _fixedBuff02; }
-            set
-            {
-                if (_fixedBuff02 != value)
-                {
-                    _fixedBuff02 = value;
-                    OnPropertyChanged(nameof(FixedBuff02));
-                }
-            }
-        }
-
-        private string? _fixedBuff01Color;
-        public string? FixedBuff01Color
-        {
-            get { return _fixedBuff01Color; }
-            set
-            {
-                if (_fixedBuff01Color != value)
-                {
-                    _fixedBuff01Color = value;
-                    OnPropertyChanged(nameof(FixedBuff01Color));
-                }
-            }
-        }
-
-        private string? _fixedBuff02Color;
-        public string? FixedBuff02Color
-        {
-            get { return _fixedBuff02Color; }
-            set
-            {
-                if (_fixedBuff02Color != value)
-                {
-                    _fixedBuff02Color = value;
-                    OnPropertyChanged(nameof(FixedBuff02Color));
+                    _magicDefense = value;
+                    OnPropertyChanged(nameof(MagicDefense));
+                    OnPropertyChanged(nameof(MainStatText));
                 }
             }
         }
@@ -1175,51 +1002,232 @@ namespace RHGMTool.ViewModels
                 {
                     _weaponID00 = value;
                     OnPropertyChanged(nameof(WeaponID00));
+                    OnPropertyChanged(nameof(MainStatText));
                 }
             }
         }
 
-        private bool _isFixedBuffVisible = true;
-        public bool IsFixedBuffVisible
+        public string MainStatText
         {
-            get { return _isFixedBuffVisible; }
-            set
+            get { return _frameService.FormatMainStat(Type, Defense, MagicDefense, JobClass, WeaponID00); }
+        }
+
+        private int _sellPrice;
+        public int SellPrice
+        {
+            get { return _sellPrice; }
+            private set
             {
-                if (_isFixedBuffVisible != value)
+                if (_sellPrice != value)
                 {
-                    _isFixedBuffVisible = value;
-                    OnPropertyChanged(nameof(IsFixedBuffVisible));
+                    _sellPrice = value;
+                    OnPropertyChanged(nameof(SellPrice));
                 }
             }
         }
 
-        private bool _isFixedBuff01Visible = true;
-        public bool IsFixedBuff01Visible
+        public string SellValueText
         {
-            get { return _isFixedBuff01Visible; }
-            set
+            get { return _frameService.FormatSellValue(SellPrice); }
+        }
+
+        private int _requiredLevel;
+        public int RequiredLevel
+        {
+            get { return _requiredLevel; }
+            private set
             {
-                if (_isFixedBuff01Visible != value)
+                if (_requiredLevel != value)
                 {
-                    _isFixedBuff01Visible = value;
-                    OnPropertyChanged(nameof(IsFixedBuff01Visible));
+                    _requiredLevel = value;
+                    OnPropertyChanged(nameof(RequiredLevel));
+                    OnPropertyChanged(nameof(RequiredLevelText));
                 }
             }
         }
 
-        private bool _isFixedBuff02Visible = true;
-        public bool IsFixedBuff02Visible
+        public string RequiredLevelText
         {
-            get { return _isFixedBuff02Visible; }
-            set
+            get { return _frameService.FormatRequiredLevel(RequiredLevel); }
+        }
+
+        private int _itemTrade;
+        public int ItemTrade
+        {
+            get { return _itemTrade; }
+            private set
             {
-                if (_isFixedBuff02Visible != value)
+                if (_itemTrade != value)
                 {
-                    _isFixedBuff02Visible = value;
-                    OnPropertyChanged(nameof(IsFixedBuff02Visible));
+                    _itemTrade = value;
+                    OnPropertyChanged(nameof(ItemTrade));
+                    OnPropertyChanged(nameof(ItemTradeText));
                 }
             }
         }
+
+        public string? ItemTradeText
+        {
+            get { return _frameService.FormatItemTrade(ItemTrade); }
+        }
+
+        private int _jobClass;
+        public int JobClass
+        {
+            get { return _jobClass; }
+            private set
+            {
+                if (_jobClass != value)
+                {
+                    _jobClass = value;
+                    OnPropertyChanged(nameof(JobClass));
+                    OnPropertyChanged(nameof(JobClassText));
+                }
+            }
+        }
+
+        public string? JobClassText
+        {
+            get { return JobClass != 0 ? GetEnumDescription((CharClass)JobClass) : ""; }
+        }
+
+        private int _setId;
+        public int SetId
+        {
+            get { return _setId; }
+            private set
+            {
+                if (_setId != value)
+                {
+                    _setId = value;
+                    OnPropertyChanged(nameof(SetId));
+                    OnPropertyChanged(nameof(SetNameText));
+                }
+            }
+        }
+
+        public string? SetNameText
+        {
+            get { return _gmDatabaseService.GetSetName(SetId); }
+        }
+
+        private int _petFood;
+        public int PetFood
+        {
+            get { return _petFood; }
+            private set
+            {
+                if (_petFood != value)
+                {
+                    _petFood = value;
+                    OnPropertyChanged(nameof(PetFood));
+                    OnPropertyChanged(nameof(PetFoodText));
+                    OnPropertyChanged(nameof(PetFoodColor));
+                }
+            }
+        }
+
+        public string? PetFoodText
+        {
+            get { return _frameService.FormatPetFood(PetFood); }
+        }
+
+        public string? PetFoodColor
+        {
+            get { return _frameService.FormatPetFoodColor(PetFood); }
+        }
+
+        #region Fixed Option
+
+        public string? FixedOption
+        {
+            get { return "[Fixed Buff]"; }
+        }
+
+        private int _fixedOption01;
+        public int FixedOption01
+        {
+            get { return _fixedOption01; }
+            set
+            {
+                if (_fixedOption01 != value)
+                {
+                    _fixedOption01 = value;
+                    OnPropertyChanged(nameof(FixedOption01));
+                    OnPropertyChanged(nameof(FixedOption01Text));
+                    OnPropertyChanged(nameof(FixedOption01Color));
+                }
+            }
+        }
+
+        private int _fixedOption01Value;
+        public int FixedOption01Value
+        {
+            get { return _fixedOption01Value; }
+            set
+            {
+                if (_fixedOption01Value != value)
+                {
+                    _fixedOption01Value = value;
+                    OnPropertyChanged(nameof(FixedOption01Value));
+                    OnPropertyChanged(nameof(FixedOption01Text));
+                }
+            }
+        }
+
+        public string? FixedOption01Text
+        {
+            get { return _frameService.GetOptionName(FixedOption01, FixedOption01Value); }
+        }
+
+        public string? FixedOption01Color
+        {
+            get { return _frameService.GetColorFromOption(FixedOption01); }
+        }
+
+
+        private int _fixedOption02;
+        public int FixedOption02
+        {
+            get { return _fixedOption02; }
+            set
+            {
+                if (_fixedOption02 != value)
+                {
+                    _fixedOption02 = value;
+                    OnPropertyChanged(nameof(FixedOption02));
+                    OnPropertyChanged(nameof(FixedOption02Text));
+                    OnPropertyChanged(nameof(FixedOption02Color));
+                }
+            }
+        }
+
+        private int _fixedOption02Value;
+        public int FixedOption02Value
+        {
+            get { return _fixedOption02Value; }
+            set
+            {
+                if (_fixedOption02Value != value)
+                {
+                    _fixedOption02Value = value;
+                    OnPropertyChanged(nameof(FixedOption02Value));
+                    OnPropertyChanged(nameof(FixedOption02Text));
+                }
+            }
+        }
+
+        public string? FixedOption02Text
+        {
+            get { return _frameService.GetOptionName(FixedOption02, FixedOption02Value); }
+        }
+
+        public string? FixedOption02Color
+        {
+            get { return _frameService.GetColorFromOption(FixedOption02); }
+        }
+
+        #endregion
 
         #endregion
 
@@ -1235,11 +1243,10 @@ namespace RHGMTool.ViewModels
                 {
                     _optionCount = value;
                     OnPropertyChanged(nameof(OptionCount));
-                    UpdateRandomBuff();
+                    UpdateRandomOption();
                 }
             }
         }
-
 
         private int _OptionCountMax;
         public int OptionCountMax
@@ -1252,22 +1259,28 @@ namespace RHGMTool.ViewModels
                 {
                     _OptionCountMax = value;
                     OnPropertyChanged(nameof(OptionCountMax));
-                    UpdateRandomBuff();
+                    UpdateRandomOption();
                 }
 
             }
         }
 
-        private string? _randomBuff;
-        public string? RandomBuff
+        public string? RandomOption
         {
-            get { return _randomBuff; }
-            private set
+            get { return Category == 29 ? $"[Buff]" : (Type != 1 && Type != 2 ? $"[Random Buff]" : ""); }
+        }
+
+
+        private readonly bool _isRandomOptionVisible = true;
+        public bool IsRandomOptionVisible
+        {
+            get { return _isRandomOptionVisible; }
+            set
             {
-                if (_randomBuff != value)
+                if (_isRandomOptionVisible != value)
                 {
-                    _randomBuff = value;
-                    OnPropertyChanged(nameof(RandomBuff));
+                    _isRandomOption01Visible = value;
+                    OnPropertyChanged(nameof(IsRandomOptionVisible));
                 }
             }
         }
@@ -1282,7 +1295,9 @@ namespace RHGMTool.ViewModels
                 {
                     _randomOption01 = value;
                     OnPropertyChanged(nameof(RandomOption01));
-                    UpdateRandomBuff();
+                    OnPropertyChanged(nameof(RandomOption01Text));
+                    OnPropertyChanged(nameof(RandomOption01Color));
+                    UpdateRandomOption();
                 }
             }
         }
@@ -1297,258 +1312,19 @@ namespace RHGMTool.ViewModels
                 {
                     _randomOption01Value = value;
                     OnPropertyChanged(nameof(RandomOption01Value));
-                    UpdateRandomBuff();
+                    OnPropertyChanged(nameof(RandomOption01Text));
                 }
             }
         }
 
-        private int _randomOption01SelectedIndex;
-
-        public int RandomOption01SelectedIndex
+        public string? RandomOption01Text
         {
-            get { return _randomOption01SelectedIndex; }
-            set
-            {
-                if (_randomOption01SelectedIndex != value)
-                {
-                    _randomOption01SelectedIndex = value;
-                    OnPropertyChanged(nameof(RandomOption01SelectedIndex));
-
-                }
-            }
+            get { return  _frameService.GetOptionName(RandomOption01, RandomOption01Value); }
         }
 
-        private int _randomOption02;
-        public int RandomOption02
+        public string? RandomOption01Color
         {
-            get { return _randomOption02; }
-            set
-            {
-                if (_randomOption02 != value)
-                {
-                    _randomOption02 = value;
-                    OnPropertyChanged(nameof(RandomOption02));
-                    UpdateRandomBuff();
-                }
-            }
-        }
-
-        private int _randomOption02Value;
-        public int RandomOption02Value
-        {
-            get { return _randomOption02Value; }
-            set
-            {
-                if (_randomOption02Value != value)
-                {
-                    _randomOption02Value = value;
-                    OnPropertyChanged(nameof(RandomOption02Value));
-                    UpdateRandomBuff();
-                }
-            }
-        }
-
-        private int _randomOption02SelectedIndex;
-
-        public int RandomOption02SelectedIndex
-        {
-            get { return _randomOption02SelectedIndex; }
-            set
-            {
-                if (_randomOption02SelectedIndex != value)
-                {
-                    _randomOption02SelectedIndex = value;
-                    OnPropertyChanged(nameof(RandomOption02SelectedIndex));
-
-                }
-            }
-        }
-
-        private int _randomOption03;
-        public int RandomOption03
-        {
-            get { return _randomOption03; }
-            set
-            {
-                if (_randomOption03 != value)
-                {
-                    _randomOption03 = value;
-                    OnPropertyChanged(nameof(RandomOption03));
-                    UpdateRandomBuff();
-                }
-            }
-        }
-
-        private int _randomOption03Value;
-        public int RandomOption03Value
-        {
-            get { return _randomOption03Value; }
-            set
-            {
-                if (_randomOption03Value != value)
-                {
-                    _randomOption03Value = value;
-                    OnPropertyChanged(nameof(RandomOption03Value));
-                    UpdateRandomBuff();
-                }
-            }
-        }
-
-        private int _randomOption03SelectedIndex;
-
-        public int RandomOption03SelectedIndex
-        {
-            get { return _randomOption03SelectedIndex; }
-            set
-            {
-                if (_randomOption03SelectedIndex != value)
-                {
-                    _randomOption03SelectedIndex = value;
-                    OnPropertyChanged(nameof(RandomOption03SelectedIndex));
-
-                }
-            }
-        }
-
-        private string? _randomBuff01;
-        public string? RandomBuff01
-        {
-            get { return _randomBuff01; }
-            set
-            {
-                if (_randomBuff01 != value)
-                {
-                    _randomBuff01 = value;
-                    OnPropertyChanged(nameof(RandomBuff01));
-                }
-            }
-        }
-
-        private string? _randomBuff02;
-        public string? RandomBuff02
-        {
-            get { return _randomBuff02; }
-            set
-            {
-                if (_randomBuff02 != value)
-                {
-                    _randomBuff02 = value;
-                    OnPropertyChanged(nameof(RandomBuff02));
-                }
-            }
-        }
-
-        private string? _randomBuff03;
-        public string? RandomBuff03
-        {
-            get { return _randomBuff03; }
-            set
-            {
-                if (_randomBuff03 != value)
-                {
-                    _randomBuff03 = value;
-                    OnPropertyChanged(nameof(RandomBuff03));
-                }
-            }
-        }
-
-        private string? _randomBuff01Color;
-        public string? RandomBuff01Color
-        {
-            get { return _randomBuff01Color; }
-            set
-            {
-                if (_randomBuff01Color != value)
-                {
-                    _randomBuff01Color = value;
-                    OnPropertyChanged(nameof(RandomBuff01Color));
-                }
-            }
-        }
-
-        private string? _randomBuff02Color;
-        public string? RandomBuff02Color
-        {
-            get { return _randomBuff02Color; }
-            set
-            {
-                if (_randomBuff02Color != value)
-                {
-                    _randomBuff02Color = value;
-                    OnPropertyChanged(nameof(RandomBuff02Color));
-                }
-            }
-        }
-
-        private string? _randomBuff03Color;
-        public string? RandomBuff03Color
-        {
-            get { return _randomBuff03Color; }
-            set
-            {
-                if (_randomBuff03Color != value)
-                {
-                    _randomBuff03Color = value;
-                    OnPropertyChanged(nameof(RandomBuff03Color));
-                }
-            }
-        }
-
-
-        private bool _isRandomBuffVisible = true;
-        public bool IsRandomBuffVisible
-        {
-            get { return _isRandomBuffVisible; }
-            set
-            {
-                if (_isRandomBuffVisible != value)
-                {
-                    _isRandomBuffVisible = value;
-                    OnPropertyChanged(nameof(IsRandomBuffVisible));
-                }
-            }
-        }
-
-        private bool _isRandomBuff01Visible = true;
-        public bool IsRandomBuff01Visible
-        {
-            get { return _isRandomBuff01Visible; }
-            set
-            {
-                if (_isRandomBuff01Visible != value)
-                {
-                    _isRandomBuff01Visible = value;
-                    OnPropertyChanged(nameof(IsRandomBuff01Visible));
-                }
-            }
-        }
-
-        private bool _isRandomBuff02Visible = true;
-        public bool IsRandomBuff02Visible
-        {
-            get { return _isRandomBuff02Visible; }
-            set
-            {
-                if (_isRandomBuff02Visible != value)
-                {
-                    _isRandomBuff02Visible = value;
-                    OnPropertyChanged(nameof(IsRandomBuff02Visible));
-                }
-            }
-        }
-
-        private bool _isRandomBuff03Visible = true;
-        public bool IsRandomBuff03Visible
-        {
-            get { return _isRandomBuff03Visible; }
-            set
-            {
-                if (_isRandomBuff03Visible != value)
-                {
-                    _isRandomBuff03Visible = value;
-                    OnPropertyChanged(nameof(IsRandomBuff03Visible));
-                }
-            }
+            get { return _frameService.GetColorFromOption(RandomOption01); }
         }
 
         private int _randomOption01MinValue;
@@ -1582,6 +1358,62 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        private bool _isRandomOption01Visible = true;
+        public bool IsRandomOption01Visible
+        {
+            get { return _isRandomOption01Visible; }
+            set
+            {
+                if (_isRandomOption01Visible != value)
+                {
+                    _isRandomOption01Visible = value;
+                    OnPropertyChanged(nameof(IsRandomOption01Visible));
+                }
+            }
+        }
+
+        private int _randomOption02;
+        public int RandomOption02
+        {
+            get { return _randomOption02; }
+            set
+            {
+                if (_randomOption02 != value)
+                {
+                    _randomOption02 = value;
+                    OnPropertyChanged(nameof(RandomOption02));
+                    OnPropertyChanged(nameof(RandomOption02Text));
+                    OnPropertyChanged(nameof(RandomOption02Color));
+                    UpdateRandomOption();
+                }
+            }
+        }
+
+        private int _randomOption02Value;
+        public int RandomOption02Value
+        {
+            get { return _randomOption02Value; }
+            set
+            {
+                if (_randomOption02Value != value)
+                {
+                    _randomOption02Value = value;
+                    OnPropertyChanged(nameof(RandomOption02Value));
+                    OnPropertyChanged(nameof(RandomOption02Text));
+                }
+            }
+        }
+
+        public string? RandomOption02Text
+        {
+            get { return _frameService.GetOptionName(RandomOption02, RandomOption02Value); }
+        }
+
+        public string? RandomOption02Color
+        {
+            get { return _frameService.GetColorFromOption(RandomOption02); }
+        }
+
         private int _randomOption02MinValue;
         public int RandomOption02MinValue
         {
@@ -1611,6 +1443,48 @@ namespace RHGMTool.ViewModels
                         RandomOption02Value = value;
                 }
             }
+        }
+
+        private int _randomOption03;
+        public int RandomOption03
+        {
+            get { return _randomOption03; }
+            set
+            {
+                if (_randomOption03 != value)
+                {
+                    _randomOption03 = value;
+                    OnPropertyChanged(nameof(RandomOption03));
+                    OnPropertyChanged(nameof(RandomOption03Text));
+                    OnPropertyChanged(nameof(RandomOption03Color));
+                    UpdateRandomOption();
+                }
+            }
+        }
+
+        private int _randomOption03Value;
+        public int RandomOption03Value
+        {
+            get { return _randomOption03Value; }
+            set
+            {
+                if (_randomOption03Value != value)
+                {
+                    _randomOption03Value = value;
+                    OnPropertyChanged(nameof(RandomOption03Value));
+                    OnPropertyChanged(nameof(RandomOption03Text));
+                }
+            }
+        }
+
+        public string? RandomOption03Text
+        {
+            get { return _frameService.GetOptionName(RandomOption03, RandomOption03Value); }
+        }
+
+        public string? RandomOption03Color
+        {
+            get { return _frameService.GetColorFromOption(RandomOption03); }
         }
 
         private int _randomOption03MinValue;
@@ -1644,49 +1518,43 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        private void UpdateRandomBuff()
+
+        private void UpdateRandomOption()
         {
-            if (Item != null)
+            IsRandomOptionVisible = Type != 1 && OptionCountMax > 0 || Category == 29 && OptionCountMax > 0;
+            IsRandomOption01Visible = Type != 1 && OptionCountMax > 0 || Category == 29 && OptionCountMax > 0;
+
+            OnPropertyChanged(nameof(IsRandomOptionVisible));
+            OnPropertyChanged(nameof(IsRandomOption01Visible));
+            (RandomOption01MinValue, RandomOption01MaxValue) = _gmDatabaseService.GetOptionValue(RandomOption01);
+            (RandomOption02MinValue, RandomOption02MaxValue) = _gmDatabaseService.GetOptionValue(RandomOption02);
+            (RandomOption03MinValue, RandomOption03MaxValue) = _gmDatabaseService.GetOptionValue(RandomOption03);
+
+
+            RandomOption01Value = CalculateOptionValue(RandomOption01, RandomOption01Value, RandomOption01MaxValue);
+            RandomOption02Value = CalculateOptionValue(RandomOption02, RandomOption02Value, RandomOption02MaxValue);
+            RandomOption03Value = CalculateOptionValue(RandomOption03, RandomOption03Value, RandomOption03MaxValue);
+
+        }
+
+        private static int CalculateOptionValue(int option, int value, int maxValue)
+        {
+            if (option != 0)
             {
-                IsRandomBuffVisible = Item.Type != 1 && OptionCountMax > 0 || Item.Category == 29 && OptionCountMax > 0;
-                IsRandomBuff01Visible = Item.Type != 1 && OptionCountMax > 0 || Item.Category == 29 && OptionCountMax > 0;
-                IsRandomBuff02Visible = OptionCountMax > 1;
-                IsRandomBuff03Visible = OptionCountMax > 2;
+                if (value == 0)
+                {
+                    return maxValue;
+                }
             }
-
-            (RandomBuff01, RandomBuff01Color) = RandomOption01 != 0 ? _frameData.GetOptionName(RandomOption01, RandomOption01Value) : ("No Buff", "White");
-            (RandomBuff02, RandomBuff02Color) = RandomOption02 != 0 ? _frameData.GetOptionName(RandomOption02, RandomOption02Value) : ("No Buff", "White");
-            (RandomBuff03, RandomBuff03Color) = RandomOption03 != 0 ? _frameData.GetOptionName(RandomOption03, RandomOption03Value) : ("No Buff", "White");
-
-            (RandomOption01MinValue, RandomOption01MaxValue) = _gMDbService.GetOptionValue(RandomOption01);
-            (RandomOption02MinValue, RandomOption02MaxValue) = _gMDbService.GetOptionValue(RandomOption02);
-            (RandomOption03MinValue, RandomOption03MaxValue) = _gMDbService.GetOptionValue(RandomOption03);
-
-            RandomOption01Value = RandomOption01 != 0 ? RandomOption01Value : 0;
-            RandomOption02Value = RandomOption02 != 0 ? RandomOption02Value : 0;
-            RandomOption03Value = RandomOption03 != 0 ? RandomOption03Value : 0;
-
-            RandomOption01Value = RandomOption01 != 0 && RandomOption01Value == 0 ? RandomOption01MaxValue : RandomOption01Value;
-            RandomOption02Value = RandomOption02 != 0 && RandomOption02Value == 0 ? RandomOption02MaxValue : RandomOption02Value;
-            RandomOption03Value = RandomOption03 != 0 && RandomOption03Value == 0 ? RandomOption03MaxValue : RandomOption03Value;
+            else
+            {
+                return 0;
+            }
+            return value;
         }
         #endregion
 
-        #region Socket
-
-        private string? _socketBuff;
-        public string? SocketBuff
-        {
-            get { return _socketBuff; }
-            set
-            {
-                if (_socketBuff != value)
-                {
-                    _socketBuff = value;
-                    OnPropertyChanged(nameof(SocketBuff));
-                }
-            }
-        }
+        #region Socket Option
 
         private int _socketCount;
         public int SocketCount
@@ -1698,8 +1566,8 @@ namespace RHGMTool.ViewModels
                 {
                     _socketCount = value;
                     OnPropertyChanged(nameof(SocketCount));
-                    UpdateSocketBuff();
-                    SocketBuff = $"Socket: {value}";
+                    OnPropertyChanged(nameof(SocketOption));
+                    UpdateSocketOption();
                 }
             }
         }
@@ -1711,13 +1579,61 @@ namespace RHGMTool.ViewModels
             get { return _socketCountMax; }
             set
             {
+
                 if (_socketCountMax != value)
                 {
                     _socketCountMax = value;
                     OnPropertyChanged(nameof(SocketCountMax));
-                    UpdateSocketBuff();
-                    SocketBuff = $"Socket: {value}";
+                    UpdateSocketOption();
                 }
+
+            }
+        }
+
+        public string? SocketOption
+        {
+            get { return $"Socket: {SocketCount}"; }
+        }
+
+        private int _socket01Color;
+        public int Socket01Color
+        {
+            get { return _socket01Color; }
+            set
+            {
+                _socket01Color = value;
+                OnPropertyChanged(nameof(Socket01Color));
+                OnPropertyChanged(nameof(SocketOption01Text));
+                OnPropertyChanged(nameof(SocketOption01Color));
+                UpdateSocketOption();
+            }
+        }
+
+        private int _socket02Color;
+        public int Socket02Color
+        {
+            get { return _socket02Color; }
+            set
+            {
+                _socket02Color = value;
+                OnPropertyChanged(nameof(Socket02Color));
+                OnPropertyChanged(nameof(SocketOption02Text));
+                OnPropertyChanged(nameof(SocketOption02Color));
+                UpdateSocketOption();
+            }
+        }
+
+        private int _socket03Color;
+        public int Socket03Color
+        {
+            get { return _socket03Color; }
+            set
+            {
+                _socket03Color = value;
+                OnPropertyChanged(nameof(Socket03Color));
+                OnPropertyChanged(nameof(SocketOption03Text));
+                OnPropertyChanged(nameof(SocketOption03Color));
+                UpdateSocketOption();
             }
         }
 
@@ -1731,7 +1647,9 @@ namespace RHGMTool.ViewModels
                 {
                     _socketOption01 = value;
                     OnPropertyChanged(nameof(SocketOption01));
-                    UpdateSocketBuff();
+                    OnPropertyChanged(nameof(SocketOption01Text));
+                    OnPropertyChanged(nameof(SocketOption01Color));
+                    UpdateSocketOption();
                 }
             }
         }
@@ -1746,294 +1664,19 @@ namespace RHGMTool.ViewModels
                 {
                     _socketOption01Value = value;
                     OnPropertyChanged(nameof(SocketOption01Value));
-                    UpdateSocketBuff();
+                    OnPropertyChanged(nameof(SocketOption01Text));
                 }
             }
         }
 
-        private int _socketOption01SelectedIndex;
-
-        public int SocketOption01SelectedIndex
+        public string? SocketOption01Text
         {
-            get { return _socketOption01SelectedIndex; }
-            set
-            {
-                if (_socketOption01SelectedIndex != value)
-                {
-                    _socketOption01SelectedIndex = value;
-                    OnPropertyChanged(nameof(SocketOption01SelectedIndex));
-
-                }
-            }
+            get { return SocketOption01 != 0 ? _frameService.GetOptionName(SocketOption01, SocketOption01Value) : _frameService.GetSocketText(Socket01Color); }
         }
 
-        private int _socketOption02;
-        public int SocketOption02
+        public string? SocketOption01Color
         {
-            get { return _socketOption02; }
-            set
-            {
-                if (_socketOption02 != value)
-                {
-                    _socketOption02 = value;
-                    OnPropertyChanged(nameof(SocketOption02));
-                    UpdateSocketBuff(); ;
-                }
-            }
-        }
-
-        private int _socketOption02Value;
-        public int SocketOption02Value
-        {
-            get { return _socketOption02Value; }
-            set
-            {
-                if (_socketOption02Value != value)
-                {
-                    _socketOption02Value = value;
-                    OnPropertyChanged(nameof(SocketOption02Value));
-                    UpdateSocketBuff();
-                }
-            }
-        }
-
-        private int _socketOption02SelectedIndex;
-
-        public int SocketOption02SelectedIndex
-        {
-            get { return _socketOption02SelectedIndex; }
-            set
-            {
-                if (_socketOption02SelectedIndex != value)
-                {
-                    _socketOption02SelectedIndex = value;
-                    OnPropertyChanged(nameof(SocketOption02SelectedIndex));
-
-                }
-            }
-        }
-
-        private int _socketOption03;
-        public int SocketOption03
-        {
-            get { return _socketOption03; }
-            set
-            {
-                if (_socketOption03 != value)
-                {
-                    _socketOption03 = value;
-                    OnPropertyChanged(nameof(SocketOption03));
-                    UpdateSocketBuff();
-                }
-            }
-        }
-
-        private int _socketOption03Value;
-        public int SocketOption03Value
-        {
-            get { return _socketOption03Value; }
-            set
-            {
-                if (_socketOption03Value != value)
-                {
-                    _socketOption03Value = value;
-                    OnPropertyChanged(nameof(SocketOption03Value));
-                    UpdateSocketBuff();
-                }
-            }
-        }
-
-        private int _socketOption03SelectedIndex;
-
-        public int SocketOption03SelectedIndex
-        {
-            get { return _socketOption03SelectedIndex; }
-            set
-            {
-                if (_socketOption03SelectedIndex != value)
-                {
-                    _socketOption03SelectedIndex = value;
-                    OnPropertyChanged(nameof(SocketOption03SelectedIndex));
-
-                }
-            }
-        }
-
-        private string? _socketBuff01;
-        public string? SocketBuff01
-        {
-            get { return _socketBuff01; }
-            set
-            {
-                if (_socketBuff01 != value)
-                {
-                    _socketBuff01 = value;
-                    OnPropertyChanged(nameof(SocketBuff01));
-                }
-            }
-        }
-
-        private string? _socketBuff02;
-        public string? SocketBuff02
-        {
-            get { return _socketBuff02; }
-            set
-            {
-                if (_socketBuff02 != value)
-                {
-                    _socketBuff02 = value;
-                    OnPropertyChanged(nameof(SocketBuff02));
-                }
-            }
-        }
-
-        private string? _socketBuff03;
-        public string? SocketBuff03
-        {
-            get { return _socketBuff03; }
-            set
-            {
-                if (_socketBuff03 != value)
-                {
-                    _socketBuff03 = value;
-                    OnPropertyChanged(nameof(SocketBuff03));
-                }
-            }
-        }
-
-        private string? _socketBuff01Color;
-        public string? SocketBuff01Color
-        {
-            get { return _socketBuff01Color; }
-            set
-            {
-                if (_socketBuff01Color != value)
-                {
-                    _socketBuff01Color = value;
-                    OnPropertyChanged(nameof(SocketBuff01Color));
-                }
-            }
-        }
-
-        private string? _socketBuff02Color;
-        public string? SocketBuff02Color
-        {
-            get { return _socketBuff02Color; }
-            set
-            {
-                if (_socketBuff02Color != value)
-                {
-                    _socketBuff02Color = value;
-                    OnPropertyChanged(nameof(SocketBuff02Color));
-                }
-            }
-        }
-
-        private string? _socketBuff03Color;
-        public string? SocketBuff03Color
-        {
-            get { return _socketBuff03Color; }
-            set
-            {
-                if (_socketBuff03Color != value)
-                {
-                    _socketBuff03Color = value;
-                    OnPropertyChanged(nameof(SocketBuff03Color));
-                }
-            }
-        }
-
-
-        private bool _isSocketBuffVisible = true;
-        public bool IsSocketBuffVisible
-        {
-            get { return _isSocketBuffVisible; }
-            set
-            {
-                if (_isSocketBuffVisible != value)
-                {
-                    _isSocketBuffVisible = value;
-                    OnPropertyChanged(nameof(IsSocketBuffVisible));
-                }
-            }
-        }
-
-        private bool _isSocketBuff01Visible = true;
-        public bool IsSocketBuff01Visible
-        {
-            get { return _isSocketBuff01Visible; }
-            set
-            {
-                if (_isSocketBuff01Visible != value)
-                {
-                    _isSocketBuff01Visible = value;
-                    OnPropertyChanged(nameof(IsSocketBuff01Visible));
-                }
-            }
-        }
-
-        private bool _isSocketBuff02Visible = true;
-        public bool IsSocketBuff02Visible
-        {
-            get { return _isSocketBuff02Visible; }
-            set
-            {
-                if (_isSocketBuff02Visible != value)
-                {
-                    _isSocketBuff02Visible = value;
-                    OnPropertyChanged(nameof(IsSocketBuff02Visible));
-                }
-            }
-        }
-
-        private bool _isSocketBuff03Visible = true;
-        public bool IsSocketBuff03Visible
-        {
-            get { return _isSocketBuff03Visible; }
-            set
-            {
-                if (_isSocketBuff03Visible != value)
-                {
-                    _isSocketBuff03Visible = value;
-                    OnPropertyChanged(nameof(IsSocketBuff03Visible));
-                }
-            }
-        }
-
-        private int _socket01Color;
-        public int Socket01Color
-        {
-            get { return _socket01Color; }
-            set
-            {
-                _socket01Color = value;
-                OnPropertyChanged(nameof(Socket01Color));
-                UpdateSocketBuff();
-            }
-        }
-
-        private int _socket02Color;
-        public int Socket02Color
-        {
-            get { return _socket02Color; }
-            set
-            {
-                _socket02Color = value;
-                OnPropertyChanged(nameof(Socket02Color));
-                UpdateSocketBuff();
-            }
-        }
-
-        private int _socket03Color;
-        public int Socket03Color
-        {
-            get { return _socket03Color; }
-            set
-            {
-                _socket03Color = value;
-                OnPropertyChanged(nameof(Socket03Color));
-                UpdateSocketBuff();
-            }
+            get { return SocketOption01 != 0 ? _frameService.GetColorFromOption(SocketOption01) : _frameService.GetSocketColor(Socket01Color); }
         }
 
         private int _socketOption01MinValue;
@@ -2060,10 +1703,53 @@ namespace RHGMTool.ViewModels
                 {
                     _socketOption01MaxValue = value;
                     OnPropertyChanged(nameof(SocketOption01MaxValue));
+
                     if (SocketOption01Value > value)
                         SocketOption01Value = value;
                 }
             }
+        }
+
+        private int _socketOption02;
+        public int SocketOption02
+        {
+            get { return _socketOption02; }
+            set
+            {
+                if (_socketOption02 != value)
+                {
+                    _socketOption02 = value;
+                    OnPropertyChanged(nameof(SocketOption02));
+                    OnPropertyChanged(nameof(SocketOption02Text));
+                    OnPropertyChanged(nameof(SocketOption02Color));
+                    UpdateSocketOption();
+                }
+            }
+        }
+
+        private int _socketOption02Value;
+        public int SocketOption02Value
+        {
+            get { return _socketOption02Value; }
+            set
+            {
+                if (_socketOption02Value != value)
+                {
+                    _socketOption02Value = value;
+                    OnPropertyChanged(nameof(SocketOption02Value));
+                    OnPropertyChanged(nameof(SocketOption02Text));
+                }
+            }
+        }
+
+        public string? SocketOption02Text
+        {
+            get { return SocketOption02 != 0 ? _frameService.GetOptionName(SocketOption02, SocketOption02Value) : _frameService.GetSocketText(Socket02Color); }
+        }
+
+        public string? SocketOption02Color
+        {
+            get { return SocketOption02 != 0 ? _frameService.GetColorFromOption(SocketOption02) : _frameService.GetSocketColor(Socket02Color); }
         }
 
         private int _socketOption02MinValue;
@@ -2090,10 +1776,54 @@ namespace RHGMTool.ViewModels
                 {
                     _socketOption02MaxValue = value;
                     OnPropertyChanged(nameof(SocketOption02MaxValue));
+
                     if (SocketOption02Value > value)
                         SocketOption02Value = value;
                 }
             }
+        }
+
+
+        private int _socketOption03;
+        public int SocketOption03
+        {
+            get { return _socketOption03; }
+            set
+            {
+                if (_socketOption03 != value)
+                {
+                    _socketOption03 = value;
+                    OnPropertyChanged(nameof(SocketOption03));
+                    OnPropertyChanged(nameof(SocketOption03Text));
+                    OnPropertyChanged(nameof(SocketOption03Color));
+                    UpdateSocketOption();
+                }
+            }
+        }
+
+        private int _socketOption03Value;
+        public int SocketOption03Value
+        {
+            get { return _socketOption03Value; }
+            set
+            {
+                if (_socketOption03Value != value)
+                {
+                    _socketOption03Value = value;
+                    OnPropertyChanged(nameof(SocketOption03Value));
+                    OnPropertyChanged(nameof(SocketOption03Text));
+                }
+            }
+        }
+
+        public string? SocketOption03Text
+        {
+            get { return SocketOption03 != 0 ? _frameService.GetOptionName(SocketOption03, SocketOption03Value) : _frameService.GetSocketText(Socket03Color); }
+        }
+
+        public string? SocketOption03Color
+        {
+            get { return SocketOption03 != 0 ? _frameService.GetColorFromOption(SocketOption03) : _frameService.GetSocketColor(Socket03Color); }
         }
 
         private int _socketOption03MinValue;
@@ -2127,28 +1857,16 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        private void UpdateSocketBuff()
+        private void UpdateSocketOption()
         {
-            IsSocketBuffVisible = SocketCount > 0;
-            IsSocketBuff01Visible = SocketCount > 0;
-            IsSocketBuff02Visible = SocketCount > 1;
-            IsSocketBuff03Visible = SocketCount > 2;
 
-            (SocketBuff01, SocketBuff01Color) = SocketOption01 != 0 ? _frameData.GetOptionName(SocketOption01, SocketOption01Value) : FrameData.SetSocketColor(Socket01Color);
-            (SocketBuff02, SocketBuff02Color) = SocketOption02 != 0 ? _frameData.GetOptionName(SocketOption02, SocketOption02Value) : FrameData.SetSocketColor(Socket02Color);
-            (SocketBuff03, SocketBuff03Color) = SocketOption03 != 0 ? _frameData.GetOptionName(SocketOption03, SocketOption03Value) : FrameData.SetSocketColor(Socket03Color);
+            (SocketOption01MinValue, SocketOption01MaxValue) = _gmDatabaseService.GetOptionValue(SocketOption01);
+            (SocketOption02MinValue, SocketOption02MaxValue) = _gmDatabaseService.GetOptionValue(SocketOption02);
+            (SocketOption03MinValue, SocketOption03MaxValue) = _gmDatabaseService.GetOptionValue(SocketOption03);
 
-            (SocketOption01MinValue, SocketOption01MaxValue) = _gMDbService.GetOptionValue(SocketOption01);
-            (SocketOption02MinValue, SocketOption02MaxValue) = _gMDbService.GetOptionValue(SocketOption02);
-            (SocketOption03MinValue, SocketOption03MaxValue) = _gMDbService.GetOptionValue(SocketOption03);
-
-            SocketOption01Value = SocketOption01 != 0 ? SocketOption01Value : 0;
-            SocketOption02Value = SocketOption02 != 0 ? SocketOption02Value : 0;
-            SocketOption03Value = SocketOption03 != 0 ? SocketOption03Value : 0;
-
-            SocketOption01Value = SocketOption01 != 0 && SocketOption01Value == 0 ? SocketOption01MaxValue : SocketOption01Value;
-            SocketOption02Value = SocketOption02 != 0 && SocketOption02Value == 0 ? SocketOption02MaxValue : SocketOption02Value;
-            SocketOption03Value = SocketOption03 != 0 && SocketOption03Value == 0 ? SocketOption03MaxValue : SocketOption03Value;
+            SocketOption01Value = CalculateOptionValue(SocketOption01, SocketOption01Value, SocketOption01MaxValue);
+            SocketOption02Value = CalculateOptionValue(SocketOption02, SocketOption02Value, SocketOption02MaxValue);
+            SocketOption03Value = CalculateOptionValue(SocketOption03, SocketOption03Value, SocketOption03MaxValue);
 
         }
 

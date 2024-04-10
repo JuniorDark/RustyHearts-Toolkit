@@ -8,13 +8,13 @@ namespace RHGMTool.Models
         public List<ItemData>? CachedItemDataList { get; private set; }
 
         private readonly SqLiteDatabaseService _databaseService;
-        private readonly GMDbService _gMDbService;
+        private readonly GMDatabaseService _gmDatabaseService;
 
         public ItemDataManager()
         {
             CachedItemDataList = null;
             _databaseService = new SqLiteDatabaseService();
-            _gMDbService = new GMDbService(_databaseService);
+            _gmDatabaseService = new GMDatabaseService(_databaseService);
             InitializeItemDataList();
         }
 
@@ -24,10 +24,10 @@ namespace RHGMTool.Models
             CachedItemDataList ??=
             [
                 // Fetch data for each item type and merge into CachedItemDataList
-                .. _gMDbService.GetItemDataList(ItemType.Item, "itemlist"),
-                    .. _gMDbService.GetItemDataList(ItemType.Costume, "itemlist_costume"),
-                    .. _gMDbService.GetItemDataList(ItemType.Armor, "itemlist_armor"),
-                    .. _gMDbService.GetItemDataList(ItemType.Weapon, "itemlist_weapon"),
+                .. _gmDatabaseService.GetItemDataList(ItemType.Item, "itemlist"),
+                    .. _gmDatabaseService.GetItemDataList(ItemType.Costume, "itemlist_costume"),
+                    .. _gmDatabaseService.GetItemDataList(ItemType.Armor, "itemlist_armor"),
+                    .. _gmDatabaseService.GetItemDataList(ItemType.Weapon, "itemlist_weapon"),
                 ];
         }
 
