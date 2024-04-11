@@ -227,7 +227,7 @@
             d:Text="[Random Option]"
             Foreground="White"
             Text="{Binding RandomOption}"
-            Visibility="{Binding IsRandomOptionVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <TextBlock
             x:Name="tbRandomOption01"
             Grid.Row="12"

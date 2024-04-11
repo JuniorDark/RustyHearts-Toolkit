@@ -160,17 +160,17 @@
         <TextBlock
             x:Name="tbRandomOption"
             Grid.Row="7"
-            Margin="10,0,0,0"
+            Margin="5,0,0,0"
             VerticalAlignment="Top"
             d:Text="[Random Option]"
             Foreground="White"
             Text="{Binding RandomOption}"
-            Visibility="{Binding IsRandomOptionVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <TextBlock
             x:Name="tbRandomOption01"
             Grid.Row="8"
             Height="Auto"
-            Margin="10,0,0,0"
+            Margin="5,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             d:Foreground="White"
@@ -183,7 +183,7 @@
             x:Name="tbRandomOption02"
             Grid.Row="9"
             Height="Auto"
-            Margin="10,0,0,0"
+            Margin="5,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             d:Foreground="White"
@@ -196,7 +196,7 @@
             x:Name="tbRandomOption03"
             Grid.Row="10"
             Height="Auto"
-            Margin="10,0,0,0"
+            Margin="5,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             d:Foreground="White"

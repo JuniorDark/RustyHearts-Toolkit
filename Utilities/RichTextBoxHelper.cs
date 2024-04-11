@@ -45,7 +45,7 @@ namespace RHGMTool.Utilities
             foreach (string part in parts)
             {
                 Paragraph paragraph = new();
-                string[] colorSeparator = ["</COLOR>", "<COLOR>"];
+                string[] colorSeparator = ["</COLOR>", "<COLOR>", "</color>"];
                 string[] colorParts = part.Split(colorSeparator, StringSplitOptions.None);
 
                 foreach (string colorPart in colorParts)

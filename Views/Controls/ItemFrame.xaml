@@ -139,7 +139,7 @@
             d:Text="[Option]"
             Foreground="White"
             Text="{Binding RandomOption}"
-            Visibility="{Binding IsRandomOptionVisible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <TextBlock
             x:Name="tbOption01"
             Grid.Row="6"
@@ -152,7 +152,7 @@
             Foreground="{Binding RandomOption01Color, Converter={StaticResource StringToBrushConverter}}"
             Text="{Binding RandomOption01Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding IsRandomOption01Visible, Converter={StaticResource BoolToVisibilityConverter}}" />
+            Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <RichTextBox
             x:Name="rtbDescription"
             Grid.Row="7"

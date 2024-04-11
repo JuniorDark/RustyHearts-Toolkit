@@ -759,7 +759,12 @@ namespace RHGMTool.ViewModels
                 {
                     _type = value;
                     OnPropertyChanged(nameof(Type));
-                    OnPropertyChanged(nameof(RandomOption));
+
+                    if (_type == 1 || _type == 2)
+                    {
+                        EnchantLevel = 0;
+                        OnPropertyChanged(nameof(EnchantLevel));
+                    }
                 }
             }
         }
@@ -801,11 +806,7 @@ namespace RHGMTool.ViewModels
             }
         }
 
-        public string? DurabilityText
-        {
-            get { return _frameService.FormatDurability(Durability, MaxDurability); }
-        }
-
+        
         private int _maxDurability;
 
         public int MaxDurability
@@ -826,6 +827,11 @@ namespace RHGMTool.ViewModels
                         Durability = MaxDurability;
                 }
             }
+        }
+
+        public string? DurabilityText
+        {
+            get { return _frameService.FormatDurability(Durability, MaxDurability); }
         }
 
         private int _reconstruction;
@@ -1022,6 +1028,7 @@ namespace RHGMTool.ViewModels
                 {
                     _sellPrice = value;
                     OnPropertyChanged(nameof(SellPrice));
+                    OnPropertyChanged(nameof(SellValueText));
                 }
             }
         }
@@ -1139,7 +1146,7 @@ namespace RHGMTool.ViewModels
 
         #region Fixed Option
 
-        public string? FixedOption
+        public static string FixedOption
         {
             get { return "[Fixed Buff]"; }
         }
@@ -1267,22 +1274,7 @@ namespace RHGMTool.ViewModels
 
         public string? RandomOption
         {
-            get { return Category == 29 ? $"[Buff]" : (Type != 1 && Type != 2 ? $"[Random Buff]" : ""); }
-        }
-
-
-        private readonly bool _isRandomOptionVisible = true;
-        public bool IsRandomOptionVisible
-        {
-            get { return _isRandomOptionVisible; }
-            set
-            {
-                if (_isRandomOptionVisible != value)
-                {
-                    _isRandomOption01Visible = value;
-                    OnPropertyChanged(nameof(IsRandomOptionVisible));
-                }
-            }
+            get { return Category == 29 ? $"[Buff]" : "[Random Buff]"; }
         }
 
         private int _randomOption01;
@@ -1354,20 +1346,6 @@ namespace RHGMTool.ViewModels
 
                     if (RandomOption01Value > value)
                         RandomOption01Value = value;
-                }
-            }
-        }
-
-        private bool _isRandomOption01Visible = true;
-        public bool IsRandomOption01Visible
-        {
-            get { return _isRandomOption01Visible; }
-            set
-            {
-                if (_isRandomOption01Visible != value)
-                {
-                    _isRandomOption01Visible = value;
-                    OnPropertyChanged(nameof(IsRandomOption01Visible));
                 }
             }
         }
@@ -1521,20 +1499,13 @@ namespace RHGMTool.ViewModels
 
         private void UpdateRandomOption()
         {
-            IsRandomOptionVisible = Type != 1 && OptionCountMax > 0 || Category == 29 && OptionCountMax > 0;
-            IsRandomOption01Visible = Type != 1 && OptionCountMax > 0 || Category == 29 && OptionCountMax > 0;
-
-            OnPropertyChanged(nameof(IsRandomOptionVisible));
-            OnPropertyChanged(nameof(IsRandomOption01Visible));
             (RandomOption01MinValue, RandomOption01MaxValue) = _gmDatabaseService.GetOptionValue(RandomOption01);
             (RandomOption02MinValue, RandomOption02MaxValue) = _gmDatabaseService.GetOptionValue(RandomOption02);
             (RandomOption03MinValue, RandomOption03MaxValue) = _gmDatabaseService.GetOptionValue(RandomOption03);
 
-
             RandomOption01Value = CalculateOptionValue(RandomOption01, RandomOption01Value, RandomOption01MaxValue);
             RandomOption02Value = CalculateOptionValue(RandomOption02, RandomOption02Value, RandomOption02MaxValue);
             RandomOption03Value = CalculateOptionValue(RandomOption03, RandomOption03Value, RandomOption03MaxValue);
-
         }
 
         private static int CalculateOptionValue(int option, int value, int maxValue)
@@ -1859,7 +1830,6 @@ namespace RHGMTool.ViewModels
 
         private void UpdateSocketOption()
         {
-
             (SocketOption01MinValue, SocketOption01MaxValue) = _gmDatabaseService.GetOptionValue(SocketOption01);
             (SocketOption02MinValue, SocketOption02MaxValue) = _gmDatabaseService.GetOptionValue(SocketOption02);
             (SocketOption03MinValue, SocketOption03MaxValue) = _gmDatabaseService.GetOptionValue(SocketOption03);
@@ -1867,7 +1837,6 @@ namespace RHGMTool.ViewModels
             SocketOption01Value = CalculateOptionValue(SocketOption01, SocketOption01Value, SocketOption01MaxValue);
             SocketOption02Value = CalculateOptionValue(SocketOption02, SocketOption02Value, SocketOption02MaxValue);
             SocketOption03Value = CalculateOptionValue(SocketOption03, SocketOption03Value, SocketOption03MaxValue);
-
         }
 
         #endregion

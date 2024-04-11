@@ -24,6 +24,12 @@
     <ImageBrush x:Key="ThumbPressedMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll_down.png" />
     <ImageBrush x:Key="ThumbPressedBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_03.png" />
 
+    <Style TargetType="{x:Type ScrollViewer}">
+        <Style.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Transparent" />
+        </Style.Resources>
+    </Style>
+
     <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
         <Setter Property="Height" Value="30" />
         <Setter Property="Width" Value="15" />
@@ -37,7 +43,7 @@
                             Height="Auto"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch"
-                            Fill="{TemplateBinding Background}" />
+                            Fill="Transparent" />
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Normal">
@@ -64,6 +70,17 @@
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                     </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Tag" Value="Horizontal">
+                            <Setter TargetName="Rectangle1" Property="Width" Value="Auto"/>
+                            <Setter TargetName="Rectangle1" Property="Height" Value="Auto"/>
+                            <Setter TargetName="Rectangle1" Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="90"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -130,15 +147,16 @@
                             x:Name="PART_Track"
                             Grid.Row="1"
                             Focusable="False"
-                            IsDirectionReversed="true">
+                            IsDirectionReversed="True">
                             <Track.DecreaseRepeatButton>
-                                <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" />
+                                <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" />
+                                
                             </Track.DecreaseRepeatButton>
                             <Track.Thumb>
                                 <Thumb x:Name="Thumb" Style="{DynamicResource ScrollThumbs}" />
                             </Track.Thumb>
                             <Track.IncreaseRepeatButton>
-                                <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" />
+                                <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" />
                             </Track.IncreaseRepeatButton>
                         </Track>
                     </Grid>
@@ -164,6 +182,9 @@
                                     <RotateTransform Angle="-90" />
                                 </Setter.Value>
                             </Setter>
+                            <Setter TargetName="Thumb" Property="Tag" Value="Horizontal" />
+                            <Setter TargetName="PART_LineUpButton" Property="Command" Value="ScrollBar.PageLeftCommand" />
+                            <Setter TargetName="PART_LineDownButton" Property="Command" Value="ScrollBar.PageRightCommand" />
 
                         </Trigger>
                     </ControlTemplate.Triggers>
