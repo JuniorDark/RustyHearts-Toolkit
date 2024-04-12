@@ -19,7 +19,6 @@ namespace RHGMTool.ViewModels
         private readonly ISqLiteDatabaseService _databaseService;
         private readonly GMDatabaseService _gmDatabaseService;
         private readonly FrameService _frameService;
-        private readonly ItemDataManager _itemDataManager;
         private readonly System.Timers.Timer searchTimer;
 
         public FrameViewModel()
@@ -27,7 +26,6 @@ namespace RHGMTool.ViewModels
             _databaseService = new SqLiteDatabaseService();
             _gmDatabaseService = new GMDatabaseService(_databaseService);
             _frameService = new FrameService();
-            _itemDataManager = new ItemDataManager();
             searchTimer = new()
             {
                 Interval = 500,
@@ -46,6 +44,8 @@ namespace RHGMTool.ViewModels
             
             _itemDataView = CollectionViewSource.GetDefaultView(ItemDataItems);
             _itemDataView.Filter = FilterItems;
+            _optionView = CollectionViewSource.GetDefaultView(OptionItems);
+            _optionView.Filter = FilterOption;
 
         }
 
@@ -72,12 +72,12 @@ namespace RHGMTool.ViewModels
         {
             try
             {
-                if (_itemDataManager.CachedItemDataList == null)
+                if (ItemDataManager.Instance.CachedItemDataList == null)
                 {
-                    _itemDataManager.InitializeItemDataList();
+                    ItemDataManager.Instance.InitializeCachedLists();
                 }
 
-                ItemDataItems = _itemDataManager.CachedItemDataList;
+                ItemDataItems = ItemDataManager.Instance.CachedItemDataList;
             }
             catch (Exception ex)
             {
@@ -103,11 +103,81 @@ namespace RHGMTool.ViewModels
         {
             try
             {
-                OptionItems = new List<NameID>(_gmDatabaseService.GetOptionItems());
+                if (ItemDataManager.Instance.CachedOptionItems == null)
+                {
+                    ItemDataManager.Instance.InitializeCachedLists();
+                }
+
+                OptionItems = ItemDataManager.Instance.CachedOptionItems;
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private ICollectionView _optionView;
+        public ICollectionView OptionView
+        {
+            get { return _optionView; }
+            set
+            {
+                _optionView = value;
+                OnPropertyChanged(nameof(OptionView));
+            }
+        }
+        private readonly List<int> selectedOptions = [];
+        private bool FilterOption(object obj)
+        {
+            if (obj is NameID option)
+            {
+                // Always include "None" option
+                if (option.ID == 0)
+                    return true;
+
+                selectedOptions.Add(RandomOption01);
+                selectedOptions.Add(RandomOption02);
+                selectedOptions.Add(RandomOption03);
+                selectedOptions.Add(SocketOption01);
+                selectedOptions.Add(SocketOption02);
+                selectedOptions.Add(SocketOption03);
+
+                if (selectedOptions.Contains(option.ID))
+                    return true;
+
+                // text search filter
+                if (!string.IsNullOrEmpty(OptionSearch))
+                {
+                    string searchText = OptionSearch.ToLower();
+
+                    // Check if either option ID or option Name contains the search text
+                    if (!string.IsNullOrEmpty(option.ID.ToString()) && option.ID.ToString().Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+
+                    if (!string.IsNullOrEmpty(option.Name) && option.Name.Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        private string? _optionSearch;
+        public string? OptionSearch
+        {
+            get { return _optionSearch; }
+            set
+            {
+                if (_optionSearch != value)
+                {
+                    _optionSearch = value;
+                    OnPropertyChanged(nameof(OptionSearch));
+                    searchTimer.Stop();
+                    searchTimer.Start();
+                }
             }
         }
 
@@ -125,6 +195,7 @@ namespace RHGMTool.ViewModels
                 OnPropertyChanged(nameof(ItemDataView));
             }
         }
+
 
         private bool FilterItems(object obj)
         {
@@ -188,6 +259,7 @@ namespace RHGMTool.ViewModels
         private void SearchTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             Application.Current.Dispatcher.Invoke(_itemDataView.Refresh);
+            Application.Current.Dispatcher.Invoke(_optionView.Refresh);
         }
 
         #endregion

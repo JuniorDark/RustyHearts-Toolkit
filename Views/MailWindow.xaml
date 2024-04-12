@@ -7,7 +7,7 @@
         vm:WindowBehaviors.EnableDoubleClickMaximize="True"
         Title="Rusty Hearts Mail Tool" Height="600" Width="640" ResizeMode="CanResizeWithGrip" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" Background="Transparent" MinWidth="640" MinHeight="600" Icon="/Assets/ico/icon_mail.png">
 
-    <ContentControl Template="{StaticResource RHWindowRed02Template}">
+    <ContentControl Template="{StaticResource box_red02}">
         <Grid Margin="-70,-80,-80,-80" >
 
             <!-- Sender Label -->

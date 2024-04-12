@@ -24,9 +24,9 @@
                 <ResourceDictionary Source="Styles/lb_def_box17.xaml" />
                 <ResourceDictionary Source="Styles/NumericUpDown.xaml" />
                 <ResourceDictionary Source="Styles/Passwordbox.xaml" />
+                <ResourceDictionary Source="Styles/red02.xaml" />
                 <ResourceDictionary Source="Styles/ScrollBar.xaml" />
                 <ResourceDictionary Source="Styles/Textbox.xaml" />
-                <ResourceDictionary Source="Styles/Window.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>

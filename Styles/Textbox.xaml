@@ -4,8 +4,26 @@
             <!--  lb_def_box04 template for the textbox  -->
             <ContentControl Template="{StaticResource lb_def_box04}">
                 <Grid>
-                    <!--  Actual TextBox content  -->
-                    <ScrollViewer x:Name="PART_ContentHost" />
+                    <TextBox
+                        Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}"
+                        Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        HorizontalContentAlignment="Center"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CaretBrush="White"
+                        FontSize="{TemplateBinding FontSize}"
+                        Foreground="Gold"
+                        IsHitTestVisible="True"
+                        IsReadOnly="{TemplateBinding IsReadOnly}"
+                        IsReadOnlyCaretVisible="{TemplateBinding IsReadOnlyCaretVisible}"
+                        Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+                        TextAlignment="{TemplateBinding TextAlignment}"
+                        TextDecorations="{TemplateBinding TextDecorations}"
+                        TextWrapping="{TemplateBinding TextWrapping}" />
 
                     <!--  Background text  -->
                     <TextBlock
@@ -13,17 +31,8 @@
                         VerticalAlignment="Center"
                         Foreground="Gray"
                         IsHitTestVisible="False"
-                        Text="{TemplateBinding Tag}">
-                        <TextBlock.Style>
-                            <Style TargetType="{x:Type TextBlock}">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Value="">
-                                        <Setter Property="Visibility" Value="Visible" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
+                        Text="{TemplateBinding Tag}"
+                        Visibility="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}">
                     </TextBlock>
                 </Grid>
             </ContentControl>

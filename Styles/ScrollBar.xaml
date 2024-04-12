@@ -13,15 +13,15 @@
 
     <!--  Thumb  -->
     <ImageBrush x:Key="ThumbNormalTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_04_01.png" />
-    <ImageBrush x:Key="ThumbNormalMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll_normal.png" />
+    <ImageBrush x:Key="ThumbNormalMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_04_02.png" />
     <ImageBrush x:Key="ThumbNormalBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_04_03.png" />
 
     <ImageBrush x:Key="ThumbHoverTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_03_01.png" />
-    <ImageBrush x:Key="ThumbHoverMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll_hover.png" />
+    <ImageBrush x:Key="ThumbHoverMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_03_02.png" />
     <ImageBrush x:Key="ThumbHoverBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_03_03.png" />
 
     <ImageBrush x:Key="ThumbPressedTop" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_01.png" />
-    <ImageBrush x:Key="ThumbPressedMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll_down.png" />
+    <ImageBrush x:Key="ThumbPressedMiddle" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_02.png" />
     <ImageBrush x:Key="ThumbPressedBottom" ImageSource="/Assets/buttons/lb_scroll/lb_scroll01_05_03.png" />
 
     <Style TargetType="{x:Type ScrollViewer}">
@@ -31,39 +31,76 @@
     </Style>
 
     <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
-        <Setter Property="Height" Value="30" />
+        <Setter Property="Height" Value="29" />
         <Setter Property="Width" Value="15" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Grid x:Name="Grid">
+                        <!--  Top part of the thumb  -->
                         <Rectangle
-                            x:Name="Rectangle1"
-                            Width="Auto"
-                            Height="Auto"
+                            x:Name="TopRectangle"
+                            Width="15"
+                            Height="10"
                             HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            Fill="Transparent" />
+                            VerticalAlignment="Top"
+                            Fill="{StaticResource ThumbNormalTop}" />
+                        <!--  Middle part of the thumb  -->
+                        <Rectangle
+                            x:Name="MiddleRectangle"
+                            Width="15"
+                            Height="10"
+                            VerticalAlignment="Center"
+                            Fill="{StaticResource ThumbNormalMiddle}" />
+                        <!--  Bottom part of the thumb  -->
+                        <Rectangle
+                            x:Name="BottomRectangle"
+                            Width="15"
+                            Height="10"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Bottom"
+                            Fill="{StaticResource ThumbNormalBottom}" />
                         <VisualStateManager.VisualStateGroups>
                             <VisualStateGroup x:Name="CommonStates">
                                 <VisualState x:Name="Normal">
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Rectangle1" Storyboard.TargetProperty="Fill">
+                                        <!--  Set the Fill for each part of the thumb  -->
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TopRectangle" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbNormalTop}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MiddleRectangle" Storyboard.TargetProperty="Fill">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbNormalMiddle}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BottomRectangle" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbNormalBottom}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="MouseOver">
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Rectangle1" Storyboard.TargetProperty="Fill">
+                                        <!--  Set the Fill for each part of the thumb  -->
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TopRectangle" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbHoverTop}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MiddleRectangle" Storyboard.TargetProperty="Fill">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbHoverMiddle}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BottomRectangle" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbHoverBottom}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Pressed">
                                     <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Rectangle1" Storyboard.TargetProperty="Fill">
+                                        <!--  Set the Fill for each part of the thumb  -->
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TopRectangle" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbPressedTop}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MiddleRectangle" Storyboard.TargetProperty="Fill">
                                             <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbPressedMiddle}" />
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BottomRectangle" Storyboard.TargetProperty="Fill">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbPressedBottom}" />
                                         </ObjectAnimationUsingKeyFrames>
                                     </Storyboard>
                                 </VisualState>
@@ -72,11 +109,26 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="Tag" Value="Horizontal">
-                            <Setter TargetName="Rectangle1" Property="Width" Value="Auto"/>
-                            <Setter TargetName="Rectangle1" Property="Height" Value="Auto"/>
-                            <Setter TargetName="Rectangle1" Property="RenderTransform">
+                            <!--  Adjust width and height for horizontal thumb  -->
+                            <Setter TargetName="TopRectangle" Property="Width" Value="10" />
+                            <Setter TargetName="MiddleRectangle" Property="Width" Value="10" />
+                            <Setter TargetName="BottomRectangle" Property="Width" Value="10" />
+                            <Setter TargetName="TopRectangle" Property="Height" Value="15" />
+                            <Setter TargetName="MiddleRectangle" Property="Height" Value="15" />
+                            <Setter TargetName="BottomRectangle" Property="Height" Value="15" />
+                            <Setter TargetName="TopRectangle" Property="RenderTransform">
                                 <Setter.Value>
-                                    <RotateTransform Angle="90"/>
+                                    <RotateTransform Angle="90" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="MiddleRectangle" Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="90" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="BottomRectangle" Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="90" />
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
@@ -147,10 +199,11 @@
                             x:Name="PART_Track"
                             Grid.Row="1"
                             Focusable="False"
-                            IsDirectionReversed="True">
+                            IsDirectionReversed="True"
+                            ViewportSize="NaN">
                             <Track.DecreaseRepeatButton>
                                 <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" />
-                                
+
                             </Track.DecreaseRepeatButton>
                             <Track.Thumb>
                                 <Thumb x:Name="Thumb" Style="{DynamicResource ScrollThumbs}" />
@@ -193,7 +246,6 @@
         </Setter>
     </Style>
 
-
     <!--  ScrollViewer Style  -->
     <Style x:Key="CustomScrollViewer" TargetType="ScrollViewer">
         <Setter Property="Template">
@@ -226,6 +278,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 
 </ResourceDictionary>

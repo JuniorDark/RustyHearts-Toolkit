@@ -10,6 +10,7 @@
     <local:GreaterOrEqualToVisibilityConverter x:Key="GreaterOrEqualToVisibilityConverter" />
     <local:IconNameToImageSourceConverter x:Key="IconNameToImageSourceConverter" />
     <local:IncrementConverter x:Key="IncrementConverter" />
+    <local:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter" />
     <local:StringToBrushConverter x:Key="StringToBrushConverter" />
     <local:ValueToIsEnabledConverter x:Key="ValueToIsEnabledConverter" />
     <local:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter" />

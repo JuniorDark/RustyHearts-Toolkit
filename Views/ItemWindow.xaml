@@ -24,8 +24,9 @@
     </Window.DataContext>
     <Window.Resources>
         <CollectionViewSource x:Key="ItemDataViewSource" Source="{Binding ItemDataItems}" />
+        <CollectionViewSource x:Key="OptionViewSource" Source="{Binding OptionItems}" />
     </Window.Resources>
-    <ContentControl Template="{StaticResource RHWindowRed02Template}">
+    <ContentControl Template="{StaticResource box_red02}">
         <Grid Margin="-70,-70,-65,-65">
             <Label
                 x:Name="lbTitle"
@@ -34,7 +35,7 @@
                 Margin="0,-5,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                Content="Item"
+                Content="Add Item"
                 FontSize="16"
                 FontWeight="Bold"
                 Foreground="White" />
@@ -50,11 +51,38 @@
                 Template="{StaticResource lb_close_button}" />
 
             <!--  Random Option  -->
-            <Grid Margin="815,162,0,383" HorizontalAlignment="Left">
+            <Grid Margin="812,190,0,355" HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+                <StackPanel
+                    Margin="150,-60,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <Label
+                        x:Name="lbOptionSearch"
+                        Width="118"
+                        Height="25"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Option Search"
+                        Foreground="Gold" />
+                    <TextBox
+                        x:Name="tbOptionSearch"
+                        Width="145"
+                        Height="30"
+                        VerticalAlignment="Top"
+                        CaretBrush="White"
+                        FontFamily="{StaticResource ArialUnicodeMS}"
+                        FontSize="11"
+                        Foreground="Gold"
+                        Tag="Option Name/ID"
+                        Template="{StaticResource lb_textbox}"
+                        Text="{Binding OptionSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
                 <!--  left Column  -->
                 <StackPanel
                     Grid.Column="0"
@@ -63,7 +91,7 @@
                     <Label
                         x:Name="lbRandomOption1"
                         Width="120"
-                        Height="25"
+                        Height="26"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Random Option 1"
@@ -83,11 +111,10 @@
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
-
                     <Label
                         x:Name="lbRandomOption2"
                         Width="120"
-                        Height="25"
+                        Height="26"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Random Option 2"
@@ -107,11 +134,10 @@
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
-
                     <Label
                         x:Name="lbRandomOption3"
                         Width="120"
-                        Height="25"
+                        Height="26"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Random Option 3"
@@ -131,7 +157,6 @@
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
-
                 </StackPanel>
                 <!--  Right Column  -->
                 <StackPanel
@@ -194,30 +219,38 @@
                         Value="{Binding RandomOption03Value, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
-            <Label
-                x:Name="lbSocketCount"
-                Width="119"
-                Height="26"
-                Margin="897,321,239,0"
-                VerticalAlignment="Top"
-                HorizontalContentAlignment="Center"
-                Content="Socket Count"
-                Foreground="Gold" />
-            <local:IntegerUpDown
-                x:Name="intSocketCount"
-                Height="26"
-                Margin="897,348,220,321"
-                Increment="1"
-                Maximum="{Binding SocketCountMax, Mode=TwoWay}"
-                Minimum="0"
-                Value="{Binding SocketCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
             <!--  Socket  -->
-            <Grid Margin="705,378,0,117" HorizontalAlignment="Left">
+            <Grid Margin="704,394,1,101">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+                <StackPanel
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <Label
+                        x:Name="lbSocketCount"
+                        Width="110"
+                        Height="26"
+                        Margin="0,-50,0,0"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Socket Count"
+                        Foreground="Gold" />
+                    <local:IntegerUpDown
+                        x:Name="intSocketCount"
+                        Width="120"
+                        Height="26"
+                        Margin="0,-25,0,0"
+                        Increment="1"
+                        Maximum="{Binding SocketCountMax, Mode=TwoWay}"
+                        Minimum="0"
+                        Value="{Binding SocketCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
                 <!--  left Column  -->
                 <StackPanel
                     Grid.Column="0"
@@ -443,10 +476,10 @@
             </Grid>
 
             <!--  Selected Item  -->
-            <Canvas Margin="815,596,20,15">
+            <Canvas Margin="733,599,9,12">
                 <Label
                     x:Name="lbAmount"
-                    Canvas.Left="5"
+                    Canvas.Left="1"
                     Canvas.Top="51"
                     Width="55"
                     Height="26"
@@ -457,8 +490,8 @@
                     Foreground="Gold" />
                 <local:IntegerUpDown
                     x:Name="intAmount"
-                    Canvas.Left="72"
-                    Canvas.Top="52"
+                    Canvas.Left="63"
+                    Canvas.Top="51"
                     Width="90"
                     Height="26"
                     HorizontalAlignment="Left"
@@ -496,8 +529,8 @@
                     Stretch="Fill" />
                 <Button
                     x:Name="btnSelectItem"
-                    Canvas.Left="200"
-                    Canvas.Top="50"
+                    Canvas.Left="175"
+                    Canvas.Top="48"
                     Width="120"
                     Height="26"
                     HorizontalAlignment="Left"
@@ -507,7 +540,7 @@
                     Style="{StaticResource lb_def_button02}" />
             </Canvas>
 
-            <Grid Margin="825,36,0,550" HorizontalAlignment="Left">
+            <Grid Margin="825,33,0,556" HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="140" />
                     <ColumnDefinition Width="140" />
@@ -522,7 +555,7 @@
                     <Label
                         x:Name="lbEnchant"
                         Width="120"
-                        Height="25"
+                        Height="23"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Enchant Level"
@@ -541,7 +574,7 @@
                     <Label
                         x:Name="lbRank"
                         Width="120"
-                        Height="25"
+                        Height="23"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Rank"
@@ -565,7 +598,7 @@
                     <Label
                         x:Name="lbDurability"
                         Width="120"
-                        Height="24"
+                        Height="23"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Durability"
@@ -582,7 +615,7 @@
                     <Label
                         x:Name="lbCurrentAttribute"
                         Width="120"
-                        Height="26"
+                        Height="23"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Current Attribute"
@@ -605,7 +638,7 @@
                     <Label
                         x:Name="lbMaxDurability"
                         Width="120"
-                        Height="25"
+                        Height="23"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Max Durability"
@@ -622,7 +655,7 @@
                     <Label
                         x:Name="lbWeight"
                         Width="120"
-                        Height="25"
+                        Height="23"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Weight"
@@ -640,45 +673,49 @@
             </Grid>
 
             <!--  Frame Controls  -->
-            <local:ItemFrame
-                x:Name="itemFrame"
-                Width="300"
-                Height="400"
-                Margin="410,31,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                DataContext="{Binding}"
-                Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=1}" />
-            <local:CostumeFrame
-                x:Name="costumeFrame"
-                Width="300"
-                Height="400"
-                Margin="410,31,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                DataContext="{Binding}"
-                Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=2}" />
-            <local:GearFrameUserControl
-                x:Name="gearFrame"
-                Width="300"
-                Height="600"
-                Margin="410,31,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                DataContext="{Binding}"
-                Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=3|4}" />
+            <Grid
+                Margin="0,30,130,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+                <local:ItemFrame
+                    x:Name="itemFrame"
+                    Width="300"
+                    Height="400"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    DataContext="{Binding}"
+                    Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=1}" />
+                <local:CostumeFrame
+                    x:Name="costumeFrame"
+                    Width="300"
+                    Height="400"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    DataContext="{Binding}"
+                    Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=2}" />
+                <local:GearFrameUserControl
+                    x:Name="gearFrame"
+                    Width="300"
+                    Height="600"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    DataContext="{Binding}"
+                    Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=3|4}" />
+            </Grid>
+            <!--  Add Item Controls  -->
             <Grid Margin="1,18,840,217">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="405"/>
-                    <ColumnDefinition/>
+                    <ColumnDefinition Width="405" />
+                    <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <TextBlock
                     x:Name="lbTotalItem"
                     Height="25"
-                    VerticalAlignment="Center"
+                    Margin="3,435,0,0"
                     HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
                     d:Text="Showing {0}/{1} Items"
-                    Foreground="Gold" Margin="3,435,0,0">
+                    Foreground="Gold">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="Showing {0}/{1} Items">
                             <Binding ElementName="dataGridView" Path="Items.Count" />
@@ -690,6 +727,7 @@
                     x:Name="dataGridView"
                     MaxWidth="440"
                     MaxHeight="425"
+                    Margin="0,-7,0,7"
                     AutoGenerateColumns="False"
                     BorderBrush="#FF0F0D0A"
                     CanUserAddRows="False"
@@ -702,8 +740,8 @@
                     Loaded="DataGridView_Loaded"
                     SelectionChanged="DataGridView_SelectionChanged"
                     SelectionMode="Single"
-                    Template="{StaticResource CustomDataGridTemplate}"
-                    VerticalGridLinesBrush="White" Margin="0,-7,0,7">
+                    Template="{StaticResource lb_datagrid}"
+                    VerticalGridLinesBrush="White">
                     <DataGrid.Resources>
                         <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkBlue" />
@@ -716,7 +754,7 @@
                     </DataGrid.Background>
                     <DataGrid.Columns>
                         <DataGridTextColumn
-                            Width="*"
+                            Width="65"
                             Binding="{Binding ID}"
                             Header="ID"
                             IsReadOnly="True" />
@@ -774,26 +812,41 @@
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
-
-            <TextBox
-                x:Name="tbSearch"
-                Width="145"
-                Height="34"
-                Margin="10,491,955,0"
-                VerticalAlignment="Top"
-                CaretBrush="White"
-                Foreground="Gold"
-                Tag="Search Name/ID"
-                Template="{StaticResource lb_textbox}"
-                Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <!--  Datagrid filter  -->
             <Grid
                 x:Name="datagridFilter"
-                Margin="10,520,0,24"
+                Margin="10,532,0,12"
                 HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+                <StackPanel
+                    Grid.ColumnSpan="2"
+                    Margin="72,-64,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <Label
+                        x:Name="lbSearch"
+                        Width="118"
+                        Height="25"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Search"
+                        Foreground="Gold" />
+                    <TextBox
+                        x:Name="tbSearch"
+                        Width="145"
+                        Height="34"
+                        VerticalAlignment="Top"
+                        CaretBrush="White"
+                        Foreground="Gold"
+                        Tag="Search Name/ID"
+                        Template="{StaticResource lb_textbox}"
+                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
                 <!--  Left Column  -->
                 <StackPanel
                     Grid.Column="0"
@@ -950,6 +1003,7 @@
                         Template="{StaticResource lb_combobox}" />
                 </StackPanel>
             </Grid>
+
 
         </Grid>
     </ContentControl>
