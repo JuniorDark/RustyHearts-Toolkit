@@ -1,24 +1,28 @@
-﻿using RHGMTool.Views;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using RHGMTool.Views;
 
 namespace RHGMTool.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public partial class MainViewModel : ObservableObject
     {
-        public RelayCommand OpenItemDatabaseCommand { get; }
-        public RelayCommand OpenMailWindowCommand { get; }
 
         public MainViewModel()
         {
-            OpenItemDatabaseCommand = new RelayCommand(OpenItemDatabaseWindow);
-            OpenMailWindowCommand = new RelayCommand(OpenMailWindow);
+
         }
 
-        private void OpenItemDatabaseWindow(object obj)
+        [ObservableProperty]
+        private bool _isTextBoxEnabled = true;
+
+        [RelayCommand]
+        private static void OpenItemDatabaseWindow(object obj)
         {
             WindowManager.Instance.OpenOrActivateWindow<ItemWindow>();
         }
 
-        private void OpenMailWindow(object obj)
+        [RelayCommand]
+        private static void OpenMailWindow(object obj)
         {
             WindowManager.Instance.OpenOrActivateWindow<MailWindow>();
         }

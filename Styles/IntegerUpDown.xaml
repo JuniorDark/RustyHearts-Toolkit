@@ -13,7 +13,7 @@
     <BitmapImage x:Key="lb_ArrowDownDisabled" UriSource="/Assets/buttons/lb_arrow/lb_arrow_bottom04.png" />
 
 
-    <ControlTemplate x:Key="IntegerUpDown" TargetType="{x:Type xctk:IntegerUpDown}">
+    <ControlTemplate x:Key="IntegerUpDown" TargetType="{x:Type TextBox}">
         <Border
             Background="{TemplateBinding Background}"
             BorderBrush="{TemplateBinding BorderBrush}"
@@ -129,10 +129,5 @@
                     TextAlignment="Center" />
             </Grid>
         </Border>
-
-
     </ControlTemplate>
-
-
-
 </ResourceDictionary>

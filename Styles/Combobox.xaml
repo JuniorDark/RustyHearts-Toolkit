@@ -16,6 +16,11 @@
     <BitmapImage x:Key="lb_combobox_ArrowDown" UriSource="/Assets/buttons/lb_combo/lb_combo02_06.png" />
     <BitmapImage x:Key="lb_combobox_ArrowDisabled" UriSource="/Assets/buttons/lb_combo/lb_combo02_07.png" />
 
+    <Style TargetType="ComboBoxItem">
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
     <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontFamily" Value="{StaticResource ArialUnicodeMS}" />
@@ -128,13 +133,15 @@
                         BorderThickness="1">
                         <ScrollViewer
                             Margin="4,6,4,6"
+                            CanContentScroll="True"
                             SnapsToDevicePixels="True"
                             Style="{StaticResource CustomScrollViewer}">
-                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
+                            <ItemsPresenter />
                         </ScrollViewer>
                     </Border>
                 </Grid>
             </Popup>
+
         </Grid>
     </ControlTemplate>
 

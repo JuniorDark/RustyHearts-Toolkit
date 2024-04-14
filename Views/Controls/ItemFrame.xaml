@@ -83,7 +83,6 @@
             d:Foreground="White"
             d:Text="Sub Category"
             Foreground="White"
-            Style="{StaticResource ArialMS}"
             Text="{Binding SubCategoryText}" />
         <!--  ReqLevel and JobClass  -->
         <TextBlock
@@ -102,7 +101,6 @@
             VerticalAlignment="Center"
             d:Text="Natasha"
             Foreground="#FFA9A9A9"
-            Style="{StaticResource ArialMS}"
             Text="{Binding JobClassText}" />
         <TextBlock
             x:Name="tbItemTrade"

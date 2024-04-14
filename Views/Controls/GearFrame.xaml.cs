@@ -3,11 +3,11 @@ using System.Windows.Controls;
 
 namespace RHGMTool.Views
 {
-    public partial class GearFrameUserControl : UserControl
+    public partial class GearFrame : UserControl
     {
         private readonly FrameViewModel? _viewModel;
 
-        public GearFrameUserControl()
+        public GearFrame()
         {
             InitializeComponent();
             _viewModel = new FrameViewModel();

@@ -20,7 +20,7 @@ namespace RHGMTool.ViewModels
             if (_windows.TryGetValue(windowType, out Window? value))
             {
                 var existingWindow = value;
-                existingWindow.WindowState = WindowState.Normal; // Ensure it's not minimized
+                existingWindow.WindowState = WindowState.Normal;
                 existingWindow.Activate();
             }
             else

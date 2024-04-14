@@ -14,7 +14,7 @@
         string FormatItemTrade(int itemTrade);
         string FormatDurability(int durability, int maxDurability);
         string FormatWeight(int weight);
-        string FormatReconstruction(int reconstructionMax, int itemTrade);
+        string FormatReconstruction(int reconstruction, int reconstructionMax, int itemTrade);
         string FormatPetFood(int petFood);
         string FormatPetFoodColor(int petFood);
         string FormatNameID(string option, string replacement01, string replacement02, string replacement03, int maxValue);

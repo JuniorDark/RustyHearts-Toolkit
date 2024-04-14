@@ -1,21 +1,17 @@
-﻿using RHGMTool.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using RHGMTool.Models;
 using RHGMTool.Services;
 using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Data;
 using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.ViewModels
 {
-    public class FrameViewModel : INotifyPropertyChanged
+    public partial class FrameViewModel : ObservableObject
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         private readonly ISqLiteDatabaseService _databaseService;
         private readonly GMDatabaseService _gmDatabaseService;
         private readonly FrameService _frameService;
@@ -23,6 +19,7 @@ namespace RHGMTool.ViewModels
 
         public FrameViewModel()
         {
+            
             _databaseService = new SqLiteDatabaseService();
             _gmDatabaseService = new GMDatabaseService(_databaseService);
             _frameService = new FrameService();
@@ -47,26 +44,137 @@ namespace RHGMTool.ViewModels
             _optionView = CollectionViewSource.GetDefaultView(OptionItems);
             _optionView.Filter = FilterOption;
 
+            WeakReferenceMessenger.Default.Register<MailData>(this, OnMailDataReceived);
+        }
+
+        private void OnMailDataReceived(object recipient, object? message)
+        {
+            if (message is MailData mailData)
+            {
+                LoadMailItemData(mailData);
+            }
+        }
+
+        [ObservableProperty]
+        private bool _isLoadingMailData = false;
+
+        private void LoadMailItemData(MailData mailData)
+        {
+            if (mailData != null)
+            {
+                IsLoadingMailData = true;
+
+                SlotIndex = mailData.SlotIndex;
+                ItemId = mailData.ItemId;
+                Type = mailData.ItemType;
+                IconName = mailData.IconName;
+                OverlapCnt = mailData.Amount;
+                Durability = mailData.Durability;
+                MaxDurability = mailData.Durability;
+                EnchantLevel = mailData.EnchantLevel;
+                Rank = mailData.Rank;
+                Weight = mailData.Weight;
+                Reconstruction = mailData.ReconstructionMax;
+                ReconstructionMax = mailData.ReconstructionMax;
+                OverlapCnt = mailData.Amount;
+                RandomOption01 = mailData.RandomOption01;
+                RandomOption02 = mailData.RandomOption02;
+                RandomOption03 = mailData.RandomOption03;
+                RandomOption01Value = mailData.RandomOption01Value;
+                RandomOption02Value = mailData.RandomOption02Value;
+                RandomOption03Value = mailData.RandomOption03Value;
+                SocketCount = mailData.SocketCount;
+                Socket01Color = mailData.Socket01Color;
+                Socket02Color = mailData.Socket02Color;
+                Socket03Color = mailData.Socket03Color;
+                SocketOption01 = mailData.SocketOption01;
+                SocketOption02 = mailData.SocketOption02;
+                SocketOption03 = mailData.SocketOption03;
+                SocketOption01Value = mailData.SocketOption01Value;
+                SocketOption02Value = mailData.SocketOption02Value;
+                SocketOption03Value = mailData.SocketOption03Value;
+
+
+                // Raise PropertyChanged for all properties
+                OnPropertyChanged(nameof(SlotIndex));
+                OnPropertyChanged(nameof(ItemId));
+                OnPropertyChanged(nameof(ItemTypeFilter));
+                OnPropertyChanged(nameof(IconName));
+                OnPropertyChanged(nameof(OverlapCnt));
+                OnPropertyChanged(nameof(Durability));
+                OnPropertyChanged(nameof(MaxDurability));
+                OnPropertyChanged(nameof(EnchantLevel));
+                OnPropertyChanged(nameof(Rank));
+                OnPropertyChanged(nameof(Weight));
+                OnPropertyChanged(nameof(Reconstruction));
+                OnPropertyChanged(nameof(ReconstructionMax));
+                OnPropertyChanged(nameof(OverlapCnt));
+                OnPropertyChanged(nameof(Type));
+                OnPropertyChanged(nameof(RandomOption01));
+                OnPropertyChanged(nameof(RandomOption02));
+                OnPropertyChanged(nameof(RandomOption03));
+                OnPropertyChanged(nameof(RandomOption01Value));
+                OnPropertyChanged(nameof(RandomOption02Value));
+                OnPropertyChanged(nameof(RandomOption03Value));
+                OnPropertyChanged(nameof(SocketCount));
+                OnPropertyChanged(nameof(Socket01Color));
+                OnPropertyChanged(nameof(Socket02Color));
+                OnPropertyChanged(nameof(Socket03Color));
+                OnPropertyChanged(nameof(SocketOption01));
+                OnPropertyChanged(nameof(SocketOption02));
+                OnPropertyChanged(nameof(SocketOption03));
+                OnPropertyChanged(nameof(SocketOption01Value));
+                OnPropertyChanged(nameof(SocketOption02Value));
+                OnPropertyChanged(nameof(SocketOption03Value));
+
+                IsLoadingMailData = false;
+            }
+
+        }
+
+        [RelayCommand]
+        private void SelectItem(object parameter)
+        {
+            MailData mailData = new()
+            {
+                SlotIndex = SlotIndex,
+                ItemId = ItemId,
+                ItemType = Type,
+                IconName = IconName,
+                Durability = Durability,
+                MaxDurability = Durability,
+                EnchantLevel = EnchantLevel,
+                Rank = Rank,
+                Weight = Weight,
+                Reconstruction = ReconstructionMax,
+                ReconstructionMax = ReconstructionMax,
+                Amount = OverlapCnt,
+                RandomOption01 = RandomOption01,
+                RandomOption02 = RandomOption02,
+                RandomOption03 = RandomOption03,
+                RandomOption01Value = RandomOption01Value,
+                RandomOption02Value = RandomOption02Value,
+                RandomOption03Value = RandomOption03Value,
+                SocketCount = SocketCount,
+                Socket01Color = Socket01Color,
+                Socket02Color = Socket02Color,
+                Socket03Color = Socket03Color,
+                SocketOption01 = SocketOption01,
+                SocketOption02 = SocketOption02,
+                SocketOption03 = SocketOption03,
+                SocketOption01Value = SocketOption01Value,
+                SocketOption02Value = SocketOption02Value,
+                SocketOption03Value = SocketOption03Value,
+            };
+
+            // Send the MailData directly
+            WeakReferenceMessenger.Default.Send(mailData);
         }
 
         #region Item Data List
 
+        [ObservableProperty]
         private List<ItemData>? _itemDataItems;
-        public List<ItemData>? ItemDataItems
-        {
-            get
-            {
-                return _itemDataItems;
-            }
-            set
-            {
-                if (_itemDataItems != value)
-                {
-                    _itemDataItems = value;
-                    OnPropertyChanged(nameof(ItemDataItems));
-                }
-            }
-        }
 
         private void PopulateItemDataItems()
         {
@@ -85,19 +193,8 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        [ObservableProperty]
         private List<NameID>? _optionItems;
-        public List<NameID>? OptionItems
-        {
-            get { return _optionItems; }
-            set
-            {
-                if (_optionItems != value)
-                {
-                    _optionItems = value;
-                    OnPropertyChanged(nameof(OptionItems));
-                }
-            }
-        }
 
         private void PopulateOptionItems()
         {
@@ -116,16 +213,9 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        [ObservableProperty]
         private ICollectionView _optionView;
-        public ICollectionView OptionView
-        {
-            get { return _optionView; }
-            set
-            {
-                _optionView = value;
-                OnPropertyChanged(nameof(OptionView));
-            }
-        }
+
         private readonly List<int> selectedOptions = [];
         private bool FilterOption(object obj)
         {
@@ -165,59 +255,42 @@ namespace RHGMTool.ViewModels
             return false;
         }
 
+        [ObservableProperty]
         private string? _optionSearch;
-        public string? OptionSearch
+        partial void OnOptionSearchChanged(string? value)
         {
-            get { return _optionSearch; }
-            set
-            {
-                if (_optionSearch != value)
-                {
-                    _optionSearch = value;
-                    OnPropertyChanged(nameof(OptionSearch));
-                    searchTimer.Stop();
-                    searchTimer.Start();
-                }
-            }
+            searchTimer.Stop();
+            searchTimer.Start();
         }
 
         #endregion
 
         #region CollectionView
 
+        [ObservableProperty]
         private ICollectionView _itemDataView;
-        public ICollectionView ItemDataView
-        {
-            get { return _itemDataView; }
-            set
-            {
-                _itemDataView = value;
-                OnPropertyChanged(nameof(ItemDataView));
-            }
-        }
-
 
         private bool FilterItems(object obj)
         {
             if (obj is ItemData item)
             {
                 //combobox filter
-                if (_itemTypeFilter != 0 && item.Type != _itemTypeFilter)
+                if (ItemTypeFilter != 0 && item.Type != ItemTypeFilter)
                     return false;
 
-                if (_itemCategoryFilter != 0 && item.Category != _itemCategoryFilter)
+                if (ItemCategoryFilter != 0 && item.Category != ItemCategoryFilter)
                     return false;
 
-                if (_itemSubCategoryFilter != 0 && item.SubCategory != _itemSubCategoryFilter)
+                if (ItemSubCategoryFilter != 0 && item.SubCategory != ItemSubCategoryFilter)
                     return false;
 
-                if (_itemClassFilter != 0 && item.JobClass != _itemClassFilter)
+                if (ItemClassFilter != 0 && item.JobClass != ItemClassFilter)
                     return false;
 
-                if (_itemBranchFilter != 0 && item.Branch != _itemBranchFilter)
+                if (ItemBranchFilter != 0 && item.Branch != ItemBranchFilter)
                     return false;
 
-                if (_itemTradeFilter != 2 && item.ItemTrade != _itemTradeFilter)
+                if (ItemTradeFilter != 2 && item.ItemTrade != ItemTradeFilter)
                     return false;
 
                 // text search filter
@@ -239,77 +312,47 @@ namespace RHGMTool.ViewModels
             }
             return false;
         }
-        
+
+        [ObservableProperty]
         private string? _searchText;
-        public string? SearchText
+        partial void OnSearchTextChanged(string? value)
         {
-            get { return _searchText; }
-            set
-            {
-                if (_searchText != value)
-                {
-                    _searchText = value;
-                    OnPropertyChanged(nameof(SearchText));
-                    searchTimer.Stop();
-                    searchTimer.Start();
-                }
-            }
+            searchTimer.Stop();
+            searchTimer.Start();
         }
 
         private void SearchTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            Application.Current.Dispatcher.Invoke(_itemDataView.Refresh);
-            Application.Current.Dispatcher.Invoke(_optionView.Refresh);
+            Application.Current.Dispatcher.Invoke(ItemDataView.Refresh);
+            Application.Current.Dispatcher.Invoke(OptionView.Refresh);
         }
 
         #endregion
 
         #region Comboboxes Filter
 
+        [ObservableProperty]
         private List<NameID>? _categoryFilterItems;
-        public List<NameID>? CategoryItemsFilter
-        {
-            get { return _categoryFilterItems; }
-            set
-            {
-                if (_categoryFilterItems != value)
-                {
-                    _categoryFilterItems = value;
-                    OnPropertyChanged(nameof(CategoryItemsFilter));
-                }
-            }
-        }
 
+        [ObservableProperty]
         private List<NameID>? _subCategoryItemsFilter;
-        public List<NameID>? SubCategoryItemsFilter
-        {
-            get { return _subCategoryItemsFilter; }
-            set
-            {
-                if (_subCategoryItemsFilter != value)
-                {
-                    _subCategoryItemsFilter = value;
-                    OnPropertyChanged(nameof(SubCategoryItemsFilter));
-                }
-            }
-        }
 
         private void PopulateCategoryItemsFilter(ItemType itemType)
         {
             try
             {
-                CategoryItemsFilter = new List<NameID>(_gmDatabaseService.GetCategoryItems(itemType, false));
+                CategoryFilterItems = new List<NameID>(_gmDatabaseService.GetCategoryItems(itemType, false));
                 SubCategoryItemsFilter = new List<NameID>(_gmDatabaseService.GetCategoryItems(itemType, true));
 
-                if (CategoryItemsFilter.Count > 0)
+                if (CategoryFilterItems.Count > 0)
                 {
                     ItemCategoryFilterSelectedIndex = 0;
-                    OnPropertyChanged(nameof(ItemCategoryFilterSelectedIndex));
+                    OnPropertyChanged();
                 }
                 if (SubCategoryItemsFilter.Count > 0)
                 {
                     ItemSubCategoryFilterSelectedIndex = 0;
-                    OnPropertyChanged(nameof(ItemSubCategoryFilterSelectedIndex));
+                    OnPropertyChanged();
                 }
             }
             catch (Exception ex)
@@ -318,180 +361,60 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        [ObservableProperty]
         private int _itemTypeFilter;
-
-        public int ItemTypeFilter
+        partial void OnItemTypeFilterChanged(int value)
         {
-            get { return _itemTypeFilter; }
-            set
-            {
-                if (_itemTypeFilter != value)
-                {
-                    _itemTypeFilter = value;
-                    OnPropertyChanged(nameof(ItemTypeFilter));
-                    PopulateCategoryItemsFilter((ItemType)value);
-                    _itemDataView.Refresh();
-                }
-            }
+            PopulateCategoryItemsFilter((ItemType)value);
+            ItemDataView.Refresh();
         }
 
+        [ObservableProperty]
         private int _itemTypeFilterSelectedIndex;
 
-        public int ItemTypeFilterSelectedIndex
-        {
-            get { return _itemTypeFilterSelectedIndex; }
-            set
-            {
-                if (_itemTypeFilterSelectedIndex != value)
-                {
-                    _itemTypeFilterSelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemTypeFilterSelectedIndex));
-
-                }
-            }
-        }
-
+        [ObservableProperty]
         private int _itemCategoryFilter;
-
-        public int ItemCategoryFilter
+        partial void OnItemCategoryFilterChanged(int value)
         {
-            get { return _itemCategoryFilter; }
-            set
-            {
-                if (_itemCategoryFilter != value)
-                {
-                    _itemCategoryFilter = value;
-                    OnPropertyChanged(nameof(ItemCategoryFilter));
-                    _itemDataView.Refresh();
-                }
-            }
+            ItemDataView.Refresh();
         }
 
+        [ObservableProperty]
         private int _itemCategoryFilterSelectedIndex;
 
-        public int ItemCategoryFilterSelectedIndex
-        {
-            get { return _itemCategoryFilterSelectedIndex; }
-            set
-            {
-                if (_itemCategoryFilterSelectedIndex != value)
-                {
-                    _itemCategoryFilterSelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemCategoryFilterSelectedIndex));
-
-                }
-            }
-        }
-
+        [ObservableProperty]
         private int _itemSubCategoryFilter;
-
-        public int ItemSubCategoryFilter
+        partial void OnItemSubCategoryFilterChanged(int value)
         {
-            get { return _itemSubCategoryFilter; }
-            set
-            {
-                if (_itemSubCategoryFilter != value)
-                {
-                    _itemSubCategoryFilter = value;
-                    OnPropertyChanged(nameof(ItemSubCategoryFilter));
-                    _itemDataView.Refresh();
-                }
-            }
+            ItemDataView.Refresh();
         }
 
+        [ObservableProperty]
         private int _itemSubCategoryFilterSelectedIndex;
 
-        public int ItemSubCategoryFilterSelectedIndex
-        {
-            get { return _itemSubCategoryFilterSelectedIndex; }
-            set
-            {
-                if (_itemSubCategoryFilterSelectedIndex != value)
-                {
-                    _itemSubCategoryFilterSelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemSubCategoryFilterSelectedIndex));
-
-                }
-            }
-        }
-
+        [ObservableProperty]
         private int _itemClassFilter;
 
-        public int ItemClassFilter
+        partial void OnItemClassFilterChanged(int value)
         {
-            get { return _itemClassFilter; }
-            set
-            {
-                if (_itemClassFilter != value)
-                {
-                    _itemClassFilter = value;
-                    OnPropertyChanged(nameof(ItemClassFilter));
-                    _itemDataView.Refresh();
-                }
-            }
+            ItemDataView.Refresh();
         }
 
+        [ObservableProperty]
         private int _itemClassFilterSelectedIndex;
 
-        public int ItemClassFilterSelectedIndex
-        {
-            get { return _itemClassFilterSelectedIndex; }
-            set
-            {
-                if (_itemClassFilterSelectedIndex != value)
-                {
-                    _itemClassFilterSelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemClassFilterSelectedIndex));
-
-                }
-            }
-        }
-
+        [ObservableProperty]
         private int _itemBranchFilter;
 
-        public int ItemBranchFilter
+        partial void OnItemBranchFilterChanged(int value)
         {
-            get { return _itemBranchFilter; }
-            set
-            {
-                if (_itemBranchFilter != value)
-                {
-                    _itemBranchFilter = value;
-                    OnPropertyChanged(nameof(ItemBranchFilter));
-                    _itemDataView.Refresh();
-                }
-            }
+            ItemDataView.Refresh();
         }
-
+        [ObservableProperty]
         private int _itemBranchFilterSelectedIndex;
 
-        public int ItemBranchFilterSelectedIndex
-        {
-            get { return _itemBranchFilterSelectedIndex; }
-            set
-            {
-                if (_itemBranchFilterSelectedIndex != value)
-                {
-                    _itemBranchFilterSelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemBranchFilterSelectedIndex));
-
-                }
-            }
-        }
-
+        [ObservableProperty]
         private List<NameID>? _itemTypeItemsFilter;
-        public List<NameID>? ItemTypeItemsFilter
-        {
-            get { return _itemTypeItemsFilter; }
-            set
-            {
-                if (_itemTypeItemsFilter != value)
-                {
-                    _itemTypeItemsFilter = value;
-                    OnPropertyChanged(nameof(ItemTypeItemsFilter));
-                }
-            }
-        }
 
         private void PopulateItemTypeItemsFilter()
         {
@@ -502,7 +425,7 @@ namespace RHGMTool.ViewModels
                 if (ItemTypeItemsFilter.Count > 0)
                 {
                     ItemTypeFilterSelectedIndex = 0;
-                    OnPropertyChanged(nameof(ItemTypeFilterSelectedIndex));
+                    OnPropertyChanged();
                 }
             }
             catch (Exception ex)
@@ -511,19 +434,8 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        [ObservableProperty]
         private List<NameID>? _classItemsFilter;
-        public List<NameID>? ClassItemsFilter
-        {
-            get { return _classItemsFilter; }
-            set
-            {
-                if (_classItemsFilter != value)
-                {
-                    _classItemsFilter = value;
-                    OnPropertyChanged(nameof(ClassItemsFilter));
-                }
-            }
-        }
 
         private void PopulateClassItemsFilter()
         {
@@ -534,7 +446,7 @@ namespace RHGMTool.ViewModels
                 if (ClassItemsFilter.Count > 0)
                 {
                     ItemClassFilterSelectedIndex = 0;
-                    OnPropertyChanged(nameof(ItemClassFilterSelectedIndex));
+                    OnPropertyChanged();
                 }
             }
             catch (Exception ex)
@@ -543,19 +455,8 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        [ObservableProperty]
         private List<NameID>? _branchItemsFilter;
-        public List<NameID>? BranchItemsFilter
-        {
-            get { return _branchItemsFilter; }
-            set
-            {
-                if (_branchItemsFilter != value)
-                {
-                    _branchItemsFilter = value;
-                    OnPropertyChanged(nameof(BranchItemsFilter));
-                }
-            }
-        }
 
         private void PopulateBranchItemsFilter()
         {
@@ -566,7 +467,7 @@ namespace RHGMTool.ViewModels
                 if (BranchItemsFilter.Count > 0)
                 {
                     ItemBranchFilterSelectedIndex = 0;
-                    OnPropertyChanged(nameof(ItemBranchFilterSelectedIndex));
+                    OnPropertyChanged();
                 }
             }
             catch (Exception ex)
@@ -575,57 +476,24 @@ namespace RHGMTool.ViewModels
             }
         }
 
+        [ObservableProperty]
         private int _itemTradeFilter;
-
-        public int ItemTradeFilter
+        partial void OnItemTradeFilterChanged(int value)
         {
-            get { return _itemTradeFilter; }
-            set
-            {
-                if (_itemTradeFilter != value)
-                {
-                    _itemTradeFilter = value;
-                    OnPropertyChanged(nameof(ItemTradeFilter));
-                    _itemDataView.Refresh();
-                }
-            }
+            ItemDataView.Refresh();
         }
 
+        [ObservableProperty]
         private int _itemTradeFilterSelectedIndex;
 
-        public int ItemTradeFilterSelectedIndex
-        {
-            get { return _itemTradeFilterSelectedIndex; }
-            set
-            {
-                if (_itemTradeFilterSelectedIndex != value)
-                {
-                    _itemTradeFilterSelectedIndex = value;
-                    OnPropertyChanged(nameof(ItemTradeFilterSelectedIndex));
-
-                }
-            }
-        }
-
+        [ObservableProperty]
         private List<NameID>? _itemTradeFilterItems;
-        public List<NameID>? ItemTradeItemsFilter
-        {
-            get { return _itemTradeFilterItems; }
-            set
-            {
-                if (_itemTradeFilterItems != value)
-                {
-                    _itemTradeFilterItems = value;
-                    OnPropertyChanged(nameof(ItemTradeItemsFilter));
-                }
-            }
-        }
 
         private void PopulateItemTradeItemsFilter()
         {
             try
             {
-                ItemTradeItemsFilter =
+                ItemTradeFilterItems =
                 [
                     new NameID { ID = 2, Name = "All" },
                     new NameID { ID = 1, Name = "Tradeable" },
@@ -633,7 +501,7 @@ namespace RHGMTool.ViewModels
                 ];
 
                 ItemTradeFilterSelectedIndex = 0;
-                OnPropertyChanged(nameof(ItemTradeFilterSelectedIndex));
+                OnPropertyChanged();
             }
             catch (Exception ex)
             {
@@ -641,20 +509,8 @@ namespace RHGMTool.ViewModels
             }
         }
 
-
+        [ObservableProperty]
         private List<NameID>? _socketColorItems;
-        public List<NameID>? SocketColorItems
-        {
-            get { return _socketColorItems; }
-            set
-            {
-                if (_socketColorItems != value)
-                {
-                    _socketColorItems = value;
-                    OnPropertyChanged(nameof(SocketColorItems));
-                }
-            }
-        }
 
         private void PopulateSocketColorItems()
         {
@@ -672,16 +528,11 @@ namespace RHGMTool.ViewModels
 
         #region ItemData
 
+        [ObservableProperty]
         private ItemData? _item;
-        public ItemData? Item
+        partial void OnItemChanged(ItemData? value)
         {
-            get { return _item; }
-            set
-            {
-                _item = value;
-                OnPropertyChanged();
-                UpdateItemData();
-            }
+            UpdateItemData();
         }
 
         // Update UI elements based on Item data
@@ -689,6 +540,7 @@ namespace RHGMTool.ViewModels
         {
             if (Item != null)
             {
+                ItemId = Item.ID;
                 ItemName = Item.Name;
                 ItemBranch = Item.Branch;
                 IconName = Item.IconName;
@@ -721,6 +573,7 @@ namespace RHGMTool.ViewModels
 
 
                 // Raise PropertyChanged for all properties
+                OnPropertyChanged(nameof(ItemId));
                 OnPropertyChanged(nameof(ItemName));
                 OnPropertyChanged(nameof(ItemBranch));
                 OnPropertyChanged(nameof(IconName));
@@ -755,556 +608,181 @@ namespace RHGMTool.ViewModels
 
         }
 
+        [ObservableProperty]
+        private int _slotIndex;
+
+        [ObservableProperty]
+        private int _itemId;
+
+        [ObservableProperty]
         private string? _itemName;
 
-        public string? ItemName
-        {
-            get { return _itemName; }
-            set
-            {
-                if (_itemName != value)
-                {
-                    _itemName = value;
-                    OnPropertyChanged(nameof(ItemName));
-                }
-            }
-        }
+        public string ItemNameColor => _frameService.GetBranchColor(ItemBranch);
 
-        public string? ItemNameColor
-        {
-            get { return _frameService.GetBranchColor(ItemBranch); }
-        }
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ItemNameColor))]
         private int _itemBranch;
 
-        public int ItemBranch
-        {
-            get { return _itemBranch; }
-            set
-            {
-                if (_itemBranch != value)
-                {
-                    _itemBranch = value;
-                    OnPropertyChanged(nameof(ItemBranch));
-                    OnPropertyChanged(nameof(ItemNameColor));
-                }
-            }
-        }
-
+        [ObservableProperty]
         private string? _iconName;
-        public string? IconName
-        {
-            get { return _iconName; }
-            private set
-            {
-                if (_iconName != value)
-                {
-                    _iconName = value;
-                    OnPropertyChanged(nameof(IconName));
-                }
-            }
-        }
 
+        [ObservableProperty]
         private string? _description;
 
-        public string? Description
-        {
-            get { return _description; }
-            set
-            {
-                if (_description != value)
-                {
-                    _description = value;
-                    OnPropertyChanged(nameof(Description));
-                }
-            }
-        }
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(EnchantLevel))]
         private int _type;
-
-        public int Type
+        partial void OnTypeChanged(int value)
         {
-            get { return _type; }
-            set
+            if (value == 1 || value == 2)
             {
-                if (_type != value)
-                {
-                    _type = value;
-                    OnPropertyChanged(nameof(Type));
-
-                    if (_type == 1 || _type == 2)
-                    {
-                        EnchantLevel = 0;
-                        OnPropertyChanged(nameof(EnchantLevel));
-                    }
-                }
+                EnchantLevel = 0;
             }
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(WeightText))]
         private int _weight;
 
-        public int Weight
-        {
-            get { return _weight; }
-            set
-            {
-                if (_weight != value)
-                {
-                    _weight = value;
-                    OnPropertyChanged(nameof(Weight));
-                    OnPropertyChanged(nameof(WeightText));
-                }
-            }
-        }
+        public string WeightText => _frameService.FormatWeight(Weight);
 
-        public string? WeightText
-        {
-            get { return _frameService.FormatWeight(Weight); }
-        }
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(DurabilityText))]
         private int _durability;
 
-        public int Durability
-        {
-            get { return _durability; }
-            set
-            {
-                if (_durability != value)
-                {
-                    _durability = value;
-                    OnPropertyChanged(nameof(Durability));
-                    OnPropertyChanged(nameof(DurabilityText));
-                }
-            }
-        }
-
-        
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(DurabilityText))]
         private int _maxDurability;
 
-        public int MaxDurability
+        partial void OnMaxDurabilityChanged(int value)
         {
-            get { return _maxDurability; }
-            set
-            {
-                if (_maxDurability != value)
-                {
-                    _maxDurability = value;
-                    OnPropertyChanged(nameof(MaxDurability));
-                    OnPropertyChanged(nameof(DurabilityText));
+            if (Durability > value)
+                Durability = value;
 
-                    if (Durability > MaxDurability)
-                        Durability = MaxDurability;
-
-                    if (Durability < MaxDurability)
-                        Durability = MaxDurability;
-                }
-            }
+            if (Durability < value)
+                Durability = value;
         }
 
-        public string? DurabilityText
-        {
-            get { return _frameService.FormatDurability(Durability, MaxDurability); }
-        }
+        public string DurabilityText => _frameService.FormatDurability(Durability, MaxDurability);
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ReconstructionText))]
         private int _reconstruction;
 
-        public int Reconstruction
-        {
-            get { return _reconstruction; }
-            set
-            {
-                if (_reconstruction != value)
-                {
-                    _reconstruction = value;
-                    OnPropertyChanged(nameof(Reconstruction));
-                    OnPropertyChanged(nameof(ReconstructionText));
-                }
-
-            }
-        }
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ReconstructionText))]
         private int _reconstructionMax;
 
-        public int ReconstructionMax
-        {
-            get { return _reconstructionMax; }
-            set
-            {
-                if (_reconstructionMax != value)
-                {
-                    _reconstructionMax = value;
-                    OnPropertyChanged(nameof(ReconstructionMax));
-                    OnPropertyChanged(nameof(ReconstructionText));
-                }
-            }
-        }
+        public string ReconstructionText => _frameService.FormatReconstruction(Reconstruction, ReconstructionMax, ItemTrade);
 
-        public string? ReconstructionText
-        {
-            get { return _frameService.FormatReconstruction(ReconstructionMax, ItemTrade); }
-        }
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RankText))]
         private int _rank = 1;
-        public int Rank
-        {
-            get { return _rank; }
-            set
-            {
-                if (_rank != value)
-                {
-                    _rank = value;
-                    OnPropertyChanged(nameof(Rank));
-                    OnPropertyChanged(nameof(RankText));
-                }
-            }
-        }
 
-        public string? RankText
-        {
-            get { return _frameService.GetRankText(Rank); }
-        }
+        public string RankText => _frameService.GetRankText(Rank);
 
-
+        [ObservableProperty]
         private int _overlapCnt;
 
-        public int OverlapCnt
-        {
-            get { return _overlapCnt; }
-            set
-            {
-                if (_overlapCnt != value)
-                {
-                    _overlapCnt = value;
-                    OnPropertyChanged(nameof(OverlapCnt));
-
-                }
-            }
-        }
-
+        [ObservableProperty]
         private int _enchantLevel;
 
-        public int EnchantLevel
-        {
-            get { return _enchantLevel; }
-            set
-            {
-                if (_enchantLevel != value)
-                {
-                    _enchantLevel = value;
-                    OnPropertyChanged(nameof(EnchantLevel));
-
-                }
-            }
-        }
-
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CategoryText))]
+        [NotifyPropertyChangedFor(nameof(RandomOption))]
         private int _category;
-        public int Category
-        {
-            get { return _category; }
-            private set
-            {
-                if (_category != value)
-                {
-                    _category = value;
-                    OnPropertyChanged(nameof(Category));
-                    OnPropertyChanged(nameof(CategoryText));
-                    OnPropertyChanged(nameof(RandomOption));
-                }
-            }
-        }
 
-        public string? CategoryText
-        {
-            get { return _gmDatabaseService.GetCategoryName(Category); }
-        }
+        public string CategoryText => _gmDatabaseService.GetCategoryName(Category);
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SubCategoryText))]
         private int _subCategory;
-        public int SubCategory
-        {
-            get { return _subCategory; }
-            private set
-            {
-                if (_subCategory != value)
-                {
-                    _subCategory = value;
-                    OnPropertyChanged(nameof(SubCategory));
-                    OnPropertyChanged(nameof(SubCategoryText));
-                }
-            }
-        }
 
-        public string? SubCategoryText
-        {
-            get { return _gmDatabaseService.GetSubCategoryName(SubCategory); }
-        }
+        public string? SubCategoryText => _gmDatabaseService.GetSubCategoryName(SubCategory);
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(MainStatText))]
         private int _defense;
-        public int Defense
-        {
-            get { return _defense; }
-            private set
-            {
-                if (_defense != value)
-                {
-                    _defense = value;
-                    OnPropertyChanged(nameof(Defense));
-                    OnPropertyChanged(nameof(MainStatText));
-                }
-            }
-        }
 
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(MainStatText))]
         private int _magicDefense;
-        public int MagicDefense
-        {
-            get { return _magicDefense; }
-            private set
-            {
-                if (_magicDefense != value)
-                {
-                    _magicDefense = value;
-                    OnPropertyChanged(nameof(MagicDefense));
-                    OnPropertyChanged(nameof(MainStatText));
-                }
-            }
-        }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(MainStatText))]
         private int _weaponID00;
-        public int WeaponID00
-        {
-            get { return _weaponID00; }
-            private set
-            {
-                if (_weaponID00 != value)
-                {
-                    _weaponID00 = value;
-                    OnPropertyChanged(nameof(WeaponID00));
-                    OnPropertyChanged(nameof(MainStatText));
-                }
-            }
-        }
 
-        public string MainStatText
-        {
-            get { return _frameService.FormatMainStat(Type, Defense, MagicDefense, JobClass, WeaponID00); }
-        }
+        public string MainStatText => _frameService.FormatMainStat(Type, Defense, MagicDefense, JobClass, WeaponID00);
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SellValueText))]
         private int _sellPrice;
-        public int SellPrice
-        {
-            get { return _sellPrice; }
-            private set
-            {
-                if (_sellPrice != value)
-                {
-                    _sellPrice = value;
-                    OnPropertyChanged(nameof(SellPrice));
-                    OnPropertyChanged(nameof(SellValueText));
-                }
-            }
-        }
 
-        public string SellValueText
-        {
-            get { return _frameService.FormatSellValue(SellPrice); }
-        }
+        public string SellValueText => _frameService.FormatSellValue(SellPrice);
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RequiredLevelText))]
         private int _requiredLevel;
-        public int RequiredLevel
-        {
-            get { return _requiredLevel; }
-            private set
-            {
-                if (_requiredLevel != value)
-                {
-                    _requiredLevel = value;
-                    OnPropertyChanged(nameof(RequiredLevel));
-                    OnPropertyChanged(nameof(RequiredLevelText));
-                }
-            }
-        }
 
-        public string RequiredLevelText
-        {
-            get { return _frameService.FormatRequiredLevel(RequiredLevel); }
-        }
+        public string RequiredLevelText => _frameService.FormatRequiredLevel(RequiredLevel);
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(ItemTradeText))]
         private int _itemTrade;
-        public int ItemTrade
-        {
-            get { return _itemTrade; }
-            private set
-            {
-                if (_itemTrade != value)
-                {
-                    _itemTrade = value;
-                    OnPropertyChanged(nameof(ItemTrade));
-                    OnPropertyChanged(nameof(ItemTradeText));
-                }
-            }
-        }
 
-        public string? ItemTradeText
-        {
-            get { return _frameService.FormatItemTrade(ItemTrade); }
-        }
+        public string ItemTradeText => _frameService.FormatItemTrade(ItemTrade);
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(JobClassText))]
         private int _jobClass;
-        public int JobClass
-        {
-            get { return _jobClass; }
-            private set
-            {
-                if (_jobClass != value)
-                {
-                    _jobClass = value;
-                    OnPropertyChanged(nameof(JobClass));
-                    OnPropertyChanged(nameof(JobClassText));
-                }
-            }
-        }
 
-        public string? JobClassText
-        {
-            get { return JobClass != 0 ? GetEnumDescription((CharClass)JobClass) : ""; }
-        }
+        public string JobClassText => JobClass != 0 ? GetEnumDescription((CharClass)JobClass) : "";
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SetNameText))]
         private int _setId;
-        public int SetId
-        {
-            get { return _setId; }
-            private set
-            {
-                if (_setId != value)
-                {
-                    _setId = value;
-                    OnPropertyChanged(nameof(SetId));
-                    OnPropertyChanged(nameof(SetNameText));
-                }
-            }
-        }
 
-        public string? SetNameText
-        {
-            get { return _gmDatabaseService.GetSetName(SetId); }
-        }
+        public string SetNameText => _gmDatabaseService.GetSetName(SetId);
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(PetFoodText))]
+        [NotifyPropertyChangedFor(nameof(PetFoodColor))]
         private int _petFood;
-        public int PetFood
-        {
-            get { return _petFood; }
-            private set
-            {
-                if (_petFood != value)
-                {
-                    _petFood = value;
-                    OnPropertyChanged(nameof(PetFood));
-                    OnPropertyChanged(nameof(PetFoodText));
-                    OnPropertyChanged(nameof(PetFoodColor));
-                }
-            }
-        }
 
-        public string? PetFoodText
-        {
-            get { return _frameService.FormatPetFood(PetFood); }
-        }
+        public string PetFoodText => _frameService.FormatPetFood(PetFood);
 
-        public string? PetFoodColor
-        {
-            get { return _frameService.FormatPetFoodColor(PetFood); }
-        }
+        public string PetFoodColor => _frameService.FormatPetFoodColor(PetFood);
 
         #region Fixed Option
 
-        public static string FixedOption
-        {
-            get { return "[Fixed Buff]"; }
-        }
+        public string FixedOption => "[Fixed Buff]";
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FixedOption01Text))]
+        [NotifyPropertyChangedFor(nameof(FixedOption01Color))]
         private int _fixedOption01;
-        public int FixedOption01
-        {
-            get { return _fixedOption01; }
-            set
-            {
-                if (_fixedOption01 != value)
-                {
-                    _fixedOption01 = value;
-                    OnPropertyChanged(nameof(FixedOption01));
-                    OnPropertyChanged(nameof(FixedOption01Text));
-                    OnPropertyChanged(nameof(FixedOption01Color));
-                }
-            }
-        }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FixedOption01Text))]
         private int _fixedOption01Value;
-        public int FixedOption01Value
-        {
-            get { return _fixedOption01Value; }
-            set
-            {
-                if (_fixedOption01Value != value)
-                {
-                    _fixedOption01Value = value;
-                    OnPropertyChanged(nameof(FixedOption01Value));
-                    OnPropertyChanged(nameof(FixedOption01Text));
-                }
-            }
-        }
 
-        public string? FixedOption01Text
-        {
-            get { return _frameService.GetOptionName(FixedOption01, FixedOption01Value); }
-        }
+        public string FixedOption01Text => _frameService.GetOptionName(FixedOption01, FixedOption01Value);
 
-        public string? FixedOption01Color
-        {
-            get { return _frameService.GetColorFromOption(FixedOption01); }
-        }
+        public string FixedOption01Color => _frameService.GetColorFromOption(FixedOption01);
 
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FixedOption02Text))]
+        [NotifyPropertyChangedFor(nameof(FixedOption02Color))]
         private int _fixedOption02;
-        public int FixedOption02
-        {
-            get { return _fixedOption02; }
-            set
-            {
-                if (_fixedOption02 != value)
-                {
-                    _fixedOption02 = value;
-                    OnPropertyChanged(nameof(FixedOption02));
-                    OnPropertyChanged(nameof(FixedOption02Text));
-                    OnPropertyChanged(nameof(FixedOption02Color));
-                }
-            }
-        }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(FixedOption02Text))]
         private int _fixedOption02Value;
-        public int FixedOption02Value
-        {
-            get { return _fixedOption02Value; }
-            set
-            {
-                if (_fixedOption02Value != value)
-                {
-                    _fixedOption02Value = value;
-                    OnPropertyChanged(nameof(FixedOption02Value));
-                    OnPropertyChanged(nameof(FixedOption02Text));
-                }
-            }
-        }
 
-        public string? FixedOption02Text
-        {
-            get { return _frameService.GetOptionName(FixedOption02, FixedOption02Value); }
-        }
+        public string FixedOption02Text => _frameService.GetOptionName(FixedOption02, FixedOption02Value);
 
-        public string? FixedOption02Color
-        {
-            get { return _frameService.GetColorFromOption(FixedOption02); }
-        }
+        public string FixedOption02Color => _frameService.GetColorFromOption(FixedOption02);
 
         #endregion
 
@@ -1312,272 +790,124 @@ namespace RHGMTool.ViewModels
 
         #region Random Option
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RandomOption01MinValue))]
+        [NotifyPropertyChangedFor(nameof(RandomOption01MaxValue))]
+        [NotifyPropertyChangedFor(nameof(RandomOption01Value))]
         private int _optionCount;
-        public int OptionCount
-        {
-            get { return _optionCount; }
-            set
-            {
-                if (_optionCount != value)
-                {
-                    _optionCount = value;
-                    OnPropertyChanged(nameof(OptionCount));
-                    UpdateRandomOption();
-                }
-            }
-        }
 
+
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RandomOption01MinValue))]
+        [NotifyPropertyChangedFor(nameof(RandomOption01MaxValue))]
+        [NotifyPropertyChangedFor(nameof(RandomOption01Value))]
         private int _OptionCountMax;
-        public int OptionCountMax
-        {
-            get { return _OptionCountMax; }
-            set
-            {
 
-                if (_OptionCountMax != value)
-                {
-                    _OptionCountMax = value;
-                    OnPropertyChanged(nameof(OptionCountMax));
-                    UpdateRandomOption();
-                }
+        public string RandomOption => Category == 29 ? $"[Buff]" : "[Random Buff]";
 
-            }
-        }
-
-        public string? RandomOption
-        {
-            get { return Category == 29 ? $"[Buff]" : "[Random Buff]"; }
-        }
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RandomOption01Text))]
+        [NotifyPropertyChangedFor(nameof(RandomOption01Color))]
+        [NotifyPropertyChangedFor(nameof(RandomOption01MinValue))]
+        [NotifyPropertyChangedFor(nameof(RandomOption01MaxValue))]
         private int _randomOption01;
-        public int RandomOption01
+
+        partial void OnRandomOption01Changed(int value)
         {
-            get { return _randomOption01; }
-            set
+            if (!IsLoadingMailData)
             {
-                if (_randomOption01 != value)
-                {
-                    _randomOption01 = value;
-                    OnPropertyChanged(nameof(RandomOption01));
-                    OnPropertyChanged(nameof(RandomOption01Text));
-                    OnPropertyChanged(nameof(RandomOption01Color));
-                    UpdateRandomOption();
-                }
+                (RandomOption01MinValue, RandomOption01MaxValue) = _gmDatabaseService.GetOptionValue(value);
+                RandomOption01Value = CalculateOptionValue(value, RandomOption01Value, RandomOption01MaxValue);
             }
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RandomOption01Text))]
         private int _randomOption01Value;
-        public int RandomOption01Value
-        {
-            get { return _randomOption01Value; }
-            set
-            {
-                if (_randomOption01Value != value)
-                {
-                    _randomOption01Value = value;
-                    OnPropertyChanged(nameof(RandomOption01Value));
-                    OnPropertyChanged(nameof(RandomOption01Text));
-                }
-            }
-        }
 
-        public string? RandomOption01Text
-        {
-            get { return  _frameService.GetOptionName(RandomOption01, RandomOption01Value); }
-        }
+        public string RandomOption01Text => _frameService.GetOptionName(RandomOption01, RandomOption01Value);
 
-        public string? RandomOption01Color
-        {
-            get { return _frameService.GetColorFromOption(RandomOption01); }
-        }
+        public string? RandomOption01Color => _frameService.GetColorFromOption(RandomOption01);
 
+        [ObservableProperty]
         private int _randomOption01MinValue;
-        public int RandomOption01MinValue
-        {
-            get { return _randomOption01MinValue; }
-            set
-            {
-                if (_randomOption01MinValue != value)
-                {
-                    _randomOption01MinValue = value;
-                    OnPropertyChanged(nameof(RandomOption01MinValue));
-                }
-            }
-        }
 
+        [ObservableProperty]
         private int _randomOption01MaxValue;
-        public int RandomOption01MaxValue
+        partial void OnRandomOption01MaxValueChanged(int value)
         {
-            get { return _randomOption01MaxValue; }
-            set
-            {
-                if (_randomOption01MaxValue != value)
-                {
-                    _randomOption01MaxValue = value;
-                    OnPropertyChanged(nameof(RandomOption01MaxValue));
-
-                    if (RandomOption01Value > value)
-                        RandomOption01Value = value;
-                }
-            }
+            if (RandomOption01Value > value)
+                RandomOption01Value = value;
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RandomOption02Text))]
+        [NotifyPropertyChangedFor(nameof(RandomOption02Color))]
+        [NotifyPropertyChangedFor(nameof(RandomOption02MinValue))]
+        [NotifyPropertyChangedFor(nameof(RandomOption02MaxValue))]
         private int _randomOption02;
-        public int RandomOption02
+
+        partial void OnRandomOption02Changed(int value)
         {
-            get { return _randomOption02; }
-            set
+            if (!IsLoadingMailData)
             {
-                if (_randomOption02 != value)
-                {
-                    _randomOption02 = value;
-                    OnPropertyChanged(nameof(RandomOption02));
-                    OnPropertyChanged(nameof(RandomOption02Text));
-                    OnPropertyChanged(nameof(RandomOption02Color));
-                    UpdateRandomOption();
-                }
+                (RandomOption02MinValue, RandomOption02MaxValue) = _gmDatabaseService.GetOptionValue(value);
+                RandomOption02Value = CalculateOptionValue(value, RandomOption02Value, RandomOption02MaxValue);
             }
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RandomOption02Text))]
         private int _randomOption02Value;
-        public int RandomOption02Value
-        {
-            get { return _randomOption02Value; }
-            set
-            {
-                if (_randomOption02Value != value)
-                {
-                    _randomOption02Value = value;
-                    OnPropertyChanged(nameof(RandomOption02Value));
-                    OnPropertyChanged(nameof(RandomOption02Text));
-                }
-            }
-        }
 
-        public string? RandomOption02Text
-        {
-            get { return _frameService.GetOptionName(RandomOption02, RandomOption02Value); }
-        }
+        public string RandomOption02Text => _frameService.GetOptionName(RandomOption02, RandomOption02Value);
 
-        public string? RandomOption02Color
-        {
-            get { return _frameService.GetColorFromOption(RandomOption02); }
-        }
+        public string? RandomOption02Color => _frameService.GetColorFromOption(RandomOption02);
 
+        [ObservableProperty]
         private int _randomOption02MinValue;
-        public int RandomOption02MinValue
-        {
-            get { return _randomOption02MinValue; }
-            set
-            {
-                if (_randomOption02MinValue != value)
-                {
-                    _randomOption02MinValue = value;
-                    OnPropertyChanged(nameof(RandomOption02MinValue));
-                }
-            }
-        }
 
+        [ObservableProperty]
         private int _randomOption02MaxValue;
-        public int RandomOption02MaxValue
+        partial void OnRandomOption02MaxValueChanged(int value)
         {
-            get { return _randomOption02MaxValue; }
-            set
-            {
-                if (_randomOption02MaxValue != value)
-                {
-                    _randomOption02MaxValue = value;
-                    OnPropertyChanged(nameof(RandomOption02MaxValue));
-
-                    if (RandomOption02Value > value)
-                        RandomOption02Value = value;
-                }
-            }
+            if (RandomOption02Value > value)
+                RandomOption02Value = value;
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RandomOption03Text))]
+        [NotifyPropertyChangedFor(nameof(RandomOption03Color))]
+        [NotifyPropertyChangedFor(nameof(RandomOption03MinValue))]
+        [NotifyPropertyChangedFor(nameof(RandomOption03MaxValue))]
         private int _randomOption03;
-        public int RandomOption03
+
+        partial void OnRandomOption03Changed(int value)
         {
-            get { return _randomOption03; }
-            set
+            if (!IsLoadingMailData)
             {
-                if (_randomOption03 != value)
-                {
-                    _randomOption03 = value;
-                    OnPropertyChanged(nameof(RandomOption03));
-                    OnPropertyChanged(nameof(RandomOption03Text));
-                    OnPropertyChanged(nameof(RandomOption03Color));
-                    UpdateRandomOption();
-                }
+                (RandomOption03MinValue, RandomOption03MaxValue) = _gmDatabaseService.GetOptionValue(value);
+                RandomOption03Value = CalculateOptionValue(value, RandomOption03Value, RandomOption03MaxValue);
             }
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(RandomOption03Text))]
         private int _randomOption03Value;
-        public int RandomOption03Value
-        {
-            get { return _randomOption03Value; }
-            set
-            {
-                if (_randomOption03Value != value)
-                {
-                    _randomOption03Value = value;
-                    OnPropertyChanged(nameof(RandomOption03Value));
-                    OnPropertyChanged(nameof(RandomOption03Text));
-                }
-            }
-        }
 
-        public string? RandomOption03Text
-        {
-            get { return _frameService.GetOptionName(RandomOption03, RandomOption03Value); }
-        }
+        public string RandomOption03Text => _frameService.GetOptionName(RandomOption03, RandomOption03Value);
 
-        public string? RandomOption03Color
-        {
-            get { return _frameService.GetColorFromOption(RandomOption03); }
-        }
+        public string? RandomOption03Color => _frameService.GetColorFromOption(RandomOption03);
 
+        [ObservableProperty]
         private int _randomOption03MinValue;
-        public int RandomOption03MinValue
-        {
-            get { return _randomOption03MinValue; }
-            set
-            {
-                if (_randomOption03MinValue != value)
-                {
-                    _randomOption03MinValue = value;
-                    OnPropertyChanged(nameof(RandomOption03MinValue));
-                }
-            }
-        }
 
+        [ObservableProperty]
         private int _randomOption03MaxValue;
-        public int RandomOption03MaxValue
+        partial void OnRandomOption03MaxValueChanged(int value)
         {
-            get { return _randomOption03MaxValue; }
-            set
-            {
-                if (_randomOption03MaxValue != value)
-                {
-                    _randomOption03MaxValue = value;
-                    OnPropertyChanged(nameof(RandomOption03MaxValue));
-
-                    if (RandomOption03Value > value)
-                        RandomOption03Value = value;
-                }
-            }
-        }
-
-
-        private void UpdateRandomOption()
-        {
-            (RandomOption01MinValue, RandomOption01MaxValue) = _gmDatabaseService.GetOptionValue(RandomOption01);
-            (RandomOption02MinValue, RandomOption02MaxValue) = _gmDatabaseService.GetOptionValue(RandomOption02);
-            (RandomOption03MinValue, RandomOption03MaxValue) = _gmDatabaseService.GetOptionValue(RandomOption03);
-
-            RandomOption01Value = CalculateOptionValue(RandomOption01, RandomOption01Value, RandomOption01MaxValue);
-            RandomOption02Value = CalculateOptionValue(RandomOption02, RandomOption02Value, RandomOption02MaxValue);
-            RandomOption03Value = CalculateOptionValue(RandomOption03, RandomOption03Value, RandomOption03MaxValue);
+            if (RandomOption03Value > value)
+                RandomOption03Value = value;
         }
 
         private static int CalculateOptionValue(int option, int value, int maxValue)
@@ -1599,316 +929,125 @@ namespace RHGMTool.ViewModels
 
         #region Socket Option
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SocketOption))]
         private int _socketCount;
-        public int SocketCount
-        {
-            get { return _socketCount; }
-            set
-            {
-                if (_socketCount != value)
-                {
-                    _socketCount = value;
-                    OnPropertyChanged(nameof(SocketCount));
-                    OnPropertyChanged(nameof(SocketOption));
-                    UpdateSocketOption();
-                }
-            }
-        }
 
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SocketOption))]
         private int _socketCountMax;
-        public int SocketCountMax
-        {
-            get { return _socketCountMax; }
-            set
-            {
 
-                if (_socketCountMax != value)
-                {
-                    _socketCountMax = value;
-                    OnPropertyChanged(nameof(SocketCountMax));
-                    UpdateSocketOption();
-                }
+        public string SocketOption => $"Socket: {SocketCount}/{SocketCountMax}";
 
-            }
-        }
-
-        public string? SocketOption
-        {
-            get { return $"Socket: {SocketCount}"; }
-        }
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SocketOption01Text))]
+        [NotifyPropertyChangedFor(nameof(SocketOption01Color))]
         private int _socket01Color;
-        public int Socket01Color
-        {
-            get { return _socket01Color; }
-            set
-            {
-                _socket01Color = value;
-                OnPropertyChanged(nameof(Socket01Color));
-                OnPropertyChanged(nameof(SocketOption01Text));
-                OnPropertyChanged(nameof(SocketOption01Color));
-                UpdateSocketOption();
-            }
-        }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SocketOption02Text))]
+        [NotifyPropertyChangedFor(nameof(SocketOption02Color))]
         private int _socket02Color;
-        public int Socket02Color
-        {
-            get { return _socket02Color; }
-            set
-            {
-                _socket02Color = value;
-                OnPropertyChanged(nameof(Socket02Color));
-                OnPropertyChanged(nameof(SocketOption02Text));
-                OnPropertyChanged(nameof(SocketOption02Color));
-                UpdateSocketOption();
-            }
-        }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SocketOption03Text))]
+        [NotifyPropertyChangedFor(nameof(SocketOption03Color))]
         private int _socket03Color;
-        public int Socket03Color
-        {
-            get { return _socket03Color; }
-            set
-            {
-                _socket03Color = value;
-                OnPropertyChanged(nameof(Socket03Color));
-                OnPropertyChanged(nameof(SocketOption03Text));
-                OnPropertyChanged(nameof(SocketOption03Color));
-                UpdateSocketOption();
-            }
-        }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SocketOption01Text))]
+        [NotifyPropertyChangedFor(nameof(SocketOption01Color))]
+        [NotifyPropertyChangedFor(nameof(SocketOption01MinValue))]
+        [NotifyPropertyChangedFor(nameof(SocketOption01MaxValue))]
         private int _socketOption01;
-        public int SocketOption01
+
+        partial void OnSocketOption01Changed(int value)
         {
-            get { return _socketOption01; }
-            set
-            {
-                if (_socketOption01 != value)
-                {
-                    _socketOption01 = value;
-                    OnPropertyChanged(nameof(SocketOption01));
-                    OnPropertyChanged(nameof(SocketOption01Text));
-                    OnPropertyChanged(nameof(SocketOption01Color));
-                    UpdateSocketOption();
-                }
-            }
+            (SocketOption01MinValue, SocketOption01MaxValue) = _gmDatabaseService.GetOptionValue(value);
+            SocketOption01Value = CalculateOptionValue(value, SocketOption01Value, SocketOption01MaxValue);
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SocketOption01Text))]
         private int _socketOption01Value;
-        public int SocketOption01Value
-        {
-            get { return _socketOption01Value; }
-            set
-            {
-                if (_socketOption01Value != value)
-                {
-                    _socketOption01Value = value;
-                    OnPropertyChanged(nameof(SocketOption01Value));
-                    OnPropertyChanged(nameof(SocketOption01Text));
-                }
-            }
-        }
 
-        public string? SocketOption01Text
-        {
-            get { return SocketOption01 != 0 ? _frameService.GetOptionName(SocketOption01, SocketOption01Value) : _frameService.GetSocketText(Socket01Color); }
-        }
+        public string SocketOption01Text => SocketOption01 != 0 ? _frameService.GetOptionName(SocketOption01, SocketOption01Value) : _frameService.GetSocketText(Socket01Color);
 
-        public string? SocketOption01Color
-        {
-            get { return SocketOption01 != 0 ? _frameService.GetColorFromOption(SocketOption01) : _frameService.GetSocketColor(Socket01Color); }
-        }
+        public string SocketOption01Color => SocketOption01 != 0 ? _frameService.GetColorFromOption(SocketOption01) : _frameService.GetSocketColor(Socket01Color);
 
+        [ObservableProperty]
         private int _socketOption01MinValue;
-        public int SocketOption01MinValue
-        {
-            get { return _socketOption01MinValue; }
-            set
-            {
-                if (_socketOption01MinValue != value)
-                {
-                    _socketOption01MinValue = value;
-                    OnPropertyChanged(nameof(SocketOption01MinValue));
-                }
-            }
-        }
 
+        [ObservableProperty]
         private int _socketOption01MaxValue;
-        public int SocketOption01MaxValue
+        partial void OnSocketOption01MaxValueChanged(int value)
         {
-            get { return _socketOption01MaxValue; }
-            set
-            {
-                if (_socketOption01MaxValue != value)
-                {
-                    _socketOption01MaxValue = value;
-                    OnPropertyChanged(nameof(SocketOption01MaxValue));
-
-                    if (SocketOption01Value > value)
-                        SocketOption01Value = value;
-                }
-            }
+            if (SocketOption01Value > value)
+                SocketOption01Value = value;
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SocketOption02Text))]
+        [NotifyPropertyChangedFor(nameof(SocketOption02Color))]
+        [NotifyPropertyChangedFor(nameof(SocketOption02MinValue))]
+        [NotifyPropertyChangedFor(nameof(SocketOption02MaxValue))]
         private int _socketOption02;
-        public int SocketOption02
+
+        partial void OnSocketOption02Changed(int value)
         {
-            get { return _socketOption02; }
-            set
-            {
-                if (_socketOption02 != value)
-                {
-                    _socketOption02 = value;
-                    OnPropertyChanged(nameof(SocketOption02));
-                    OnPropertyChanged(nameof(SocketOption02Text));
-                    OnPropertyChanged(nameof(SocketOption02Color));
-                    UpdateSocketOption();
-                }
-            }
+            (SocketOption02MinValue, SocketOption02MaxValue) = _gmDatabaseService.GetOptionValue(value);
+            SocketOption02Value = CalculateOptionValue(value, SocketOption02Value, SocketOption02MaxValue);
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SocketOption02Text))]
         private int _socketOption02Value;
-        public int SocketOption02Value
-        {
-            get { return _socketOption02Value; }
-            set
-            {
-                if (_socketOption02Value != value)
-                {
-                    _socketOption02Value = value;
-                    OnPropertyChanged(nameof(SocketOption02Value));
-                    OnPropertyChanged(nameof(SocketOption02Text));
-                }
-            }
-        }
 
-        public string? SocketOption02Text
-        {
-            get { return SocketOption02 != 0 ? _frameService.GetOptionName(SocketOption02, SocketOption02Value) : _frameService.GetSocketText(Socket02Color); }
-        }
+        public string SocketOption02Text => SocketOption02 != 0 ? _frameService.GetOptionName(SocketOption02, SocketOption02Value) : _frameService.GetSocketText(Socket02Color);
 
-        public string? SocketOption02Color
-        {
-            get { return SocketOption02 != 0 ? _frameService.GetColorFromOption(SocketOption02) : _frameService.GetSocketColor(Socket02Color); }
-        }
+        public string? SocketOption02Color => SocketOption02 != 0 ? _frameService.GetColorFromOption(SocketOption02) : _frameService.GetSocketColor(Socket02Color);
 
+        [ObservableProperty]
         private int _socketOption02MinValue;
-        public int SocketOption02MinValue
-        {
-            get { return _socketOption02MinValue; }
-            set
-            {
-                if (_socketOption02MinValue != value)
-                {
-                    _socketOption02MinValue = value;
-                    OnPropertyChanged(nameof(SocketOption02MinValue));
-                }
-            }
-        }
 
+        [ObservableProperty]
         private int _socketOption02MaxValue;
-        public int SocketOption02MaxValue
+        partial void OnSocketOption02MaxValueChanged(int value)
         {
-            get { return _socketOption02MaxValue; }
-            set
-            {
-                if (_socketOption02MaxValue != value)
-                {
-                    _socketOption02MaxValue = value;
-                    OnPropertyChanged(nameof(SocketOption02MaxValue));
-
-                    if (SocketOption02Value > value)
-                        SocketOption02Value = value;
-                }
-            }
+            if (SocketOption02Value > value)
+                SocketOption02Value = value;
         }
 
-
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SocketOption03Text))]
+        [NotifyPropertyChangedFor(nameof(SocketOption03Color))]
+        [NotifyPropertyChangedFor(nameof(SocketOption03MinValue))]
+        [NotifyPropertyChangedFor(nameof(SocketOption03MaxValue))]
         private int _socketOption03;
-        public int SocketOption03
+
+        partial void OnSocketOption03Changed(int value)
         {
-            get { return _socketOption03; }
-            set
-            {
-                if (_socketOption03 != value)
-                {
-                    _socketOption03 = value;
-                    OnPropertyChanged(nameof(SocketOption03));
-                    OnPropertyChanged(nameof(SocketOption03Text));
-                    OnPropertyChanged(nameof(SocketOption03Color));
-                    UpdateSocketOption();
-                }
-            }
+            (SocketOption03MinValue, SocketOption03MaxValue) = _gmDatabaseService.GetOptionValue(value);
+            SocketOption03Value = CalculateOptionValue(value, SocketOption03Value, SocketOption03MaxValue);
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SocketOption03Text))]
         private int _socketOption03Value;
-        public int SocketOption03Value
-        {
-            get { return _socketOption03Value; }
-            set
-            {
-                if (_socketOption03Value != value)
-                {
-                    _socketOption03Value = value;
-                    OnPropertyChanged(nameof(SocketOption03Value));
-                    OnPropertyChanged(nameof(SocketOption03Text));
-                }
-            }
-        }
 
-        public string? SocketOption03Text
-        {
-            get { return SocketOption03 != 0 ? _frameService.GetOptionName(SocketOption03, SocketOption03Value) : _frameService.GetSocketText(Socket03Color); }
-        }
+        public string SocketOption03Text => SocketOption03 != 0 ? _frameService.GetOptionName(SocketOption03, SocketOption03Value) : _frameService.GetSocketText(Socket03Color);
 
-        public string? SocketOption03Color
-        {
-            get { return SocketOption03 != 0 ? _frameService.GetColorFromOption(SocketOption03) : _frameService.GetSocketColor(Socket03Color); }
-        }
+        public string? SocketOption03Color => SocketOption03 != 0 ? _frameService.GetColorFromOption(SocketOption03) : _frameService.GetSocketColor(Socket03Color);
 
+        [ObservableProperty]
         private int _socketOption03MinValue;
-        public int SocketOption03MinValue
-        {
-            get { return _socketOption03MinValue; }
-            set
-            {
-                if (_socketOption03MinValue != value)
-                {
-                    _socketOption03MinValue = value;
-                    OnPropertyChanged(nameof(SocketOption03MinValue));
-                }
-            }
-        }
 
+        [ObservableProperty]
         private int _socketOption03MaxValue;
-        public int SocketOption03MaxValue
+        partial void OnSocketOption03MaxValueChanged(int value)
         {
-            get { return _socketOption03MaxValue; }
-            set
-            {
-                if (_socketOption03MaxValue != value)
-                {
-                    _socketOption03MaxValue = value;
-                    OnPropertyChanged(nameof(SocketOption03MaxValue));
-
-                    if (SocketOption03Value > value)
-                        SocketOption03Value = value;
-                }
-            }
-        }
-
-        private void UpdateSocketOption()
-        {
-            (SocketOption01MinValue, SocketOption01MaxValue) = _gmDatabaseService.GetOptionValue(SocketOption01);
-            (SocketOption02MinValue, SocketOption02MaxValue) = _gmDatabaseService.GetOptionValue(SocketOption02);
-            (SocketOption03MinValue, SocketOption03MaxValue) = _gmDatabaseService.GetOptionValue(SocketOption03);
-
-            SocketOption01Value = CalculateOptionValue(SocketOption01, SocketOption01Value, SocketOption01MaxValue);
-            SocketOption02Value = CalculateOptionValue(SocketOption02, SocketOption02Value, SocketOption02MaxValue);
-            SocketOption03Value = CalculateOptionValue(SocketOption03, SocketOption03Value, SocketOption03MaxValue);
+            if (SocketOption03Value > value)
+                SocketOption03Value = value;
         }
 
         #endregion

@@ -59,9 +59,30 @@ namespace RHGMTool.Views
         {
             if (dataGridView.Items.Count > 0)
             {
-                dataGridView.SelectedItem = dataGridView.Items[0];
+                var frameViewModel = _viewModel;
+
+                int itemId = frameViewModel.ItemId;
+
+                if (itemId != 0)
+                {
+                    // Find the item with the matching ID
+                    var selectedItem = dataGridView.Items.Cast<ItemData>().FirstOrDefault(item => item.ID == itemId);
+
+                    if (selectedItem != null)
+                    {
+                        // Scroll to the selected item
+                        dataGridView.ScrollIntoView(selectedItem);
+
+                        // Set the selected item
+                        dataGridView.SelectedItem = selectedItem;
+                    }
+                }
+                else
+                {
+                    dataGridView.SelectedItem = dataGridView.Items[0];
+                }
+                
             }
         }
-
     }
 }

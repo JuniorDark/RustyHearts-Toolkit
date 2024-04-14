@@ -7,9 +7,14 @@ namespace RHGMTool.Utilities
 {
     public class IconNameToImageSourceConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string? iconName = value as string;
+
+            if (string.IsNullOrEmpty(iconName))
+            {
+                return null;
+            }
 
             string? imagePath = FindImage(iconName);
 
@@ -26,6 +31,7 @@ namespace RHGMTool.Utilities
                 return new BitmapImage(new Uri("/Assets/images/question_icon.png", UriKind.Relative));
             }
         }
+
 
         private static string? FindImage(string? iconName)
         {

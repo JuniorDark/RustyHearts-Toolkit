@@ -5,34 +5,41 @@
             <ContentControl Template="{StaticResource lb_def_box04}">
                 <Grid>
                     <TextBox
+                        x:Name="PART_TextBox"
                         Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}"
                         Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}"
-                        VerticalAlignment="Center"
                         HorizontalAlignment="Left"
-                        VerticalContentAlignment="Center"
+                        VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
                         Background="Transparent"
                         BorderBrush="Transparent"
-                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderThickness="0"
                         CaretBrush="White"
                         FontSize="{TemplateBinding FontSize}"
                         Foreground="Gold"
                         IsHitTestVisible="True"
                         IsReadOnly="{TemplateBinding IsReadOnly}"
                         IsReadOnlyCaretVisible="{TemplateBinding IsReadOnlyCaretVisible}"
-                        Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+                        Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, UpdateSourceTrigger=PropertyChanged}"
                         TextAlignment="{TemplateBinding TextAlignment}"
                         TextDecorations="{TemplateBinding TextDecorations}"
                         TextWrapping="{TemplateBinding TextWrapping}" />
 
                     <!--  Background text  -->
                     <TextBlock
-                        Margin="5,0"
+                        Margin="0,0"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Foreground="Gray"
                         IsHitTestVisible="False"
-                        Text="{TemplateBinding Tag}"
-                        Visibility="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource StringNullOrEmptyToVisibilityConverter}}">
+                        Text="{TemplateBinding Tag}">
+                        <TextBlock.Visibility>
+                            <MultiBinding Converter="{StaticResource TextBoxVisibilityConverter}">
+                                <Binding ElementName="PART_TextBox" Path="IsKeyboardFocused" />
+                                <Binding ElementName="PART_TextBox" Path="Text" />
+                            </MultiBinding>
+                        </TextBlock.Visibility>
                     </TextBlock>
                 </Grid>
             </ContentControl>

@@ -57,7 +57,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel
-                    Margin="150,-60,0,0"
+                    Margin="80,-60,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
@@ -65,16 +65,15 @@
                         x:Name="lbOptionSearch"
                         Width="118"
                         Height="25"
-                        HorizontalAlignment="Left"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Option Search"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbOptionSearch"
-                        Width="145"
+                        Width="200"
                         Height="30"
-                        VerticalAlignment="Top"
                         CaretBrush="White"
                         FontFamily="{StaticResource ArialUnicodeMS}"
                         FontSize="11"
@@ -95,17 +94,20 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Random Option 1"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode1"
                         Width="300"
                         Height="24"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
+                        IsSynchronizedWithCurrentItem="True"
                         ItemsSource="{Binding OptionItems}"
                         SelectedValue="{Binding RandomOption01, Mode=TwoWay}"
                         SelectedValuePath="ID"
@@ -118,13 +120,15 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Random Option 2"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode2"
                         Width="300"
                         Height="24"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
@@ -141,13 +145,15 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Random Option 3"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode3"
                         Width="300"
                         Height="24"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
@@ -170,8 +176,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Random Option Value 1"
-                        FontSize="10"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intOptionValue1"
                         Width="120"
@@ -188,8 +193,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Random Option Value 2"
-                        FontSize="10"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intOptionValue2"
                         Width="120"
@@ -207,7 +211,7 @@
                         HorizontalContentAlignment="Center"
                         Content="Random Option Value 3"
                         FontSize="10"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intOptionValue3"
                         Width="120"
@@ -240,7 +244,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Socket Count"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intSocketCount"
                         Width="120"
@@ -267,7 +271,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Socket Color 1"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketColor1"
                         Width="48"
@@ -291,7 +295,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Socket Color 2"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketColor2"
                         Width="48"
@@ -315,7 +319,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Socket Color 3"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketColor3"
                         Width="48"
@@ -344,7 +348,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Socket Option 1"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketCode1"
                         Width="300"
@@ -352,6 +356,8 @@
                         Margin="0,10,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
                         IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
@@ -368,7 +374,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Socket Option 2"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketCode2"
                         Width="300"
@@ -376,6 +382,8 @@
                         Margin="0,10,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
                         IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
@@ -392,7 +400,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Socket Option 3"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketCode3"
                         Width="300"
@@ -400,6 +408,8 @@
                         Margin="0,10,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
                         IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
@@ -422,8 +432,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Socket Option Value 1"
-                        FontSize="10"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intSocketValue1"
                         Width="120"
@@ -441,8 +450,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Socket Option Value 2"
-                        FontSize="10"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intSocketValue2"
                         Width="120"
@@ -460,8 +468,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Socket Option Value 3"
-                        FontSize="10"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intSocketValue3"
                         Width="120"
@@ -487,7 +494,7 @@
                     VerticalAlignment="Center"
                     HorizontalContentAlignment="Center"
                     Content="Amount"
-                    Foreground="Gold" />
+                    Style="{StaticResource ArialMSWhite}" />
                 <local:IntegerUpDown
                     x:Name="intAmount"
                     Canvas.Left="63"
@@ -535,6 +542,7 @@
                     Height="26"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
+                    Command="{Binding SelectItemCommand}"
                     Content="Add"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -559,7 +567,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Enchant Level"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intEnchantLevel"
                         Width="120"
@@ -578,7 +586,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Rank"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intRank"
                         Width="120"
@@ -602,7 +610,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Durability"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intDurability"
                         Width="120"
@@ -619,7 +627,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Current Attribute"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intReconstruction"
                         Width="120"
@@ -642,7 +650,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Max Durability"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intMaxDurability"
                         Width="120"
@@ -659,7 +667,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Weight"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
                         x:Name="intWeight"
                         Width="120"
@@ -693,7 +701,7 @@
                     VerticalAlignment="Top"
                     DataContext="{Binding}"
                     Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=2}" />
-                <local:GearFrameUserControl
+                <local:GearFrame
                     x:Name="gearFrame"
                     Width="300"
                     Height="600"
@@ -728,6 +736,8 @@
                     MaxWidth="440"
                     MaxHeight="425"
                     Margin="0,-7,0,7"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
                     AutoGenerateColumns="False"
                     BorderBrush="#FF0F0D0A"
                     CanUserAddRows="False"
@@ -754,7 +764,8 @@
                     </DataGrid.Background>
                     <DataGrid.Columns>
                         <DataGridTextColumn
-                            Width="65"
+                            Width="*"
+                            MaxWidth="80"
                             Binding="{Binding ID}"
                             Header="ID"
                             IsReadOnly="True" />
@@ -823,7 +834,7 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel
                     Grid.ColumnSpan="2"
-                    Margin="72,-64,0,0"
+                    Margin="50,-60,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
@@ -831,14 +842,14 @@
                         x:Name="lbSearch"
                         Width="118"
                         Height="25"
-                        HorizontalAlignment="Left"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Search"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbSearch"
-                        Width="145"
+                        Width="200"
                         Height="34"
                         VerticalAlignment="Top"
                         CaretBrush="White"
@@ -861,7 +872,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Item Type"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemType"
                         Width="145"
@@ -869,6 +880,8 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemTypeItemsFilter}"
                         SelectedIndex="{Binding ItemTypeFilterSelectedIndex}"
@@ -885,15 +898,17 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Category"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemCategory"
                         Width="145"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         IsReadOnly="True"
-                        ItemsSource="{Binding CategoryItemsFilter}"
+                        ItemsSource="{Binding CategoryFilterItems}"
                         SelectedIndex="{Binding ItemCategoryFilterSelectedIndex}"
                         SelectedValue="{Binding ItemCategoryFilter, Mode=TwoWay}"
                         SelectedValuePath="ID"
@@ -908,7 +923,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Sub Category"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbSubCategory"
                         Width="145"
@@ -916,6 +931,8 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         IsReadOnly="True"
                         ItemsSource="{Binding SubCategoryItemsFilter}"
                         SelectedIndex="{Binding ItemSubCategoryFilterSelectedIndex}"
@@ -938,7 +955,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Quality"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemBranch"
                         Width="145"
@@ -946,6 +963,8 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         IsReadOnly="True"
                         ItemsSource="{Binding BranchItemsFilter}"
                         SelectedIndex="{Binding ItemBranchFilterSelectedIndex}"
@@ -962,7 +981,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Class"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbJobClass"
                         Width="145"
@@ -970,6 +989,8 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
                         IsReadOnly="True"
                         ItemsSource="{Binding ClassItemsFilter}"
                         SelectedIndex="{Binding ItemClassFilterSelectedIndex}"
@@ -986,7 +1007,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="Item Trade"
-                        Foreground="Gold" />
+                        Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemTrade"
                         Width="145"
@@ -995,7 +1016,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         IsReadOnly="True"
-                        ItemsSource="{Binding ItemTradeItemsFilter}"
+                        ItemsSource="{Binding ItemTradeFilterItems}"
                         SelectedIndex="{Binding ItemTradeFilterSelectedIndex}"
                         SelectedValue="{Binding ItemTradeFilter, Mode=TwoWay}"
                         SelectedValuePath="ID"

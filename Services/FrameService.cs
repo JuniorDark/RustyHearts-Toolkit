@@ -142,9 +142,9 @@ namespace RHGMTool.Services
             return weight > 0 ? $"{weight / 1000.0:0.000}Kg" : "";
         }
 
-        public string FormatReconstruction(int reconstructionMax, int itemTrade)
+        public string FormatReconstruction(int reconstruction, int reconstructionMax, int itemTrade)
         {
-            return reconstructionMax > 0 && itemTrade != 0 ? $"Attribute Item ({reconstructionMax} Times/{reconstructionMax} Times)" : "Bound item (Binds when acquired)";
+            return reconstructionMax > 0 && itemTrade != 0 ? $"Attribute Item ({reconstruction} Times/{reconstructionMax} Times)" : "Bound item (Binds when acquired)";
         }
 
         public string FormatPetFood(int petFood)
