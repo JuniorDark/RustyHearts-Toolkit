@@ -7,11 +7,6 @@ namespace RHGMTool.Views
 {
     public partial class ItemWindow : Window
     {
-        #region Class Variables
-        private readonly int activeItemIndex;
-        private readonly MailTemplateData? templateData = new();
-        #endregion
-
         private readonly FrameViewModel _viewModel;
 
         public ItemWindow()

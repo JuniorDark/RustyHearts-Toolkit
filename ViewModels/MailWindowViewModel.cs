@@ -1,16 +1,17 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using RHGMTool.Messages;
 using RHGMTool.Models;
 using RHGMTool.Views;
 
 namespace RHGMTool.ViewModels
 {
-    public partial class MailWindowViewModel : ObservableRecipient
+    public partial class MailWindowViewModel : ObservableObject, IRecipient<MailItemData>
     {
         public MailWindowViewModel()
         {
-            WeakReferenceMessenger.Default.Register<MailData>(this, OnMailDataReceived);
+            WeakReferenceMessenger.Default.Register<MailItemData>(this);
         }
 
         [RelayCommand]
@@ -30,16 +31,17 @@ namespace RHGMTool.ViewModels
                 // Open the ItemWindow
                 ItemWindow itemWindow = new();
                 // Send the MailData to the ItemWindow
-                WeakReferenceMessenger.Default.Send(mailData);
+                WeakReferenceMessenger.Default.Send(new MailItemData(mailData, ViewModelType.ItemViewModel));
                 itemWindow.ShowDialog();
             }
         }
 
-        private void OnMailDataReceived(object recipient, object? message)
+        public void Receive(MailItemData message)
         {
-            if (message is MailData mailData)
+            if (message.Recipient == ViewModelType.MailWindowViewModel)
             {
-                // Add or update the MailData in the Mail list
+                var mailData = message.Value;
+
                 Mail ??= [];
 
                 var existingMailIndex = Mail.FindIndex(m => m.SlotIndex == mailData.SlotIndex);
@@ -63,7 +65,6 @@ namespace RHGMTool.ViewModels
             UpdateMailData();
         }
 
-
         private void UpdateMailData()
         {
             if (Mail != null)
@@ -72,13 +73,17 @@ namespace RHGMTool.ViewModels
                 ItemIcon2 = Mail.FirstOrDefault(data => data.SlotIndex == 1)?.IconName;
                 ItemIcon3 = Mail.FirstOrDefault(data => data.SlotIndex == 2)?.IconName;
                 ItemIconBranch1 = Mail.FirstOrDefault(data => data.SlotIndex == 0)?.ItemBranch;
-
-                OnPropertyChanged(nameof(ItemIcon1));
-                OnPropertyChanged(nameof(ItemIcon2));
-                OnPropertyChanged(nameof(ItemIcon3));
-                OnPropertyChanged(nameof(ItemIconBranch1));
+                ItemIconBranch2 = Mail.FirstOrDefault(data => data.SlotIndex == 1)?.ItemBranch;
+                ItemIconBranch3 = Mail.FirstOrDefault(data => data.SlotIndex == 2)?.ItemBranch;
+                ItemName1 = Mail.FirstOrDefault(data => data.SlotIndex == 0)?.ItemName;
+                ItemName2 = Mail.FirstOrDefault(data => data.SlotIndex == 1)?.ItemName;
+                ItemName3 = Mail.FirstOrDefault(data => data.SlotIndex == 2)?.ItemName;
+                ItemAmount1 = Mail.FirstOrDefault(data => data.SlotIndex == 0)?.Amount;
+                ItemAmount2 = Mail.FirstOrDefault(data => data.SlotIndex == 1)?.Amount;
+                ItemAmount3 = Mail.FirstOrDefault(data => data.SlotIndex == 2)?.Amount;
             }
         }
+
 
         [ObservableProperty]
         private string? _recipient;
@@ -102,6 +107,24 @@ namespace RHGMTool.ViewModels
         private bool _sendToAll;
 
         [ObservableProperty]
+        private string? _itemName1;
+
+        [ObservableProperty]
+        private string? _itemName2;
+
+        [ObservableProperty]
+        private string? _itemName3;
+
+        [ObservableProperty]
+        private int? _itemAmount1;
+
+        [ObservableProperty]
+        private int? _itemAmount2;
+
+        [ObservableProperty]
+        private int? _itemAmount3;
+
+        [ObservableProperty]
         private string? _itemIcon1;
 
         [ObservableProperty]
@@ -114,10 +137,10 @@ namespace RHGMTool.ViewModels
         private int? _itemIconBranch1;
 
         [ObservableProperty]
-        private int _itemIconBranch2;
+        private int? _itemIconBranch2;
 
         [ObservableProperty]
-        private int _itemIconBranch3;
+        private int? _itemIconBranch3;
 
     }
 }

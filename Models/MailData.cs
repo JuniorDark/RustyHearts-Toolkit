@@ -6,6 +6,7 @@
         public int ItemId { get; set; }
         public int ItemType { get; set; }
         public int ItemBranch { get; set; }
+        public string? ItemName { get; set; }
         public string? IconName { get; set; }
         public int Amount { get; set; }
         public int Durability { get; set; }

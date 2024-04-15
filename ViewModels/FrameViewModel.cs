@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using RHGMTool.Messages;
 using RHGMTool.Models;
 using RHGMTool.Services;
 using System.ComponentModel;
@@ -10,7 +11,7 @@ using static RHGMTool.Models.EnumService;
 
 namespace RHGMTool.ViewModels
 {
-    public partial class FrameViewModel : ObservableObject
+    public partial class FrameViewModel : ObservableObject, IRecipient<MailItemData>
     {
         private readonly ISqLiteDatabaseService _databaseService;
         private readonly GMDatabaseService _gmDatabaseService;
@@ -44,94 +45,11 @@ namespace RHGMTool.ViewModels
             _optionView = CollectionViewSource.GetDefaultView(OptionItems);
             _optionView.Filter = FilterOption;
 
-            WeakReferenceMessenger.Default.Register<MailData>(this, OnMailDataReceived);
+            WeakReferenceMessenger.Default.Register<MailItemData>(this);
         }
 
-        private void OnMailDataReceived(object recipient, object? message)
-        {
-            if (message is MailData mailData)
-            {
-                LoadMailItemData(mailData);
-            }
-        }
-
-        [ObservableProperty]
-        private bool _isLoadingMailData = false;
-
-        private void LoadMailItemData(MailData mailData)
-        {
-            if (mailData != null)
-            {
-                IsLoadingMailData = true;
-
-                SlotIndex = mailData.SlotIndex;
-                ItemId = mailData.ItemId;
-                Type = mailData.ItemType;
-                IconName = mailData.IconName;
-                OverlapCnt = mailData.Amount;
-                Durability = mailData.Durability;
-                MaxDurability = mailData.Durability;
-                EnchantLevel = mailData.EnchantLevel;
-                Rank = mailData.Rank;
-                Weight = mailData.Weight;
-                Reconstruction = mailData.ReconstructionMax;
-                ReconstructionMax = mailData.ReconstructionMax;
-                OverlapCnt = mailData.Amount;
-                RandomOption01 = mailData.RandomOption01;
-                RandomOption02 = mailData.RandomOption02;
-                RandomOption03 = mailData.RandomOption03;
-                RandomOption01Value = mailData.RandomOption01Value;
-                RandomOption02Value = mailData.RandomOption02Value;
-                RandomOption03Value = mailData.RandomOption03Value;
-                SocketCount = mailData.SocketCount;
-                Socket01Color = mailData.Socket01Color;
-                Socket02Color = mailData.Socket02Color;
-                Socket03Color = mailData.Socket03Color;
-                SocketOption01 = mailData.SocketOption01;
-                SocketOption02 = mailData.SocketOption02;
-                SocketOption03 = mailData.SocketOption03;
-                SocketOption01Value = mailData.SocketOption01Value;
-                SocketOption02Value = mailData.SocketOption02Value;
-                SocketOption03Value = mailData.SocketOption03Value;
-
-
-                // Raise PropertyChanged for all properties
-                OnPropertyChanged(nameof(SlotIndex));
-                OnPropertyChanged(nameof(ItemId));
-                OnPropertyChanged(nameof(ItemTypeFilter));
-                OnPropertyChanged(nameof(IconName));
-                OnPropertyChanged(nameof(OverlapCnt));
-                OnPropertyChanged(nameof(Durability));
-                OnPropertyChanged(nameof(MaxDurability));
-                OnPropertyChanged(nameof(EnchantLevel));
-                OnPropertyChanged(nameof(Rank));
-                OnPropertyChanged(nameof(Weight));
-                OnPropertyChanged(nameof(Reconstruction));
-                OnPropertyChanged(nameof(ReconstructionMax));
-                OnPropertyChanged(nameof(OverlapCnt));
-                OnPropertyChanged(nameof(Type));
-                OnPropertyChanged(nameof(RandomOption01));
-                OnPropertyChanged(nameof(RandomOption02));
-                OnPropertyChanged(nameof(RandomOption03));
-                OnPropertyChanged(nameof(RandomOption01Value));
-                OnPropertyChanged(nameof(RandomOption02Value));
-                OnPropertyChanged(nameof(RandomOption03Value));
-                OnPropertyChanged(nameof(SocketCount));
-                OnPropertyChanged(nameof(Socket01Color));
-                OnPropertyChanged(nameof(Socket02Color));
-                OnPropertyChanged(nameof(Socket03Color));
-                OnPropertyChanged(nameof(SocketOption01));
-                OnPropertyChanged(nameof(SocketOption02));
-                OnPropertyChanged(nameof(SocketOption03));
-                OnPropertyChanged(nameof(SocketOption01Value));
-                OnPropertyChanged(nameof(SocketOption02Value));
-                OnPropertyChanged(nameof(SocketOption03Value));
-
-                IsLoadingMailData = false;
-            }
-
-        }
-
+       
+        #region Add Item
         [RelayCommand]
         private void SelectItem(object parameter)
         {
@@ -139,16 +57,18 @@ namespace RHGMTool.ViewModels
             {
                 SlotIndex = SlotIndex,
                 ItemId = ItemId,
+                ItemName = ItemName,
                 ItemType = Type,
+                ItemBranch = ItemBranch,
                 IconName = IconName,
                 Durability = Durability,
-                MaxDurability = Durability,
+                MaxDurability = MaxDurability,
                 EnchantLevel = EnchantLevel,
                 Rank = Rank,
                 Weight = Weight,
-                Reconstruction = ReconstructionMax,
+                Reconstruction = Reconstruction,
                 ReconstructionMax = ReconstructionMax,
-                Amount = OverlapCnt,
+                Amount = Amount,
                 RandomOption01 = RandomOption01,
                 RandomOption02 = RandomOption02,
                 RandomOption03 = RandomOption03,
@@ -167,9 +87,68 @@ namespace RHGMTool.ViewModels
                 SocketOption03Value = SocketOption03Value,
             };
 
-            // Send the MailData directly
-            WeakReferenceMessenger.Default.Send(mailData);
+            // Send the MailData
+            WeakReferenceMessenger.Default.Send(new MailItemData(mailData, ViewModelType.MailWindowViewModel));
+            //WeakReferenceMessenger.Default.Unregister<MailItemData>(this);
+
         }
+        #endregion
+
+        #region Load Item 
+
+        public void Receive(MailItemData message)
+        {
+            if (message.Recipient == ViewModelType.ItemViewModel)
+            {
+                var mailData = message.Value;
+                LoadMailItemData(mailData);
+            }
+
+        }
+
+        [ObservableProperty]
+        private bool _isLoadingMailData = false;
+
+        private void LoadMailItemData(MailData mailData)
+        {
+            if (mailData != null)
+            {
+                IsLoadingMailData = true;
+
+                SlotIndex = mailData.SlotIndex;
+                ItemId = mailData.ItemId;
+                Type = mailData.ItemType;
+                IconName = mailData.IconName;
+                Amount = mailData.Amount;
+                Durability = mailData.Durability;
+                MaxDurability = mailData.MaxDurability;
+                EnchantLevel = mailData.EnchantLevel;
+                Rank = mailData.Rank;
+                Weight = mailData.Weight;
+                Reconstruction = mailData.Reconstruction;
+                ReconstructionMax = mailData.ReconstructionMax;
+                RandomOption01 = mailData.RandomOption01;
+                RandomOption02 = mailData.RandomOption02;
+                RandomOption03 = mailData.RandomOption03;
+                RandomOption01Value = mailData.RandomOption01Value;
+                RandomOption02Value = mailData.RandomOption02Value;
+                RandomOption03Value = mailData.RandomOption03Value;
+                SocketCount = mailData.SocketCount;
+                Socket01Color = mailData.Socket01Color;
+                Socket02Color = mailData.Socket02Color;
+                Socket03Color = mailData.Socket03Color;
+                SocketOption01 = mailData.SocketOption01;
+                SocketOption02 = mailData.SocketOption02;
+                SocketOption03 = mailData.SocketOption03;
+                SocketOption01Value = mailData.SocketOption01Value;
+                SocketOption02Value = mailData.SocketOption02Value;
+                SocketOption03Value = mailData.SocketOption03Value;
+
+                IsLoadingMailData = false;
+            }
+
+        }
+        #endregion
 
         #region Item Data List
 
@@ -347,12 +326,10 @@ namespace RHGMTool.ViewModels
                 if (CategoryFilterItems.Count > 0)
                 {
                     ItemCategoryFilterSelectedIndex = 0;
-                    OnPropertyChanged();
                 }
                 if (SubCategoryItemsFilter.Count > 0)
                 {
                     ItemSubCategoryFilterSelectedIndex = 0;
-                    OnPropertyChanged();
                 }
             }
             catch (Exception ex)
@@ -425,7 +402,6 @@ namespace RHGMTool.ViewModels
                 if (ItemTypeItemsFilter.Count > 0)
                 {
                     ItemTypeFilterSelectedIndex = 0;
-                    OnPropertyChanged();
                 }
             }
             catch (Exception ex)
@@ -446,7 +422,6 @@ namespace RHGMTool.ViewModels
                 if (ClassItemsFilter.Count > 0)
                 {
                     ItemClassFilterSelectedIndex = 0;
-                    OnPropertyChanged();
                 }
             }
             catch (Exception ex)
@@ -467,7 +442,6 @@ namespace RHGMTool.ViewModels
                 if (BranchItemsFilter.Count > 0)
                 {
                     ItemBranchFilterSelectedIndex = 0;
-                    OnPropertyChanged();
                 }
             }
             catch (Exception ex)
@@ -501,7 +475,6 @@ namespace RHGMTool.ViewModels
                 ];
 
                 ItemTradeFilterSelectedIndex = 0;
-                OnPropertyChanged();
             }
             catch (Exception ex)
             {
@@ -551,7 +524,7 @@ namespace RHGMTool.ViewModels
                 Weight = Item.Weight;
                 Reconstruction = Item.ReconstructionMax;
                 ReconstructionMax = Item.ReconstructionMax;
-                OverlapCnt = Item.OverlapCnt;
+                OverlapCnt = OverlapCnt == 0 ? 1: Item.OverlapCnt;
                 Type = Item.Type;
                 Category = Item.Category;
                 SubCategory = Item.SubCategory;
@@ -570,39 +543,6 @@ namespace RHGMTool.ViewModels
                 OptionCountMax = Item.Type != 1 ? Item.OptionCountMax : (Item.Type == 1 && Item.Category == 29 ? 1 : 0);
                 SocketCountMax = Item.SocketCountMax;
                 SocketCount = Item.SocketCountMax;
-
-
-                // Raise PropertyChanged for all properties
-                OnPropertyChanged(nameof(ItemId));
-                OnPropertyChanged(nameof(ItemName));
-                OnPropertyChanged(nameof(ItemBranch));
-                OnPropertyChanged(nameof(IconName));
-                OnPropertyChanged(nameof(Description));
-                OnPropertyChanged(nameof(ItemTrade));
-                OnPropertyChanged(nameof(Durability));
-                OnPropertyChanged(nameof(MaxDurability));
-                OnPropertyChanged(nameof(Weight));
-                OnPropertyChanged(nameof(Reconstruction));
-                OnPropertyChanged(nameof(ReconstructionMax));
-                OnPropertyChanged(nameof(OverlapCnt));
-                OnPropertyChanged(nameof(Type));
-                OnPropertyChanged(nameof(Category));
-                OnPropertyChanged(nameof(SubCategory));
-                OnPropertyChanged(nameof(JobClass));
-                OnPropertyChanged(nameof(Defense));
-                OnPropertyChanged(nameof(MagicDefense));
-                OnPropertyChanged(nameof(WeaponID00));
-                OnPropertyChanged(nameof(SellPrice));
-                OnPropertyChanged(nameof(RequiredLevel));
-                OnPropertyChanged(nameof(SetId));
-                OnPropertyChanged(nameof(PetFood));
-                OnPropertyChanged(nameof(FixedOption01));
-                OnPropertyChanged(nameof(FixedOption01Value));
-                OnPropertyChanged(nameof(FixedOption02));
-                OnPropertyChanged(nameof(FixedOption02Value));
-                OnPropertyChanged(nameof(OptionCountMax));
-                OnPropertyChanged(nameof(SocketCountMax));
-                OnPropertyChanged(nameof(SocketCount));
 
             }
 
@@ -628,6 +568,9 @@ namespace RHGMTool.ViewModels
 
         [ObservableProperty]
         private string? _description;
+
+        [ObservableProperty]
+        private int _amount = 1;
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(EnchantLevel))]
@@ -814,11 +757,8 @@ namespace RHGMTool.ViewModels
 
         partial void OnRandomOption01Changed(int value)
         {
-            if (!IsLoadingMailData)
-            {
-                (RandomOption01MinValue, RandomOption01MaxValue) = _gmDatabaseService.GetOptionValue(value);
-                RandomOption01Value = CalculateOptionValue(value, RandomOption01Value, RandomOption01MaxValue);
-            }
+            (RandomOption01MinValue, RandomOption01MaxValue) = _gmDatabaseService.GetOptionValue(value);
+            RandomOption01Value = CalculateOptionValue(value, RandomOption01Value, RandomOption01MaxValue);
         }
 
         [ObservableProperty]
@@ -849,11 +789,8 @@ namespace RHGMTool.ViewModels
 
         partial void OnRandomOption02Changed(int value)
         {
-            if (!IsLoadingMailData)
-            {
-                (RandomOption02MinValue, RandomOption02MaxValue) = _gmDatabaseService.GetOptionValue(value);
-                RandomOption02Value = CalculateOptionValue(value, RandomOption02Value, RandomOption02MaxValue);
-            }
+            (RandomOption02MinValue, RandomOption02MaxValue) = _gmDatabaseService.GetOptionValue(value);
+            RandomOption02Value = CalculateOptionValue(value, RandomOption02Value, RandomOption02MaxValue);
         }
 
         [ObservableProperty]
@@ -884,11 +821,8 @@ namespace RHGMTool.ViewModels
 
         partial void OnRandomOption03Changed(int value)
         {
-            if (!IsLoadingMailData)
-            {
-                (RandomOption03MinValue, RandomOption03MaxValue) = _gmDatabaseService.GetOptionValue(value);
-                RandomOption03Value = CalculateOptionValue(value, RandomOption03Value, RandomOption03MaxValue);
-            }
+            (RandomOption03MinValue, RandomOption03MaxValue) = _gmDatabaseService.GetOptionValue(value);
+            RandomOption03Value = CalculateOptionValue(value, RandomOption03Value, RandomOption03MaxValue);
         }
 
         [ObservableProperty]

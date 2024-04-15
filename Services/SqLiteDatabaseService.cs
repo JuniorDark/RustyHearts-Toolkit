@@ -6,6 +6,13 @@ namespace RHGMTool.Services
 {
     public class SqLiteDatabaseService : ISqLiteDatabaseService
     {
+        private readonly string _dbFilePath;
+
+        public SqLiteDatabaseService()
+        {
+            _dbFilePath = GetDatabaseFilePath();
+        }
+
         public static string GetDatabaseFilePath()
         {
             string resourcesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
@@ -14,14 +21,12 @@ namespace RHGMTool.Services
 
         public SQLiteConnection OpenSQLiteConnection()
         {
-            string dbFilePath = GetDatabaseFilePath();
-
-            if (!File.Exists(dbFilePath))
+            if (!File.Exists(_dbFilePath))
             {
-                throw new FileNotFoundException($"Database file ({Path.GetFileName(dbFilePath)}) not found in the expected location. Please ensure to create the gmdb and place it in the Resources folder.");
+                throw new FileNotFoundException($"Database file not found...");
             }
 
-            var connection = new SQLiteConnection($"Data Source={dbFilePath};Version=3;");
+            var connection = new SQLiteConnection($"Data Source={_dbFilePath};Version=3;");
             connection.Open();
             return connection;
         }

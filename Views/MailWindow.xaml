@@ -260,42 +260,8 @@
                 <!--  Cursor change  -->
                 <Image.Cursor>Help</Image.Cursor>
             </Image>
-            <Button
-                Width="44"
-                Height="44"
-                Margin="300,350,286,206"
-                Command="{Binding OpenItemWindowCommand}"
-                CommandParameter="0"
-                Style="{StaticResource ImageButtonStyle}">
-                <Button.Content>
-                    <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
-                </Button.Content>
-            </Button>
-            <Button
-                Width="44"
-                Height="44"
-                Margin="350,350,236,206"
-                Command="{Binding OpenItemWindowCommand}"
-                CommandParameter="1"
-                Style="{StaticResource ImageButtonStyle}">
-                <Button.Content>
-                    <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
-                </Button.Content>
-            </Button>
 
-            <Button
-                Width="44"
-                Height="44"
-                Margin="411,350,175,206"
-                Command="{Binding OpenItemWindowCommand}"
-                CommandParameter="2"
-                Style="{StaticResource ImageButtonStyle}">
-                <Button.Content>
-                    <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
-                </Button.Content>
-            </Button>
-
-
+            <!--  Item Slots  -->
             <Grid
                 Width="140"
                 Height="50"
@@ -310,126 +276,149 @@
                 </Grid.ColumnDefinitions>
 
                 <!--  Images in column 0  -->
-                <Image
-                    x:Name="imgItemIconEmpty1"
-                    VerticalAlignment="Top"
-                    Source="/Assets/images/lb_ac_icon.png"
-                    Stretch="None"
-                    Tag="0" />
+                <Button
+                    Grid.Column="0"
+                    Width="44"
+                    Height="44"
+                    Command="{Binding OpenItemWindowCommand}"
+                    CommandParameter="0"
+                    Style="{StaticResource ImageButtonStyle}">
+                    <Button.Content>
+                        <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
+                    </Button.Content>
+                    <Button.ToolTip>
+                        <ToolTip>
+                            <TextBlock Text="{Binding ItemName1}" />
+                        </ToolTip>
+                    </Button.ToolTip>
+                    <Button.Cursor>Help</Button.Cursor>
+                </Button>
                 <Image
                     x:Name="imgItemIcon1"
+                    Grid.Column="0"
                     Width="36"
                     Height="36"
-                    Margin="0,4,0,0"
+                    Margin="0,6,0,0"
                     VerticalAlignment="Top"
+                    IsHitTestVisible="False"
                     Source="{Binding ItemIcon1, Converter={StaticResource IconNameToImageSourceConverter}}"
-                    Stretch="Fill">
-                    <Image.ToolTip>
-                        <ToolTip>
-                            <TextBlock Text="Help Tooltip Content" />
-                        </ToolTip>
-                    </Image.ToolTip>
-                    <Image.Cursor>Help</Image.Cursor>
-                </Image>
+                    Stretch="Fill" />
                 <Image
                     x:Name="imgItemIconBranch1"
-                    Width="36"
-                    Height="36"
+                    Grid.Column="0"
+                    Width="42"
+                    Height="42"
                     Margin="0,4,0,0"
                     VerticalAlignment="Top"
+                    IsHitTestVisible="False"
                     Source="{Binding ItemIconBranch1, Converter={StaticResource BranchToImageSourceConverter}}"
-                    Stretch="Fill">
-                    <Image.ToolTip>
-                        <ToolTip>
-                            <TextBlock Text="Help Tooltip Content" />
-                        </ToolTip>
-                    </Image.ToolTip>
-                    <Image.Cursor>Help</Image.Cursor>
-                </Image>
-
-                <!--  Images in column 1  -->
-                <Image
-                    x:Name="imgItemIconEmpty2"
-                    Grid.Column="1"
+                    Stretch="Fill" />
+                <TextBlock
+                    x:Name="tbItemAmount1"
+                    Grid.Column="0"
+                    Width="20"
+                    Margin="18,26,6,0"
                     VerticalAlignment="Top"
-                    MouseLeftButtonDown="OpenItemWindowCommandExecute"
-                    Source="/Assets/images/lb_ac_icon.png"
-                    Stretch="None"
-                    Tag="1" />
+                    d:Text="999"
+                    Foreground="White"
+                    IsHitTestVisible="False"
+                    Text="{Binding ItemAmount1}" />
+                <!--  Images in column 1  -->
+                <Button
+                    Grid.Column="1"
+                    Width="44"
+                    Height="44"
+                    Command="{Binding OpenItemWindowCommand}"
+                    CommandParameter="1"
+                    Style="{StaticResource ImageButtonStyle}">
+                    <Button.Content>
+                        <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
+                    </Button.Content>
+                    <Button.ToolTip>
+                        <ToolTip>
+                            <TextBlock Text="{Binding ItemName2}" />
+                        </ToolTip>
+                    </Button.ToolTip>
+                    <Button.Cursor>Help</Button.Cursor>
+                </Button>
                 <Image
                     x:Name="imgItemIcon2"
                     Grid.Column="1"
                     Width="36"
                     Height="36"
-                    Margin="0,4,0,0"
+                    Margin="0,6,0,0"
                     VerticalAlignment="Top"
+                    IsHitTestVisible="False"
                     Source="{Binding ItemIcon2, Converter={StaticResource IconNameToImageSourceConverter}}"
-                    Stretch="Fill">
-                    <Image.ToolTip>
-                        <ToolTip>
-                            <TextBlock Text="Help Tooltip Content" />
-                        </ToolTip>
-                    </Image.ToolTip>
-                    <Image.Cursor>Help</Image.Cursor>
-                </Image>
+                    Stretch="Fill" />
                 <Image
                     x:Name="imgItemIconBranch2"
                     Grid.Column="1"
-                    Width="36"
-                    Height="36"
+                    Width="42"
+                    Height="42"
                     Margin="0,4,0,0"
                     VerticalAlignment="Top"
-                    Source="{Binding ItemIconBranch2, Converter={StaticResource IconNameToImageSourceConverter}}"
-                    Stretch="Fill">
-                    <Image.ToolTip>
-                        <ToolTip>
-                            <TextBlock Text="Help Tooltip Content" />
-                        </ToolTip>
-                    </Image.ToolTip>
-                    <Image.Cursor>Help</Image.Cursor>
-                </Image>
-
-                <!--  Images in column 2  -->
-                <Image
-                    x:Name="imgItemIconEmpty3"
-                    Grid.Column="2"
+                    IsHitTestVisible="False"
+                    Source="{Binding ItemIconBranch2, Converter={StaticResource BranchToImageSourceConverter}}"
+                    Stretch="Fill" />
+                <TextBlock
+                    x:Name="tbItemAmount2"
+                    Grid.Column="1"
+                    Width="20"
+                    Margin="18,26,6,0"
                     VerticalAlignment="Top"
-                    MouseLeftButtonDown="OpenItemWindowCommandExecute"
-                    Source="/Assets/images/lb_ac_icon.png"
-                    Stretch="None"
-                    Tag="2" />
+                    d:Text="999"
+                    Foreground="White"
+                    IsHitTestVisible="False"
+                    Text="{Binding ItemAmount2}" />
+                <!--  Images in column 2  -->
+                <Button
+                    Grid.Column="2"
+                    Width="44"
+                    Height="44"
+                    Command="{Binding OpenItemWindowCommand}"
+                    CommandParameter="2"
+                    Style="{StaticResource ImageButtonStyle}">
+                    <Button.Content>
+                        <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
+                    </Button.Content>
+                    <Button.ToolTip>
+                        <ToolTip>
+                            <TextBlock Text="{Binding ItemName3}" />
+                        </ToolTip>
+                    </Button.ToolTip>
+                    <Button.Cursor>Help</Button.Cursor>
+                </Button>
                 <Image
                     x:Name="imgItemIcon3"
                     Grid.Column="2"
                     Width="36"
                     Height="36"
-                    Margin="0,4,0,0"
+                    Margin="0,6,0,0"
                     VerticalAlignment="Top"
+                    IsHitTestVisible="False"
                     Source="{Binding ItemIcon3, Converter={StaticResource IconNameToImageSourceConverter}}"
-                    Stretch="Fill">
-                    <Image.ToolTip>
-                        <ToolTip>
-                            <TextBlock Text="Help Tooltip Content" />
-                        </ToolTip>
-                    </Image.ToolTip>
-                    <Image.Cursor>Help</Image.Cursor>
-                </Image>
+                    Stretch="Fill" />
                 <Image
                     x:Name="imgItemIconBranch3"
                     Grid.Column="2"
-                    Width="36"
-                    Height="36"
+                    Width="42"
+                    Height="42"
                     Margin="0,4,0,0"
                     VerticalAlignment="Top"
-                    Source="{Binding ItemIconBranch3, Converter={StaticResource IconNameToImageSourceConverter}}"
-                    Stretch="Fill">
-                    <Image.ToolTip>
-                        <ToolTip>
-                            <TextBlock Text="Help Tooltip Content" />
-                        </ToolTip>
-                    </Image.ToolTip>
-                    <Image.Cursor>Help</Image.Cursor>
-                </Image>
+                    IsHitTestVisible="False"
+                    Source="{Binding ItemIconBranch3, Converter={StaticResource BranchToImageSourceConverter}}"
+                    Stretch="Fill" />
+                <TextBlock
+                    x:Name="tbItemAmount3"
+                    Grid.Column="2"
+                    Width="20"
+                    Margin="18,26,6,0"
+                    VerticalAlignment="Top"
+                    d:Text="999"
+                    Foreground="White"
+                    IsHitTestVisible="False"
+                    Text="{Binding ItemAmount3}" />
             </Grid>
 
             <Label

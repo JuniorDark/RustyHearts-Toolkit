@@ -107,7 +107,6 @@
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        IsSynchronizedWithCurrentItem="True"
                         ItemsSource="{Binding OptionItems}"
                         SelectedValue="{Binding RandomOption01, Mode=TwoWay}"
                         SelectedValuePath="ID"
@@ -181,10 +180,10 @@
                         x:Name="intOptionValue1"
                         Width="120"
                         Height="26"
-                        Increment="{Binding RandomOption01MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        Increment="{Binding RandomOption01MaxValue, Converter={StaticResource IncrementConverter}}"
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
-                        Maximum="{Binding RandomOption01MaxValue, Mode=TwoWay}"
-                        Minimum="{Binding RandomOption01MinValue, Mode=TwoWay}"
+                        Maximum="{Binding RandomOption01MaxValue}"
+                        Minimum="{Binding RandomOption01MinValue}"
                         Value="{Binding RandomOption01Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbRandomOptionValue2"
@@ -198,10 +197,10 @@
                         x:Name="intOptionValue2"
                         Width="120"
                         Height="26"
-                        Increment="{Binding RandomOption02MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        Increment="{Binding RandomOption02MaxValue, Converter={StaticResource IncrementConverter}}"
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
-                        Maximum="{Binding RandomOption02MaxValue, Mode=TwoWay}"
-                        Minimum="{Binding RandomOption02MinValue, Mode=TwoWay}"
+                        Maximum="{Binding RandomOption02MaxValue}"
+                        Minimum="{Binding RandomOption02MinValue}"
                         Value="{Binding RandomOption02Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbRandomOptionValue3"
@@ -216,10 +215,10 @@
                         x:Name="intOptionValue3"
                         Width="120"
                         Height="26"
-                        Increment="{Binding RandomOption03MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        Increment="{Binding RandomOption03MaxValue, Converter={StaticResource IncrementConverter}}"
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
-                        Maximum="{Binding RandomOption03MaxValue, Mode=TwoWay}"
-                        Minimum="{Binding RandomOption03MinValue, Mode=TwoWay}"
+                        Maximum="{Binding RandomOption03MaxValue}"
+                        Minimum="{Binding RandomOption03MinValue}"
                         Value="{Binding RandomOption03Value, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
@@ -497,22 +496,22 @@
                     Style="{StaticResource ArialMSWhite}" />
                 <local:IntegerUpDown
                     x:Name="intAmount"
-                    Canvas.Left="63"
+                    Canvas.Left="57"
                     Canvas.Top="51"
                     Width="90"
                     Height="26"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Increment="1"
-                    Maximum="{Binding OverlapCnt, Mode=TwoWay}"
+                    Maximum="{Binding OverlapCnt}"
                     Minimum="1"
-                    Value="1" />
+                    Value="{Binding Amount, Mode=TwoWay}" />
                 <TextBlock
                     x:Name="lbSelectedItem"
-                    Canvas.Left="72"
-                    Canvas.Top="17"
+                    Canvas.Left="63"
+                    Canvas.Top="18"
                     Width="Auto"
-                    HorizontalAlignment="Center"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     d:Text="Item Name"
                     Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}"
@@ -536,8 +535,8 @@
                     Stretch="Fill" />
                 <Button
                     x:Name="btnSelectItem"
-                    Canvas.Left="175"
-                    Canvas.Top="48"
+                    Canvas.Left="337"
+                    Canvas.Top="50"
                     Width="120"
                     Height="26"
                     HorizontalAlignment="Left"
@@ -546,6 +545,29 @@
                     Content="Add"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
+                <Label
+                    x:Name="lbSlot"
+                    Canvas.Left="162"
+                    Canvas.Top="50"
+                    Width="54"
+                    Height="26"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Content="Slot"
+                    Style="{StaticResource ArialMSWhite}" />
+                <local:IntegerUpDown
+                    x:Name="intItemSlot"
+                    Canvas.Left="216"
+                    Canvas.Top="51"
+                    Width="90"
+                    Height="26"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Increment="1"
+                    Maximum="2"
+                    Minimum="0"
+                    Value="{Binding SlotIndex, Mode=TwoWay}" />
             </Canvas>
 
             <Grid Margin="825,33,0,556" HorizontalAlignment="Left">
