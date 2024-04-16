@@ -71,10 +71,10 @@ namespace RHGMTool.Services
 
         public string GetOptionName(int option, int optionValue)
         {
-            string fixedOption = _gmDatabaseService.GetOptionName(option);
+            string optionName = _gmDatabaseService.GetOptionName(option);
             (int secTime, float value, int maxValue) = _gmDatabaseService.GetOptionValues(option);
 
-            string formattedOption = FormatNameID(fixedOption, $"{optionValue}", $"{secTime}", $"{value}", maxValue);
+            string formattedOption = FormatNameID(optionName, $"{optionValue}", $"{secTime}", $"{value}", maxValue);
 
             return option != 0 ? formattedOption : "No Buff";
         }

@@ -13,11 +13,11 @@ namespace RHGMTool.Utilities
             int maxValue = System.Convert.ToInt32(value);
 
             if (maxValue >= 10000)
-                return 1000;
-            else if (maxValue >= 1000)
                 return 100;
-            else if (maxValue >= 100)
+            else if (maxValue >= 1000)
                 return 10;
+            else if (maxValue >= 100)
+                return 1;
             else
                 return 1;
         }

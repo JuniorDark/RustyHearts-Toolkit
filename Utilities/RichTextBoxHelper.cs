@@ -23,7 +23,7 @@ namespace RHGMTool.Utilities
 
         private static void OnFormattedTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is RichTextBox richTextBox)
+            if (d is RichTextBox richTextBox && e.NewValue != null)
             {
                 if (e.NewValue is string formattedText)
                 {
@@ -35,6 +35,7 @@ namespace RHGMTool.Utilities
                 }
             }
         }
+
 
         private static FlowDocument FormatRichTextBoxDescription(string description)
         {

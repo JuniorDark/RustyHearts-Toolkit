@@ -11,6 +11,7 @@
     <local:GreaterOrEqualToVisibilityConverter x:Key="GreaterOrEqualToVisibilityConverter" />
     <local:IconNameToImageSourceConverter x:Key="IconNameToImageSourceConverter" />
     <local:IncrementConverter x:Key="IncrementConverter" />
+    <local:ItemIdToSelectedItemConverter x:Key="ItemIdToSelectedItemConverter" />
     <local:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter" />
     <local:StringToBrushConverter x:Key="StringToBrushConverter" />
     <local:TextBoxVisibilityConverter x:Key="TextBoxVisibilityConverter" />

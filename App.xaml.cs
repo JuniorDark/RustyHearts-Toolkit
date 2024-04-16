@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RHGMTool.Services;
+using RHGMTool.ViewModels;
+using RHGMTool.Views;
 using System.Windows;
 
 namespace RHGMTool
@@ -16,12 +18,22 @@ namespace RHGMTool
             _serviceProvider = services.BuildServiceProvider();
         }
 
-        private void ConfigureServices(IServiceCollection services)
+        private static void ConfigureServices(IServiceCollection services)
         {
             // Register your services
             services.AddSingleton<ISqLiteDatabaseService, SqLiteDatabaseService>();
             services.AddSingleton<IGMDatabaseService, GMDatabaseService>();
-            services.AddSingleton<MainWindow>();
+            services.AddSingleton(ServiceProvider => new MainWindow
+            {
+                DataContext = ServiceProvider.GetRequiredService<MainWindowViewModel>()
+            });
+            services.AddSingleton(ServiceProvider => new ItemWindow
+            {
+                DataContext = ServiceProvider.GetRequiredService<ItemWindowViewModel>()
+            });
+            services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<MailWindowViewModel>();
+            services.AddSingleton<ItemWindowViewModel>();
             // Register your view models, services, etc. here
             // services.AddTransient<IMyService, MyService>();
             // services.AddScoped<IMyViewModel, MyViewModel>();

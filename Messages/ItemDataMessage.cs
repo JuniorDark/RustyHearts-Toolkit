@@ -3,14 +3,14 @@ using RHGMTool.Models;
 
 namespace RHGMTool.Messages
 {
-    public class MailItemData(MailData value, ViewModelType recipient) : ValueChangedMessage<MailData>(value)
+    public class ItemDataMessage(ItemData value, ViewModelType recipient) : ValueChangedMessage<ItemData>(value)
     {
         public ViewModelType Recipient { get; } = recipient;
     }
 
     public enum ViewModelType
     {
-        ItemViewModel,
+        ItemWindowViewModel,
         MailWindowViewModel
     }
 }

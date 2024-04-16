@@ -8,12 +8,12 @@ namespace RHGMTool.Views
     /// </summary>
     public partial class ItemFrame : UserControl
     {
-        private readonly FrameViewModel? _viewModel;
+        private readonly ItemWindowViewModel? _viewModel;
 
         public ItemFrame()
         {
             InitializeComponent();
-            _viewModel = new FrameViewModel();
+            _viewModel = new ItemWindowViewModel();
             DataContext = _viewModel;
         }
 

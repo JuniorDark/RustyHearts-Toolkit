@@ -20,9 +20,7 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Window.DataContext>
-        <vm:MainViewModel />
-    </Window.DataContext>
+
 
     <ContentControl Template="{StaticResource box_red02}">
         <Grid Margin="-70,-70,-65,-60">

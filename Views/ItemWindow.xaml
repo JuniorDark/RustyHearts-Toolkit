@@ -20,7 +20,7 @@
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.DataContext>
-        <vm:FrameViewModel />
+        <vm:ItemWindowViewModel />
     </Window.DataContext>
     <Window.Resources>
         <CollectionViewSource x:Key="ItemDataViewSource" Source="{Binding ItemDataItems}" />
@@ -80,7 +80,7 @@
                         Foreground="Gold"
                         Tag="Option Name/ID"
                         Template="{StaticResource lb_textbox}"
-                        Text="{Binding OptionSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding OptionSearch, Mode=TwoWay}" />
                 </StackPanel>
                 <!--  left Column  -->
                 <StackPanel
@@ -252,7 +252,7 @@
                         Increment="1"
                         Maximum="{Binding SocketCountMax, Mode=TwoWay}"
                         Minimum="0"
-                        Value="{Binding SocketCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding SocketCount, Mode=TwoWay}" />
                 </StackPanel>
                 <!--  left Column  -->
                 <StackPanel
@@ -441,7 +441,7 @@
                         IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         Maximum="{Binding SocketOption01MaxValue, Mode=TwoWay}"
                         Minimum="{Binding SocketOption01MinValue, Mode=TwoWay}"
-                        Value="{Binding SocketOption01Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding SocketOption01Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbSocketOptionValue2"
                         Width="120"
@@ -600,7 +600,7 @@
                         IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="20"
                         Minimum="0"
-                        Value="{Binding EnchantLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding EnchantLevel, Mode=TwoWay}" />
                     <Label
                         x:Name="lbRank"
                         Width="120"
@@ -639,8 +639,8 @@
                         Height="26"
                         Increment="{Binding MaxDurability, Converter={StaticResource IncrementConverter}}"
                         IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
-                        Maximum="{Binding MaxDurability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                        Minimum="1"
+                        Maximum="{Binding MaxDurability}"
+                        Minimum="100"
                         Value="{Binding Durability, Mode=TwoWay}" />
                     <Label
                         x:Name="lbCurrentAttribute"
@@ -656,7 +656,7 @@
                         Height="26"
                         Increment="1"
                         IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
-                        Maximum="{Binding ReconstructionMax, Mode=TwoWay}"
+                        Maximum="{Binding ReconstructionMax}"
                         Minimum="0"
                         Value="{Binding Reconstruction, Mode=TwoWay}" />
                 </StackPanel>
@@ -681,7 +681,7 @@
                         IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="100000"
                         Minimum="100"
-                        Value="{Binding MaxDurability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding MaxDurability, Mode=TwoWay}" />
                     <Label
                         x:Name="lbWeight"
                         Width="120"
@@ -878,7 +878,7 @@
                         Foreground="Gold"
                         Tag="Search Name/ID"
                         Template="{StaticResource lb_textbox}"
-                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding SearchText, Mode=TwoWay}" />
                 </StackPanel>
                 <!--  Left Column  -->
                 <StackPanel

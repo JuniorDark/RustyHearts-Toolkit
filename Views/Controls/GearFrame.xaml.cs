@@ -5,12 +5,12 @@ namespace RHGMTool.Views
 {
     public partial class GearFrame : UserControl
     {
-        private readonly FrameViewModel? _viewModel;
+        private readonly ItemWindowViewModel? _viewModel;
 
         public GearFrame()
         {
             InitializeComponent();
-            _viewModel = new FrameViewModel();
+            _viewModel = new ItemWindowViewModel();
             DataContext = _viewModel;
         }
     }

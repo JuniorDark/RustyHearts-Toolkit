@@ -7,22 +7,29 @@ namespace RHGMTool.Views
 {
     public partial class ItemWindow : Window
     {
-        private readonly FrameViewModel _viewModel;
+        private readonly ItemWindowViewModel _viewModel;
 
         public ItemWindow()
         {
             InitializeComponent();
-            _viewModel = new FrameViewModel();
+            _viewModel = new ItemWindowViewModel();
+            _viewModel.SelectedItemChanged += ViewModel_SelectedItemChanged;
+            dataGridView.SelectionChanged += DataGridView_SelectionChanged;
             DataContext = _viewModel;
-            cmbItemType.SelectedIndex = 0;
             cmbItemTrade.SelectedIndex = 0;
         }
 
-        private void UpdateItemFrameValues(ItemData? item)
+        private void ViewModel_SelectedItemChanged(object? sender, ItemData selectedItem)
         {
-            var frameViewModel = _viewModel;
-            frameViewModel.Item = item;
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                dataGridView.SelectedItem = selectedItem;
+                dataGridView.ScrollIntoView(selectedItem);
+                dataGridView.UpdateLayout(); // Ensure the layout is updated
+                DataGridView_SelectionChanged(dataGridView, null);
+            });
         }
+
 
         private void ComboBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -41,42 +48,32 @@ namespace RHGMTool.Views
 
         private void DataGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            HandleSelectionChanged();
+        }
+
+        private void HandleSelectionChanged()
+        {
             if (_viewModel != null && dataGridView.SelectedItem != null)
             {
                 ItemData? selectedItem = dataGridView.SelectedItem as ItemData;
 
                 UpdateItemFrameValues(selectedItem);
             }
-            
+        }
+
+
+        private void UpdateItemFrameValues(ItemData? item)
+        {
+            var frameViewModel = _viewModel;
+            frameViewModel.Item = item;
         }
 
         private void DataGridView_Loaded(object sender, RoutedEventArgs e)
         {
             if (dataGridView.Items.Count > 0)
             {
-                var frameViewModel = _viewModel;
+                dataGridView.SelectedItem = dataGridView.Items[0];
 
-                int itemId = frameViewModel.ItemId;
-
-                if (itemId != 0)
-                {
-                    // Find the item with the matching ID
-                    var selectedItem = dataGridView.Items.Cast<ItemData>().FirstOrDefault(item => item.ID == itemId);
-
-                    if (selectedItem != null)
-                    {
-                        // Scroll to the selected item
-                        dataGridView.ScrollIntoView(selectedItem);
-
-                        // Set the selected item
-                        dataGridView.SelectedItem = selectedItem;
-                    }
-                }
-                else
-                {
-                    dataGridView.SelectedItem = dataGridView.Items[0];
-                }
-                
             }
         }
     }

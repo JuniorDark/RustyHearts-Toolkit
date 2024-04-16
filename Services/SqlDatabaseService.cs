@@ -1,6 +1,6 @@
-﻿using RHGMTool.Models;
+﻿using Microsoft.Data.SqlClient;
+using RHGMTool.Models;
 using System.Data;
-using System.Data.SqlClient;
 
 namespace RHGMTool.Services
 {

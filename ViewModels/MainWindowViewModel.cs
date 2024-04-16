@@ -4,10 +4,10 @@ using RHGMTool.Views;
 
 namespace RHGMTool.ViewModels
 {
-    public partial class MainViewModel : ObservableObject
+    public partial class MainWindowViewModel : ObservableObject
     {
 
-        public MainViewModel()
+        public MainWindowViewModel()
         {
 
         }

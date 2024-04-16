@@ -15,7 +15,7 @@
     Template="{StaticResource lb_def_box01}"
     mc:Ignorable="d">
     <UserControl.DataContext>
-        <vm:FrameViewModel />
+        <vm:ItemWindowViewModel />
     </UserControl.DataContext>
     <Grid
         x:Name="gearGrid"

@@ -7,80 +7,87 @@ using RHGMTool.Views;
 
 namespace RHGMTool.ViewModels
 {
-    public partial class MailWindowViewModel : ObservableObject, IRecipient<MailItemData>
+    public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>
     {
         public MailWindowViewModel()
         {
-            WeakReferenceMessenger.Default.Register<MailItemData>(this);
+            WeakReferenceMessenger.Default.Register(this);
         }
 
+        private ItemWindow? itemWindow;
         [RelayCommand]
         private void OpenItemWindow(string parameter)
         {
             if (int.TryParse(parameter, out int slotIndex))
             {
-                // Create a MailData object to pass to the ItemWindow
-                MailData? mailData = Mail?.FirstOrDefault(m => m.SlotIndex == slotIndex);
+                ItemData? itemData = Item?.FirstOrDefault(m => m.SlotIndex == slotIndex);
 
-                // If the MailData for the slot index is not found, create a new MailData with only the SlotIndex
-                mailData ??= new MailData
+                itemData ??= new ItemData
                 {
                     SlotIndex = slotIndex
                 };
 
-                // Open the ItemWindow
-                ItemWindow itemWindow = new();
-                // Send the MailData to the ItemWindow
-                WeakReferenceMessenger.Default.Send(new MailItemData(mailData, ViewModelType.ItemViewModel));
-                itemWindow.ShowDialog();
+                if (itemWindow != null)
+                {
+                    WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel));
+                }
+                else
+                {
+                    itemWindow = new ItemWindow();
+                    WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel));
+
+                    itemWindow.Closed += (sender, e) => itemWindow = null;
+
+                    itemWindow.Show();
+                }
             }
         }
 
-        public void Receive(MailItemData message)
+        public void Receive(ItemDataMessage message)
         {
             if (message.Recipient == ViewModelType.MailWindowViewModel)
             {
-                var mailData = message.Value;
+                var itemData = message.Value;
 
-                Mail ??= [];
+                Item ??= [];
 
-                var existingMailIndex = Mail.FindIndex(m => m.SlotIndex == mailData.SlotIndex);
-                if (existingMailIndex != -1)
+                var existingItemIndex = Item.FindIndex(m => m.SlotIndex == itemData.SlotIndex);
+                if (existingItemIndex != -1)
                 {
-                    // Remove the existing MailData with the same SlotIndex
-                    Mail.RemoveAt(existingMailIndex);
+                    // Remove the existing ItemData with the same SlotIndex
+                    Item.RemoveAt(existingItemIndex);
                 }
 
-                // Add the new MailData to the Mail list
-                Mail.Add(mailData);
+                // Add the new ItemData to the Item list
+                Item.Add(itemData);
 
-                UpdateMailData();
+                UpdateItemData(Item);
             }
         }
 
         [ObservableProperty]
-        private List<MailData>? _mail;
-        partial void OnMailChanged(List<MailData>? value)
+        private List<ItemData>? _item;
+        partial void OnItemChanged(List<ItemData>? value)
         {
-            UpdateMailData();
+            UpdateItemData(value);
         }
 
-        private void UpdateMailData()
+        private void UpdateItemData(List<ItemData>? itemDatas)
         {
-            if (Mail != null)
+            if (itemDatas != null)
             {
-                ItemIcon1 = Mail.FirstOrDefault(data => data.SlotIndex == 0)?.IconName;
-                ItemIcon2 = Mail.FirstOrDefault(data => data.SlotIndex == 1)?.IconName;
-                ItemIcon3 = Mail.FirstOrDefault(data => data.SlotIndex == 2)?.IconName;
-                ItemIconBranch1 = Mail.FirstOrDefault(data => data.SlotIndex == 0)?.ItemBranch;
-                ItemIconBranch2 = Mail.FirstOrDefault(data => data.SlotIndex == 1)?.ItemBranch;
-                ItemIconBranch3 = Mail.FirstOrDefault(data => data.SlotIndex == 2)?.ItemBranch;
-                ItemName1 = Mail.FirstOrDefault(data => data.SlotIndex == 0)?.ItemName;
-                ItemName2 = Mail.FirstOrDefault(data => data.SlotIndex == 1)?.ItemName;
-                ItemName3 = Mail.FirstOrDefault(data => data.SlotIndex == 2)?.ItemName;
-                ItemAmount1 = Mail.FirstOrDefault(data => data.SlotIndex == 0)?.Amount;
-                ItemAmount2 = Mail.FirstOrDefault(data => data.SlotIndex == 1)?.Amount;
-                ItemAmount3 = Mail.FirstOrDefault(data => data.SlotIndex == 2)?.Amount;
+                ItemIcon1 = itemDatas.FirstOrDefault(data => data.SlotIndex == 0)?.IconName;
+                ItemIcon2 = itemDatas.FirstOrDefault(data => data.SlotIndex == 1)?.IconName;
+                ItemIcon3 = itemDatas.FirstOrDefault(data => data.SlotIndex == 2)?.IconName;
+                ItemIconBranch1 = itemDatas.FirstOrDefault(data => data.SlotIndex == 0)?.Branch;
+                ItemIconBranch2 = itemDatas.FirstOrDefault(data => data.SlotIndex == 1)?.Branch;
+                ItemIconBranch3 = itemDatas.FirstOrDefault(data => data.SlotIndex == 2)?.Branch;
+                ItemName1 = itemDatas.FirstOrDefault(data => data.SlotIndex == 0)?.Name;
+                ItemName2 = itemDatas.FirstOrDefault(data => data.SlotIndex == 1)?.Name;
+                ItemName3 = itemDatas.FirstOrDefault(data => data.SlotIndex == 2)?.Name;
+                ItemAmount1 = itemDatas.FirstOrDefault(data => data.SlotIndex == 0)?.Amount;
+                ItemAmount2 = itemDatas.FirstOrDefault(data => data.SlotIndex == 1)?.Amount;
+                ItemAmount3 = itemDatas.FirstOrDefault(data => data.SlotIndex == 2)?.Amount;
             }
         }
 

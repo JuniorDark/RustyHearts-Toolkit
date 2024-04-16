@@ -317,12 +317,14 @@
                     x:Name="tbItemAmount1"
                     Grid.Column="0"
                     Width="20"
-                    Margin="18,26,6,0"
+                    Margin="0,26,6,0"
+                    HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     d:Text="999"
                     Foreground="White"
                     IsHitTestVisible="False"
-                    Text="{Binding ItemAmount1}" />
+                    Text="{Binding ItemAmount1}"
+                    Visibility="{Binding ItemAmount1, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
                 <!--  Images in column 1  -->
                 <Button
                     Grid.Column="1"
@@ -365,12 +367,14 @@
                     x:Name="tbItemAmount2"
                     Grid.Column="1"
                     Width="20"
-                    Margin="18,26,6,0"
+                    Margin="0,26,6,0"
+                    HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     d:Text="999"
                     Foreground="White"
                     IsHitTestVisible="False"
-                    Text="{Binding ItemAmount2}" />
+                    Text="{Binding ItemAmount2}"
+                    Visibility="{Binding ItemAmount2, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
                 <!--  Images in column 2  -->
                 <Button
                     Grid.Column="2"
@@ -413,12 +417,14 @@
                     x:Name="tbItemAmount3"
                     Grid.Column="2"
                     Width="20"
-                    Margin="18,26,6,0"
+                    Margin="0,26,6,0"
+                    HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     d:Text="999"
                     Foreground="White"
                     IsHitTestVisible="False"
-                    Text="{Binding ItemAmount3}" />
+                    Text="{Binding ItemAmount3}"
+                    Visibility="{Binding ItemAmount3, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
             </Grid>
 
             <Label
