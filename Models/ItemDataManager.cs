@@ -1,7 +1,7 @@
-﻿using RHGMTool.Services;
-using static RHGMTool.Models.EnumService;
+﻿using RHToolkit.Services;
+using static RHToolkit.Models.EnumService;
 
-namespace RHGMTool.Models
+namespace RHToolkit.Models
 {
     public class ItemDataManager
     {

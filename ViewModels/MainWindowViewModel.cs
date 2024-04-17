@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using RHGMTool.Views;
+using RHToolkit.Views;
 
-namespace RHGMTool.ViewModels
+namespace RHToolkit.ViewModels
 {
     public partial class MainWindowViewModel : ObservableObject
     {

@@ -1,7 +1,7 @@
-﻿using RHGMTool.Models;
+﻿using RHToolkit.Models;
 using System.Data;
 
-namespace RHGMTool.Services
+namespace RHToolkit.Services
 {
     public interface IDatabaseService
     {

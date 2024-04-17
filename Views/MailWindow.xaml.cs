@@ -1,9 +1,7 @@
-﻿using RHGMTool.Models;
-using RHGMTool.ViewModels;
+﻿using RHToolkit.ViewModels;
 using System.Windows;
-using System.Windows.Input;
 
-namespace RHGMTool.Views
+namespace RHToolkit.Views
 {
     public partial class MailWindow : Window
     {
@@ -15,17 +13,6 @@ namespace RHGMTool.Views
             _viewModel = new MailWindowViewModel();
             DataContext = _viewModel;
 
-        }
-
-        private void OpenItemWindowCommandExecute(object sender, MouseButtonEventArgs e)
-        {
-            if (sender is FrameworkElement element && element.Tag is int slotIndex)
-            {
-                if (DataContext is MailWindowViewModel viewModel)
-                {
-                    viewModel.OpenItemWindowCommand.Execute(slotIndex);
-                }
-            }
         }
 
     }

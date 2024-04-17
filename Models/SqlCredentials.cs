@@ -1,4 +1,4 @@
-﻿namespace RHGMTool.Models
+﻿namespace RHToolkit.Models
 {
     public static class SqlCredentials
     {

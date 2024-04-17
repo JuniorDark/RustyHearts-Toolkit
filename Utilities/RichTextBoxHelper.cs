@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace RHGMTool.Utilities
+namespace RHToolkit.Utilities
 {
     public static class RichTextBoxHelper
     {

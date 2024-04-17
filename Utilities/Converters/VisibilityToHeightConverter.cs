@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows;
 
-namespace RHGMTool.Utilities
+namespace RHToolkit.Utilities
 {
     public class VisibilityToHeightConverter : IValueConverter
     {

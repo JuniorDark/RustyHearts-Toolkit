@@ -2,7 +2,7 @@
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace RHGMTool.Utilities
+namespace RHToolkit.Utilities
 {
     public class StringToBrushConverter : IValueConverter
     {

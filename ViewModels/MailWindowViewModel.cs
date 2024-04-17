@@ -1,11 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using RHGMTool.Messages;
-using RHGMTool.Models;
-using RHGMTool.Views;
+using RHToolkit.Messages;
+using RHToolkit.Models;
+using RHToolkit.Views;
 
-namespace RHGMTool.ViewModels
+namespace RHToolkit.ViewModels
 {
     public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>
     {
@@ -15,8 +15,9 @@ namespace RHGMTool.ViewModels
         }
 
         private ItemWindow? itemWindow;
+
         [RelayCommand]
-        private void OpenItemWindow(string parameter)
+        private void AddItem(string parameter)
         {
             if (int.TryParse(parameter, out int slotIndex))
             {
@@ -34,12 +35,58 @@ namespace RHGMTool.ViewModels
                 else
                 {
                     itemWindow = new ItemWindow();
-                    WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel));
-
                     itemWindow.Closed += (sender, e) => itemWindow = null;
-
                     itemWindow.Show();
+                    WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel));
                 }
+            }
+        }
+
+
+        [RelayCommand]
+        private void RemoveItem(string parameter)
+        {
+            if (int.TryParse(parameter, out int slotIndex))
+            {
+                if (Item != null)
+                {
+                    var removedItemIndex = Item.FindIndex(i => i.SlotIndex == slotIndex);
+                    if (removedItemIndex != -1)
+                    {
+                        // Remove the ItemData with the specified SlotIndex
+                        Item.RemoveAt(removedItemIndex);
+
+                        // Update properties to default values for the removed SlotIndex
+                        ResetItemProperties(slotIndex);
+                    }
+                }
+            }
+        }
+
+        private void ResetItemProperties(int slotIndex)
+        {
+            switch (slotIndex)
+            {
+                case 0:
+                    ItemIcon1 = null;
+                    ItemIconBranch1 = 0;
+                    ItemName1 = "Click to add a item";
+                    ItemAmount1 = 0;
+                    break;
+                case 1:
+                    ItemIcon2 = null;
+                    ItemIconBranch2 = 0;
+                    ItemName2 = "Click to add a item";
+                    ItemAmount2 = 0;
+                    break;
+                case 2:
+                    ItemIcon3 = null;
+                    ItemIconBranch3 = 0;
+                    ItemName3 = "Click to add a item";
+                    ItemAmount3 = 0;
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -61,7 +108,8 @@ namespace RHGMTool.ViewModels
                 // Add the new ItemData to the Item list
                 Item.Add(itemData);
 
-                UpdateItemData(Item);
+                UpdateItemProperties(itemData);
+
             }
         }
 
@@ -69,7 +117,34 @@ namespace RHGMTool.ViewModels
         private List<ItemData>? _item;
         partial void OnItemChanged(List<ItemData>? value)
         {
-            UpdateItemData(value);
+            //UpdateItemData(value);
+        }
+
+        private void UpdateItemProperties(ItemData itemData)
+        {
+            switch (itemData.SlotIndex)
+            {
+                case 0:
+                    ItemIcon1 = itemData.IconName;
+                    ItemIconBranch1 = itemData.Branch;
+                    ItemName1 = itemData.Name;
+                    ItemAmount1 = itemData.Amount;
+                    break;
+                case 1:
+                    ItemIcon2 = itemData.IconName;
+                    ItemIconBranch2 = itemData.Branch;
+                    ItemName2 = itemData.Name;
+                    ItemAmount2 = itemData.Amount;
+                    break;
+                case 2:
+                    ItemIcon3 = itemData.IconName;
+                    ItemIconBranch3 = itemData.Branch;
+                    ItemName3 = itemData.Name;
+                    ItemAmount3 = itemData.Amount;
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void UpdateItemData(List<ItemData>? itemDatas)
@@ -114,13 +189,13 @@ namespace RHGMTool.ViewModels
         private bool _sendToAll;
 
         [ObservableProperty]
-        private string? _itemName1;
+        private string? _itemName1 = "Click to add a item";
 
         [ObservableProperty]
-        private string? _itemName2;
+        private string? _itemName2 = "Click to add a item";
 
         [ObservableProperty]
-        private string? _itemName3;
+        private string? _itemName3 = "Click to add a item";
 
         [ObservableProperty]
         private int? _itemAmount1;

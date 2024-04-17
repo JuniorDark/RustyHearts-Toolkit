@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace RHGMTool.Views
+namespace RHToolkit.Views
 {
     /// <summary>
     /// Interaction logic for IntegerUpDown.xaml

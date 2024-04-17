@@ -1,15 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
-using RHGMTool.Messages;
-using RHGMTool.Models;
-using RHGMTool.Services;
+using RHToolkit.Messages;
+using RHToolkit.Models;
+using RHToolkit.Services;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
-using static RHGMTool.Models.EnumService;
+using System.Windows.Threading;
+using static RHToolkit.Models.EnumService;
 
-namespace RHGMTool.ViewModels
+namespace RHToolkit.ViewModels
 {
     public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>
     {
@@ -45,8 +46,6 @@ namespace RHGMTool.ViewModels
             _optionView.Filter = FilterOption;
 
             WeakReferenceMessenger.Default.Register(this);
-            Amount = 1;
-            Rank = 1;
         }
 
        
@@ -90,7 +89,6 @@ namespace RHGMTool.ViewModels
 
             // Send the MailData
             WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.MailWindowViewModel));
-            //WeakReferenceMessenger.Default.Unregister<MailItemData>(this);
 
         }
         #endregion
@@ -102,7 +100,10 @@ namespace RHGMTool.ViewModels
             if (message.Recipient == ViewModelType.ItemWindowViewModel)
             {
                 var itemData = message.Value;
+                ItemId = itemData.ID;
+                IsLoadingItemData = true;
                 LoadMailItemData(itemData);
+                
             }
 
         }
@@ -112,22 +113,17 @@ namespace RHGMTool.ViewModels
 
         private void LoadMailItemData(ItemData itemData)
         {
-            if (itemData != null)
+            if (IsLoadingItemData)
             {
-                IsLoadingItemData = true;
-
                 SlotIndex = itemData.SlotIndex;
-                ItemId = itemData.ID;
-                Type = itemData.Type;
-                IconName = itemData.IconName;
                 Amount = itemData.Amount;
-                Durability = itemData.Durability;
                 MaxDurability = itemData.MaxDurability;
+                Durability = itemData.Durability;
                 EnchantLevel = itemData.EnchantLevel;
                 Rank = itemData.Rank;
                 Weight = itemData.Weight;
-                Reconstruction = itemData.Reconstruction;
                 ReconstructionMax = itemData.ReconstructionMax;
+                Reconstruction = itemData.Reconstruction;
                 RandomOption01 = itemData.RandomOption01;
                 RandomOption02 = itemData.RandomOption02;
                 RandomOption03 = itemData.RandomOption03;
@@ -151,29 +147,25 @@ namespace RHGMTool.ViewModels
         }
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(SelectedItem))]
         private int _itemId;
         partial void OnItemIdChanged(int value)
         {
             if (value == 0)
             {
-                // Set the selected item to the first item in the collection
                 SelectedItem = ItemDataItems?.FirstOrDefault();
-                
             }
             else
             {
-                // Update the selected item based on ItemId
                 SelectedItem = ItemDataItems?.FirstOrDefault(item => item.ID == value);
             }
         }
         
-        public event EventHandler<ItemData>? SelectedItemChanged;
-
         [ObservableProperty]
         private ItemData? _selectedItem;
         partial void OnSelectedItemChanged(ItemData? value)
         {
-            SelectedItemChanged?.Invoke(this, value);
+            Item = value;
         }
 
         #endregion
@@ -533,7 +525,11 @@ namespace RHGMTool.ViewModels
         private ItemData? _item;
         partial void OnItemChanged(ItemData? value)
         {
-            UpdateItemData(value);
+            Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
+            {
+                UpdateItemData(SelectedItem);
+            }));
+
         }
 
         // Update UI elements based on Item data
@@ -547,12 +543,14 @@ namespace RHGMTool.ViewModels
                 IconName = itemData.IconName;
                 Description = itemData.Description;
                 ItemTrade = itemData.ItemTrade;
-                Durability = itemData.Durability;
                 MaxDurability = itemData.Durability;
+                Durability = itemData.Durability;
                 Weight = itemData.Weight;
-                Reconstruction = itemData.ReconstructionMax;
                 ReconstructionMax = itemData.ReconstructionMax;
+                Reconstruction = itemData.ReconstructionMax;
                 OverlapCnt = OverlapCnt == 0 ? 1 : itemData.OverlapCnt;
+                Amount = Amount == 0 ? 1 : Amount;
+                Rank = Rank == 0 ? 1 : Rank;
                 Type = itemData.Type;
                 Category = itemData.Category;
                 SubCategory = itemData.SubCategory;

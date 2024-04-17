@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace RHGMTool.ViewModels
+namespace RHToolkit.ViewModels
 {
     public static class WindowBehaviors
     {

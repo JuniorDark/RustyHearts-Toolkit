@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace RHGMTool.Services
+namespace RHToolkit.Services
 {
     public interface ISqlDatabaseService
     {

@@ -1,9 +1,9 @@
-﻿using RHGMTool.Models;
+﻿using RHToolkit.Models;
 using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
 
-namespace RHGMTool.Utilities
+namespace RHToolkit.Utilities
 {
     public class ItemIdToSelectedItemConverter : IValueConverter
     {

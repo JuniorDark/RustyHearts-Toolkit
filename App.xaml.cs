@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using RHGMTool.Services;
-using RHGMTool.ViewModels;
-using RHGMTool.Views;
+using RHToolkit.Services;
+using RHToolkit.ViewModels;
+using RHToolkit.Views;
 using System.Windows;
 
-namespace RHGMTool
+namespace RHToolkit
 {
     public partial class App : Application
     {

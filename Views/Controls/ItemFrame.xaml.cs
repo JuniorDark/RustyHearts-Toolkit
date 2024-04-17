@@ -1,7 +1,7 @@
-﻿using RHGMTool.ViewModels;
+﻿using RHToolkit.ViewModels;
 using System.Windows.Controls;
 
-namespace RHGMTool.Views
+namespace RHToolkit.Views
 {
     /// <summary>
     /// Interaction logic for ItemFrame.xaml

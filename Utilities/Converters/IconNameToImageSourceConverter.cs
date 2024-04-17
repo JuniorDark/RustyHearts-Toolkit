@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace RHGMTool.Utilities
+namespace RHToolkit.Utilities
 {
     public class IconNameToImageSourceConverter : IValueConverter
     {

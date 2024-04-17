@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Messaging.Messages;
-using RHGMTool.Models;
+using RHToolkit.Models;
 
-namespace RHGMTool.Messages
+namespace RHToolkit.Messages
 {
     public class ItemDataMessage(ItemData value, ViewModelType recipient) : ValueChangedMessage<ItemData>(value)
     {

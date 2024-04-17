@@ -2,7 +2,7 @@
 using System.Data.SQLite;
 using System.IO;
 
-namespace RHGMTool.Services
+namespace RHToolkit.Services
 {
     public class SqLiteDatabaseService : ISqLiteDatabaseService
     {

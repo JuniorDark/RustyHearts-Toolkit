@@ -1,7 +1,7 @@
-﻿using RHGMTool.Models;
-using static RHGMTool.Models.EnumService;
+﻿using RHToolkit.Models;
+using static RHToolkit.Models.EnumService;
 
-namespace RHGMTool.Services
+namespace RHToolkit.Services
 {
     public interface IGMDatabaseService
     {

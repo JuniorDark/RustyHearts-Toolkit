@@ -1,6 +1,6 @@
 ﻿using System.Data.SQLite;
 
-namespace RHGMTool.Services
+namespace RHToolkit.Services
 {
     public interface ISqLiteDatabaseService
     {

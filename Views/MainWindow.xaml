@@ -1,27 +1,26 @@
 ﻿<Window
-    x:Class="RHGMTool.MainWindow"
+    x:Class="RHToolkit.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:RHGMTool.ViewModels"
+    xmlns:local="clr-namespace:RHToolkit.ViewModels"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="clr-namespace:RHGMTool.ViewModels"
-    Title="Rusty Hearts GM Tool"
+    xmlns:vm="clr-namespace:RHToolkit.ViewModels"
+    Title="Rusty Hearts Toolkit"
     Width="640"
     Height="600"
     MinWidth="640"
     MinHeight="600"
+    d:DataContext="{d:DesignInstance Type=local:MainWindowViewModel}"
     local:WindowBehaviors.EnableDoubleClickMaximize="True"
     local:WindowBehaviors.EnableDragMove="True"
     AllowsTransparency="True"
     Background="Transparent"
-    Icon="/Assets/ico/gm.ico"
+    Icon="/Assets/ico/icon_100t_hammer.ico"
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-
-
     <ContentControl Template="{StaticResource box_red02}">
         <Grid Margin="-70,-70,-65,-60">
             <Grid.RowDefinitions>
@@ -36,7 +35,7 @@
                 Margin="0,-5,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                Content="Rusty Hearts GM Tool"
+                Content="Rusty Hearts Toolkit"
                 FontSize="16"
                 FontWeight="Bold"
                 Foreground="White" />

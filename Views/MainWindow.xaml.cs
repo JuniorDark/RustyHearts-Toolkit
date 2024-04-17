@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace RHGMTool
+namespace RHToolkit
 {
     public partial class MainWindow : Window
     {

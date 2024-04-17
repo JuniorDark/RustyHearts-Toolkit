@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace RHGMTool.Models
+namespace RHToolkit.Models
 {
     public class EnumService
     {

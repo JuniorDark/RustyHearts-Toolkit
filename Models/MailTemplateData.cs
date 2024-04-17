@@ -1,4 +1,4 @@
-﻿namespace RHGMTool.Models
+﻿namespace RHToolkit.Models
 {
     [Serializable]
     public class MailTemplateData

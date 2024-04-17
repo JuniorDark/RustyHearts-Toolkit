@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace RHGMTool.ViewModels
+namespace RHToolkit.ViewModels
 {
     public class WindowManager
     {

@@ -1,11 +1,13 @@
 ﻿<Window
-    x:Class="RHGMTool.Views.MailWindow"
+    x:Class="RHToolkit.Views.MailWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:bh="clr-namespace:RHToolkit.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:RHGMTool.Views"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:RHToolkit.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="clr-namespace:RHGMTool.ViewModels"
+    xmlns:vm="clr-namespace:RHToolkit.ViewModels"
     Title="Rusty Hearts Mail Tool"
     Width="640"
     Height="600"
@@ -156,7 +158,14 @@
                 Background="Transparent"
                 Content="Load Template"
                 Foreground="White"
-                Style="{StaticResource lb_def_button02}" />
+                Style="{StaticResource lb_def_button02}">
+                <Button.ToolTip>
+                    <ToolTip>
+                        <TextBlock Text="Load a previous saved json template" />
+                    </ToolTip>
+                </Button.ToolTip>
+                <Button.Cursor>Hand</Button.Cursor>
+            </Button>
 
             <!--  Clear Button  -->
             <Button
@@ -168,7 +177,14 @@
                 Background="Transparent"
                 Content="Clear"
                 Foreground="White"
-                Style="{StaticResource lb_def_button02}" />
+                Style="{StaticResource lb_def_button02}">
+                <Button.ToolTip>
+                    <ToolTip>
+                        <TextBlock Text="Clear all current mail settings" />
+                    </ToolTip>
+                </Button.ToolTip>
+                <Button.Cursor>Hand</Button.Cursor>
+            </Button>
 
             <!--  Save Template Button  -->
             <Button
@@ -180,7 +196,14 @@
                 Background="Transparent"
                 Content="Save Template"
                 Foreground="White"
-                Style="{StaticResource lb_def_button02}" />
+                Style="{StaticResource lb_def_button02}">
+                <Button.ToolTip>
+                    <ToolTip>
+                        <TextBlock Text="Save the current mail as a json template" />
+                    </ToolTip>
+                </Button.ToolTip>
+                <Button.Cursor>Hand</Button.Cursor>
+            </Button>
 
             <!--  Message Panel  -->
             <TextBox
@@ -189,15 +212,47 @@
                 Height="205"
                 Margin="52,119,236,0"
                 VerticalAlignment="Top"
-                d:Text="Game Master InsertItem"
+                d:Text="Game Master InsertItem!"
+                AcceptsReturn="True"
                 BorderThickness="0"
-                ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                CaretBrush="White"
+                FontFamily="{StaticResource ArialUnicodeMS}"
+                Foreground="#ff000000"
+                MaxLength="128"
+                MaxLines="12"
+                MinLines="1"
                 Tag="Recipient"
-                Text="{Binding MailContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                Text="{Binding MailContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                TextWrapping="Wrap"
+                VerticalScrollBarVisibility="Auto">
                 <TextBox.Background>
                     <ImageBrush ImageSource="/Assets/images/lb_mail_paper.png" />
                 </TextBox.Background>
+                <TextBox.Template>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
+                            <ScrollViewer
+                                x:Name="PART_ContentHost"
+                                CanContentScroll="true"
+                                Focusable="false"
+                                HorizontalScrollBarVisibility="Disabled"
+                                VerticalScrollBarVisibility="Auto">
+                                <ScrollViewer.Style>
+                                    <Style TargetType="ScrollViewer">
+                                        <Setter Property="OverridesDefaultStyle" Value="True" />
+                                    </Style>
+                                </ScrollViewer.Style>
+                                <ScrollViewer.Resources>
+                                    <Style BasedOn="{StaticResource CustomScrollBarStyle}" TargetType="ScrollBar" />
+                                </ScrollViewer.Resources>
+                            </ScrollViewer>
+                        </Border>
+                    </ControlTemplate>
+                </TextBox.Template>
             </TextBox>
 
             <!--  Send Button  -->
@@ -208,10 +263,16 @@
                 Margin="229,0,260,39"
                 VerticalAlignment="Bottom"
                 Background="Transparent"
-                Command="{Binding OpenItemWindowCommand}"
                 Content="Send"
                 Foreground="White"
-                Style="{StaticResource lb_def_button02}" />
+                Style="{StaticResource lb_def_button02}">
+                <Button.ToolTip>
+                    <ToolTip>
+                        <TextBlock Text="Send" />
+                    </ToolTip>
+                </Button.ToolTip>
+                <Button.Cursor>Hand</Button.Cursor>
+            </Button>
 
             <!--  Close Button  -->
             <Button
@@ -237,7 +298,7 @@
                 <Image.ToolTip>
                     <!--  Tooltip content  -->
                     <ToolTip>
-                        <TextBlock Text="Help Tooltip Content" />
+                        <TextBlock Text="Click on a slot to add/edit a item, Right click to remove." />
                     </ToolTip>
                 </Image.ToolTip>
                 <!--  Cursor change  -->
@@ -254,13 +315,12 @@
                 <Image.ToolTip>
                     <!--  Tooltip content  -->
                     <ToolTip>
-                        <TextBlock Text="Help Tooltip Content" />
+                        <TextBlock Text="Name of the characters that will receive the mail. Names must be sepparated by comma ','" />
                     </ToolTip>
                 </Image.ToolTip>
                 <!--  Cursor change  -->
                 <Image.Cursor>Help</Image.Cursor>
             </Image>
-
             <!--  Item Slots  -->
             <Grid
                 Width="140"
@@ -280,9 +340,20 @@
                     Grid.Column="0"
                     Width="44"
                     Height="44"
-                    Command="{Binding OpenItemWindowCommand}"
-                    CommandParameter="0"
                     Style="{StaticResource ImageButtonStyle}">
+                    <Button.InputBindings>
+                        <!--  Left-click command  -->
+                        <MouseBinding
+                            Command="{Binding AddItemCommand}"
+                            CommandParameter="0"
+                            Gesture="LeftClick" />
+
+                        <!--  Right-click command  -->
+                        <MouseBinding
+                            Command="{Binding RemoveItemCommand}"
+                            CommandParameter="0"
+                            Gesture="RightClick" />
+                    </Button.InputBindings>
                     <Button.Content>
                         <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
                     </Button.Content>
@@ -291,8 +362,9 @@
                             <TextBlock Text="{Binding ItemName1}" />
                         </ToolTip>
                     </Button.ToolTip>
-                    <Button.Cursor>Help</Button.Cursor>
+                    <Button.Cursor>Hand</Button.Cursor>
                 </Button>
+
                 <Image
                     x:Name="imgItemIcon1"
                     Grid.Column="0"
@@ -317,12 +389,14 @@
                     x:Name="tbItemAmount1"
                     Grid.Column="0"
                     Width="20"
-                    Margin="0,26,6,0"
-                    HorizontalAlignment="Right"
+                    Margin="15,25,6,0"
                     VerticalAlignment="Top"
-                    d:Text="999"
+                    d:Text="1"
+                    FlowDirection="RightToLeft"
+                    FontWeight="Bold"
                     Foreground="White"
                     IsHitTestVisible="False"
+                    RenderTransformOrigin="0.65,0.06"
                     Text="{Binding ItemAmount1}"
                     Visibility="{Binding ItemAmount1, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
                 <!--  Images in column 1  -->
@@ -330,9 +404,20 @@
                     Grid.Column="1"
                     Width="44"
                     Height="44"
-                    Command="{Binding OpenItemWindowCommand}"
-                    CommandParameter="1"
                     Style="{StaticResource ImageButtonStyle}">
+                    <Button.InputBindings>
+                        <!--  Left-click command  -->
+                        <MouseBinding
+                            Command="{Binding AddItemCommand}"
+                            CommandParameter="1"
+                            Gesture="LeftClick" />
+
+                        <!--  Right-click command  -->
+                        <MouseBinding
+                            Command="{Binding RemoveItemCommand}"
+                            CommandParameter="1"
+                            Gesture="RightClick" />
+                    </Button.InputBindings>
                     <Button.Content>
                         <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
                     </Button.Content>
@@ -341,7 +426,7 @@
                             <TextBlock Text="{Binding ItemName2}" />
                         </ToolTip>
                     </Button.ToolTip>
-                    <Button.Cursor>Help</Button.Cursor>
+                    <Button.Cursor>Hand</Button.Cursor>
                 </Button>
                 <Image
                     x:Name="imgItemIcon2"
@@ -367,12 +452,14 @@
                     x:Name="tbItemAmount2"
                     Grid.Column="1"
                     Width="20"
-                    Margin="0,26,6,0"
-                    HorizontalAlignment="Right"
+                    Margin="15,25,6,0"
                     VerticalAlignment="Top"
-                    d:Text="999"
+                    d:Text="1"
+                    FlowDirection="RightToLeft"
+                    FontWeight="Bold"
                     Foreground="White"
                     IsHitTestVisible="False"
+                    RenderTransformOrigin="0.65,0.06"
                     Text="{Binding ItemAmount2}"
                     Visibility="{Binding ItemAmount2, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
                 <!--  Images in column 2  -->
@@ -380,9 +467,20 @@
                     Grid.Column="2"
                     Width="44"
                     Height="44"
-                    Command="{Binding OpenItemWindowCommand}"
-                    CommandParameter="2"
                     Style="{StaticResource ImageButtonStyle}">
+                    <Button.InputBindings>
+                        <!--  Left-click command  -->
+                        <MouseBinding
+                            Command="{Binding AddItemCommand}"
+                            CommandParameter="2"
+                            Gesture="LeftClick" />
+
+                        <!--  Right-click command  -->
+                        <MouseBinding
+                            Command="{Binding RemoveItemCommand}"
+                            CommandParameter="2"
+                            Gesture="RightClick" />
+                    </Button.InputBindings>
                     <Button.Content>
                         <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
                     </Button.Content>
@@ -391,7 +489,7 @@
                             <TextBlock Text="{Binding ItemName3}" />
                         </ToolTip>
                     </Button.ToolTip>
-                    <Button.Cursor>Help</Button.Cursor>
+                    <Button.Cursor>Hand</Button.Cursor>
                 </Button>
                 <Image
                     x:Name="imgItemIcon3"
@@ -417,12 +515,14 @@
                     x:Name="tbItemAmount3"
                     Grid.Column="2"
                     Width="20"
-                    Margin="0,26,6,0"
-                    HorizontalAlignment="Right"
+                    Margin="15,25,6,0"
                     VerticalAlignment="Top"
-                    d:Text="999"
+                    d:Text="1"
+                    FlowDirection="RightToLeft"
+                    FontWeight="Bold"
                     Foreground="White"
                     IsHitTestVisible="False"
+                    RenderTransformOrigin="0.65,0.06"
                     Text="{Binding ItemAmount3}"
                     Visibility="{Binding ItemAmount3, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
             </Grid>

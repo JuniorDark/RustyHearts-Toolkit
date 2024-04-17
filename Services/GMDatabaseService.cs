@@ -1,8 +1,8 @@
-﻿using RHGMTool.Models;
+﻿using RHToolkit.Models;
 using System.Data.SQLite;
-using static RHGMTool.Models.EnumService;
+using static RHToolkit.Models.EnumService;
 
-namespace RHGMTool.Services
+namespace RHToolkit.Services
 {
     public class GMDatabaseService(ISqLiteDatabaseService databaseService) : IGMDatabaseService
     {

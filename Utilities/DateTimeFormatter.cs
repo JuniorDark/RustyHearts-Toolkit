@@ -1,4 +1,4 @@
-﻿namespace RHGMTool.Utilities
+﻿namespace RHToolkit.Utilities
 {
     public class DateTimeFormatter
     {

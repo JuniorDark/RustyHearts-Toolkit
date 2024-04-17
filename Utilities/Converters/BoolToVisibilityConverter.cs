@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace RHGMTool.Utilities
+namespace RHToolkit.Utilities
 {
     public class BoolToVisibilityConverter : IValueConverter
     {

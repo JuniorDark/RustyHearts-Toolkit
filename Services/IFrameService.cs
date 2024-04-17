@@ -1,4 +1,4 @@
-﻿namespace RHGMTool.Services
+﻿namespace RHToolkit.Services
 {
     public interface IFrameService
     {

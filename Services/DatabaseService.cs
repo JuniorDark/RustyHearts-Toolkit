@@ -1,9 +1,9 @@
-﻿using RHGMTool.Models;
+﻿using RHToolkit.Models;
 using System.Data;
 using System.Windows;
-using static RHGMTool.Models.EnumService;
+using static RHToolkit.Models.EnumService;
 
-namespace RHGMTool.Services
+namespace RHToolkit.Services
 {
     public class DatabaseService(ISqlDatabaseService databaseService) : IDatabaseService
     {
@@ -332,7 +332,7 @@ namespace RHGMTool.Services
                 transaction,
                 ("@kind", sanctionKind),
                 ("@sanction_uid", sanctionUid),
-                ("@personnel", "RHGMTool"),
+                ("@personnel", "RHToolkit"),
                 ("@releaser", releaser),
                 ("@comment", comment),
                 ("@character_id", characterId),
@@ -378,7 +378,7 @@ namespace RHGMTool.Services
                      connection,
                      transaction,
                      ("@audit_id", Guid.NewGuid()),
-                     ("@AdminID", "RHGMTool"),
+                     ("@AdminID", "RHToolkit"),
                      ("@world_index", 1),
                      ("@bcust_id", windyCode),
                      ("@character_id", characterId),
@@ -416,7 +416,7 @@ namespace RHGMTool.Services
                      ("@item_name", ""),
                      ("@start_time", startTime),
                      ("@end_time", endTime),
-                     ("@personnel", "RHGMTool"),
+                     ("@personnel", "RHToolkit"),
                      ("@releaser", ""),
                      ("@cause", reason),
                      ("@comment", ""),
