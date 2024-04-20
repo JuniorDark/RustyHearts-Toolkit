@@ -10,13 +10,11 @@
     x:Name="Frame"
     Height="Auto"
     MaxHeight="350"
+    d:DataContext="{d:DesignInstance Type=vm:FrameViewModel}"
     d:DesignHeight="350"
     d:DesignWidth="300"
     Template="{StaticResource lb_def_box01}"
     mc:Ignorable="d">
-    <UserControl.DataContext>
-        <vm:ItemWindowViewModel />
-    </UserControl.DataContext>
     <Grid
         x:Name="gearGrid"
         Width="300"

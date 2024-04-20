@@ -12,13 +12,11 @@
     MaxHeight="400"
     HorizontalAlignment="Center"
     VerticalAlignment="Top"
+    d:DataContext="{d:DesignInstance Type=vm:FrameViewModel}"
     d:DesignHeight="400"
     d:DesignWidth="300"
     Template="{StaticResource lb_def_box01}"
     mc:Ignorable="d">
-    <UserControl.DataContext>
-        <vm:ItemWindowViewModel />
-    </UserControl.DataContext>
     <Grid
         x:Name="itemGrid"
         Width="300"
@@ -35,7 +33,7 @@
             <RowDefinition Height="Auto" MinHeight="22" />
             <RowDefinition Height="Auto" MinHeight="22" />
             <RowDefinition Height="Auto" MinHeight="22" />
-            <RowDefinition Height="Auto"  />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <!--  ItemName  -->
@@ -106,9 +104,10 @@
             x:Name="tbItemTrade"
             Grid.Row="3"
             Margin="10,1,0,0"
+            VerticalAlignment="Top"
             d:Text="Trade Unavailable"
             Foreground="#e75151"
-            Text="{Binding ItemTradeText}" VerticalAlignment="Top" />
+            Text="{Binding ItemTradeText}" />
         <TextBlock
             x:Name="tbWeight"
             Grid.Row="3"

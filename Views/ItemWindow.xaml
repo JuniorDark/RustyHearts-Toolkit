@@ -13,6 +13,7 @@
     Height="720"
     MinWidth="1280"
     MinHeight="720"
+    d:DataContext="{d:DesignInstance Type=vm:ItemWindowViewModel}"
     vm:WindowBehaviors.EnableDragMove="True"
     AllowsTransparency="True"
     Background="Transparent"
@@ -21,9 +22,6 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Window.DataContext>
-        <vm:ItemWindowViewModel />
-    </Window.DataContext>
     <Window.Resources>
         <CollectionViewSource x:Key="ItemDataViewSource" Source="{Binding ItemDataItems}" />
         <CollectionViewSource x:Key="OptionViewSource" Source="{Binding OptionItems}" />
@@ -515,6 +513,7 @@
                     Width="Auto"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
+                    d:Foreground="White"
                     d:Text="Item Name"
                     Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}"
                     Text="{Binding ItemName}" />
@@ -715,7 +714,7 @@
                     Height="400"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    DataContext="{Binding}"
+                    DataContext="{Binding FrameViewModel}"
                     Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=1}" />
                 <local:CostumeFrame
                     x:Name="costumeFrame"
@@ -723,7 +722,7 @@
                     Height="400"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    DataContext="{Binding}"
+                    DataContext="{Binding FrameViewModel}"
                     Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=2}" />
                 <local:GearFrame
                     x:Name="gearFrame"
@@ -731,7 +730,7 @@
                     Height="600"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    DataContext="{Binding}"
+                    DataContext="{Binding FrameViewModel}"
                     Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=3|4}" />
             </Grid>
             <!--  Add Item Controls  -->

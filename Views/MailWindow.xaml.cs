@@ -5,14 +5,10 @@ namespace RHToolkit.Views
 {
     public partial class MailWindow : Window
     {
-        private readonly MailWindowViewModel _viewModel;
-
-        public MailWindow()
+        public MailWindow(MailWindowViewModel viewModel)
         {
             InitializeComponent();
-            _viewModel = new MailWindowViewModel();
-            DataContext = _viewModel;
-
+            DataContext = viewModel;
         }
 
     }

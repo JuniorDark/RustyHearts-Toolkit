@@ -1,4 +1,4 @@
-﻿using RHToolkit.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
 using RHToolkit.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
@@ -7,14 +7,10 @@ namespace RHToolkit.Views
 {
     public partial class ItemWindow : Window
     {
-        private readonly ItemWindowViewModel _viewModel;
-
-        public ItemWindow()
+        public ItemWindow(ItemWindowViewModel viewModel)
         {
             InitializeComponent();
-            _viewModel = new ItemWindowViewModel();
-
-            DataContext = _viewModel;
+            DataContext = viewModel;
             cmbItemTrade.SelectedIndex = 0;
         }
 

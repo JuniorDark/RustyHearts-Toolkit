@@ -4,51 +4,63 @@ using RHToolkit.ViewModels;
 using RHToolkit.Views;
 using System.Windows;
 
-namespace RHToolkit
+namespace RHToolkit;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    // Service collection to register services
+    public static readonly ServiceCollection Services = new();
+
+    // ServiceProvider to resolve services
+    private readonly ServiceProvider _serviceProvider;
+
+    public App()
     {
-        private readonly ServiceProvider _serviceProvider;
-
-        public App()
-        {
-            // Set up DI container
-            var services = new ServiceCollection();
-            ConfigureServices(services);
-            _serviceProvider = services.BuildServiceProvider();
-        }
-
-        private static void ConfigureServices(IServiceCollection services)
-        {
-            // Register your services
-            services.AddSingleton<ISqLiteDatabaseService, SqLiteDatabaseService>();
-            services.AddSingleton<IGMDatabaseService, GMDatabaseService>();
-            services.AddSingleton(ServiceProvider => new MainWindow
-            {
-                DataContext = ServiceProvider.GetRequiredService<MainWindowViewModel>()
-            });
-            services.AddSingleton(ServiceProvider => new ItemWindow
-            {
-                DataContext = ServiceProvider.GetRequiredService<ItemWindowViewModel>()
-            });
-            services.AddSingleton<MainWindowViewModel>();
-            services.AddSingleton<MailWindowViewModel>();
-            services.AddSingleton<ItemWindowViewModel>();
-            // Register your view models, services, etc. here
-            // services.AddTransient<IMyService, MyService>();
-            // services.AddScoped<IMyViewModel, MyViewModel>();
-            // ...
-        }
-
-        // Override OnStartup method to resolve and set main window
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            base.OnStartup(e);
-
-            // Resolve your main window and show it
-            var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
-        }
+        ConfigureServices(Services);
+        _serviceProvider = Services.BuildServiceProvider();
     }
 
+    // Method to register services
+    private static void ConfigureServices(IServiceCollection services)
+    {
+        // Register your services
+        services.AddSingleton<ISqlDatabaseService, SqlDatabaseService>();
+        services.AddSingleton<IDatabaseService, DatabaseService>();
+        services.AddSingleton<ISqLiteDatabaseService, SqLiteDatabaseService>();
+        services.AddSingleton<IGMDatabaseService, GMDatabaseService>();
+        services.AddSingleton<IFrameService, FrameService>();
+
+        services.AddSingleton<MainWindow>();
+        services.AddSingleton<MainWindowViewModel>();
+
+        services.AddTransient<MailWindow>();
+        services.AddTransient<MailWindowViewModel>();
+        services.AddTransient<ItemWindow>();
+        services.AddTransient<ItemWindowViewModel>();
+
+        services.AddTransient<FrameViewModel>();
+    }
+
+    // Method to retrieve service provider
+    public static T GetService<T>() where T : class
+    {
+        return Services.BuildServiceProvider().GetRequiredService<T>();
+    }
+
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+
+        var mainWindow = new MainWindow
+        {
+            DataContext = _serviceProvider.GetRequiredService<MainWindowViewModel>()
+        };
+        mainWindow.Show();
+    }
+
+    protected override void OnExit(ExitEventArgs e)
+    {
+        base.OnExit(e);
+        _serviceProvider.Dispose();
+    }
 }

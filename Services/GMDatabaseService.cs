@@ -4,14 +4,14 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Services
 {
-    public class GMDatabaseService(ISqLiteDatabaseService databaseService) : IGMDatabaseService
+    public class GMDatabaseService(ISqLiteDatabaseService sqLiteDatabaseService) : IGMDatabaseService
     {
-        private readonly ISqLiteDatabaseService _databaseService = databaseService;
+        private readonly ISqLiteDatabaseService _sqLiteDatabaseService = sqLiteDatabaseService;
 
         public List<ItemData> GetItemDataList(ItemType itemType, string itemTableName)
         {
             List<ItemData> itemList = [];
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
                 string query = GetItemQuery(itemTableName);
@@ -79,11 +79,11 @@ namespace RHToolkit.Services
         public List<NameID> GetOptionItems()
         {
             List<NameID> optionItems = [];
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
                 string query = "SELECT nID, wszDescNoColor FROM itemoptionlist";
-                using var optionReader = _databaseService.ExecuteReader(query, connection);
+                using var optionReader = _sqLiteDatabaseService.ExecuteReader(query, connection);
                 optionItems.Add(new NameID { ID = 0, Name = "None" });
 
                 while (optionReader.Read())
@@ -106,11 +106,11 @@ namespace RHToolkit.Services
 
         public (int minValue, int maxValue) GetOptionValue(int itemID)
         {
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
                 string query = "SELECT nCheckMinValue, nCheckMaxValue FROM itemoptionlist WHERE nID = @itemID";
-                using var optionReader = _databaseService.ExecuteReader(query, connection, ("@itemID", itemID));
+                using var optionReader = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@itemID", itemID));
                 if (optionReader.Read())
                 {
                     return (optionReader.GetInt32(0), optionReader.GetInt32(1));
@@ -130,10 +130,10 @@ namespace RHToolkit.Services
         private List<NameID> GetItemsFromQuery(string query)
         {
             List<NameID> items = [];
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
-                using var command = _databaseService.ExecuteReader(query, connection);
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
 
                 while (command.Read())
                 {
@@ -169,7 +169,7 @@ namespace RHToolkit.Services
         public List<NameID> GetCategoryItems(ItemType itemType, bool isSubCategory)
         {
             List<NameID> categoryItems = [];
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
                 string query;
@@ -190,7 +190,7 @@ namespace RHToolkit.Services
                 using var command = connection.CreateCommand();
                 command.CommandText = query;
 
-                using var reader = _databaseService.ExecuteReader(query, connection);
+                using var reader = _sqLiteDatabaseService.ExecuteReader(query, connection);
 
                 categoryItems.Add(new NameID { ID = 0, Name = "All" }); // Add an option to show all categories or subcategories
 
@@ -234,10 +234,10 @@ namespace RHToolkit.Services
 
         private string GetStringValueFromQuery(string query, params (string, object)[] parameters)
         {
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
-                using var command = _databaseService.ExecuteReader(query, connection, parameters);
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, parameters);
 
                 return command.Read() ? command.GetString(0) : string.Empty;
             }
@@ -291,10 +291,10 @@ namespace RHToolkit.Services
 
         private int GetIntValueFromQuery(string query, params (string, object)[] parameters)
         {
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
-                using var command = _databaseService.ExecuteReader(query, connection, parameters);
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, parameters);
                 return command.Read() ? command.GetInt32(0) : 0;
             }
             catch (Exception ex)
@@ -317,11 +317,11 @@ namespace RHToolkit.Services
 
         public (int secTime, float value, int maxValue) GetOptionValues(int optionID)
         {
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
                 string query = "SELECT nSecTime, fValue, nCheckMaxValue FROM itemoptionlist WHERE nID = @optionID";
-                using var optionCommand = _databaseService.ExecuteReader(query, connection, ("@optionID", optionID));
+                using var optionCommand = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@optionID", optionID));
 
                 return optionCommand.Read() ? (optionCommand.GetInt32(0), optionCommand.GetFloat(1), optionCommand.GetInt32(2)) : (0, 0, 0);
             }
@@ -340,13 +340,13 @@ namespace RHToolkit.Services
                 { 3, "tudeweapon" },
                 { 4, "natashaweapon" }
             };
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
                 if (classToTableMap.TryGetValue(jbClass, out string? tableName))
                 {
                     string query = $"SELECT nPhysicalAttackMin, nPhysicalAttackMax, nMagicAttackMin, nMagicAttackMax FROM {tableName} WHERE nID = @WeaponID";
-                    using var command = _databaseService.ExecuteReader(query, connection, ("@WeaponID", weaponID));
+                    using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@WeaponID", weaponID));
 
 
                     return command.Read() ? (command.GetInt32(0), command.GetInt32(1), command.GetInt32(2), command.GetInt32(3)) : (0, 0, 0, 0);
@@ -363,11 +363,11 @@ namespace RHToolkit.Services
 
         public (string fortuneName, string AddEffectDesc00, string AddEffectDesc01, string AddEffectDesc02, string fortuneDesc) GetFortuneValues(int fortuneID)
         {
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
                 string query = "SELECT wszFortuneRollDesc, wszAddEffectDesc00, wszAddEffectDesc01, wszAddEffectDesc02, wszDesc FROM fortune WHERE nID = @fortuneID";
-                using var command = _databaseService.ExecuteReader(query, connection, ("@fortuneID", fortuneID));
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@fortuneID", fortuneID));
 
                 return command.Read() ? (command.IsDBNull(0) ? "Secondary Desc" : command.GetString(0),
                                          command.GetString(1),
@@ -384,11 +384,11 @@ namespace RHToolkit.Services
 
         public bool IsNameInNickFilter(string characterName)
         {
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
                 string query = "SELECT COUNT(*) FROM nick_filter WHERE wszNick LIKE '%' || @characterName || '%'";
-                using var command = _databaseService.ExecuteReader(query, connection, ("@characterName", characterName));
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@characterName", characterName));
 
                 long count = command.Read() ? command.GetInt64(0) : 0;
 
@@ -402,11 +402,11 @@ namespace RHToolkit.Services
 
         public long GetExperienceFromLevel(int level)
         {
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
                 string query = "SELECT i64Exp FROM exp WHERE nID = @level";
-                using var command = _databaseService.ExecuteReader(query, connection, ("@level", level - 1));
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@level", level - 1));
 
                 return command.Read() && !command.IsDBNull(0) ? command.GetInt64(0) : 0;
             }
@@ -418,11 +418,11 @@ namespace RHToolkit.Services
 
         public (int titleCategory, int remainTime, int nAddEffectID00, int nAddEffectID01, int nAddEffectID02, int nAddEffectID03, int nAddEffectID04, int nAddEffectID05, string titleDesc) GetTitleInfo(int titleID)
         {
-            using var connection = _databaseService.OpenSQLiteConnection();
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
                 string query = "SELECT c.nTitleCategory, c.nRemainTime, c.nAddEffectID00, c.nAddEffectID01, c.nAddEffectID02, c.nAddEffectID03, c.nAddEffectID04, c.nAddEffectID05, s.wszTitleDesc FROM charactertitle c LEFT JOIN charactertitle_string s ON c.nID = s.nID WHERE c.nID = @titleID";
-                using var command = _databaseService.ExecuteReader(query, connection, ("@titleID", titleID));
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@titleID", titleID));
 
                 return command.Read() ?
                     (command.GetInt32(0),

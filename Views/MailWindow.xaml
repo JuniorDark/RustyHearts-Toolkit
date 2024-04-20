@@ -13,6 +13,7 @@
     Height="600"
     MinWidth="640"
     MinHeight="600"
+    d:DataContext="{d:DesignInstance Type=vm:MailWindowViewModel}"
     vm:WindowBehaviors.EnableDoubleClickMaximize="True"
     vm:WindowBehaviors.EnableDragMove="True"
     AllowsTransparency="True"
@@ -22,9 +23,6 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Window.DataContext>
-        <vm:MailWindowViewModel />
-    </Window.DataContext>
     <ContentControl Template="{StaticResource box_red02}">
         <Grid Margin="-70,-80,-80,-80">
             <!--  Sender Label  -->
@@ -94,6 +92,7 @@
                 Width="157"
                 Height="19"
                 Margin="411,45,62,0"
+                IsChecked="{Binding SendToAll}"
                 VerticalAlignment="Top"
                 Content="Send to All Characters"
                 Foreground="#FFFFDE00"
@@ -156,8 +155,10 @@
                 Margin="432,159,62,0"
                 VerticalAlignment="Top"
                 Background="Transparent"
+                Command="{Binding LoadTemplateCommand}"
                 Content="Load Template"
                 Foreground="White"
+                IsEnabled="{Binding IsButtonEnabled}"
                 Style="{StaticResource lb_def_button02}">
                 <Button.ToolTip>
                     <ToolTip>
@@ -175,8 +176,10 @@
                 Margin="431,197,62,0"
                 VerticalAlignment="Top"
                 Background="Transparent"
+                Command="{Binding ClearTemplateCommand}"
                 Content="Clear"
                 Foreground="White"
+                IsEnabled="{Binding IsButtonEnabled}"
                 Style="{StaticResource lb_def_button02}">
                 <Button.ToolTip>
                     <ToolTip>
@@ -194,8 +197,10 @@
                 Margin="432,121,62,0"
                 VerticalAlignment="Top"
                 Background="Transparent"
+                Command="{Binding SaveTemplateCommand}"
                 Content="Save Template"
                 Foreground="White"
+                IsEnabled="{Binding IsButtonEnabled}"
                 Style="{StaticResource lb_def_button02}">
                 <Button.ToolTip>
                     <ToolTip>
@@ -265,6 +270,7 @@
                 Background="Transparent"
                 Content="Send"
                 Foreground="White"
+                IsEnabled="{Binding IsButtonEnabled}"
                 Style="{StaticResource lb_def_button02}">
                 <Button.ToolTip>
                     <ToolTip>
@@ -340,6 +346,7 @@
                     Grid.Column="0"
                     Width="44"
                     Height="44"
+                    IsEnabled="{Binding IsButtonEnabled}"
                     Style="{StaticResource ImageButtonStyle}">
                     <Button.InputBindings>
                         <!--  Left-click command  -->
@@ -404,6 +411,7 @@
                     Grid.Column="1"
                     Width="44"
                     Height="44"
+                    IsEnabled="{Binding IsButtonEnabled}"
                     Style="{StaticResource ImageButtonStyle}">
                     <Button.InputBindings>
                         <!--  Left-click command  -->
@@ -467,6 +475,7 @@
                     Grid.Column="2"
                     Width="44"
                     Height="44"
+                    IsEnabled="{Binding IsButtonEnabled}"
                     Style="{StaticResource ImageButtonStyle}">
                     <Button.InputBindings>
                         <!--  Left-click command  -->

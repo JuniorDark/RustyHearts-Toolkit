@@ -2,16 +2,9 @@
 
 namespace RHToolkit.Services
 {
-    public class FrameService : IFrameService
+    public class FrameService(IGMDatabaseService gmDatabaseService) : IFrameService
     {
-        private readonly ISqLiteDatabaseService _databaseService;
-        private readonly GMDatabaseService _gmDatabaseService;
-
-        public FrameService()
-        {
-            _databaseService = new SqLiteDatabaseService();
-            _gmDatabaseService = new GMDatabaseService(_databaseService);
-        }
+        private readonly IGMDatabaseService _gmDatabaseService = gmDatabaseService;
 
         public string GetBranchColor(int branch)
         {
@@ -157,7 +150,7 @@ namespace RHToolkit.Services
             return petFood == 0 ? "#e75151" : "#eed040";
         }
 
-        
+
         private const string ColorTagStart = "<COLOR:";
         private const string ColorTagEnd = ">";
         private const string ColorTagClose = "</COLOR>";
@@ -291,7 +284,7 @@ namespace RHToolkit.Services
             return input;
         }
 
-        
+
 
     }
 }

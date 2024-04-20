@@ -9,13 +9,11 @@
     x:Name="Frame"
     Height="Auto"
     MaxHeight="600"
+    d:DataContext="{d:DesignInstance Type=vm:FrameViewModel}"
     d:DesignHeight="600"
     d:DesignWidth="300"
     Template="{StaticResource lb_def_box01}"
     mc:Ignorable="d">
-    <UserControl.DataContext>
-        <vm:ItemWindowViewModel />
-    </UserControl.DataContext>
     <Grid
         x:Name="gearGrid"
         Width="300"
@@ -204,7 +202,7 @@
             Foreground="{Binding FixedOption01Color, Converter={StaticResource StringToBrushConverter}}"
             Text="{Binding FixedOption01Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}"  />
+            Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
         <TextBlock
             x:Name="tbFixedOption02"
             Grid.Row="10"
@@ -217,7 +215,7 @@
             Foreground="{Binding FixedOption02Color, Converter={StaticResource StringToBrushConverter}}"
             Text="{Binding FixedOption02Text}"
             TextWrapping="Wrap"
-            Visibility="{Binding FixedOption02, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}"  />
+            Visibility="{Binding FixedOption02, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
         <!--  RandomOption and its children  -->
         <TextBlock
             x:Name="tbRandomOption"

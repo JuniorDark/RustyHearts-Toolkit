@@ -8,7 +8,7 @@ namespace RHToolkit.Services
     public class DatabaseService(ISqlDatabaseService databaseService) : IDatabaseService
     {
         private readonly ISqlDatabaseService _databaseService = databaseService;
-        
+
         #region RustyHearts
 
         #region Character
