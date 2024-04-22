@@ -31,6 +31,7 @@
         public int PetFood { get; set; }
         public int JobClass { get; set; }
         public int SetId { get; set; }
+        public int AugmentStone { get; set; }
         public int FixOption00 { get; set; }
         public int FixOptionValue00 { get; set; }
         public int FixOption01 { get; set; }

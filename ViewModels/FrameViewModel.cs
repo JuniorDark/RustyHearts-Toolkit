@@ -35,23 +35,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DurabilityText))]
-    private int _durability;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(Durability))]
-    [NotifyPropertyChangedFor(nameof(DurabilityText))]
     private int _maxDurability;
 
-    partial void OnMaxDurabilityChanged(int value)
-    {
-        if (Durability > value)
-            Durability = value;
-
-        if (Durability < value)
-            Durability = value;
-    }
-
-    public string DurabilityText => _frameService.FormatDurability(Durability, MaxDurability);
+    public string DurabilityText => _frameService.FormatDurability(MaxDurability);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ReconstructionText))]
@@ -137,6 +123,14 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     public string PetFoodText => _frameService.FormatPetFood(PetFood);
 
     public string PetFoodColor => _frameService.FormatPetFoodColor(PetFood);
+
+    public static string AugmentStone => "Augment Stone";
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AugmentText))]
+    private int _augmentValue;
+
+    public string AugmentText => _frameService.FormatAugmentStone(AugmentValue);
 
     #region Fixed Option
 

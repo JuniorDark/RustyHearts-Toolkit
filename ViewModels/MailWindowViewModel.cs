@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using Newtonsoft.Json;
 using RHToolkit.Messages;
 using RHToolkit.Models;
+using RHToolkit.Services;
 using RHToolkit.Views;
 using System.Data;
 using System.IO;
@@ -16,9 +17,12 @@ namespace RHToolkit.ViewModels
     public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>
     {
         private readonly List<ItemData>? _cachedItemDataList = [];
+        private readonly IDatabaseService _databaseService;
 
-        public MailWindowViewModel()
+        public MailWindowViewModel(IDatabaseService databaseService)
         {
+            _databaseService = databaseService;
+
             if (ItemDataManager.Instance.CachedItemDataList == null)
             {
                 ItemDataManager.Instance.InitializeCachedLists();
@@ -29,6 +33,8 @@ namespace RHToolkit.ViewModels
 
             WeakReferenceMessenger.Default.Register(this);
         }
+
+        #region Add Item
 
         private ItemWindow? itemWindow;
 
@@ -59,6 +65,111 @@ namespace RHToolkit.ViewModels
             }
         }
 
+        public void Receive(ItemDataMessage message)
+        {
+            if (message.Recipient == ViewModelType.MailWindowViewModel)
+            {
+                var itemData = message.Value;
+
+                Item ??= [];
+
+                var existingItemIndex = Item.FindIndex(m => m.SlotIndex == itemData.SlotIndex);
+                if (existingItemIndex != -1)
+                {
+                    // Remove the existing ItemData with the same SlotIndex
+                    Item.RemoveAt(existingItemIndex);
+                }
+
+                // Add the new ItemData to the Item list
+                Item.Add(itemData);
+
+                UpdateItemProperties(itemData);
+
+            }
+        }
+
+        [ObservableProperty]
+        private List<ItemData>? _item;
+
+        private void UpdateItemProperties(ItemData itemData)
+        {
+            switch (itemData.SlotIndex)
+            {
+                case 0:
+                    ItemIcon1 = itemData.IconName;
+                    ItemIconBranch1 = itemData.Branch;
+                    ItemName1 = itemData.Name;
+                    ItemAmount1 = itemData.Amount;
+                    break;
+                case 1:
+                    ItemIcon2 = itemData.IconName;
+                    ItemIconBranch2 = itemData.Branch;
+                    ItemName2 = itemData.Name;
+                    ItemAmount2 = itemData.Amount;
+                    break;
+                case 2:
+                    ItemIcon3 = itemData.IconName;
+                    ItemIconBranch3 = itemData.Branch;
+                    ItemName3 = itemData.Name;
+                    ItemAmount3 = itemData.Amount;
+                    break;
+                default:
+                    break;
+            }
+        }
+        #endregion
+
+        #region Remove Item
+        [RelayCommand]
+        private void RemoveItem(string parameter)
+        {
+            if (int.TryParse(parameter, out int slotIndex))
+            {
+                if (Item != null)
+                {
+                    var removedItemIndex = Item.FindIndex(i => i.SlotIndex == slotIndex);
+                    if (removedItemIndex != -1)
+                    {
+                        // Remove the ItemData with the specified SlotIndex
+                        Item.RemoveAt(removedItemIndex);
+
+                        // Update properties to default values for the removed SlotIndex
+                        ResetItemProperties(slotIndex);
+                    }
+                }
+            }
+        }
+
+        private void ResetItemProperties(int slotIndex)
+        {
+            switch (slotIndex)
+            {
+                case 0:
+                    ItemIcon1 = null;
+                    ItemIconBranch1 = 0;
+                    ItemName1 = "Click to add a item";
+                    ItemAmount1 = 0;
+                    break;
+                case 1:
+                    ItemIcon2 = null;
+                    ItemIconBranch2 = 0;
+                    ItemName2 = "Click to add a item";
+                    ItemAmount2 = 0;
+                    break;
+                case 2:
+                    ItemIcon3 = null;
+                    ItemIconBranch3 = 0;
+                    ItemName3 = "Click to add a item";
+                    ItemAmount3 = 0;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region Template
 
         [RelayCommand]
         private void SaveTemplate()
@@ -77,7 +188,7 @@ namespace RHToolkit.ViewModels
                     ReturnDays = ReturnDays,
                     ItemIDs = Item.Select(item => item.ID).ToList(),
                     ItemAmounts = Item.Select(item => item.Amount).ToList(),
-                    Durabilities = Item.Select(item => item.Durability).ToList(),
+                    Durabilities = Item.Select(item => item.MaxDurability).ToList(),
                     EnchantLevels = Item.Select(item => item.EnchantLevel).ToList(),
                     Ranks = Item.Select(item => item.Rank).ToList(),
                     ReconNums = Item.Select(item => item.Reconstruction).ToList(),
@@ -305,106 +416,166 @@ namespace RHToolkit.ViewModels
             ResetItemProperties(1);
             ResetItemProperties(2);
         }
+        #endregion
 
-            [RelayCommand]
-        private void RemoveItem(string parameter)
+        #region Send Mail
+
+        private static readonly char[] separator = [','];
+
+        [RelayCommand]
+        private void SendMail()
         {
-            if (int.TryParse(parameter, out int slotIndex))
-            {
-                if (Item != null)
-                {
-                    var removedItemIndex = Item.FindIndex(i => i.SlotIndex == slotIndex);
-                    if (removedItemIndex != -1)
-                    {
-                        // Remove the ItemData with the specified SlotIndex
-                        Item.RemoveAt(removedItemIndex);
+            string? mailSender = Sender;
+            string? content = MailContent;
+            content = content.Replace("'", "''");
+            content += $"<br><br><right>{DateTime.Now:yyyy-MM-dd HH:mm:ss}";
 
-                        // Update properties to default values for the removed SlotIndex
-                        ResetItemProperties(slotIndex);
+            int gold = AttachGold;
+            int reqGold = ItemCharge;
+            int returnDay = ReturnDays;
+            int createType = (reqGold != 0) ? 5 : 0;
+            List<string> failedRecipients = [];
+            bool sendToAllCharacters = SendToAll;
+            string[] recipients;
+
+            if (string.IsNullOrEmpty(Recipient) && !sendToAllCharacters)
+            {
+                MessageBox.Show("Enter a Recipient", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (sendToAllCharacters)
+            {
+
+                recipients = _databaseService.GetAllCharacterNames();
+            }
+            else
+            {
+                // Split recipients by comma and trim any extra spaces
+                recipients = Recipient.Split(separator, StringSplitOptions.RemoveEmptyEntries)
+                                        .Select(r => r.Trim())
+                                        .ToArray();
+
+                // Validate if any recipient is empty or contains non-letter characters
+                if (recipients.Any(string.IsNullOrEmpty) || recipients.Any(r => !r.All(char.IsLetter)))
+                {
+                    MessageBox.Show("Recipient names must contain only letters and cannot be empty", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Check for duplicate recipients
+                HashSet<string> uniqueRecipients = new(StringComparer.OrdinalIgnoreCase);
+                foreach (var recipient in recipients)
+                {
+                    if (!uniqueRecipients.Add(recipient))
+                    {
+                        MessageBox.Show($"Duplicate recipient found: {recipient}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
                     }
                 }
             }
-        }
 
-        private void ResetItemProperties(int slotIndex)
-        {
-            switch (slotIndex)
+            string confirmationMessage = sendToAllCharacters
+                ? "Send this mail to all characters?"
+                : $"Send this mail to the following recipients?\n{string.Join(", ", recipients)}";
+
+            if (ConfirmMessage($"{confirmationMessage}"))
             {
-                case 0:
-                    ItemIcon1 = null;
-                    ItemIconBranch1 = 0;
-                    ItemName1 = "Click to add a item";
-                    ItemAmount1 = 0;
-                    break;
-                case 1:
-                    ItemIcon2 = null;
-                    ItemIconBranch2 = 0;
-                    ItemName2 = "Click to add a item";
-                    ItemAmount2 = 0;
-                    break;
-                case 2:
-                    ItemIcon3 = null;
-                    ItemIconBranch3 = 0;
-                    ItemName3 = "Click to add a item";
-                    ItemAmount3 = 0;
-                    break;
-                default:
-                    break;
-            }
-        }
+                string recipient = string.Empty;
 
-        public void Receive(ItemDataMessage message)
-        {
-            if (message.Recipient == ViewModelType.MailWindowViewModel)
-            {
-                var itemData = message.Value;
-
-                Item ??= [];
-
-                var existingItemIndex = Item.FindIndex(m => m.SlotIndex == itemData.SlotIndex);
-                if (existingItemIndex != -1)
+                try
                 {
-                    // Remove the existing ItemData with the same SlotIndex
-                    Item.RemoveAt(existingItemIndex);
+                    foreach (var currentRecipient in recipients)
+                    {
+                        Guid mailId = Guid.NewGuid();
+
+                        recipient = currentRecipient;
+
+                        (Guid? senderCharacterId, Guid? senderAuthId, string? senderWindyCode) = _databaseService.GetCharacterInfo(mailSender);
+                        (Guid? recipientCharacterId, Guid? recipientAuthId, string? recipientWindyCode) = _databaseService.GetCharacterInfo(recipient);
+
+                        if (senderCharacterId == null && createType == 5)
+                        {
+                            MessageBox.Show($"The sender ({mailSender}) does not exist.\nThe sender name must be a valid character name for billing mail.", "Failed to send Mail", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            return;
+                        }
+
+                        if (senderCharacterId == recipientCharacterId)
+                        {
+                            MessageBox.Show($"The sender and recipient cannot be the same.", "Failed to send Mail", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            return;
+                        }
+
+                        if (recipientCharacterId == null || recipientAuthId == null)
+                        {
+                            MessageBox.Show($"The recipient ({recipient}) does not exist.", "Failed to send Mail", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            continue; // Skip to the next recipient
+                        }
+
+                        if (senderCharacterId == null)
+                        {
+                            senderCharacterId = Guid.Parse("00000000-0000-0000-0000-000000000000");
+                        }
+
+                        string Modify = "";
+
+                        if (gold > 0)
+                        {
+                            Modify += $"[<font color=blue>Attach Gold - {gold}</font>]<br></font>";
+                        }
+
+                        if (Item != null)
+                        {
+                            // Iterate over MailDataList and insert item data for each MailData
+                            foreach (ItemData itemData in Item)
+                            {
+                                try
+                                {
+                                    if (itemData.ID != 0)
+                                    {
+                                        Modify += $"[<font color=blue>Attach Item - {itemData.ID} ({itemData.Amount})</font>]<br></font>";
+
+                                        _databaseService.InsertMailItem(itemData, recipientAuthId, recipientCharacterId, mailId, itemData.SlotIndex);
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show($"Error attaching item to mail: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                }
+                            }
+                        }
+
+                        _databaseService.InsertMail(recipientAuthId, senderCharacterId, mailSender, recipient, content, gold, returnDay, reqGold, mailId, createType);
+
+                        _databaseService.GMAudit(recipientWindyCode, recipientCharacterId, recipient, "Send Mail", $"<font color=blue>Send Mail</font>]<br><font color=red>Sender: RHToolkit: {senderCharacterId}, Recipient: {recipient}, GUID:{{{recipientCharacterId}}}<br></font>" + Modify);
+                    }
+
+                    if (sendToAllCharacters)
+                    {
+                        MessageBox.Show($"The mail has been sent successfully to all characters. Please re-login the character/change game server to view the mail.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show($"The mail has been sent successfully. Please re-login the character/change game server to view the mail.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
-
-                // Add the new ItemData to the Item list
-                Item.Add(itemData);
-
-                UpdateItemProperties(itemData);
-
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error sending mail: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
         }
 
-        [ObservableProperty]
-        private List<ItemData>? _item;
-
-        private void UpdateItemProperties(ItemData itemData)
+        public static bool ConfirmMessage(string message)
         {
-            switch (itemData.SlotIndex)
-            {
-                case 0:
-                    ItemIcon1 = itemData.IconName;
-                    ItemIconBranch1 = itemData.Branch;
-                    ItemName1 = itemData.Name;
-                    ItemAmount1 = itemData.Amount;
-                    break;
-                case 1:
-                    ItemIcon2 = itemData.IconName;
-                    ItemIconBranch2 = itemData.Branch;
-                    ItemName2 = itemData.Name;
-                    ItemAmount2 = itemData.Amount;
-                    break;
-                case 2:
-                    ItemIcon3 = itemData.IconName;
-                    ItemIconBranch3 = itemData.Branch;
-                    ItemName3 = itemData.Name;
-                    ItemAmount3 = itemData.Amount;
-                    break;
-                default:
-                    break;
-            }
+            MessageBoxResult result = MessageBox.Show(message, "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            return result == MessageBoxResult.Yes;
         }
+
+
+        #endregion
+
+        #region Properties
 
         [ObservableProperty]
         private bool _isButtonEnabled = true;
@@ -465,6 +636,8 @@ namespace RHToolkit.ViewModels
 
         [ObservableProperty]
         private int? _itemIconBranch3;
+
+        #endregion
 
     }
 }

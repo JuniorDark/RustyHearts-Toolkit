@@ -125,9 +125,9 @@ namespace RHToolkit.Services
             return itemTrade == 0 ? "Trade Unavailable" : "";
         }
 
-        public string FormatDurability(int durability, int maxDurability)
+        public string FormatDurability(int durability)
         {
-            return durability > 0 ? $"Durability: {durability / 100}/{maxDurability / 100}" : "";
+            return durability > 0 ? $"Durability: {durability / 100}/{durability / 100}" : "";
         }
 
         public string FormatWeight(int weight)
@@ -150,6 +150,10 @@ namespace RHToolkit.Services
             return petFood == 0 ? "#e75151" : "#eed040";
         }
 
+        public string FormatAugmentStone(int value)
+        {
+            return value > 0 ? $"Physical/Magic Damage +{value}" : "";
+        }
 
         private const string ColorTagStart = "<COLOR:";
         private const string ColorTagEnd = ">";

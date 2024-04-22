@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
+using RHToolkit.Models;
 using RHToolkit.Views;
 
 namespace RHToolkit.ViewModels
@@ -32,6 +33,25 @@ namespace RHToolkit.ViewModels
         [ObservableProperty]
         private bool _isTextBoxEnabled = true;
 
-        
+        [ObservableProperty]
+        private string? _sQLServer = "192.168.44.208";
+        partial void OnSQLServerChanged(string? value)
+        {
+            SqlCredentials.SQLServer = value;
+        }
+
+        [ObservableProperty]
+        private string? _sQLUser = "sa";
+        partial void OnSQLUserChanged(string? value)
+        {
+            SqlCredentials.SQLUser = value;
+        }
+
+        [ObservableProperty]
+        private string? _sQLPwd = "RustyHearts";
+        partial void OnSQLPwdChanged(string? value)
+        {
+            SqlCredentials.SQLPwd = value;
+        }
     }
 }

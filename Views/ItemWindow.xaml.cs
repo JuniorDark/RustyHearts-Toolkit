@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using RHToolkit.ViewModels;
+﻿using RHToolkit.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 

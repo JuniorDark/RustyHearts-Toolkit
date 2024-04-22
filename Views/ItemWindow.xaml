@@ -627,22 +627,24 @@
                     HorizontalAlignment="Center"
                     Orientation="Vertical">
                     <Label
-                        x:Name="lbDurability"
+                        x:Name="lbAugment"
                         Width="120"
                         Height="23"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Durability"
+                        Content="Augment Stone"
                         Style="{StaticResource ArialMSWhite}" />
                     <local:IntegerUpDown
-                        x:Name="intDurability"
+                        x:Name="intAugmentValue"
                         Width="120"
                         Height="26"
-                        Increment="{Binding MaxDurability, Converter={StaticResource IncrementConverter}}"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Increment="1"
                         IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
-                        Maximum="{Binding MaxDurability}"
-                        Minimum="100"
-                        Value="{Binding Durability, Mode=TwoWay}" />
+                        Maximum="100000"
+                        Minimum="0"
+                        Value="{Binding AugmentValue, Mode=TwoWay}" />
                     <Label
                         x:Name="lbCurrentAttribute"
                         Width="120"

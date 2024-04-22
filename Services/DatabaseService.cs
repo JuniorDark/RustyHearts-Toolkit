@@ -12,9 +12,10 @@ namespace RHToolkit.Services
         #region RustyHearts
 
         #region Character
-        public CharacterData? GetCharacterData(IDbConnection connection, string characterName)
+        public CharacterData? GetCharacterData(string characterName)
         {
             string selectQuery = "SELECT * FROM CharacterTable WHERE [Name] = @name";
+            using var connection = _databaseService.OpenConnection("RustyHearts");
             DataTable dataTable = _databaseService.ExecuteDataQuery(selectQuery, connection, null, ("@name", characterName));
 
             if (dataTable.Rows.Count > 0)
@@ -52,7 +53,7 @@ namespace RHToolkit.Services
 
                 if (row["guildid"] != DBNull.Value)
                 {
-                    characterData.GuildName = GetGuildName(connection, (Guid)row["guildid"]);
+                    characterData.GuildName = GetGuildName((Guid)row["guildid"]);
                 }
                 else
                 {
@@ -67,9 +68,14 @@ namespace RHToolkit.Services
             }
         }
 
-        public void UpdateCharacterData(IDbConnection connection, IDbTransaction transaction, Guid characterId, NewCharacterData characterData)
+        public void UpdateCharacterData(Guid characterId, NewCharacterData characterData)
         {
-            _databaseService.ExecuteNonQuery(
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                _databaseService.ExecuteNonQuery(
                     "UPDATE CharacterTable SET Class = @class, Job = @job, Level = @level, Experience = @experience, SP = @sp, Total_SP = @total_sp, Fatigue = @fatigue, LobbyID = @lobbyID, gold = @gold, Hearts = @hearts, Block_YN = @block_YN, storage_gold = @storage_gold, storage_count = @storage_count, IsTradeEnable = @isTradeEnable, Permission = @permission, GuildPoint = @guild_point, IsMoveEnable = @isMoveEnable WHERE character_id = @character_id",
                     connection,
                     transaction,
@@ -92,24 +98,48 @@ namespace RHToolkit.Services
                     ("@guild_point", characterData.GuildPoint),
                     ("@isMoveEnable", characterData.IsMoveEnable)
                 );
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error Updating Character Data: {ex.Message}", ex);
+            }
+
+
         }
 
-        public int UpdateCharacterName(IDbConnection connection, IDbTransaction transaction, Guid characterId, string characterName)
+        public int UpdateCharacterName(Guid characterId, string characterName)
         {
-            return (int)_databaseService.ExecuteProcedure(
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+
+            try
+            {
+                return (int)_databaseService.ExecuteProcedure(
                     "up_update_character_name",
                     connection,
-                    transaction,
+                    null,
                     ("@character_id", characterId),
                     ("@character_name", characterName)
                 );
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}", ex);
+            }
+
+
         }
 
         #region Read
-        public bool IsCharacterOnline(IDbConnection connection, string characterName)
+        public bool IsCharacterOnline(string characterName)
         {
             string selectQuery = "SELECT IsConnect FROM CharacterTable WHERE name = @characterName";
             var parameters = new (string, object)[] { ("@characterName", characterName) };
+
+            using var connection = _databaseService.OpenConnection("RustyHearts");
 
             object result = _databaseService.ExecuteScalar(selectQuery, connection, parameters);
 
@@ -123,12 +153,14 @@ namespace RHToolkit.Services
             }
         }
 
-        public string[] GetAllCharacterNames(IDbConnection connection)
+        public string[] GetAllCharacterNames()
         {
             List<string> characterNames = [];
 
             string query = "SELECT name FROM CharacterTable";
 
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+
             DataTable dataTable = _databaseService.ExecuteDataQuery(query, connection);
 
             foreach (DataRow row in dataTable.Rows)
@@ -140,12 +172,14 @@ namespace RHToolkit.Services
             return [.. characterNames];
         }
 
-        public string[] GetAllOnlineCharacterNames(IDbConnection connection)
+        public string[] GetAllOnlineCharacterNames()
         {
             List<string> characterNames = [];
 
             string query = "SELECT name FROM CharacterTable WHERE IsConnect = 'Y'";
 
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+
             DataTable dataTable = _databaseService.ExecuteDataQuery(query, connection);
 
             foreach (DataRow row in dataTable.Rows)
@@ -157,10 +191,12 @@ namespace RHToolkit.Services
             return [.. characterNames];
         }
 
-        public (Guid? characterId, Guid? authid, string? windyCode) GetCharacterInfo(IDbConnection connection, string characterName)
+        public (Guid? characterId, Guid? authid, string? windyCode) GetCharacterInfo(string characterName)
         {
             string selectQuery = "SELECT character_id, authid, bcust_id FROM CharacterTable WHERE name = @characterName";
             var parameters = new (string, object)[] { ("@characterName", characterName) };
+
+            using var connection = _databaseService.OpenConnection("RustyHearts");
 
             DataTable dataTable = _databaseService.ExecuteDataQuery(selectQuery, connection, null, parameters);
 
@@ -180,15 +216,20 @@ namespace RHToolkit.Services
 
         #region Fortune
 
-        public DataRow? ReadCharacterFortune(IDbConnection connection, Guid characterId)
+        public DataRow? ReadCharacterFortune(Guid characterId)
         {
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+
             DataTable dataTable = _databaseService.ExecuteDataProcedure("up_read_fortune", connection, null, ("@character_id", characterId));
 
             return dataTable.Rows.Count > 0 ? dataTable.Rows[0] : null;
         }
 
-        public void UpdateFortune(IDbConnection connection, IDbTransaction transaction, Guid characterId, int fortune, int selectedFortuneID1, int selectedFortuneID2, int selectedFortuneID3)
+        public void UpdateFortune(Guid characterId, int fortune, int selectedFortuneID1, int selectedFortuneID2, int selectedFortuneID3)
         {
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
             try
             {
                 _databaseService.ExecuteProcedure(
@@ -202,23 +243,29 @@ namespace RHToolkit.Services
                     ("@type_3", selectedFortuneID3),
                     ("@count", 1)
                 );
+
+                transaction.Commit();
             }
             catch (Exception ex)
             {
+                transaction.Rollback();
                 throw new Exception($"Error updating fortune: {ex.Message}", ex);
             }
         }
 
-        public void RemoveFortune(IDbConnection connection, IDbTransaction transaction, Guid characterId, int fortuneState)
+        public void RemoveFortune(Guid characterId, int fortuneState)
         {
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
             try
             {
                 _databaseService.ExecuteNonQuery(
-                "DELETE FROM FortuneTable WHERE character_id = @character_id",
-                connection,
-                transaction,
-                ("@character_id", characterId)
-            );
+               "DELETE FROM FortuneTable WHERE character_id = @character_id",
+               connection,
+               transaction,
+               ("@character_id", characterId)
+           );
 
                 _databaseService.ExecuteProcedure(
                     "up_update_character_fortune",
@@ -227,9 +274,12 @@ namespace RHToolkit.Services
                     ("@character_id", characterId),
                     ("@fortune", fortuneState)
                 );
+
+                transaction.Commit();
             }
             catch (Exception ex)
             {
+                transaction.Rollback();
                 throw new Exception($"Error removing fortune: {ex.Message}", ex);
             }
         }
@@ -237,7 +287,7 @@ namespace RHToolkit.Services
 
         #region Sanction
 
-        public DataTable ReadCharacterSanctionList(IDbConnection connection, Guid characterId)
+        public DataTable ReadCharacterSanctionList(Guid characterId)
         {
             DataTable dataTable = new();
             dataTable.Columns.Add("SanctionUid", typeof(Guid));
@@ -252,6 +302,8 @@ namespace RHToolkit.Services
             try
             {
                 string selectQuery = "SELECT * FROM Character_Sanction WHERE [character_id] = @character_id";
+
+                using var connection = _databaseService.OpenConnection("RustyHearts");
 
                 _databaseService.ExecuteQuery(
                     selectQuery,
@@ -292,8 +344,11 @@ namespace RHToolkit.Services
             return dataTable;
         }
 
-        public (DateTime startTime, DateTime? endTime) GetSanctionTimes(IDbConnection connection, IDbTransaction transaction, Guid sanctionUid)
+        public (DateTime startTime, DateTime? endTime) GetSanctionTimes(Guid sanctionUid)
         {
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
             var result = _databaseService.ExecuteDataQuery(
                 "SELECT start_time, end_time FROM Character_Sanction WHERE uid = @uid",
                 connection,
@@ -313,8 +368,10 @@ namespace RHToolkit.Services
             }
         }
 
-        public bool CharacterHasSanction(IDbConnection connection, Guid characterId)
+        public bool CharacterHasSanction(Guid characterId)
         {
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+
             int sanctionCount = (int)_databaseService.ExecuteScalar(
                 "SELECT COUNT(*) FROM Character_Sanction WHERE [character_id] = @character_id AND [is_apply] = 1",
                 connection,
@@ -324,8 +381,11 @@ namespace RHToolkit.Services
             return sanctionCount > 0;
         }
 
-        public (Guid SanctionUid, bool IsInsert) CharacterSanction(IDbConnection connection, IDbTransaction transaction, Guid characterId, Guid sanctionUid, int sanctionKind, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount)
+        public (Guid SanctionUid, bool IsInsert) CharacterSanction(Guid characterId, Guid sanctionUid, int sanctionKind, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount)
         {
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
             var result = _databaseService.ExecuteProcedure(
                 "up_char_sanction",
                 connection,
@@ -347,8 +407,10 @@ namespace RHToolkit.Services
         #endregion
 
         #region Guild
-        public string? GetGuildName(IDbConnection connection, Guid guildId)
+        public string? GetGuildName(Guid guildId)
         {
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+
             string selectQuery = "SELECT name FROM GuildTable WHERE guild_id = @guildId";
             var parameters = new (string, object)[] { ("@guildId", guildId) };
 
@@ -357,20 +419,111 @@ namespace RHToolkit.Services
         }
         #endregion
 
+        #region Mail
+        public void InsertMail(Guid? senderAuthId, Guid? senderCharacterId, string mailSender, string recipient, string content, int gold, int returnDay, int reqGold, Guid mailId, int createType)
+        {
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                _databaseService.ExecuteProcedure(
+                    "up_insert_mail",
+                    connection,
+                    transaction,
+                    ("@sender_auth_id", senderAuthId),
+                    ("@sender_character_id", senderCharacterId),
+                    ("@sender_name", mailSender),
+                    ("@recver_name", recipient),
+                    ("@msg", content),
+                    ("@money", gold),
+                    ("@return_day", returnDay),
+                    ("@req_money", reqGold),
+                    ("@NewMailID", mailId),
+                    ("@createType", createType)
+                );
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error inserting mail: {ex.Message}", ex);
+            }
+        }
+
+        public void InsertMailItem(ItemData itemData, Guid? recipientAuthId, Guid? recipientCharacterId, Guid mailId, int slotIndex)
+        {
+            using var connection = _databaseService.OpenConnection("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                _databaseService.ExecuteNonQuery(
+                    "INSERT INTO n_mailitem (item_uid, mail_uid, character_id, auth_id, page_index, slot_index, code, use_cnt, remain_time, create_time, update_time, gcode, durability, enhance_level, option_1_code, option_1_value, option_2_code, option_2_value, option_3_code, option_3_value, option_group, ReconNum, ReconState, socket_count, socket_1_code, socket_1_value, socket_2_code, socket_2_value, socket_3_code, socket_3_value, expire_time, lock_pwd, activity_value, link_id, is_seizure, socket_1_color, socket_2_color, socket_3_color, rank, acquireroute, physical, magical, durabilitymax, weight) " +
+                    "VALUES (@item_id, @MailId, @character_id, @auth_id, @page_index, @slot_index, @code, @use_cnt, @remain_time, GETDATE(), GETDATE(), @gcode, @durability, @enhance_level, @option_1_code, @option_1_value, @option_2_code, @option_2_value, @option_3_code, @option_3_value, 0, @ReconNum, @ReconState, @socket_count, @socket_1_code, @socket_1_value, @socket_2_code, @socket_2_value, @socket_3_code, @socket_3_value, @expire_time, '', @activity_value, @link_id, 0, @socket_1_color, @socket_2_color, @socket_3_color, @rank, @acquireroute, @physical, @magical, @durabilitymax, @weight)",
+                    connection,
+                    transaction,
+                    ("@character_id", recipientCharacterId),
+                    ("@auth_id", recipientAuthId),
+                    ("@item_id", Guid.NewGuid()),
+                    ("@code", itemData.ID),
+                    ("@use_cnt", itemData.Amount),
+                    ("@remain_time", 0),
+                    ("@gcode", 0),
+                    ("@page_index", 61),
+                    ("@slot_index", slotIndex),
+                    ("@durability", itemData.Durability),
+                    ("@enhance_level", itemData.EnchantLevel),
+                    ("@option_1_code", itemData.RandomOption01),
+                    ("@option_1_value", itemData.RandomOption01Value),
+                    ("@option_2_code", itemData.RandomOption02),
+                    ("@option_2_value", itemData.RandomOption02Value),
+                    ("@option_3_code", itemData.RandomOption03),
+                    ("@option_3_value", itemData.RandomOption03Value),
+                    ("@ReconNum", itemData.Reconstruction),
+                    ("@ReconState", itemData.ReconstructionMax),
+                    ("@socket_count", itemData.SocketCount),
+                    ("@socket_1_code", itemData.SocketOption01),
+                    ("@socket_1_value", itemData.SocketOption01Value),
+                    ("@socket_2_code", itemData.SocketOption02),
+                    ("@socket_2_value", itemData.SocketOption02Value),
+                    ("@socket_3_code", itemData.SocketOption03),
+                    ("@socket_3_value", itemData.SocketOption03Value),
+                    ("@socket_1_color", itemData.Socket01Color),
+                    ("@socket_2_color", itemData.Socket02Color),
+                    ("@socket_3_color", itemData.Socket03Color),
+                    ("@expire_time", 0),
+                    ("@MailId", mailId),
+                    ("@activity_value", itemData.AugmentStone),
+                    ("@link_id", "00000000-0000-0000-0000-000000000000"),
+                    ("@rank", itemData.Rank),
+                    ("@acquireroute", 0),
+                    ("@physical", 0),
+                    ("@magical", 0),
+                    ("@durabilitymax", itemData.MaxDurability),
+                    ("@weight", itemData.Weight)
+                );
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error inserting mail item: {ex.Message}", ex);
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region RustyHearts_Log
-        public void GMAudit(IDbConnection connection, IDbTransaction transaction, string windyCode, Guid characterId, string characterName, string action, string modify)
+        public void GMAudit(string windyCode, Guid? characterId, string characterName, string action, string modify)
         {
+            using var connection = _databaseService.OpenConnection("GMRustyHearts");
+            using var transaction = connection.BeginTransaction();
+
             try
             {
-                if (connection.State != ConnectionState.Open)
-                {
-                    connection.Open();
-                }
-
-                connection.ChangeDatabase("GMRustyHearts");
-
                 string changes = $"<font color=blue>{action}</font>]<br><font color=red>{modify}<br>{characterName}, GUID:{{{characterId.ToString().ToUpper()}}}<br></font>";
 
                 _databaseService.ExecuteNonQuery("INSERT INTO GMAudit(audit_id, AdminID, world_index, bcust_id, character_id, char_name, Type, Modify, Memo, date) " +
@@ -388,18 +541,22 @@ namespace RHToolkit.Services
                      ("@Memo", ""),
                      ("@date", DateTime.UtcNow)
                 );
+                transaction.Commit();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                transaction.Rollback();
+                throw new Exception($"Error: {ex.Message}", ex);
             }
         }
 
-        public void SanctionLog(IDbConnection connection, IDbTransaction transaction, Guid sanctionUid, Guid characterId, string windyCode, string characterName, DateTime startTime, DateTime? endTime, string reason)
+        public void SanctionLog(Guid sanctionUid, Guid characterId, string windyCode, string characterName, DateTime startTime, DateTime? endTime, string reason)
         {
+            using var connection = _databaseService.OpenConnection("RustyHearts_Log");
+            using var transaction = connection.BeginTransaction();
+
             try
             {
-                connection.ChangeDatabase("RustyHearts_Log");
 
                 _databaseService.ExecuteNonQuery("INSERT INTO Sanction_Log(log_type, sanction_uid, world_id, bcust_id, item_uid, character_id, char_name, item_name, start_time, end_time, personnel, releaser, cause, comment, is_release, reg_date) " +
                                                          "VALUES (@log_type, @sanction_uid, @world_id, @bcust_id, @item_uid, @character_id, @char_name, @item_name, " +
@@ -423,18 +580,23 @@ namespace RHToolkit.Services
                      ("@is_release", 0),
                      ("@reg_date", startTime)
                 );
+                transaction.Commit();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                transaction.Rollback();
+                throw new Exception($"Error: {ex.Message}", ex);
             }
         }
 
-        public void UpdateSanctionLog(IDbConnection connection, IDbTransaction transaction, Guid sanctionUid, string releaser, string comment, int isRelease)
+        public void UpdateSanctionLog(Guid sanctionUid, string releaser, string comment, int isRelease)
         {
-            connection.ChangeDatabase("RustyHearts_Log");
+            using var connection = _databaseService.OpenConnection("RustyHearts_Log");
+            using var transaction = connection.BeginTransaction();
 
-            _databaseService.ExecuteNonQuery(
+            try
+            {
+                _databaseService.ExecuteNonQuery(
                     "UPDATE Sanction_Log SET releaser = @releaser, comment = @comment, is_release = @is_release WHERE sanction_uid = @sanction_uid",
                     connection,
                     transaction,
@@ -443,6 +605,14 @@ namespace RHToolkit.Services
                      ("@comment", comment),
                      ("@is_release", isRelease)
                 );
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error: {ex.Message}", ex);
+            }
         }
         #endregion
 

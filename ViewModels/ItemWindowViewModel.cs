@@ -58,9 +58,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             Name = ItemName,
             Branch = ItemBranch,
             IconName = IconName,
-            Durability = Durability,
+            Durability = MaxDurability,
             MaxDurability = MaxDurability,
             EnchantLevel = EnchantLevel,
+            AugmentStone = AugmentValue,
             Rank = Rank,
             Weight = Weight,
             Reconstruction = Reconstruction,
@@ -109,8 +110,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         SlotIndex = itemData.SlotIndex;
         Amount = itemData.Amount;
         MaxDurability = itemData.MaxDurability;
-        Durability = itemData.Durability;
         EnchantLevel = itemData.EnchantLevel;
+        AugmentValue = itemData.AugmentStone;
         Rank = itemData.Rank;
         Weight = itemData.Weight;
         ReconstructionMax = itemData.ReconstructionMax;
@@ -530,7 +531,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             IconName = itemData.IconName;
             ItemTrade = itemData.ItemTrade;
             MaxDurability = itemData.Durability;
-            Durability = itemData.Durability;
             Weight = itemData.Weight;
             ReconstructionMax = itemData.ReconstructionMax;
             Reconstruction = itemData.ReconstructionMax;
@@ -617,23 +617,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _durability;
-    partial void OnDurabilityChanged(int value)
-    {
-        _frameViewModel.Durability = value;
-    }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(Durability))]
     private int _maxDurability;
     partial void OnMaxDurabilityChanged(int value)
     {
-        if (Durability > value)
-            Durability = value;
-
-        if (Durability < value)
-            Durability = value;
-
         _frameViewModel.MaxDurability = value;
     }
 
@@ -749,6 +735,13 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     partial void OnPetFoodChanged(int value)
     {
         _frameViewModel.PetFood = value;
+    }
+
+    [ObservableProperty]
+    private int _augmentValue;
+    partial void OnAugmentValueChanged(int value)
+    {
+        _frameViewModel.AugmentValue = value;
     }
 
     #region Fixed Option

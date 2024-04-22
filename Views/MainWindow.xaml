@@ -57,7 +57,7 @@
                 Foreground="Gold"
                 IsEnabled="{Binding IsTextBoxEnabled}"
                 Template="{StaticResource lb_textbox}"
-                Text="127.0.0.1" />
+                Text="{Binding SQLServer, Mode=TwoWay}" />
             <Label
                 x:Name="lbSqlAccount"
                 Grid.Row="1"
@@ -76,7 +76,7 @@
                 Foreground="Gold"
                 IsEnabled="{Binding IsTextBoxEnabled}"
                 Template="{StaticResource lb_textbox}"
-                Text="sa" />
+                Text="{Binding SQLUser, Mode=TwoWay}" />
             <Button
                 x:Name="btnSQLConnection"
                 Grid.Row="1"
@@ -195,7 +195,7 @@
                 Foreground="Gold"
                 IsEnabled="{Binding IsTextBoxEnabled}"
                 Template="{StaticResource lb_textbox}"
-                Text="" />
+                Text="{Binding SQLPwd, Mode=TwoWay}" />
         </Grid>
     </ContentControl>
 

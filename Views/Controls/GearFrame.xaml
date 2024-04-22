@@ -8,16 +8,16 @@
     xmlns:vm="clr-namespace:RHToolkit.ViewModels"
     x:Name="Frame"
     Height="Auto"
-    MaxHeight="600"
+    MaxHeight="650"
     d:DataContext="{d:DesignInstance Type=vm:FrameViewModel}"
-    d:DesignHeight="600"
+    d:DesignHeight="650"
     d:DesignWidth="300"
     Template="{StaticResource lb_def_box01}"
     mc:Ignorable="d">
     <Grid
         x:Name="gearGrid"
         Width="300"
-        MaxHeight="600"
+        MaxHeight="650"
         Margin="-22,-22,-22,-22"
         VerticalAlignment="Top">
         <Grid.RowDefinitions>
@@ -28,7 +28,9 @@
             <RowDefinition Height="Auto" MinHeight="22" />
             <RowDefinition Height="Auto" MinHeight="22" />
             <RowDefinition Height="Auto" MinHeight="50" />
-            <RowDefinition Height="Auto" MinHeight="40" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" MinHeight="30" />
+            <RowDefinition Height="Auto" MinHeight="30"/>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" MinHeight="50" />
@@ -170,10 +172,33 @@
             d:Text="Physical Damage +0~0&#x0a;Magic Damage +0~0"
             Foreground="White"
             Text="{Binding MainStatText}" />
+        <!--  Augment  -->
+        <TextBlock
+            x:Name="tbAugment"
+            Grid.Row="7"
+            Margin="10,0,0,0"
+            VerticalAlignment="Top"
+            d:Text="Augment Stone"
+            Foreground="White"
+            Text="{Binding AugmentStone}"
+            Visibility="{Binding AugmentValue, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+        <TextBlock
+            x:Name="tbAugmentName"
+            Grid.Row="8"
+            Height="Auto"
+            Margin="10,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            d:Foreground="White"
+            d:Text="Physical/Magic Damage +0"
+            Foreground="#06EBE8"
+            Text="{Binding AugmentText}"
+            Visibility="{Binding AugmentValue, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+
         <!--  SetName  -->
         <TextBlock
             x:Name="tbSetName"
-            Grid.Row="7"
+            Grid.Row="9"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Center"
@@ -183,7 +208,7 @@
         <!--  FixedOption and its children  -->
         <TextBlock
             x:Name="tbFixedOption"
-            Grid.Row="8"
+            Grid.Row="10"
             Margin="10,0,0,0"
             VerticalAlignment="Top"
             d:Text="[Fixed Buff]"
@@ -192,7 +217,7 @@
             Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
         <TextBlock
             x:Name="tbFixedOption01"
-            Grid.Row="9"
+            Grid.Row="11"
             Height="Auto"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
@@ -205,7 +230,7 @@
             Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
         <TextBlock
             x:Name="tbFixedOption02"
-            Grid.Row="10"
+            Grid.Row="12"
             Height="Auto"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
@@ -219,7 +244,7 @@
         <!--  RandomOption and its children  -->
         <TextBlock
             x:Name="tbRandomOption"
-            Grid.Row="11"
+            Grid.Row="13"
             Margin="10,0,0,0"
             VerticalAlignment="Top"
             d:Text="[Random Option]"
@@ -228,7 +253,7 @@
             Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <TextBlock
             x:Name="tbRandomOption01"
-            Grid.Row="12"
+            Grid.Row="14"
             Height="Auto"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
@@ -241,7 +266,7 @@
             Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <TextBlock
             x:Name="tbRandomOption02"
-            Grid.Row="13"
+            Grid.Row="15"
             Height="Auto"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
@@ -254,7 +279,7 @@
             Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
         <TextBlock
             x:Name="tbRandomOption03"
-            Grid.Row="14"
+            Grid.Row="16"
             Height="Auto"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
@@ -268,7 +293,7 @@
         <!--  SocketOption and its children  -->
         <TextBlock
             x:Name="tbSocketOption"
-            Grid.Row="15"
+            Grid.Row="17"
             Margin="10,0,0,0"
             VerticalAlignment="Top"
             d:Text="[Socket]"
@@ -277,7 +302,7 @@
             Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <TextBlock
             x:Name="tbSocketOption01"
-            Grid.Row="16"
+            Grid.Row="18"
             Height="Auto"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
@@ -290,7 +315,7 @@
             Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <TextBlock
             x:Name="tbSocketOption02"
-            Grid.Row="17"
+            Grid.Row="19"
             Height="Auto"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
@@ -303,7 +328,7 @@
             Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
         <TextBlock
             x:Name="tbSocketOption03"
-            Grid.Row="18"
+            Grid.Row="20"
             Height="Auto"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
@@ -316,7 +341,7 @@
             Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
         <TextBlock
             x:Name="tbPetFood"
-            Grid.Row="19"
+            Grid.Row="21"
             Margin="10,0,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"

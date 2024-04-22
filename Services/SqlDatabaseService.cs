@@ -8,7 +8,7 @@ namespace RHToolkit.Services
     {
         public IDbConnection OpenConnection(string databaseName)
         {
-            string connectionString = $"Data Source={SqlCredentials.SQLServer};Initial Catalog={databaseName};User Id={SqlCredentials.SQLUser};Password={SqlCredentials.SQLPwd};";
+            string connectionString = $"Data Source={SqlCredentials.SQLServer};Initial Catalog={databaseName};User Id={SqlCredentials.SQLUser};Password={SqlCredentials.SQLPwd};Encrypt=false;";
             SqlConnection connection = new()
             {
                 ConnectionString = connectionString
