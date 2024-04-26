@@ -1,13 +1,12 @@
 ﻿using System.Windows.Controls;
 
-namespace RHToolkit.Views
+namespace RHToolkit.Controls
 {
-    public partial class ItemFrame : UserControl
+    public partial class GearFrame : UserControl
     {
-        public ItemFrame()
+        public GearFrame()
         {
             InitializeComponent();
         }
     }
-
 }

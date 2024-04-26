@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Assets\ico\icon_100t_hammer.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\ico\gearbox.ico</ApplicationIcon>
     <Authors>JuniorDark</Authors>
     <Product>Rusty Hearts Toolkit</Product>
     <PackageId>Rusty Hearts Toolkit</PackageId>
@@ -81,7 +81,12 @@
     <None Remove="Assets\buttons\lb_scroll\lb_scroll01_05_01.png" />
     <None Remove="Assets\buttons\lb_scroll\lb_scroll01_05_02.png" />
     <None Remove="Assets\buttons\lb_scroll\lb_scroll01_05_03.png" />
+    <None Remove="Assets\buttons\system\lb_main_quick_system04_01.png" />
+    <None Remove="Assets\buttons\system\lb_main_quick_system04_02.png" />
+    <None Remove="Assets\buttons\system\lb_main_quick_system04_03.png" />
+    <None Remove="Assets\buttons\system\lb_main_quick_system04_04.png" />
     <None Remove="Assets\Fonts\Dotum.ttc" />
+    <None Remove="Assets\icon\gearbox.png" />
     <None Remove="Assets\icon\icons8-eye-16.png" />
     <None Remove="Assets\icon\icon_cashtitle.png" />
     <None Remove="Assets\icon\icon_cash_optionchange.png" />
@@ -95,6 +100,7 @@
     <None Remove="Assets\icon\title.png" />
     <None Remove="Assets\ico\character.ico" />
     <None Remove="Assets\ico\fortune.ico" />
+    <None Remove="Assets\ico\gearbox.png" />
     <None Remove="Assets\ico\gm.ico" />
     <None Remove="Assets\ico\icon_fortune.ico" />
     <None Remove="Assets\ico\icon_mail.png" />
@@ -273,6 +279,15 @@
     <None Remove="Assets\Fonts\font.ttf" />
     <None Remove="icon_cash_optionchange.png" />
     <None Remove="MainForm.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\buttons\system\lb_main_quick_system04_01.png" />
+    <Resource Include="Assets\buttons\system\lb_main_quick_system04_02.png" />
+    <Resource Include="Assets\buttons\system\lb_main_quick_system04_03.png" />
+    <Resource Include="Assets\buttons\system\lb_main_quick_system04_04.png" />
+    <Resource Include="Assets\icon\gearbox.png" />
+    <Resource Include="Assets\ico\gearbox.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -458,6 +473,7 @@
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
+    <PackageReference Include="WPF-UI" Version="3.0.4" />
   </ItemGroup>
 
 </Project>

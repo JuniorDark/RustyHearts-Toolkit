@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="RHToolkit.Views.CostumeFrame"
+    x:Class="RHToolkit.Controls.CostumeFrame"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -40,7 +40,8 @@
             x:Name="tbItemName"
             Margin="1,3,0,0"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top">
+            VerticalAlignment="Top"
+            Style="{StaticResource ArialMS}">
             <TextBlock
                 Grid.Row="0"
                 d:Text="+10"
@@ -70,6 +71,7 @@
             VerticalAlignment="Center"
             d:Text="Category"
             Foreground="White"
+            Style="{StaticResource ArialMS}"
             Text="{Binding CategoryText}" />
         <TextBlock
             x:Name="tbSubCategory"
@@ -90,6 +92,7 @@
             VerticalAlignment="Top"
             d:Text="Required Level: 1"
             Foreground="#FFA9A9A9"
+            Style="{StaticResource ArialMS}"
             Text="{Binding RequiredLevelText}" />
         <TextBlock
             x:Name="tbJobClass"
@@ -108,6 +111,7 @@
             VerticalAlignment="Top"
             d:Text="Trade Unavailable"
             Foreground="#e75151"
+            Style="{StaticResource ArialMS}"
             Text="{Binding ItemTradeText}" />
         <TextBlock
             x:Name="tbWeight"
@@ -117,6 +121,7 @@
             VerticalAlignment="Top"
             d:Text="0,001Kg"
             Foreground="White"
+            Style="{StaticResource ArialMS}"
             Text="{Binding WeightText}" />
         <!--  FixedOption and its children  -->
         <TextBlock
@@ -126,6 +131,7 @@
             VerticalAlignment="Top"
             d:Text="[Fixed Option]"
             Foreground="White"
+            Style="{StaticResource ArialMS}"
             Text="{Binding FixedOption}"
             Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
         <TextBlock
@@ -138,6 +144,7 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding FixedOption01Color, Converter={StaticResource StringToBrushConverter}}"
+            Style="{StaticResource ArialMS}"
             Text="{Binding FixedOption01Text}"
             TextWrapping="Wrap"
             Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
@@ -151,6 +158,7 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding FixedOption02Color, Converter={StaticResource StringToBrushConverter}}"
+            Style="{StaticResource ArialMS}"
             Text="{Binding FixedOption02Text}"
             TextWrapping="Wrap"
             Visibility="{Binding FixedOption02, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
@@ -162,6 +170,7 @@
             VerticalAlignment="Top"
             d:Text="[Random Option]"
             Foreground="White"
+            Style="{StaticResource ArialMS}"
             Text="{Binding RandomOption}"
             Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         <TextBlock
@@ -174,6 +183,7 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding RandomOption01Color, Converter={StaticResource StringToBrushConverter}}"
+            Style="{StaticResource ArialMS}"
             Text="{Binding RandomOption01Text}"
             TextWrapping="Wrap"
             Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
@@ -187,6 +197,7 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding RandomOption02Color, Converter={StaticResource StringToBrushConverter}}"
+            Style="{StaticResource ArialMS}"
             Text="{Binding RandomOption02Text}"
             TextWrapping="Wrap"
             Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
@@ -200,6 +211,7 @@
             d:Foreground="White"
             d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
             Foreground="{Binding RandomOption03Color, Converter={StaticResource StringToBrushConverter}}"
+            Style="{StaticResource ArialMS}"
             Text="{Binding RandomOption03Text}"
             TextWrapping="Wrap"
             Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />

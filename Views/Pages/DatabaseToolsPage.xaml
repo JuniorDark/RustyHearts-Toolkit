@@ -1,0 +1,59 @@
+﻿<Page
+    x:Class="RHToolkit.Views.Pages.DatabaseToolsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:RHToolkit.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:RHToolkit.Models"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:RHToolkit.ViewModels"
+    Title="Tools"
+    d:DataContext="{d:DesignInstance local:DatabaseToolsPage,
+                                     IsDesignTimeCreatable=False}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid>
+        <ItemsControl ItemsSource="{Binding ViewModel.WindowCards, Mode=OneWay}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type models:WindowCard}">
+                    <ui:CardAction
+                        Margin="4"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Background="#FF232321"
+                        Command="{Binding ViewModel.OpenWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:DatabaseToolsPage}, Mode=OneWay}"
+                        CommandParameter="{Binding Value, Mode=OneTime}"
+                        Foreground="White"
+                        Icon="{Binding Icon, Mode=OneTime}"
+                        IsChevronVisible="True">
+                        <StackPanel>
+                            <ui:TextBlock
+                                Margin="0"
+                                FontTypography="BodyStrong"
+                                Text="{Binding Name, Mode=OneTime}"
+                                TextWrapping="WrapWithOverflow" />
+                            <ui:TextBlock
+                                Appearance="Tertiary"
+                                Background="#FF232321"
+                                Foreground="White"
+                                Text="{Binding Description, Mode=OneTime}"
+                                TextWrapping="WrapWithOverflow" />
+                        </StackPanel>
+                    </ui:CardAction>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ui:VirtualizingWrapPanel
+                        IsItemsHost="True"
+                        ItemSize="290,80"
+                        Orientation="Vertical"
+                        SpacingMode="Uniform"
+                        StretchItems="True" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </Grid>
+</Page>

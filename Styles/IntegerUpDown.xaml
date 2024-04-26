@@ -15,57 +15,57 @@
 
     <ControlTemplate x:Key="IntegerUpDown" TargetType="{x:Type TextBox}">
         <Border
-            Background="{TemplateBinding Background}"
-            BorderBrush="{TemplateBinding BorderBrush}"
-            BorderThickness="{TemplateBinding BorderThickness}"
-            SnapsToDevicePixels="True">
+        Background="{TemplateBinding Background}"
+        BorderBrush="{TemplateBinding BorderBrush}"
+        BorderThickness="{TemplateBinding BorderThickness}"
+        SnapsToDevicePixels="True">
             <Grid>
                 <!--  Box  -->
                 <Image
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    Source="{StaticResource lb_combobox_Left02}"
-                    Stretch="None" />
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="{StaticResource lb_combobox_Left02}"
+                Stretch="None" />
                 <Image
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Source="{StaticResource lb_combobox_Right02}"
-                    Stretch="None" />
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="{StaticResource lb_combobox_Right02}"
+                Stretch="None" />
                 <Image
-                    Height="24"
-                    Margin="24,0,24,0"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Top"
-                    Source="{StaticResource lb_combobox_Center02}"
-                    Stretch="Fill">
+                Height="24"
+                Margin="24,0,24,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="{StaticResource lb_combobox_Center02}"
+                Stretch="Fill">
                     <Image.OpacityMask>
                         <ImageBrush
-                            ImageSource="{StaticResource lb_combobox_Center02}"
-                            Stretch="None"
-                            TileMode="Tile"
-                            Viewport="0,0,1,0.25"
-                            ViewportUnits="Absolute" />
+                        ImageSource="{StaticResource lb_combobox_Center02}"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
                     </Image.OpacityMask>
                 </Image>
 
                 <!--  Arrows  -->
                 <RepeatButton
-                    Margin="0,-2,-10,0"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Command="{Binding IncrementCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                    Focusable="False">
+                Margin="0,-2,-10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Command="{Binding IncrementCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                Focusable="False">
                     <RepeatButton.Template>
                         <ControlTemplate TargetType="RepeatButton">
                             <Image
-                                x:Name="Arrow"
-                                Width="16"
-                                Height="16"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                RenderOptions.BitmapScalingMode="HighQuality"
-                                Source="{StaticResource lb_ArrowUp}" />
+                            x:Name="Arrow"
+                            Width="16"
+                            Height="16"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Source="{StaticResource lb_ArrowUp}" />
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="Arrow" Property="Source" Value="{StaticResource lb_ArrowUpHover}" />
@@ -82,22 +82,22 @@
                 </RepeatButton>
 
                 <RepeatButton
-                    Margin="0,0,-10,-2"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Bottom"
-                    Command="{Binding DecrementCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
-                    Focusable="False">
+                Margin="0,0,-10,-2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Command="{Binding DecrementCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource TemplatedParent}}"
+                Focusable="False">
                     <RepeatButton.Template>
                         <ControlTemplate TargetType="RepeatButton">
                             <Image
-                                x:Name="Arrow"
-                                Width="16"
-                                Height="16"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                RenderOptions.BitmapScalingMode="HighQuality"
-                                Source="{StaticResource lb_ArrowDown}" />
+                            x:Name="Arrow"
+                            Width="16"
+                            Height="16"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            Source="{StaticResource lb_ArrowDown}" />
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter TargetName="Arrow" Property="Source" Value="{StaticResource lb_ArrowDownHover}" />
@@ -115,19 +115,38 @@
 
                 <!--  TextBox  -->
                 <TextBox
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    CaretBrush="White"
-                    Focusable="{TemplateBinding Focusable}"
-                    FontSize="{TemplateBinding FontSize}"
-                    Foreground="{TemplateBinding Foreground}"
-                    IsReadOnly="{TemplateBinding IsReadOnly}"
-                    Text="{Binding Path=Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    TextAlignment="Center" />
+                x:Name="PART_TextBox"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                CaretBrush="White"
+                Focusable="{TemplateBinding Focusable}"
+                FontSize="{TemplateBinding FontSize}"
+                Foreground="{TemplateBinding Foreground}"
+                IsReadOnly="{TemplateBinding IsReadOnly}"
+                Text="{Binding Path=Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                TextAlignment="Center">
+                    <TextBox.Style>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </Trigger>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Background" Value="Transparent"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
             </Grid>
         </Border>
     </ControlTemplate>
+
 </ResourceDictionary>

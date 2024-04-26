@@ -10,7 +10,6 @@ namespace RHToolkit.Views
         {
             InitializeComponent();
             DataContext = viewModel;
-            cmbItemTrade.SelectedIndex = 0;
         }
 
         private void ComboBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)

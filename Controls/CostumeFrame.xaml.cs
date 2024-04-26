@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace RHToolkit.Views
+namespace RHToolkit.Controls
 {
     public partial class CostumeFrame : UserControl
     {

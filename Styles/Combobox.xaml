@@ -24,7 +24,7 @@
     <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontFamily" Value="{StaticResource ArialUnicodeMS}" />
-        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontSize" Value="10" />
         <!--  Default text color  -->
         <Style.Triggers>
             <Trigger Property="IsEnabled" Value="False">
@@ -78,9 +78,7 @@
             <!--  Custom button for dropdown/arrow  -->
             <ToggleButton
                 x:Name="PART_DropdownButton"
-                Width="21"
-                Height="22"
-                Margin="0,0,5,0"
+                Margin="0,-5,-5,-5"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Background="Transparent"
@@ -196,9 +194,7 @@
             <!--  Custom button for dropdown/arrow  -->
             <ToggleButton
                 x:Name="PART_DropdownButton"
-                Width="21"
-                Height="22"
-                Margin="0,0,-15,0"
+                Margin="0,-5,-25,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 Background="Transparent"

@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using System.IO;
-using System.Windows.Data;
-using System.Windows.Media.Imaging;
+﻿using System.Windows.Media.Imaging;
 
 namespace RHToolkit.Utilities
 {
@@ -28,7 +25,7 @@ namespace RHToolkit.Utilities
             }
             else
             {
-                return new BitmapImage(new Uri("/Assets/images/question_icon.png", UriKind.Relative));
+                return new BitmapImage(new Uri("pack://application:,,,/Assets/images/question_icon.png"));
             }
         }
 

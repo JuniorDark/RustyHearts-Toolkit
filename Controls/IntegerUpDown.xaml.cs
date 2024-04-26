@@ -1,12 +1,7 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
+﻿using System.Windows.Controls;
 
-namespace RHToolkit.Views
+namespace RHToolkit.Controls
 {
-    /// <summary>
-    /// Interaction logic for IntegerUpDown.xaml
-    /// </summary>
     public partial class IntegerUpDown : UserControl
     {
         public static readonly DependencyProperty MinimumProperty =

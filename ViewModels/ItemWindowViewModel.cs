@@ -466,7 +466,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _itemTradeFilterSelectedIndex;
+    private int _itemTradeFilterSelectedIndex = 1;
 
     [ObservableProperty]
     private List<NameID>? _itemTradeFilterItems;
@@ -482,7 +482,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 new NameID { ID = 0, Name = "Untradeable" }
             ];
 
-            ItemTradeFilterSelectedIndex = 0;
         }
         catch (Exception ex)
         {
@@ -527,6 +526,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         {
             ItemId = itemData.ID;
             ItemName = itemData.Name;
+            Description = itemData.Description;
             ItemBranch = itemData.Branch;
             IconName = itemData.IconName;
             ItemTrade = itemData.ItemTrade;
@@ -593,6 +593,13 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     [ObservableProperty]
     private string? _iconName;
+
+    [ObservableProperty]
+    private string? _description;
+    partial void OnDescriptionChanged(string? value)
+    {
+        _frameViewModel.Description = value;
+    }
 
     [ObservableProperty]
     private int _amount = 1;

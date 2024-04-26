@@ -107,7 +107,7 @@
 
             <!--  Content  -->
             <ContentPresenter
-                Margin="80,80,80,80"
+                Margin="13,40,16,16"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Content="{TemplateBinding Content}" />

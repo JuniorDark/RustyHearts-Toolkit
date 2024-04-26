@@ -1,14 +1,23 @@
 ﻿using RHToolkit.ViewModels;
-using System.Windows;
+using Wpf.Ui;
+using Wpf.Ui.Appearance;
 
-namespace RHToolkit.Views
+namespace RHToolkit.Views.Windows
 {
     public partial class MailWindow : Window
     {
-        public MailWindow(MailWindowViewModel viewModel)
+        public MailWindowViewModel ViewModel { get; }
+
+        public MailWindow(MailWindowViewModel viewModel, ISnackbarService snackbarService)
         {
+            SystemThemeWatcher.Watch(this);
+
+            ViewModel = viewModel;
+            DataContext = this;
+
             InitializeComponent();
-            DataContext = viewModel;
+
+            snackbarService.SetSnackbarPresenter(MailSnackbarPresenter);
         }
 
     }

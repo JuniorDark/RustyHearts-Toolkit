@@ -1,66 +1,96 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using RHToolkit.Services;
+﻿using RHToolkit.Services;
+using RHToolkit.Services.Contracts;
 using RHToolkit.ViewModels;
+using RHToolkit.ViewModels.Pages;
+using RHToolkit.ViewModels.Windows;
 using RHToolkit.Views;
-using System.Windows;
+using RHToolkit.Views.Pages;
+using RHToolkit.Views.Windows;
+using Wpf.Ui;
 
 namespace RHToolkit;
 
 public partial class App : Application
 {
-    // Service collection to register services
-    public static readonly ServiceCollection Services = new();
-
-    // ServiceProvider to resolve services
-    private readonly ServiceProvider _serviceProvider;
-
-    public App()
-    {
-        ConfigureServices(Services);
-        _serviceProvider = Services.BuildServiceProvider();
-    }
-
-    // Method to register services
-    private static void ConfigureServices(IServiceCollection services)
-    {
-        // Register your services
-        services.AddSingleton<ISqlDatabaseService, SqlDatabaseService>();
-        services.AddSingleton<IDatabaseService, DatabaseService>();
-        services.AddSingleton<ISqLiteDatabaseService, SqLiteDatabaseService>();
-        services.AddSingleton<IGMDatabaseService, GMDatabaseService>();
-        services.AddSingleton<IFrameService, FrameService>();
-
-        services.AddSingleton<MainWindow>();
-        services.AddSingleton<MainWindowViewModel>();
-
-        services.AddTransient<MailWindow>();
-        services.AddTransient<MailWindowViewModel>();
-        services.AddTransient<ItemWindow>();
-        services.AddTransient<ItemWindowViewModel>();
-
-        services.AddTransient<FrameViewModel>();
-    }
-
-    // Method to retrieve service provider
-    public static T GetService<T>() where T : class
-    {
-        return Services.BuildServiceProvider().GetRequiredService<T>();
-    }
-
-    protected override void OnStartup(StartupEventArgs e)
-    {
-        base.OnStartup(e);
-
-        var mainWindow = new MainWindow
+    private static readonly IHost _host = Host.CreateDefaultBuilder()
+        .ConfigureAppConfiguration(c =>
         {
-            DataContext = _serviceProvider.GetRequiredService<MainWindowViewModel>()
-        };
-        mainWindow.Show();
+            _ = c.SetBasePath(AppContext.BaseDirectory);
+        })
+        .ConfigureServices(
+            (_1, services) =>
+            {
+                // App Host
+                _ = services.AddHostedService<ApplicationHostService>();
+
+                // Main window container with navigation
+                _ = services.AddSingleton<IWindow, MainWindow>();
+                _ = services.AddSingleton<MainWindowViewModel>();
+                _ = services.AddSingleton<INavigationService, NavigationService>();
+                _ = services.AddSingleton<ISnackbarService, SnackbarService>();
+                _ = services.AddSingleton<IContentDialogService, ContentDialogService>();
+                _ = services.AddSingleton<WindowsProviderService>();
+
+                // Top-level pages
+                _ = services.AddSingleton<HomePage>();
+                _ = services.AddSingleton<DatabaseToolsPage>();
+                _ = services.AddSingleton<DatabaseToolsViewModel>();
+                _ = services.AddSingleton<DatabasePage>();
+                _ = services.AddSingleton<DatabaseViewModel>();
+                _ = services.AddSingleton<SettingsPage>();
+                _ = services.AddSingleton<SettingsViewModel>();
+
+                // All other pages and view models
+                _ = services.AddSingleton<ISqlDatabaseService, SqlDatabaseService>();
+                _ = services.AddSingleton<IDatabaseService, DatabaseService>();
+                _ = services.AddSingleton<ISqLiteDatabaseService, SqLiteDatabaseService>();
+                _ = services.AddSingleton<IGMDatabaseService, GMDatabaseService>();
+                _ = services.AddSingleton<IFrameService, FrameService>();
+
+                _ = services.AddTransient<MailWindow>();
+                _ = services.AddTransient<MailWindowViewModel>();
+                _ = services.AddTransient<ItemWindow>();
+                _ = services.AddTransient<ItemWindowViewModel>();
+                _ = services.AddTransient<FrameViewModel>();
+
+            }
+        )
+        .Build();
+
+    /// <summary>
+    /// Gets registered service.
+    /// </summary>
+    /// <typeparam name="T">Type of the service to get.</typeparam>
+    /// <returns>Instance of the service or <see langword="null"/>.</returns>
+    public static T GetRequiredService<T>()
+        where T : class
+    {
+        return _host.Services.GetRequiredService<T>();
     }
 
-    protected override void OnExit(ExitEventArgs e)
+    /// <summary>
+    /// Occurs when the application is loading.
+    /// </summary>
+    private void OnStartup(object sender, StartupEventArgs e)
     {
-        base.OnExit(e);
-        _serviceProvider.Dispose();
+        _host.Start();
+    }
+
+    /// <summary>
+    /// Occurs when the application is closing.
+    /// </summary>
+    private void OnExit(object sender, ExitEventArgs e)
+    {
+        _host.StopAsync().Wait();
+
+        _host.Dispose();
+    }
+
+    /// <summary>
+    /// Occurs when an exception is thrown by an application but not handled.
+    /// </summary>
+    private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+    {
+        // For more info see https://learn.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-8.0
     }
 }

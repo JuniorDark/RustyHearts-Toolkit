@@ -1,27 +1,27 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using Newtonsoft.Json;
 using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Services;
 using RHToolkit.Views;
 using System.Data;
-using System.IO;
-using System.Windows;
+using Wpf.Ui;
+using Wpf.Ui.Controls;
 
 namespace RHToolkit.ViewModels
 {
     public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>
     {
+        private readonly WindowsProviderService _windowsProviderService;
         private readonly List<ItemData>? _cachedItemDataList = [];
         private readonly IDatabaseService _databaseService;
+        private readonly ISnackbarService _snackbarService;
 
-        public MailWindowViewModel(IDatabaseService databaseService)
+        public MailWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, ISnackbarService snackbarService)
         {
+            _windowsProviderService = windowsProviderService;
             _databaseService = databaseService;
+            _snackbarService = snackbarService;
 
             if (ItemDataManager.Instance.CachedItemDataList == null)
             {
@@ -56,10 +56,7 @@ namespace RHToolkit.ViewModels
                 }
                 else
                 {
-                    var viewModel = App.Services.BuildServiceProvider().GetRequiredService<ItemWindowViewModel>();
-                    itemWindow = new ItemWindow(viewModel);
-                    itemWindow.Closed += (sender, e) => itemWindow = null;
-                    itemWindow.Show();
+                    _windowsProviderService.Show<ItemWindow>();
                     WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel));
                 }
             }
@@ -230,12 +227,12 @@ namespace RHToolkit.ViewModels
                         serializer.Serialize(file, templateData);
                     }
 
-                    MessageBox.Show("Mail template saved successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    System.Windows.MessageBox.Show("Mail template saved successfully.", "Success", System.Windows.MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving template: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show($"Error saving template: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -264,7 +261,7 @@ namespace RHToolkit.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error loading template: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show($"Error loading template: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 finally
                 {
@@ -288,7 +285,7 @@ namespace RHToolkit.ViewModels
                         if (invalidItemIDs.Count > 0)
                         {
                             string invalidItemIDsString = string.Join(", ", invalidItemIDs);
-                            MessageBox.Show($"Template have invalid ItemIDs.\nInvalid ItemIDs in the template: {invalidItemIDsString}", "Error loading template", MessageBoxButton.OK, MessageBoxImage.Error);
+                            System.Windows.MessageBox.Show($"Template have invalid ItemIDs.\nInvalid ItemIDs in the template: {invalidItemIDsString}", "Error loading template", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
 
@@ -351,17 +348,17 @@ namespace RHToolkit.ViewModels
                     }
                     else
                     {
-                        MessageBox.Show("Failed to load JSON template or JSON is empty.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                        System.Windows.MessageBox.Show("Failed to load JSON template or JSON is empty.", "Error", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Invalid template file.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    System.Windows.MessageBox.Show("Invalid template file.", "Error", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading json template: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                System.Windows.MessageBox.Show($"Error loading json template: {ex.Message}", "Error", System.Windows.MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -427,7 +424,10 @@ namespace RHToolkit.ViewModels
         {
             string? mailSender = Sender;
             string? content = MailContent;
-            content = content.Replace("'", "''");
+            if (content != null)
+            {
+                content = content.Replace("'", "''");
+            }
             content += $"<br><br><right>{DateTime.Now:yyyy-MM-dd HH:mm:ss}";
 
             int gold = AttachGold;
@@ -440,7 +440,13 @@ namespace RHToolkit.ViewModels
 
             if (string.IsNullOrEmpty(Recipient) && !sendToAllCharacters)
             {
-                MessageBox.Show("Enter a Recipient", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                _snackbarService.Show(
+                "Empty recipient.",
+                "Enter a Recipient.",
+                ControlAppearance.Caution,
+                new SymbolIcon(SymbolRegular.MailWarning24),
+                TimeSpan.FromSeconds(5)
+                );
                 return;
             }
 
@@ -459,7 +465,13 @@ namespace RHToolkit.ViewModels
                 // Validate if any recipient is empty or contains non-letter characters
                 if (recipients.Any(string.IsNullOrEmpty) || recipients.Any(r => !r.All(char.IsLetter)))
                 {
-                    MessageBox.Show("Recipient names must contain only letters and cannot be empty", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    _snackbarService.Show(
+                    "Invalid recipient.",
+                    "Recipient names must contain only letters and cannot be empty",
+                    ControlAppearance.Caution,
+                    new SymbolIcon(SymbolRegular.MailWarning24),
+                    TimeSpan.FromSeconds(5)
+                    );
                     return;
                 }
 
@@ -469,7 +481,13 @@ namespace RHToolkit.ViewModels
                 {
                     if (!uniqueRecipients.Add(recipient))
                     {
-                        MessageBox.Show($"Duplicate recipient found: {recipient}", "Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        _snackbarService.Show(
+                        "Duplicate recipient.",
+                        $"Duplicate recipient found: {recipient}",
+                        ControlAppearance.Caution,
+                        new SymbolIcon(SymbolRegular.MailWarning24),
+                        TimeSpan.FromSeconds(5)
+                        );
                         return;
                     }
                 }
@@ -496,19 +514,37 @@ namespace RHToolkit.ViewModels
 
                         if (senderCharacterId == null && createType == 5)
                         {
-                            MessageBox.Show($"The sender ({mailSender}) does not exist.\nThe sender name must be a valid character name for billing mail.", "Failed to send Mail", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            _snackbarService.Show(
+                           "Invalid sender.",
+                           $"The sender ({mailSender}) does not exist.\nThe sender name must be a valid character name for billing mail.",
+                           ControlAppearance.Danger,
+                           new SymbolIcon(SymbolRegular.MailWarning24),
+                           TimeSpan.FromSeconds(5)
+                           );
                             return;
                         }
 
                         if (senderCharacterId == recipientCharacterId)
                         {
-                            MessageBox.Show($"The sender and recipient cannot be the same.", "Failed to send Mail", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            _snackbarService.Show(
+                           "Failed to send Mail.",
+                           $"The sender and recipient cannot be the same.",
+                           ControlAppearance.Danger,
+                           new SymbolIcon(SymbolRegular.MailWarning24),
+                           TimeSpan.FromSeconds(5)
+                           );
                             return;
                         }
 
                         if (recipientCharacterId == null || recipientAuthId == null)
                         {
-                            MessageBox.Show($"The recipient ({recipient}) does not exist.", "Failed to send Mail", MessageBoxButton.OK, MessageBoxImage.Warning);
+                            _snackbarService.Show(
+                           "Failed to send Mail.",
+                           $"The recipient ({recipient}) does not exist.",
+                           ControlAppearance.Danger,
+                           new SymbolIcon(SymbolRegular.MailWarning24),
+                           TimeSpan.FromSeconds(5)
+                           );
                             continue; // Skip to the next recipient
                         }
 
@@ -526,7 +562,7 @@ namespace RHToolkit.ViewModels
 
                         if (Item != null)
                         {
-                            // Iterate over MailDataList and insert item data for each MailData
+                            // Iterate over ItemDataList and insert item data for each ItemData
                             foreach (ItemData itemData in Item)
                             {
                                 try
@@ -540,7 +576,14 @@ namespace RHToolkit.ViewModels
                                 }
                                 catch (Exception ex)
                                 {
-                                    MessageBox.Show($"Error attaching item to mail: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                                    _snackbarService.Show(
+                                   "Attaching item.",
+                                   $"Error attaching item to mail: {ex.Message}",
+                                   ControlAppearance.Danger,
+                                   new SymbolIcon(SymbolRegular.MailWarning24),
+                                   TimeSpan.FromSeconds(5)
+                                   );
+                                    return;
                                 }
                             }
                         }
@@ -552,24 +595,42 @@ namespace RHToolkit.ViewModels
 
                     if (sendToAllCharacters)
                     {
-                        MessageBox.Show($"The mail has been sent successfully to all characters. Please re-login the character/change game server to view the mail.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                        _snackbarService.Show(
+                                  "Success.",
+                                  $"The mail has been sent successfully to all characters. Please re-login the character/change game server to view the mail.",
+                                  ControlAppearance.Success,
+                                  new SymbolIcon(SymbolRegular.MailCheckmark24),
+                                  TimeSpan.FromSeconds(5)
+                                  );
                     }
                     else
-                    {
-                        MessageBox.Show($"The mail has been sent successfully. Please re-login the character/change game server to view the mail.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    { 
+                        _snackbarService.Show(
+                                  "Success.",
+                                  $"The mail has been sent successfully. Please re-login the character/change game server to view the mail.",
+                                  ControlAppearance.Success,
+                                  new SymbolIcon(SymbolRegular.MailCheckmark24),
+                                  TimeSpan.FromSeconds(5)
+                                  );
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error sending mail: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    _snackbarService.Show(
+                                   "Error",
+                                   $"Error sending mail: {ex.Message}",
+                                   ControlAppearance.Danger,
+                                   new SymbolIcon(SymbolRegular.MailWarning24),
+                                   TimeSpan.FromSeconds(5)
+                                   );
                 }
             }
         }
 
         public static bool ConfirmMessage(string message)
         {
-            MessageBoxResult result = MessageBox.Show(message, "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            return result == MessageBoxResult.Yes;
+            System.Windows.MessageBoxResult result = System.Windows.MessageBox.Show(message, "Confirmation", System.Windows.MessageBoxButton.YesNo, MessageBoxImage.Question);
+            return result == System.Windows.MessageBoxResult.Yes;
         }
 
 
