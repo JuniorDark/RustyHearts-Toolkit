@@ -22,10 +22,8 @@
                         Margin="4"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        Background="#FF232321"
                         Command="{Binding ViewModel.OpenWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:DatabaseToolsPage}, Mode=OneWay}"
                         CommandParameter="{Binding Value, Mode=OneTime}"
-                        Foreground="White"
                         Icon="{Binding Icon, Mode=OneTime}"
                         IsChevronVisible="True">
                         <StackPanel>
@@ -36,8 +34,6 @@
                                 TextWrapping="WrapWithOverflow" />
                             <ui:TextBlock
                                 Appearance="Tertiary"
-                                Background="#FF232321"
-                                Foreground="White"
                                 Text="{Binding Description, Mode=OneTime}"
                                 TextWrapping="WrapWithOverflow" />
                         </StackPanel>

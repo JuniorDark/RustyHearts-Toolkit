@@ -11,9 +11,9 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:vm="clr-namespace:RHToolkit.ViewModels"
     Title="Mail Tool"
-    Width="800"
+    Width="720"
     Height="640"
-    MinWidth="800"
+    MinWidth="720"
     MinHeight="640"
     d:DataContext="{d:DesignInstance local:MailWindow,
                                      IsDesignTimeCreatable=False}"
@@ -29,125 +29,126 @@
     <ContentControl Template="{StaticResource box_red02}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="60*" />
+                <ColumnDefinition Width="100*" />
+                <ColumnDefinition Width="60*" />
 
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40" />
-                <RowDefinition Height="40" />
+                <RowDefinition Height="35" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
                 <RowDefinition Height="260" />
-                <RowDefinition Height="100" />
+                <RowDefinition Height="60" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
+                <RowDefinition Height="45" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <!--  Close Button  -->
-            <Button
-                x:Name="btnClose"
-                Grid.Column="2"
-                Width="19"
-                Height="19"
-                Margin="0,-29,1,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                vm:WindowBehaviors.CloseWindowOnClick="True"
-                Content=""
-                RenderTransformOrigin="0.789,0.263"
-                Template="{StaticResource lb_close_button}" />
-            <!--  Title  -->
-            <ui:TextBlock
-                x:Name="lbTitle"
-                Grid.Column="1"
-                Margin="0,-30,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                FontTypography="BodyStrong"
-                Foreground="White"
-                Text="Mail Tool" />
-            <!--  Recipient  -->
-            <!--  Recipient Label  -->
-            <Label
+            <ui:TitleBar
+                x:Name="TitleBar"
+                Title="Send Mail"
                 Grid.Row="0"
+                Grid.ColumnSpan="3"
+                Height="28"
+                Margin="0,5,0,0"
+                ButtonsForeground="White"
+                CloseWindowByDoubleClickOnIcon="True"
+                FontSize="15"
+                Foreground="White">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon
+                        Width="20"
+                        Height="20"
+                        Margin="0,-1,0,-3"
+                        Source="/Assets/icon/icon_mail.png" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+            <StackPanel
+                Grid.Row="1"
                 Grid.Column="0"
-                Margin="10,0"
+                Margin="10"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Content="Recipient(s)"
-                Foreground="White"
-                Target="{Binding ElementName=txtRecipient}" />
-            <Image
-                x:Name="imgHelp"
-                Grid.Row="0"
-                Grid.Column="0"
-                Width="16"
-                Height="16"
-                Margin="90,3,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Cursor="Help"
-                Source="/Assets/icon/icon_help_tip.png"
-                Stretch="None"
-                ToolTip="Name of the characters that will receive the mail. Names must be sepparated by comma ','" />
-
+                Orientation="Horizontal">
+                <Label
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Content="Recipient(s)"
+                    Foreground="White"
+                    Target="{Binding ElementName=txtRecipient}" />
+                <Image
+                    x:Name="imgHelp"
+                    Width="16"
+                    Height="16"
+                    Margin="10,3,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Cursor="Help"
+                    Source="/Assets/icon/icon_help_tip.png"
+                    Stretch="None"
+                    ToolTip="Name of the characters that will receive the mail. Names must be sepparated by comma ','" />
+            </StackPanel>
             <!--  Recipient TextBox  -->
             <TextBox
                 x:Name="txtRecipient"
-                Grid.Row="0"
+                Grid.Row="1"
                 Grid.ColumnSpan="3"
-                Width="264"
+                Width="300"
+                Height="35"
+                HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                HorizontalContentAlignment="Center"
                 Background="Black"
                 BorderThickness="0"
                 Foreground="White"
+                IsEnabled="{Binding ViewModel.IsRecipientEabled}"
                 Tag="Recipient"
                 Template="{StaticResource lb_textbox}"
                 Text="{Binding ViewModel.Recipient, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <!--  Send To All CheckBox  -->
             <CheckBox
                 x:Name="chkSendToAll"
-                Grid.Row="0"
+                Grid.Row="1"
                 Grid.Column="2"
-                Width="157"
-                Height="19"
-                Margin="35,0,0,0"
                 VerticalAlignment="Top"
                 Content="Send to All Characters"
                 Foreground="White"
                 IsChecked="{Binding ViewModel.SendToAll}"
                 Template="{StaticResource lb_checkbox}" />
-
             <!--  Sender  -->
-            <Label
-                Grid.Row="1"
+            <StackPanel
+                Grid.Row="2"
                 Grid.Column="0"
-                Margin="10,0"
+                Margin="10"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Content="Sender"
-                Foreground="White"
-                Target="{Binding ElementName=txtSender}" />
-            <Image
-                x:Name="imgHelpSender"
-                Grid.Row="1"
-                Grid.Column="0"
-                Width="16"
-                Height="16"
-                Margin="90,3,0,0"
-                VerticalAlignment="Top"
-                Cursor="Help"
-                Source="/Assets/icon/icon_help_tip.png"
-                Stretch="None"
-                ToolTip="Name of the sender." />
-
+                Orientation="Horizontal">
+                <Label
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Content="Sender"
+                    Foreground="White"
+                    Target="{Binding ElementName=txtSender}" />
+                <Image
+                    x:Name="imgHelpSender"
+                    Width="16"
+                    Height="16"
+                    Margin="10,3,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Cursor="Help"
+                    Source="/Assets/icon/icon_help_tip.png"
+                    Stretch="None"
+                    ToolTip="Name of the sender." />
+            </StackPanel>
             <!--  Sender TextBox  -->
             <TextBox
                 x:Name="txtSender"
-                Grid.Row="1"
+                Grid.Row="2"
                 Grid.ColumnSpan="3"
-                Width="264"
+                Width="300"
+                Height="35"
+                HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                HorizontalContentAlignment="Left"
                 Background="Black"
                 BorderThickness="0"
                 Foreground="White"
@@ -156,15 +157,15 @@
                 Text="{Binding ViewModel.Sender, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <!--  Message  -->
             <StackPanel
-                Grid.Row="2"
+                Grid.Row="3"
                 Grid.ColumnSpan="3"
-                Margin="0,10,0,0"
+                Margin="0,10,100,0"
                 HorizontalAlignment="Center"
                 Orientation="Vertical">
                 <!--  Message Panel  -->
                 <TextBox
                     x:Name="txtMailContent"
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Grid.ColumnSpan="2"
                     Width="418"
                     Height="250"
@@ -174,7 +175,6 @@
                     FontFamily="{StaticResource ArialUnicodeMS}"
                     Foreground="White"
                     MaxLength="128"
-                    Tag="Recipient"
                     Text="{Binding ViewModel.MailContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto">
@@ -209,49 +209,60 @@
                 </TextBox>
             </StackPanel>
             <StackPanel
-                Grid.Row="2"
+                Grid.Row="3"
                 Grid.Column="3"
-                Margin="60,10,0,0"
+                Margin="0,10,0,0"
                 HorizontalAlignment="Center"
                 Orientation="Vertical">
-                <ui:DropDownButton
-                    Background="#FF2C2521"
-                    Content="Template"
+                <!--  Save Template Button  -->
+                <Button
+                    x:Name="btnSaveTemplate"
+                    Width="137"
+                    Margin="0,5"
+                    VerticalAlignment="Top"
+                    Background="Transparent"
+                    Command="{Binding ViewModel.SaveTemplateCommand}"
+                    Content="Save Template"
+                    Cursor="Hand"
                     Foreground="White"
-                    Icon="{ui:SymbolIcon MailTemplate24}"
                     IsEnabled="{Binding ViewModel.IsButtonEnabled}"
-                    MouseOverBackground="#FF3C2521"
-                    PressedBackground="#FF4C2521"
-                    PressedBorderBrush="AliceBlue">
-                    <ui:DropDownButton.Flyout>
-                        <ContextMenu
-                            Background="#FF2C2521"
-                            BorderThickness="1"
-                            Foreground="White">
-                            <MenuItem
-                                Command="{Binding ViewModel.SaveTemplateCommand}"
-                                Header="Save Template"
-                                Icon="{ui:SymbolIcon MailAdd24}"
-                                ToolTip="Save the current mail as a json template" />
-                            <MenuItem
-                                Command="{Binding ViewModel.LoadTemplateCommand}"
-                                Header="Load Template"
-                                Icon="{ui:SymbolIcon MailTemplate24}"
-                                ToolTip="Load a previous saved json template" />
-                            <MenuItem
-                                Command="{Binding ViewModel.ClearTemplateCommand}"
-                                Header="Clear"
-                                Icon="{ui:SymbolIcon MailDismiss24}"
-                                ToolTip="Clear all current mail settings" />
-                        </ContextMenu>
-                    </ui:DropDownButton.Flyout>
-                </ui:DropDownButton>
+                    Style="{StaticResource lb_def_button02}"
+                    ToolTip="Save the current mail as a json template" />
+
+                <!--  Load Template Button  -->
+                <Button
+                    x:Name="btnLoadTemplate"
+                    Width="137"
+                    Margin="0,5"
+                    VerticalAlignment="Top"
+                    Background="Transparent"
+                    Command="{Binding ViewModel.LoadTemplateCommand}"
+                    Content="Load Template"
+                    Cursor="Hand"
+                    Foreground="White"
+                    IsEnabled="{Binding ViewModel.IsButtonEnabled}"
+                    Style="{StaticResource lb_def_button02}"
+                    ToolTip="Load a previous saved json template" />
+
+                <!--  Clear Button  -->
+                <Button
+                    x:Name="btnClear"
+                    Width="137"
+                    VerticalAlignment="Top"
+                    Background="Transparent"
+                    Command="{Binding ViewModel.ClearTemplateCommand}"
+                    Content="Clear"
+                    Cursor="Hand"
+                    Foreground="White"
+                    IsEnabled="{Binding ViewModel.IsButtonEnabled}"
+                    Style="{StaticResource lb_def_button02}"
+                    ToolTip="Clear all current mail settings" />
             </StackPanel>
 
             <StackPanel
-                Grid.Row="3"
+                Grid.Row="4"
                 Grid.ColumnSpan="3"
-                Margin="0,20,150,0"
+                Margin="0,10,250,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 Orientation="Horizontal">
@@ -276,198 +287,51 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-
-                    <!--  Images in column 0  -->
-                    <Button
+                    <!--  Item 1  -->
+                    <control:ItemSlot
                         Grid.Column="0"
-                        Width="44"
-                        Height="44"
-                        Cursor="Hand"
-                        IsEnabled="{Binding ViewModel.IsButtonEnabled}"
-                        Style="{StaticResource ImageButtonStyle}"
-                        ToolTip="{Binding ViewModel.ItemName1}">
-                        <Button.InputBindings>
-                            <!--  Left-click command  -->
-                            <MouseBinding
-                                Command="{Binding ViewModel.AddItemCommand}"
-                                CommandParameter="0"
-                                Gesture="LeftClick" />
-
-                            <!--  Right-click command  -->
-                            <MouseBinding
-                                Command="{Binding ViewModel.RemoveItemCommand}"
-                                CommandParameter="0"
-                                Gesture="RightClick" />
-                        </Button.InputBindings>
-                        <Button.Content>
-                            <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
-                        </Button.Content>
-                    </Button>
-
-                    <Image
-                        x:Name="imgItemIcon1"
-                        Grid.Column="0"
-                        Width="36"
-                        Height="36"
-                        Margin="0,6,0,0"
-                        VerticalAlignment="Top"
-                        IsHitTestVisible="False"
-                        Source="{Binding ViewModel.ItemIcon1, Converter={StaticResource IconNameToImageSourceConverter}}"
-                        Stretch="Fill" />
-                    <Image
-                        x:Name="imgItemIconBranch1"
-                        Grid.Column="0"
-                        Width="42"
-                        Height="42"
-                        Margin="0,4,0,0"
-                        VerticalAlignment="Top"
-                        IsHitTestVisible="False"
-                        Source="{Binding ViewModel.ItemIconBranch1, Converter={StaticResource BranchToImageSourceConverter}}"
-                        Stretch="Fill" />
-                    <TextBlock
-                        x:Name="tbItemAmount1"
-                        Grid.Column="0"
-                        Width="20"
-                        Margin="15,25,6,0"
-                        VerticalAlignment="Top"
-                        d:Text="1"
-                        FlowDirection="RightToLeft"
-                        FontWeight="Bold"
-                        Foreground="White"
-                        IsHitTestVisible="False"
-                        RenderTransformOrigin="0.65,0.06"
-                        Text="{Binding ViewModel.ItemAmount1}"
-                        Visibility="{Binding ViewModel.ItemAmount1, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
-                    <!--  Images in column 1  -->
-                    <Button
+                        AddItemCommand="{Binding ViewModel.AddItemCommand}"
+                        AddItemCommandParameter="0"
+                        IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
+                        ItemAmount="{Binding ViewModel.ItemAmount1}"
+                        ItemIcon="{Binding ViewModel.ItemIcon1}"
+                        ItemIconBranch="{Binding ViewModel.ItemIconBranch1}"
+                        ItemName="{Binding ViewModel.ItemName1}"
+                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
+                        RemoveItemCommandParameter="0" />
+                    <!--  Item 2  -->
+                    <control:ItemSlot
                         Grid.Column="1"
-                        Width="44"
-                        Height="44"
-                        Cursor="Hand"
-                        IsEnabled="{Binding ViewModel.IsButtonEnabled}"
-                        Style="{StaticResource ImageButtonStyle}"
-                        ToolTip="{Binding ViewModel.ItemName2}">
-                        <Button.InputBindings>
-                            <!--  Left-click command  -->
-                            <MouseBinding
-                                Command="{Binding ViewModel.AddItemCommand}"
-                                CommandParameter="1"
-                                Gesture="LeftClick" />
-
-                            <!--  Right-click command  -->
-                            <MouseBinding
-                                Command="{Binding ViewModel.RemoveItemCommand}"
-                                CommandParameter="1"
-                                Gesture="RightClick" />
-                        </Button.InputBindings>
-                        <Button.Content>
-                            <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
-                        </Button.Content>
-                    </Button>
-                    <Image
-                        x:Name="imgItemIcon2"
-                        Grid.Column="1"
-                        Width="36"
-                        Height="36"
-                        Margin="0,6,0,0"
-                        VerticalAlignment="Top"
-                        IsHitTestVisible="False"
-                        Source="{Binding ViewModel.ItemIcon2, Converter={StaticResource IconNameToImageSourceConverter}}"
-                        Stretch="Fill" />
-                    <Image
-                        x:Name="imgItemIconBranch2"
-                        Grid.Column="1"
-                        Width="42"
-                        Height="42"
-                        Margin="0,4,0,0"
-                        VerticalAlignment="Top"
-                        IsHitTestVisible="False"
-                        Source="{Binding ViewModel.ItemIconBranch2, Converter={StaticResource BranchToImageSourceConverter}}"
-                        Stretch="Fill" />
-                    <TextBlock
-                        x:Name="tbItemAmount2"
-                        Grid.Column="1"
-                        Width="20"
-                        Margin="15,25,6,0"
-                        VerticalAlignment="Top"
-                        d:Text="1"
-                        FlowDirection="RightToLeft"
-                        FontWeight="Bold"
-                        Foreground="White"
-                        IsHitTestVisible="False"
-                        RenderTransformOrigin="0.65,0.06"
-                        Text="{Binding ViewModel.ItemAmount2}"
-                        Visibility="{Binding ViewModel.ItemAmount2, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
-                    <!--  Images in column 2  -->
-                    <Button
+                        AddItemCommand="{Binding ViewModel.AddItemCommand}"
+                        AddItemCommandParameter="1"
+                        IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
+                        ItemAmount="{Binding ViewModel.ItemAmount2}"
+                        ItemIcon="{Binding ViewModel.ItemIcon2}"
+                        ItemIconBranch="{Binding ViewModel.ItemIconBranch2}"
+                        ItemName="{Binding ViewModel.ItemName2}"
+                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
+                        RemoveItemCommandParameter="1" />
+                    <!--  Item 3  -->
+                    <control:ItemSlot
                         Grid.Column="2"
-                        Width="44"
-                        Height="44"
-                        Cursor="Hand"
-                        IsEnabled="{Binding ViewModel.IsButtonEnabled}"
-                        Style="{StaticResource ImageButtonStyle}"
-                        ToolTip="{Binding ViewModel.ItemName3}">
-                        <Button.InputBindings>
-                            <!--  Left-click command  -->
-                            <MouseBinding
-                                Command="{Binding ViewModel.AddItemCommand}"
-                                CommandParameter="2"
-                                Gesture="LeftClick" />
-
-                            <!--  Right-click command  -->
-                            <MouseBinding
-                                Command="{Binding ViewModel.RemoveItemCommand}"
-                                CommandParameter="2"
-                                Gesture="RightClick" />
-                        </Button.InputBindings>
-                        <Button.Content>
-                            <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
-                        </Button.Content>
-                    </Button>
-                    <Image
-                        x:Name="imgItemIcon3"
-                        Grid.Column="2"
-                        Width="36"
-                        Height="36"
-                        Margin="0,6,0,0"
-                        VerticalAlignment="Top"
-                        IsHitTestVisible="False"
-                        Source="{Binding ViewModel.ItemIcon3, Converter={StaticResource IconNameToImageSourceConverter}}"
-                        Stretch="Fill" />
-                    <Image
-                        x:Name="imgItemIconBranch3"
-                        Grid.Column="2"
-                        Width="42"
-                        Height="42"
-                        Margin="0,4,0,0"
-                        VerticalAlignment="Top"
-                        IsHitTestVisible="False"
-                        Source="{Binding ViewModel.ItemIconBranch3, Converter={StaticResource BranchToImageSourceConverter}}"
-                        Stretch="Fill" />
-                    <TextBlock
-                        x:Name="tbItemAmount3"
-                        Grid.Column="2"
-                        Width="20"
-                        Margin="15,25,6,0"
-                        VerticalAlignment="Top"
-                        d:Text="1"
-                        FlowDirection="RightToLeft"
-                        FontWeight="Bold"
-                        Foreground="White"
-                        IsHitTestVisible="False"
-                        RenderTransformOrigin="0.65,0.06"
-                        Text="{Binding ViewModel.ItemAmount3}"
-                        Visibility="{Binding ViewModel.ItemAmount3, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+                        AddItemCommand="{Binding ViewModel.AddItemCommand}"
+                        AddItemCommandParameter="2"
+                        IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
+                        ItemAmount="{Binding ViewModel.ItemAmount3}"
+                        ItemIcon="{Binding ViewModel.ItemIcon3}"
+                        ItemIconBranch="{Binding ViewModel.ItemIconBranch3}"
+                        ItemName="{Binding ViewModel.ItemName3}"
+                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
+                        RemoveItemCommandParameter="2" />
                 </Grid>
             </StackPanel>
             <StackPanel
-                Grid.Row="4"
+                Grid.Row="5"
+                Grid.RowSpan="4"
                 Grid.Column="0"
-                Margin="0,0,0,0"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
+                VerticalAlignment="Top"
                 Orientation="Vertical">
-                <!--  White Label  -->
                 <Label
                     x:Name="lbAttachWhite"
                     Content="Attach Gold Amount"
@@ -520,44 +384,42 @@
                     Value="{Binding ViewModel.ItemCharge, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <Image
-                Grid.Row="4"
-                Margin="160,-70,0,0"
+                Grid.Row="5"
+                Grid.Column="0"
+                Margin="168,24,0,0"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
+                VerticalAlignment="Bottom"
                 Source="/Assets/images/lb_ac_icon_gold.png"
                 Stretch="None" />
             <Image
-                Grid.Row="4"
-                Margin="160,115,0,0"
+                Grid.Row="7"
+                Grid.Column="0"
+                Margin="169,24,0,0"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
+                VerticalAlignment="Bottom"
                 Source="/Assets/images/lb_ac_icon_gold.png"
                 Stretch="None" />
+
             <!--  Send Button  -->
             <Button
                 x:Name="btnSend"
-                Grid.Row="4"
+                Grid.Row="8"
                 Grid.Column="1"
-                Width="137"
-                Margin="0,20"
+                Width="150"
+                Margin="0,10"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Background="Transparent"
                 Command="{Binding ViewModel.SendMailCommand}"
                 Content="Send"
+                Cursor="Hand"
                 Foreground="White"
                 IsEnabled="{Binding ViewModel.IsButtonEnabled}"
-                Style="{StaticResource lb_def_button02}">
-                <Button.ToolTip>
-                    <ToolTip>
-                        <TextBlock Text="Send" />
-                    </ToolTip>
-                </Button.ToolTip>
-                <Button.Cursor>Hand</Button.Cursor>
-            </Button>
+                Style="{StaticResource lb_def_button02}"
+                ToolTip="Send" />
             <ui:SnackbarPresenter
                 x:Name="MailSnackbarPresenter"
-                Grid.Row="4"
+                Grid.Row="8"
                 Grid.ColumnSpan="3" />
         </Grid>
     </ContentControl>

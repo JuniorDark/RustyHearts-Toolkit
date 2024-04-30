@@ -18,9 +18,7 @@
     <Grid
         x:Name="gearGrid"
         Width="300"
-        MaxHeight="350"
-        Margin="-22,-22,-22,-22"
-        VerticalAlignment="Top">
+        MaxHeight="350">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" MinHeight="22" />

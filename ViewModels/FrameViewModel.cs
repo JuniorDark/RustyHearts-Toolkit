@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using RHToolkit.Services;
+﻿using RHToolkit.Services;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels;

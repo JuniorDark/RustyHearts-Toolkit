@@ -13,7 +13,7 @@ namespace RHToolkit.Services
         (Guid? characterId, Guid? authid, string? windyCode) GetCharacterInfo(string characterName);
         string? GetGuildName(Guid guildId);
         (DateTime startTime, DateTime? endTime) GetSanctionTimes(Guid sanctionUid);
-        void GMAudit(string windyCode, Guid? characterId, string characterName, string action, string modify);
+        void GMAudit(string? windyCode, Guid? characterId, string characterName, string action, string modify);
         void InsertMail(Guid? senderAuthId, Guid? senderCharacterId, string mailSender, string recipient, string content, int gold, int returnDay, int reqGold, Guid mailId, int createType);
         void InsertMailItem(ItemData itemData, Guid? recipientAuthId, Guid? recipientCharacterId, Guid mailId, int slotIndex);
         bool IsCharacterOnline(string characterName);

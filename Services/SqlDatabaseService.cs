@@ -31,6 +31,33 @@ namespace RHToolkit.Services
             }
         }
 
+        public async Task<(bool success, string errorMessage)> TestDatabaseConnectionAsync()
+        {
+            string connectionString = $"Data Source={SqlCredentials.SQLServer};User ID={SqlCredentials.SQLUser};Password={SqlCredentials.SQLPwd};Encrypt=false;";
+
+            try
+            {
+                return await Task.Run(() =>
+                {
+                    using SqlConnection connection = new(connectionString);
+                    try
+                    {
+                        connection.Open();
+                        return (true, "");
+                    }
+                    catch (SqlException ex)
+                    {
+                        return (false, ex.Message);
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
+
         public object ExecuteScalar(string query, IDbConnection connection, params (string, object)[] parameters)
         {
             return ExecuteScalarInternal(query, connection, parameters);

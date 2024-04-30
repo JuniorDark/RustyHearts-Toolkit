@@ -8,41 +8,36 @@
     xmlns:vm="clr-namespace:RHToolkit.ViewModels"
     x:Name="Frame"
     Height="Auto"
-    MaxHeight="650"
+    MaxHeight="700"
     d:DataContext="{d:DesignInstance Type=vm:FrameViewModel}"
-    d:DesignHeight="650"
+    d:DesignHeight="700"
     d:DesignWidth="300"
     Template="{StaticResource lb_def_box01}"
     mc:Ignorable="d">
-    <Grid
-        x:Name="gearGrid"
-        Width="300"
-        MaxHeight="650"
-        Margin="-22,-22,-22,-22"
-        VerticalAlignment="Top">
+    <Grid x:Name="gearGrid">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" MinHeight="22" />
-            <RowDefinition Height="Auto" MinHeight="22" />
-            <RowDefinition Height="Auto" MinHeight="22" />
-            <RowDefinition Height="Auto" MinHeight="22" />
-            <RowDefinition Height="Auto" MinHeight="22" />
-            <RowDefinition Height="Auto" MinHeight="50" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" MinHeight="30" />
-            <RowDefinition Height="Auto" MinHeight="30" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" MinHeight="50" />
+            <RowDefinition Height="22" />
+            <RowDefinition Height="22" />
+            <RowDefinition Height="22" />
+            <RowDefinition Height="22" />
+            <RowDefinition Height="22" />
+            <RowDefinition Height="22" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="22" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="80" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" MinHeight="50" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" MinHeight="50" />
+            <RowDefinition Height="50" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="22" />
         </Grid.RowDefinitions>
         <!--  ItemName  -->
         <TextBlock
@@ -211,9 +206,9 @@
         <TextBlock
             x:Name="tbSetName"
             Grid.Row="9"
-            Margin="10,0,0,0"
+            Margin="10"
             HorizontalAlignment="Left"
-            VerticalAlignment="Center"
+            VerticalAlignment="Top"
             d:Text="Set Name"
             Foreground="White"
             Style="{StaticResource ArialMS}"
@@ -366,8 +361,8 @@
         <TextBlock
             x:Name="tbPetFood"
             Grid.Row="21"
-            Margin="10,0,0,0"
-            HorizontalAlignment="Left"
+            Margin="0,0,80,0"
+            HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
             d:Foreground="#e75151"
             d:Text="This item cannot be used as Pet Food"

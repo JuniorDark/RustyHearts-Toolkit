@@ -1,0 +1,65 @@
+﻿<UserControl
+    x:Class="RHToolkit.Controls.ItemSlot"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid>
+        <Button
+            Width="44"
+            Height="44"
+            Cursor="Hand"
+            IsEnabled="{Binding IsButtonEnabled, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Style="{StaticResource ImageButtonStyle}"
+            ToolTip="{Binding ItemName, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <Button.InputBindings>
+                <!--  Left-click command  -->
+                <MouseBinding
+                    Command="{Binding AddItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    CommandParameter="{Binding AddItemCommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Gesture="LeftClick" />
+                <!--  Right-click command  -->
+                <MouseBinding
+                    Command="{Binding RemoveItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    CommandParameter="{Binding RemoveItemCommandParameter, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    Gesture="RightClick" />
+            </Button.InputBindings>
+            <Button.Content>
+                <BitmapImage UriSource="/Assets/images/lb_ac_icon.png" />
+            </Button.Content>
+        </Button>
+        <Image
+            x:Name="imgItemIcon"
+            Width="36"
+            Height="36"
+            Margin="0,6,0,0"
+            VerticalAlignment="Top"
+            IsHitTestVisible="False"
+            Source="{Binding ItemIcon, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource IconNameToImageSourceConverter}}"
+            Stretch="Fill" />
+        <Image
+            x:Name="imgItemIconBranch"
+            Width="42"
+            Height="42"
+            Margin="0,4,0,0"
+            VerticalAlignment="Top"
+            IsHitTestVisible="False"
+            Source="{Binding ItemIconBranch, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BranchToImageSourceConverter}}"
+            Stretch="Fill" />
+        <TextBlock
+            x:Name="tbItemAmount"
+            Grid.Column="0"
+            Width="20"
+            Margin="15,25,6,0"
+            VerticalAlignment="Top"
+            d:Text="1"
+            FlowDirection="RightToLeft"
+            FontWeight="Bold"
+            Foreground="White"
+            IsHitTestVisible="False"
+            RenderTransformOrigin="0.65,0.06"
+            Text="{Binding ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Visibility="{Binding ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+    </Grid>
+</UserControl>

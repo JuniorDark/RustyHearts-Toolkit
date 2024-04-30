@@ -517,7 +517,7 @@ namespace RHToolkit.Services
         #endregion
 
         #region RustyHearts_Log
-        public void GMAudit(string windyCode, Guid? characterId, string characterName, string action, string modify)
+        public void GMAudit(string? windyCode, Guid? characterId, string characterName, string action, string modify)
         {
             using var connection = _databaseService.OpenConnection("GMRustyHearts");
             using var transaction = connection.BeginTransaction();

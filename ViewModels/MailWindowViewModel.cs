@@ -36,7 +36,7 @@ namespace RHToolkit.ViewModels
 
         #region Add Item
 
-        private ItemWindow? itemWindow;
+        private ItemWindow? _itemWindowInstance;
 
         [RelayCommand]
         private void AddItem(string parameter)
@@ -50,17 +50,17 @@ namespace RHToolkit.ViewModels
                     SlotIndex = slotIndex
                 };
 
-                if (itemWindow != null)
-                {
-                    WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel));
-                }
-                else
+                if (_itemWindowInstance == null)
                 {
                     _windowsProviderService.Show<ItemWindow>();
-                    WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel));
+                    _itemWindowInstance = Application.Current.Windows.OfType<ItemWindow>().FirstOrDefault();
+                    _itemWindowInstance.Closed += (sender, args) => _itemWindowInstance = null;
                 }
+
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel));
             }
         }
+
 
         public void Receive(ItemDataMessage message)
         {
@@ -449,6 +449,17 @@ namespace RHToolkit.ViewModels
                 );
                 return;
             }
+            if (string.IsNullOrEmpty(Sender))
+            {
+                _snackbarService.Show(
+                "Empty sender.",
+                "Enter a Sender.",
+                ControlAppearance.Caution,
+                new SymbolIcon(SymbolRegular.MailWarning24),
+                TimeSpan.FromSeconds(5)
+                );
+                return;
+            }
 
             if (sendToAllCharacters)
             {
@@ -633,7 +644,6 @@ namespace RHToolkit.ViewModels
             return result == System.Windows.MessageBoxResult.Yes;
         }
 
-
         #endregion
 
         #region Properties
@@ -660,7 +670,22 @@ namespace RHToolkit.ViewModels
         private int _itemCharge;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsRecipientEabled))]
         private bool _sendToAll = false;
+        partial void OnSendToAllChanged(bool value)
+        {
+            if (value == true)
+            {
+                IsRecipientEabled = false;
+            }
+            else
+            {
+                IsRecipientEabled = true;
+            }
+        }
+
+        [ObservableProperty]
+        private bool _isRecipientEabled = true;
 
         [ObservableProperty]
         private string? _itemName1 = "Click to add a item";

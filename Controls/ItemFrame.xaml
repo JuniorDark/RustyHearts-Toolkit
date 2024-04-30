@@ -21,10 +21,7 @@
         x:Name="itemGrid"
         Width="300"
         Height="400"
-        MaxHeight="400"
-        Margin="-25,-20,-25,-25"
-        HorizontalAlignment="Left"
-        VerticalAlignment="Top">
+        MaxHeight="400">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" MinHeight="22" />
@@ -165,14 +162,14 @@
             Grid.Row="7"
             Width="290"
             Height="215"
-            Style="{StaticResource ArialMSRTB}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             ut:RichTextBoxHelper.FormattedText="{Binding Description}"
             Background="Transparent"
             BorderThickness="0"
             Foreground="White"
-            IsReadOnly="True" />
+            IsReadOnly="True"
+            Style="{StaticResource ArialMSRTB}" />
         <TextBlock
             x:Name="tbPetFood"
             Grid.Row="8"
