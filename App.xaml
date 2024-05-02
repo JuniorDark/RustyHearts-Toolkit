@@ -17,7 +17,6 @@
                 <ui:ThemesDictionary Theme="Dark" />
                 <ui:ControlsDictionary />
                 <ResourceDictionary Source="Shared/ConvertersDictionary.xaml" />
-                <ResourceDictionary Source="Styles/Box.xaml" />
                 <ResourceDictionary Source="Styles/Button.xaml" />
                 <ResourceDictionary Source="Styles/Checkbox.xaml" />
                 <ResourceDictionary Source="Styles/CloseButton.xaml" />
@@ -25,6 +24,7 @@
                 <ResourceDictionary Source="Styles/Datagrid.xaml" />
                 <ResourceDictionary Source="Styles/IntegerUpDown.xaml" />
                 <ResourceDictionary Source="Styles/Label.xaml" />
+                <ResourceDictionary Source="Styles/lb_def_box01.xaml" />
                 <ResourceDictionary Source="Styles/lb_def_box04.xaml" />
                 <ResourceDictionary Source="Styles/lb_def_box17.xaml" />
                 <ResourceDictionary Source="Styles/lb_def_msg_box.xaml" />

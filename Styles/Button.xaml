@@ -103,6 +103,41 @@
         </Grid>
     </ControlTemplate>
 
+    <ControlTemplate x:Key="lb_def_button02_disabled" TargetType="Button">
+        <Grid>
+            <!--  Corners  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/images/button/lb_def_button02/lb_def_button02_10.png"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/images/button/lb_def_button02/lb_def_button02_12.png"
+                Stretch="None" />
+
+            <!--  Edges  -->
+            <Image
+                Height="26"
+                Margin="26,0,26,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/images/button/lb_def_button02/lb_def_button02_11.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/button/lb_def_button02/lb_def_button02_11.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
+    </ControlTemplate>
+
     <Style x:Key="lb_def_button02" TargetType="Button">
         <Setter Property="Template" Value="{StaticResource lb_def_button02_normal}" />
         <Style.Triggers>
@@ -111,6 +146,9 @@
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="Template" Value="{StaticResource lb_def_button02_down}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Template" Value="{StaticResource lb_def_button02_disabled}" />
             </Trigger>
         </Style.Triggers>
     </Style>
