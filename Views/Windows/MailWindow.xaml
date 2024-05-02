@@ -258,7 +258,6 @@
                     Style="{StaticResource lb_def_button02}"
                     ToolTip="Clear all current mail settings" />
             </StackPanel>
-
             <StackPanel
                 Grid.Row="4"
                 Grid.ColumnSpan="3"
@@ -291,38 +290,35 @@
                     <control:ItemSlot
                         Grid.Column="0"
                         AddItemCommand="{Binding ViewModel.AddItemCommand}"
-                        AddItemCommandParameter="0"
+                        CommandParameter="0"
                         IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
                         ItemAmount="{Binding ViewModel.ItemAmount1}"
                         ItemIcon="{Binding ViewModel.ItemIcon1}"
                         ItemIconBranch="{Binding ViewModel.ItemIconBranch1}"
                         ItemName="{Binding ViewModel.ItemName1}"
-                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
-                        RemoveItemCommandParameter="0" />
+                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}" />
                     <!--  Item 2  -->
                     <control:ItemSlot
                         Grid.Column="1"
                         AddItemCommand="{Binding ViewModel.AddItemCommand}"
-                        AddItemCommandParameter="1"
+                        CommandParameter="1"
                         IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
                         ItemAmount="{Binding ViewModel.ItemAmount2}"
                         ItemIcon="{Binding ViewModel.ItemIcon2}"
                         ItemIconBranch="{Binding ViewModel.ItemIconBranch2}"
                         ItemName="{Binding ViewModel.ItemName2}"
-                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
-                        RemoveItemCommandParameter="1" />
+                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}" />
                     <!--  Item 3  -->
                     <control:ItemSlot
                         Grid.Column="2"
                         AddItemCommand="{Binding ViewModel.AddItemCommand}"
-                        AddItemCommandParameter="2"
+                        CommandParameter="2"
                         IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
                         ItemAmount="{Binding ViewModel.ItemAmount3}"
                         ItemIcon="{Binding ViewModel.ItemIcon3}"
                         ItemIconBranch="{Binding ViewModel.ItemIconBranch3}"
                         ItemName="{Binding ViewModel.ItemName3}"
-                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
-                        RemoveItemCommandParameter="2" />
+                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}" />
                 </Grid>
             </StackPanel>
             <StackPanel
@@ -417,10 +413,6 @@
                 IsEnabled="{Binding ViewModel.IsButtonEnabled}"
                 Style="{StaticResource lb_def_button02}"
                 ToolTip="Send" />
-            <ui:SnackbarPresenter
-                x:Name="MailSnackbarPresenter"
-                Grid.Row="8"
-                Grid.ColumnSpan="3" />
         </Grid>
     </ContentControl>
 </Window>

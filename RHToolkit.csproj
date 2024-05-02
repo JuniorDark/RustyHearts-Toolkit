@@ -253,6 +253,15 @@
     <None Remove="Assets\images\window\lb_def_box17\lb_def_box17_07.png" />
     <None Remove="Assets\images\window\lb_def_box17\lb_def_box17_08.png" />
     <None Remove="Assets\images\window\lb_def_box17\lb_def_box17_09.png" />
+    <None Remove="Assets\images\window\lb_def_msg_box\lb_def_msg_box01.png" />
+    <None Remove="Assets\images\window\lb_def_msg_box\lb_def_msg_box02.png" />
+    <None Remove="Assets\images\window\lb_def_msg_box\lb_def_msg_box03.png" />
+    <None Remove="Assets\images\window\lb_def_msg_box\lb_def_msg_box04.png" />
+    <None Remove="Assets\images\window\lb_def_msg_box\lb_def_msg_box05.png" />
+    <None Remove="Assets\images\window\lb_def_msg_box\lb_def_msg_box06.png" />
+    <None Remove="Assets\images\window\lb_def_msg_box\lb_def_msg_box07.png" />
+    <None Remove="Assets\images\window\lb_def_msg_box\lb_def_msg_box08.png" />
+    <None Remove="Assets\images\window\lb_def_msg_box\lb_def_msg_box09.png" />
     <None Remove="Assets\images\window\MailForm.png" />
     <None Remove="Assets\images\window\MainForm.png" />
     <None Remove="Assets\images\window\red01\Center.png" />
@@ -442,6 +451,15 @@
     <Resource Include="Assets\images\window\lb_def_box17\lb_def_box17_07.png" />
     <Resource Include="Assets\images\window\lb_def_box17\lb_def_box17_08.png" />
     <Resource Include="Assets\images\window\lb_def_box17\lb_def_box17_09.png" />
+    <Resource Include="Assets\images\window\lb_def_msg_box\lb_def_msg_box01.png" />
+    <Resource Include="Assets\images\window\lb_def_msg_box\lb_def_msg_box02.png" />
+    <Resource Include="Assets\images\window\lb_def_msg_box\lb_def_msg_box03.png" />
+    <Resource Include="Assets\images\window\lb_def_msg_box\lb_def_msg_box04.png" />
+    <Resource Include="Assets\images\window\lb_def_msg_box\lb_def_msg_box05.png" />
+    <Resource Include="Assets\images\window\lb_def_msg_box\lb_def_msg_box06.png" />
+    <Resource Include="Assets\images\window\lb_def_msg_box\lb_def_msg_box07.png" />
+    <Resource Include="Assets\images\window\lb_def_msg_box\lb_def_msg_box08.png" />
+    <Resource Include="Assets\images\window\lb_def_msg_box\lb_def_msg_box09.png" />
     <Resource Include="Assets\images\window\red01\Center.png" />
     <Resource Include="Assets\images\window\red01\CornerBottomLeft.png" />
     <Resource Include="Assets\images\window\red01\CornerBottomRight.png" />
@@ -474,10 +492,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.118" />
     <PackageReference Include="WPF-UI" Version="3.0.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ViewModels\Controls\" />
   </ItemGroup>
 
 </Project>

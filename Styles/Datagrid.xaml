@@ -14,7 +14,10 @@
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 SnapsToDevicePixels="True">
-                <ScrollViewer x:Name="DG_ScrollViewer" Focusable="false">
+                <ScrollViewer
+                    x:Name="DG_ScrollViewer"
+                    Focusable="false"
+                    HorizontalScrollBarVisibility="{TemplateBinding HorizontalScrollBarVisibility}">
                     <ScrollViewer.Template>
                         <ControlTemplate TargetType="{x:Type ScrollViewer}">
                             <Grid>

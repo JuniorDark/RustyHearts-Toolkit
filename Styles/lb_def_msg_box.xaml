@@ -1,0 +1,160 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--  lb_def_msg_box  -->
+    <ControlTemplate x:Key="lb_def_msg_box" TargetType="ContentControl">
+        <Grid>
+            <!--  Top-left corner  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/lb_def_msg_box/lb_def_msg_box01.png"
+                Stretch="None">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_msg_box/lb_def_msg_box01.png"
+                        TileMode="Tile"
+                        Viewport="0,0,1,1"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <!--  Top-right corner  -->
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/lb_def_msg_box/lb_def_msg_box03.png"
+                Stretch="None">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_msg_box/lb_def_msg_box03.png"
+                        TileMode="Tile"
+                        Viewport="0,0,1,1"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <!--  Bottom-left corner  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/lb_def_msg_box/lb_def_msg_box07.png"
+                Stretch="None">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_msg_box/lb_def_msg_box07.png"
+                        TileMode="Tile"
+                        Viewport="0,0,1,1"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <!--  Bottom-right corner  -->
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/lb_def_msg_box/lb_def_msg_box09.png"
+                Stretch="None">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_msg_box/lb_def_msg_box09.png"
+                        TileMode="Tile"
+                        Viewport="0,0,1,1"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <!--  Edges  -->
+            <Image
+                Height="30"
+                Margin="30,0,30,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/lb_def_msg_box/lb_def_msg_box02.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_msg_box/lb_def_msg_box02.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <Image
+                Height="30"
+                Margin="30,0,30,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/lb_def_msg_box/lb_def_msg_box08.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_msg_box/lb_def_msg_box08.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <Image
+                Width="30"
+                Margin="0,30,0,30"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/lb_def_msg_box/lb_def_msg_box04.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_msg_box/lb_def_msg_box04.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,0.25,1"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <Image
+                Width="30"
+                Margin="0,30,0,30"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/lb_def_msg_box/lb_def_msg_box06.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_msg_box/lb_def_msg_box06.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,0.25,1"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <!--  Center  -->
+            <Image
+                Margin="30,30,30,30"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/lb_def_msg_box/lb_def_msg_box05.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_msg_box/lb_def_msg_box05.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,1"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <!--  Content  -->
+            <ContentPresenter
+                Margin="0,0,0,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Content="{TemplateBinding Content}" />
+        </Grid>
+    </ControlTemplate>
+
+</ResourceDictionary>

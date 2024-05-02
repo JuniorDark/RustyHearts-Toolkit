@@ -6,7 +6,21 @@ public class BranchToImageSourceConverter : IValueConverter
 {
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value == null || value is not int branch)
+        if (value == null)
+        {
+            return null;
+        }
+
+        int branch;
+        if (value is int intValue)
+        {
+            branch = intValue;
+        }
+        else if (value is string stringValue && int.TryParse(stringValue, out int parsedValue))
+        {
+            branch = parsedValue;
+        }
+        else
         {
             return null;
         }
@@ -34,4 +48,5 @@ public class BranchToImageSourceConverter : IValueConverter
     {
         throw new NotImplementedException();
     }
+
 }

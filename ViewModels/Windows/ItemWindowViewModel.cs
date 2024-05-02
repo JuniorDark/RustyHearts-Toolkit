@@ -1,16 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
-using RHToolkit.Messages;
+﻿using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Services;
+using RHToolkit.ViewModels.Controls;
 using System.ComponentModel;
-using System.Windows;
-using System.Windows.Data;
-using System.Windows.Threading;
 using static RHToolkit.Models.EnumService;
 
-namespace RHToolkit.ViewModels;
+namespace RHToolkit.ViewModels.Windows;
 
 public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>
 {
@@ -466,7 +461,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _itemTradeFilterSelectedIndex = 1;
+    private int _itemTradeFilterSelectedIndex = 0;
 
     [ObservableProperty]
     private List<NameID>? _itemTradeFilterItems;
@@ -606,12 +601,14 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(EnchantLevel))]
+    [NotifyPropertyChangedFor(nameof(AugmentValue))]
     private int _type;
     partial void OnTypeChanged(int value)
     {
         if (value == 1 || value == 2)
         {
             EnchantLevel = 0;
+            AugmentValue = 0;
         }
         _frameViewModel.Type = value;
     }

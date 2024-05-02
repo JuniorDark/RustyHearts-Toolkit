@@ -441,5 +441,32 @@ namespace RHToolkit.Services
                 throw new Exception($"Error retrieving title values from the database", ex);
             }
         }
+
+        public (int nSetOption00, int nSetOptionvlue00, int nSetOption01, int nSetOptionvlue01, int nSetOption02, int nSetOptionvlue02, int nSetOption03, int nSetOptionvlue03, int nSetOption04, int nSetOptionvlue04) GetSetInfo(int setID)
+        {
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = "SELECT nSetOption00, nSetOptionvlue00, nSetOption01, nSetOptionvlue01, nSetOption02, nSetOptionvlue02, nSetOption03, nSetOptionvlue03, nSetOption04, nSetOptionvlue04 FROM setitem WHERE nID = @setID";
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@setID", setID));
+
+                return command.Read() ?
+                    (command.GetInt32(0),
+                    command.GetInt32(1),
+                    command.GetInt32(2),
+                    command.GetInt32(3),
+                    command.GetInt32(4),
+                    command.GetInt32(5),
+                    command.GetInt32(6),
+                    command.GetInt32(7),
+                    command.GetInt32(8),
+                    command.GetInt32(9)) :
+                    (0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving set values from the database", ex);
+            }
+        }
     }
 }

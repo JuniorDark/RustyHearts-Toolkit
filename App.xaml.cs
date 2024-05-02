@@ -1,11 +1,10 @@
 ﻿using RHToolkit.Services;
 using RHToolkit.Services.Contracts;
-using RHToolkit.ViewModels;
+using RHToolkit.ViewModels.Controls;
 using RHToolkit.ViewModels.Pages;
 using RHToolkit.ViewModels.Windows;
-using RHToolkit.Views;
-using RHToolkit.Views.Pages;
 using RHToolkit.Views.Windows;
+using RHToolkit.Views.Pages;
 using Wpf.Ui;
 
 namespace RHToolkit;

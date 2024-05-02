@@ -1,7 +1,7 @@
 ﻿using RHToolkit.Services;
 using static RHToolkit.Models.EnumService;
 
-namespace RHToolkit.ViewModels;
+namespace RHToolkit.ViewModels.Controls;
 
 public partial class FrameViewModel(IFrameService frameService, IGMDatabaseService gmDatabaseService) : ObservableObject
 {
@@ -110,9 +110,11 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SetNameText))]
+    [NotifyPropertyChangedFor(nameof(SetEffectText))]
     private int _setId;
 
     public string SetNameText => _gmDatabaseService.GetSetName(SetId);
+    public string SetEffectText => _frameService.FormatSetEffect(SetId);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PetFoodText))]
@@ -144,7 +146,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(FixedOption01Text))]
     private int _fixedOption01Value;
 
-    public string FixedOption01Text => _frameService.GetOptionName(FixedOption01, FixedOption01Value);
+    public string FixedOption01Text => _frameService.GetOptionName(FixedOption01, FixedOption01Value, true);
 
     public string FixedOption01Color => _frameService.GetColorFromOption(FixedOption01);
 
@@ -158,7 +160,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(FixedOption02Text))]
     private int _fixedOption02Value;
 
-    public string FixedOption02Text => _frameService.GetOptionName(FixedOption02, FixedOption02Value);
+    public string FixedOption02Text => _frameService.GetOptionName(FixedOption02, FixedOption02Value, true);
 
     public string FixedOption02Color => _frameService.GetColorFromOption(FixedOption02);
 

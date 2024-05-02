@@ -6,14 +6,14 @@ namespace RHToolkit.Services
 {
     public class SqlDatabaseService : ISqlDatabaseService
     {
-        public IDbConnection OpenConnection(string databaseName)
+        public async Task<SqlConnection> OpenConnectionAsync(string databaseName)
         {
             string connectionString = $"Data Source={SqlCredentials.SQLServer};Initial Catalog={databaseName};User Id={SqlCredentials.SQLUser};Password={SqlCredentials.SQLPwd};Encrypt=false;";
             SqlConnection connection = new()
             {
                 ConnectionString = connectionString
             };
-            connection.Open();
+            await connection.OpenAsync();
 
             if (!string.IsNullOrEmpty(databaseName))
             {
@@ -23,7 +23,7 @@ namespace RHToolkit.Services
             return connection;
         }
 
-        public void EnsureConnectionClosed(IDbConnection connection)
+        public void EnsureConnectionClosed(SqlConnection connection)
         {
             if (connection.State != ConnectionState.Closed)
             {
@@ -37,19 +37,16 @@ namespace RHToolkit.Services
 
             try
             {
-                return await Task.Run(() =>
+                using SqlConnection connection = new(connectionString);
+                try
                 {
-                    using SqlConnection connection = new(connectionString);
-                    try
-                    {
-                        connection.Open();
-                        return (true, "");
-                    }
-                    catch (SqlException ex)
-                    {
-                        return (false, ex.Message);
-                    }
-                });
+                    await connection.OpenAsync();
+                    return (true, "");
+                }
+                catch (SqlException ex)
+                {
+                    return (false, ex.Message);
+                }
             }
             catch (Exception ex)
             {
@@ -57,32 +54,31 @@ namespace RHToolkit.Services
             }
         }
 
-
-        public object ExecuteScalar(string query, IDbConnection connection, params (string, object)[] parameters)
+        public async Task<object?> ExecuteScalarAsync(string query, SqlConnection connection, params (string, object)[] parameters)
         {
-            return ExecuteScalarInternal(query, connection, parameters);
+            return await ExecuteScalarInternalAsync(query, connection, parameters);
         }
 
-        private static object ExecuteScalarInternal(string query, IDbConnection connection, params (string, object)[] parameters)
+        private static async Task<object?> ExecuteScalarInternalAsync(string query, SqlConnection connection, params (string, object)[] parameters)
         {
             if (connection.State != ConnectionState.Open)
             {
-                connection.Open();
+                await connection.OpenAsync();
             }
 
             using var command = connection.CreateCommand();
             command.CommandText = query;
             AddParametersToCommand(command, parameters);
 
-            object? result = command.ExecuteScalar();
+            object? result = await command.ExecuteScalarAsync();
             return result ?? DBNull.Value;
         }
 
-        public DataTable ExecuteDataQuery(string query, IDbConnection connection, IDbTransaction? transaction = null, params (string, object)[] parameters)
+        public async Task<DataTable> ExecuteDataQueryAsync(string query, SqlConnection connection, SqlTransaction? transaction = null, params (string, object)[] parameters)
         {
             DataTable dataTable = new();
 
-            using (IDbCommand command = connection.CreateCommand())
+            using (SqlCommand command = connection.CreateCommand())
             {
                 command.CommandText = query;
                 AddParametersToCommand(command, parameters);
@@ -92,26 +88,26 @@ namespace RHToolkit.Services
                     command.Transaction = transaction;
                 }
 
-                using IDataReader reader = command.ExecuteReader();
+                using IDataReader reader = await command.ExecuteReaderAsync();
                 dataTable.Load(reader);
             }
 
             return dataTable;
         }
 
-        public void ExecuteQuery(string query, IDbConnection connection, Action<IDataReader> processResultsCallback, params (string, object)[] parameters)
+        public async Task ExecuteQueryAsync(string query, SqlConnection connection, Action<IDataReader> processResultsCallback, params (string, object)[] parameters)
         {
-            using IDbCommand command = connection.CreateCommand();
+            using SqlCommand command = connection.CreateCommand();
             command.CommandText = query;
             AddParametersToCommand(command, parameters);
 
-            using IDataReader reader = command.ExecuteReader();
+            using IDataReader reader = await command.ExecuteReaderAsync();
             processResultsCallback?.Invoke(reader);
         }
 
-        public int ExecuteNonQuery(string query, IDbConnection connection, IDbTransaction? transaction = null, params (string, object)[] parameters)
+        public async Task<int> ExecuteNonQueryAsync(string query, SqlConnection connection, SqlTransaction? transaction = null, params (string, object)[] parameters)
         {
-            using IDbCommand command = connection.CreateCommand();
+            using SqlCommand command = connection.CreateCommand();
             command.CommandText = query;
             if (transaction != null)
             {
@@ -119,11 +115,11 @@ namespace RHToolkit.Services
             }
             AddParametersToCommand(command, parameters);
 
-            int affectedRows = command.ExecuteNonQuery();
+            int affectedRows = await command.ExecuteNonQueryAsync();
             return affectedRows;
         }
 
-        private static void AddParametersToCommand(IDbCommand command, params (string, object)[] parameters)
+        private static void AddParametersToCommand(SqlCommand command, params (string, object)[] parameters)
         {
             foreach (var (paramName, paramValue) in parameters)
             {
@@ -134,9 +130,9 @@ namespace RHToolkit.Services
             }
         }
 
-        public object ExecuteProcedure(string procedureName, IDbConnection connection, IDbTransaction? transaction = null, params (string, object)[] parameters)
+        public async Task<object> ExecuteProcedureAsync(string procedureName, SqlConnection connection, SqlTransaction? transaction = null, params (string, object)[] parameters)
         {
-            using IDbCommand command = connection.CreateCommand();
+            using SqlCommand command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
             command.CommandText = procedureName;
             if (transaction != null)
@@ -145,15 +141,15 @@ namespace RHToolkit.Services
             }
             AddParametersToCommand(command, parameters);
 
-            object? result = command.ExecuteScalar();
+            object? result = await command.ExecuteScalarAsync();
             return result ?? DBNull.Value;
         }
 
-        public DataTable ExecuteDataProcedure(string procedureName, IDbConnection connection, IDbTransaction? transaction = null, params (string, object)[] parameters)
+        public async Task<DataTable> ExecuteDataProcedureAsync(string procedureName, SqlConnection connection, SqlTransaction? transaction = null, params (string, object)[] parameters)
         {
             DataTable dataTable = new();
 
-            using IDbCommand command = connection.CreateCommand();
+            using SqlCommand command = connection.CreateCommand();
             command.CommandType = CommandType.StoredProcedure;
             command.CommandText = procedureName;
             if (transaction != null)
@@ -162,12 +158,12 @@ namespace RHToolkit.Services
             }
             AddParametersToCommand(command, parameters);
 
-            using var adapter = new SqlDataAdapter((SqlCommand)command);
-            adapter.Fill(dataTable);
+            using var adapter = new SqlDataAdapter(command);
+            await Task.Run(() => adapter.Fill(dataTable));
 
             return dataTable;
         }
-
     }
+
 
 }

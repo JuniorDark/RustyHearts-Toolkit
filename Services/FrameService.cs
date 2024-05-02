@@ -62,12 +62,12 @@ namespace RHToolkit.Services
         }
 
 
-        public string GetOptionName(int option, int optionValue)
+        public string GetOptionName(int option, int optionValue, bool isFixedOption = false)
         {
             string optionName = _gmDatabaseService.GetOptionName(option);
             (int secTime, float value, int maxValue) = _gmDatabaseService.GetOptionValues(option);
 
-            string formattedOption = FormatNameID(optionName, $"{optionValue}", $"{secTime}", $"{value}", maxValue);
+            string formattedOption = FormatNameID(optionName, $"{optionValue}", $"{secTime}", $"{value}", maxValue, isFixedOption);
 
             return option != 0 ? formattedOption : "No Buff";
         }
@@ -108,6 +108,33 @@ namespace RHToolkit.Services
             }
 
             return mainStat;
+        }
+
+        public string FormatSetEffect(int setId)
+        {
+            (int nSetOption00, int nSetOptionvlue00, int nSetOption01, int nSetOptionvlue01, int nSetOption02, int nSetOptionvlue02, int nSetOption03, int nSetOptionvlue03, int nSetOption04, int nSetOptionvlue04) = _gmDatabaseService.GetSetInfo(setId);
+
+            if (nSetOption00 == 0)
+                return "";
+
+            string setEffect01 = GetOptionName(nSetOption00, nSetOptionvlue00);
+            string setEffect02 = GetOptionName(nSetOption01, nSetOptionvlue01);
+            string setEffect03 = GetOptionName(nSetOption02, nSetOptionvlue02);
+            string setEffect04 = GetOptionName(nSetOption03, nSetOptionvlue03);
+            string setEffect05 = GetOptionName(nSetOption04, nSetOptionvlue04);
+
+            string setEffect = "Set Effect\n";
+            setEffect += $"2Set: {setEffect01}\n";
+            if (nSetOption01 != 0)
+                setEffect += $"3Set: {setEffect02}\n";
+            if (nSetOption02 != 0)
+                setEffect += $"4Set: {setEffect03}\n";
+            if (nSetOption03 != 0)
+                setEffect += $"5Set: {setEffect04}\n";
+            if (nSetOption04 != 0)
+                setEffect += $"6Set: {setEffect05}\n";
+
+            return setEffect;
         }
 
         public string FormatSellValue(int sellPrice)
@@ -160,7 +187,7 @@ namespace RHToolkit.Services
         private const string ColorTagClose = "</COLOR>";
         private const string LineBreakTag = "<br>";
 
-        public string FormatNameID(string option, string replacement01, string replacement02, string replacement03, int maxValue)
+        public string FormatNameID(string option, string replacement01, string replacement02, string replacement03, int maxValue, bool isFixedOption = false)
         {
             option = RemoveColorTags(option);
 
@@ -169,7 +196,7 @@ namespace RHToolkit.Services
                            .Replace(LineBreakTag, " ");
 
             string valuePlaceholder01 = option.Contains("#@value01@#%") ? "#@value01@#%" : "#@value01@#";
-            string valuePlaceholder02 = option.Contains("#@value02@#") ? "#@value02@#" : "#@value02@#%";
+            string valuePlaceholder02 = option.Contains("#@value02@#%") ? "#@value02@#%" : "#@value02@#";
             string valuePlaceholder03 = option.Contains("#@value03@#%") ? "#@value03@#%" : "#@value03@#";
 
             bool hasValuePlaceholder01 = option.Contains(valuePlaceholder01);
@@ -193,9 +220,8 @@ namespace RHToolkit.Services
                 }
                 else if (option.Contains("damage will be converted"))
                 {
-                    //valuePlaceholder02 = option.Contains("#@value02@#%") ? "#@value02@#%" : "#@value02@#";
                     option = option.Replace(valuePlaceholder01, "Physical + Magic");
-                    option = FormatPercentage(option, valuePlaceholder02, replacement01, maxValue);
+                    option = FormatPercentage(option, valuePlaceholder02, replacement01, maxValue, isFixedOption);
                 }
                 else if (option.Contains("Recover +"))
                 {
@@ -273,12 +299,40 @@ namespace RHToolkit.Services
             return input;
         }
 
-        private static string FormatPercentage(string input, string placeholder, string replacement, int maxValue)
+        private static string FormatPercentage(string input, string placeholder, string replacement, int maxValue, bool isFixedOption = false)
         {
             if (placeholder.Contains('%') && int.TryParse(replacement, out int numericValue))
             {
-                double formattedValue = (double)numericValue / maxValue;
-                input = input.Replace(placeholder, $"{formattedValue:P}");
+                double formattedValue;
+
+                if (maxValue == 10000)
+                {
+                    if (input.Contains("damage will be converted") && isFixedOption)
+                    {
+                        formattedValue = numericValue;
+                    }
+                    else
+                    {
+                        formattedValue = (double)numericValue / 100;
+                    }
+                    
+                }
+                
+                else
+                {
+                    if (input.Contains("All Elemental Damage"))
+                    {
+                        formattedValue = (double)numericValue / maxValue;
+                    }
+                    else
+                    {
+                        formattedValue = numericValue;
+                    }
+
+                }
+
+                string formattedPercentage = formattedValue.ToString("0.00");
+                input = input.Replace(placeholder, $"{formattedPercentage}%");
             }
             else
             {
@@ -287,8 +341,6 @@ namespace RHToolkit.Services
 
             return input;
         }
-
-
 
     }
 }

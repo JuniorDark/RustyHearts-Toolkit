@@ -1,6 +1,6 @@
 ﻿using RHToolkit.Services;
 using RHToolkit.Models;
-using RHToolkit.Views;
+using RHToolkit.Views.Windows;
 using Wpf.Ui.Controls;
 
 namespace RHToolkit.ViewModels.Pages

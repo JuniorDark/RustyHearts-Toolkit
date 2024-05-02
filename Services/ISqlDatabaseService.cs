@@ -1,17 +1,18 @@
-﻿using System.Data;
+﻿using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace RHToolkit.Services
 {
     public interface ISqlDatabaseService
     {
-        void EnsureConnectionClosed(IDbConnection connection);
-        DataTable ExecuteDataProcedure(string procedureName, IDbConnection connection, IDbTransaction? transaction = null, params (string, object)[] parameters);
-        DataTable ExecuteDataQuery(string query, IDbConnection connection, IDbTransaction? transaction = null, params (string, object)[] parameters);
-        int ExecuteNonQuery(string query, IDbConnection connection, IDbTransaction? transaction = null, params (string, object)[] parameters);
-        object ExecuteProcedure(string procedureName, IDbConnection connection, IDbTransaction? transaction = null, params (string, object)[] parameters);
-        void ExecuteQuery(string query, IDbConnection connection, Action<IDataReader> processResultsCallback, params (string, object)[] parameters);
-        object ExecuteScalar(string query, IDbConnection connection, params (string, object)[] parameters);
-        IDbConnection OpenConnection(string databaseName);
+        void EnsureConnectionClosed(SqlConnection connection);
+        Task<DataTable> ExecuteDataProcedureAsync(string procedureName, SqlConnection connection, SqlTransaction? transaction = null, params (string, object)[] parameters);
+        Task<DataTable> ExecuteDataQueryAsync(string query, SqlConnection connection, SqlTransaction? transaction = null, params (string, object)[] parameters);
+        Task<int> ExecuteNonQueryAsync(string query, SqlConnection connection, SqlTransaction? transaction = null, params (string, object)[] parameters);
+        Task<object> ExecuteProcedureAsync(string procedureName, SqlConnection connection, SqlTransaction? transaction = null, params (string, object)[] parameters);
+        Task ExecuteQueryAsync(string query, SqlConnection connection, Action<IDataReader> processResultsCallback, params (string, object)[] parameters);
+        Task<object?> ExecuteScalarAsync(string query, SqlConnection connection, params (string, object)[] parameters);
+        Task<SqlConnection> OpenConnectionAsync(string databaseName);
         Task<(bool success, string errorMessage)> TestDatabaseConnectionAsync();
     }
 }

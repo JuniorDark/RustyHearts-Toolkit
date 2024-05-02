@@ -121,7 +121,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Image Source="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" Stretch="Uniform" />
+                    <Image Source="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}" Stretch="Fill" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

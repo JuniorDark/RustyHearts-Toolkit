@@ -13,14 +13,11 @@ namespace RHToolkit.Controls
         public static readonly DependencyProperty AddItemCommandProperty = DependencyProperty.Register(
             "AddItemCommand", typeof(ICommand), typeof(ItemSlot));
 
-        public static readonly DependencyProperty AddItemCommandParameterProperty = DependencyProperty.Register(
-            "AddItemCommandParameter", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
-
         public static readonly DependencyProperty RemoveItemCommandProperty = DependencyProperty.Register(
             "RemoveItemCommand", typeof(ICommand), typeof(ItemSlot));
 
-        public static readonly DependencyProperty RemoveItemCommandParameterProperty = DependencyProperty.Register(
-            "RemoveItemCommandParameter", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(
+            "CommandParameter", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty ItemIconProperty = DependencyProperty.Register(
             "ItemIcon", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
@@ -49,22 +46,16 @@ namespace RHToolkit.Controls
             set => SetValue(AddItemCommandProperty, value);
         }
 
-        public string AddItemCommandParameter
-        {
-            get => (string)GetValue(AddItemCommandParameterProperty);
-            set => SetValue(AddItemCommandParameterProperty, value);
-        }
-
         public ICommand RemoveItemCommand
         {
             get => (ICommand)GetValue(RemoveItemCommandProperty);
             set => SetValue(RemoveItemCommandProperty, value);
         }
 
-        public string RemoveItemCommandParameter
+        public string CommandParameter
         {
-            get => (string)GetValue(RemoveItemCommandParameterProperty);
-            set => SetValue(RemoveItemCommandParameterProperty, value);
+            get => (string)GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
         }
 
         public string ItemIcon
