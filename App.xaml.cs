@@ -6,6 +6,8 @@ using RHToolkit.ViewModels.Windows;
 using RHToolkit.Views.Windows;
 using RHToolkit.Views.Pages;
 using Wpf.Ui;
+using RHToolkit.Models.Localization;
+using RHToolkit.Models.UISettings;
 
 namespace RHToolkit;
 
@@ -72,6 +74,20 @@ public partial class App : Application
     /// </summary>
     private void OnStartup(object sender, StartupEventArgs e)
     {
+        var CurrentApplicationLanguage = RegistrySettingsHelper.GetAppLanguage();
+
+        if (CurrentApplicationLanguage != null)
+        {
+            if (CurrentApplicationLanguage == "English")
+                LocalizationManager.LoadLocalizedStrings("en-US");
+            else if (CurrentApplicationLanguage == "한국어")
+                LocalizationManager.LoadLocalizedStrings("ko-KR");
+        }
+        else
+        {
+            LocalizationManager.LoadLocalizedStrings("en-US");
+        }
+
         _host.Start();
     }
 

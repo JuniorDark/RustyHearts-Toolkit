@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:RHToolkit.Views.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
     Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
     Width="1280"
     Height="720"
@@ -71,7 +72,7 @@
                 </StackPanel>
             </ui:NavigationView.Header>
             <ui:NavigationView.AutoSuggestBox>
-                <ui:AutoSuggestBox x:Name="AutoSuggestBox" PlaceholderText="Search">
+                <ui:AutoSuggestBox x:Name="AutoSuggestBox" PlaceholderText="{x:Static rs:Resources.Search}">
                     <ui:AutoSuggestBox.Icon>
                         <ui:IconSourceElement>
                             <ui:SymbolIconSource Symbol="Search24" />

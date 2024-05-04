@@ -1,4 +1,5 @@
 ﻿using RHToolkit.Services.Contracts;
+using RHToolkit.ViewModels.Pages;
 using RHToolkit.ViewModels.Windows;
 using RHToolkit.Views.Pages;
 using Wpf.Ui;
@@ -10,25 +11,30 @@ namespace RHToolkit.Views.Windows
     public partial class MainWindow : IWindow
     {
         public MainWindow(
-            MainWindowViewModel viewModel,
-            INavigationService navigationService,
-            IServiceProvider serviceProvider,
-            ISnackbarService snackbarService,
-            IContentDialogService contentDialogService
-        )
+        MainWindowViewModel viewModel,
+        SettingsViewModel settingsViewModel,
+        INavigationService navigationService,
+        IServiceProvider serviceProvider,
+        ISnackbarService snackbarService,
+        IContentDialogService contentDialogService
+    )
         {
-        SystemThemeWatcher.Watch(this);
+            SystemThemeWatcher.Watch(this);
 
-        ViewModel = viewModel;
+            ViewModel = viewModel;
             DataContext = this;
 
             InitializeComponent();
+
+            // Load settings
+            settingsViewModel.LoadSettings();
 
             snackbarService.SetSnackbarPresenter(SnackbarPresenter);
             navigationService.SetNavigationControl(NavigationView);
             contentDialogService.SetDialogHost(RootContentDialog);
 
             NavigationView.SetServiceProvider(serviceProvider);
+
         }
 
         public MainWindowViewModel ViewModel { get; }

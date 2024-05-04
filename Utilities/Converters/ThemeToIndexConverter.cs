@@ -6,7 +6,7 @@ internal sealed class ThemeToIndexConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is ApplicationTheme.Dark)
+        if (value is ApplicationTheme.Light)
         {
             return 1;
         }
@@ -16,7 +16,7 @@ internal sealed class ThemeToIndexConverter : IValueConverter
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is 1)
+        if (value is 0)
         {
             return ApplicationTheme.Dark;
         }

@@ -2,11 +2,10 @@
     x:Class="RHToolkit.Views.Pages.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="clr-namespace:RHToolkit.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:helpers="clr-namespace:RHToolkit.Utilities"
     xmlns:local="clr-namespace:RHToolkit.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="Settings Page"
     d:DataContext="{d:DesignInstance local:SettingsPage,
@@ -18,8 +17,9 @@
     <StackPanel Margin="0,0,0,24">
         <ui:TextBlock
             Margin="0,0,0,8"
+            d:Text="Appearance"
             FontTypography="BodyStrong"
-            Text="Appearance" />
+            Text="{x:Static rs:Resources.Appearance}" />
         <ui:CardControl Margin="0,0,0,12" Icon="{ui:SymbolIcon Color24}">
             <ui:CardControl.Header>
                 <Grid>
@@ -29,24 +29,56 @@
                     </Grid.RowDefinitions>
                     <ui:TextBlock
                         Grid.Row="0"
+                        d:Text="App theme"
                         FontTypography="Body"
-                        Text="App theme" />
+                        Text="{x:Static rs:Resources.AppTheme}" />
                     <ui:TextBlock
                         Grid.Row="1"
+                        d:Text="Select which app theme to display"
                         Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
-                        Text="Select which app theme to display" />
+                        Text="{x:Static rs:Resources.AppThemeDesc}" />
                 </Grid>
             </ui:CardControl.Header>
             <ComboBox
+                x:Name="cmbAppTheme"
                 Grid.Column="1"
                 MinWidth="200"
-                SelectedIndex="{Binding ViewModel.CurrentApplicationTheme, Converter={StaticResource ThemeToIndexConverter}, Mode=TwoWay}">
-                <ComboBoxItem Content="Light" />
-                <ComboBoxItem Content="Dark" />
-            </ComboBox>
+                ItemsSource="{Binding ViewModel.Themes}"
+                SelectedIndex="{Binding ViewModel.CurrentApplicationTheme, Converter={StaticResource ThemeToIndexConverter}, Mode=TwoWay}" />
         </ui:CardControl>
 
-        <ui:TextBlock FontTypography="BodyStrong" Text="SQL Settings" />
+        <ui:CardControl Margin="0,0,0,12" Icon="{ui:SymbolIcon LocalLanguage24}">
+            <ui:CardControl.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <ui:TextBlock
+                        Grid.Row="0"
+                        d:Text="Language"
+                        FontTypography="Body"
+                        Text="{x:Static rs:Resources.Language}" />
+                    <ui:TextBlock
+                        Grid.Row="1"
+                        d:Text="Select which language to display"
+                        Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{x:Static rs:Resources.LanguageDesc}" />
+                </Grid>
+            </ui:CardControl.Header>
+            <ComboBox
+                x:Name="cmbLanguage"
+                Grid.Column="1"
+                MinWidth="200"
+                ItemsSource="{Binding ViewModel.Languages}"
+                SelectedItem="{Binding ViewModel.CurrentApplicationLanguage}"
+                SelectionChanged="CmbLanguage_SelectionChanged" />
+        </ui:CardControl>
+
+        <ui:TextBlock
+            d:Text="SQL Settings"
+            FontTypography="BodyStrong"
+            Text="{x:Static rs:Resources.SQLSettings}" />
         <ui:CardExpander ContentPadding="0" Icon="{ui:SymbolIcon DatabaseLink24}">
             <ui:CardExpander.Header>
                 <Grid>
@@ -64,45 +96,48 @@
                         Grid.RowSpan="2"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
+                        d:Text="SQL Settings"
                         FontTypography="Body"
-                        Text="SQL Settings" />
+                        Text="{x:Static rs:Resources.SQLSettings}" />
                 </Grid>
             </ui:CardExpander.Header>
             <StackPanel Orientation="Vertical">
                 <ui:TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
+                    d:Text="SQL Address"
                     FontTypography="BodyStrong"
-                    Text="SQL Address" />
+                    Text="{x:Static rs:Resources.SQLAddress}" />
                 <ui:TextBox
                     Width="150"
                     Height="33"
                     IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
-                    PlaceholderText="SQL Server"
-                    Text="{Binding ViewModel.SQLServer, Mode=TwoWay}" />
+                    PlaceholderText="{x:Static rs:Resources.SQLServer}"
+                    Text="{Binding ViewModel.SQLServer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <ui:TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
+                    d:Text="SQL User"
                     FontTypography="BodyStrong"
-                    Text="SQL User" />
+                    Text="{x:Static rs:Resources.SQLUser}" />
                 <ui:TextBox
                     Width="150"
                     Height="33"
                     IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
-                    PlaceholderText="SQL User"
-                    Text="{Binding ViewModel.SQLUser, Mode=TwoWay}" />
+                    PlaceholderText="{x:Static rs:Resources.SQLUser}"
+                    Text="{Binding ViewModel.SQLUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <ui:TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
+                    d:Text="SQL Password"
                     FontTypography="BodyStrong"
-                    Text="SQL Password" />
-                <ui:PasswordBox
+                    Text="{x:Static rs:Resources.SQLPassword}" />
+                <ui:TextBox
                     Width="150"
                     Height="33"
-                    Icon="Password24"
                     IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
-                    PlaceholderText="SQL Password"
-                    Text="{Binding ViewModel.SQLPwd, Mode=TwoWay}" />
+                    PlaceholderText="{x:Static rs:Resources.SQLPassword}"
+                    Text="{Binding ViewModel.SQLPwd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
                     Grid.Column="0"
                     Margin="0,10"
@@ -110,11 +145,11 @@
                     VerticalAlignment="Center"
                     d:Content="Test Connection"
                     Command="{Binding ViewModel.OpenSqlConnectionCommand}"
-                    Content="{Binding ViewModel.TestButton}"
+                    Content="{x:Static rs:Resources.TestConnection}"
                     IsEnabled="{Binding ViewModel.IsTextBoxEnabled}" />
             </StackPanel>
         </ui:CardExpander>
-        <ui:TextBlock FontTypography="BodyStrong" Text="About" />
+        <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Resources.About}" />
         <ui:CardExpander ContentPadding="0" Icon="{ui:ImageIcon 'pack://application:,,,/Assets/icon/gearbox.png', Width=36, Height=36}">
             <ui:CardExpander.Header>
                 <Grid>
@@ -130,7 +165,7 @@
                         Grid.Row="0"
                         Grid.Column="0"
                         FontTypography="Body"
-                        Text="Rusty Hearts Toolkit" />
+                        Text="{x:Static rs:Resources.AppTitle}" />
                     <ui:TextBlock
                         Grid.Row="1"
                         Grid.Column="0"
@@ -159,7 +194,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Github repository" />
+                        <TextBlock Grid.Column="0" Text="{x:Static rs:Resources.GithubRepository}" />
                         <ui:SymbolIcon Grid.Column="1" Symbol="Link24" />
                     </Grid>
                 </ui:Anchor>

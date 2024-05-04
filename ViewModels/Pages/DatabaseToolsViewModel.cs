@@ -2,6 +2,7 @@
 using RHToolkit.Models;
 using RHToolkit.Views.Windows;
 using Wpf.Ui.Controls;
+using RHToolkit.Properties;
 
 namespace RHToolkit.ViewModels.Pages
 {
@@ -10,8 +11,8 @@ namespace RHToolkit.ViewModels.Pages
         [ObservableProperty]
         private WindowCard[] _windowCards =
         [
-            new("Mail", "Send Mail to characters", SymbolRegular.Mail24, "mail"),
-        new("Character Editor", "Character editor.", SymbolRegular.PersonEdit24, "charactereditor"),
+            new(Resources.Mail, Resources.MailDesc, SymbolRegular.Mail24, "mail"),
+        new(Resources.CharacterEditor, Resources.CharacterEditorDesc, SymbolRegular.PersonEdit24, "charactereditor"),
     ];
 
         [RelayCommand]

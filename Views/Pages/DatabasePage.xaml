@@ -7,8 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:RHToolkit.Models"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    xmlns:vm="clr-namespace:RHToolkit.ViewModels"
-    Title="Tools"
+    Title="Database Tools"
     d:DataContext="{d:DesignInstance local:DatabaseToolsPage,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="450"

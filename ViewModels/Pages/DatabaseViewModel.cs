@@ -2,6 +2,7 @@
 using RHToolkit.Models;
 using RHToolkit.Views.Windows;
 using Wpf.Ui.Controls;
+using RHToolkit.Properties;
 
 namespace RHToolkit.ViewModels.Pages
 {
@@ -10,7 +11,7 @@ namespace RHToolkit.ViewModels.Pages
         [ObservableProperty]
         private WindowCard[] _windowCards =
         [
-            new("Item Database", "Item database.", SymbolRegular.BookDatabase24, "item"),
+            new(Resources.ItemDatabase, Resources.ItemDatabaseDesc, SymbolRegular.BookDatabase24, "item"),
     ];
 
         [RelayCommand]

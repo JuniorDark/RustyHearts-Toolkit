@@ -1,4 +1,7 @@
 ﻿using RHToolkit.Models;
+using RHToolkit.Models.Localization;
+using RHToolkit.Models.UISettings;
+using RHToolkit.Properties;
 using RHToolkit.Services;
 using Wpf.Ui;
 using Wpf.Ui.Appearance;
@@ -20,6 +23,42 @@ public sealed partial class SettingsViewModel(ISqlDatabaseService databaseServic
 
     [ObservableProperty]
     private ApplicationTheme _currentApplicationTheme = ApplicationTheme.Unknown;
+    partial void OnCurrentApplicationThemeChanged(ApplicationTheme value)
+    {
+        RegistrySettingsHelper.SetAppTheme(value);
+    }
+
+    [ObservableProperty]
+    private bool _isUserLanguageChange = false;
+
+    public void HandleLanguageSelectionChange()
+    {
+        IsUserLanguageChange = true;
+    }
+
+    [ObservableProperty]
+    private string _currentApplicationLanguage = "English";
+    partial void OnCurrentApplicationLanguageChanged(string? oldValue, string newValue)
+    {
+        RegistrySettingsHelper.SetAppLanguage(newValue);
+
+        if (newValue == "English")
+            LocalizationManager.LoadLocalizedStrings("en-US");
+        else if (newValue == "한국어")
+            LocalizationManager.LoadLocalizedStrings("ko-KR");
+
+        if (IsUserLanguageChange)
+        {
+            _snackbarService.Show(
+                        Resources.LanguageChanged,
+                        Resources.LanguageChangedDesc,
+                        ControlAppearance.Success,
+                        new SymbolIcon(SymbolRegular.LocalLanguage24),
+                        TimeSpan.FromSeconds(5)
+                    );
+        }
+        
+    }
 
     [ObservableProperty]
     private NavigationViewPaneDisplayMode _currentApplicationNavigationStyle =
@@ -48,14 +87,29 @@ public sealed partial class SettingsViewModel(ISqlDatabaseService databaseServic
         _ = _navigationService.SetPaneDisplayMode(newValue);
     }
 
-    private void InitializeViewModel()
-    {
-        CurrentApplicationTheme = ApplicationThemeManager.GetAppTheme();
-        AppVersion = $"{GetAssemblyVersion()}";
+    [ObservableProperty]
+    string[] _themes = ["Dark", "Light"];
 
+    [ObservableProperty]
+    string[] _languages = ["English", "한국어"];
+
+    public void LoadSettings()
+    {
+        IsUserLanguageChange = false;
+
+        CurrentApplicationTheme = RegistrySettingsHelper.GetAppTheme();
+        CurrentApplicationLanguage = RegistrySettingsHelper.GetAppLanguage();
+        SQLServer = RegistrySettingsHelper.GetSQLServer();
+        SQLUser = RegistrySettingsHelper.GetSQLUser();
+        SQLPwd = RegistrySettingsHelper.GetSQLPassword();
         SqlCredentials.SQLServer = SQLServer;
         SqlCredentials.SQLUser = SQLUser;
         SqlCredentials.SQLPwd = SQLPwd;
+    }
+
+    private void InitializeViewModel()
+    {
+        AppVersion = $"{GetAssemblyVersion()}";
 
         ApplicationThemeManager.Changed += OnThemeChanged;
 
@@ -82,8 +136,8 @@ public sealed partial class SettingsViewModel(ISqlDatabaseService databaseServic
         if (string.IsNullOrEmpty(SQLServer) || string.IsNullOrEmpty(SQLUser) || string.IsNullOrEmpty(SQLPwd))
         {
             _snackbarService.Show(
-             "SQL Info",
-             "Server address, SQL account, and SQL password cannot be empty!",
+             Resources.SQLInfo,
+             Resources.SQLEmptyDesc,
              ControlAppearance.Caution,
              new SymbolIcon(SymbolRegular.DatabaseWarning20),
              TimeSpan.FromSeconds(5)
@@ -92,17 +146,17 @@ public sealed partial class SettingsViewModel(ISqlDatabaseService databaseServic
         }
 
         IsTextBoxEnabled = false;
-        TestButton = "Connecting...";
+        TestButton = Resources.Connecting;
         (bool connectionTestResult, string errorMessage) = await _databaseService.TestDatabaseConnectionAsync();
 
         IsTextBoxEnabled = true;
-        TestButton = "Test Connection";
+        TestButton = Resources.TestConnection;
 
         if (!connectionTestResult)
         {
             _snackbarService.Show(
-            "SQL Error",
-            $"Failed to establish a connection with the SQL server. Error: {errorMessage}",
+            Resources.SQLError,
+            $"{Resources.SQLConnectionError}. {Resources.Error}: {errorMessage}",
             ControlAppearance.Danger,
             new SymbolIcon(SymbolRegular.DatabaseWarning20),
             TimeSpan.FromSeconds(5)
@@ -112,8 +166,8 @@ public sealed partial class SettingsViewModel(ISqlDatabaseService databaseServic
         else
         {
             _snackbarService.Show(
-            "Connection Test.",
-            "Connection success!",
+            Resources.TestConnection,
+            Resources.ConnectionSuccess,
             ControlAppearance.Success,
             new SymbolIcon(SymbolRegular.DatabasePlugConnected20),
             TimeSpan.FromSeconds(5)
@@ -125,26 +179,29 @@ public sealed partial class SettingsViewModel(ISqlDatabaseService databaseServic
     private bool _isTextBoxEnabled = true;
 
     [ObservableProperty]
-    private string _testButton = "Test Connection";
+    private string _testButton = Resources.TestConnection;
 
     [ObservableProperty]
-    private string? _sQLServer = "192.168.100.3";
-    partial void OnSQLServerChanged(string? value)
+    private string _sQLServer = "127.0.0.1";
+    partial void OnSQLServerChanged(string value)
     {
+        RegistrySettingsHelper.SetSQLServer(value);
         SqlCredentials.SQLServer = value;
     }
 
     [ObservableProperty]
-    private string? _sQLUser = "sa";
-    partial void OnSQLUserChanged(string? value)
+    private string _sQLUser = "sa";
+    partial void OnSQLUserChanged(string value)
     {
+        RegistrySettingsHelper.SetSQLUser(value);
         SqlCredentials.SQLUser = value;
     }
 
     [ObservableProperty]
-    private string? _sQLPwd = "RustyHearts";
-    partial void OnSQLPwdChanged(string? value)
+    private string _sQLPwd = string.Empty;
+    partial void OnSQLPwdChanged(string value)
     {
+        RegistrySettingsHelper.SetSQLPassword(value);
         SqlCredentials.SQLPwd = value;
     }
 }
