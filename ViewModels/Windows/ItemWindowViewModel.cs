@@ -1,5 +1,7 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
+using RHToolkit.Models.MessageBox;
+using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
 using System.ComponentModel;
@@ -95,9 +97,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             var itemData = message.Value;
             ItemId = itemData.ID;
             LoadMailItemData(itemData);
-
         }
-
     }
 
     private void LoadMailItemData(ItemData itemData)
@@ -171,7 +171,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -191,7 +191,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -203,7 +203,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         if (obj is NameID option)
         {
-            // Always include "None" option
             if (option.ID == 0)
                 return true;
 
@@ -337,7 +336,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -409,7 +408,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -429,7 +428,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -449,7 +448,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -472,15 +471,15 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         {
             ItemTradeFilterItems =
             [
-                new NameID { ID = 2, Name = "All" },
-                new NameID { ID = 1, Name = "Tradeable" },
-                new NameID { ID = 0, Name = "Untradeable" }
+                new NameID { ID = 2, Name = Resources.All },
+                new NameID { ID = 1, Name = Resources.Tradeable },
+                new NameID { ID = 0, Name = Resources.Untradeable }
             ];
 
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -495,7 +494,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 

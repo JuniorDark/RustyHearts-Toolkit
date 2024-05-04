@@ -1,4 +1,5 @@
-﻿using RHToolkit.Services;
+﻿using RHToolkit.Properties;
+using RHToolkit.Services;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Controls;
@@ -125,7 +126,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
 
     public string PetFoodColor => _frameService.FormatPetFoodColor(PetFood);
 
-    public static string AugmentStone => "Augment Stone";
+    public static string AugmentStone => Resources.AugmentStone;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AugmentText))]
@@ -135,7 +136,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
 
     #region Fixed Option
 
-    public static string FixedOption => "[Fixed Buff]";
+    public static string FixedOption => $"[{Resources.FixedBuff}]";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(FixedOption01Text))]
@@ -181,7 +182,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(RandomOption01Value))]
     private int _OptionCountMax;
 
-    public string RandomOption => Category == 29 ? $"[Buff]" : "[Random Buff]";
+    public string RandomOption => Category == 29 ? $"[{Resources.Buff}]" : $"[{Resources.RandomBuff}]";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption01Text))]
@@ -306,7 +307,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(SocketOption))]
     private int _socketCountMax;
 
-    public string SocketOption => $"Socket: {SocketCount}/{SocketCountMax}";
+    public string SocketOption => $"{Resources.Socket}: {SocketCount}/{SocketCountMax}";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption01Text))]

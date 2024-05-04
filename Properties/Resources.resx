@@ -120,6 +120,24 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>Add Item</value>
+  </data>
+  <data name="AddItemDesc" xml:space="preserve">
+    <value>Click to add a item</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="Angela" xml:space="preserve">
+    <value>Angela</value>
+  </data>
   <data name="Appearance" xml:space="preserve">
     <value>Appearance</value>
   </data>
@@ -132,11 +150,59 @@
   <data name="AppTitle" xml:space="preserve">
     <value>Rusty Hearts Toolkit</value>
   </data>
+  <data name="Armor" xml:space="preserve">
+    <value>Armor</value>
+  </data>
+  <data name="AttachGoldAmount" xml:space="preserve">
+    <value>Attach Gold Amount</value>
+  </data>
+  <data name="AttachItem" xml:space="preserve">
+    <value>Attach Item</value>
+  </data>
+  <data name="AttachItemError" xml:space="preserve">
+    <value>Failed to Attach item</value>
+  </data>
+  <data name="AttachItemErrorDesc" xml:space="preserve">
+    <value>Error attaching item to mail</value>
+  </data>
+  <data name="AttachItemHelp" xml:space="preserve">
+    <value>Click on a slot to add/edit a item, Right click to remove.</value>
+  </data>
+  <data name="AttributeItem" xml:space="preserve">
+    <value>Attribute Item</value>
+  </data>
+  <data name="AugmentStone" xml:space="preserve">
+    <value>Augment Stone</value>
+  </data>
+  <data name="Axe" xml:space="preserve">
+    <value>Axe</value>
+  </data>
+  <data name="Basic" xml:space="preserve">
+    <value>Basic</value>
+  </data>
+  <data name="BoundItem" xml:space="preserve">
+    <value>Bound item (Binds when acquired)</value>
+  </data>
+  <data name="Buff" xml:space="preserve">
+    <value>Buff</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>Category</value>
+  </data>
   <data name="CharacterEditor" xml:space="preserve">
     <value>Character Editor</value>
   </data>
   <data name="CharacterEditorDesc" xml:space="preserve">
     <value>Edit character info.</value>
+  </data>
+  <data name="Class" xml:space="preserve">
+    <value>Class</value>
+  </data>
+  <data name="Claw" xml:space="preserve">
+    <value>Claw</value>
   </data>
   <data name="Connecting" xml:space="preserve">
     <value>Connecting...</value>
@@ -144,26 +210,134 @@
   <data name="ConnectionSuccess" xml:space="preserve">
     <value>Connection success</value>
   </data>
+  <data name="Costume" xml:space="preserve">
+    <value>Costume</value>
+  </data>
+  <data name="CurrentAttribute" xml:space="preserve">
+    <value>Current Attribute</value>
+  </data>
   <data name="Database" xml:space="preserve">
     <value>Database</value>
   </data>
   <data name="DatabaseTools" xml:space="preserve">
     <value>Database Tools</value>
   </data>
+  <data name="DatagridTotalItems" xml:space="preserve">
+    <value>Showing {0}/{1} Items</value>
+  </data>
+  <data name="DemonHands" xml:space="preserve">
+    <value>Demon Hands</value>
+  </data>
+  <data name="DuplicateRecipient" xml:space="preserve">
+    <value>Duplicate Recipient</value>
+  </data>
+  <data name="DuplicateRecipientDesc" xml:space="preserve">
+    <value>Duplicate recipient found</value>
+  </data>
+  <data name="Durability" xml:space="preserve">
+    <value>Durability</value>
+  </data>
+  <data name="Edgar" xml:space="preserve">
+    <value>Edgar</value>
+  </data>
+  <data name="EmptyRecipient" xml:space="preserve">
+    <value>Empty Recipient</value>
+  </data>
+  <data name="EmptyRecipientDesc" xml:space="preserve">
+    <value>Enter a Recipient.</value>
+  </data>
+  <data name="EmptySender" xml:space="preserve">
+    <value>Empty Sender</value>
+  </data>
+  <data name="EmptySenderDesc" xml:space="preserve">
+    <value>Enter a Sender.</value>
+  </data>
+  <data name="EnchantLevel" xml:space="preserve">
+    <value>Enchant Level</value>
+  </data>
+  <data name="Epic" xml:space="preserve">
+    <value>Epic</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
+  </data>
+  <data name="FailedSendMail" xml:space="preserve">
+    <value>Failed to send Mail</value>
+  </data>
+  <data name="FixedBuff" xml:space="preserve">
+    <value>Fixed Buff</value>
+  </data>
+  <data name="Frantz" xml:space="preserve">
+    <value>Frantz</value>
+  </data>
+  <data name="GameMasterInsertItem" xml:space="preserve">
+    <value>GameMaster InsertItem</value>
+  </data>
+  <data name="Gauntlet" xml:space="preserve">
+    <value>Gauntlet</value>
   </data>
   <data name="GithubRepository" xml:space="preserve">
     <value>Github Repository</value>
   </data>
+  <data name="Glaive" xml:space="preserve">
+    <value>Glaive</value>
+  </data>
+  <data name="GMAuditAttachGold" xml:space="preserve">
+    <value>Attach Gold</value>
+  </data>
+  <data name="GMAuditAttachItem" xml:space="preserve">
+    <value>Attach Item</value>
+  </data>
+  <data name="Gold" xml:space="preserve">
+    <value>Gold</value>
+  </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
+  </data>
+  <data name="Ian" xml:space="preserve">
+    <value>Ian</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>Icon</value>
+  </data>
+  <data name="ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="InvalidRecipient" xml:space="preserve">
+    <value>Invalid Recipient</value>
+  </data>
+  <data name="InvalidRecipientDesc" xml:space="preserve">
+    <value>Recipient names must contain only letters and cannot be empty.</value>
+  </data>
+  <data name="InvalidSender" xml:space="preserve">
+    <value>Invalid Sender</value>
+  </data>
+  <data name="InvalidSenderDesc" xml:space="preserve">
+    <value>The sender ({0}) does not exist.\nThe sender name must be a valid character name for billing mail.</value>
+  </data>
+  <data name="InvalidTemplate" xml:space="preserve">
+    <value>Invalid template file.</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>Item</value>
+  </data>
+  <data name="ItemCharge" xml:space="preserve">
+    <value>Item Charge</value>
   </data>
   <data name="ItemDatabase" xml:space="preserve">
     <value>Item Database</value>
   </data>
   <data name="ItemDatabaseDesc" xml:space="preserve">
     <value>Open a Item Database</value>
+  </data>
+  <data name="ItemTrade" xml:space="preserve">
+    <value>Item Trade</value>
+  </data>
+  <data name="ItemType" xml:space="preserve">
+    <value>Item Type</value>
+  </data>
+  <data name="Kg" xml:space="preserve">
+    <value>Kg</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>Language</value>
@@ -177,17 +351,368 @@
   <data name="LanguageDesc" xml:space="preserve">
     <value>Select which language to display</value>
   </data>
+  <data name="Leila" xml:space="preserve">
+    <value>Leila</value>
+  </data>
+  <data name="LoadTemplate" xml:space="preserve">
+    <value>Load Template</value>
+  </data>
+  <data name="LoadTemplateError" xml:space="preserve">
+    <value>Error loading template</value>
+  </data>
+  <data name="LoadTemplateHelp" xml:space="preserve">
+    <value>Load a previous saved json template</value>
+  </data>
+  <data name="LoadTemplateJsonError" xml:space="preserve">
+    <value>Failed to load JSON template or JSON is empty.</value>
+  </data>
+  <data name="Magic" xml:space="preserve">
+    <value>Magic</value>
+  </data>
+  <data name="MagicDamage" xml:space="preserve">
+    <value>Magic Damage</value>
+  </data>
+  <data name="MagicDefense" xml:space="preserve">
+    <value>Magic Defense</value>
+  </data>
+  <data name="MagicSword" xml:space="preserve">
+    <value>Magic Sword</value>
+  </data>
   <data name="Mail" xml:space="preserve">
     <value>Mail</value>
+  </data>
+  <data name="MailClear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="MailClearHelp" xml:space="preserve">
+    <value>Clear all current mail settings</value>
   </data>
   <data name="MailDesc" xml:space="preserve">
     <value>Send Mail to characters</value>
   </data>
+  <data name="MailSend" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="MailSendHelp" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="MailTool" xml:space="preserve">
+    <value>Mail Tool</value>
+  </data>
+  <data name="MaxDurability" xml:space="preserve">
+    <value>Max Durability</value>
+  </data>
+  <data name="Meilin" xml:space="preserve">
+    <value>Meilin</value>
+  </data>
+  <data name="Musket" xml:space="preserve">
+    <value>Musket</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Natasha" xml:space="preserve">
+    <value>Natasha</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="NoBuff" xml:space="preserve">
+    <value>No Buff</value>
+  </data>
+  <data name="NoGuild" xml:space="preserve">
+    <value>No Guild</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="NonExistentRecipient" xml:space="preserve">
+    <value>The recipient ({0}) does not exist.</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="OptionAllElementalDamage" xml:space="preserve">
+    <value>All Elemental Damage</value>
+  </data>
+  <data name="OptionChanceOf" xml:space="preserve">
+    <value>chance of</value>
+  </data>
+  <data name="OptionChanceTo" xml:space="preserve">
+    <value>chance to</value>
+  </data>
+  <data name="OptionChanceToCast" xml:space="preserve">
+    <value>chance to cast</value>
+  </data>
+  <data name="OptionDamageConverted" xml:space="preserve">
+    <value>damage will be converted</value>
+  </data>
+  <data name="OptionNameID" xml:space="preserve">
+    <value>Option Name/ID</value>
+  </data>
+  <data name="OptionRecoverPlus" xml:space="preserve">
+    <value>Recover +</value>
+  </data>
+  <data name="OptionSearch" xml:space="preserve">
+    <value>Option Search</value>
+  </data>
+  <data name="OptionWhenHit" xml:space="preserve">
+    <value>When hit</value>
+  </data>
+  <data name="PetFoodDescNo" xml:space="preserve">
+    <value>This item cannot be used as Pet Food</value>
+  </data>
+  <data name="PetFoodDescYes" xml:space="preserve">
+    <value>This item can be used as Pet Food</value>
+  </data>
+  <data name="PhysicalDamage" xml:space="preserve">
+    <value>Physical Damage</value>
+  </data>
+  <data name="PhysicalDefense" xml:space="preserve">
+    <value>Physical Defense</value>
+  </data>
+  <data name="PhysicalMagic" xml:space="preserve">
+    <value>Physical + Magic</value>
+  </data>
+  <data name="PhysicalMagicDamage" xml:space="preserve">
+    <value>Physical/Magic Damage</value>
+  </data>
+  <data name="Quality" xml:space="preserve">
+    <value>Quality</value>
+  </data>
+  <data name="RandomBuff" xml:space="preserve">
+    <value>Random Buff</value>
+  </data>
+  <data name="RandomOption" xml:space="preserve">
+    <value>Random Option</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>Rank</value>
+  </data>
+  <data name="Rank1" xml:space="preserve">
+    <value>1st Rank</value>
+  </data>
+  <data name="Rank2" xml:space="preserve">
+    <value>2nd Rank</value>
+  </data>
+  <data name="Rank3" xml:space="preserve">
+    <value>3rd Rank</value>
+  </data>
+  <data name="Rank4" xml:space="preserve">
+    <value>4th Rank</value>
+  </data>
+  <data name="Rank5" xml:space="preserve">
+    <value>5th Rank</value>
+  </data>
+  <data name="Rare" xml:space="preserve">
+    <value>Rare</value>
+  </data>
+  <data name="Recipient" xml:space="preserve">
+    <value>Recipient</value>
+  </data>
+  <data name="Recipients" xml:space="preserve">
+    <value>Recipient(s)</value>
+  </data>
+  <data name="RecipientsHelp" xml:space="preserve">
+    <value>Name of the characters that will receive the mail. Names must be sepparated by comma ','</value>
+  </data>
+  <data name="RequiredLevel" xml:space="preserve">
+    <value>Required Level</value>
+  </data>
+  <data name="ReturnDate" xml:space="preserve">
+    <value>Return Date</value>
+  </data>
+  <data name="Revolver" xml:space="preserve">
+    <value>Revolver</value>
+  </data>
+  <data name="Roselle" xml:space="preserve">
+    <value>Roselle</value>
+  </data>
+  <data name="Sanction10Days" xml:space="preserve">
+    <value>10 Days</value>
+  </data>
+  <data name="Sanction15Days" xml:space="preserve">
+    <value>15 Days</value>
+  </data>
+  <data name="Sanction3Days" xml:space="preserve">
+    <value>3 Days</value>
+  </data>
+  <data name="Sanction7Days" xml:space="preserve">
+    <value>7 Days</value>
+  </data>
+  <data name="SanctionAbusing" xml:space="preserve">
+    <value>Abusing</value>
+  </data>
+  <data name="SanctionAbusingLanguage" xml:space="preserve">
+    <value>Use of Sexual/Abusive Language</value>
+  </data>
+  <data name="SanctionAccountSteal" xml:space="preserve">
+    <value>Account Steal</value>
+  </data>
+  <data name="SanctionAdvertising" xml:space="preserve">
+    <value>Commercial Advertising</value>
+  </data>
+  <data name="SanctionBugExploiting" xml:space="preserve">
+    <value>Bug Exploiting</value>
+  </data>
+  <data name="SanctionFalseReport" xml:space="preserve">
+    <value>False Report</value>
+  </data>
+  <data name="SanctionFifth" xml:space="preserve">
+    <value>Fifth</value>
+  </data>
+  <data name="SanctionFirst" xml:space="preserve">
+    <value>First</value>
+  </data>
+  <data name="SanctionFourth" xml:space="preserve">
+    <value>Fourth</value>
+  </data>
+  <data name="SanctionHacking" xml:space="preserve">
+    <value>Hacking</value>
+  </data>
+  <data name="SanctionImpersonation" xml:space="preserve">
+    <value>Impersonation/Scam</value>
+  </data>
+  <data name="SanctionPermanent" xml:space="preserve">
+    <value>Permanent</value>
+  </data>
+  <data name="SanctionScam" xml:space="preserve">
+    <value>Scam</value>
+  </data>
+  <data name="SanctionSecond" xml:space="preserve">
+    <value>Second</value>
+  </data>
+  <data name="SanctionThird" xml:space="preserve">
+    <value>Third</value>
+  </data>
+  <data name="SaveTemplate" xml:space="preserve">
+    <value>Save Template</value>
+  </data>
+  <data name="SaveTemplateError" xml:space="preserve">
+    <value>Error saving template</value>
+  </data>
+  <data name="SaveTemplateHelp" xml:space="preserve">
+    <value>Save the current mail as a json template</value>
+  </data>
+  <data name="SaveTemplateSucess" xml:space="preserve">
+    <value>Mail template saved successfully.</value>
+  </data>
+  <data name="Scythe" xml:space="preserve">
+    <value>Scythe</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>
+  <data name="SearchNameID" xml:space="preserve">
+    <value>Search Name/ID</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Sender</value>
+  </data>
+  <data name="SendMail" xml:space="preserve">
+    <value>Send Mail</value>
+  </data>
+  <data name="SendMailError" xml:space="preserve">
+    <value>Error sending mail</value>
+  </data>
+  <data name="SendMailMessage" xml:space="preserve">
+    <value>Send this mail to the following recipients?</value>
+  </data>
+  <data name="SendMailMessageAll" xml:space="preserve">
+    <value>Send this mail to all characters?</value>
+  </data>
+  <data name="SendMailMessageAllSuccess" xml:space="preserve">
+    <value>The mail has been sent successfully to all characters. Please re-login the character/change game server to view the mail.</value>
+  </data>
+  <data name="SendMailMessageSuccess" xml:space="preserve">
+    <value>The mail has been sent successfully. Please re-login the character/change game server to view the mail.</value>
+  </data>
+  <data name="SendMailSameName" xml:space="preserve">
+    <value>The sender and recipient cannot be the same.</value>
+  </data>
+  <data name="SendToAllCharacters" xml:space="preserve">
+    <value>Send to All Characters</value>
+  </data>
+  <data name="Set2" xml:space="preserve">
+    <value>2Set</value>
+  </data>
+  <data name="Set3" xml:space="preserve">
+    <value>3Set</value>
+  </data>
+  <data name="Set4" xml:space="preserve">
+    <value>4Set</value>
+  </data>
+  <data name="Set5" xml:space="preserve">
+    <value>5Set</value>
+  </data>
+  <data name="Set6" xml:space="preserve">
+    <value>6Set</value>
+  </data>
+  <data name="SetEffect" xml:space="preserve">
+    <value>Set Effect</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
+  </data>
+  <data name="Slot" xml:space="preserve">
+    <value>Slot</value>
+  </data>
+  <data name="Socket" xml:space="preserve">
+    <value>Socket</value>
+  </data>
+  <data name="SocketColor" xml:space="preserve">
+    <value>Socket Color</value>
+  </data>
+  <data name="SocketColorBlue" xml:space="preserve">
+    <value>Blue</value>
+  </data>
+  <data name="SocketColorBlueDesc" xml:space="preserve">
+    <value>Processed Blue Gem Socket</value>
+  </data>
+  <data name="SocketColorColorless" xml:space="preserve">
+    <value>Colorless</value>
+  </data>
+  <data name="SocketColorColorlessDesc" xml:space="preserve">
+    <value>Processed Colorless Socket</value>
+  </data>
+  <data name="SocketColorGray" xml:space="preserve">
+    <value>Gray</value>
+  </data>
+  <data name="SocketColorGrayDesc" xml:space="preserve">
+    <value>Processed Gray Socket</value>
+  </data>
+  <data name="SocketColorGreen" xml:space="preserve">
+    <value>Green</value>
+  </data>
+  <data name="SocketColorGreenDesc" xml:space="preserve">
+    <value>Processed Green Gem Socket</value>
+  </data>
+  <data name="SocketColorNone" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="SocketColorNoneDesc" xml:space="preserve">
+    <value>Unprocessed Gem Socket</value>
+  </data>
+  <data name="SocketColorRed" xml:space="preserve">
+    <value>Red</value>
+  </data>
+  <data name="SocketColorRedDesc" xml:space="preserve">
+    <value>Processed Red Gem Socket</value>
+  </data>
+  <data name="SocketColorYellow" xml:space="preserve">
+    <value>Yellow</value>
+  </data>
+  <data name="SocketColorYellowDesc" xml:space="preserve">
+    <value>Processed Yellow Gem Socket</value>
+  </data>
+  <data name="SocketCount" xml:space="preserve">
+    <value>Socket Count</value>
+  </data>
+  <data name="SocketOption" xml:space="preserve">
+    <value>Socket Option</value>
   </data>
   <data name="SQLAddress" xml:space="preserve">
     <value>SQL Address</value>
@@ -216,10 +741,64 @@
   <data name="SQLUser" xml:space="preserve">
     <value>SQL User</value>
   </data>
+  <data name="SubCategory" xml:space="preserve">
+    <value>Sub Category</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
+  <data name="Sword" xml:space="preserve">
+    <value>Sword</value>
+  </data>
+  <data name="TemplateInvalidId" xml:space="preserve">
+    <value>Template have invalid Item IDs.\nInvalid Item IDs in the template</value>
+  </data>
   <data name="TestConnection" xml:space="preserve">
     <value>Test Connection</value>
   </data>
+  <data name="ThemeDark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="ThemeLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="Times" xml:space="preserve">
+    <value>Times</value>
+  </data>
   <data name="Tools" xml:space="preserve">
     <value>Tools</value>
+  </data>
+  <data name="Tradeable" xml:space="preserve">
+    <value>Tradeable</value>
+  </data>
+  <data name="TradeUnavailable" xml:space="preserve">
+    <value>Trade Unavailable</value>
+  </data>
+  <data name="Tude" xml:space="preserve">
+    <value>Tude</value>
+  </data>
+  <data name="TwinSwords" xml:space="preserve">
+    <value>Twin Swords</value>
+  </data>
+  <data name="Unique" xml:space="preserve">
+    <value>Unique</value>
+  </data>
+  <data name="Untradeable" xml:space="preserve">
+    <value>Untradeable</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="Weapon" xml:space="preserve">
+    <value>Weapon</value>
+  </data>
+  <data name="WeaponBag" xml:space="preserve">
+    <value>Weapon Bag</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>

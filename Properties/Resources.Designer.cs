@@ -70,6 +70,60 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string Add {
+            get {
+                return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Item.
+        /// </summary>
+        public static string AddItem {
+            get {
+                return ResourceManager.GetString("AddItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click to add a item.
+        /// </summary>
+        public static string AddItemDesc {
+            get {
+                return ResourceManager.GetString("AddItemDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amount.
+        /// </summary>
+        public static string Amount {
+            get {
+                return ResourceManager.GetString("Amount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angela.
+        /// </summary>
+        public static string Angela {
+            get {
+                return ResourceManager.GetString("Angela", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Appearance.
         /// </summary>
         public static string Appearance {
@@ -106,6 +160,132 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Armor.
+        /// </summary>
+        public static string Armor {
+            get {
+                return ResourceManager.GetString("Armor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attach Gold Amount.
+        /// </summary>
+        public static string AttachGoldAmount {
+            get {
+                return ResourceManager.GetString("AttachGoldAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attach Item.
+        /// </summary>
+        public static string AttachItem {
+            get {
+                return ResourceManager.GetString("AttachItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to Attach item.
+        /// </summary>
+        public static string AttachItemError {
+            get {
+                return ResourceManager.GetString("AttachItemError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error attaching item to mail.
+        /// </summary>
+        public static string AttachItemErrorDesc {
+            get {
+                return ResourceManager.GetString("AttachItemErrorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Click on a slot to add/edit a item, Right click to remove..
+        /// </summary>
+        public static string AttachItemHelp {
+            get {
+                return ResourceManager.GetString("AttachItemHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute Item.
+        /// </summary>
+        public static string AttributeItem {
+            get {
+                return ResourceManager.GetString("AttributeItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Augment Stone.
+        /// </summary>
+        public static string AugmentStone {
+            get {
+                return ResourceManager.GetString("AugmentStone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Axe.
+        /// </summary>
+        public static string Axe {
+            get {
+                return ResourceManager.GetString("Axe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Basic.
+        /// </summary>
+        public static string Basic {
+            get {
+                return ResourceManager.GetString("Basic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bound item (Binds when acquired).
+        /// </summary>
+        public static string BoundItem {
+            get {
+                return ResourceManager.GetString("BoundItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Buff.
+        /// </summary>
+        public static string Buff {
+            get {
+                return ResourceManager.GetString("Buff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Category.
+        /// </summary>
+        public static string Category {
+            get {
+                return ResourceManager.GetString("Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Character Editor.
         /// </summary>
         public static string CharacterEditor {
@@ -120,6 +300,24 @@ namespace RHToolkit.Properties {
         public static string CharacterEditorDesc {
             get {
                 return ResourceManager.GetString("CharacterEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Class.
+        /// </summary>
+        public static string Class {
+            get {
+                return ResourceManager.GetString("Class", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Claw.
+        /// </summary>
+        public static string Claw {
+            get {
+                return ResourceManager.GetString("Claw", resourceCulture);
             }
         }
         
@@ -142,6 +340,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Costume.
+        /// </summary>
+        public static string Costume {
+            get {
+                return ResourceManager.GetString("Costume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Attribute.
+        /// </summary>
+        public static string CurrentAttribute {
+            get {
+                return ResourceManager.GetString("CurrentAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Database.
         /// </summary>
         public static string Database {
@@ -160,11 +376,164 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Showing {0}/{1} Items.
+        /// </summary>
+        public static string DatagridTotalItems {
+            get {
+                return ResourceManager.GetString("DatagridTotalItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Demon Hands.
+        /// </summary>
+        public static string DemonHands {
+            get {
+                return ResourceManager.GetString("DemonHands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate Recipient.
+        /// </summary>
+        public static string DuplicateRecipient {
+            get {
+                return ResourceManager.GetString("DuplicateRecipient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate recipient found.
+        /// </summary>
+        public static string DuplicateRecipientDesc {
+            get {
+                return ResourceManager.GetString("DuplicateRecipientDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Durability.
+        /// </summary>
+        public static string Durability {
+            get {
+                return ResourceManager.GetString("Durability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edgar.
+        /// </summary>
+        public static string Edgar {
+            get {
+                return ResourceManager.GetString("Edgar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty Recipient.
+        /// </summary>
+        public static string EmptyRecipient {
+            get {
+                return ResourceManager.GetString("EmptyRecipient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a Recipient..
+        /// </summary>
+        public static string EmptyRecipientDesc {
+            get {
+                return ResourceManager.GetString("EmptyRecipientDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty Sender.
+        /// </summary>
+        public static string EmptySender {
+            get {
+                return ResourceManager.GetString("EmptySender", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter a Sender..
+        /// </summary>
+        public static string EmptySenderDesc {
+            get {
+                return ResourceManager.GetString("EmptySenderDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enchant Level.
+        /// </summary>
+        public static string EnchantLevel {
+            get {
+                return ResourceManager.GetString("EnchantLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Epic.
+        /// </summary>
+        public static string Epic {
+            get {
+                return ResourceManager.GetString("Epic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to send Mail.
+        /// </summary>
+        public static string FailedSendMail {
+            get {
+                return ResourceManager.GetString("FailedSendMail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixed Buff.
+        /// </summary>
+        public static string FixedBuff {
+            get {
+                return ResourceManager.GetString("FixedBuff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frantz.
+        /// </summary>
+        public static string Frantz {
+            get {
+                return ResourceManager.GetString("Frantz", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GameMaster InsertItem.
+        /// </summary>
+        public static string GameMasterInsertItem {
+            get {
+                return ResourceManager.GetString("GameMasterInsertItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gauntlet.
+        /// </summary>
+        public static string Gauntlet {
+            get {
+                return ResourceManager.GetString("Gauntlet", resourceCulture);
             }
         }
         
@@ -178,11 +547,137 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Glaive.
+        /// </summary>
+        public static string Glaive {
+            get {
+                return ResourceManager.GetString("Glaive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attach Gold.
+        /// </summary>
+        public static string GMAuditAttachGold {
+            get {
+                return ResourceManager.GetString("GMAuditAttachGold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attach Item.
+        /// </summary>
+        public static string GMAuditAttachItem {
+            get {
+                return ResourceManager.GetString("GMAuditAttachItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gold.
+        /// </summary>
+        public static string Gold {
+            get {
+                return ResourceManager.GetString("Gold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string Home {
             get {
                 return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ian.
+        /// </summary>
+        public static string Ian {
+            get {
+                return ResourceManager.GetString("Ian", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon.
+        /// </summary>
+        public static string Icon {
+            get {
+                return ResourceManager.GetString("Icon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ID.
+        /// </summary>
+        public static string ID {
+            get {
+                return ResourceManager.GetString("ID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Recipient.
+        /// </summary>
+        public static string InvalidRecipient {
+            get {
+                return ResourceManager.GetString("InvalidRecipient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recipient names must contain only letters and cannot be empty..
+        /// </summary>
+        public static string InvalidRecipientDesc {
+            get {
+                return ResourceManager.GetString("InvalidRecipientDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Sender.
+        /// </summary>
+        public static string InvalidSender {
+            get {
+                return ResourceManager.GetString("InvalidSender", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The sender ({0}) does not exist.\nThe sender name must be a valid character name for billing mail..
+        /// </summary>
+        public static string InvalidSenderDesc {
+            get {
+                return ResourceManager.GetString("InvalidSenderDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid template file..
+        /// </summary>
+        public static string InvalidTemplate {
+            get {
+                return ResourceManager.GetString("InvalidTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item.
+        /// </summary>
+        public static string Item {
+            get {
+                return ResourceManager.GetString("Item", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Charge.
+        /// </summary>
+        public static string ItemCharge {
+            get {
+                return ResourceManager.GetString("ItemCharge", resourceCulture);
             }
         }
         
@@ -201,6 +696,33 @@ namespace RHToolkit.Properties {
         public static string ItemDatabaseDesc {
             get {
                 return ResourceManager.GetString("ItemDatabaseDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Trade.
+        /// </summary>
+        public static string ItemTrade {
+            get {
+                return ResourceManager.GetString("ItemTrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Type.
+        /// </summary>
+        public static string ItemType {
+            get {
+                return ResourceManager.GetString("ItemType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kg.
+        /// </summary>
+        public static string Kg {
+            get {
+                return ResourceManager.GetString("Kg", resourceCulture);
             }
         }
         
@@ -241,11 +763,110 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Leila.
+        /// </summary>
+        public static string Leila {
+            get {
+                return ResourceManager.GetString("Leila", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load Template.
+        /// </summary>
+        public static string LoadTemplate {
+            get {
+                return ResourceManager.GetString("LoadTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error loading template.
+        /// </summary>
+        public static string LoadTemplateError {
+            get {
+                return ResourceManager.GetString("LoadTemplateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load a previous saved json template.
+        /// </summary>
+        public static string LoadTemplateHelp {
+            get {
+                return ResourceManager.GetString("LoadTemplateHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load JSON template or JSON is empty..
+        /// </summary>
+        public static string LoadTemplateJsonError {
+            get {
+                return ResourceManager.GetString("LoadTemplateJsonError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magic.
+        /// </summary>
+        public static string Magic {
+            get {
+                return ResourceManager.GetString("Magic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magic Damage.
+        /// </summary>
+        public static string MagicDamage {
+            get {
+                return ResourceManager.GetString("MagicDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magic Defense.
+        /// </summary>
+        public static string MagicDefense {
+            get {
+                return ResourceManager.GetString("MagicDefense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Magic Sword.
+        /// </summary>
+        public static string MagicSword {
+            get {
+                return ResourceManager.GetString("MagicSword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mail.
         /// </summary>
         public static string Mail {
             get {
                 return ResourceManager.GetString("Mail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        public static string MailClear {
+            get {
+                return ResourceManager.GetString("MailClear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear all current mail settings.
+        /// </summary>
+        public static string MailClearHelp {
+            get {
+                return ResourceManager.GetString("MailClearHelp", resourceCulture);
             }
         }
         
@@ -259,6 +880,645 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send.
+        /// </summary>
+        public static string MailSend {
+            get {
+                return ResourceManager.GetString("MailSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send.
+        /// </summary>
+        public static string MailSendHelp {
+            get {
+                return ResourceManager.GetString("MailSendHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mail Tool.
+        /// </summary>
+        public static string MailTool {
+            get {
+                return ResourceManager.GetString("MailTool", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max Durability.
+        /// </summary>
+        public static string MaxDurability {
+            get {
+                return ResourceManager.GetString("MaxDurability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Meilin.
+        /// </summary>
+        public static string Meilin {
+            get {
+                return ResourceManager.GetString("Meilin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Musket.
+        /// </summary>
+        public static string Musket {
+            get {
+                return ResourceManager.GetString("Musket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Name {
+            get {
+                return ResourceManager.GetString("Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Natasha.
+        /// </summary>
+        public static string Natasha {
+            get {
+                return ResourceManager.GetString("Natasha", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Buff.
+        /// </summary>
+        public static string NoBuff {
+            get {
+                return ResourceManager.GetString("NoBuff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Guild.
+        /// </summary>
+        public static string NoGuild {
+            get {
+                return ResourceManager.GetString("NoGuild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string None {
+            get {
+                return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The recipient ({0}) does not exist..
+        /// </summary>
+        public static string NonExistentRecipient {
+            get {
+                return ResourceManager.GetString("NonExistentRecipient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal.
+        /// </summary>
+        public static string Normal {
+            get {
+                return ResourceManager.GetString("Normal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string OK {
+            get {
+                return ResourceManager.GetString("OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Elemental Damage.
+        /// </summary>
+        public static string OptionAllElementalDamage {
+            get {
+                return ResourceManager.GetString("OptionAllElementalDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to chance of.
+        /// </summary>
+        public static string OptionChanceOf {
+            get {
+                return ResourceManager.GetString("OptionChanceOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to chance to.
+        /// </summary>
+        public static string OptionChanceTo {
+            get {
+                return ResourceManager.GetString("OptionChanceTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to chance to cast.
+        /// </summary>
+        public static string OptionChanceToCast {
+            get {
+                return ResourceManager.GetString("OptionChanceToCast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to damage will be converted.
+        /// </summary>
+        public static string OptionDamageConverted {
+            get {
+                return ResourceManager.GetString("OptionDamageConverted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Option Name/ID.
+        /// </summary>
+        public static string OptionNameID {
+            get {
+                return ResourceManager.GetString("OptionNameID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recover +.
+        /// </summary>
+        public static string OptionRecoverPlus {
+            get {
+                return ResourceManager.GetString("OptionRecoverPlus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Option Search.
+        /// </summary>
+        public static string OptionSearch {
+            get {
+                return ResourceManager.GetString("OptionSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When hit.
+        /// </summary>
+        public static string OptionWhenHit {
+            get {
+                return ResourceManager.GetString("OptionWhenHit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This item cannot be used as Pet Food.
+        /// </summary>
+        public static string PetFoodDescNo {
+            get {
+                return ResourceManager.GetString("PetFoodDescNo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This item can be used as Pet Food.
+        /// </summary>
+        public static string PetFoodDescYes {
+            get {
+                return ResourceManager.GetString("PetFoodDescYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Physical Damage.
+        /// </summary>
+        public static string PhysicalDamage {
+            get {
+                return ResourceManager.GetString("PhysicalDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Physical Defense.
+        /// </summary>
+        public static string PhysicalDefense {
+            get {
+                return ResourceManager.GetString("PhysicalDefense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Physical + Magic.
+        /// </summary>
+        public static string PhysicalMagic {
+            get {
+                return ResourceManager.GetString("PhysicalMagic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Physical/Magic Damage.
+        /// </summary>
+        public static string PhysicalMagicDamage {
+            get {
+                return ResourceManager.GetString("PhysicalMagicDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quality.
+        /// </summary>
+        public static string Quality {
+            get {
+                return ResourceManager.GetString("Quality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random Buff.
+        /// </summary>
+        public static string RandomBuff {
+            get {
+                return ResourceManager.GetString("RandomBuff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random Option.
+        /// </summary>
+        public static string RandomOption {
+            get {
+                return ResourceManager.GetString("RandomOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rank.
+        /// </summary>
+        public static string Rank {
+            get {
+                return ResourceManager.GetString("Rank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1st Rank.
+        /// </summary>
+        public static string Rank1 {
+            get {
+                return ResourceManager.GetString("Rank1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2nd Rank.
+        /// </summary>
+        public static string Rank2 {
+            get {
+                return ResourceManager.GetString("Rank2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3rd Rank.
+        /// </summary>
+        public static string Rank3 {
+            get {
+                return ResourceManager.GetString("Rank3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4th Rank.
+        /// </summary>
+        public static string Rank4 {
+            get {
+                return ResourceManager.GetString("Rank4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5th Rank.
+        /// </summary>
+        public static string Rank5 {
+            get {
+                return ResourceManager.GetString("Rank5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rare.
+        /// </summary>
+        public static string Rare {
+            get {
+                return ResourceManager.GetString("Rare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recipient.
+        /// </summary>
+        public static string Recipient {
+            get {
+                return ResourceManager.GetString("Recipient", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recipient(s).
+        /// </summary>
+        public static string Recipients {
+            get {
+                return ResourceManager.GetString("Recipients", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name of the characters that will receive the mail. Names must be sepparated by comma &apos;,&apos;.
+        /// </summary>
+        public static string RecipientsHelp {
+            get {
+                return ResourceManager.GetString("RecipientsHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required Level.
+        /// </summary>
+        public static string RequiredLevel {
+            get {
+                return ResourceManager.GetString("RequiredLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return Date.
+        /// </summary>
+        public static string ReturnDate {
+            get {
+                return ResourceManager.GetString("ReturnDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revolver.
+        /// </summary>
+        public static string Revolver {
+            get {
+                return ResourceManager.GetString("Revolver", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Roselle.
+        /// </summary>
+        public static string Roselle {
+            get {
+                return ResourceManager.GetString("Roselle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 10 Days.
+        /// </summary>
+        public static string Sanction10Days {
+            get {
+                return ResourceManager.GetString("Sanction10Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 15 Days.
+        /// </summary>
+        public static string Sanction15Days {
+            get {
+                return ResourceManager.GetString("Sanction15Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3 Days.
+        /// </summary>
+        public static string Sanction3Days {
+            get {
+                return ResourceManager.GetString("Sanction3Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 7 Days.
+        /// </summary>
+        public static string Sanction7Days {
+            get {
+                return ResourceManager.GetString("Sanction7Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abusing.
+        /// </summary>
+        public static string SanctionAbusing {
+            get {
+                return ResourceManager.GetString("SanctionAbusing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use of Sexual/Abusive Language.
+        /// </summary>
+        public static string SanctionAbusingLanguage {
+            get {
+                return ResourceManager.GetString("SanctionAbusingLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account Steal.
+        /// </summary>
+        public static string SanctionAccountSteal {
+            get {
+                return ResourceManager.GetString("SanctionAccountSteal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commercial Advertising.
+        /// </summary>
+        public static string SanctionAdvertising {
+            get {
+                return ResourceManager.GetString("SanctionAdvertising", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bug Exploiting.
+        /// </summary>
+        public static string SanctionBugExploiting {
+            get {
+                return ResourceManager.GetString("SanctionBugExploiting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to False Report.
+        /// </summary>
+        public static string SanctionFalseReport {
+            get {
+                return ResourceManager.GetString("SanctionFalseReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fifth.
+        /// </summary>
+        public static string SanctionFifth {
+            get {
+                return ResourceManager.GetString("SanctionFifth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First.
+        /// </summary>
+        public static string SanctionFirst {
+            get {
+                return ResourceManager.GetString("SanctionFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fourth.
+        /// </summary>
+        public static string SanctionFourth {
+            get {
+                return ResourceManager.GetString("SanctionFourth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hacking.
+        /// </summary>
+        public static string SanctionHacking {
+            get {
+                return ResourceManager.GetString("SanctionHacking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Impersonation/Scam.
+        /// </summary>
+        public static string SanctionImpersonation {
+            get {
+                return ResourceManager.GetString("SanctionImpersonation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permanent.
+        /// </summary>
+        public static string SanctionPermanent {
+            get {
+                return ResourceManager.GetString("SanctionPermanent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scam.
+        /// </summary>
+        public static string SanctionScam {
+            get {
+                return ResourceManager.GetString("SanctionScam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Second.
+        /// </summary>
+        public static string SanctionSecond {
+            get {
+                return ResourceManager.GetString("SanctionSecond", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Third.
+        /// </summary>
+        public static string SanctionThird {
+            get {
+                return ResourceManager.GetString("SanctionThird", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Template.
+        /// </summary>
+        public static string SaveTemplate {
+            get {
+                return ResourceManager.GetString("SaveTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error saving template.
+        /// </summary>
+        public static string SaveTemplateError {
+            get {
+                return ResourceManager.GetString("SaveTemplateError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save the current mail as a json template.
+        /// </summary>
+        public static string SaveTemplateHelp {
+            get {
+                return ResourceManager.GetString("SaveTemplateHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mail template saved successfully..
+        /// </summary>
+        public static string SaveTemplateSucess {
+            get {
+                return ResourceManager.GetString("SaveTemplateSucess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scythe.
+        /// </summary>
+        public static string Scythe {
+            get {
+                return ResourceManager.GetString("Scythe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string Search {
@@ -268,11 +1528,326 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search Name/ID.
+        /// </summary>
+        public static string SearchNameID {
+            get {
+                return ResourceManager.GetString("SearchNameID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sender.
+        /// </summary>
+        public static string Sender {
+            get {
+                return ResourceManager.GetString("Sender", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send Mail.
+        /// </summary>
+        public static string SendMail {
+            get {
+                return ResourceManager.GetString("SendMail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error sending mail.
+        /// </summary>
+        public static string SendMailError {
+            get {
+                return ResourceManager.GetString("SendMailError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send this mail to the following recipients?.
+        /// </summary>
+        public static string SendMailMessage {
+            get {
+                return ResourceManager.GetString("SendMailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send this mail to all characters?.
+        /// </summary>
+        public static string SendMailMessageAll {
+            get {
+                return ResourceManager.GetString("SendMailMessageAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The mail has been sent successfully to all characters. Please re-login the character/change game server to view the mail..
+        /// </summary>
+        public static string SendMailMessageAllSuccess {
+            get {
+                return ResourceManager.GetString("SendMailMessageAllSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The mail has been sent successfully. Please re-login the character/change game server to view the mail..
+        /// </summary>
+        public static string SendMailMessageSuccess {
+            get {
+                return ResourceManager.GetString("SendMailMessageSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The sender and recipient cannot be the same..
+        /// </summary>
+        public static string SendMailSameName {
+            get {
+                return ResourceManager.GetString("SendMailSameName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send to All Characters.
+        /// </summary>
+        public static string SendToAllCharacters {
+            get {
+                return ResourceManager.GetString("SendToAllCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2Set.
+        /// </summary>
+        public static string Set2 {
+            get {
+                return ResourceManager.GetString("Set2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3Set.
+        /// </summary>
+        public static string Set3 {
+            get {
+                return ResourceManager.GetString("Set3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4Set.
+        /// </summary>
+        public static string Set4 {
+            get {
+                return ResourceManager.GetString("Set4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5Set.
+        /// </summary>
+        public static string Set5 {
+            get {
+                return ResourceManager.GetString("Set5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 6Set.
+        /// </summary>
+        public static string Set6 {
+            get {
+                return ResourceManager.GetString("Set6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Effect.
+        /// </summary>
+        public static string SetEffect {
+            get {
+                return ResourceManager.GetString("SetEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slot.
+        /// </summary>
+        public static string Slot {
+            get {
+                return ResourceManager.GetString("Slot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Socket.
+        /// </summary>
+        public static string Socket {
+            get {
+                return ResourceManager.GetString("Socket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Socket Color.
+        /// </summary>
+        public static string SocketColor {
+            get {
+                return ResourceManager.GetString("SocketColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blue.
+        /// </summary>
+        public static string SocketColorBlue {
+            get {
+                return ResourceManager.GetString("SocketColorBlue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processed Blue Gem Socket.
+        /// </summary>
+        public static string SocketColorBlueDesc {
+            get {
+                return ResourceManager.GetString("SocketColorBlueDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Colorless.
+        /// </summary>
+        public static string SocketColorColorless {
+            get {
+                return ResourceManager.GetString("SocketColorColorless", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processed Colorless Socket.
+        /// </summary>
+        public static string SocketColorColorlessDesc {
+            get {
+                return ResourceManager.GetString("SocketColorColorlessDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gray.
+        /// </summary>
+        public static string SocketColorGray {
+            get {
+                return ResourceManager.GetString("SocketColorGray", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processed Gray Socket.
+        /// </summary>
+        public static string SocketColorGrayDesc {
+            get {
+                return ResourceManager.GetString("SocketColorGrayDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Green.
+        /// </summary>
+        public static string SocketColorGreen {
+            get {
+                return ResourceManager.GetString("SocketColorGreen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processed Green Gem Socket.
+        /// </summary>
+        public static string SocketColorGreenDesc {
+            get {
+                return ResourceManager.GetString("SocketColorGreenDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string SocketColorNone {
+            get {
+                return ResourceManager.GetString("SocketColorNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unprocessed Gem Socket.
+        /// </summary>
+        public static string SocketColorNoneDesc {
+            get {
+                return ResourceManager.GetString("SocketColorNoneDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Red.
+        /// </summary>
+        public static string SocketColorRed {
+            get {
+                return ResourceManager.GetString("SocketColorRed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processed Red Gem Socket.
+        /// </summary>
+        public static string SocketColorRedDesc {
+            get {
+                return ResourceManager.GetString("SocketColorRedDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yellow.
+        /// </summary>
+        public static string SocketColorYellow {
+            get {
+                return ResourceManager.GetString("SocketColorYellow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processed Yellow Gem Socket.
+        /// </summary>
+        public static string SocketColorYellowDesc {
+            get {
+                return ResourceManager.GetString("SocketColorYellowDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Socket Count.
+        /// </summary>
+        public static string SocketCount {
+            get {
+                return ResourceManager.GetString("SocketCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Socket Option.
+        /// </summary>
+        public static string SocketOption {
+            get {
+                return ResourceManager.GetString("SocketOption", resourceCulture);
             }
         }
         
@@ -358,6 +1933,42 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sub Category.
+        /// </summary>
+        public static string SubCategory {
+            get {
+                return ResourceManager.GetString("SubCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        public static string Success {
+            get {
+                return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sword.
+        /// </summary>
+        public static string Sword {
+            get {
+                return ResourceManager.GetString("Sword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Template have invalid Item IDs.\nInvalid Item IDs in the template.
+        /// </summary>
+        public static string TemplateInvalidId {
+            get {
+                return ResourceManager.GetString("TemplateInvalidId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Test Connection.
         /// </summary>
         public static string TestConnection {
@@ -367,11 +1978,137 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dark.
+        /// </summary>
+        public static string ThemeDark {
+            get {
+                return ResourceManager.GetString("ThemeDark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        public static string ThemeLight {
+            get {
+                return ResourceManager.GetString("ThemeLight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Times.
+        /// </summary>
+        public static string Times {
+            get {
+                return ResourceManager.GetString("Times", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tools.
         /// </summary>
         public static string Tools {
             get {
                 return ResourceManager.GetString("Tools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tradeable.
+        /// </summary>
+        public static string Tradeable {
+            get {
+                return ResourceManager.GetString("Tradeable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trade Unavailable.
+        /// </summary>
+        public static string TradeUnavailable {
+            get {
+                return ResourceManager.GetString("TradeUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tude.
+        /// </summary>
+        public static string Tude {
+            get {
+                return ResourceManager.GetString("Tude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Twin Swords.
+        /// </summary>
+        public static string TwinSwords {
+            get {
+                return ResourceManager.GetString("TwinSwords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unique.
+        /// </summary>
+        public static string Unique {
+            get {
+                return ResourceManager.GetString("Unique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Untradeable.
+        /// </summary>
+        public static string Untradeable {
+            get {
+                return ResourceManager.GetString("Untradeable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string Value {
+            get {
+                return ResourceManager.GetString("Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weapon.
+        /// </summary>
+        public static string Weapon {
+            get {
+                return ResourceManager.GetString("Weapon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weapon Bag.
+        /// </summary>
+        public static string WeaponBag {
+            get {
+                return ResourceManager.GetString("WeaponBag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weight.
+        /// </summary>
+        public static string Weight {
+            get {
+                return ResourceManager.GetString("Weight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

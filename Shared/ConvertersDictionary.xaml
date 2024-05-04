@@ -13,6 +13,7 @@
     <local:IncrementConverter x:Key="IncrementConverter" />
     <local:ItemIdToSelectedItemConverter x:Key="ItemIdToSelectedItemConverter" />
     <local:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter" />
+    <local:StringFormatConverter x:Key="StringFormatConverter" />
     <local:StringToBrushConverter x:Key="StringToBrushConverter" />
     <local:ThemeToIndexConverter x:Key="ThemeToIndexConverter" />
     <local:TextBoxVisibilityConverter x:Key="TextBoxVisibilityConverter" />

@@ -1,4 +1,5 @@
-﻿using static RHToolkit.Models.EnumService;
+﻿using RHToolkit.Properties;
+using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Services
 {
@@ -22,12 +23,12 @@ namespace RHToolkit.Services
         {
             return rank switch
             {
-                5 => "1st Rank",
-                4 => "2nd Rank",
-                3 => "3rd Rank",
-                2 => "4th Rank",
-                1 => "5th Rank",
-                _ => $"{rank}th Rank",
+                5 => $"{Resources.Rank1}",
+                4 => $"{Resources.Rank2}",
+                3 => $"{Resources.Rank3}",
+                2 => $"{Resources.Rank4}",
+                1 => $"{Resources.Rank5}",
+                _ => $"{rank} {Resources.Rank}",
             };
         }
 
@@ -35,14 +36,14 @@ namespace RHToolkit.Services
         {
             return ((SocketColor)colorId) switch
             {
-                SocketColor.None => "Unprocessed Gem Socket",
-                SocketColor.Red => "Processed Red Gem Socket",
-                SocketColor.Blue => "Processed Blue Gem Socket",
-                SocketColor.Yellow => "Processed Yellow Gem Socket",
-                SocketColor.Green => "Processed Green Gem Socket",
-                SocketColor.Colorless => "Processed Colorless Socket",
-                SocketColor.Gray => "Processed Gray Socket",
-                _ => "Unprocessed Gem Socket",
+                SocketColor.None => Resources.SocketColorNoneDesc,
+                SocketColor.Red => Resources.SocketColorRedDesc,
+                SocketColor.Blue => Resources.SocketColorBlueDesc,
+                SocketColor.Yellow => Resources.SocketColorYellowDesc,
+                SocketColor.Green => Resources.SocketColorGreenDesc,
+                SocketColor.Colorless => Resources.SocketColorColorlessDesc,
+                SocketColor.Gray => Resources.SocketColorGrayDesc,
+                _ => Resources.SocketColorNoneDesc,
             };
         }
 
@@ -69,7 +70,7 @@ namespace RHToolkit.Services
 
             string formattedOption = FormatNameID(optionName, $"{optionValue}", $"{secTime}", $"{value}", maxValue, isFixedOption);
 
-            return option != 0 ? formattedOption : "No Buff";
+            return option != 0 ? formattedOption : Resources.NoBuff;
         }
 
         public string GetColorFromOption(int option)
@@ -98,13 +99,13 @@ namespace RHToolkit.Services
 
             if ((ItemType)itemType == ItemType.Armor && physicalStat > 0 && magicStat > 0)
             {
-                mainStat = $"Physical Defense +{physicalStat}\nMagic Defense +{magicStat}";
+                mainStat = $"{Resources.PhysicalDefense} +{physicalStat}\n{Resources.MagicDefense} +{magicStat}";
             }
 
             else if ((ItemType)itemType == ItemType.Weapon)
             {
                 (int physicalAttackMin, int physicalAttackMax, int magicAttackMin, int magicAttackMax) = _gmDatabaseService.GetWeaponStats(jobClass, weaponId);
-                mainStat = $"Physical Damage +{physicalAttackMin}~{physicalAttackMax}\nMagic Damage +{magicAttackMin}~{magicAttackMax}";
+                mainStat = $"{Resources.PhysicalDamage} +{physicalAttackMin}~{physicalAttackMax}\n{Resources.MagicDamage} +{magicAttackMin}~{magicAttackMax}";
             }
 
             return mainStat;
@@ -123,53 +124,53 @@ namespace RHToolkit.Services
             string setEffect04 = GetOptionName(nSetOption03, nSetOptionvlue03);
             string setEffect05 = GetOptionName(nSetOption04, nSetOptionvlue04);
 
-            string setEffect = "Set Effect\n";
-            setEffect += $"2Set: {setEffect01}\n";
+            string setEffect = $"{Resources.SetEffect}\n";
+            setEffect += $"{Resources.Set2}: {setEffect01}\n";
             if (nSetOption01 != 0)
-                setEffect += $"3Set: {setEffect02}\n";
+                setEffect += $"{Resources.Set3}: {setEffect02}\n";
             if (nSetOption02 != 0)
-                setEffect += $"4Set: {setEffect03}\n";
+                setEffect += $"{Resources.Set4}: {setEffect03}\n";
             if (nSetOption03 != 0)
-                setEffect += $"5Set: {setEffect04}\n";
+                setEffect += $"{Resources.Set5}: {setEffect04}\n";
             if (nSetOption04 != 0)
-                setEffect += $"6Set: {setEffect05}\n";
+                setEffect += $"{Resources.Set6}: {setEffect05}\n";
 
             return setEffect;
         }
 
         public string FormatSellValue(int sellPrice)
         {
-            return sellPrice > 0 ? $"{sellPrice:N0} Gold" : "";
+            return sellPrice > 0 ? $"{sellPrice:N0} {Resources.Gold}" : "";
         }
 
         public string FormatRequiredLevel(int levelLimit)
         {
-            return $"Required Level: {levelLimit}";
+            return $"{Resources.RequiredLevel}: {levelLimit}";
         }
 
         public string FormatItemTrade(int itemTrade)
         {
-            return itemTrade == 0 ? "Trade Unavailable" : "";
+            return itemTrade == 0 ? $"{Resources.TradeUnavailable}" : "";
         }
 
         public string FormatDurability(int durability)
         {
-            return durability > 0 ? $"Durability: {durability / 100}/{durability / 100}" : "";
+            return durability > 0 ? $"{Resources.Durability}: {durability / 100}/{durability / 100}" : "";
         }
 
         public string FormatWeight(int weight)
         {
-            return weight > 0 ? $"{weight / 1000.0:0.000}Kg" : "";
+            return weight > 0 ? $"{weight / 1000.0:0.000}{Resources.Kg}" : "";
         }
 
         public string FormatReconstruction(int reconstruction, int reconstructionMax, int itemTrade)
         {
-            return reconstructionMax > 0 && itemTrade != 0 ? $"Attribute Item ({reconstruction} Times/{reconstructionMax} Times)" : "Bound item (Binds when acquired)";
+            return reconstructionMax > 0 && itemTrade != 0 ? $"{Resources.AttributeItem} ({reconstruction} {Resources.Times}/{reconstructionMax} {Resources.Times})" : $"{Resources.BoundItem}";
         }
 
         public string FormatPetFood(int petFood)
         {
-            return petFood == 0 ? "This item cannot be used as Pet Food" : "This item can be used as Pet Food";
+            return petFood == 0 ? $"{Resources.PetFoodDescNo}" : $"{Resources.PetFoodDescYes}";
         }
 
         public string FormatPetFoodColor(int petFood)
@@ -179,7 +180,7 @@ namespace RHToolkit.Services
 
         public string FormatAugmentStone(int value)
         {
-            return value > 0 ? $"Physical/Magic Damage +{value}" : "";
+            return value > 0 ? $"{Resources.PhysicalMagicDamage} +{value}" : "";
         }
 
         private const string ColorTagStart = "<COLOR:";
@@ -213,17 +214,17 @@ namespace RHToolkit.Services
             }
             else if (hasValuePlaceholder01 && hasValuePlaceholder02 && !hasValuePlaceholder03)
             {
-                if (option.Contains("chance to cast"))
+                if (option.Contains(Resources.OptionChanceToCast))
                 {
                     option = FormatPercentage(option, valuePlaceholder01, replacement01, maxValue);
                     option = FormatPercentage(option, valuePlaceholder02, replacement03, maxValue);
                 }
-                else if (option.Contains("damage will be converted"))
+                else if (option.Contains(Resources.OptionDamageConverted))
                 {
-                    option = option.Replace(valuePlaceholder01, "Physical + Magic");
+                    option = option.Replace(valuePlaceholder01, Resources.PhysicalMagic);
                     option = FormatPercentage(option, valuePlaceholder02, replacement01, maxValue, isFixedOption);
                 }
-                else if (option.Contains("Recover +"))
+                else if (option.Contains(Resources.OptionRecoverPlus))
                 {
                     option = FormatPercentage(option, valuePlaceholder01, replacement01, maxValue);
                     if (int.TryParse(replacement02, out int seconds))
@@ -234,7 +235,7 @@ namespace RHToolkit.Services
 
                     option = option.Replace(valuePlaceholder02, replacement02);
                 }
-                else if (option.Contains("chance of") || option.Contains("chance to"))
+                else if (option.Contains(Resources.OptionChanceOf) || option.Contains(Resources.OptionChanceTo))
                 {
                     option = FormatPercentage(option, valuePlaceholder01, replacement01, maxValue);
                     option = FormatPercentage(option, valuePlaceholder02, replacement03, maxValue);
@@ -247,7 +248,7 @@ namespace RHToolkit.Services
             }
             else if (hasValuePlaceholder01 && hasValuePlaceholder02 && hasValuePlaceholder03)
             {
-                if (option.Contains("chance of") || option.Contains("chance to"))
+                if (option.Contains(Resources.OptionChanceOf) || option.Contains(Resources.OptionChanceTo))
                 {
                     option = FormatPercentage(option, valuePlaceholder01, replacement01, maxValue);
                     option = FormatPercentage(option, valuePlaceholder02, replacement02, maxValue);
@@ -262,7 +263,7 @@ namespace RHToolkit.Services
             }
             else if (!hasValuePlaceholder01 && hasValuePlaceholder02 && hasValuePlaceholder03)
             {
-                if (option.Contains("When hit"))
+                if (option.Contains(Resources.OptionWhenHit))
                 {
                     option = FormatPercentage(option, valuePlaceholder02, replacement02, maxValue);
                     option = FormatPercentage(option, valuePlaceholder02, replacement01, maxValue);
@@ -307,7 +308,7 @@ namespace RHToolkit.Services
 
                 if (maxValue == 10000)
                 {
-                    if (input.Contains("damage will be converted") && isFixedOption)
+                    if (input.Contains(Resources.OptionDamageConverted) && isFixedOption)
                     {
                         formattedValue = numericValue;
                     }
@@ -320,7 +321,7 @@ namespace RHToolkit.Services
                 
                 else
                 {
-                    if (input.Contains("All Elemental Damage"))
+                    if (input.Contains(Resources.OptionAllElementalDamage))
                     {
                         formattedValue = (double)numericValue / maxValue;
                     }

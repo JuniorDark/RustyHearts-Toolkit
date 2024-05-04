@@ -1,4 +1,6 @@
 ﻿using RHToolkit.Models;
+using RHToolkit.Models.UISettings;
+using RHToolkit.Properties;
 using System.Data.SQLite;
 using static RHToolkit.Models.EnumService;
 
@@ -7,6 +9,8 @@ namespace RHToolkit.Services
     public class GMDatabaseService(ISqLiteDatabaseService sqLiteDatabaseService) : IGMDatabaseService
     {
         private readonly ISqLiteDatabaseService _sqLiteDatabaseService = sqLiteDatabaseService;
+
+        private readonly string currentLanguage = RegistrySettingsHelper.GetAppLanguage();
 
         public List<ItemData> GetItemDataList(ItemType itemType, string itemTableName)
         {
@@ -28,7 +32,7 @@ namespace RHToolkit.Services
                     {
                         ID = Convert.ToInt32(reader["nID"]),
                         Name = reader["wszDesc"].ToString(),
-                        Description = reader["wszItemDescription"].ToString(),
+                        Description = currentLanguage == "ko-KR" && itemTableName == "itemlist_costume" ? reader["szItemDescription"].ToString() : reader["wszItemDescription"].ToString(),
                         Type = (int)itemType,
                         WeaponID00 = Convert.ToInt32(reader["nWeaponID00"]),
                         Category = Convert.ToInt32(reader["nCategory"]),
@@ -66,15 +70,46 @@ namespace RHToolkit.Services
             return itemList;
         }
 
-        private static string GetItemQuery(string itemTableName)
+        private string GetItemQuery(string itemTableName)
         {
-            return $@"
-            SELECT i.nID, i.nWeaponID00, i.szIconName, i.nCategory, i.nSubCategory, i.nBranch, i.nSocketCountMax, i.nReconstructionMax, i.nJobClass, i.nLevelLimit, 
-                i.nItemTrade, i.nOverlapCnt, i.nDurability, i.nDefense, i.nMagicDefense, i.nWeight, i.nSellPrice, i.nOptionCountMax, i.nSetId, i.nFixOption00, i.nFixOptionValue00, i.nFixOption01, i.nFixOptionValue01, i.nPetEatGroup,
-                s.wszDesc, s.wszItemDescription
+            string descriptionField = currentLanguage == "ko-KR" && itemTableName == "itemlist_costume" ? "szItemDescription" : "wszItemDescription";
+
+            if (currentLanguage == "ko-KR")
+            {
+                if (itemTableName == "itemlist_costume")
+                {
+                    return $@"
+                SELECT 
+                    nID, nWeaponID00, szIconName, nCategory, nSubCategory, nBranch, nSocketCountMax, nReconstructionMax, nJobClass, nLevelLimit, 
+                    nItemTrade, nOverlapCnt, nDurability, nDefense, nMagicDefense, nWeight, nSellPrice, nOptionCountMax, nSetId, 
+                    nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup,
+                    wszDesc, {descriptionField}
+                FROM {itemTableName}";
+                }
+                else
+                {
+                    return $@"
+                SELECT 
+                    nID, nWeaponID00, szIconName, nCategory, nSubCategory, nBranch, nSocketCountMax, nReconstructionMax, nJobClass, nLevelLimit, 
+                    nItemTrade, nOverlapCnt, nDurability, nDefense, nMagicDefense, nWeight, nSellPrice, nOptionCountMax, nSetId, 
+                    nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup,
+                    wszDesc, {descriptionField}
+                FROM {itemTableName}";
+                }
+            }
+            else
+            {
+                return $@"
+            SELECT 
+                i.nID, i.nWeaponID00, i.szIconName, i.nCategory, i.nSubCategory, i.nBranch, i.nSocketCountMax, i.nReconstructionMax, i.nJobClass, i.nLevelLimit, 
+                i.nItemTrade, i.nOverlapCnt, i.nDurability, i.nDefense, i.nMagicDefense, i.nWeight, i.nSellPrice, i.nOptionCountMax, i.nSetId, 
+                i.nFixOption00, i.nFixOptionValue00, i.nFixOption01, i.nFixOptionValue01, i.nPetEatGroup,
+                s.wszDesc, s.{descriptionField}
             FROM {itemTableName} i
             LEFT JOIN {itemTableName}_string s ON i.nID = s.nID";
+            }
         }
+
 
         public List<NameID> GetOptionItems()
         {
@@ -84,7 +119,7 @@ namespace RHToolkit.Services
             {
                 string query = "SELECT nID, wszDescNoColor FROM itemoptionlist";
                 using var optionReader = _sqLiteDatabaseService.ExecuteReader(query, connection);
-                optionItems.Add(new NameID { ID = 0, Name = "None" });
+                optionItems.Add(new NameID { ID = 0, Name = Resources.None });
 
                 while (optionReader.Read())
                 {
@@ -192,7 +227,7 @@ namespace RHToolkit.Services
 
                 using var reader = _sqLiteDatabaseService.ExecuteReader(query, connection);
 
-                categoryItems.Add(new NameID { ID = 0, Name = "All" }); // Add an option to show all categories or subcategories
+                categoryItems.Add(new NameID { ID = 0, Name = Resources.All }); // Add an option to show all categories or subcategories
 
                 while (reader.Read())
                 {

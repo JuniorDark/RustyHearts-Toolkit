@@ -2,9 +2,10 @@
 using Newtonsoft.Json;
 using RHToolkit.Messages;
 using RHToolkit.Models;
+using RHToolkit.Models.MessageBox;
+using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
-using RHToolkit.Models.MessageBox;
 using System.Data;
 
 namespace RHToolkit.ViewModels.Windows;
@@ -141,19 +142,19 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
             case 0:
                 ItemIcon1 = null;
                 ItemIconBranch1 = 0;
-                ItemName1 = "Click to add a item";
+                ItemName1 = Resources.AddItemDesc;
                 ItemAmount1 = 0;
                 break;
             case 1:
                 ItemIcon2 = null;
                 ItemIconBranch2 = 0;
-                ItemName2 = "Click to add a item";
+                ItemName2 = Resources.AddItemDesc;
                 ItemAmount2 = 0;
                 break;
             case 2:
                 ItemIcon3 = null;
                 ItemIconBranch3 = 0;
-                ItemName3 = "Click to add a item";
+                ItemName3 = Resources.AddItemDesc;
                 ItemAmount3 = 0;
                 break;
             default:
@@ -223,12 +224,12 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                     };
                     serializer.Serialize(file, templateData);
                 }
-                RHMessageBox.ShowOKMessage("Mail template saved successfully.", "Success");
+                RHMessageBox.ShowOKMessage(Resources.SaveTemplateSucess, Resources.Success);
             }
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error saving template: {ex.Message}", "Error");
+            RHMessageBox.ShowOKMessage($"{Resources.SaveTemplateError}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -257,7 +258,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error loading template: {ex.Message}", "Error");
+                RHMessageBox.ShowOKMessage($"{Resources.LoadTemplateError}: {ex.Message}", Resources.Error);
             }
             finally
             {
@@ -281,7 +282,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                     if (invalidItemIDs.Count > 0)
                     {
                         string invalidItemIDsString = string.Join(", ", invalidItemIDs);
-                        RHMessageBox.ShowOKMessage($"Template have invalid ItemIDs.\nInvalid ItemIDs in the template: {invalidItemIDsString}", "Error loading template");
+                        RHMessageBox.ShowOKMessage($"{Resources.TemplateInvalidId}: {invalidItemIDsString}", Resources.LoadTemplateError);
                         return;
                     }
 
@@ -344,17 +345,17 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                 }
                 else
                 {
-                    RHMessageBox.ShowOKMessage("Failed to load JSON template or JSON is empty.", "Error");
+                    RHMessageBox.ShowOKMessage(Resources.LoadTemplateJsonError, Resources.Error);
                 }
             }
             else
             {
-                RHMessageBox.ShowOKMessage("Invalid template file.", "Error");
+                RHMessageBox.ShowOKMessage(Resources.InvalidTemplate, Resources.Error);
             }
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error loading json template: {ex.Message}", "Error");
+            RHMessageBox.ShowOKMessage($"{Resources.LoadTemplateError}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -397,7 +398,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         Recipient = default;
         Sender = "GM";
-        MailContent = "GameMaster InsertItem";
+        MailContent = Resources.GameMasterInsertItem;
         SendToAll = false;
         AttachGold = 0;
         ReturnDays = 7;
@@ -436,12 +437,12 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
 
         if (string.IsNullOrEmpty(Recipient) && !sendToAllCharacters)
         {
-            RHMessageBox.ShowOKMessage("Enter a Recipient.", "Empty recipient");
+            RHMessageBox.ShowOKMessage(Resources.EmptyRecipientDesc, Resources.EmptyRecipient);
             return;
         }
         if (string.IsNullOrEmpty(Sender))
         {
-            RHMessageBox.ShowOKMessage("Enter a Sender.", "Empty sender");
+            RHMessageBox.ShowOKMessage(Resources.EmptySenderDesc, Resources.EmptySender);
             return;
         }
 
@@ -459,7 +460,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
             // Validate if any recipient is empty or contains non-letter characters
             if (recipients.Any(string.IsNullOrEmpty) || recipients.Any(r => !r.All(char.IsLetter)))
             {
-                RHMessageBox.ShowOKMessage("Recipient names must contain only letters and cannot be empty.", "Invalid recipient");
+                RHMessageBox.ShowOKMessage(Resources.InvalidRecipientDesc, Resources.InvalidRecipient);
                 return;
             }
 
@@ -469,15 +470,15 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
             {
                 if (!uniqueRecipients.Add(recipient))
                 {
-                    RHMessageBox.ShowOKMessage($"Duplicate recipient found: {recipient}", "Duplicate recipient");
+                    RHMessageBox.ShowOKMessage($"{Resources.DuplicateRecipientDesc}: {recipient}", Resources.DuplicateRecipient);
                     return;
                 }
             }
         }
 
         string confirmationMessage = sendToAllCharacters
-            ? "Send this mail to all characters?"
-            : $"Send this mail to the following recipients?\n{string.Join(", ", recipients)}";
+            ? Resources.SendMailMessageAll
+            : $"{Resources.SendMailMessage}\n{string.Join(", ", recipients)}";
 
         if (RHMessageBox.ConfirmMessage($"{confirmationMessage}"))
         {
@@ -495,19 +496,21 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
 
                     if (senderCharacterId == null && createType == 5)
                     {
-                        RHMessageBox.ShowOKMessage($"The sender ({mailSender}) does not exist.\nThe sender name must be a valid character name for billing mail.", "Invalid sender");
+                        string invalidSenderMessage = string.Format(Resources.InvalidSenderDesc, mailSender);
+                        RHMessageBox.ShowOKMessage(invalidSenderMessage, Resources.InvalidSender);
                         return;
                     }
 
                     if (senderCharacterId == recipientCharacterId)
                     {
-                        RHMessageBox.ShowOKMessage("The sender and recipient cannot be the same.", "Failed to send Mail");
+                        RHMessageBox.ShowOKMessage(Resources.SendMailSameName, Resources.FailedSendMail);
                         return;
                     }
 
                     if (recipientCharacterId == null || recipientAuthId == null)
                     {
-                        RHMessageBox.ShowOKMessage($"The recipient ({recipient}) does not exist.", "Failed to send Mail");
+                        string invalidRecipientMessage = string.Format(Resources.NonExistentRecipient, recipient);
+                        RHMessageBox.ShowOKMessage(invalidRecipientMessage, Resources.FailedSendMail);
                         continue;
                     }
 
@@ -520,7 +523,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
 
                     if (gold > 0)
                     {
-                        modify += $"[<font color=blue>Attach Gold - {gold}</font>]<br></font>";
+                        modify += $"[<font color=blue>{Resources.GMAuditAttachGold} - {gold}</font>]<br></font>";
                     }
 
                     if (ItemDataList != null)
@@ -532,36 +535,36 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                             {
                                 if (itemData.ID != 0)
                                 {
-                                    modify += $"[<font color=blue>Attach Item - {itemData.ID} ({itemData.Amount})</font>]<br></font>";
+                                    modify += $"[<font color=blue>{Resources.GMAuditAttachItem} - {itemData.ID} ({itemData.Amount})</font>]<br></font>";
 
-                                    await _databaseService.InsertMailItemAsync(itemData, recipientAuthId, recipientCharacterId, mailId, itemData.SlotIndex); // Assuming an asynchronous version of this method exists
+                                    await _databaseService.InsertMailItemAsync(itemData, recipientAuthId, recipientCharacterId, mailId, itemData.SlotIndex);
                                 }
                             }
                             catch (Exception ex)
                             {
-                                RHMessageBox.ShowOKMessage($"Error attaching item to mail: {ex.Message}", "Failed to Attach item");
+                                RHMessageBox.ShowOKMessage($"{Resources.AttachItemErrorDesc}: {ex.Message}", Resources.AttachItemErrorDesc);
                                 return;
                             }
                         }
                     }
 
-                    await _databaseService.InsertMailAsync(recipientAuthId, senderCharacterId, mailSender, recipient, content, gold, returnDay, reqGold, mailId, createType); // Assuming an asynchronous version of this method exists
+                    await _databaseService.InsertMailAsync(recipientAuthId, senderCharacterId, mailSender, recipient, content, gold, returnDay, reqGold, mailId, createType);
 
-                   await _databaseService.GMAuditAsync(recipientWindyCode, recipientCharacterId, recipient, "Send Mail", $"<font color=blue>Send Mail</font>]<br><font color=red>Sender: RHToolkit: {senderCharacterId}, Recipient: {recipient}, GUID:{{{recipientCharacterId}}}<br></font>" + modify);
+                   await _databaseService.GMAuditAsync(recipientWindyCode, recipientCharacterId, recipient, Resources.SendMail, $"<font color=blue>{Resources.SendMail}</font>]<br><font color=red>{Resources.Sender}: RHToolkit: {senderCharacterId}, {Resources.Recipient}: {recipient}, GUID:{{{recipientCharacterId}}}<br></font>" + modify);
                 }
 
                 if (sendToAllCharacters)
                 {
-                    RHMessageBox.ShowOKMessage($"The mail has been sent successfully to all characters. Please re-login the character/change game server to view the mail.", "Success");
+                    RHMessageBox.ShowOKMessage(Resources.SendMailMessageAllSuccess, Resources.Success);
                 }
                 else
                 {
-                    RHMessageBox.ShowOKMessage($"The mail has been sent successfully. Please re-login the character/change game server to view the mail.", "Success");
+                    RHMessageBox.ShowOKMessage(Resources.SendMailMessageSuccess, Resources.Success);
                 }
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error sending mail: {ex.Message}", "Error");
+                RHMessageBox.ShowOKMessage($"{Resources.SendMailError}: {ex.Message}", Resources.Error);
             }
             finally
             {
@@ -584,7 +587,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
     private string? _sender = "GM";
 
     [ObservableProperty]
-    private string? _mailContent = "GameMaster InsertItem";
+    private string? _mailContent = Resources.GameMasterInsertItem;
 
     [ObservableProperty]
     private int _attachGold;
@@ -614,13 +617,13 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
     private bool _isRecipientEabled = true;
 
     [ObservableProperty]
-    private string? _itemName1 = "Click to add a item";
+    private string? _itemName1 = Resources.AddItemDesc;
 
     [ObservableProperty]
-    private string? _itemName2 = "Click to add a item";
+    private string? _itemName2 = Resources.AddItemDesc;
 
     [ObservableProperty]
-    private string? _itemName3 = "Click to add a item";
+    private string? _itemName3 = Resources.AddItemDesc;
 
     [ObservableProperty]
     private int? _itemAmount1;

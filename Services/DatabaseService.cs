@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using RHToolkit.Models;
+using RHToolkit.Properties;
 using System.Data;
 using static RHToolkit.Models.EnumService;
 
@@ -57,7 +58,7 @@ namespace RHToolkit.Services
                 }
                 else
                 {
-                    characterData.GuildName = "No Guild";
+                    characterData.GuildName = Resources.NoGuild;
                 }
 
                 return characterData;

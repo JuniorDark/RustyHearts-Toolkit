@@ -5,6 +5,7 @@
     xmlns:bh="clr-namespace:RHToolkit.Behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
     Title="MessageBox"
     MinWidth="420"
     MinHeight="160"
@@ -84,7 +85,7 @@
                         VerticalContentAlignment="Center"
                         Background="White"
                         Click="Button_Click"
-                        Content="OK"
+                        Content="{x:Static rs:Resources.OK}"
                         FontSize="14"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}" />
@@ -97,7 +98,7 @@
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
                         Click="Button_Click"
-                        Content="Yes"
+                        Content="{x:Static rs:Resources.Yes}"
                         FontSize="14"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}" />
@@ -110,7 +111,7 @@
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
                         Click="Button_Click"
-                        Content="No"
+                        Content="{x:Static rs:Resources.No}"
                         FontSize="14"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}" />
@@ -123,7 +124,7 @@
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
                         Click="Button_Click"
-                        Content="Cancel"
+                        Content="{x:Static rs:Resources.Cancel}"
                         FontSize="14"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}" />

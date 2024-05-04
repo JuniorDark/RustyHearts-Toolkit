@@ -120,6 +120,24 @@
   <data name="About" xml:space="preserve">
     <value>대해서</value>
   </data>
+  <data name="Add" xml:space="preserve">
+    <value>추가</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>아이템 추가</value>
+  </data>
+  <data name="AddItemDesc" xml:space="preserve">
+    <value>아이템을 추가하려면 클릭하세요</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>모든</value>
+  </data>
+  <data name="Amount" xml:space="preserve">
+    <value>수량</value>
+  </data>
+  <data name="Angela" xml:space="preserve">
+    <value>안젤라</value>
+  </data>
   <data name="Appearance" xml:space="preserve">
     <value>앱 모양</value>
   </data>
@@ -132,11 +150,59 @@
   <data name="AppTitle" xml:space="preserve">
     <value>러스티 하트 툴킷</value>
   </data>
+  <data name="Armor" xml:space="preserve">
+    <value>방어구</value>
+  </data>
+  <data name="AttachGoldAmount" xml:space="preserve">
+    <value>골드 첨부 금액</value>
+  </data>
+  <data name="AttachItem" xml:space="preserve">
+    <value>아이템 첨부</value>
+  </data>
+  <data name="AttachItemError" xml:space="preserve">
+    <value>아이템 첨부 실패</value>
+  </data>
+  <data name="AttachItemErrorDesc" xml:space="preserve">
+    <value>메일에 아이템을 첨부하는 중 오류 발생</value>
+  </data>
+  <data name="AttachItemHelp" xml:space="preserve">
+    <value>슬롯을 클릭하여 아이템을 추가/편집하거나 삭제하려면 오른쪽을 클릭하세요.</value>
+  </data>
+  <data name="AttributeItem" xml:space="preserve">
+    <value>속성 아이템</value>
+  </data>
+  <data name="AugmentStone" xml:space="preserve">
+    <value>강화석</value>
+  </data>
+  <data name="Axe" xml:space="preserve">
+    <value>도끼</value>
+  </data>
+  <data name="Basic" xml:space="preserve">
+    <value>기본</value>
+  </data>
+  <data name="BoundItem" xml:space="preserve">
+    <value>바인드 아이템 (획득 시 귀속)</value>
+  </data>
+  <data name="Buff" xml:space="preserve">
+    <value>버프</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>취소</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>카테고리</value>
+  </data>
   <data name="CharacterEditor" xml:space="preserve">
     <value>캐릭터 에디터</value>
   </data>
   <data name="CharacterEditorDesc" xml:space="preserve">
     <value>캐릭터 정보를 편집합니다.</value>
+  </data>
+  <data name="Class" xml:space="preserve">
+    <value>클래스</value>
+  </data>
+  <data name="Claw" xml:space="preserve">
+    <value>발톱</value>
   </data>
   <data name="Connecting" xml:space="preserve">
     <value>연결 중...</value>
@@ -144,26 +210,134 @@
   <data name="ConnectionSuccess" xml:space="preserve">
     <value>연결 성공</value>
   </data>
+  <data name="Costume" xml:space="preserve">
+    <value>의상</value>
+  </data>
+  <data name="CurrentAttribute" xml:space="preserve">
+    <value>현재 속성</value>
+  </data>
   <data name="Database" xml:space="preserve">
     <value>데이터 베이스</value>
   </data>
   <data name="DatabaseTools" xml:space="preserve">
     <value>데이터베이스 도구</value>
   </data>
+  <data name="DatagridTotalItems" xml:space="preserve">
+    <value>{0}/{1}개의 아이템 표시</value>
+  </data>
+  <data name="DemonHands" xml:space="preserve">
+    <value>악마 손</value>
+  </data>
+  <data name="DuplicateRecipient" xml:space="preserve">
+    <value>중복된 받는 사람</value>
+  </data>
+  <data name="DuplicateRecipientDesc" xml:space="preserve">
+    <value>중복된 받는 사람이 있습니다.</value>
+  </data>
+  <data name="Durability" xml:space="preserve">
+    <value>내구도</value>
+  </data>
+  <data name="Edgar" xml:space="preserve">
+    <value>에드거</value>
+  </data>
+  <data name="EmptyRecipient" xml:space="preserve">
+    <value>받는 사람이 비어 있습니다.</value>
+  </data>
+  <data name="EmptyRecipientDesc" xml:space="preserve">
+    <value>받는 사람을 입력하세요.</value>
+  </data>
+  <data name="EmptySender" xml:space="preserve">
+    <value>보내는 사람이 비어 있습니다.</value>
+  </data>
+  <data name="EmptySenderDesc" xml:space="preserve">
+    <value>보내는 사람을 입력하세요.</value>
+  </data>
+  <data name="EnchantLevel" xml:space="preserve">
+    <value>강화 레벨</value>
+  </data>
+  <data name="Epic" xml:space="preserve">
+    <value>에픽</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>오류</value>
+  </data>
+  <data name="FailedSendMail" xml:space="preserve">
+    <value>메일 전송 실패</value>
+  </data>
+  <data name="FixedBuff" xml:space="preserve">
+    <value>고정 버프</value>
+  </data>
+  <data name="Frantz" xml:space="preserve">
+    <value>프란츠</value>
+  </data>
+  <data name="GameMasterInsertItem" xml:space="preserve">
+    <value>게임 마스터 아이템 삽입</value>
+  </data>
+  <data name="Gauntlet" xml:space="preserve">
+    <value>건틀릿</value>
   </data>
   <data name="GithubRepository" xml:space="preserve">
     <value>Github 저장소</value>
   </data>
+  <data name="Glaive" xml:space="preserve">
+    <value>글레이브</value>
+  </data>
+  <data name="GMAuditAttachGold" xml:space="preserve">
+    <value>골드 첨부</value>
+  </data>
+  <data name="GMAuditAttachItem" xml:space="preserve">
+    <value>아이템 첨부</value>
+  </data>
+  <data name="Gold" xml:space="preserve">
+    <value>골드</value>
+  </data>
   <data name="Home" xml:space="preserve">
     <value>홈페이지</value>
+  </data>
+  <data name="Ian" xml:space="preserve">
+    <value>이안</value>
+  </data>
+  <data name="Icon" xml:space="preserve">
+    <value>아이콘</value>
+  </data>
+  <data name="ID" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="InvalidRecipient" xml:space="preserve">
+    <value>유효하지 않은 받는 사람</value>
+  </data>
+  <data name="InvalidRecipientDesc" xml:space="preserve">
+    <value>받는 사람 이름에는 문자만 포함되어야 하며 비어 있을 수 없습니다.</value>
+  </data>
+  <data name="InvalidSender" xml:space="preserve">
+    <value>유효하지 않은 보내는 사람</value>
+  </data>
+  <data name="InvalidSenderDesc" xml:space="preserve">
+    <value>보내는 사람 ({0})이(가) 존재하지 않습니다.\n보내는 사람 이름은 과금 메일에 대한 유효한 캐릭터 이름이어야 합니다.</value>
+  </data>
+  <data name="InvalidTemplate" xml:space="preserve">
+    <value>유효하지 않은 템플릿 파일</value>
+  </data>
+  <data name="Item" xml:space="preserve">
+    <value>아이템</value>
+  </data>
+  <data name="ItemCharge" xml:space="preserve">
+    <value>아이템 요금</value>
   </data>
   <data name="ItemDatabase" xml:space="preserve">
     <value>아이템 데이터베이스</value>
   </data>
   <data name="ItemDatabaseDesc" xml:space="preserve">
     <value>아이템 데이터베이스 열기</value>
+  </data>
+  <data name="ItemTrade" xml:space="preserve">
+    <value>아이템 거래</value>
+  </data>
+  <data name="ItemType" xml:space="preserve">
+    <value>아이템 유형</value>
+  </data>
+  <data name="Kg" xml:space="preserve">
+    <value>킬로그램</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>언어</value>
@@ -177,17 +351,368 @@
   <data name="LanguageDesc" xml:space="preserve">
     <value>표시할 언어를 선택하세요.</value>
   </data>
+  <data name="Leila" xml:space="preserve">
+    <value>레일라</value>
+  </data>
+  <data name="LoadTemplate" xml:space="preserve">
+    <value>템플릿 불러오기</value>
+  </data>
+  <data name="LoadTemplateError" xml:space="preserve">
+    <value>템플릿 불러오기 오류</value>
+  </data>
+  <data name="LoadTemplateHelp" xml:space="preserve">
+    <value>이전에 저장한 JSON 템플릿을 불러옵니다.</value>
+  </data>
+  <data name="LoadTemplateJsonError" xml:space="preserve">
+    <value>JSON 템플릿을 불러오거나 JSON이 비어 있습니다.</value>
+  </data>
+  <data name="Magic" xml:space="preserve">
+    <value>마법</value>
+  </data>
+  <data name="MagicDamage" xml:space="preserve">
+    <value>마법 피해</value>
+  </data>
+  <data name="MagicDefense" xml:space="preserve">
+    <value>마법 방어력</value>
+  </data>
+  <data name="MagicSword" xml:space="preserve">
+    <value>마법 검</value>
+  </data>
   <data name="Mail" xml:space="preserve">
     <value>메일을 보내다</value>
+  </data>
+  <data name="MailClear" xml:space="preserve">
+    <value>지우기</value>
+  </data>
+  <data name="MailClearHelp" xml:space="preserve">
+    <value>현재 메일 설정을 모두 지웁니다.</value>
   </data>
   <data name="MailDesc" xml:space="preserve">
     <value>캐릭터에게 메일 보내기</value>
   </data>
+  <data name="MailSend" xml:space="preserve">
+    <value>보내기</value>
+  </data>
+  <data name="MailSendHelp" xml:space="preserve">
+    <value>메일 보내기</value>
+  </data>
+  <data name="MailTool" xml:space="preserve">
+    <value>메일 도구</value>
+  </data>
+  <data name="MaxDurability" xml:space="preserve">
+    <value>최대 내구도</value>
+  </data>
+  <data name="Meilin" xml:space="preserve">
+    <value>메이린</value>
+  </data>
+  <data name="Musket" xml:space="preserve">
+    <value>머스킷총</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="Natasha" xml:space="preserve">
+    <value>나타샤</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>아니요</value>
+  </data>
+  <data name="NoBuff" xml:space="preserve">
+    <value>버프 없음</value>
+  </data>
+  <data name="NoGuild" xml:space="preserve">
+    <value>길드 없음</value>
+  </data>
+  <data name="None" xml:space="preserve">
+    <value>없음</value>
+  </data>
+  <data name="NonExistentRecipient" xml:space="preserve">
+    <value>받는 사람 ({0})이(가) 존재하지 않습니다.</value>
+  </data>
+  <data name="Normal" xml:space="preserve">
+    <value>일반</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>확인</value>
+  </data>
+  <data name="OptionAllElementalDamage" xml:space="preserve">
+    <value>모든 속성 피해</value>
+  </data>
+  <data name="OptionChanceOf" xml:space="preserve">
+    <value>확률</value>
+  </data>
+  <data name="OptionChanceTo" xml:space="preserve">
+    <value>확률</value>
+  </data>
+  <data name="OptionChanceToCast" xml:space="preserve">
+    <value>시전 확률</value>
+  </data>
+  <data name="OptionDamageConverted" xml:space="preserve">
+    <value>피해가 변환됩니다</value>
+  </data>
+  <data name="OptionNameID" xml:space="preserve">
+    <value>옵션 이름/ID</value>
+  </data>
+  <data name="OptionRecoverPlus" xml:space="preserve">
+    <value>회복 +</value>
+  </data>
+  <data name="OptionSearch" xml:space="preserve">
+    <value>옵션 검색</value>
+  </data>
+  <data name="OptionWhenHit" xml:space="preserve">
+    <value>피격 시</value>
+  </data>
+  <data name="PetFoodDescNo" xml:space="preserve">
+    <value>이 아이템은 애완동물 음식으로 사용할 수 없습니다</value>
+  </data>
+  <data name="PetFoodDescYes" xml:space="preserve">
+    <value>이 아이템은 애완동물 음식으로 사용할 수 있습니다</value>
+  </data>
+  <data name="PhysicalDamage" xml:space="preserve">
+    <value>물리 피해</value>
+  </data>
+  <data name="PhysicalDefense" xml:space="preserve">
+    <value>물리 방어력</value>
+  </data>
+  <data name="PhysicalMagic" xml:space="preserve">
+    <value>물리 + 마법</value>
+  </data>
+  <data name="PhysicalMagicDamage" xml:space="preserve">
+    <value>물리/마법 피해</value>
+  </data>
+  <data name="Quality" xml:space="preserve">
+    <value>품질</value>
+  </data>
+  <data name="RandomBuff" xml:space="preserve">
+    <value>랜덤 버프</value>
+  </data>
+  <data name="RandomOption" xml:space="preserve">
+    <value>랜덤 옵션</value>
+  </data>
+  <data name="Rank" xml:space="preserve">
+    <value>등급</value>
+  </data>
+  <data name="Rank1" xml:space="preserve">
+    <value>1등급</value>
+  </data>
+  <data name="Rank2" xml:space="preserve">
+    <value>2등급</value>
+  </data>
+  <data name="Rank3" xml:space="preserve">
+    <value>3등급</value>
+  </data>
+  <data name="Rank4" xml:space="preserve">
+    <value>4등급</value>
+  </data>
+  <data name="Rank5" xml:space="preserve">
+    <value>5등급</value>
+  </data>
+  <data name="Rare" xml:space="preserve">
+    <value>희귀</value>
+  </data>
+  <data name="Recipient" xml:space="preserve">
+    <value>수신자</value>
+  </data>
+  <data name="Recipients" xml:space="preserve">
+    <value>수신자</value>
+  </data>
+  <data name="RecipientsHelp" xml:space="preserve">
+    <value>메일을 받을 캐릭터의 이름을 입력하세요. 이름은 쉼표로 구분되어야 합니다.</value>
+  </data>
+  <data name="RequiredLevel" xml:space="preserve">
+    <value>필요 레벨</value>
+  </data>
+  <data name="ReturnDate" xml:space="preserve">
+    <value>반환 일자</value>
+  </data>
+  <data name="Revolver" xml:space="preserve">
+    <value>리볼버</value>
+  </data>
+  <data name="Roselle" xml:space="preserve">
+    <value>로젤</value>
+  </data>
+  <data name="Sanction10Days" xml:space="preserve">
+    <value>10일</value>
+  </data>
+  <data name="Sanction15Days" xml:space="preserve">
+    <value>15일</value>
+  </data>
+  <data name="Sanction3Days" xml:space="preserve">
+    <value>3일</value>
+  </data>
+  <data name="Sanction7Days" xml:space="preserve">
+    <value>7일</value>
+  </data>
+  <data name="SanctionAbusing" xml:space="preserve">
+    <value>남용</value>
+  </data>
+  <data name="SanctionAbusingLanguage" xml:space="preserve">
+    <value>음란/학대 언어 사용</value>
+  </data>
+  <data name="SanctionAccountSteal" xml:space="preserve">
+    <value>계정 도용</value>
+  </data>
+  <data name="SanctionAdvertising" xml:space="preserve">
+    <value>상업 광고</value>
+  </data>
+  <data name="SanctionBugExploiting" xml:space="preserve">
+    <value>버그 악용</value>
+  </data>
+  <data name="SanctionFalseReport" xml:space="preserve">
+    <value>거짓 신고</value>
+  </data>
+  <data name="SanctionFifth" xml:space="preserve">
+    <value>다섯 번째</value>
+  </data>
+  <data name="SanctionFirst" xml:space="preserve">
+    <value>첫 번째</value>
+  </data>
+  <data name="SanctionFourth" xml:space="preserve">
+    <value>네 번째</value>
+  </data>
+  <data name="SanctionHacking" xml:space="preserve">
+    <value>해킹</value>
+  </data>
+  <data name="SanctionImpersonation" xml:space="preserve">
+    <value>사칭/사기</value>
+  </data>
+  <data name="SanctionPermanent" xml:space="preserve">
+    <value>영구</value>
+  </data>
+  <data name="SanctionScam" xml:space="preserve">
+    <value>사기</value>
+  </data>
+  <data name="SanctionSecond" xml:space="preserve">
+    <value>두 번째</value>
+  </data>
+  <data name="SanctionThird" xml:space="preserve">
+    <value>세 번째</value>
+  </data>
+  <data name="SaveTemplate" xml:space="preserve">
+    <value>템플릿 저장</value>
+  </data>
+  <data name="SaveTemplateError" xml:space="preserve">
+    <value>템플릿 저장 오류</value>
+  </data>
+  <data name="SaveTemplateHelp" xml:space="preserve">
+    <value>현재 메일을 JSON 템플릿으로 저장합니다.</value>
+  </data>
+  <data name="SaveTemplateSucess" xml:space="preserve">
+    <value>메일 템플릿이 성공적으로 저장되었습니다.</value>
+  </data>
+  <data name="Scythe" xml:space="preserve">
+    <value>낫</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>찾다</value>
   </data>
+  <data name="SearchNameID" xml:space="preserve">
+    <value>검색 이름/ID</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>송신자</value>
+  </data>
+  <data name="SendMail" xml:space="preserve">
+    <value>메일 보내기</value>
+  </data>
+  <data name="SendMailError" xml:space="preserve">
+    <value>메일 전송 오류</value>
+  </data>
+  <data name="SendMailMessage" xml:space="preserve">
+    <value>이 메일을 다음 수신자에게 보내시겠습니까?</value>
+  </data>
+  <data name="SendMailMessageAll" xml:space="preserve">
+    <value>이 메일을 모든 캐릭터에게 보내시겠습니까?</value>
+  </data>
+  <data name="SendMailMessageAllSuccess" xml:space="preserve">
+    <value>메일이 모든 캐릭터에게 성공적으로 전송되었습니다. 메일을 확인하려면 캐릭터를 다시 로그인하거나 게임 서버를 변경하세요.</value>
+  </data>
+  <data name="SendMailMessageSuccess" xml:space="preserve">
+    <value>메일이 성공적으로 전송되었습니다. 메일을 확인하려면 캐릭터를 다시 로그인하거나 게임 서버를 변경하세요.</value>
+  </data>
+  <data name="SendMailSameName" xml:space="preserve">
+    <value>보내는 사람과 받는 사람은 동일할 수 없습니다.</value>
+  </data>
+  <data name="SendToAllCharacters" xml:space="preserve">
+    <value>모든 캐릭터에게 보내기</value>
+  </data>
+  <data name="Set2" xml:space="preserve">
+    <value>2세트</value>
+  </data>
+  <data name="Set3" xml:space="preserve">
+    <value>3세트</value>
+  </data>
+  <data name="Set4" xml:space="preserve">
+    <value>4세트</value>
+  </data>
+  <data name="Set5" xml:space="preserve">
+    <value>5세트</value>
+  </data>
+  <data name="Set6" xml:space="preserve">
+    <value>6세트</value>
+  </data>
+  <data name="SetEffect" xml:space="preserve">
+    <value>세트 효과</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>설정</value>
+  </data>
+  <data name="Slot" xml:space="preserve">
+    <value>슬롯</value>
+  </data>
+  <data name="Socket" xml:space="preserve">
+    <value>소켓</value>
+  </data>
+  <data name="SocketColor" xml:space="preserve">
+    <value>소켓 색상</value>
+  </data>
+  <data name="SocketColorBlue" xml:space="preserve">
+    <value>파란색</value>
+  </data>
+  <data name="SocketColorBlueDesc" xml:space="preserve">
+    <value>가공된 파란색 보석 소켓</value>
+  </data>
+  <data name="SocketColorColorless" xml:space="preserve">
+    <value>무색</value>
+  </data>
+  <data name="SocketColorColorlessDesc" xml:space="preserve">
+    <value>가공된 무색 보석 소켓</value>
+  </data>
+  <data name="SocketColorGray" xml:space="preserve">
+    <value>회색</value>
+  </data>
+  <data name="SocketColorGrayDesc" xml:space="preserve">
+    <value>가공된 회색 보석 소켓</value>
+  </data>
+  <data name="SocketColorGreen" xml:space="preserve">
+    <value>초록색</value>
+  </data>
+  <data name="SocketColorGreenDesc" xml:space="preserve">
+    <value>가공된 초록색 보석 소켓</value>
+  </data>
+  <data name="SocketColorNone" xml:space="preserve">
+    <value>없음</value>
+  </data>
+  <data name="SocketColorNoneDesc" xml:space="preserve">
+    <value>미처리된 보석 소켓</value>
+  </data>
+  <data name="SocketColorRed" xml:space="preserve">
+    <value>빨간색</value>
+  </data>
+  <data name="SocketColorRedDesc" xml:space="preserve">
+    <value>가공된 빨간색 보석 소켓</value>
+  </data>
+  <data name="SocketColorYellow" xml:space="preserve">
+    <value>노란색</value>
+  </data>
+  <data name="SocketColorYellowDesc" xml:space="preserve">
+    <value>가공된 노란색 보석 소켓</value>
+  </data>
+  <data name="SocketCount" xml:space="preserve">
+    <value>소켓 개수</value>
+  </data>
+  <data name="SocketOption" xml:space="preserve">
+    <value>소켓 옵션</value>
   </data>
   <data name="SQLAddress" xml:space="preserve">
     <value>SQL 주소</value>
@@ -216,10 +741,64 @@
   <data name="SQLUser" xml:space="preserve">
     <value>SQL 사용자</value>
   </data>
+  <data name="SubCategory" xml:space="preserve">
+    <value>하위 카테고리</value>
+  </data>
+  <data name="Success" xml:space="preserve">
+    <value>성공</value>
+  </data>
+  <data name="Sword" xml:space="preserve">
+    <value>검</value>
+  </data>
+  <data name="TemplateInvalidId" xml:space="preserve">
+    <value>템플릿에 유효하지 않은 아이템 ID가 있습니다.\n템플릿 내의 유효하지 않은 아이템 ID</value>
+  </data>
   <data name="TestConnection" xml:space="preserve">
     <value>연결 테스트</value>
   </data>
+  <data name="ThemeDark" xml:space="preserve">
+    <value>어두운</value>
+  </data>
+  <data name="ThemeLight" xml:space="preserve">
+    <value>밝은</value>
+  </data>
+  <data name="Times" xml:space="preserve">
+    <value>회</value>
+  </data>
   <data name="Tools" xml:space="preserve">
     <value>툴</value>
+  </data>
+  <data name="Tradeable" xml:space="preserve">
+    <value>거래 가능</value>
+  </data>
+  <data name="TradeUnavailable" xml:space="preserve">
+    <value>거래 불가능</value>
+  </data>
+  <data name="Tude" xml:space="preserve">
+    <value>튜드</value>
+  </data>
+  <data name="TwinSwords" xml:space="preserve">
+    <value>쌍검</value>
+  </data>
+  <data name="Unique" xml:space="preserve">
+    <value>유니크</value>
+  </data>
+  <data name="Untradeable" xml:space="preserve">
+    <value>거래 불가능</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>값</value>
+  </data>
+  <data name="Weapon" xml:space="preserve">
+    <value>무기</value>
+  </data>
+  <data name="WeaponBag" xml:space="preserve">
+    <value>무기 가방</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>무게</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>예</value>
   </data>
 </root>

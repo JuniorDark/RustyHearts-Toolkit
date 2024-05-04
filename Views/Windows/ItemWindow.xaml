@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
     Title="Add Item"
@@ -44,7 +45,7 @@
 
             <ui:TitleBar
                 x:Name="TitleBar"
-                Title="Add Item"
+                Title="{x:Static rs:Resources.AddItem}"
                 Grid.Row="0"
                 Grid.ColumnSpan="3"
                 Height="25"
@@ -85,7 +86,7 @@
                         x:Name="lbEnchant"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Enchant Level"
+                        Content="{x:Static rs:Resources.EnchantLevel}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intEnchantLevel"
@@ -102,7 +103,7 @@
                         x:Name="lbRank"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Rank"
+                        Content="{x:Static rs:Resources.Rank}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intRank"
@@ -124,7 +125,7 @@
                         x:Name="lbAugment"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Augment Stone"
+                        Content="{x:Static rs:Resources.AugmentStone}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intAugmentValue"
@@ -141,7 +142,7 @@
                         x:Name="lbCurrentAttribute"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Current Attribute"
+                        Content="{x:Static rs:Resources.CurrentAttribute}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intReconstruction"
@@ -162,7 +163,7 @@
                         x:Name="lbMaxDurability"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Max Durability"
+                        Content="{x:Static rs:Resources.MaxDurability}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intMaxDurability"
@@ -177,7 +178,7 @@
                         x:Name="lbWeight"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Weight"
+                        Content="{x:Static rs:Resources.Weight}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intWeight"
@@ -211,7 +212,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Option Search"
+                        Content="{x:Static rs:Resources.OptionSearch}"
                         Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbOptionSearch"
@@ -221,7 +222,7 @@
                         FontFamily="{StaticResource ArialUnicodeMS}"
                         FontSize="11"
                         Foreground="Gold"
-                        Tag="Option Name/ID"
+                        Tag="{x:Static rs:Resources.OptionNameID}"
                         Template="{StaticResource lb_textbox}"
                         Text="{Binding OptionSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
@@ -234,7 +235,7 @@
                         x:Name="lbRandomOption1"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Random Option 1"
+                        Content="{Binding Source={x:Static rs:Resources.RandomOption}, Converter={StaticResource StringFormatConverter}, ConverterParameter=1}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode1"
@@ -257,7 +258,7 @@
                         x:Name="lbRandomOption2"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Random Option 2"
+                        Content="{Binding Source={x:Static rs:Resources.RandomOption}, Converter={StaticResource StringFormatConverter}, ConverterParameter=2}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode2"
@@ -280,7 +281,7 @@
                         x:Name="lbRandomOption3"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Random Option 3"
+                        Content="{Binding Source={x:Static rs:Resources.RandomOption}, Converter={StaticResource StringFormatConverter}, ConverterParameter=3}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode3"
@@ -309,7 +310,7 @@
                         x:Name="lbRandomOptionValue1"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Value 1"
+                        Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=1}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intOptionValue1"
@@ -323,7 +324,7 @@
                         x:Name="lbRandomOptionValue2"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Value 2"
+                        Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=2}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intOptionValue2"
@@ -337,7 +338,7 @@
                         x:Name="lbRandomOptionValue3"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Value 3"
+                        Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=3}"
                         FontSize="10"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
@@ -373,7 +374,7 @@
                         Margin="0,-50,0,0"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Socket Count"
+                        Content="{x:Static rs:Resources.SocketCount}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intSocketCount"
@@ -397,7 +398,7 @@
                         Margin="0,10,0,0"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Socket Color 1"
+                        Content="{Binding Source={x:Static rs:Resources.SocketColor}, Converter={StaticResource StringFormatConverter}, ConverterParameter=1}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketColor1"
@@ -419,7 +420,7 @@
                         Margin="0,-5,0,0"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Socket Color 2"
+                        Content="{Binding Source={x:Static rs:Resources.SocketColor}, Converter={StaticResource StringFormatConverter}, ConverterParameter=2}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketColor2"
@@ -441,7 +442,7 @@
                         Margin="0,-9,0,0"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Socket Color 3"
+                        Content="{Binding Source={x:Static rs:Resources.SocketColor}, Converter={StaticResource StringFormatConverter}, ConverterParameter=3}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketColor3"
@@ -469,7 +470,7 @@
                         x:Name="lbSocketOption1"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Socket Option 1"
+                        Content="{Binding Source={x:Static rs:Resources.SocketOption}, Converter={StaticResource StringFormatConverter}, ConverterParameter=1}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketCode1"
@@ -493,7 +494,7 @@
                         x:Name="lbSocketOption2"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Socket Option 2"
+                        Content="{Binding Source={x:Static rs:Resources.SocketOption}, Converter={StaticResource StringFormatConverter}, ConverterParameter=2}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketCode2"
@@ -517,7 +518,7 @@
                         x:Name="lbSocketOption3"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Socket Option 3"
+                        Content="{Binding Source={x:Static rs:Resources.SocketOption}, Converter={StaticResource StringFormatConverter}, ConverterParameter=3}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketCode3"
@@ -548,7 +549,7 @@
                         x:Name="lbSocketOptionValue1"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Value 1"
+                        Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=1}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intSocketValue1"
@@ -563,7 +564,7 @@
                         x:Name="lbSocketOptionValue2"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Value 2"
+                        Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=2}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intSocketValue2"
@@ -578,7 +579,7 @@
                         x:Name="lbSocketOptionValue3"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Value 3"
+                        Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=3}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intSocketValue3"
@@ -604,7 +605,7 @@
                         Canvas.Top="51"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Bottom"
-                        Content="Amount"
+                        Content="{x:Static rs:Resources.Amount}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intAmount"
@@ -641,7 +642,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Command="{Binding SelectItemCommand}"
-                        Content="Add"
+                        Content="{x:Static rs:Resources.Add}"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}" />
                     <Label
@@ -651,7 +652,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
-                        Content="Slot"
+                        Content="{x:Static rs:Resources.Slot}"
                         Style="{StaticResource ArialMSWhite}" />
                     <control:IntegerUpDown
                         x:Name="intItemSlot"
@@ -724,7 +725,7 @@
                     Foreground="Gold"
                     Style="{StaticResource ArialMS}">
                     <TextBlock.Text>
-                        <MultiBinding StringFormat="Showing {0}/{1} Items">
+                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
                             <Binding ElementName="dataGridView" Path="Items.Count" />
                             <Binding Path="ItemDataItems.Count" />
                         </MultiBinding>
@@ -767,12 +768,12 @@
                             Width="*"
                             MaxWidth="80"
                             Binding="{Binding ID}"
-                            Header="ID"
+                            Header="{x:Static rs:Resources.ID}"
                             IsReadOnly="True" />
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding Name}"
-                            Header="Name"
+                            Header="{x:Static rs:Resources.Name}"
                             IsReadOnly="True">
                             <DataGridTextColumn.CellStyle>
                                 <Style TargetType="DataGridCell">
@@ -810,7 +811,7 @@
                                 </Style>
                             </DataGridTextColumn.CellStyle>
                         </DataGridTextColumn>
-                        <DataGridTemplateColumn Header="Icon" IsReadOnly="True">
+                        <DataGridTemplateColumn Header="{x:Static rs:Resources.Icon}" IsReadOnly="True">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Image
@@ -849,7 +850,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Search"
+                        Content="{x:Static rs:Resources.Search}"
                         Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbSearch"
@@ -858,7 +859,7 @@
                         VerticalAlignment="Top"
                         CaretBrush="White"
                         Foreground="Gold"
-                        Tag="Search Name/ID"
+                        Tag="{x:Static rs:Resources.SearchNameID}"
                         Template="{StaticResource lb_textbox}"
                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
@@ -872,7 +873,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Item Type"
+                        Content="{x:Static rs:Resources.ItemType}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemType"
@@ -895,7 +896,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Category"
+                        Content="{x:Static rs:Resources.Category}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemCategory"
@@ -917,7 +918,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Sub Category"
+                        Content="{x:Static rs:Resources.SubCategory}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbSubCategory"
@@ -946,7 +947,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Quality"
+                        Content="{x:Static rs:Resources.Quality}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemBranch"
@@ -969,7 +970,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Class"
+                        Content="{x:Static rs:Resources.Class}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbJobClass"
@@ -993,7 +994,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Item Trade"
+                        Content="{x:Static rs:Resources.ItemTrade}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemTrade"

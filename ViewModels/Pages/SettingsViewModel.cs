@@ -40,12 +40,22 @@ public sealed partial class SettingsViewModel(ISqlDatabaseService databaseServic
     private string _currentApplicationLanguage = "English";
     partial void OnCurrentApplicationLanguageChanged(string? oldValue, string newValue)
     {
-        RegistrySettingsHelper.SetAppLanguage(newValue);
+        string languageCode;
+        switch (newValue)
+        {
+            case "English":
+                languageCode = "en-US";
+                break;
+            case "한국어":
+                languageCode = "ko-KR";
+                break;
+            default:
+                languageCode = "en-US";
+                break;
+        }
 
-        if (newValue == "English")
-            LocalizationManager.LoadLocalizedStrings("en-US");
-        else if (newValue == "한국어")
-            LocalizationManager.LoadLocalizedStrings("ko-KR");
+        RegistrySettingsHelper.SetAppLanguage(languageCode);
+        LocalizationManager.LoadLocalizedStrings(languageCode);
 
         if (IsUserLanguageChange)
         {
@@ -88,23 +98,33 @@ public sealed partial class SettingsViewModel(ISqlDatabaseService databaseServic
     }
 
     [ObservableProperty]
-    string[] _themes = ["Dark", "Light"];
+    private string[] _themes = [Resources.ThemeDark, Resources.ThemeLight];
 
     [ObservableProperty]
-    string[] _languages = ["English", "한국어"];
+    private string[] _languages = ["English", "한국어"];
 
     public void LoadSettings()
     {
         IsUserLanguageChange = false;
 
         CurrentApplicationTheme = RegistrySettingsHelper.GetAppTheme();
-        CurrentApplicationLanguage = RegistrySettingsHelper.GetAppLanguage();
+        CurrentApplicationLanguage = GetLanguageDisplayName(RegistrySettingsHelper.GetAppLanguage());
         SQLServer = RegistrySettingsHelper.GetSQLServer();
         SQLUser = RegistrySettingsHelper.GetSQLUser();
         SQLPwd = RegistrySettingsHelper.GetSQLPassword();
         SqlCredentials.SQLServer = SQLServer;
         SqlCredentials.SQLUser = SQLUser;
         SqlCredentials.SQLPwd = SQLPwd;
+    }
+
+    private static string GetLanguageDisplayName(string languageCode)
+    {
+        return languageCode switch
+        {
+            "en-US" => "English",
+            "ko-KR" => "한국어",
+            _ => "English",
+        };
     }
 
     private void InitializeViewModel()

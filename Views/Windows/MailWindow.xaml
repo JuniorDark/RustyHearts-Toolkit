@@ -5,11 +5,11 @@
     xmlns:bh="clr-namespace:RHToolkit.Behaviors"
     xmlns:control="clr-namespace:RHToolkit.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:RHToolkit.Views.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
-    Title="Mail Tool"
+    Title="{x:Static rs:Resources.MailTool}"
     Width="720"
     Height="640"
     MinWidth="720"
@@ -47,7 +47,7 @@
             <!--  Close Button  -->
             <ui:TitleBar
                 x:Name="TitleBar"
-                Title="Send Mail"
+                Title="{x:Static rs:Resources.SendMail}"
                 Grid.Row="0"
                 Grid.ColumnSpan="3"
                 Height="28"
@@ -73,9 +73,8 @@
                 <Label
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Content="Recipient(s)"
-                    Foreground="White"
-                    Target="{Binding ElementName=txtRecipient}" />
+                    Content="{x:Static rs:Resources.Recipients}"
+                    Foreground="White" />
                 <Image
                     x:Name="imgHelp"
                     Width="16"
@@ -86,7 +85,7 @@
                     Cursor="Help"
                     Source="/Assets/icon/icon_help_tip.png"
                     Stretch="None"
-                    ToolTip="Name of the characters that will receive the mail. Names must be sepparated by comma ','" />
+                    ToolTip="{x:Static rs:Resources.RecipientsHelp}" />
             </StackPanel>
             <!--  Recipient TextBox  -->
             <TextBox
@@ -101,7 +100,7 @@
                 BorderThickness="0"
                 Foreground="White"
                 IsEnabled="{Binding ViewModel.IsRecipientEabled}"
-                Tag="Recipient"
+                Tag="{x:Static rs:Resources.Recipient}"
                 Template="{StaticResource lb_textbox}"
                 Text="{Binding ViewModel.Recipient, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <!--  Send To All CheckBox  -->
@@ -110,7 +109,7 @@
                 Grid.Row="1"
                 Grid.Column="2"
                 VerticalAlignment="Top"
-                Content="Send to All Characters"
+                Content="{x:Static rs:Resources.SendToAllCharacters}"
                 Foreground="White"
                 IsChecked="{Binding ViewModel.SendToAll}"
                 Template="{StaticResource lb_checkbox}" />
@@ -124,20 +123,8 @@
                 <Label
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Content="Sender"
-                    Foreground="White"
-                    Target="{Binding ElementName=txtSender}" />
-                <Image
-                    x:Name="imgHelpSender"
-                    Width="16"
-                    Height="16"
-                    Margin="10,3,0,0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Cursor="Help"
-                    Source="/Assets/icon/icon_help_tip.png"
-                    Stretch="None"
-                    ToolTip="Name of the sender." />
+                    Content="{x:Static rs:Resources.Sender}"
+                    Foreground="White" />
             </StackPanel>
             <!--  Sender TextBox  -->
             <TextBox
@@ -151,7 +138,7 @@
                 Background="Black"
                 BorderThickness="0"
                 Foreground="White"
-                Tag="Sender"
+                Tag="{x:Static rs:Resources.Sender}"
                 Template="{StaticResource lb_textbox}"
                 Text="{Binding ViewModel.Sender, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <!--  Message  -->
@@ -221,12 +208,12 @@
                     VerticalAlignment="Top"
                     Background="Transparent"
                     Command="{Binding ViewModel.SaveTemplateCommand}"
-                    Content="Save Template"
+                    Content="{x:Static rs:Resources.SaveTemplate}"
                     Cursor="Hand"
                     Foreground="White"
                     IsEnabled="{Binding ViewModel.IsButtonEnabled}"
                     Style="{StaticResource lb_def_button02}"
-                    ToolTip="Save the current mail as a json template" />
+                    ToolTip="{x:Static rs:Resources.SaveTemplateHelp}" />
 
                 <!--  Load Template Button  -->
                 <Button
@@ -236,12 +223,12 @@
                     VerticalAlignment="Top"
                     Background="Transparent"
                     Command="{Binding ViewModel.LoadTemplateCommand}"
-                    Content="Load Template"
+                    Content="{x:Static rs:Resources.LoadTemplate}"
                     Cursor="Hand"
                     Foreground="White"
                     IsEnabled="{Binding ViewModel.IsButtonEnabled}"
                     Style="{StaticResource lb_def_button02}"
-                    ToolTip="Load a previous saved json template" />
+                    ToolTip="{x:Static rs:Resources.LoadTemplateHelp}" />
 
                 <!--  Clear Button  -->
                 <Button
@@ -250,12 +237,12 @@
                     VerticalAlignment="Top"
                     Background="Transparent"
                     Command="{Binding ViewModel.ClearTemplateCommand}"
-                    Content="Clear"
+                    Content="{x:Static rs:Resources.MailClear}"
                     Cursor="Hand"
                     Foreground="White"
                     IsEnabled="{Binding ViewModel.IsButtonEnabled}"
                     Style="{StaticResource lb_def_button02}"
-                    ToolTip="Clear all current mail settings" />
+                    ToolTip="{x:Static rs:Resources.MailClearHelp}" />
             </StackPanel>
             <StackPanel
                 Grid.Row="4"
@@ -267,7 +254,7 @@
                 <!--  Attach Item Label  -->
                 <Label
                     VerticalAlignment="Center"
-                    Content="Attach Item"
+                    Content="{x:Static rs:Resources.AttachItem}"
                     Foreground="White" />
                 <Image
                     Margin="6,0,5,0"
@@ -276,7 +263,7 @@
                     Cursor="Help"
                     Source="/Assets/icon/icon_help_tip.png"
                     Stretch="None"
-                    ToolTip="Click on a slot to add/edit a item, Right click to remove." />
+                    ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
                 <!--  Item Slots  -->
                 <Grid Width="140" Height="50">
                     <!--  Column definitions  -->
@@ -329,9 +316,8 @@
                 Orientation="Vertical">
                 <Label
                     x:Name="lbAttachWhite"
-                    Content="Attach Gold Amount"
-                    Foreground="White"
-                    Target="{Binding ElementName=intAttachWhite}" />
+                    Content="{x:Static rs:Resources.AttachGoldAmount}"
+                    Foreground="White" />
                 <control:IntegerUpDown
                     x:Name="intAttachWhite"
                     Width="120"
@@ -348,7 +334,7 @@
                     x:Name="lbReturnDays"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
-                    Content="Return Date"
+                    Content="{x:Static rs:Resources.ReturnDate}"
                     Foreground="White" />
                 <control:IntegerUpDown
                     x:Name="intReturnDays"
@@ -365,7 +351,7 @@
                     x:Name="lbItemCharge"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
-                    Content="Item Charge"
+                    Content="{x:Static rs:Resources.ItemCharge}"
                     Foreground="White" />
                 <control:IntegerUpDown
                     x:Name="intItemCharge"
@@ -406,12 +392,12 @@
                 VerticalAlignment="Bottom"
                 Background="Transparent"
                 Command="{Binding ViewModel.SendMailCommand}"
-                Content="Send"
+                Content="{x:Static rs:Resources.MailSend}"
                 Cursor="Hand"
                 Foreground="White"
                 IsEnabled="{Binding ViewModel.IsButtonEnabled}"
                 Style="{StaticResource lb_def_button02}"
-                ToolTip="Send" />
+                ToolTip="{x:Static rs:Resources.MailSendHelp}" />
         </Grid>
     </ContentControl>
 </Window>

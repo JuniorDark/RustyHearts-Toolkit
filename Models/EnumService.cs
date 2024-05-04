@@ -1,5 +1,6 @@
-﻿using System.ComponentModel;
-using System.Reflection;
+﻿using RHToolkit.Models.Localization;
+using RHToolkit.Properties;
+using System.ComponentModel;
 
 namespace RHToolkit.Models
 {
@@ -11,7 +12,7 @@ namespace RHToolkit.Models
 
             if (typeof(T) != typeof(ItemType))
             {
-                enumItems.Add(new NameID { ID = 0, Name = "All" });
+                enumItems.Add(new NameID { ID = 0, Name = Resources.All });
             }
 
             foreach (T enumValue in Enum.GetValues(typeof(T)))
@@ -75,85 +76,85 @@ namespace RHToolkit.Models
 
         public enum CharClass
         {
-            [Description("Frantz")]
+            [LocalizedDescription("Frantz")]
             Frantz = 1,
-            [Description("Angela")]
+            [LocalizedDescription("Angela")]
             Angela = 2,
-            [Description("Tude")]
+            [LocalizedDescription("Tude")]
             Tude = 3,
-            [Description("Natasha")]
+            [LocalizedDescription("Natasha")]
             Natasha = 4,
-            [Description("Roselle")]
+            [LocalizedDescription("Roselle")]
             Roselle = 101,
-            [Description("Leila")]
+            [LocalizedDescription("Leila")]
             Leila = 102,
-            [Description("Edgar")]
+            [LocalizedDescription("Edgar")]
             Edgar = 201,
-            [Description("Meilin")]
+            [LocalizedDescription("Meilin")]
             Meilin = 301,
-            [Description("Ian")]
+            [LocalizedDescription("Ian")]
             Ian = 401
         }
 
         public enum FrantzJob
         {
-            [Description("Basic")]
+            [LocalizedDescription("Basic")]
             Basic = 0,
-            [Description("Sword")]
+            [LocalizedDescription("Sword")]
             Sword = 1,
-            [Description("Axe")]
+            [LocalizedDescription("Axe")]
             Axe = 2,
-            [Description("Twin Swords")]
+            [LocalizedDescription("Twin Swords")]
             TwinSwords = 3
         }
 
         public enum AngelaJob
         {
-            [Description("Basic")]
+            [LocalizedDescription("Basic")]
             Basic = 0,
-            [Description("Magic Sword")]
+            [LocalizedDescription("MagicSword")]
             MagicSword = 1,
-            [Description("Scythe")]
+            [LocalizedDescription("Scythe")]
             Scythe = 2,
-            [Description("Glaive")]
+            [LocalizedDescription("Glaive")]
             Glaive = 3
         }
 
         public enum TudeJob
         {
-            [Description("Basic")]
+            [LocalizedDescription("Basic")]
             Basic = 0,
-            [Description("Gauntlet")]
+            [LocalizedDescription("Gauntlet")]
             Gauntlet = 1,
-            [Description("Claw")]
+            [LocalizedDescription("Claw")]
             Claw = 2,
-            [Description("Demon Hands")]
+            [LocalizedDescription("DemonHands")]
             DemonHands = 3
         }
 
         public enum NatashaJob
         {
-            [Description("Basic")]
+            [LocalizedDescription("Basic")]
             Basic = 0,
-            [Description("Revolver")]
+            [LocalizedDescription("Revolver")]
             Revolver = 1,
-            [Description("Musket")]
+            [LocalizedDescription("Musket")]
             Musket = 2,
-            [Description("Weapon Bag")]
+            [LocalizedDescription("WeaponBag")]
             WeaponBag = 3
         }
 
         public enum Branch
         {
-            [Description("Normal")]
+            [LocalizedDescription("Normal")]
             Normal = 1,
-            [Description("Magic")]
+            [LocalizedDescription("Magic")]
             Magic = 2,
-            [Description("Rare")]
+            [LocalizedDescription("Rare")]
             Rare = 4,
-            [Description("Unique")]
+            [LocalizedDescription("Unique")]
             Unique = 5,
-            [Description("Epic")]
+            [LocalizedDescription("Epic")]
             Epic = 6
         }
 
@@ -174,33 +175,33 @@ namespace RHToolkit.Models
 
         public enum SocketColor
         {
-            [Description("None")]
+            [LocalizedDescription("SocketColorNone")]
             None = 0,
-            [Description("Red")]
+            [LocalizedDescription("SocketColorRed")]
             Red = 1,
-            [Description("Blue")]
+            [LocalizedDescription("SocketColorBlue")]
             Blue = 2,
-            [Description("Yellow")]
+            [LocalizedDescription("SocketColorYellow")]
             Yellow = 3,
-            [Description("Green")]
+            [LocalizedDescription("SocketColorGreen")]
             Green = 4,
-            [Description("Colorless")]
+            [LocalizedDescription("SocketColorColorless")]
             Colorless = 5,
-            [Description("Gray")]
+            [LocalizedDescription("SocketColorGray")]
             Gray = 6
         }
 
         public enum ItemType
         {
-            [Description("All")]
+            [LocalizedDescription("All")]
             All,
-            [Description("Item")]
+            [LocalizedDescription("Item")]
             Item,
-            [Description("Costume")]
+            [LocalizedDescription("Costume")]
             Costume,
-            [Description("Armor")]
+            [LocalizedDescription("Armor")]
             Armor,
-            [Description("Weapon")]
+            [LocalizedDescription("Weapon")]
             Weapon
         }
 
@@ -212,51 +213,51 @@ namespace RHToolkit.Models
 
         public enum SanctionType
         {
-            [Description("Hacking")]
+            [LocalizedDescription("SanctionHacking")]
             Hacking = 1,
-            [Description("Account Steal")]
+            [LocalizedDescription("SanctionAccountSteal")]
             AccountSteal = 2,
-            [Description("Abusing")]
+            [LocalizedDescription("SanctionAbusing")]
             Abusing = 3,
-            [Description("Impersonation/Scam")]
+            [LocalizedDescription("SanctionImpersonation")]
             ImpersonationScam = 4,
-            [Description("Bug Exploiting")]
+            [LocalizedDescription("SanctionBugExploiting")]
             BugExploiting = 5,
-            [Description("Scam")]
+            [LocalizedDescription("SanctionScam")]
             Scam = 6,
-            [Description("Use of Sexual/Abusive Language")]
+            [LocalizedDescription("SanctionAbusingLanguage")]
             AbusiveLanguage = 7,
-            [Description("Commercial Advertising")]
+            [LocalizedDescription("SanctionAdvertising")]
             CommercialAdvertising = 8,
-            [Description("False Report")]
+            [LocalizedDescription("SanctionFalseReport")]
             FalseReport = 9
         }
 
         public enum SanctionCount
         {
-            [Description("First")]
+            [LocalizedDescription("SanctionFirst")]
             First = 1,
-            [Description("Second")]
+            [LocalizedDescription("SanctionSecond")]
             Second = 2,
-            [Description("Third")]
+            [LocalizedDescription("SanctionThird")]
             Third = 3,
-            [Description("Fourth")]
+            [LocalizedDescription("SanctionFourth")]
             Fourth = 4,
-            [Description("Fifth")]
+            [LocalizedDescription("SanctionFifth")]
             Fifth = 5
         }
 
         public enum SanctionPeriod
         {
-            [Description("3 Days")]
+            [LocalizedDescription("Sanction3Days")]
             ThreeDays = 1,
-            [Description("7 Days")]
+            [LocalizedDescription("Sanction7Days")]
             SevenDays = 2,
-            [Description("10 Days")]
+            [LocalizedDescription("Sanction10Days")]
             TenDays = 3,
-            [Description("15 Days")]
+            [LocalizedDescription("Sanction15Days")]
             FifteenDays = 4,
-            [Description("Permanent")]
+            [LocalizedDescription("SanctionPermanent")]
             Permanent = 5
         }
     }

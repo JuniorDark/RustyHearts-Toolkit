@@ -74,14 +74,11 @@ public partial class App : Application
     /// </summary>
     private void OnStartup(object sender, StartupEventArgs e)
     {
-        var CurrentApplicationLanguage = RegistrySettingsHelper.GetAppLanguage();
+        var languageCode = RegistrySettingsHelper.GetAppLanguage();
 
-        if (CurrentApplicationLanguage != null)
+        if (languageCode != null)
         {
-            if (CurrentApplicationLanguage == "English")
-                LocalizationManager.LoadLocalizedStrings("en-US");
-            else if (CurrentApplicationLanguage == "한국어")
-                LocalizationManager.LoadLocalizedStrings("ko-KR");
+            LocalizationManager.LoadLocalizedStrings(languageCode);
         }
         else
         {
