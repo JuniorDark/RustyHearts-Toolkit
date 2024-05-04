@@ -80,9 +80,12 @@ The following nuget packages are used in this project:
 * [CommunityToolkit.Mvvm](https://www.nuget.org/packages/CommunityToolkit.Mvvm)
 * [EPPlus](https://www.nuget.org/packages/EPPlus)
 * [Microsoft.Data.SqlClient](https://www.nuget.org/packages/Microsoft.Data.SqlClient)
-* [Microsoft.Extensions.DependencyInjectio](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection)
+* [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection)
+* [Microsoft.Extensions.Hosting](https://www.nuget.org/packages/Microsoft.Extensions.Hosting)
+* [Microsoft.Xaml.Behaviors.Wpf](https://www.nuget.org/packages/Microsoft.Xaml.Behaviors.Wpf)
 * [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json)
 * [System.Data.SQLite.Core](https://www.nuget.org/packages/System.Data.SQLite.Core)
+* [WPF-UI](https://www.nuget.org/packages/WPF-UI/)
 
 ## Support
 If you need help with the tool, please submit an issue on GitHub.
