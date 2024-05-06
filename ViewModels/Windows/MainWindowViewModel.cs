@@ -20,6 +20,7 @@ public partial class MainWindowViewModel : ObservableObject
         MenuItemsSource = new object[]
         {
             new NavigationViewItem(Resources.Tools, SymbolRegular.WindowDatabase24, typeof(DatabaseToolsPage)),
+            new NavigationViewItem("Character Edit", SymbolRegular.WindowDatabase24, typeof(CharacterEditPage)),
              new NavigationViewItem(Resources.Database, SymbolRegular.WindowDatabase24, typeof(DatabasePage)),
         }
     },

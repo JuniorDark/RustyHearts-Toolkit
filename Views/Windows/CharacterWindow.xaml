@@ -1,0 +1,662 @@
+﻿<Window
+    x:Class="RHToolkit.Views.Windows.CharacterWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:bh="clr-namespace:RHToolkit.Behaviors"
+    xmlns:control="clr-namespace:RHToolkit.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
+    Title="Character Editor"
+    Width="1280"
+    Height="720"
+    MinWidth="1280"
+    MinHeight="720"
+    bh:WindowBehaviors.EnableDragMove="True"
+    d:DataContext="{d:DesignInstance Type=windows:CharacterWindowViewModel}"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="/Assets/icon/icon_cash_optionchange.png"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <ContentControl Template="{StaticResource box_red02}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="500*" />
+                <ColumnDefinition Width="465*" />
+                <ColumnDefinition Width="289*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="150*" />
+                <RowDefinition Height="260*" />
+                <RowDefinition Height="40*" />
+            </Grid.RowDefinitions>
+
+            <ui:TitleBar
+                x:Name="TitleBar"
+                Title="{Binding Title}"
+                Grid.ColumnSpan="3"
+                Height="24"
+                Margin="30,0,0,0"
+                VerticalAlignment="Center"
+                d:Title="Character Editor"
+                ButtonsForeground="White"
+                FontSize="15"
+                Foreground="White">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon
+                        Width="20"
+                        Height="20"
+                        Margin="0,-1,0,-3"
+                        Source="/Assets/icon/lb_main_quick_system_01character.png" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+
+            <!--  Character Info  -->
+            <Grid
+                Grid.Row="1"
+                Grid.Column="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <Label
+                        Margin="10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Wyndycode:"
+                        Foreground="White" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        d:Text="windycode"
+                        Background="Transparent"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="{Binding WindyCode}" />
+
+                </StackPanel>
+                <StackPanel Grid.Row="1" Orientation="Horizontal">
+                    <Label
+                        Margin="10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Character ID:"
+                        Foreground="White" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        d:Text="Character ID"
+                        Background="Transparent"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="{Binding CharacterID}" />
+
+                </StackPanel>
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <Label
+                        Margin="10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Created:"
+                        Foreground="White" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        d:Text="Created Date"
+                        Background="Transparent"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="{Binding CreateTime}" />
+
+                </StackPanel>
+                <StackPanel Grid.Row="3" Orientation="Horizontal">
+                    <Label
+                        Margin="10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Last Login:"
+                        Foreground="White" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        d:Text="Last Login"
+                        Background="Transparent"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="{Binding LastLoginTime}" />
+
+                </StackPanel>
+
+            </Grid>
+            <!--  Character  -->
+            <Grid
+                Grid.Row="2"
+                Grid.RowSpan="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200*" />
+                    <ColumnDefinition Width="150*" />
+                    <ColumnDefinition Width="150*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3"
+                    Margin="10"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal">
+                    <Label
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="Character Name"
+                        Foreground="White" />
+                    <TextBox
+                        x:Name="txtCharacterName"
+                        Width="200"
+                        Height="35"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Black"
+                        BorderThickness="0"
+                        Foreground="White"
+                        Tag="Name"
+                        Template="{StaticResource lb_textbox}"
+                        Text="{Binding CharacterName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <Button
+                        x:Name="btnSaveName"
+                        Width="150"
+                        Margin="0,10"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        Command="{Binding SaveNameCommand}"
+                        Content="Save Name"
+                        Cursor="Hand"
+                        Foreground="White"
+                        IsEnabled="{Binding IsButtonEnabled}"
+                        Style="{StaticResource lb_def_button02}"
+                        ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <Label
+                        x:Name="lbClass"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="{x:Static rs:Resources.Class}"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <ComboBox
+                        x:Name="cmbClass"
+                        Width="145"
+                        Height="24"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding ClassItems}"
+                        SelectedIndex="{Binding ClassSelectedIndex}"
+                        SelectedValue="{Binding Class, Mode=TwoWay}"
+                        SelectedValuePath="ID"
+                        Style="{StaticResource ComboBoxStyle}"
+                        Template="{StaticResource lb_combobox}" />
+                    <Label
+                        x:Name="lbItemTrade"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Focus"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <ComboBox
+                        x:Name="cmbJob"
+                        Width="145"
+                        Height="24"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding JobItems}"
+                        SelectedIndex="{Binding JobSelectedIndex}"
+                        SelectedValue="{Binding Job, Mode=TwoWay}"
+                        SelectedValuePath="ID"
+                        Style="{StaticResource ComboBoxStyle}"
+                        Template="{StaticResource lb_combobox}" />
+                    <Label
+                        x:Name="lbLobby"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Lobby"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <ComboBox
+                        x:Name="cmbLobby"
+                        Width="145"
+                        Height="24"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding LobbyItems}"
+                        SelectedIndex="{Binding LobbySelectedIndex}"
+                        SelectedValue="{Binding Lobby, Mode=TwoWay}"
+                        SelectedValuePath="ID"
+                        Style="{StaticResource ComboBoxStyle}"
+                        Template="{StaticResource lb_combobox}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <CheckBox
+                        VerticalAlignment="Top"
+                        Content="Restrict Character"
+                        Foreground="White"
+                        IsChecked="{Binding RestrictCharacter}"
+                        Template="{StaticResource lb_checkbox}" />
+                    <CheckBox
+                        VerticalAlignment="Top"
+                        Content="Block Movement"
+                        Foreground="White"
+                        IsChecked="{Binding IsMoveEnable}"
+                        Template="{StaticResource lb_checkbox}" />
+                    <CheckBox
+                        VerticalAlignment="Top"
+                        Content="Can Trade"
+                        Foreground="White"
+                        IsChecked="{Binding IsTradeEnable}"
+                        Template="{StaticResource lb_checkbox}" />
+                    <CheckBox
+                        VerticalAlignment="Top"
+                        Content="Is Admin"
+                        Foreground="White"
+                        IsChecked="{Binding IsAdmin}"
+                        Template="{StaticResource lb_checkbox}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <Label
+                        x:Name="lbLevel"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Level"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <control:IntegerUpDown
+                        x:Name="intLevel"
+                        Width="120"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        Maximum="100"
+                        Minimum="1"
+                        Value="{Binding Level, Mode=TwoWay}" />
+                    <Label
+                        x:Name="lbScrolls"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Ressurection Scrolls"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <control:IntegerUpDown
+                        x:Name="intRessurectionScrolls"
+                        Width="120"
+                        Increment="1"
+                        Maximum="500"
+                        Minimum="0"
+                        Value="{Binding RessurectionScrolls, Mode=TwoWay}" />
+                    <Label
+                        x:Name="lbWHSlot"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Warehouse Slots"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <control:IntegerUpDown
+                        x:Name="intWarehouseSlots"
+                        Width="120"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        Maximum="180"
+                        Minimum="0"
+                        Value="{Binding WarehouseSlots, Mode=TwoWay}" />
+                </StackPanel>
+                <!--  center Column  -->
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <Label
+                        x:Name="lbExp"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="EXP"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <control:IntegerUpDown
+                        x:Name="intExp"
+                        Width="120"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        Maximum="420897460"
+                        Minimum="0"
+                        Value="{Binding CharacterExp, Mode=TwoWay}" />
+                    <Label
+                        x:Name="lbSkillPoints"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Unused Skill Points"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <control:IntegerUpDown
+                        x:Name="intSkillPoints"
+                        Width="120"
+                        Increment="1"
+                        Maximum="{Binding TotalSkillPoints}"
+                        Minimum="0"
+                        Value="{Binding SkillPoints, Mode=TwoWay}" />
+                    <Label
+                        x:Name="lbWarehouseGold"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Warehouse Gold"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <control:IntegerUpDown
+                        x:Name="intWHGold"
+                        Width="120"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        Maximum="2100000000"
+                        Minimum="0"
+                        Value="{Binding WarehouseGold, Mode=TwoWay}" />
+                </StackPanel>
+                <!--  Right Column  -->
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="3"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <Label
+                        x:Name="lbInventoryGold"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Inventory Gold"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <control:IntegerUpDown
+                        x:Name="intInventoryGold"
+                        Width="120"
+                        Increment="100"
+                        Maximum="2100000000"
+                        Minimum="0"
+                        Value="{Binding InventoryGold, Mode=TwoWay}" />
+                    <Label
+                        x:Name="lbTotalSkillPoints"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Total Skill Points"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <control:IntegerUpDown
+                        x:Name="intTotalSkillPoints"
+                        Width="120"
+                        Increment="1"
+                        Maximum="200000"
+                        Minimum="0"
+                        Value="{Binding TotalSkillPoints, Mode=TwoWay}" />
+                    <Label
+                        x:Name="lbGuildExp"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Guild Exp"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <control:IntegerUpDown
+                        x:Name="intGuildExp"
+                        Width="120"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        Maximum="32767"
+                        Minimum="0"
+                        Value="{Binding GuildExp, Mode=TwoWay}" />
+                </StackPanel>
+            </Grid>
+            <!--  Save  -->
+            <Grid
+                Grid.Row="3"
+                Grid.Column="1"
+                Width="150"
+                Height="46"
+                Margin="0,13,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <!--  Send Button  -->
+                <Button
+                    x:Name="btnSave"
+                    Width="150"
+                    Margin="0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Background="Transparent"
+                    Command="{Binding SaveCharacterCommand}"
+                    Content="Save"
+                    Cursor="Hand"
+                    Foreground="White"
+                    IsEnabled="{Binding IsButtonEnabled}"
+                    Style="{StaticResource lb_def_button02}"
+                    ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+            </Grid>
+            <!--  Profile  -->
+            <Grid
+                Grid.Row="1"
+                Grid.Column="1"
+                Width="384"
+                Height="156"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="47*" />
+                    <ColumnDefinition Width="47*" />
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="47*" />
+                    <ColumnDefinition Width="47*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="34*" />
+                    <RowDefinition Height="34*" />
+                    <RowDefinition Height="50*" />
+                </Grid.RowDefinitions>
+                <Image
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="5"
+                    Width="384"
+                    Height="156"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    d:Source="/Assets/images/char/ui_silhouette_roselle01.png"
+                    Source="{Binding CharSilhouetteImage}" />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    d:Text="Lv.50 Roselle"
+                    Background="Transparent"
+                    Foreground="Gold"
+                    Style="{StaticResource ArialMS}"
+                    Text="{Binding CharacterNameText}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    d:Text="Roselle - Sword Focus"
+                    Background="Transparent"
+                    Foreground="Gold"
+                    Style="{StaticResource ArialMS}"
+                    Text="{Binding CharacterClassText}"
+                    TextWrapping="Wrap" />
+                <control:ItemSlot
+                    x:Name="ItemSlotIndex0"
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    AddItemCommand="{Binding AddItemCommand}"
+                    CommandParameter="0"
+                    IsButtonEnabled="{Binding IsButtonEnabled}"
+                    ItemAmount="{Binding ItemAmount0}"
+                    ItemIcon="{Binding ItemIcon0}"
+                    ItemIconBranch="{Binding ItemIconBranch0}"
+                    ItemName="{Binding ItemName0}"
+                    RemoveItemCommand="{Binding RemoveItemCommand}"
+                    SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_07.png" />
+                <control:ItemSlot
+                    x:Name="ItemSlotIndex1"
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    AddItemCommand="{Binding AddItemCommand}"
+                    CommandParameter="1"
+                    IsButtonEnabled="{Binding IsButtonEnabled}"
+                    ItemAmount="{Binding ItemAmount1}"
+                    ItemIcon="{Binding ItemIcon1}"
+                    ItemIconBranch="{Binding ItemIconBranch1}"
+                    ItemName="{Binding ItemName1}"
+                    RemoveItemCommand="{Binding RemoveItemCommand}"
+                    SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_02.png" />
+                <control:ItemSlot
+                    x:Name="ItemSlotIndex2"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    AddItemCommand="{Binding AddItemCommand}"
+                    CommandParameter="2"
+                    IsButtonEnabled="{Binding IsButtonEnabled}"
+                    ItemAmount="{Binding ItemAmount2}"
+                    ItemIcon="{Binding ItemIcon2}"
+                    ItemIconBranch="{Binding ItemIconBranch2}"
+                    ItemName="{Binding ItemName2}"
+                    RemoveItemCommand="{Binding RemoveItemCommand}"
+                    SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_01.png" />
+                <control:ItemSlot
+                    x:Name="ItemSlotIndex3"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    AddItemCommand="{Binding AddItemCommand}"
+                    CommandParameter="3"
+                    IsButtonEnabled="{Binding IsButtonEnabled}"
+                    ItemAmount="{Binding ItemAmount3}"
+                    ItemIcon="{Binding ItemIcon3}"
+                    ItemIconBranch="{Binding ItemIconBranch3}"
+                    ItemName="{Binding ItemName3}"
+                    RemoveItemCommand="{Binding RemoveItemCommand}"
+                    SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_05.png" />
+                <control:ItemSlot
+                    x:Name="ItemSlotIndex4"
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    AddItemCommand="{Binding AddItemCommand}"
+                    CommandParameter="4"
+                    IsButtonEnabled="{Binding IsButtonEnabled}"
+                    ItemAmount="{Binding ItemAmount4}"
+                    ItemIcon="{Binding ItemIcon4}"
+                    ItemIconBranch="{Binding ItemIconBranch4}"
+                    ItemName="{Binding ItemName4}"
+                    RemoveItemCommand="{Binding RemoveItemCommand}"
+                    SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_03.png" />
+                <control:ItemSlot
+                    x:Name="ItemSlotIndex5"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    AddItemCommand="{Binding AddItemCommand}"
+                    CommandParameter="5"
+                    IsButtonEnabled="{Binding IsButtonEnabled}"
+                    ItemAmount="{Binding ItemAmount5}"
+                    ItemIcon="{Binding ItemIcon5}"
+                    ItemIconBranch="{Binding ItemIconBranch5}"
+                    ItemName="{Binding ItemName5}"
+                    RemoveItemCommand="{Binding RemoveItemCommand}"
+                    SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_04.png" />
+                <control:ItemSlot
+                    x:Name="ItemSlotIndex6"
+                    Grid.Row="1"
+                    Grid.Column="4"
+                    AddItemCommand="{Binding AddItemCommand}"
+                    CommandParameter="6"
+                    IsButtonEnabled="{Binding IsButtonEnabled}"
+                    ItemAmount="{Binding ItemAmount6}"
+                    ItemIcon="{Binding ItemIcon6}"
+                    ItemIconBranch="{Binding ItemIconBranch6}"
+                    ItemName="{Binding ItemName6}"
+                    RemoveItemCommand="{Binding RemoveItemCommand}"
+                    SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_09.png" />
+                <control:ItemSlot
+                    x:Name="ItemSlotIndex7"
+                    Grid.Row="2"
+                    Grid.Column="4"
+                    Margin="0,0,1,0"
+                    AddItemCommand="{Binding AddItemCommand}"
+                    CommandParameter="7"
+                    IsButtonEnabled="{Binding IsButtonEnabled}"
+                    ItemAmount="{Binding ItemAmount7}"
+                    ItemIcon="{Binding ItemIcon7}"
+                    ItemIconBranch="{Binding ItemIconBranch7}"
+                    ItemName="{Binding ItemName7}"
+                    RemoveItemCommand="{Binding RemoveItemCommand}"
+                    SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_10.png" />
+                <control:ItemSlot
+                    x:Name="ItemSlotIndex8"
+                    Grid.Row="0"
+                    Grid.Column="4"
+                    AddItemCommand="{Binding AddItemCommand}"
+                    CommandParameter="8"
+                    IsButtonEnabled="{Binding IsButtonEnabled}"
+                    ItemAmount="{Binding ItemAmount8}"
+                    ItemIcon="{Binding ItemIcon8}"
+                    ItemIconBranch="{Binding ItemIconBranch8}"
+                    ItemName="{Binding ItemName8}"
+                    RemoveItemCommand="{Binding RemoveItemCommand}"
+                    SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_08.png" />
+                <control:ItemSlot
+                    x:Name="ItemSlotIndex9"
+                    Grid.Row="0"
+                    Grid.Column="3"
+                    AddItemCommand="{Binding AddItemCommand}"
+                    CommandParameter="9"
+                    IsButtonEnabled="{Binding IsButtonEnabled}"
+                    ItemAmount="{Binding ItemAmount9}"
+                    ItemIcon="{Binding ItemIcon9}"
+                    ItemIconBranch="{Binding ItemIconBranch9}"
+                    ItemName="{Binding ItemName9}"
+                    RemoveItemCommand="{Binding RemoveItemCommand}"
+                    SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_06.png" />
+            </Grid>
+
+        </Grid>
+    </ContentControl>
+</Window>

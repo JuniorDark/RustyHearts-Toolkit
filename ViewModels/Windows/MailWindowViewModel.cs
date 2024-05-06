@@ -491,10 +491,10 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                     Guid mailId = Guid.NewGuid();
                     string recipient = currentRecipient;
 
-                    (Guid? senderCharacterId, Guid? senderAuthId, string? senderWindyCode) = await _databaseService.GetCharacterInfoAsync(mailSender);
-                    (Guid? recipientCharacterId, Guid? recipientAuthId, string? recipientWindyCode) = await _databaseService.GetCharacterInfoAsync(recipient);
+                    (Guid senderCharacterId, Guid senderAuthId, string senderWindyCode) = await _databaseService.GetCharacterInfoAsync(mailSender);
+                    (Guid recipientCharacterId, Guid recipientAuthId, string recipientWindyCode) = await _databaseService.GetCharacterInfoAsync(recipient);
 
-                    if (senderCharacterId == null && createType == 5)
+                    if (senderCharacterId == Guid.Empty && createType == 5)
                     {
                         string invalidSenderMessage = string.Format(Resources.InvalidSenderDesc, mailSender);
                         RHMessageBox.ShowOKMessage(invalidSenderMessage, Resources.InvalidSender);
@@ -507,14 +507,14 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                         return;
                     }
 
-                    if (recipientCharacterId == null || recipientAuthId == null)
+                    if (recipientCharacterId == Guid.Empty || recipientAuthId == Guid.Empty)
                     {
                         string invalidRecipientMessage = string.Format(Resources.NonExistentRecipient, recipient);
                         RHMessageBox.ShowOKMessage(invalidRecipientMessage, Resources.FailedSendMail);
                         continue;
                     }
 
-                    if (senderCharacterId == null)
+                    if (senderCharacterId == Guid.Empty)
                     {
                         senderCharacterId = Guid.Parse("00000000-0000-0000-0000-000000000000");
                     }
@@ -599,22 +599,22 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
     private int _itemCharge;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsRecipientEabled))]
+    [NotifyPropertyChangedFor(nameof(IsRecipientEnabled))]
     private bool _sendToAll = false;
     partial void OnSendToAllChanged(bool value)
     {
         if (value == true)
         {
-            IsRecipientEabled = false;
+            IsRecipientEnabled = false;
         }
         else
         {
-            IsRecipientEabled = true;
+            IsRecipientEnabled = true;
         }
     }
 
     [ObservableProperty]
-    private bool _isRecipientEabled = true;
+    private bool _isRecipientEnabled = true;
 
     [ObservableProperty]
     private string? _itemName1 = Resources.AddItemDesc;

@@ -104,7 +104,7 @@ namespace RHToolkit.Models
             Sword = 1,
             [LocalizedDescription("Axe")]
             Axe = 2,
-            [LocalizedDescription("Twin Swords")]
+            [LocalizedDescription("TwinSwords")]
             TwinSwords = 3
         }
 

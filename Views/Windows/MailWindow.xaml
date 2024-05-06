@@ -99,7 +99,7 @@
                 Background="Black"
                 BorderThickness="0"
                 Foreground="White"
-                IsEnabled="{Binding ViewModel.IsRecipientEabled}"
+                IsEnabled="{Binding ViewModel.IsRecipientEnabled}"
                 Tag="{x:Static rs:Resources.Recipient}"
                 Template="{StaticResource lb_textbox}"
                 Text="{Binding ViewModel.Recipient, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -282,7 +282,8 @@
                         ItemIcon="{Binding ViewModel.ItemIcon1}"
                         ItemIconBranch="{Binding ViewModel.ItemIconBranch1}"
                         ItemName="{Binding ViewModel.ItemName1}"
-                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}" />
+                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
+                        SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <!--  Item 2  -->
                     <control:ItemSlot
                         Grid.Column="1"
@@ -293,7 +294,8 @@
                         ItemIcon="{Binding ViewModel.ItemIcon2}"
                         ItemIconBranch="{Binding ViewModel.ItemIconBranch2}"
                         ItemName="{Binding ViewModel.ItemName2}"
-                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}" />
+                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
+                        SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <!--  Item 3  -->
                     <control:ItemSlot
                         Grid.Column="2"
@@ -304,7 +306,8 @@
                         ItemIcon="{Binding ViewModel.ItemIcon3}"
                         ItemIconBranch="{Binding ViewModel.ItemIconBranch3}"
                         ItemName="{Binding ViewModel.ItemName3}"
-                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}" />
+                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
+                        SlotIcon="/Assets/images/lb_ac_icon.png" />
                 </Grid>
             </StackPanel>
             <StackPanel

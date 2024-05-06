@@ -10,6 +10,7 @@ namespace RHToolkit.Messages
 
     public enum ViewModelType
     {
+        CharacterWindowViewModel,
         ItemWindowViewModel,
         MailWindowViewModel
     }

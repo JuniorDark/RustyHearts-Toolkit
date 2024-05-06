@@ -22,6 +22,9 @@ namespace RHToolkit.Controls
         public static readonly DependencyProperty ItemIconProperty = DependencyProperty.Register(
             "ItemIcon", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
 
+        public static readonly DependencyProperty SlotIconProperty = DependencyProperty.Register(
+           "SlotIcon", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
+
         public static readonly DependencyProperty ItemIconBranchProperty = DependencyProperty.Register(
             "ItemIconBranch", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
 
@@ -62,6 +65,12 @@ namespace RHToolkit.Controls
         {
             get => (string)GetValue(ItemIconProperty);
             set => SetValue(ItemIconProperty, value);
+        }
+
+        public string SlotIcon
+        {
+            get => (string)GetValue(SlotIconProperty);
+            set => SetValue(SlotIconProperty, value);
         }
 
         public string ItemIconBranch

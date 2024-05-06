@@ -32,8 +32,9 @@
             Width="44"
             Height="44"
             VerticalAlignment="Top"
+            d:Source="/Assets/images/lb_ac_icon.png"
             IsHitTestVisible="False"
-            Source="/Assets/images/lb_ac_icon.png"
+            Source="{Binding SlotIcon, RelativeSource={RelativeSource AncestorType=UserControl}}"
             Stretch="Fill" />
         <Image
             x:Name="imgItemIcon"

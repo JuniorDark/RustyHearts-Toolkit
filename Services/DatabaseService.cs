@@ -13,6 +13,72 @@ namespace RHToolkit.Services
         #region RustyHearts
 
         #region Character
+
+        #region Write
+        public async Task UpdateCharacterDataAsync(Guid characterId, NewCharacterData characterData)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                await _databaseService.ExecuteNonQueryAsync(
+                    "UPDATE CharacterTable SET Class = @class, Job = @job, Level = @level, Experience = @experience, SP = @sp, Total_SP = @total_sp, Fatigue = @fatigue, LobbyID = @lobbyID, gold = @gold, Hearts = @hearts, Block_YN = @block_YN, storage_gold = @storage_gold, storage_count = @storage_count, IsTradeEnable = @isTradeEnable, Permission = @permission, GuildPoint = @guild_point, IsMoveEnable = @isMoveEnable WHERE character_id = @character_id",
+                    connection,
+                    transaction,
+                    ("@character_id", characterId),
+                    ("@class", characterData.Class),
+                    ("@job", characterData.Job),
+                    ("@level", characterData.Level),
+                    ("@experience", characterData.Experience),
+                    ("@sp", characterData.SP),
+                    ("@total_sp", characterData.TotalSP),
+                    ("@fatigue", characterData.Fatigue),
+                    ("@lobbyID", characterData.LobbyID),
+                    ("@gold", characterData.Gold),
+                    ("@hearts", characterData.Hearts),
+                    ("@block_YN", characterData.BlockYN),
+                    ("@storage_gold", characterData.StorageGold),
+                    ("@storage_count", characterData.StorageCount),
+                    ("@isTradeEnable", characterData.IsTradeEnable),
+                    ("@permission", characterData.Permission),
+                    ("@guild_point", characterData.GuildPoint),
+                    ("@isMoveEnable", characterData.IsMoveEnable)
+                );
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error Updating Character Data: {ex.Message}", ex);
+            }
+        }
+
+        public async Task<int> UpdateCharacterNameAsync(Guid characterId, string characterName)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+
+            try
+            {
+                return (int)(await _databaseService.ExecuteProcedureAsync(
+                    "up_update_character_name",
+                    connection,
+                    null,
+                    ("@character_id", characterId),
+                    ("@character_name", characterName)
+                ));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}", ex);
+            }
+        }
+
+        #endregion
+
+        #region Read
+
         public async Task<CharacterData?> GetCharacterDataAsync(string characterName)
         {
             string selectQuery = "SELECT * FROM CharacterTable WHERE [Name] = @name";
@@ -69,70 +135,132 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task UpdateCharacterDataAsync(Guid characterId, NewCharacterData characterData)
+        public async Task<List<DatabaseItem>> GetItemList(Guid characterId, string tableName)
         {
+            string selectQuery = $"SELECT * FROM {tableName} WHERE character_id = @character_id;";
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
-            using var transaction = connection.BeginTransaction();
+            DataTable dataTable = await _databaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@character_id", characterId));
 
-            try
+            List<DatabaseItem> itemList = [];
+
+            foreach (DataRow row in dataTable.Rows)
             {
-                await _databaseService.ExecuteNonQueryAsync(
-                    "UPDATE CharacterTable SET Class = @class, Job = @job, Level = @level, Experience = @experience, SP = @sp, Total_SP = @total_sp, Fatigue = @fatigue, LobbyID = @lobbyID, gold = @gold, Hearts = @hearts, Block_YN = @block_YN, storage_gold = @storage_gold, storage_count = @storage_count, IsTradeEnable = @isTradeEnable, Permission = @permission, GuildPoint = @guild_point, IsMoveEnable = @isMoveEnable WHERE character_id = @character_id",
-                    connection,
-                    transaction,
-                    ("@character_id", characterId),
-                    ("@class", characterData.Class),
-                    ("@job", characterData.Job),
-                    ("@level", characterData.Level),
-                    ("@experience", characterData.Experience),
-                    ("@sp", characterData.SP),
-                    ("@total_sp", characterData.TotalSP),
-                    ("@fatigue", characterData.Fatigue),
-                    ("@lobbyID", characterData.LobbyID),
-                    ("@gold", characterData.Gold),
-                    ("@hearts", characterData.Hearts),
-                    ("@block_YN", characterData.BlockYN),
-                    ("@storage_gold", characterData.StorageGold),
-                    ("@storage_count", characterData.StorageCount),
-                    ("@isTradeEnable", characterData.IsTradeEnable),
-                    ("@permission", characterData.Permission),
-                    ("@guild_point", characterData.GuildPoint),
-                    ("@isMoveEnable", characterData.IsMoveEnable)
-                );
+                DatabaseItem item = new()
+                {
+                    ItemUid = (Guid)row["item_uid"],
+                    CharacterId = (Guid)row["character_id"],
+                    AuthId = (Guid)row["auth_id"],
+                    PageIndex = (int)row["page_index"],
+                    SlotIndex = (int)row["slot_index"],
+                    Code = (int)row["code"],
+                    UseCount = (int)row["use_cnt"],
+                    RemainTime = (int)row["remain_time"],
+                    CreateTime = (DateTime)row["create_time"],
+                    UpdateTime = (DateTime)row["update_time"],
+                    GCode = (int)row["gcode"],
+                    Durability = (int)row["durability"],
+                    EnhanceLevel = (int)row["enhance_level"],
+                    Option1Code = (int)row["option_1_code"],
+                    Option1Value = (int)row["option_1_value"],
+                    Option2Code = (int)row["option_2_code"],
+                    Option2Value = (int)row["option_2_value"],
+                    Option3Code = (int)row["option_3_code"],
+                    Option3Value = (int)row["option_3_value"],
+                    OptionGroup = (int)row["option_group"],
+                    ReconNum = (int)row["ReconNum"],
+                    ReconState = (byte)row["ReconState"],
+                    SocketCount = (int)row["socket_count"],
+                    Socket1Code = (int)row["socket_1_code"],
+                    Socket1Value = (int)row["socket_1_value"],
+                    Socket2Code = (int)row["socket_2_code"],
+                    Socket2Value = (int)row["socket_2_value"],
+                    Socket3Code = (int)row["socket_3_code"],
+                    Socket3Value = (int)row["socket_3_value"],
+                    ExpireTime = (int)row["expire_time"],
+                    LockPassword = (string)row["lock_pwd"],
+                    ActivityValue = (int)row["activity_value"],
+                    LinkId = (Guid)row["link_id"],
+                    IsSeizure = (byte)row["is_seizure"],
+                    Socket1Color = (byte)row["socket_1_color"],
+                    Socket2Color = (byte)row["socket_2_color"],
+                    Socket3Color = (byte)row["socket_3_color"],
+                    DefermentTime = (int)row["deferment_time"],
+                    Rank = (byte)row["rank"],
+                    AcquireRoute = (byte)row["acquireroute"],
+                    Physical = (int)row["physical"],
+                    Magical = (int)row["magical"],
+                    DurabilityMax = (int)row["durabilitymax"],
+                    Weight = (int)row["weight"]
+                };
 
-                transaction.Commit();
+                itemList.Add(item);
             }
-            catch (Exception ex)
-            {
-                transaction.Rollback();
-                throw new Exception($"Error Updating Character Data: {ex.Message}", ex);
-            }
 
-
+            return itemList;
         }
 
-        public async Task<int> UpdateCharacterNameAsync(Guid characterId, string characterName)
+        public async Task<List<DatabaseItem>> GetAccountItemList(Guid authId)
         {
+            string selectQuery = $"SELECT * FROM tbl_Account_Storage WHERE auth_id = @auth_id;";
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            DataTable dataTable = await _databaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@auth_id", authId));
 
-            try
+            List<DatabaseItem> itemList = [];
+
+            foreach (DataRow row in dataTable.Rows)
             {
-                return (int)(await _databaseService.ExecuteProcedureAsync(
-                    "up_update_character_name",
-                    connection,
-                    null,
-                    ("@character_id", characterId),
-                    ("@character_name", characterName)
-                ));
+                DatabaseItem item = new()
+                {
+                    ItemUid = (Guid)row["item_uid"],
+                    AuthId = (Guid)row["auth_id"],
+                    PageIndex = (int)row["page_index"],
+                    SlotIndex = (int)row["slot_index"],
+                    Code = (int)row["code"],
+                    UseCount = (int)row["use_cnt"],
+                    RemainTime = (int)row["remain_time"],
+                    CreateTime = (DateTime)row["create_time"],
+                    UpdateTime = (DateTime)row["update_time"],
+                    GCode = (int)row["gcode"],
+                    Durability = (int)row["durability"],
+                    EnhanceLevel = (int)row["enhance_level"],
+                    Option1Code = (int)row["option_1_code"],
+                    Option1Value = (int)row["option_1_value"],
+                    Option2Code = (int)row["option_2_code"],
+                    Option2Value = (int)row["option_2_value"],
+                    Option3Code = (int)row["option_3_code"],
+                    Option3Value = (int)row["option_3_value"],
+                    OptionGroup = (int)row["option_group"],
+                    ReconNum = (int)row["ReconNum"],
+                    ReconState = (byte)row["ReconState"],
+                    SocketCount = (int)row["socket_count"],
+                    Socket1Code = (int)row["socket_1_code"],
+                    Socket1Value = (int)row["socket_1_value"],
+                    Socket2Code = (int)row["socket_2_code"],
+                    Socket2Value = (int)row["socket_2_value"],
+                    Socket3Code = (int)row["socket_3_code"],
+                    Socket3Value = (int)row["socket_3_value"],
+                    ExpireTime = (int)row["expire_time"],
+                    LockPassword = (string)row["lock_pwd"],
+                    ActivityValue = (int)row["activity_value"],
+                    IsSeizure = (byte)row["is_seizure"],
+                    Socket1Color = (byte)row["socket_1_color"],
+                    Socket2Color = (byte)row["socket_2_color"],
+                    Socket3Color = (byte)row["socket_3_color"],
+                    Rank = (byte)row["rank"],
+                    AcquireRoute = (byte)row["acquireroute"],
+                    Physical = (int)row["physical"],
+                    Magical = (int)row["magical"],
+                    DurabilityMax = (int)row["durabilitymax"],
+                    Weight = (int)row["weight"]
+                };
+
+                itemList.Add(item);
             }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error: {ex.Message}", ex);
-            }
+
+            return itemList;
         }
 
 
-        #region Read
         public async Task<bool> IsCharacterOnlineAsync(string characterName)
         {
             string selectQuery = "SELECT IsConnect FROM CharacterTable WHERE name = @characterName";
@@ -140,7 +268,7 @@ namespace RHToolkit.Services
 
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
 
-            object result = await _databaseService.ExecuteScalarAsync(selectQuery, connection, parameters);
+            object? result = await _databaseService.ExecuteScalarAsync(selectQuery, connection, parameters);
 
             if (result != null && result != DBNull.Value)
             {
@@ -190,7 +318,7 @@ namespace RHToolkit.Services
             return [.. characterNames];
         }
 
-        public async Task<(Guid? characterId, Guid? authid, string? windyCode)> GetCharacterInfoAsync(string characterName)
+        public async Task<(Guid characterId, Guid authid, string windyCode)> GetCharacterInfoAsync(string characterName)
         {
             string selectQuery = "SELECT character_id, authid, bcust_id FROM CharacterTable WHERE name = @characterName";
             var parameters = new (string, object)[] { ("@characterName", characterName) };
@@ -206,7 +334,7 @@ namespace RHToolkit.Services
             }
             else
             {
-                return (null, null, null);
+                return (Guid.Empty, Guid.Empty, string.Empty);
             }
         }
 
@@ -372,15 +500,16 @@ namespace RHToolkit.Services
         {
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
 
-            int sanctionCount = (int)await _databaseService.ExecuteScalarAsync(
+            object? result = await _databaseService.ExecuteScalarAsync(
                 "SELECT COUNT(*) FROM Character_Sanction WHERE [character_id] = @character_id AND [is_apply] = 1",
                 connection,
                 ("@character_id", characterId)
             );
 
+            int sanctionCount = result != null ? (int)result : 0;
+
             return sanctionCount > 0;
         }
-
 
         public async Task<(Guid SanctionUid, bool IsInsert)> CharacterSanctionAsync(Guid characterId, Guid sanctionUid, int sanctionKind, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount)
         {
@@ -415,13 +544,13 @@ namespace RHToolkit.Services
             string selectQuery = "SELECT name FROM GuildTable WHERE guild_id = @guildId";
             var parameters = new (string, object)[] { ("@guildId", guildId) };
 
-            object result = await _databaseService.ExecuteScalarAsync(selectQuery, connection, parameters);
+            object? result = await _databaseService.ExecuteScalarAsync(selectQuery, connection, parameters);
             return result != null ? result.ToString() : "No Guild";
         }
         #endregion
 
         #region Mail
-        public async Task InsertMailAsync(Guid? senderAuthId, Guid? senderCharacterId, string mailSender, string recipient, string content, int gold, int returnDay, int reqGold, Guid mailId, int createType)
+        public async Task InsertMailAsync(Guid senderAuthId, Guid senderCharacterId, string mailSender, string recipient, string content, int gold, int returnDay, int reqGold, Guid mailId, int createType)
         {
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -452,7 +581,7 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task InsertMailItemAsync(ItemData itemData, Guid? recipientAuthId, Guid? recipientCharacterId, Guid mailId, int slotIndex)
+        public async Task InsertMailItemAsync(ItemData itemData, Guid recipientAuthId, Guid recipientCharacterId, Guid mailId, int slotIndex)
         {
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -518,7 +647,7 @@ namespace RHToolkit.Services
         #endregion
 
         #region RustyHearts_Log
-        public async Task GMAuditAsync(string? windyCode, Guid? characterId, string characterName, string action, string modify)
+        public async Task GMAuditAsync(string windyCode, Guid characterId, string characterName, string action, string modify)
         {
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("GMRustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -558,6 +687,7 @@ namespace RHToolkit.Services
 
             try
             {
+                object endTimeParameter = (endTime != null && endTime != DateTime.MinValue) ? endTime : DBNull.Value;
 
                 await _databaseService.ExecuteNonQueryAsync("INSERT INTO Sanction_Log(log_type, sanction_uid, world_id, bcust_id, item_uid, character_id, char_name, item_name, start_time, end_time, personnel, releaser, cause, comment, is_release, reg_date) " +
                                                           "VALUES (@log_type, @sanction_uid, @world_id, @bcust_id, @item_uid, @character_id, @char_name, @item_name, " +
@@ -573,7 +703,7 @@ namespace RHToolkit.Services
                       ("@char_name", characterName),
                       ("@item_name", ""),
                       ("@start_time", startTime),
-                      ("@end_time", endTime),
+                      ("@end_time", endTimeParameter),
                       ("@personnel", "RHToolkit"),
                       ("@releaser", ""),
                       ("@cause", reason),

@@ -316,7 +316,7 @@
             Text="{Binding RandomOption03Text}"
             TextWrapping="Wrap"
             Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
-        <!--  SocketOption -->
+        <!--  SocketOption  -->
         <TextBlock
             x:Name="tbSocketOption"
             Grid.Row="18"

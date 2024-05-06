@@ -110,7 +110,6 @@ namespace RHToolkit.Services
             }
         }
 
-
         public List<NameID> GetOptionItems()
         {
             List<NameID> optionItems = [];

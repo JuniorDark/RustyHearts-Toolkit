@@ -631,6 +631,7 @@
                         Text="{Binding ItemName}" />
                     <control:ItemSlot
                         ItemIcon="{Binding IconName}"
+                        SlotIcon="/Assets/images/lb_ac_icon.png"
                         ItemIconBranch="{Binding ItemBranch}"
                         ItemName="{Binding ItemName}" />
                     <Button
