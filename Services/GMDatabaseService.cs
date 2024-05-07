@@ -47,15 +47,15 @@ namespace RHToolkit.Services
                         Branch = Convert.ToInt32(reader["nBranch"]),
                         OptionCountMax = Convert.ToInt32(reader["nOptionCountMax"]),
                         SocketCountMax = Convert.ToInt32(reader["nSocketCountMax"]),
-                        ReconstructionMax = Convert.ToInt32(reader["nReconstructionMax"]),
+                        ReconstructionMax = Convert.ToByte(reader["nReconstructionMax"]),
                         SellPrice = Convert.ToInt32(reader["nSellPrice"]),
                         PetFood = Convert.ToInt32(reader["nPetEatGroup"]),
                         JobClass = Convert.ToInt32(reader["nJobClass"]),
                         SetId = Convert.ToInt32(reader["nSetId"]),
-                        FixOption00 = Convert.ToInt32(reader["nFixOption00"]),
-                        FixOptionValue00 = Convert.ToInt32(reader["nFixOptionValue00"]),
-                        FixOption01 = Convert.ToInt32(reader["nFixOption01"]),
-                        FixOptionValue01 = Convert.ToInt32(reader["nFixOptionValue01"]),
+                        FixOption1Code = Convert.ToInt32(reader["nFixOption00"]),
+                        FixOption1Value = Convert.ToInt32(reader["nFixOptionValue00"]),
+                        FixOption2Code = Convert.ToInt32(reader["nFixOption01"]),
+                        FixOption2Value = Convert.ToInt32(reader["nFixOptionValue01"]),
                         IconName = reader["szIconName"].ToString()
                     };
 

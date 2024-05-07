@@ -24,6 +24,19 @@ namespace RHToolkit.Models
             return enumItems;
         }
 
+        public static List<NameID> GetEnumItemsNotAll<T>() where T : Enum
+        {
+            List<NameID> enumItems = [];
+
+            foreach (T enumValue in Enum.GetValues(typeof(T)))
+            {
+                string description = GetEnumDescription(enumValue);
+                enumItems.Add(new NameID { ID = Convert.ToInt32(enumValue), Name = description });
+            }
+
+            return enumItems;
+        }
+
         public static List<NameID> GetSocketColorItems()
         {
             List<NameID> socketColorItems = [];

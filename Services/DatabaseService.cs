@@ -135,25 +135,25 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task<List<DatabaseItem>> GetItemList(Guid characterId, string tableName)
+        public async Task<List<ItemData>> GetItemList(Guid characterId, string tableName)
         {
             string selectQuery = $"SELECT * FROM {tableName} WHERE character_id = @character_id;";
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
             DataTable dataTable = await _databaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@character_id", characterId));
 
-            List<DatabaseItem> itemList = [];
+            List<ItemData> itemList = [];
 
             foreach (DataRow row in dataTable.Rows)
             {
-                DatabaseItem item = new()
+                ItemData item = new()
                 {
                     ItemUid = (Guid)row["item_uid"],
                     CharacterId = (Guid)row["character_id"],
                     AuthId = (Guid)row["auth_id"],
                     PageIndex = (int)row["page_index"],
                     SlotIndex = (int)row["slot_index"],
-                    Code = (int)row["code"],
-                    UseCount = (int)row["use_cnt"],
+                    ID = (int)row["code"],
+                    Amount = (int)row["use_cnt"],
                     RemainTime = (int)row["remain_time"],
                     CreateTime = (DateTime)row["create_time"],
                     UpdateTime = (DateTime)row["update_time"],
@@ -167,8 +167,8 @@ namespace RHToolkit.Services
                     Option3Code = (int)row["option_3_code"],
                     Option3Value = (int)row["option_3_value"],
                     OptionGroup = (int)row["option_group"],
-                    ReconNum = (int)row["ReconNum"],
-                    ReconState = (byte)row["ReconState"],
+                    Reconstruction = (int)row["ReconNum"],
+                    ReconstructionMax = (byte)row["ReconState"],
                     SocketCount = (int)row["socket_count"],
                     Socket1Code = (int)row["socket_1_code"],
                     Socket1Value = (int)row["socket_1_value"],
@@ -178,7 +178,7 @@ namespace RHToolkit.Services
                     Socket3Value = (int)row["socket_3_value"],
                     ExpireTime = (int)row["expire_time"],
                     LockPassword = (string)row["lock_pwd"],
-                    ActivityValue = (int)row["activity_value"],
+                    AugmentStone = (int)row["activity_value"],
                     LinkId = (Guid)row["link_id"],
                     IsSeizure = (byte)row["is_seizure"],
                     Socket1Color = (byte)row["socket_1_color"],
@@ -199,24 +199,24 @@ namespace RHToolkit.Services
             return itemList;
         }
 
-        public async Task<List<DatabaseItem>> GetAccountItemList(Guid authId)
+        public async Task<List<ItemData>> GetAccountItemList(Guid authId)
         {
             string selectQuery = $"SELECT * FROM tbl_Account_Storage WHERE auth_id = @auth_id;";
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
             DataTable dataTable = await _databaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@auth_id", authId));
 
-            List<DatabaseItem> itemList = [];
+            List<ItemData> itemList = [];
 
             foreach (DataRow row in dataTable.Rows)
             {
-                DatabaseItem item = new()
+                ItemData item = new()
                 {
                     ItemUid = (Guid)row["item_uid"],
                     AuthId = (Guid)row["auth_id"],
                     PageIndex = (int)row["page_index"],
                     SlotIndex = (int)row["slot_index"],
-                    Code = (int)row["code"],
-                    UseCount = (int)row["use_cnt"],
+                    ID = (int)row["code"],
+                    Amount = (int)row["use_cnt"],
                     RemainTime = (int)row["remain_time"],
                     CreateTime = (DateTime)row["create_time"],
                     UpdateTime = (DateTime)row["update_time"],
@@ -230,8 +230,8 @@ namespace RHToolkit.Services
                     Option3Code = (int)row["option_3_code"],
                     Option3Value = (int)row["option_3_value"],
                     OptionGroup = (int)row["option_group"],
-                    ReconNum = (int)row["ReconNum"],
-                    ReconState = (byte)row["ReconState"],
+                    Reconstruction = (int)row["ReconNum"],
+                    ReconstructionMax = (byte)row["ReconState"],
                     SocketCount = (int)row["socket_count"],
                     Socket1Code = (int)row["socket_1_code"],
                     Socket1Value = (int)row["socket_1_value"],
@@ -241,7 +241,7 @@ namespace RHToolkit.Services
                     Socket3Value = (int)row["socket_3_value"],
                     ExpireTime = (int)row["expire_time"],
                     LockPassword = (string)row["lock_pwd"],
-                    ActivityValue = (int)row["activity_value"],
+                    AugmentStone = (int)row["activity_value"],
                     IsSeizure = (byte)row["is_seizure"],
                     Socket1Color = (byte)row["socket_1_color"],
                     Socket2Color = (byte)row["socket_2_color"],
@@ -603,25 +603,25 @@ namespace RHToolkit.Services
                      ("@page_index", 61),
                      ("@slot_index", slotIndex),
                      ("@durability", itemData.Durability),
-                     ("@enhance_level", itemData.EnchantLevel),
-                     ("@option_1_code", itemData.RandomOption01),
-                     ("@option_1_value", itemData.RandomOption01Value),
-                     ("@option_2_code", itemData.RandomOption02),
-                     ("@option_2_value", itemData.RandomOption02Value),
-                     ("@option_3_code", itemData.RandomOption03),
-                     ("@option_3_value", itemData.RandomOption03Value),
+                     ("@enhance_level", itemData.EnhanceLevel),
+                     ("@option_1_code", itemData.Option1Code),
+                     ("@option_1_value", itemData.Option1Value),
+                     ("@option_2_code", itemData.Option2Code),
+                     ("@option_2_value", itemData.Option2Value),
+                     ("@option_3_code", itemData.Option3Code),
+                     ("@option_3_value", itemData.Option3Value),
                      ("@ReconNum", itemData.Reconstruction),
                      ("@ReconState", itemData.ReconstructionMax),
                      ("@socket_count", itemData.SocketCount),
-                     ("@socket_1_code", itemData.SocketOption01),
-                     ("@socket_1_value", itemData.SocketOption01Value),
-                     ("@socket_2_code", itemData.SocketOption02),
-                     ("@socket_2_value", itemData.SocketOption02Value),
-                     ("@socket_3_code", itemData.SocketOption03),
-                     ("@socket_3_value", itemData.SocketOption03Value),
-                     ("@socket_1_color", itemData.Socket01Color),
-                     ("@socket_2_color", itemData.Socket02Color),
-                     ("@socket_3_color", itemData.Socket03Color),
+                     ("@socket_1_code", itemData.Socket1Code),
+                     ("@socket_1_value", itemData.Socket1Value),
+                     ("@socket_2_code", itemData.Socket2Code),
+                     ("@socket_2_value", itemData.Socket2Value),
+                     ("@socket_3_code", itemData.Socket3Code),
+                     ("@socket_3_value", itemData.Socket3Value),
+                     ("@socket_1_color", itemData.Socket1Color),
+                     ("@socket_2_color", itemData.Socket2Color),
+                     ("@socket_3_color", itemData.Socket3Color),
                      ("@expire_time", 0),
                      ("@MailId", mailId),
                      ("@activity_value", itemData.AugmentStone),
@@ -630,7 +630,7 @@ namespace RHToolkit.Services
                      ("@acquireroute", 0),
                      ("@physical", 0),
                      ("@magical", 0),
-                     ("@durabilitymax", itemData.MaxDurability),
+                     ("@durabilitymax", itemData.DurabilityMax),
                      ("@weight", itemData.Weight)
                  );
                 transaction.Commit();

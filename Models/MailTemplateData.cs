@@ -17,9 +17,9 @@
         public List<int>? DurabilityMaxValues { get; set; }
         public List<int>? WeightValues { get; set; }
         public List<int>? EnchantLevels { get; set; }
-        public List<int>? Ranks { get; set; }
+        public List<byte>? Ranks { get; set; }
         public List<int>? ReconNums { get; set; }
-        public List<int>? ReconStates { get; set; }
+        public List<byte>? ReconStates { get; set; }
         public List<int>? Options1 { get; set; }
         public List<int>? Options2 { get; set; }
         public List<int>? Options3 { get; set; }

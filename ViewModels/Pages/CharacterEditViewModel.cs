@@ -33,9 +33,9 @@ namespace RHToolkit.ViewModels.Pages
             }
             else
             {
-                List<DatabaseItem> inventoryItem = await _databaseService.GetItemList(characterData.CharacterID, "N_InventoryItem");
-                List<DatabaseItem> equipItem = await _databaseService.GetItemList(characterData.CharacterID, "N_EquipItem");
-                List<DatabaseItem> accountStorage = await _databaseService.GetAccountItemList(characterData.AuthID);
+                List<ItemData> inventoryItem = await _databaseService.GetItemList(characterData.CharacterID, "N_InventoryItem");
+                List<ItemData> equipItem = await _databaseService.GetItemList(characterData.CharacterID, "N_EquipItem");
+                List<ItemData> accountStorage = await _databaseService.GetAccountItemList(characterData.AuthID);
 
                 if (_characterWindowInstance == null)
                 {

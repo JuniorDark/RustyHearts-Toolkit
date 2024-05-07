@@ -631,9 +631,9 @@
                         Text="{Binding ItemName}" />
                     <control:ItemSlot
                         ItemIcon="{Binding IconName}"
-                        SlotIcon="/Assets/images/lb_ac_icon.png"
                         ItemIconBranch="{Binding ItemBranch}"
-                        ItemName="{Binding ItemName}" />
+                        ItemName="{Binding ItemName}"
+                        SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <Button
                         x:Name="btnSelectItem"
                         Canvas.Left="105"
@@ -664,9 +664,9 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Increment="1"
-                        Maximum="2"
-                        Minimum="0"
-                        Value="{Binding SlotIndex, Mode=TwoWay}" />
+                        Maximum="{Binding SlotIndexMax}"
+                        Minimum="{Binding SlotIndexMin}"
+                        Value="{Binding SlotIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Canvas>
             </Grid>
             <!--  Frame Controls  -->
@@ -932,8 +932,8 @@
                         VerticalContentAlignment="Center"
                         IsReadOnly="True"
                         ItemsSource="{Binding SubCategoryItemsFilter}"
-                        SelectedIndex="{Binding ItemSubCategoryFilterSelectedIndex}"
-                        SelectedValue="{Binding ItemSubCategoryFilter, Mode=TwoWay}"
+                        SelectedIndex="{Binding ItemSubCategoryFilterSelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValue="{Binding ItemSubCategoryFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -984,8 +984,8 @@
                         VerticalContentAlignment="Center"
                         IsReadOnly="True"
                         ItemsSource="{Binding ClassItemsFilter}"
-                        SelectedIndex="{Binding ItemClassFilterSelectedIndex}"
-                        SelectedValue="{Binding ItemClassFilter, Mode=TwoWay}"
+                        SelectedIndex="{Binding ItemClassFilterSelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValue="{Binding ItemClassFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -1006,8 +1006,8 @@
                         VerticalAlignment="Top"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemTradeFilterItems}"
-                        SelectedIndex="{Binding ItemTradeFilterSelectedIndex}"
-                        SelectedValue="{Binding ItemTradeFilter, Mode=TwoWay}"
+                        SelectedIndex="{Binding ItemTradeFilterSelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValue="{Binding ItemTradeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />

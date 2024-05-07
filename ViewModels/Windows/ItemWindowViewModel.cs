@@ -9,7 +9,7 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>
+public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<CharacterDataMessage>
 {
     private readonly IGMDatabaseService _gmDatabaseService;
     private readonly FrameViewModel _frameViewModel;
@@ -41,7 +41,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         _optionView = CollectionViewSource.GetDefaultView(OptionItems);
         _optionView.Filter = FilterOption;
 
-        WeakReferenceMessenger.Default.Register(this);
+        ItemTradeFilter = 2;
+
+        WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
+        WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
+        
     }
 
     #region Add Item
@@ -56,47 +60,89 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             Branch = ItemBranch,
             IconName = IconName,
             Durability = MaxDurability,
-            MaxDurability = MaxDurability,
-            EnchantLevel = EnchantLevel,
+            DurabilityMax = MaxDurability,
+            EnhanceLevel = EnchantLevel,
             AugmentStone = AugmentValue,
             Rank = Rank,
             Weight = Weight,
             Reconstruction = Reconstruction,
             ReconstructionMax = ReconstructionMax,
             Amount = Amount,
-            RandomOption01 = RandomOption01,
-            RandomOption02 = RandomOption02,
-            RandomOption03 = RandomOption03,
-            RandomOption01Value = RandomOption01Value,
-            RandomOption02Value = RandomOption02Value,
-            RandomOption03Value = RandomOption03Value,
+            Option1Code = RandomOption01,
+            Option2Code = RandomOption02,
+            Option3Code = RandomOption03,
+            Option1Value = RandomOption01Value,
+            Option2Value = RandomOption02Value,
+            Option3Value = RandomOption03Value,
             SocketCount = SocketCount,
-            Socket01Color = Socket01Color,
-            Socket02Color = Socket02Color,
-            Socket03Color = Socket03Color,
-            SocketOption01 = SocketOption01,
-            SocketOption02 = SocketOption02,
-            SocketOption03 = SocketOption03,
-            SocketOption01Value = SocketOption01Value,
-            SocketOption02Value = SocketOption02Value,
-            SocketOption03Value = SocketOption03Value,
+            Socket1Color = Socket01Color,
+            Socket2Color = Socket02Color,
+            Socket3Color = Socket03Color,
+            Socket1Code = SocketOption01,
+            Socket2Code = SocketOption02,
+            Socket3Code = SocketOption03,
+            Socket1Value = SocketOption01Value,
+            Socket2Value = SocketOption02Value,
+            Socket3Value = SocketOption03Value,
         };
 
-        // Send the MailData
-        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.MailWindowViewModel));
+        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.MailWindowViewModel, "Mail"));
+        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.CharacterWindowViewModel, "DatabaseItem"));
 
     }
     #endregion
 
     #region Load Item 
 
+    [ObservableProperty]
+    private CharacterData? _characterData;
+
+    public void Receive(CharacterDataMessage message)
+    {
+        CharacterData = message.Value;
+    }
+
+    [ObservableProperty]
+    private ItemData? _itemData;
+
     public void Receive(ItemDataMessage message)
     {
         if (message.Recipient == ViewModelType.ItemWindowViewModel)
         {
-            var itemData = message.Value;
-            ItemId = itemData.ID;
-            LoadMailItemData(itemData);
+            ItemData = message.Value;
+            ItemId = ItemData.ID;
+
+            LoadMailItemData(ItemData);
+
+            if (message.MessageType == "Mail")
+            {
+                SlotIndexMin = 0;
+                SlotIndexMax = 2;
+            }
+            else if (message.MessageType == "DatabaseItem")
+            {
+                SlotIndexMin = ItemData.SlotIndex;
+                SlotIndexMax = ItemData.SlotIndex;
+
+                if (CharacterData != null)
+                {
+                    switch (ItemData.SlotIndex)
+                    {
+                        case 0:
+                            ItemSubCategoryFilterSelectedIndex = 1;
+                            ItemClassFilter = CharacterData.Class;
+                            break;
+                    }
+                }
+
+            }
+            else
+            {
+                SlotIndexMin = ItemData.SlotIndex;
+                SlotIndexMax = ItemData.SlotIndex;
+            }
+
+            
         }
     }
 
@@ -104,29 +150,29 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         SlotIndex = itemData.SlotIndex;
         Amount = itemData.Amount;
-        MaxDurability = itemData.MaxDurability;
-        EnchantLevel = itemData.EnchantLevel;
+        MaxDurability = itemData.DurabilityMax;
+        EnchantLevel = itemData.EnhanceLevel;
         AugmentValue = itemData.AugmentStone;
         Rank = itemData.Rank;
         Weight = itemData.Weight;
         ReconstructionMax = itemData.ReconstructionMax;
         Reconstruction = itemData.Reconstruction;
-        RandomOption01 = itemData.RandomOption01;
-        RandomOption02 = itemData.RandomOption02;
-        RandomOption03 = itemData.RandomOption03;
-        RandomOption01Value = itemData.RandomOption01Value;
-        RandomOption02Value = itemData.RandomOption02Value;
-        RandomOption03Value = itemData.RandomOption03Value;
+        RandomOption01 = itemData.Option1Code;
+        RandomOption02 = itemData.Option2Code;
+        RandomOption03 = itemData.Option3Code;
+        RandomOption01Value = itemData.Option1Value;
+        RandomOption02Value = itemData.Option2Value;
+        RandomOption03Value = itemData.Option3Value;
         SocketCount = itemData.SocketCount;
-        Socket01Color = itemData.Socket01Color;
-        Socket02Color = itemData.Socket02Color;
-        Socket03Color = itemData.Socket03Color;
-        SocketOption01 = itemData.SocketOption01;
-        SocketOption02 = itemData.SocketOption02;
-        SocketOption03 = itemData.SocketOption03;
-        SocketOption01Value = itemData.SocketOption01Value;
-        SocketOption02Value = itemData.SocketOption02Value;
-        SocketOption03Value = itemData.SocketOption03Value;
+        Socket01Color = itemData.Socket1Color;
+        Socket02Color = itemData.Socket2Color;
+        Socket03Color = itemData.Socket3Color;
+        SocketOption01 = itemData.Socket1Code;
+        SocketOption02 = itemData.Socket2Code;
+        SocketOption03 = itemData.Socket3Code;
+        SocketOption01Value = itemData.Socket1Value;
+        SocketOption02Value = itemData.Socket2Value;
+        SocketOption03Value = itemData.Socket3Value;
     }
 
     [ObservableProperty]
@@ -460,7 +506,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _itemTradeFilterSelectedIndex = 0;
+    private int _itemTradeFilterSelectedIndex;
 
     [ObservableProperty]
     private List<NameID>? _itemTradeFilterItems;
@@ -530,7 +576,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             Reconstruction = itemData.ReconstructionMax;
             OverlapCnt = OverlapCnt == 0 ? 1 : itemData.OverlapCnt;
             Amount = Amount == 0 ? 1 : Amount;
-            Rank = Rank == 0 ? 1 : Rank;
+            Rank = (byte)(Rank == 0 ? 1 : Rank);
             Type = itemData.Type;
             Category = itemData.Category;
             SubCategory = itemData.SubCategory;
@@ -542,10 +588,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             RequiredLevel = itemData.LevelLimit;
             SetId = itemData.SetId;
             PetFood = itemData.PetFood;
-            FixedOption01 = itemData.FixOption00;
-            FixedOption01Value = itemData.FixOptionValue00;
-            FixedOption02 = itemData.FixOption01;
-            FixedOption02Value = itemData.FixOptionValue01;
+            FixedOption01 = itemData.FixOption1Code;
+            FixedOption01Value = itemData.FixOption1Value;
+            FixedOption02 = itemData.FixOption2Code;
+            FixedOption02Value = itemData.FixOption2Value;
             OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
             SocketCountMax = itemData.SocketCountMax;
             SocketCount = itemData.SocketCountMax;
@@ -555,6 +601,12 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     [ObservableProperty]
     private int _slotIndex;
+
+    [ObservableProperty]
+    private int _slotIndexMin;
+
+    [ObservableProperty]
+    private int _slotIndexMax;
 
     [ObservableProperty]
     private string? _itemName;
@@ -634,15 +686,15 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _reconstructionMax;
-    partial void OnReconstructionMaxChanged(int value)
+    private byte _reconstructionMax;
+    partial void OnReconstructionMaxChanged(byte value)
     {
         _frameViewModel.ReconstructionMax = value;
     }
 
     [ObservableProperty]
-    private int _rank = 1;
-    partial void OnRankChanged(int value)
+    private byte _rank = 1;
+    partial void OnRankChanged(byte value)
     {
         _frameViewModel.Rank = value;
     }

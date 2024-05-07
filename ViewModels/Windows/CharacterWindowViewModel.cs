@@ -3,6 +3,7 @@ using RHToolkit.Models;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
+using RHToolkit.Views.Windows;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
@@ -12,12 +13,20 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     private readonly WindowsProviderService _windowsProviderService;
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
+    private readonly List<ItemData>? _cachedItemDataList = [];
 
     public CharacterWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService)
     {
         _windowsProviderService = windowsProviderService;
         _databaseService = databaseService;
         _gmDatabaseService = gmDatabaseService;
+
+        if (ItemDataManager.Instance.CachedItemDataList == null)
+        {
+            ItemDataManager.Instance.InitializeCachedLists();
+        }
+
+        _cachedItemDataList = ItemDataManager.Instance.CachedItemDataList;
 
         PopulateClassItems();
         PopulateLobbyItems();
@@ -28,12 +37,15 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     }
 
+    #region Load Character
 
-    #region Load Item 
+    [ObservableProperty]
+    private CharacterData? _characterData;
 
     public void Receive(CharacterDataMessage message)
     {
         var characterData = message.Value;
+        CharacterData = message.Value;
         LoadCharacterData(characterData);
     }
 
@@ -95,20 +107,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         };
     }
 
-    public void Receive(ItemDataMessage message)
-    {
-        if (message.Recipient == ViewModelType.CharacterWindowViewModel)
-        {
-            var itemData = message.Value;
-            LoadItemData(itemData);
-        }
-    }
-
-    private void LoadItemData(ItemData itemData)
-    {
-    }
-
-
     #endregion
 
     #region Comboboxes
@@ -123,7 +121,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     {
         try
         {
-            ClassItems = GetEnumItems<CharClass>();
+            ClassItems = GetEnumItemsNotAll<CharClass>();
 
             if (ClassItems.Count > 0)
             {
@@ -146,14 +144,12 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     {
         try
         {
-            JobItems = GetEnumItems<CharClass>();
-
             JobItems = charClass switch
             {
-                CharClass.Frantz or CharClass.Roselle or CharClass.Leila => GetEnumItems<FrantzJob>(),
-                CharClass.Angela or CharClass.Edgar => GetEnumItems<AngelaJob>(),
-                CharClass.Tude or CharClass.Meilin => GetEnumItems<TudeJob>(),
-                CharClass.Natasha or CharClass.Ian => GetEnumItems<NatashaJob>(),
+                CharClass.Frantz or CharClass.Roselle or CharClass.Leila => GetEnumItemsNotAll<FrantzJob>(),
+                CharClass.Angela or CharClass.Edgar => GetEnumItemsNotAll<AngelaJob>(),
+                CharClass.Tude or CharClass.Meilin => GetEnumItemsNotAll<TudeJob>(),
+                CharClass.Natasha or CharClass.Ian => GetEnumItemsNotAll<NatashaJob>(),
                 _ => throw new ArgumentException($"Invalid character class: {charClass}"),
             };
 
@@ -191,25 +187,146 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         }
     }
 
+    #endregion
+
+    #region Item Data
+
+    public void Receive(ItemDataMessage message)
+    {
+        if (message.Recipient == ViewModelType.CharacterWindowViewModel)
+        {
+            var newItemData = message.Value;
+
+            ItemDatabaseList ??= [];
+
+            // Find the existing item in ItemDatabaseList
+            var existingItem = ItemDatabaseList.FirstOrDefault(item => item.SlotIndex == newItemData.SlotIndex);
+
+            if (existingItem != null)
+            {
+                // Update existing item with the received data
+                UpdateItem(existingItem, newItemData);
+            }
+            else
+            {
+                // Create a new item with the received data
+                var newItem = CreateNewItem(newItemData);
+
+                // Add the new item to the list
+                ItemDatabaseList.Add(newItem);
+
+                // Update UI with the new item
+                SetItemProperties(newItem);
+            }
+        }
+    }
+
+    private void UpdateItem(ItemData existingItem, ItemData newItemData)
+    {
+        // Update only the properties sent by SelectItem
+        existingItem.Name = newItemData.Name;
+        existingItem.IconName = newItemData.IconName;
+        existingItem.Durability = newItemData.Durability;
+        existingItem.DurabilityMax = newItemData.DurabilityMax;
+        existingItem.EnhanceLevel = newItemData.EnhanceLevel;
+        existingItem.AugmentStone = newItemData.AugmentStone;
+        existingItem.Rank = newItemData.Rank;
+        existingItem.Weight = newItemData.Weight;
+        existingItem.Reconstruction = newItemData.Reconstruction;
+        existingItem.ReconstructionMax = newItemData.ReconstructionMax;
+        existingItem.Amount = newItemData.Amount;
+        existingItem.Option1Code = newItemData.Option1Code;
+        existingItem.Option2Code = newItemData.Option2Code;
+        existingItem.Option3Code = newItemData.Option3Code;
+        existingItem.Option1Value = newItemData.Option1Value;
+        existingItem.Option2Value = newItemData.Option2Value;
+        existingItem.Option3Value = newItemData.Option3Value;
+        existingItem.SocketCount = newItemData.SocketCount;
+        existingItem.Socket1Color = newItemData.Socket1Color;
+        existingItem.Socket2Color = newItemData.Socket2Color;
+        existingItem.Socket3Color = newItemData.Socket3Color;
+        existingItem.Socket1Code = newItemData.Socket1Code;
+        existingItem.Socket2Code = newItemData.Socket2Code;
+        existingItem.Socket3Code = newItemData.Socket3Code;
+        existingItem.Socket1Value = newItemData.Socket1Value;
+        existingItem.Socket2Value = newItemData.Socket2Value;
+        existingItem.Socket3Value = newItemData.Socket3Value;
+
+        // Update UI with the new values
+        SetItemProperties(existingItem);
+    }
+
+    private ItemData CreateNewItem(ItemData newItemData)
+    {
+        // Create a new item with the received data
+        var newItem = new ItemData
+        {
+            // Assign received data
+            SlotIndex = newItemData.SlotIndex,
+            ID = newItemData.ID,
+            Name = newItemData.Name,
+            IconName = newItemData.IconName,
+            Durability = newItemData.Durability,
+            DurabilityMax = newItemData.DurabilityMax,
+            EnhanceLevel = newItemData.EnhanceLevel,
+            AugmentStone = newItemData.AugmentStone,
+            Rank = newItemData.Rank,
+            Weight = newItemData.Weight,
+            Reconstruction = newItemData.Reconstruction,
+            ReconstructionMax = newItemData.ReconstructionMax,
+            Amount = newItemData.Amount,
+            Option1Code = newItemData.Option1Code,
+            Option2Code = newItemData.Option2Code,
+            Option3Code = newItemData.Option3Code,
+            Option1Value = newItemData.Option1Value,
+            Option2Value = newItemData.Option2Value,
+            Option3Value = newItemData.Option3Value,
+            SocketCount = newItemData.SocketCount,
+            Socket1Color = newItemData.Socket1Color,
+            Socket2Color = newItemData.Socket2Color,
+            Socket3Color = newItemData.Socket3Color,
+            Socket1Code = newItemData.Socket1Code,
+            Socket2Code = newItemData.Socket2Code,
+            Socket3Code = newItemData.Socket3Code,
+            Socket1Value = newItemData.Socket1Value,
+            Socket2Value = newItemData.Socket2Value,
+            Socket3Value = newItemData.Socket3Value,
+            // Generate values for additional properties
+            CharacterId = CharacterData.CharacterID,
+            AuthId = CharacterData.AuthID,
+            ItemUid = Guid.NewGuid(),
+            CreateTime = DateTime.Now,
+            UpdateTime = DateTime.Now,
+            
+        };
+
+        return newItem;
+    }
+
+
+    [ObservableProperty]
+    private List<ItemData>? _itemDatabaseList;
+
     public void Receive(DatabaseItemMessage message)
     {
         switch (message.ItemStorageType)
         {
             case ItemStorageType.Inventory:
                 // Handle inventory items
-                List<DatabaseItem> inventoryItems = message.Value;
-                // Do something with the inventory items...
+                List<ItemData> inventoryItems = message.Value;
+                
                 break;
 
             case ItemStorageType.Equipment:
                 // Handle equipment items
-                List<DatabaseItem> equipmentItems = message.Value;
-                // Do something with the equipment items...
+                var equipmentItems = message.Value;
+                LoadEquipmentItems(equipmentItems);
+                ItemDatabaseList = equipmentItems;
                 break;
 
             case ItemStorageType.Storage:
                 // Handle equipment items
-                List<DatabaseItem> storageItems = message.Value;
+                List<ItemData> storageItems = message.Value;
                 // Do something with the storage items...
                 break;
 
@@ -218,10 +335,121 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         }
     }
 
+    private void LoadEquipmentItems(List<ItemData> equipmentItems)
+    {
+        if (equipmentItems != null)
+        {
+            for (int i = 0; i < equipmentItems.Count; i++)
+            {
+                ItemData databaseItem = equipmentItems[i];
+
+                // Access the property from the DatabaseItem object
+                int index = databaseItem.SlotIndex;
+                int code = databaseItem.ID;
+
+                // Find the corresponding ItemData object in the _cachedItemDataList
+                ItemData? cachedItem = _cachedItemDataList?.FirstOrDefault(item => item.ID == code);
+
+                ItemData itemData = new()
+                {
+                    SlotIndex = index,
+                    ID = code,
+                    Name = cachedItem?.Name ?? "",
+                    IconName = cachedItem?.IconName ?? "",
+                    Branch = cachedItem?.Branch ?? 0,
+
+                };
+
+                SetItemProperties(itemData);
+            }
+
+        }
+    }
+
+    private void SetItemProperties(ItemData itemData)
+    {
+        // Construct property names dynamically
+        string iconNameProperty = $"ItemIcon{itemData.SlotIndex}";
+        string iconBranchProperty = $"ItemIconBranch{itemData.SlotIndex}";
+        string nameProperty = $"ItemName{itemData.SlotIndex}";
+
+        // Set properties using reflection
+        GetType().GetProperty(iconNameProperty)?.SetValue(this, itemData.IconName);
+        GetType().GetProperty(iconBranchProperty)?.SetValue(this, itemData.Branch);
+        GetType().GetProperty(nameProperty)?.SetValue(this, itemData.Name);
+    }
+
+    private ItemWindow? _itemWindowInstance;
+
+    [RelayCommand]
+    private void AddItem(string parameter)
+    {
+        if (int.TryParse(parameter, out int slotIndex))
+        {
+            ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex);
+
+            itemData ??= new ItemData
+            {
+                SlotIndex = slotIndex
+            };
+
+            if (_itemWindowInstance == null)
+            {
+                _windowsProviderService.Show<ItemWindow>();
+                _itemWindowInstance = Application.Current.Windows.OfType<ItemWindow>().FirstOrDefault();
+                _itemWindowInstance.Closed += (sender, args) => _itemWindowInstance = null;
+            }
+
+            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel, "DatabaseItem"));
+            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+        }
+    }
+
+    #region Remove Item
+    [RelayCommand]
+    private void RemoveItem(string parameter)
+    {
+        if (int.TryParse(parameter, out int slotIndex))
+        {
+            if (ItemDatabaseList != null)
+            {
+                var removedItemIndex = ItemDatabaseList.FindIndex(i => i.SlotIndex == slotIndex);
+                if (removedItemIndex != -1)
+                {
+                    // Remove the ItemData with the specified SlotIndex
+                    ItemDatabaseList.RemoveAt(removedItemIndex);
+
+                    // Update properties to default values for the removed SlotIndex
+                    ResetItemProperties(slotIndex);
+                }
+            }
+        }
+    }
+
+    private void ResetItemProperties(int slotIndex)
+    {
+        // Construct property names dynamically
+        string iconNameProperty = $"ItemIcon{slotIndex}";
+        string iconBranchProperty = $"ItemIconBranch{slotIndex}";
+        string nameProperty = $"ItemName{slotIndex}";
+        string amountProperty = $"ItemAmount{slotIndex}";
+
+        // Set properties using reflection
+        GetType().GetProperty(iconNameProperty)?.SetValue(this, null);
+        GetType().GetProperty(iconBranchProperty)?.SetValue(this, 0);
+        GetType().GetProperty(nameProperty)?.SetValue(this, Resources.AddItemDesc);
+        GetType().GetProperty(amountProperty)?.SetValue(this, 0);
+    }
+
+    #endregion
+
 
     #endregion
 
     #region Character Data Properties
+
+    [ObservableProperty]
+    private bool _isButtonEnabled = true;
 
     [ObservableProperty]
     private string? _title;
@@ -312,6 +540,193 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     [ObservableProperty]
     private string? _guildName;
+
+    #region Equipament 
+
+    [ObservableProperty]
+    private string? _itemName0 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName1 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName2 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName3 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName4 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName5 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName6 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName7 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName8 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName9 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName10 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName11 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName12 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName13 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName14 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName15 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName16 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName17 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName18 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName19 = Resources.AddItemDesc;
+
+    [ObservableProperty]
+    private string? _itemName21= "Spirit (Not Implemented)";
+
+    [ObservableProperty]
+    private string? _itemIcon0;
+
+    [ObservableProperty]
+    private string? _itemIcon1;
+
+    [ObservableProperty]
+    private string? _itemIcon2;
+
+    [ObservableProperty]
+    private string? _itemIcon3;
+
+    [ObservableProperty]
+    private string? _itemIcon4;
+
+    [ObservableProperty]
+    private string? _itemIcon5;
+
+    [ObservableProperty]
+    private string? _itemIcon6;
+
+    [ObservableProperty]
+    private string? _itemIcon7;
+
+    [ObservableProperty]
+    private string? _itemIcon8;
+
+    [ObservableProperty]
+    private string? _itemIcon9;
+
+    [ObservableProperty]
+    private string? _itemIcon10;
+
+    [ObservableProperty]
+    private string? _itemIcon11;
+
+    [ObservableProperty]
+    private string? _itemIcon12;
+
+    [ObservableProperty]
+    private string? _itemIcon13;
+
+    [ObservableProperty]
+    private string? _itemIcon14;
+
+    [ObservableProperty]
+    private string? _itemIcon15;
+
+    [ObservableProperty]
+    private string? _itemIcon16;
+
+    [ObservableProperty]
+    private string? _itemIcon17;
+
+    [ObservableProperty]
+    private string? _itemIcon18;
+
+    [ObservableProperty]
+    private string? _itemIcon19;
+
+    [ObservableProperty]
+    private int? _itemIconBranch0;
+
+    [ObservableProperty]
+    private int? _itemIconBranch1;
+
+    [ObservableProperty]
+    private int? _itemIconBranch2;
+
+    [ObservableProperty]
+    private int? _itemIconBranch3;
+
+    [ObservableProperty]
+    private int? _itemIconBranch4;
+
+    [ObservableProperty]
+    private int? _itemIconBranch5;
+
+    [ObservableProperty]
+    private int? _itemIconBranch6;
+
+    [ObservableProperty]
+    private int? _itemIconBranch7;
+
+    [ObservableProperty]
+    private int? _itemIconBranch8;
+
+    [ObservableProperty]
+    private int? _itemIconBranch9;
+
+    [ObservableProperty]
+    private int? _itemIconBranch10;
+
+    [ObservableProperty]
+    private int? _itemIconBranch11;
+
+    [ObservableProperty]
+    private int? _itemIconBranch12;
+
+    [ObservableProperty]
+    private int? _itemIconBranch13;
+
+    [ObservableProperty]
+    private int? _itemIconBranch14;
+
+    [ObservableProperty]
+    private int? _itemIconBranch15;
+
+    [ObservableProperty]
+    private int? _itemIconBranch16;
+
+    [ObservableProperty]
+    private int? _itemIconBranch17;
+
+    [ObservableProperty]
+    private int? _itemIconBranch18;
+
+    [ObservableProperty]
+    private int? _itemIconBranch19;
+
+    #endregion
 
     #endregion
 }

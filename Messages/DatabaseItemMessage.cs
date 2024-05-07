@@ -10,7 +10,7 @@ namespace RHToolkit.Messages
         Storage
     }
 
-    public class DatabaseItemMessage(List<DatabaseItem> value, ItemStorageType itemStorageType) : ValueChangedMessage<List<DatabaseItem>>(value)
+    public class DatabaseItemMessage(List<ItemData> value, ItemStorageType itemStorageType) : ValueChangedMessage<List<ItemData>>(value)
     {
         public ItemStorageType ItemStorageType { get; } = itemStorageType;
     }
