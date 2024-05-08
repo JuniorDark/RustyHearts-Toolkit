@@ -206,6 +206,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
             {
                 // Update existing item with the received data
                 UpdateItem(existingItem, newItemData);
+                
             }
             else
             {
@@ -214,46 +215,65 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
                 // Add the new item to the list
                 ItemDatabaseList.Add(newItem);
-
-                // Update UI with the new item
-                SetItemProperties(newItem);
             }
+
+            SetItemProperties(newItemData);
         }
     }
 
     private void UpdateItem(ItemData existingItem, ItemData newItemData)
     {
-        // Update only the properties sent by SelectItem
-        existingItem.Name = newItemData.Name;
-        existingItem.IconName = newItemData.IconName;
-        existingItem.Durability = newItemData.Durability;
-        existingItem.DurabilityMax = newItemData.DurabilityMax;
-        existingItem.EnhanceLevel = newItemData.EnhanceLevel;
-        existingItem.AugmentStone = newItemData.AugmentStone;
-        existingItem.Rank = newItemData.Rank;
-        existingItem.Weight = newItemData.Weight;
-        existingItem.Reconstruction = newItemData.Reconstruction;
-        existingItem.ReconstructionMax = newItemData.ReconstructionMax;
-        existingItem.Amount = newItemData.Amount;
-        existingItem.Option1Code = newItemData.Option1Code;
-        existingItem.Option2Code = newItemData.Option2Code;
-        existingItem.Option3Code = newItemData.Option3Code;
-        existingItem.Option1Value = newItemData.Option1Value;
-        existingItem.Option2Value = newItemData.Option2Value;
-        existingItem.Option3Value = newItemData.Option3Value;
-        existingItem.SocketCount = newItemData.SocketCount;
-        existingItem.Socket1Color = newItemData.Socket1Color;
-        existingItem.Socket2Color = newItemData.Socket2Color;
-        existingItem.Socket3Color = newItemData.Socket3Color;
-        existingItem.Socket1Code = newItemData.Socket1Code;
-        existingItem.Socket2Code = newItemData.Socket2Code;
-        existingItem.Socket3Code = newItemData.Socket3Code;
-        existingItem.Socket1Value = newItemData.Socket1Value;
-        existingItem.Socket2Value = newItemData.Socket2Value;
-        existingItem.Socket3Value = newItemData.Socket3Value;
+        // Check if the IDs are different
+        if (existingItem.ID != newItemData.ID)
+        {
+            // Move the existing item to DeletedItemDatabaseList
+            DeletedItemDatabaseList ??= [];
+            DeletedItemDatabaseList.Add(existingItem);
 
-        // Update UI with the new values
-        SetItemProperties(existingItem);
+            // Remove the existing item from ItemDatabaseList
+            ItemDatabaseList?.Remove(existingItem);
+
+            // Create a new item with the received data
+            var newItem = CreateNewItem(newItemData);
+
+            // Add the new item to the list
+            ItemDatabaseList?.Add(newItem);
+        }
+        else
+        {
+            // Update only the properties sent by SelectItem
+            existingItem.Name = newItemData.Name;
+            existingItem.IconName = newItemData.IconName;
+            existingItem.Durability = newItemData.Durability;
+            existingItem.DurabilityMax = newItemData.DurabilityMax;
+            existingItem.EnhanceLevel = newItemData.EnhanceLevel;
+            existingItem.AugmentStone = newItemData.AugmentStone;
+            existingItem.Rank = newItemData.Rank;
+            existingItem.Weight = newItemData.Weight;
+            existingItem.Reconstruction = newItemData.Reconstruction;
+            existingItem.ReconstructionMax = newItemData.ReconstructionMax;
+            existingItem.Amount = newItemData.Amount;
+            existingItem.Option1Code = newItemData.Option1Code;
+            existingItem.Option2Code = newItemData.Option2Code;
+            existingItem.Option3Code = newItemData.Option3Code;
+            existingItem.Option1Value = newItemData.Option1Value;
+            existingItem.Option2Value = newItemData.Option2Value;
+            existingItem.Option3Value = newItemData.Option3Value;
+            existingItem.SocketCount = newItemData.SocketCount;
+            existingItem.Socket1Color = newItemData.Socket1Color;
+            existingItem.Socket2Color = newItemData.Socket2Color;
+            existingItem.Socket3Color = newItemData.Socket3Color;
+            existingItem.Socket1Code = newItemData.Socket1Code;
+            existingItem.Socket2Code = newItemData.Socket2Code;
+            existingItem.Socket3Code = newItemData.Socket3Code;
+            existingItem.Socket1Value = newItemData.Socket1Value;
+            existingItem.Socket2Value = newItemData.Socket2Value;
+            existingItem.Socket3Value = newItemData.Socket3Value;
+            existingItem.UpdateTime = DateTime.Now;
+
+            // Update UI with the new values
+            SetItemProperties(existingItem);
+        }
     }
 
     private ItemData CreateNewItem(ItemData newItemData)
@@ -292,7 +312,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
             Socket2Value = newItemData.Socket2Value,
             Socket3Value = newItemData.Socket3Value,
             // Generate values for additional properties
-            CharacterId = CharacterData.CharacterID,
+            CharacterId = CharacterData!.CharacterID,
             AuthId = CharacterData.AuthID,
             ItemUid = Guid.NewGuid(),
             CreateTime = DateTime.Now,
@@ -302,7 +322,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
         return newItem;
     }
-
 
     [ObservableProperty]
     private List<ItemData>? _itemDatabaseList;
@@ -341,11 +360,11 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         {
             for (int i = 0; i < equipmentItems.Count; i++)
             {
-                ItemData databaseItem = equipmentItems[i];
+                ItemData equipmentItem = equipmentItems[i];
 
                 // Access the property from the DatabaseItem object
-                int index = databaseItem.SlotIndex;
-                int code = databaseItem.ID;
+                int index = equipmentItem.SlotIndex;
+                int code = equipmentItem.ID;
 
                 // Find the corresponding ItemData object in the _cachedItemDataList
                 ItemData? cachedItem = _cachedItemDataList?.FirstOrDefault(item => item.ID == code);
@@ -397,15 +416,40 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
             {
                 _windowsProviderService.Show<ItemWindow>();
                 _itemWindowInstance = Application.Current.Windows.OfType<ItemWindow>().FirstOrDefault();
-                _itemWindowInstance.Closed += (sender, args) => _itemWindowInstance = null;
-            }
 
-            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel, "DatabaseItem"));
-            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+                if (_itemWindowInstance != null)
+                {
+                    _itemWindowInstance.Closed += (sender, args) => _itemWindowInstance = null;
+
+                    _itemWindowInstance.ContentRendered += (sender, args) =>
+                    {
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel, "EquipItem"));
+                        
+                        if (CharacterData != null)
+                        {
+                            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+                        }
+                    };
+                }
+            }
+            else
+            {
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel, "EquipItem"));
+                if (CharacterData != null)
+                {
+                    WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+                }
+                Task.Delay(500);
+                _itemWindowInstance.Focus();
+            }
         }
     }
 
     #region Remove Item
+
+    [ObservableProperty]
+    private List<ItemData>? _deletedItemDatabaseList;
+
     [RelayCommand]
     private void RemoveItem(string parameter)
     {
@@ -416,8 +460,25 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 var removedItemIndex = ItemDatabaseList.FindIndex(i => i.SlotIndex == slotIndex);
                 if (removedItemIndex != -1)
                 {
-                    // Remove the ItemData with the specified SlotIndex
+                    // Get the removed item
+                    var removedItem = ItemDatabaseList[removedItemIndex];
+
+                    // Set the SlotIndex to a negative value
+                    if (slotIndex == 0)
+                    {
+                        removedItem.SlotIndex = -1;
+                    }
+                    else
+                    {
+                        removedItem.SlotIndex = -slotIndex;
+                    }
+
+                    // Remove the ItemData with the specified SlotIndex from ItemDatabaseList
                     ItemDatabaseList.RemoveAt(removedItemIndex);
+
+                    // Add the removed item to DeletedItemDatabaseList
+                    DeletedItemDatabaseList ??= [];
+                    DeletedItemDatabaseList.Add(removedItem);
 
                     // Update properties to default values for the removed SlotIndex
                     ResetItemProperties(slotIndex);
@@ -425,6 +486,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
             }
         }
     }
+
 
     private void ResetItemProperties(int slotIndex)
     {

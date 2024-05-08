@@ -98,7 +98,7 @@
                         IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="20"
                         Minimum="0"
-                        Value="{Binding EnchantLevel, Mode=TwoWay}" />
+                        Value="{Binding EnhanceLevel, Mode=TwoWay}" />
                     <Label
                         x:Name="lbRank"
                         VerticalAlignment="Top"
@@ -884,6 +884,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
+                        IsEnabled="{Binding ItemTypeEnabled}"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemTypeItemsFilter}"
                         SelectedIndex="{Binding ItemTypeFilterSelectedIndex}"
@@ -907,6 +908,7 @@
                         HorizontalAlignment="Left"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
+                        IsEnabled="{Binding ItemCategoryEnabled}"
                         IsReadOnly="True"
                         ItemsSource="{Binding CategoryFilterItems}"
                         SelectedIndex="{Binding ItemCategoryFilterSelectedIndex}"
@@ -930,6 +932,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
+                        IsEnabled="{Binding ItemSubCategoryEnabled}"
                         IsReadOnly="True"
                         ItemsSource="{Binding SubCategoryItemsFilter}"
                         SelectedIndex="{Binding ItemSubCategoryFilterSelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -982,6 +985,7 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
+                        IsEnabled="{Binding ItemClassEnabled}"
                         IsReadOnly="True"
                         ItemsSource="{Binding ClassItemsFilter}"
                         SelectedIndex="{Binding ItemClassFilterSelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

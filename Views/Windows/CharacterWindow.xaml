@@ -59,6 +59,34 @@
                 </ui:TitleBar.Icon>
             </ui:TitleBar>
 
+            <StackPanel
+                Grid.Row="2"
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Orientation="Vertical">
+                <Label
+                    x:Name="lbLobby"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    HorizontalContentAlignment="Center"
+                    Content="Lobby"
+                    Style="{StaticResource ArialMSWhite}" />
+                <ComboBox
+                    x:Name="cmbLobby"
+                    Width="250"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding LobbyItems}"
+                    SelectedIndex="{Binding LobbySelectedIndex}"
+                    SelectedValue="{Binding Lobby, Mode=TwoWay}"
+                    SelectedValuePath="ID"
+                    Style="{StaticResource ComboBoxStyle}"
+                    Template="{StaticResource lb_combobox}" />
+            </StackPanel>
+
             <!--  Character Info  -->
             <Grid
                 Grid.Row="1"
@@ -70,13 +98,14 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                     <Label
                         Margin="10"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Content="Wyndycode:"
+                        Content="WindyCode:"
                         Foreground="White" />
                     <TextBlock
                         HorizontalAlignment="Center"
@@ -96,7 +125,6 @@
                         Content="Character ID:"
                         Foreground="White" />
                     <TextBlock
-                        HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         d:Text="Character ID"
                         Background="Transparent"
@@ -239,27 +267,6 @@
                         ItemsSource="{Binding JobItems}"
                         SelectedIndex="{Binding JobSelectedIndex}"
                         SelectedValue="{Binding Job, Mode=TwoWay}"
-                        SelectedValuePath="ID"
-                        Style="{StaticResource ComboBoxStyle}"
-                        Template="{StaticResource lb_combobox}" />
-                    <Label
-                        x:Name="lbLobby"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
-                        Content="Lobby"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <ComboBox
-                        x:Name="cmbLobby"
-                        Width="145"
-                        Height="24"
-                        Margin="0,0,0,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        IsReadOnly="True"
-                        ItemsSource="{Binding LobbyItems}"
-                        SelectedIndex="{Binding LobbySelectedIndex}"
-                        SelectedValue="{Binding Lobby, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -529,7 +536,7 @@
                             Grid.Row="2"
                             Grid.Column="2"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Bottom"
+                            VerticalAlignment="Center"
                             d:Text="Roselle - Sword Focus"
                             Background="Transparent"
                             Foreground="Gold"

@@ -56,7 +56,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     public string RankText => _frameService.GetRankText(Rank);
 
     [ObservableProperty]
-    private int _enchantLevel;
+    private int _enhanceLevel;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CategoryText))]

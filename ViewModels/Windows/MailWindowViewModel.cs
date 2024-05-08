@@ -51,10 +51,23 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
             {
                 _windowsProviderService.Show<ItemWindow>();
                 _itemWindowInstance = Application.Current.Windows.OfType<ItemWindow>().FirstOrDefault();
-                _itemWindowInstance.Closed += (sender, args) => _itemWindowInstance = null;
-            }
 
-            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel, "Mail"));
+                if (_itemWindowInstance != null)
+                {
+                    _itemWindowInstance.Closed += (sender, args) => _itemWindowInstance = null;
+
+                    _itemWindowInstance.ContentRendered += (sender, args) =>
+                    {
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel, "Mail"));
+                    };
+                }
+            }
+            else
+            {
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel, "Mail"));
+                Task.Delay(500);
+                _itemWindowInstance.Focus();
+            }
         }
     }
 
@@ -89,10 +102,12 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
         string iconNameProperty = $"ItemIcon{itemData.SlotIndex}";
         string iconBranchProperty = $"ItemIconBranch{itemData.SlotIndex}";
         string nameProperty = $"ItemName{itemData.SlotIndex}";
+        string itemAmountProperty = $"ItemAmount{itemData.SlotIndex}";
 
         GetType().GetProperty(iconNameProperty)?.SetValue(this, itemData.IconName);
         GetType().GetProperty(iconBranchProperty)?.SetValue(this, itemData.Branch);
         GetType().GetProperty(nameProperty)?.SetValue(this, itemData.Name);
+        GetType().GetProperty(itemAmountProperty)?.SetValue(this, itemData.Amount);
     }
     #endregion
 
@@ -149,31 +164,31 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                 AttachGold = AttachGold,
                 ItemCharge = ItemCharge,
                 ReturnDays = ReturnDays,
-                ItemIDs = ItemDataList.Select(item => item.ID).ToList(),
-                ItemAmounts = ItemDataList.Select(item => item.Amount).ToList(),
-                Durabilities = ItemDataList.Select(item => item.DurabilityMax).ToList(),
-                EnchantLevels = ItemDataList.Select(item => item.EnhanceLevel).ToList(),
-                Ranks = ItemDataList.Select(item => item.Rank).ToList(),
-                ReconNums = ItemDataList.Select(item => item.Reconstruction).ToList(),
-                ReconStates = ItemDataList.Select(item => item.ReconstructionMax).ToList(),
-                Options1 = ItemDataList.Select(item => item.Option1Code).ToList(),
-                Options2 = ItemDataList.Select(item => item.Option2Code).ToList(),
-                Options3 = ItemDataList.Select(item => item.Option3Code).ToList(),
-                OptionValues1 = ItemDataList.Select(item => item.Option1Value).ToList(),
-                OptionValues2 = ItemDataList.Select(item => item.Option2Value).ToList(),
-                OptionValues3 = ItemDataList.Select(item => item.Option3Value).ToList(),
-                SocketCounts = ItemDataList.Select(item => item.SocketCount).ToList(),
-                SocketColors1 = ItemDataList.Select(item => item.Socket1Color).ToList(),
-                SocketColors2 = ItemDataList.Select(item => item.Socket2Color).ToList(),
-                SocketColors3 = ItemDataList.Select(item => item.Socket3Color).ToList(),
-                SocketOptions1 = ItemDataList.Select(item => item.Socket1Code).ToList(),
-                SocketOptions2 = ItemDataList.Select(item => item.Socket2Code).ToList(),
-                SocketOptions3 = ItemDataList.Select(item => item.Socket3Code).ToList(),
-                SocketOptionValues1 = ItemDataList.Select(item => item.Socket1Value).ToList(),
-                SocketOptionValues2 = ItemDataList.Select(item => item.Socket2Value).ToList(),
-                SocketOptionValues3 = ItemDataList.Select(item => item.Socket3Value).ToList(),
-                DurabilityMaxValues = ItemDataList.Select(item => item.DurabilityMax).ToList(),
-                WeightValues = ItemDataList.Select(item => item.Weight).ToList(),
+                ItemIDs = ItemDataList?.Select(item => item.ID).ToList(),
+                ItemAmounts = ItemDataList?.Select(item => item.Amount).ToList(),
+                Durabilities = ItemDataList?.Select(item => item.DurabilityMax).ToList(),
+                EnchantLevels = ItemDataList?.Select(item => item.EnhanceLevel).ToList(),
+                Ranks = ItemDataList?.Select(item => item.Rank).ToList(),
+                ReconNums = ItemDataList?.Select(item => item.Reconstruction).ToList(),
+                ReconStates = ItemDataList?.Select(item => item.ReconstructionMax).ToList(),
+                Options1 = ItemDataList?.Select(item => item.Option1Code).ToList(),
+                Options2 = ItemDataList?.Select(item => item.Option2Code).ToList(),
+                Options3 = ItemDataList?.Select(item => item.Option3Code).ToList(),
+                OptionValues1 = ItemDataList?.Select(item => item.Option1Value).ToList(),
+                OptionValues2 = ItemDataList?.Select(item => item.Option2Value).ToList(),
+                OptionValues3 = ItemDataList?.Select(item => item.Option3Value).ToList(),
+                SocketCounts = ItemDataList?.Select(item => item.SocketCount).ToList(),
+                SocketColors1 = ItemDataList?.Select(item => item.Socket1Color).ToList(),
+                SocketColors2 = ItemDataList?.Select(item => item.Socket2Color).ToList(),
+                SocketColors3 = ItemDataList?.Select(item => item.Socket3Color).ToList(),
+                SocketOptions1 = ItemDataList?.Select(item => item.Socket1Code).ToList(),
+                SocketOptions2 = ItemDataList?.Select(item => item.Socket2Code).ToList(),
+                SocketOptions3 = ItemDataList?.Select(item => item.Socket3Code).ToList(),
+                SocketOptionValues1 = ItemDataList?.Select(item => item.Socket1Value).ToList(),
+                SocketOptionValues2 = ItemDataList?.Select(item => item.Socket2Value).ToList(),
+                SocketOptionValues3 = ItemDataList?.Select(item => item.Socket3Value).ToList(),
+                DurabilityMaxValues = ItemDataList?.Select(item => item.DurabilityMax).ToList(),
+                WeightValues = ItemDataList?.Select(item => item.Weight).ToList(),
             };
 
             SaveFileDialog saveFileDialog = new()
@@ -342,20 +357,25 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
         {
             // Check if there is any item in the cached list with the current item ID
             bool found = false;
-            foreach (ItemData item in _cachedItemDataList)
+
+            if (_cachedItemDataList != null)
             {
-                if (item.ID == itemID)
+                foreach (ItemData item in _cachedItemDataList)
                 {
-                    found = true;
-                    break;
+                    if (item.ID == itemID)
+                    {
+                        found = true;
+                        break;
+                    }
+                }
+
+                // If no matching row is found, the ItemID is invalid
+                if (!found)
+                {
+                    invalidItemIDs.Add(itemID);
                 }
             }
 
-            // If no matching row is found, the ItemID is invalid
-            if (!found)
-            {
-                invalidItemIDs.Add(itemID);
-            }
         }
 
         return invalidItemIDs;
@@ -421,7 +441,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
         else
         {
             // Split recipients by comma and trim any extra spaces
-            recipients = Recipient.Split(separator, StringSplitOptions.RemoveEmptyEntries)
+            recipients = Recipient!.Split(separator, StringSplitOptions.RemoveEmptyEntries)
                                     .Select(r => r.Trim())
                                     .ToArray();
 
@@ -459,7 +479,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                     Guid mailId = Guid.NewGuid();
                     string recipient = currentRecipient;
 
-                    (Guid senderCharacterId, Guid senderAuthId, string senderWindyCode) = await _databaseService.GetCharacterInfoAsync(mailSender);
+                    (Guid senderCharacterId, Guid senderAuthId, string senderWindyCode) = await _databaseService.GetCharacterInfoAsync(mailSender!);
                     (Guid recipientCharacterId, Guid recipientAuthId, string recipientWindyCode) = await _databaseService.GetCharacterInfoAsync(recipient);
 
                     if (senderCharacterId == Guid.Empty && createType == 5)
@@ -516,7 +536,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                         }
                     }
 
-                    await _databaseService.InsertMailAsync(recipientAuthId, senderCharacterId, mailSender, recipient, content, gold, returnDay, reqGold, mailId, createType);
+                    await _databaseService.InsertMailAsync(recipientAuthId, senderCharacterId, mailSender!, recipient, content, gold, returnDay, reqGold, mailId, createType);
 
                    await _databaseService.GMAuditAsync(recipientWindyCode, recipientCharacterId, recipient, Resources.SendMail, $"<font color=blue>{Resources.SendMail}</font>]<br><font color=red>{Resources.Sender}: RHToolkit: {senderCharacterId}, {Resources.Recipient}: {recipient}, GUID:{{{recipientCharacterId}}}<br></font>" + modify);
                 }
@@ -585,13 +605,16 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
     private bool _isRecipientEnabled = true;
 
     [ObservableProperty]
+    private string? _itemName0 = Resources.AddItemDesc;
+
+    [ObservableProperty]
     private string? _itemName1 = Resources.AddItemDesc;
 
     [ObservableProperty]
     private string? _itemName2 = Resources.AddItemDesc;
 
     [ObservableProperty]
-    private string? _itemName3 = Resources.AddItemDesc;
+    private int? _itemAmount0;
 
     [ObservableProperty]
     private int? _itemAmount1;
@@ -600,7 +623,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
     private int? _itemAmount2;
 
     [ObservableProperty]
-    private int? _itemAmount3;
+    private string? _itemIcon0;
 
     [ObservableProperty]
     private string? _itemIcon1;
@@ -609,16 +632,13 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
     private string? _itemIcon2;
 
     [ObservableProperty]
-    private string? _itemIcon3;
+    private int? _itemIconBranch0;
 
     [ObservableProperty]
     private int? _itemIconBranch1;
 
     [ObservableProperty]
     private int? _itemIconBranch2;
-
-    [ObservableProperty]
-    private int? _itemIconBranch3;
 
     #endregion
 

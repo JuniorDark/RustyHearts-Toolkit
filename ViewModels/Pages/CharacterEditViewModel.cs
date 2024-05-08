@@ -27,7 +27,7 @@ namespace RHToolkit.ViewModels.Pages
 
             if (characterData == null)
             {
-                RHMessageBox.ShowOKMessage($"The character '{CharacterName}' does not exist.", "Invalid Name");
+                RHMessageBox.ShowOKMessage($"The character '{CharacterName}' does not exist.", "Invalid Character");
                 return;
 
             }
@@ -41,7 +41,12 @@ namespace RHToolkit.ViewModels.Pages
                 {
                     _windowsProviderService.Show<CharacterWindow>();
                     _characterWindowInstance = Application.Current.Windows.OfType<CharacterWindow>().FirstOrDefault();
-                    _characterWindowInstance.Closed += (sender, args) => _characterWindowInstance = null;
+
+                    if (_characterWindowInstance != null)
+                    {
+                        _characterWindowInstance.Closed += (sender, args) => _characterWindowInstance = null;
+                    }
+                    
                 }
 
                 WeakReferenceMessenger.Default.Send(new CharacterDataMessage(characterData));
@@ -50,7 +55,6 @@ namespace RHToolkit.ViewModels.Pages
                 WeakReferenceMessenger.Default.Send(new DatabaseItemMessage(accountStorage, ItemStorageType.Storage));
 
             }
-
 
         }
 

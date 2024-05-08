@@ -278,10 +278,10 @@
                         AddItemCommand="{Binding ViewModel.AddItemCommand}"
                         CommandParameter="0"
                         IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
-                        ItemAmount="{Binding ViewModel.ItemAmount1}"
-                        ItemIcon="{Binding ViewModel.ItemIcon1}"
-                        ItemIconBranch="{Binding ViewModel.ItemIconBranch1}"
-                        ItemName="{Binding ViewModel.ItemName1}"
+                        ItemAmount="{Binding ViewModel.ItemAmount0}"
+                        ItemIcon="{Binding ViewModel.ItemIcon0}"
+                        ItemIconBranch="{Binding ViewModel.ItemIconBranch0}"
+                        ItemName="{Binding ViewModel.ItemName0}"
                         RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
                         SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <!--  Item 2  -->
@@ -290,10 +290,10 @@
                         AddItemCommand="{Binding ViewModel.AddItemCommand}"
                         CommandParameter="1"
                         IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
-                        ItemAmount="{Binding ViewModel.ItemAmount2}"
-                        ItemIcon="{Binding ViewModel.ItemIcon2}"
-                        ItemIconBranch="{Binding ViewModel.ItemIconBranch2}"
-                        ItemName="{Binding ViewModel.ItemName2}"
+                        ItemAmount="{Binding ViewModel.ItemAmount1}"
+                        ItemIcon="{Binding ViewModel.ItemIcon1}"
+                        ItemIconBranch="{Binding ViewModel.ItemIconBranch1}"
+                        ItemName="{Binding ViewModel.ItemName1}"
                         RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
                         SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <!--  Item 3  -->
@@ -302,10 +302,10 @@
                         AddItemCommand="{Binding ViewModel.AddItemCommand}"
                         CommandParameter="2"
                         IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
-                        ItemAmount="{Binding ViewModel.ItemAmount3}"
-                        ItemIcon="{Binding ViewModel.ItemIcon3}"
-                        ItemIconBranch="{Binding ViewModel.ItemIconBranch3}"
-                        ItemName="{Binding ViewModel.ItemName3}"
+                        ItemAmount="{Binding ViewModel.ItemAmount2}"
+                        ItemIcon="{Binding ViewModel.ItemIcon2}"
+                        ItemIconBranch="{Binding ViewModel.ItemIconBranch2}"
+                        ItemName="{Binding ViewModel.ItemName2}"
                         RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
                         SlotIcon="/Assets/images/lb_ac_icon.png" />
                 </Grid>

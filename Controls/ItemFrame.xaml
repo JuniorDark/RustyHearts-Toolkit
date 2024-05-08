@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ut="clr-namespace:RHToolkit.Utilities"
-    xmlns:vm="clr-namespace:RHToolkit.ViewModels"
     x:Name="Frame"
     Height="Auto"
     MaxHeight="400"
@@ -44,11 +43,11 @@
                 Grid.Row="0"
                 d:Text="+10"
                 Foreground="#06EBE8"
-                Text="{Binding EnchantLevel, StringFormat=' +{0}'}">
+                Text="{Binding EnhanceLevel, StringFormat=' +{0}'}">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding EnchantLevel}" Value="0">
+                            <DataTrigger Binding="{Binding EnhanceLevel}" Value="0">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>

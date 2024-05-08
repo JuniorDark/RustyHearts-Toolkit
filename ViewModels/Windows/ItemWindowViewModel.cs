@@ -61,7 +61,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             IconName = IconName,
             Durability = MaxDurability,
             DurabilityMax = MaxDurability,
-            EnhanceLevel = EnchantLevel,
+            EnhanceLevel = EnhanceLevel,
             AugmentStone = AugmentValue,
             Rank = Rank,
             Weight = Weight,
@@ -86,9 +86,14 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             Socket3Value = SocketOption03Value,
         };
 
-        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.MailWindowViewModel, "Mail"));
-        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.CharacterWindowViewModel, "DatabaseItem"));
-
+        if (MessageType == "Mail")
+        {
+            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.MailWindowViewModel, "Mail"));
+        }
+        else
+        {
+            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.CharacterWindowViewModel, "EquipItem"));
+        }
     }
     #endregion
 
@@ -105,53 +110,226 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     [ObservableProperty]
     private ItemData? _itemData;
 
+    [ObservableProperty]
+    private string? _messageType;
+
     public void Receive(ItemDataMessage message)
     {
         if (message.Recipient == ViewModelType.ItemWindowViewModel)
         {
-            ItemData = message.Value;
-            ItemId = ItemData.ID;
+            var itemData = message.Value;
+            MessageType = message.MessageType;
 
-            LoadMailItemData(ItemData);
-
-            if (message.MessageType == "Mail")
+            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
             {
-                SlotIndexMin = 0;
-                SlotIndexMax = 2;
-            }
-            else if (message.MessageType == "DatabaseItem")
-            {
-                SlotIndexMin = ItemData.SlotIndex;
-                SlotIndexMax = ItemData.SlotIndex;
-
-                if (CharacterData != null)
+                if (message.MessageType == "Mail")
                 {
-                    switch (ItemData.SlotIndex)
-                    {
-                        case 0:
-                            ItemSubCategoryFilterSelectedIndex = 1;
-                            ItemClassFilter = CharacterData.Class;
-                            break;
-                    }
+                    SlotIndexMin = 0;
+                    SlotIndexMax = 2;
+                }
+                else if (message.MessageType == "EquipItem")
+                {
+                    SlotIndexMin = itemData.SlotIndex;
+                    SlotIndexMax = itemData.SlotIndex;
+
+                    SlotFilter(itemData.SlotIndex);
+
+                }
+                else
+                {
+                    SlotIndexMin = itemData.SlotIndex;
+                    SlotIndexMax = itemData.SlotIndex;
+                    SlotFilter(itemData.SlotIndex);
                 }
 
-            }
-            else
-            {
-                SlotIndexMin = ItemData.SlotIndex;
-                SlotIndexMax = ItemData.SlotIndex;
-            }
+                ItemId = itemData.ID;
+
+                LoadItemData(itemData);
+
+            }), DispatcherPriority.Loaded);
 
             
         }
     }
 
-    private void LoadMailItemData(ItemData itemData)
+    private void SlotFilter(int slotIndex)
+    {
+        if (CharacterData != null)
+        {
+            switch (slotIndex)
+            {
+                //Equipment
+                case 0: // Weapon
+                    ItemTypeFilter = 4;
+                    ItemSubCategoryFilter = 1;
+                    ItemClassFilter = CharacterData.Class;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = false;
+                    break;
+                case 1: //Chest
+                    ItemTypeFilter = 3;
+                    ItemSubCategoryFilter = 2;
+                    ItemClassFilter = 0;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = true;
+                    break;
+                case 2: //Head
+                    ItemTypeFilter = 3;
+                    ItemSubCategoryFilter = 3;
+                    ItemClassFilter = 0;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = true;
+                    break;
+                case 3: //Legs
+                    ItemTypeFilter = 3;
+                    ItemSubCategoryFilter = 4;
+                    ItemClassFilter = 0;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = true;
+                    break;
+                case 4: //Feet
+                    ItemTypeFilter = 3;
+                    ItemSubCategoryFilter = 5;
+                    ItemClassFilter = 0;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = true;
+                    break;
+                case 5: //Waist
+                    ItemTypeFilter = 3;
+                    ItemSubCategoryFilter = 6;
+                    ItemClassFilter = 0;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = true;
+                    break;
+                case 6: //Necklace
+                    ItemTypeFilter = 3;
+                    ItemSubCategoryFilter = 7;
+                    ItemClassFilter = 0;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = true;
+                    break;
+                case 7: //Earrings
+                    ItemTypeFilter = 3;
+                    ItemSubCategoryFilter = 8;
+                    ItemClassFilter = 0;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = true;
+                    break;
+                case 8: //Ring
+                    ItemTypeFilter = 3;
+                    ItemSubCategoryFilter = 9;
+                    ItemClassFilter = 0;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = true;
+                    break;
+                case 9: //Hands
+                    ItemTypeFilter = 3;
+                    ItemSubCategoryFilter = 10;
+                    ItemClassFilter = 0;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = true;
+                    break;
+                //Costume
+                case 10: //Hair
+                    ItemTypeFilter = 2;
+                    ItemSubCategoryFilter = 11;
+                    ItemClassFilter = CharacterData.Class;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = false;
+                    break;
+                case 11: //Face
+                    ItemTypeFilter = 2;
+                    ItemSubCategoryFilter = 12;
+                    ItemClassFilter = 0;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = true;
+                    break;
+                case 12: //Neck
+                    ItemTypeFilter = 2;
+                    ItemSubCategoryFilter = 13;
+                    ItemClassFilter = CharacterData.Class;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = false;
+                    break;
+                case 13: //Outerwear
+                    ItemTypeFilter = 2;
+                    ItemSubCategoryFilter = 14;
+                    ItemClassFilter = CharacterData.Class;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = false;
+                    break;
+                case 14: //Top
+                    ItemTypeFilter = 2;
+                    ItemSubCategoryFilter = 15;
+                    ItemClassFilter = CharacterData.Class;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = false;
+                    break;
+                case 15: //Bottom
+                    ItemTypeFilter = 2;
+                    ItemSubCategoryFilter = 16;
+                    ItemClassFilter = CharacterData.Class;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = false;
+                    break;
+                case 16: //Gloves
+                    ItemTypeFilter = 2;
+                    ItemSubCategoryFilter = 17;
+                    ItemClassFilter = CharacterData.Class;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = false;
+                    break;
+                case 17: //Shoes
+                    ItemTypeFilter = 2;
+                    ItemSubCategoryFilter = 18;
+                    ItemClassFilter = CharacterData.Class;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = false;
+                    break;
+                case 18: //Accessory 1
+                    ItemTypeFilter = 2;
+                    ItemSubCategoryFilter = 19;
+                    ItemClassFilter = CharacterData.Class;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = false;
+                    break;
+                case 19: //Accessory 2
+                    ItemTypeFilter = 2;
+                    ItemSubCategoryFilter = 20;
+                    ItemClassFilter = 0;
+                    ItemTypeEnabled = false;
+                    ItemSubCategoryEnabled = false;
+                    ItemClassEnabled = true;
+                    break;
+            }
+        }
+    }
+
+    private void LoadItemData(ItemData itemData)
     {
         SlotIndex = itemData.SlotIndex;
         Amount = itemData.Amount;
         MaxDurability = itemData.DurabilityMax;
-        EnchantLevel = itemData.EnhanceLevel;
+        EnhanceLevel = itemData.EnhanceLevel;
         AugmentValue = itemData.AugmentStone;
         Rank = itemData.Rank;
         Weight = itemData.Weight;
@@ -182,7 +360,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         if (value == 0)
         {
-            SelectedItem = ItemDataItems?.FirstOrDefault();
+            //SelectedItem = ItemDataItems?.FirstOrDefault();
+            SelectedItem = ItemDataView?.Cast<ItemData>()?.FirstOrDefault(FilterItems);
         }
         else
         {
@@ -398,6 +577,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private int _itemTypeFilterSelectedIndex;
 
     [ObservableProperty]
+    private bool _itemTypeEnabled = true;
+
+    [ObservableProperty]
     private int _itemCategoryFilter;
     partial void OnItemCategoryFilterChanged(int value)
     {
@@ -406,6 +588,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     [ObservableProperty]
     private int _itemCategoryFilterSelectedIndex;
+
+    [ObservableProperty]
+    private bool _itemCategoryEnabled = true;
 
     [ObservableProperty]
     private int _itemSubCategoryFilter;
@@ -418,6 +603,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private int _itemSubCategoryFilterSelectedIndex;
 
     [ObservableProperty]
+    private bool _itemSubCategoryEnabled = true;
+
+    [ObservableProperty]
     private int _itemClassFilter;
 
     partial void OnItemClassFilterChanged(int value)
@@ -427,6 +615,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     [ObservableProperty]
     private int _itemClassFilterSelectedIndex;
+
+    [ObservableProperty]
+    private bool _itemClassEnabled = true;
 
     [ObservableProperty]
     private int _itemBranchFilter;
@@ -651,14 +842,14 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private int _amount = 1;
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(EnchantLevel))]
+    [NotifyPropertyChangedFor(nameof(EnhanceLevel))]
     [NotifyPropertyChangedFor(nameof(AugmentValue))]
     private int _type;
     partial void OnTypeChanged(int value)
     {
         if (value == 1 || value == 2)
         {
-            EnchantLevel = 0;
+            EnhanceLevel = 0;
             AugmentValue = 0;
         }
         _frameViewModel.Type = value;
@@ -709,10 +900,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _enchantLevel;
-    partial void OnEnchantLevelChanged(int value)
+    private int _enhanceLevel;
+    partial void OnEnhanceLevelChanged(int value)
     {
-        _frameViewModel.EnchantLevel = value;
+        _frameViewModel.EnhanceLevel = value;
     }
 
     [ObservableProperty]
