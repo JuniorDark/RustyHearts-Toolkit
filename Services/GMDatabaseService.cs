@@ -27,7 +27,6 @@ namespace RHToolkit.Services
                 using var reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    // Map database fields to ItemData properties
                     ItemData item = new()
                     {
                         ID = Convert.ToInt32(reader["nID"]),

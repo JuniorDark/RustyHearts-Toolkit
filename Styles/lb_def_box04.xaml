@@ -7,60 +7,28 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Source="/Assets/images/window/lb_def_box04/lb_def_box04_01.png"
-                Stretch="None">
-                <Image.OpacityMask>
-                    <ImageBrush
-                        ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_01.png"
-                        TileMode="Tile"
-                        Viewport="0,0,1,1"
-                        ViewportUnits="Absolute" />
-                </Image.OpacityMask>
-            </Image>
+                Stretch="None" />
 
             <!--  Top-right corner  -->
             <Image
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Source="/Assets/images/window/lb_def_box04/lb_def_box04_03.png"
-                Stretch="None">
-                <Image.OpacityMask>
-                    <ImageBrush
-                        ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_03.png"
-                        TileMode="Tile"
-                        Viewport="0,0,1,1"
-                        ViewportUnits="Absolute" />
-                </Image.OpacityMask>
-            </Image>
+                Stretch="None" />
 
             <!--  Bottom-left corner  -->
             <Image
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
                 Source="/Assets/images/window/lb_def_box04/lb_def_box04_07.png"
-                Stretch="None">
-                <Image.OpacityMask>
-                    <ImageBrush
-                        ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_07.png"
-                        TileMode="Tile"
-                        Viewport="0,0,1,1"
-                        ViewportUnits="Absolute" />
-                </Image.OpacityMask>
-            </Image>
+                Stretch="None" />
 
             <!--  Bottom-right corner  -->
             <Image
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Source="/Assets/images/window/lb_def_box04/lb_def_box04_09.png"
-                Stretch="None">
-                <Image.OpacityMask>
-                    <ImageBrush
-                        ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_09.png"
-                        TileMode="Tile"
-                        Viewport="0,0,1,1"
-                        ViewportUnits="Absolute" />
-                </Image.OpacityMask>
-            </Image>
+                Stretch="None" />
 
             <!--  Edges  -->
             <Image
@@ -69,16 +37,7 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Top"
                 Source="/Assets/images/window/lb_def_box04/lb_def_box04_02.png"
-                Stretch="Fill">
-                <Image.OpacityMask>
-                    <ImageBrush
-                        ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_02.png"
-                        Stretch="None"
-                        TileMode="Tile"
-                        Viewport="0,0,1,0.25"
-                        ViewportUnits="Absolute" />
-                </Image.OpacityMask>
-            </Image>
+                Stretch="Fill" />
 
             <Image
                 Height="9"
@@ -86,16 +45,7 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Bottom"
                 Source="/Assets/images/window/lb_def_box04/lb_def_box04_08.png"
-                Stretch="Fill">
-                <Image.OpacityMask>
-                    <ImageBrush
-                        ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_08.png"
-                        Stretch="None"
-                        TileMode="Tile"
-                        Viewport="0,0,1,0.25"
-                        ViewportUnits="Absolute" />
-                </Image.OpacityMask>
-            </Image>
+                Stretch="Fill" />
 
             <Image
                 Width="9"
@@ -103,16 +53,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Stretch"
                 Source="/Assets/images/window/lb_def_box04/lb_def_box04_04.png"
-                Stretch="Fill">
-                <Image.OpacityMask>
-                    <ImageBrush
-                        ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_04.png"
-                        Stretch="None"
-                        TileMode="Tile"
-                        Viewport="0,0,0.25,1"
-                        ViewportUnits="Absolute" />
-                </Image.OpacityMask>
-            </Image>
+                Stretch="Fill" />
 
             <Image
                 Width="9"
@@ -120,16 +61,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Stretch"
                 Source="/Assets/images/window/lb_def_box04/lb_def_box04_06.png"
-                Stretch="Fill">
-                <Image.OpacityMask>
-                    <ImageBrush
-                        ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_06.png"
-                        Stretch="None"
-                        TileMode="Tile"
-                        Viewport="0,0,0.25,1"
-                        ViewportUnits="Absolute" />
-                </Image.OpacityMask>
-            </Image>
+                Stretch="Fill" />
 
             <!--  Center  -->
             <Image
@@ -137,16 +69,7 @@
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
                 Source="/Assets/images/window/lb_def_box04/lb_def_box04_05.png"
-                Stretch="Fill">
-                <Image.OpacityMask>
-                    <ImageBrush
-                        ImageSource="/Assets/images/window/lb_def_box04/lb_def_box04_05.png"
-                        Stretch="None"
-                        TileMode="Tile"
-                        Viewport="0,0,1,1"
-                        ViewportUnits="Absolute" />
-                </Image.OpacityMask>
-            </Image>
+                Stretch="Fill" />
 
             <!--  Content  -->
             <ContentPresenter

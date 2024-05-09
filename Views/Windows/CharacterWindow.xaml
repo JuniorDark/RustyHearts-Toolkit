@@ -19,7 +19,7 @@
     d:DataContext="{d:DesignInstance Type=windows:CharacterWindowViewModel}"
     AllowsTransparency="True"
     Background="Transparent"
-    Icon="/Assets/icon/icon_cash_optionchange.png"
+    Icon="/Assets/icon/lb_main_quick_system_01character.png"
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
@@ -199,7 +199,8 @@
                     <TextBox
                         x:Name="txtCharacterName"
                         Width="200"
-                        Height="35"
+                        Height="30"
+                        Margin="10"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Background="Black"
@@ -215,7 +216,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Background="Transparent"
-                        Command="{Binding SaveNameCommand}"
+                        Command="{Binding SaveCharacterNameCommand}"
                         Content="Save Name"
                         Cursor="Hand"
                         Foreground="White"
@@ -245,7 +246,7 @@
                         IsReadOnly="True"
                         ItemsSource="{Binding ClassItems}"
                         SelectedIndex="{Binding ClassSelectedIndex}"
-                        SelectedValue="{Binding Class, Mode=TwoWay}"
+                        SelectedValue="{Binding Class, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -266,7 +267,7 @@
                         IsReadOnly="True"
                         ItemsSource="{Binding JobItems}"
                         SelectedIndex="{Binding JobSelectedIndex}"
-                        SelectedValue="{Binding Job, Mode=TwoWay}"
+                        SelectedValue="{Binding Job, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -368,6 +369,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         Increment="1"
+                        IsEnabled="False"
                         Maximum="420897460"
                         Minimum="0"
                         Value="{Binding CharacterExp, Mode=TwoWay}" />
@@ -429,9 +431,9 @@
                         x:Name="intTotalSkillPoints"
                         Width="120"
                         Increment="1"
-                        Maximum="200000"
+                        Maximum="99999"
                         Minimum="0"
-                        Value="{Binding TotalSkillPoints, Mode=TwoWay}" />
+                        Value="{Binding TotalSkillPoints, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
                         x:Name="lbGuildExp"
                         VerticalAlignment="Top"
@@ -487,12 +489,13 @@
                 Margin="0,8,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top">
-                <TabItem IsSelected="True">
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Equipment" />
-                        </StackPanel>
-                    </TabItem.Header>
+
+                <TabItem
+                    Width="192"
+                    Foreground="White"
+                    Header="Equipment"
+                    IsSelected="True"
+                    Style="{StaticResource lb_tab}">
                     <Grid
                         Width="384"
                         Height="156"
@@ -666,12 +669,11 @@
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_06.png" />
                     </Grid>
                 </TabItem>
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Costume" />
-                        </StackPanel>
-                    </TabItem.Header>
+                <TabItem
+                    Width="192"
+                    Foreground="White"
+                    Header="Costume"
+                    Style="{StaticResource lb_tab}">
                     <Grid
                         Width="384"
                         Height="156"
@@ -715,7 +717,7 @@
                             Grid.Row="2"
                             Grid.Column="2"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Bottom"
+                            VerticalAlignment="Center"
                             d:Text="Roselle - Sword Focus"
                             Background="Transparent"
                             Foreground="Gold"

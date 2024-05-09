@@ -23,7 +23,7 @@ namespace RHToolkit.Services
             try
             {
                 await _databaseService.ExecuteNonQueryAsync(
-                    "UPDATE CharacterTable SET Class = @class, Job = @job, Level = @level, Experience = @experience, SP = @sp, Total_SP = @total_sp, Fatigue = @fatigue, LobbyID = @lobbyID, gold = @gold, Hearts = @hearts, Block_YN = @block_YN, storage_gold = @storage_gold, storage_count = @storage_count, IsTradeEnable = @isTradeEnable, Permission = @permission, GuildPoint = @guild_point, IsMoveEnable = @isMoveEnable WHERE character_id = @character_id",
+                    "UPDATE CharacterTable SET Class = @class, Job = @job, Level = @level, Experience = @experience, SP = @sp, Total_SP = @total_sp, LobbyID = @lobbyID, gold = @gold, Hearts = @hearts, Block_YN = @block_YN, storage_gold = @storage_gold, storage_count = @storage_count, IsTradeEnable = @isTradeEnable, Permission = @permission, GuildPoint = @guild_point, IsMoveEnable = @isMoveEnable WHERE character_id = @character_id",
                     connection,
                     transaction,
                     ("@character_id", characterId),
@@ -33,7 +33,6 @@ namespace RHToolkit.Services
                     ("@experience", characterData.Experience),
                     ("@sp", characterData.SP),
                     ("@total_sp", characterData.TotalSP),
-                    ("@fatigue", characterData.Fatigue),
                     ("@lobbyID", characterData.LobbyID),
                     ("@gold", characterData.Gold),
                     ("@hearts", characterData.Hearts),

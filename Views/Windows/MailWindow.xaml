@@ -165,7 +165,7 @@
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto">
                     <TextBox.Background>
-                        <ImageBrush ImageSource="/Assets/images/lb_mail_paper.png" />
+                        <ImageBrush ImageSource="/Assets/images/bg/lb_mail_paper.png" />
                     </TextBox.Background>
                     <TextBox.Template>
                         <ControlTemplate TargetType="TextBox">

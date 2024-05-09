@@ -1,0 +1,145 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  Custom style for TabItem  -->
+    <ControlTemplate x:Key="lb_tab_normal" TargetType="TabItem">
+        <Grid>
+            <!--  Left  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_01.png"
+                Stretch="None" />
+
+            <!--  Middle  -->
+            <Image
+                Height="27"
+                Margin="10,0,10,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_02.png"
+                Stretch="Fill" />
+
+            <!--  Right  -->
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_03.png"
+                Stretch="None" />
+
+            <ContentPresenter
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                ContentSource="Header" />
+        </Grid>
+    </ControlTemplate>
+    <ControlTemplate x:Key="lb_tab_hover" TargetType="TabItem">
+        <Grid>
+            <!--  Left  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_04.png"
+                Stretch="None" />
+
+
+            <!--  Middle  -->
+            <Image
+                Height="27"
+                Margin="5,0,5,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_05.png"
+                Stretch="Fill" />
+
+            <!--  Right  -->
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_06.png"
+                Stretch="None" />
+
+            <ContentPresenter
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                ContentSource="Header" />
+        </Grid>
+    </ControlTemplate>
+    <ControlTemplate x:Key="lb_tab_down" TargetType="TabItem">
+        <Grid>
+            <!--  Left  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_07.png"
+                Stretch="None" />
+
+            <!--  Middle  -->
+            <Image
+                Height="27"
+                Margin="5,0,5,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_08.png"
+                Stretch="Fill" />
+
+
+            <!--  Right  -->
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_09.png"
+                Stretch="None" />
+
+            <ContentPresenter
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                ContentSource="Header" />
+        </Grid>
+    </ControlTemplate>
+    <ControlTemplate x:Key="lb_tab_disabled" TargetType="TabItem">
+        <Grid>
+            <!--  Left  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_10.png"
+                Stretch="None" />
+
+            <!--  Middle  -->
+            <Image
+                Height="27"
+                Margin="5,0,5,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_11.png"
+                Stretch="Fill" />
+
+            <!--  Right  -->
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_tab/lb_tab_button_12.png"
+                Stretch="None" />
+
+            <ContentPresenter
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                ContentSource="Header" />
+        </Grid>
+    </ControlTemplate>
+
+    <Style x:Key="lb_tab" TargetType="TabItem">
+        <Setter Property="Template" Value="{StaticResource lb_tab_normal}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Template" Value="{StaticResource lb_tab_hover}" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Template" Value="{StaticResource lb_tab_down}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Template" Value="{StaticResource lb_tab_disabled}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

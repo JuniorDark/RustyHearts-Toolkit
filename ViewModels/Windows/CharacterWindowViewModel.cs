@@ -1,4 +1,5 @@
-﻿using RHToolkit.Messages;
+﻿using Newtonsoft.Json.Linq;
+using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
@@ -57,6 +58,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
             CharacterName = characterData.CharacterName;
             WindyCode = characterData.WindyCode;
             Class = characterData.Class;
+            Job = characterData.Job;
             Level = characterData.Level;
             CharacterExp = characterData.Experience;
             SkillPoints = characterData.SP;
@@ -75,18 +77,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
             IsTradeEnable = characterData.IsTradeEnable == "Y";
             IsMoveEnable = characterData.IsMoveEnable == "Y";
             IsAdmin = characterData.Permission == 100;
-
-            string className = GetEnumDescription((CharClass)characterData.Class);
-            Enum jobEnum = GetJobEnum((CharClass)characterData.Class, characterData.Job);
-            string jobName = GetEnumDescription(jobEnum);
-
-            CharacterNameText = $"Lv.{characterData.Level} {characterData.CharacterName}";
-            CharacterClassText = $"<{className} - {jobName} Focus> ";
-            CharSilhouetteImage = GetClassImage(characterData.Class);
             Title = $"Character Editor ({characterData.CharacterName})";
-
-            PopulateJobItems((CharClass)characterData.Class);
-            Job = characterData.Job;
         }
     }
 
@@ -107,6 +98,221 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         };
     }
 
+    #endregion
+
+    #region Save Character
+    [RelayCommand]
+    private async Task SaveCharacter()
+    {
+        try
+        {
+            if (CharacterData != null)
+            {
+
+                if ( await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName))
+                {
+                    RHMessageBox.ShowOKMessage("This character is online. You can't edit an online character.", "Info");
+                    return;
+                }
+
+                var newCharacterData = GetCharacterChanges();
+
+                // Check if there are any changes
+                if (!HasChanges(CharacterData, newCharacterData))
+                {
+                    RHMessageBox.ShowOKMessage("There are no changes to save.", "Info");
+                    return;
+                }
+
+                string changes = GenerateMessage(CharacterData, newCharacterData, "changes");
+
+                if (RHMessageBox.ConfirmMessage($"Save the following changes to the character {CharacterData.CharacterName}?\n\n{changes}"))
+                {
+                    string modify = GenerateMessage(CharacterData, newCharacterData, "audit");
+                   await UpdateCharacter(newCharacterData, modify);
+                }
+
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBox.ShowOKMessage($"Error saving character changes: {ex.Message}", "Error");
+        }
+    }
+
+    private async Task UpdateCharacter(NewCharacterData newCharacterData, string modify)
+    {
+
+        try
+        {
+            if (CharacterData != null)
+            {
+                await _databaseService.UpdateCharacterDataAsync(CharacterData.CharacterID, newCharacterData);
+               await _databaseService.GMAuditAsync(CharacterData.WindyCode, CharacterData.CharacterID, CharacterData.CharacterName, "Character Information Change", modify);
+
+                RHMessageBox.ShowOKMessage("Character saved successfully!", "Success");
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBox.ShowOKMessage($"Error saving character changes: {ex.Message}", "Error");
+        }
+    }
+
+    private NewCharacterData GetCharacterChanges()
+    {
+        return new NewCharacterData
+        {
+            Class = Class,
+            Job = Job,
+            Level = Level,
+            Experience = CharacterExp,
+            SP = SkillPoints,
+            TotalSP = TotalSkillPoints,
+            LobbyID = Lobby,
+            Gold = InventoryGold,
+            Hearts = RessurectionScrolls,
+            StorageGold = WarehouseGold,
+            StorageCount = WarehouseSlots,
+            GuildPoint = GuildExp,
+            Permission = IsAdmin == true ? 100 : 0,
+            BlockYN = RestrictCharacter == true ? "Y" : "N",
+            IsTradeEnable = IsTradeEnable == true ? "Y" : "N",
+            IsMoveEnable = IsMoveEnable == true ? "Y" : "N",
+        };
+    }
+
+    private static string GenerateMessage(CharacterData oldData, NewCharacterData newData, string messageType)
+    {
+        string message = "";
+
+        void AppendChange(string property, object oldValue, object? newValue)
+        {
+            if (!Equals(oldValue, newValue))
+            {
+                if (messageType == "audit")
+                {
+                    message += $"[<font color=blue>{property} Change</font>]<br><font color=red>Old: {oldValue} -> New: {newValue}<br></font>";
+                }
+                else if (messageType == "changes")
+                {
+                    message += $"{property}: Old - {oldValue}, New - {newValue}\n";
+                }
+            }
+        }
+
+        AppendChange("Class", oldData.Class, newData.Class);
+        AppendChange("Job", oldData.Job, newData.Job);
+        AppendChange("Level", oldData.Level, newData.Level);
+        AppendChange("Experience", oldData.Experience, newData.Experience);
+        AppendChange("Skill Points", oldData.SP, newData.SP);
+        AppendChange("Total Skill Point", oldData.TotalSP, newData.TotalSP);
+        AppendChange("Lobby", oldData.LobbyID, newData.LobbyID);
+        AppendChange("Gold", oldData.Gold, newData.Gold);
+        AppendChange("Hearts", oldData.Hearts, newData.Hearts);
+        AppendChange("Storage Gold", oldData.StorageGold, newData.StorageGold);
+        AppendChange("Storage Count", oldData.StorageCount, newData.StorageCount);
+        AppendChange("Guild Exp", oldData.GuildPoint, newData.GuildPoint);
+        AppendChange("Permission", oldData.Permission, newData.Permission);
+        AppendChange("Block", oldData.BlockYN, newData.BlockYN);
+        AppendChange("IsTradeEnable", oldData.IsTradeEnable, newData.IsTradeEnable);
+        AppendChange("IsMoveEnable", oldData.IsMoveEnable, newData.IsMoveEnable);
+
+        return message;
+    }
+
+    private static bool HasChanges(CharacterData oldData, NewCharacterData newData)
+    {
+        return oldData.Class != newData.Class ||
+               oldData.Job != newData.Job ||
+               oldData.Level != newData.Level ||
+               oldData.Experience != newData.Experience ||
+               oldData.SP != newData.SP ||
+               oldData.TotalSP != newData.TotalSP ||
+               oldData.LobbyID != newData.LobbyID ||
+               oldData.Gold != newData.Gold ||
+               oldData.Hearts != newData.Hearts ||
+               oldData.StorageGold != newData.StorageGold ||
+               oldData.StorageCount != newData.StorageCount ||
+               oldData.GuildPoint != newData.GuildPoint ||
+               oldData.Permission != newData.Permission ||
+               oldData.BlockYN != newData.BlockYN ||
+               oldData.IsTradeEnable != newData.IsTradeEnable ||
+               oldData.IsMoveEnable != newData.IsMoveEnable;
+    }
+
+    #endregion
+
+    #region Character Name
+    [RelayCommand]
+    private async Task SaveCharacterName()
+    {
+        string newCharacterName = CharacterName;
+
+        if (IsNameNotAllowed(newCharacterName))
+        {
+            RHMessageBox.ShowOKMessage("This character name is not allowed.", "Error");
+            return;
+        }
+
+        if (!ValidateCharacterName(newCharacterName))
+        {
+            RHMessageBox.ShowOKMessage("Invalid character name.", "Error");
+            return;
+        }
+
+        try
+        {
+            await UpdateCharacterName(newCharacterName);
+        }
+        catch (Exception ex)
+        {
+            RHMessageBox.ShowOKMessage($"Error saving character name: {ex.Message}", "Error");
+        }
+
+    }
+
+    private async Task UpdateCharacterName(string newCharacterName)
+    {
+        if (CharacterData == null || CharacterData.CharacterName == newCharacterName)
+        {
+            return;
+        }
+
+        if (RHMessageBox.ConfirmMessage($"Change this character name to '{newCharacterName}'?"))
+        {
+            try
+            {
+                int result = await _databaseService.UpdateCharacterNameAsync(CharacterData.CharacterID, newCharacterName);
+
+                if (result == -1)
+                {
+                    RHMessageBox.ShowOKMessage("Character name already exists.", "Error");
+                    return;
+                }
+
+               await _databaseService.GMAuditAsync(CharacterData.WindyCode, CharacterData.CharacterID, newCharacterName, "Character Name Change", $"Old Name:{CharacterData.CharacterName}, New Name: {newCharacterName}");
+
+                RHMessageBox.ShowOKMessage("Character name updated successfully!", "Success");
+                CharacterData.CharacterName = newCharacterName;
+            }
+            catch (Exception ex)
+            {
+                RHMessageBox.ShowOKMessage($"Error updating character name: {ex}");
+            }
+        }
+
+    }
+
+    private bool IsNameNotAllowed(string characterName)
+    {
+        return _gmDatabaseService.IsNameInNickFilter(characterName);
+    }
+
+    private static bool ValidateCharacterName(string name)
+    {
+        return !string.IsNullOrEmpty(name) && name.Length >= 3 && name.Length <= 16;
+    }
     #endregion
 
     #region Comboboxes
@@ -517,10 +723,16 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     private string? _title;
 
     [ObservableProperty]
-    private string? _characterNameText;
+    [NotifyPropertyChangedFor(nameof(CharacterClassText))]
+    private string? _className;
 
     [ObservableProperty]
-    private string? _characterClassText;
+    [NotifyPropertyChangedFor(nameof(CharacterClassText))]
+    private string? _jobName;
+
+    public string? CharacterNameText => $"Lv.{Level} {CharacterName}";
+
+    public string? CharacterClassText => $"<{ClassName} - {JobName} Focus> ";
 
     [ObservableProperty]
     private string? _charSilhouetteImage;
@@ -558,16 +770,27 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CharacterClassText))]
+    [NotifyPropertyChangedFor(nameof(CharSilhouetteImage))]
     private int _class;
     partial void OnClassChanged(int value)
     {
+        ClassName = GetEnumDescription((CharClass)value);
+        CharSilhouetteImage = GetClassImage(value);
         JobItems?.Clear();
         PopulateJobItems((CharClass)value);
+        Job = CharacterData.Job;
+
     }
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CharacterClassText))]
+    [NotifyPropertyChangedFor(nameof(Class))]
+    [NotifyPropertyChangedFor(nameof(JobName))]
     private int _job;
+    partial void OnJobChanged(int value)
+    {
+        Enum jobEnum = GetJobEnum((CharClass)Class, value);
+        JobName = GetEnumDescription(jobEnum);
+    }
 
     [ObservableProperty]
     private int _lobby;
@@ -575,6 +798,11 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CharacterNameText))]
     private int _level;
+    partial void OnLevelChanged(int value)
+    {
+        long experience = _gmDatabaseService.GetExperienceFromLevel(value);
+        CharacterExp = experience;
+    }
 
     [ObservableProperty]
     private long _characterExp;
@@ -584,6 +812,13 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     [ObservableProperty]
     private int _totalSkillPoints;
+    partial void OnTotalSkillPointsChanged(int value)
+    {
+        if (SkillPoints > value)
+        {
+            SkillPoints = value;
+        }
+    }
 
     [ObservableProperty]
     private int _inventoryGold;

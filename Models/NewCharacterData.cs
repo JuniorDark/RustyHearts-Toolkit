@@ -9,7 +9,6 @@
         public long Experience { get; set; }
         public int SP { get; set; }
         public int TotalSP { get; set; }
-        public int Fatigue { get; set; }
         public int LobbyID { get; set; }
         public int Gold { get; set; }
         public int Hearts { get; set; }

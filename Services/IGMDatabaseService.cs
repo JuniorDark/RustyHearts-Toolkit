@@ -17,6 +17,7 @@ namespace RHToolkit.Services
         string GetOptionName(int optionID);
         (int minValue, int maxValue) GetOptionValue(int itemID);
         (int secTime, float value, int maxValue) GetOptionValues(int optionID);
+        (int nSetOption00, int nSetOptionvlue00, int nSetOption01, int nSetOptionvlue01, int nSetOption02, int nSetOptionvlue02, int nSetOption03, int nSetOptionvlue03, int nSetOption04, int nSetOptionvlue04) GetSetInfo(int setID);
         string GetSetName(int setId);
         string GetSubCategoryName(int categoryID);
         int GetTitleCategory(int titleID);
@@ -26,6 +27,5 @@ namespace RHToolkit.Services
         int GetTitleRemainTime(int titleID);
         (int nPhysicalAttackMin, int nPhysicalAttackMax, int nMagicAttackMin, int nMagicAttackMax) GetWeaponStats(int jbClass, int weaponID);
         bool IsNameInNickFilter(string characterName);
-        (int nSetOption00, int nSetOptionvlue00, int nSetOption01, int nSetOptionvlue01, int nSetOption02, int nSetOptionvlue02, int nSetOption03, int nSetOptionvlue03, int nSetOption04, int nSetOptionvlue04) GetSetInfo(int setID);
     }
 }

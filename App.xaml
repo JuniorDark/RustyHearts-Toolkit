@@ -30,6 +30,7 @@
                 <ResourceDictionary Source="Styles/lb_def_msg_box.xaml" />
                 <ResourceDictionary Source="Styles/red02.xaml" />
                 <ResourceDictionary Source="Styles/ScrollBar.xaml" />
+                <ResourceDictionary Source="Styles/Tab.xaml" />
                 <ResourceDictionary Source="Styles/Textbox.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
