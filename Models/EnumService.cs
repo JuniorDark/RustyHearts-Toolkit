@@ -6,27 +6,14 @@ namespace RHToolkit.Models
 {
     public class EnumService
     {
-        public static List<NameID> GetEnumItems<T>() where T : Enum
+        public static List<NameID> GetEnumItems<T>(bool addAll = false) where T : Enum
         {
             List<NameID> enumItems = [];
 
-            if (typeof(T) != typeof(ItemType))
+            if (addAll)
             {
                 enumItems.Add(new NameID { ID = 0, Name = Resources.All });
             }
-
-            foreach (T enumValue in Enum.GetValues(typeof(T)))
-            {
-                string description = GetEnumDescription(enumValue);
-                enumItems.Add(new NameID { ID = Convert.ToInt32(enumValue), Name = description });
-            }
-
-            return enumItems;
-        }
-
-        public static List<NameID> GetEnumItemsNotAll<T>() where T : Enum
-        {
-            List<NameID> enumItems = [];
 
             foreach (T enumValue in Enum.GetValues(typeof(T)))
             {
@@ -169,21 +156,6 @@ namespace RHToolkit.Models
             Unique = 5,
             [LocalizedDescription("Epic")]
             Epic = 6
-        }
-
-        public static IEnumerable<int> MapBranchIndexToValues(int branchIndex)
-        {
-            return branchIndex switch
-            {
-                0 => [0], // All branches
-                1 => [1],
-                2 => [2],
-                3 => [4],
-                4 => [5],
-                5 => [6],
-                6 => [5],
-                _ => [0],
-            };
         }
 
         public enum SocketColor

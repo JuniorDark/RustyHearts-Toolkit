@@ -29,6 +29,7 @@
         public int GuildPoint { get; set; }
         public string? IsMoveEnable { get; set; }
         public string? GuildName { get; set; }
+        public bool HasGuild { get; set; }
     }
 
 }

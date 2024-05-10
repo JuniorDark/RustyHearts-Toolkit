@@ -656,7 +656,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         try
         {
-            ClassItemsFilter = GetEnumItems<CharClass>();
+            ClassItemsFilter = GetEnumItems<CharClass>(true);
 
             if (ClassItemsFilter.Count > 0)
             {
@@ -676,7 +676,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         try
         {
-            BranchItemsFilter = GetEnumItems<Branch>();
+            BranchItemsFilter = GetEnumItems<Branch>(true);
 
             if (BranchItemsFilter.Count > 0)
             {

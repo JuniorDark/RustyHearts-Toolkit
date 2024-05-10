@@ -120,10 +120,12 @@ namespace RHToolkit.Services
                 if (row["guildid"] != DBNull.Value)
                 {
                     characterData.GuildName = await GetGuildNameAsync((Guid)row["guildid"]);
+                    characterData.HasGuild = true;
                 }
                 else
                 {
                     characterData.GuildName = Resources.NoGuild;
+                    characterData.HasGuild = false;
                 }
 
                 return characterData;
@@ -317,7 +319,7 @@ namespace RHToolkit.Services
             return [.. characterNames];
         }
 
-        public async Task<(Guid characterId, Guid authid, string windyCode)> GetCharacterInfoAsync(string characterName)
+        public async Task<(Guid characterId, Guid authid, string? windyCode)> GetCharacterInfoAsync(string characterName)
         {
             string selectQuery = "SELECT character_id, authid, bcust_id FROM CharacterTable WHERE name = @characterName";
             var parameters = new (string, object)[] { ("@characterName", characterName) };

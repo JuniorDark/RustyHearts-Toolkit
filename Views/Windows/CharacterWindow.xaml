@@ -130,7 +130,7 @@
                         Background="Transparent"
                         Foreground="Gold"
                         Style="{StaticResource ArialMS}"
-                        Text="{Binding CharacterID}" />
+                        Text="{Binding CharacterIDText}" />
 
                 </StackPanel>
                 <StackPanel Grid.Row="2" Orientation="Horizontal">
@@ -385,7 +385,7 @@
                         Increment="1"
                         Maximum="{Binding TotalSkillPoints}"
                         Minimum="0"
-                        Value="{Binding SkillPoints, Mode=TwoWay}" />
+                        Value="{Binding SkillPoints, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
                         x:Name="lbWarehouseGold"
                         VerticalAlignment="Top"
@@ -443,6 +443,7 @@
                     <control:IntegerUpDown
                         x:Name="intGuildExp"
                         Width="120"
+                        IsEnabled="{Binding HasGuild}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         Increment="1"
