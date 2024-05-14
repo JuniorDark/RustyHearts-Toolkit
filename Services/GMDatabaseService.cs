@@ -168,6 +168,8 @@ namespace RHToolkit.Services
             {
                 using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
 
+                items.Add(new NameID { ID = 0, Name = Resources.None });
+
                 while (command.Read())
                 {
                     int id = command.GetInt32(0);

@@ -360,7 +360,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         if (value == 0)
         {
-            //SelectedItem = ItemDataItems?.FirstOrDefault();
             SelectedItem = ItemDataView?.Cast<ItemData>()?.FirstOrDefault(FilterItems);
         }
         else

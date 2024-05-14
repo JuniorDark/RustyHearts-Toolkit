@@ -237,6 +237,38 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     }
     #endregion
 
+    #region Title
+    private TitleWindow? _titleWindowInstance;
+
+    [RelayCommand]
+    private void OnOpenTitleWindow()
+    {
+        try
+        {
+            if (CharacterData != null)
+            {
+                if (_titleWindowInstance == null)
+                {
+                    _windowsProviderService.Show<TitleWindow>();
+                    _titleWindowInstance = Application.Current.Windows.OfType<TitleWindow>().FirstOrDefault();
+
+                    if (_titleWindowInstance != null)
+                    {
+                        _titleWindowInstance.Closed += (sender, args) => _titleWindowInstance = null;
+                    }
+
+                }
+
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBox.ShowOKMessage($"Error reading Character Title: {ex.Message}", "Error");
+        }
+    }
+    #endregion
+
     #region Comboboxes
 
     [ObservableProperty]
@@ -278,7 +310,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     {
         try
         {
-            LobbyItems = _gmDatabaseService.GetLobbyItems(); ;
+            LobbyItems = _gmDatabaseService.GetLobbyItems();
 
             if (LobbyItems.Count > 0)
             {

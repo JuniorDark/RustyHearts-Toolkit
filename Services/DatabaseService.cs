@@ -1,14 +1,16 @@
 ﻿using Microsoft.Data.SqlClient;
 using RHToolkit.Models;
 using RHToolkit.Properties;
+using RHToolkit.Utilities;
 using System.Data;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Services
 {
-    public class DatabaseService(ISqlDatabaseService databaseService) : IDatabaseService
+    public class DatabaseService(ISqlDatabaseService databaseService, IGMDatabaseService gmDatabaseService) : IDatabaseService
     {
         private readonly ISqlDatabaseService _databaseService = databaseService;
+        private readonly IGMDatabaseService _gmDatabaseService = gmDatabaseService;
 
         #region RustyHearts
 
@@ -343,6 +345,176 @@ namespace RHToolkit.Services
 
         #endregion
 
+        #region Character Title
+
+        public async Task<DataTable?> ReadCharacterTitleListAsync(Guid characterId)
+        {
+            DataTable dataTable = new();
+            dataTable.Columns.Add("TitleUid", typeof(Guid));
+            dataTable.Columns.Add("TitleId", typeof(int));
+            dataTable.Columns.Add("ExpireTime", typeof(int));
+            dataTable.Columns.Add("TitleType", typeof(string));
+            dataTable.Columns.Add("TitleName", typeof(string));
+            dataTable.Columns.Add("FormattedRemainTime", typeof(string));
+            dataTable.Columns.Add("FormattedExpireTime", typeof(string));
+
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            DataTable titleDataTable = await _databaseService.ExecuteDataProcedureAsync("up_read_title_list", connection, null, ("@character_id", characterId));
+
+            if (titleDataTable.Rows.Count > 0)
+            {
+                foreach (DataRow row in titleDataTable.Rows)
+                {
+                    Guid titleUid = (Guid)row["ID"];
+                    int titleId = (int)row["title_code"];
+                    int remainTime = (int)row["remain_time"];
+                    int expireTime = (int)row["expire_time"];
+
+                    int titleCategory = _gmDatabaseService.GetTitleCategory(titleId);
+                    string formattedtitleCategory = titleCategory == 0 ? "Normal" : "Special";
+                    string titleName = _gmDatabaseService.GetTitleName(titleId);
+                    string formattedTitleName = $"{titleName} ({titleId})";
+                    string formattedRemainTime = DateTimeFormatter.FormatRemainTime(remainTime);
+                    string formattedExpireTime = DateTimeFormatter.FormatExpireTime(expireTime);
+
+                    dataTable.Rows.Add(titleUid, titleId, expireTime, formattedtitleCategory, formattedTitleName, formattedRemainTime, formattedExpireTime);
+                }
+
+                return dataTable;
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+
+        public async Task<DataRow?> ReadCharacterEquipTitleAsync(Guid characterId)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+
+            DataTable dataTable = await _databaseService.ExecuteDataProcedureAsync("up_read_equip_title", connection, null, ("@character_id", characterId));
+
+            return dataTable.Rows.Count > 0 ? dataTable.Rows[0] : null;
+        }
+
+        public async Task<bool> CharacterHasTitle(Guid characterId, int titleID)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+
+            object? result = await _databaseService.ExecuteScalarAsync(
+                "SELECT COUNT(*) FROM CharacterTitle WHERE [character_id] = @character_id AND [title_code] = @title_code",
+                connection,
+                ("@character_id", characterId),
+                ("@title_code", titleID)
+            );
+
+            int titleCount = result != null ? (int)result : 0;
+
+            return titleCount > 0;
+        }
+
+        public async Task AddCharacterTitleAsync(Guid characterId, int titleId, int remainTime, int expireTime)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                await _databaseService.ExecuteProcedureAsync(
+                     "up_add_character_title",
+                     connection,
+                     transaction,
+                     ("@character_id", characterId),
+                     ("@new_id", Guid.NewGuid()),
+                     ("@title_code", titleId),
+                     ("@remain_time", remainTime),
+                     ("@expire_time", expireTime)
+                 );
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error adding character title: {ex.Message}", ex);
+            }
+        }
+
+        public async Task EquipCharacterTitleAsync(Guid characterId, Guid titleId)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                await _databaseService.ExecuteProcedureAsync(
+                     "up_equip_character_title",
+                     connection,
+                     transaction,
+                     ("@character_id", characterId),
+                     ("@title_id", titleId)
+                 );
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error equipping character title: {ex.Message}", ex);
+            }
+        }
+
+        public async Task UnequipCharacterTitleAsync(Guid titleId)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                await _databaseService.ExecuteProcedureAsync(
+                     "up_unequip_character_title",
+                     connection,
+                     transaction,
+                     ("@title_id", titleId)
+                 );
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error unequipping character title: {ex.Message}", ex);
+            }
+        }
+
+        public async Task RemoveCharacterTitleAsync(Guid characterId, Guid titleUid)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                await _databaseService.ExecuteProcedureAsync(
+                     "up_delete_character_title",
+                     connection,
+                     transaction,
+                     ("@character_id", characterId),
+                     ("@del_title_id", titleUid)
+                 );
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error removing character title: {ex.Message}", ex);
+            }
+        }
+
+
+        #endregion
+
         #region Fortune
 
         public async Task<DataRow?> ReadCharacterFortuneAsync(Guid characterId)
@@ -467,7 +639,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error reading sanction: {ex.Message}", "Error");
+                throw new Exception($"Error reading sanction: {ex.Message}");
             }
 
             return dataTable;

@@ -12,129 +12,131 @@ namespace RHToolkit.Models.UISettings
         private const string SQLServerValueName = "SQLServer";
         private const string SQLUserValueName = "SQLUser";
         private const string SQLPwdValueName = "SQLPwd";
+        private const string DefaultLanguage = "English";
+        private const string DefaultSQLServer = "localhost";
+        private const string DefaultSQLUser = "sa";
 
-        private static byte[] ProtectData(byte[] data)
+        private static string Encrypt(string plainText)
         {
-            return ProtectedData.Protect(data, null, DataProtectionScope.CurrentUser);
+            byte[] plainTextBytes = Encoding.UTF8.GetBytes(plainText);
+            byte[] encryptedBytes = ProtectedData.Protect(plainTextBytes, null, DataProtectionScope.CurrentUser);
+            return Convert.ToBase64String(encryptedBytes);
         }
 
-        private static byte[] UnprotectData(byte[] data)
+        private static string Decrypt(string encryptedText)
         {
-            return ProtectedData.Unprotect(data, null, DataProtectionScope.CurrentUser);
-        }
-
-        private static string EncryptString(string data)
-        {
-            byte[] encryptedData = ProtectData(Encoding.UTF8.GetBytes(data));
-            return Convert.ToBase64String(encryptedData);
-        }
-
-        private static string DecryptString(string encryptedData)
-        {
-            byte[] decryptedData = UnprotectData(Convert.FromBase64String(encryptedData));
-            return Encoding.UTF8.GetString(decryptedData);
+            byte[] encryptedBytes = Convert.FromBase64String(encryptedText);
+            byte[] plainTextBytes = ProtectedData.Unprotect(encryptedBytes, null, DataProtectionScope.CurrentUser);
+            return Encoding.UTF8.GetString(plainTextBytes);
         }
 
         public static ApplicationTheme GetAppTheme()
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(RegistryKey))
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
             {
-                if (key != null)
-                {
-                    return Enum.TryParse<ApplicationTheme>(key.GetValue(ThemeValueName)?.ToString(), out var theme)
-                        ? theme
-                        : ApplicationTheme.Dark;
-                }
-                return ApplicationTheme.Dark;
+                return Enum.TryParse<ApplicationTheme>(key.GetValue(ThemeValueName)?.ToString(), out var theme)
+                    ? theme
+                    : ApplicationTheme.Dark;
             }
+            return ApplicationTheme.Dark;
         }
 
         public static void SetAppTheme(ApplicationTheme theme)
         {
-            using (var key = Registry.CurrentUser.CreateSubKey(RegistryKey))
-            {
-                key.SetValue(ThemeValueName, theme.ToString());
-            }
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(ThemeValueName, theme.ToString());
         }
 
         public static string GetAppLanguage()
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(RegistryKey))
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
             {
-                if (key != null)
-                {
-                    return key.GetValue(LanguageValueName)?.ToString() ?? "English";
-                }
-                return "English";
+                return key.GetValue(LanguageValueName)?.ToString() ?? DefaultLanguage;
             }
+            return DefaultLanguage;
         }
 
         public static void SetAppLanguage(string language)
         {
-            using (var key = Registry.CurrentUser.CreateSubKey(RegistryKey))
-            {
-                key.SetValue(LanguageValueName, language);
-            }
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(LanguageValueName, language);
         }
 
         public static string GetSQLServer()
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(RegistryKey))
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
             {
-                if (key != null)
-                {
-                    return key.GetValue(SQLServerValueName)?.ToString() ?? "localhost";
-                }
-                return "localhost";
+                return key.GetValue(SQLServerValueName)?.ToString() ?? DefaultSQLServer;
             }
+            return DefaultSQLServer;
         }
 
         public static void SetSQLServer(string server)
         {
-            using (var key = Registry.CurrentUser.CreateSubKey(RegistryKey))
-            {
-                key.SetValue(SQLServerValueName, server);
-            }
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(SQLServerValueName, server);
         }
 
         public static string GetSQLUser()
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(RegistryKey))
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
             {
-                if (key != null)
-                {
-                    return key.GetValue(SQLUserValueName)?.ToString() ?? "sa";
-                }
-                return "sa";
+                return key.GetValue(SQLUserValueName)?.ToString() ?? DefaultSQLUser;
             }
+            return DefaultSQLUser;
         }
 
         public static void SetSQLUser(string user)
         {
-            using (var key = Registry.CurrentUser.CreateSubKey(RegistryKey))
-            {
-                key.SetValue(SQLUserValueName, user);
-            }
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(SQLUserValueName, user);
         }
 
         public static string GetSQLPassword()
-    {
-        using (var key = Registry.CurrentUser.OpenSubKey(RegistryKey))
         {
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
             if (key != null)
             {
-                return key.GetValue(SQLPwdValueName)?.ToString() ?? string.Empty;
+                var password = key.GetValue(SQLPwdValueName)?.ToString();
+
+                if (!string.IsNullOrEmpty(password))
+                {
+                    if (IsBase64String(password))
+                    {
+                        return Decrypt(password);
+                    }
+                    else
+                    {
+                        return password;
+                    }
+                }
             }
             return string.Empty;
         }
-    }
 
-    public static void SetSQLPassword(string password)
-    {
-        using (var key = Registry.CurrentUser.CreateSubKey(RegistryKey))
+        private static bool IsBase64String(string s)
         {
-            key.SetValue(SQLPwdValueName, password);
+            try
+            {
+                Convert.FromBase64String(s);
+                return true;
+            }
+            catch (FormatException)
+            {
+                return false;
+            }
         }
-    }
+
+
+        public static void SetSQLPassword(string password)
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+
+            key.SetValue(SQLPwdValueName, password != null ? Encrypt(password) : string.Empty);
+        }
     }
 }

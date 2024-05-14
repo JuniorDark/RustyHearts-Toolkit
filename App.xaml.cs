@@ -1,13 +1,13 @@
-﻿using RHToolkit.Services;
+﻿using RHToolkit.Models.Localization;
+using RHToolkit.Models.UISettings;
+using RHToolkit.Services;
 using RHToolkit.Services.Contracts;
 using RHToolkit.ViewModels.Controls;
 using RHToolkit.ViewModels.Pages;
 using RHToolkit.ViewModels.Windows;
-using RHToolkit.Views.Windows;
 using RHToolkit.Views.Pages;
+using RHToolkit.Views.Windows;
 using Wpf.Ui;
-using RHToolkit.Models.Localization;
-using RHToolkit.Models.UISettings;
 
 namespace RHToolkit;
 
@@ -43,7 +43,7 @@ public partial class App : Application
                 _ = services.AddSingleton<SettingsPage>();
                 _ = services.AddSingleton<SettingsViewModel>();
 
-                // All other pages and view models
+                // All other services and view models
                 _ = services.AddSingleton<ISqlDatabaseService, SqlDatabaseService>();
                 _ = services.AddSingleton<IDatabaseService, DatabaseService>();
                 _ = services.AddSingleton<ISqLiteDatabaseService, SqLiteDatabaseService>();
@@ -57,6 +57,8 @@ public partial class App : Application
                 _ = services.AddTransient<FrameViewModel>();
                 _ = services.AddTransient<CharacterWindow>();
                 _ = services.AddTransient<CharacterWindowViewModel>();
+                _ = services.AddTransient<TitleWindow>();
+                _ = services.AddTransient<TitleWindowViewModel>();
 
             }
         )
