@@ -8,7 +8,7 @@
     xmlns:models="clr-namespace:RHToolkit.Models"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="Database Tools"
-    d:DataContext="{d:DesignInstance local:DatabaseToolsPage,
+    d:DataContext="{d:DesignInstance local:DatabasePage,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -21,7 +21,7 @@
                         Margin="4"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        Command="{Binding ViewModel.OpenWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:DatabaseToolsPage}, Mode=OneWay}"
+                        Command="{Binding ViewModel.OpenWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=local:DatabasePage}, Mode=OneWay}"
                         CommandParameter="{Binding Value, Mode=OneTime}"
                         Icon="{Binding Icon, Mode=OneTime}"
                         IsChevronVisible="True">

@@ -46,6 +46,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     public void Receive(CharacterDataMessage message)
     {
         var characterData = message.Value;
+        CharacterData = null;
         CharacterData = message.Value;
         LoadCharacterData(characterData);
     }
@@ -56,7 +57,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         {
             CharacterID = characterData.CharacterID;
             CharacterName = characterData.CharacterName;
-            WindyCode = characterData.WindyCode;
+            Account = characterData.AccountName;
             Class = characterData.Class;
             Job = characterData.Job;
             Level = characterData.Level;
@@ -139,7 +140,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                     string modify = CharacterManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
 
                     await _databaseService.UpdateCharacterDataAsync(CharacterData.CharacterID, newCharacterData);
-                    await _databaseService.GMAuditAsync(CharacterData.WindyCode!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Information Change", modify);
+                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Information Change", modify);
 
                     RHMessageBox.ShowOKMessage("Character saved successfully!", "Success");
                     await ReadCharacterData();
@@ -213,7 +214,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                     return;
                 }
 
-                await _databaseService.GMAuditAsync(CharacterData.WindyCode!, CharacterData.CharacterID, newCharacterName, "Character Name Change", $"Old Name:{CharacterData.CharacterName}, New Name: {newCharacterName}");
+                await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, newCharacterName, "Character Name Change", $"Old Name:{CharacterData.CharacterName}, New Name: {newCharacterName}");
 
                 RHMessageBox.ShowOKMessage("Character name updated successfully!", "Success");
                 CharacterData.CharacterName = newCharacterName;
@@ -257,9 +258,14 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                         _titleWindowInstance.Closed += (sender, args) => _titleWindowInstance = null;
                     }
 
+                    WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
                 }
-
-                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+                else
+                {
+                    WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+                    Task.Delay(500);
+                    _titleWindowInstance.Focus();
+                }
             }
         }
         catch (Exception ex)
@@ -658,7 +664,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CharacterClassText))]
-    private string? _jobName;
+    private string? _jobName = Resources.Basic;
 
     public string? CharacterNameText => $"Lv.{Level} {CharacterName}";
 
@@ -668,7 +674,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     private string? _charSilhouetteImage;
 
     [ObservableProperty]
-    private string? _windyCode;
+    private string? _account;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CharacterIDText))]

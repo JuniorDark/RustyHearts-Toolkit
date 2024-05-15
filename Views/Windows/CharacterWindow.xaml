@@ -28,13 +28,13 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="500*" />
-                <ColumnDefinition Width="465*" />
+                <ColumnDefinition Width="390*" />
                 <ColumnDefinition Width="289*" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
-                <RowDefinition Height="150*" />
+                <RowDefinition Height="120*" />
                 <RowDefinition Height="260*" />
                 <RowDefinition Height="40*" />
             </Grid.RowDefinitions>
@@ -128,16 +128,16 @@
                         Margin="10,5"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Content="WindyCode:"
+                        Content="Account:"
                         Foreground="White" />
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        d:Text="windycode"
+                        d:Text="account"
                         Background="Transparent"
                         Foreground="Gold"
                         Style="{StaticResource ArialMS}"
-                        Text="{Binding WindyCode}" />
+                        Text="{Binding Account}" />
 
                 </StackPanel>
                 <StackPanel Grid.Row="1" Orientation="Horizontal">
@@ -891,6 +891,15 @@
                     </Grid>
                 </TabItem>
             </TabControl>
+            <Image
+                Grid.Column="1"
+                Grid.Row="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Cursor="Help"
+                Source="/Assets/icon/icon_help_tip.png"
+                Stretch="None"
+                ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
 
         </Grid>
     </ContentControl>

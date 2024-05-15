@@ -104,6 +104,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     public void Receive(CharacterDataMessage message)
     {
+        CharacterData = null;
         CharacterData = message.Value;
     }
 
@@ -118,6 +119,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         if (message.Recipient == ViewModelType.ItemWindowViewModel)
         {
             var itemData = message.Value;
+            ItemData = null;
             MessageType = message.MessageType;
 
             Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
@@ -372,7 +374,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private ItemData? _selectedItem;
     partial void OnSelectedItemChanged(ItemData? value)
     {
-        Item = value;
+        Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
+        {
+            UpdateItemData(value);
+        }));
     }
 
     #endregion
@@ -738,18 +743,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     #region ItemData
 
-    [ObservableProperty]
-    private ItemData? _item;
-    partial void OnItemChanged(ItemData? value)
-    {
-        Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
-        {
-            UpdateItemData(SelectedItem);
-        }));
-
-    }
-
-    // Update UI elements based on Item data
     private void UpdateItemData(ItemData? itemData)
     {
         if (itemData != null)

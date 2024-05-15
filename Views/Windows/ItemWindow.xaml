@@ -48,7 +48,7 @@
                 Title="{x:Static rs:Resources.AddItem}"
                 Grid.Row="0"
                 Grid.ColumnSpan="3"
-                Height="25"
+                Height="30"
                 Margin="30,5,0,0"
                 VerticalAlignment="Center"
                 ButtonsForeground="White"
@@ -203,7 +203,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <StackPanel
-                    Margin="0,-60,0,0"
+                    Margin="60,-65,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
@@ -216,7 +216,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbOptionSearch"
-                        Width="200"
+                        Width="250"
                         Height="30"
                         CaretBrush="White"
                         FontFamily="{StaticResource ArialUnicodeMS}"
@@ -627,6 +627,7 @@
                         VerticalAlignment="Top"
                         d:Foreground="White"
                         d:Text="Item Name"
+                        FontSize="12"
                         Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}"
                         Text="{Binding ItemName}" />
                     <control:ItemSlot
@@ -637,9 +638,8 @@
                     <Button
                         x:Name="btnSelectItem"
                         Canvas.Left="105"
-                        Canvas.Top="94"
+                        Canvas.Top="90"
                         Width="120"
-                        Height="26"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Command="{Binding SelectItemCommand}"
@@ -842,21 +842,21 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel
                     Grid.ColumnSpan="2"
-                    Margin="50,-60,0,0"
-                    HorizontalAlignment="Left"
+                    Margin="0,-65,0,0"
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
                     <Label
                         x:Name="lbSearch"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
                         Content="{x:Static rs:Resources.Search}"
                         Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbSearch"
-                        Width="200"
+                        Width="250"
                         Height="34"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         CaretBrush="White"
                         Foreground="Gold"

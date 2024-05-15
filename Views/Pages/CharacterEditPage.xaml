@@ -10,7 +10,7 @@
     d:DataContext="{d:DesignInstance local:CharacterEditPage,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignWidth="1280"
     mc:Ignorable="d">
 
     <Grid>
@@ -27,16 +27,29 @@
         <StackPanel
             Grid.Row="0"
             Grid.ColumnSpan="3"
-            Margin="10"
-            HorizontalAlignment="Center"
+            Margin="0,5"
+            HorizontalAlignment="Left"
             Orientation="Horizontal">
-            <Label
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Content="Character Name"
-                Foreground="White" />
+            <CheckBox
+                Command="{Binding ViewModel.SelectAllCheckedCommand, Mode=OneWay}"
+                CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                Content="All"
+                IsChecked="{Binding ViewModel.SelectAllCheckBoxChecked, Mode=TwoWay}"
+                IsThreeState="True"
+                Template="{StaticResource lb_checkbox}" />
+            <CheckBox
+                Command="{Binding ViewModel.SingleCheckedCommand, Mode=OneWay}"
+                CommandParameter="1"
+                Content="Online"
+                IsChecked="{Binding ViewModel.OnlineCheckBoxChecked, Mode=TwoWay}"
+                Template="{StaticResource lb_checkbox}" />
+            <CheckBox
+                Command="{Binding ViewModel.SingleCheckedCommand, Mode=OneWay}"
+                CommandParameter="2"
+                Content="Offline"
+                IsChecked="{Binding ViewModel.OfflineCheckBoxChecked, Mode=TwoWay}"
+                Template="{StaticResource lb_checkbox}" />
             <TextBox
-                x:Name="txtCharacterName"
                 Width="200"
                 Height="35"
                 Margin="10,0"
@@ -45,20 +58,162 @@
                 Background="Black"
                 BorderThickness="0"
                 Foreground="White"
-                Tag="Name"
+                Tag="Character Name/Account"
                 Template="{StaticResource lb_textbox}"
-                Text="{Binding ViewModel.CharacterName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button
                 x:Name="btnSearch"
                 Width="150"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Background="Transparent"
-                Command="{Binding ViewModel.OpenCharacterWindowCommand}"
+                Command="{Binding ViewModel.ReadCharacterDataCommand}"
                 Content="Search"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
         </StackPanel>
+
+        <!--  Datagrid  -->
+        <Grid
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="50" />
+            </Grid.RowDefinitions>
+            <DataGrid
+                x:Name="dataGridView"
+                Height="300"
+                Margin="0,5,0,0"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                AutoGenerateColumns="False"
+                BorderBrush="#FF0F0D0A"
+                CanUserAddRows="False"
+                ColumnWidth="Auto"
+                EnableColumnVirtualization="True"
+                EnableRowVirtualization="True"
+                FontFamily="{StaticResource ArialUnicodeMS}"
+                FontSize="12"
+                HeadersVisibility="Column"
+                HorizontalGridLinesBrush="White"
+                HorizontalScrollBarVisibility="Disabled"
+                ItemsSource="{Binding ViewModel.CharacterDataList}"
+                SelectedItem="{Binding ViewModel.CharacterData, Mode=TwoWay}"
+                SelectionMode="Single"
+                Template="{StaticResource lb_datagrid}"
+                VerticalGridLinesBrush="White">
+                <DataGrid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkBlue" />
+                </DataGrid.Resources>
+                <DataGrid.Foreground>
+                    <ImageBrush />
+                </DataGrid.Foreground>
+                <DataGrid.Background>
+                    <ImageBrush />
+                </DataGrid.Background>
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="80*"
+                        Binding="{Binding AccountName}"
+                        Header="Account"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="100*"
+                        Binding="{Binding CharacterName}"
+                        Header="Character Name"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="140*"
+                        Binding="{Binding CreateTime}"
+                        Header="Create Date"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="50*"
+                        Binding="{Binding Class}"
+                        Header="Class"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="50*"
+                        Binding="{Binding Job}"
+                        Header="Focus"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="50*"
+                        Binding="{Binding Level}"
+                        Header="Level"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="90*"
+                        Binding="{Binding Gold}"
+                        Header="Gold"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="60*"
+                        Binding="{Binding IsConnect}"
+                        Header="State"
+                        IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="15"
+                Foreground="White">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Text" Value="Please search for a character." />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ViewModel.CharacterDataList.Count}" Value="0">
+                                <Setter Property="Text" Value="No data found." />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ViewModel.IsFirstTimeInitialized}" Value="False">
+                                <Setter Property="Text" Value="" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+                <TextBlock.Visibility>
+                    <Binding Converter="{StaticResource ZeroToVisibilityConverter}" Path="ViewModel.CharacterDataList.Count" />
+                </TextBlock.Visibility>
+            </TextBlock>
+
+            <StackPanel
+                Grid.Row="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <Button
+                    Width="150"
+                    Margin="10,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="Transparent"
+                    Command="{Binding ViewModel.EditCharacterCommand}"
+                    Content="Edit Character"
+                    Cursor="Hand"
+                    Foreground="White"
+                    IsEnabled="{Binding ViewModel.IsEditCharacterButtonEnabled}"
+                    Style="{StaticResource lb_def_button02}" />
+                <Button
+                    Width="150"
+                    Margin="10,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="Transparent"
+                    Command="{Binding DeleteCharacterCommand}"
+                    Content="Delete Character"
+                    Cursor="Hand"
+                    Foreground="White"
+                    IsEnabled="{Binding IsDeleteCharacterButtonEnabled}"
+                    Style="{StaticResource lb_def_button02}" />
+
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

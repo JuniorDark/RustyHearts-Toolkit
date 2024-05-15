@@ -1,34 +1,32 @@
-﻿using RHToolkit.Services;
-using RHToolkit.Models;
+﻿using RHToolkit.Models;
+using RHToolkit.Properties;
+using RHToolkit.Services;
 using RHToolkit.Views.Windows;
 using Wpf.Ui.Controls;
-using RHToolkit.Properties;
 
-namespace RHToolkit.ViewModels.Pages
+namespace RHToolkit.ViewModels.Pages;
+
+public partial class DatabaseToolsViewModel(WindowsProviderService windowsProviderService) : ObservableObject
 {
-    public partial class DatabaseToolsViewModel(WindowsProviderService windowsProviderService) : ObservableObject
+    [ObservableProperty]
+    private WindowCard[] _windowCards =
+    [
+        new(Resources.Mail, Resources.MailDesc, SymbolRegular.Mail24, "mail"),
+];
+
+    [RelayCommand]
+    public void OnOpenWindow(string value)
     {
-        [ObservableProperty]
-        private WindowCard[] _windowCards =
-        [
-            new(Resources.Mail, Resources.MailDesc, SymbolRegular.Mail24, "mail"),
-        new(Resources.CharacterEditor, Resources.CharacterEditorDesc, SymbolRegular.PersonEdit24, "charactereditor"),
-    ];
-
-        [RelayCommand]
-        public void OnOpenWindow(string value)
+        if (string.IsNullOrEmpty(value))
         {
-            if (string.IsNullOrEmpty(value))
-            {
-                return;
-            }
+            return;
+        }
 
-            switch (value)
-            {
-                case "mail":
-                    windowsProviderService.Show<MailWindow>();
-                    break;
-            }
+        switch (value)
+        {
+            case "mail":
+                windowsProviderService.Show<MailWindow>();
+                break;
         }
     }
 }

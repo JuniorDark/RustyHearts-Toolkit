@@ -13,6 +13,7 @@
             <TextBlock
                 x:Name="ContentTb"
                 Grid.Column="1"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Text="{TemplateBinding Content}" />
         </Grid>

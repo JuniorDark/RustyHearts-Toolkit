@@ -31,6 +31,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
     public async void Receive(CharacterDataMessage message)
     {
         var characterData = message.Value;
+        CharacterData = null;
         CharacterData = characterData;
 
         Title = $"Character Title ({characterData.CharacterName})";
@@ -43,8 +44,10 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
     private async Task ReadTitle(Guid characterId)
     {
+        TitleData = null;
         TitleData = await _databaseService.ReadCharacterTitleListAsync(characterId);
 
+        EquippedTitle = null;
         EquippedTitle = await _databaseService.ReadCharacterEquipTitleAsync(characterId);
 
         if (EquippedTitle != null)
@@ -152,7 +155,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
                     }
 
                     await _databaseService.AddCharacterTitleAsync(CharacterData.CharacterID, selectedTitleID, selectedTitleRemainTime, selectedTitleExpireTime);
-                    await _databaseService.GMAuditAsync(CharacterData.WindyCode!, CharacterData.CharacterID, CharacterData.CharacterName!, "Add Title", $"<font color=blue>Add Title</font>]<br><font color=red>Title: {selectedTitleID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Add Title", $"<font color=blue>Add Title</font>]<br><font color=red>Title: {selectedTitleID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
                     RHMessageBox.ShowOKMessage("Title added successfully!", "Success");
 
@@ -193,7 +196,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
                     if (CharacterData != null)
                     {
                         await _databaseService.EquipCharacterTitleAsync(CharacterData.CharacterID, SelectedTitleUid);
-                        await _databaseService.GMAuditAsync(CharacterData.WindyCode!, CharacterData.CharacterID, CharacterData.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {SelectedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                        await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {SelectedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
                         RHMessageBox.ShowOKMessage("Title equiped successfully!", "Success");
 
@@ -229,7 +232,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
                     if (RHMessageBox.ConfirmMessage($"Unequip the title '{EquippedTitleName}' from this character?"))
                     {
                         await _databaseService.UnequipCharacterTitleAsync(EquippedTitleUid);
-                        await _databaseService.GMAuditAsync(CharacterData.WindyCode!, CharacterData.CharacterID, CharacterData.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {EquippedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                        await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {EquippedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
                         RHMessageBox.ShowOKMessage("Title unequiped successfully!", "Success");
                         await ReadTitle(CharacterData.CharacterID);
@@ -265,7 +268,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
                     {
                         await _databaseService.UnequipCharacterTitleAsync(SelectedTitleUid);
                         await _databaseService.RemoveCharacterTitleAsync(CharacterData.CharacterID, SelectedTitleUid);
-                        await _databaseService.GMAuditAsync(CharacterData.WindyCode!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Title Deletion", $"<font color=blue>Character Title Deletion</font>]<br><font color=red>Deleted: {SelectedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                        await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Title Deletion", $"<font color=blue>Character Title Deletion</font>]<br><font color=red>Deleted: {SelectedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
                         RHMessageBox.ShowOKMessage($"Title '{SelectedTitleName}' deleted successfully!", "Success");
 

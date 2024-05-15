@@ -80,11 +80,21 @@ namespace RHToolkit.Services
 
         #region Read
 
-        public async Task<CharacterData?> GetCharacterDataAsync(string characterName)
+        public async Task<CharacterData?> GetCharacterDataAsync(string characterIdentifier)
         {
-            string selectQuery = "SELECT * FROM CharacterTable WHERE [Name] = @name";
+            string selectQuery = "SELECT * FROM CharacterTable WHERE [Name] = @name OR [character_id] = @id";
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
-            DataTable dataTable = await _databaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@name", characterName));
+
+            DataTable dataTable;
+
+            if (Guid.TryParse(characterIdentifier, out Guid characterId))
+            {
+                dataTable = await _databaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@id", characterId));
+            }
+            else
+            {
+                dataTable = await _databaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@name", characterIdentifier));
+            }
 
             if (dataTable.Rows.Count > 0)
             {
@@ -92,7 +102,7 @@ namespace RHToolkit.Services
                 var characterData = new CharacterData
                 {
                     CharacterID = (Guid)row["character_id"],
-                    WindyCode = (string)row["bcust_id"],
+                    AccountName = (string)row["bcust_id"],
                     AuthID = (Guid)row["authid"],
                     Server = (int)row["server"],
                     CharacterName = (string)row["name"],
@@ -136,6 +146,76 @@ namespace RHToolkit.Services
             {
                 return null;
             }
+        }
+
+        public async Task<List<CharacterData>> GetCharacterDataListAsync(string characterIdentifier, string isConnect = "")
+        {
+            string selectQuery = "SELECT * FROM CharacterTable WHERE [bcust_id] = @characterIdentifier OR [name] = @characterIdentifier";
+
+            if (!string.IsNullOrEmpty(isConnect))
+            {
+                selectQuery += " AND [isconnect] = @isConnect";
+            }
+
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+
+            DataTable dataTable = await _databaseService.ExecuteDataQueryAsync(
+                selectQuery,
+                connection,
+                null,
+                ("@characterIdentifier", characterIdentifier),
+                ("@IsConnect", isConnect)
+            );
+
+            List<CharacterData> characterDataList = [];
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                var characterData = new CharacterData
+                {
+                    CharacterID = (Guid)row["character_id"],
+                    AccountName = (string)row["bcust_id"],
+                    AuthID = (Guid)row["authid"],
+                    Server = (int)row["server"],
+                    CharacterName = (string)row["name"],
+                    Class = (int)row["class"],
+                    Job = (byte)row["job"],
+                    Level = (int)row["level"],
+                    Experience = (long)row["experience"],
+                    SP = (int)row["sp"],
+                    TotalSP = (int)row["total_sp"],
+                    Fatigue = (int)row["fatigue"],
+                    LobbyID = (int)row["lobbyid"],
+                    Gold = (int)row["gold"],
+                    CreateTime = (DateTime)row["createtime"],
+                    LastLogin = (DateTime)row["lastlogin"],
+                    Hearts = (int)row["hearts"],
+                    BlockType = (byte)row["block_type"],
+                    BlockYN = (string)row["block_yn"],
+                    IsConnect = (string)row["isconnect"],
+                    StorageGold = (int)row["storage_gold"],
+                    StorageCount = (int)row["storage_count"],
+                    IsTradeEnable = (string)row["istradeenable"],
+                    Permission = (short)row["permission"],
+                    GuildPoint = (int)row["guildpoint"],
+                    IsMoveEnable = (string)row["ismoveenable"]
+                };
+
+                if (row["guildid"] != DBNull.Value)
+                {
+                    characterData.GuildName = await GetGuildNameAsync((Guid)row["guildid"]);
+                    characterData.HasGuild = true;
+                }
+                else
+                {
+                    characterData.GuildName = Resources.NoGuild;
+                    characterData.HasGuild = false;
+                }
+
+                characterDataList.Add(characterData);
+            }
+
+            return characterDataList;
         }
 
         public async Task<List<ItemData>> GetItemList(Guid characterId, string tableName)
@@ -262,7 +342,6 @@ namespace RHToolkit.Services
 
             return itemList;
         }
-
 
         public async Task<bool> IsCharacterOnlineAsync(string characterName)
         {

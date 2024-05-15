@@ -110,8 +110,16 @@
                 Source="/Assets/buttons/lb_def_button02/lb_def_button02_12.png"
                 Stretch="None" />
 
-            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <ContentPresenter
+                x:Name="contentPresenter"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
         </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="Gray" />
+            </Trigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
     <Style x:Key="lb_def_button02" TargetType="Button">
@@ -125,6 +133,7 @@
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
                 <Setter Property="Template" Value="{StaticResource lb_def_button02_disabled}" />
+                <Setter Property="Foreground" Value="Gray" />
             </Trigger>
         </Style.Triggers>
     </Style>
