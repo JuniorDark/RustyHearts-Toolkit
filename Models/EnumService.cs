@@ -192,8 +192,8 @@ namespace RHToolkit.Models
 
         public enum SanctionOperationType
         {
-            Add,
-            Remove
+            Add = 1,
+            Remove = 2
         }
 
         public enum SanctionType

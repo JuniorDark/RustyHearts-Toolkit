@@ -62,17 +62,70 @@ namespace RHToolkit.Services
 
             try
             {
-                return (int)(await _databaseService.ExecuteProcedureAsync(
+                return (int)await _databaseService.ExecuteProcedureAsync(
                     "up_update_character_name",
                     connection,
                     null,
                     ("@character_id", characterId),
                     ("@character_name", characterName)
-                ));
+                );
             }
             catch (Exception ex)
             {
                 throw new Exception($"Error: {ex.Message}", ex);
+            }
+        }
+
+        public async Task DeleteCharacterAsync(Guid authId, Guid characterId)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                await _databaseService.ExecuteProcedureAsync(
+                     "up_delete_character",
+                     connection,
+                transaction,
+                ("@auth_id", authId),
+                ("@character_id", characterId)
+                 );
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error deleting character: {ex.Message}", ex);
+            }
+        }
+
+        public async Task RestoreCharacterAsync(Guid characterId)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                await _databaseService.ExecuteNonQueryAsync(
+                   "insert into CharacterTable select * FROM CharacterTable_DELETE where character_id = @character_id",
+                   connection,
+                   transaction,
+                   ("@character_id", characterId)
+               );
+                await _databaseService.ExecuteNonQueryAsync(
+                   "delete FROM CharacterTable_DELETE where character_id = @character_id",
+                   connection,
+                   transaction,
+                   ("@character_id", characterId)
+               );
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error restoring character: {ex.Message}", ex);
             }
         }
 
@@ -148,13 +201,15 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task<List<CharacterData>> GetCharacterDataListAsync(string characterIdentifier, string isConnect = "")
+        public async Task<List<CharacterData>> GetCharacterDataListAsync(string characterIdentifier, string isConnect = "", bool isDeletedCharacter = false)
         {
-            string selectQuery = "SELECT * FROM CharacterTable WHERE [bcust_id] = @characterIdentifier OR [name] = @characterIdentifier";
+            string tableName = isDeletedCharacter ? "CharacterTable_DELETE" : "CharacterTable";
+
+            string selectQuery = $"SELECT * FROM {tableName} WHERE ([bcust_id] = @characterIdentifier OR [name] = @characterIdentifier)";
 
             if (!string.IsNullOrEmpty(isConnect))
             {
-                selectQuery += " AND [isconnect] = @isConnect";
+                selectQuery += " AND [IsConnect] = @isConnect";
             }
 
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
@@ -164,7 +219,7 @@ namespace RHToolkit.Services
                 connection,
                 null,
                 ("@characterIdentifier", characterIdentifier),
-                ("@IsConnect", isConnect)
+                ("@isConnect", isConnect)
             );
 
             List<CharacterData> characterDataList = [];
@@ -667,6 +722,38 @@ namespace RHToolkit.Services
 
         #region Sanction
 
+        public async Task<(Guid SanctionUid, bool IsInsert)> CharacterSanctionAsync(Guid characterId, Guid sanctionUid, int sanctionKind, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                var result = await _databaseService.ExecuteProcedureAsync(
+                "up_char_sanction",
+                connection,
+                transaction,
+                ("@kind", sanctionKind),
+                ("@sanction_uid", sanctionUid),
+                ("@personnel", "RHToolkit"),
+                ("@releaser", releaser),
+                ("@comment", comment),
+                ("@character_id", characterId),
+                ("@sanction_type", sanctionType),
+                ("@sanction_count", sanctionCount),
+                ("@sanction_period_type", sanctionPeriod)
+            );
+                transaction.Commit();
+
+                return ((Guid)result, false);
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error adding sanction: {ex.Message}", ex);
+            }
+        }
+
         public async Task<DataTable> ReadCharacterSanctionListAsync(Guid characterId)
         {
             DataTable dataTable = new();
@@ -744,7 +831,7 @@ namespace RHToolkit.Services
             }
             else
             {
-                return (DateTime.MinValue, null);
+                return (DateTime.UtcNow, null);
             }
         }
 
@@ -761,29 +848,6 @@ namespace RHToolkit.Services
             int sanctionCount = result != null ? (int)result : 0;
 
             return sanctionCount > 0;
-        }
-
-        public async Task<(Guid SanctionUid, bool IsInsert)> CharacterSanctionAsync(Guid characterId, Guid sanctionUid, int sanctionKind, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount)
-        {
-            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
-            using var transaction = connection.BeginTransaction();
-
-            var result = await _databaseService.ExecuteProcedureAsync(
-                "up_char_sanction",
-                connection,
-                transaction,
-                ("@kind", sanctionKind),
-                ("@sanction_uid", sanctionUid),
-                ("@personnel", "RHToolkit"),
-                ("@releaser", releaser),
-                ("@comment", comment),
-                ("@character_id", characterId),
-                ("@sanction_type", sanctionType),
-                ("@sanction_count", sanctionCount),
-                ("@sanction_period_type", sanctionPeriod)
-            );
-
-            return ((Guid)result, false);
         }
 
         #endregion
@@ -939,11 +1003,9 @@ namespace RHToolkit.Services
 
             try
             {
-                object endTimeParameter = (endTime != null && endTime != DateTime.MinValue) ? endTime : DBNull.Value;
-
                 await _databaseService.ExecuteNonQueryAsync("INSERT INTO Sanction_Log(log_type, sanction_uid, world_id, bcust_id, item_uid, character_id, char_name, item_name, start_time, end_time, personnel, releaser, cause, comment, is_release, reg_date) " +
                                                           "VALUES (@log_type, @sanction_uid, @world_id, @bcust_id, @item_uid, @character_id, @char_name, @item_name, " +
-                                                          "FORMAT(@start_time, 'M/d/yyyy h:mm:ss tt'), FORMAT(@end_time, 'M/d/yyyy h:mm:ss tt'), @personnel, @releaser, @cause, @comment, @is_release, @reg_date)",
+                                                          "@start_time, @end_time, @personnel, @releaser, @cause, @comment, @is_release, @reg_date)",
                       connection,
                       transaction,
                       ("@log_type", 1),
@@ -955,7 +1017,7 @@ namespace RHToolkit.Services
                       ("@char_name", characterName),
                       ("@item_name", ""),
                       ("@start_time", startTime),
-                      ("@end_time", endTimeParameter),
+                      ("@end_time", DateTime.UtcNow),
                       ("@personnel", "RHToolkit"),
                       ("@releaser", ""),
                       ("@cause", reason),
@@ -968,7 +1030,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error: {ex.Message}", ex);
+                throw new Exception($"Error Sanction Log: {ex.Message} {ex.StackTrace}", ex);
             }
         }
 

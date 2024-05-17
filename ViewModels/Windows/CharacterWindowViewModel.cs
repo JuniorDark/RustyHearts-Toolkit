@@ -244,33 +244,68 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     [RelayCommand]
     private void OnOpenTitleWindow()
     {
+        if (CharacterData == null) return;
+
         try
         {
-            if (CharacterData != null)
+            if (_titleWindowInstance == null)
             {
-                if (_titleWindowInstance == null)
-                {
-                    _windowsProviderService.Show<TitleWindow>();
-                    _titleWindowInstance = Application.Current.Windows.OfType<TitleWindow>().FirstOrDefault();
+                _windowsProviderService.Show<TitleWindow>();
+                _titleWindowInstance = Application.Current.Windows.OfType<TitleWindow>().FirstOrDefault();
 
-                    if (_titleWindowInstance != null)
-                    {
-                        _titleWindowInstance.Closed += (sender, args) => _titleWindowInstance = null;
-                    }
-
-                    WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
-                }
-                else
+                if (_titleWindowInstance != null)
                 {
-                    WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
-                    Task.Delay(500);
-                    _titleWindowInstance.Focus();
+                    _titleWindowInstance.Closed += (sender, args) => _titleWindowInstance = null;
                 }
+
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+            }
+            else
+            {
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+                Task.Delay(500);
+                _titleWindowInstance.Focus();
             }
         }
         catch (Exception ex)
         {
             RHMessageBox.ShowOKMessage($"Error reading Character Title: {ex.Message}", "Error");
+        }
+    }
+    #endregion
+
+    #region Sanction
+    private SanctionWindow? _sanctionWindowInstance;
+
+    [RelayCommand]
+    private void OnOpenSanctionWindow()
+    {
+        if (CharacterData == null) return;
+
+        try
+        {
+            if (_sanctionWindowInstance == null)
+            {
+                _windowsProviderService.Show<SanctionWindow>();
+                _sanctionWindowInstance = Application.Current.Windows.OfType<SanctionWindow>().FirstOrDefault();
+
+                if (_sanctionWindowInstance != null)
+                {
+                    _sanctionWindowInstance.Closed += (sender, args) => _sanctionWindowInstance = null;
+                }
+
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+            }
+            else
+            {
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+                Task.Delay(500);
+                _sanctionWindowInstance.Focus();
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBox.ShowOKMessage($"Error reading Character Sanction: {ex.Message}", "Error");
         }
     }
     #endregion

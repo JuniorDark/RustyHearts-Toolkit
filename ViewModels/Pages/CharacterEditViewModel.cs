@@ -49,7 +49,6 @@ namespace RHToolkit.ViewModels.Pages
                 return string.Empty;
             }
         }
-
         #endregion
 
         #region Character Window
@@ -57,18 +56,30 @@ namespace RHToolkit.ViewModels.Pages
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(IsEditCharacterButtonEnabled))]
+        [NotifyPropertyChangedFor(nameof(IsDeleteCharacterButtonEnabled))]
         private CharacterData? _characterData;
         partial void OnCharacterDataChanged(CharacterData? value)
         {
             IsEditCharacterButtonEnabled = value == null ? false : true;
+
+            if (_characterWindowInstance == null)
+            {
+                IsDeleteCharacterButtonEnabled = value == null ? false : true;
+            }
         }
 
         [RelayCommand]
         private async Task EditCharacter()
         {
+            if (CharacterData == null) return;
+
             try
             {
-                if (CharacterData == null) return;
+                if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+                {
+                    RHMessageBox.ShowOKMessage($"The character '{CharacterData.CharacterName}' is online. You can't edit an online character.", "Info");
+                    return;
+                }
 
                 List<ItemData> inventoryItem = await _databaseService.GetItemList(CharacterData.CharacterID, "N_InventoryItem");
                 List<ItemData> equipItem = await _databaseService.GetItemList(CharacterData.CharacterID, "N_EquipItem");
@@ -81,9 +92,13 @@ namespace RHToolkit.ViewModels.Pages
 
                     if (_characterWindowInstance != null)
                     {
-                        _characterWindowInstance.Closed += (sender, args) => _characterWindowInstance = null;
+                        IsDeleteCharacterButtonEnabled = false;
+                        _characterWindowInstance.Closed += (sender, args) =>
+                        {
+                            _characterWindowInstance = null;
+                            IsDeleteCharacterButtonEnabled = true;
+                        };
                     }
-
                 }
 
                 WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
@@ -94,7 +109,38 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
+                RHMessageBox.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
+
+        [RelayCommand]
+        private async Task DeleteCharacter()
+        {
+            if (CharacterData == null) return;
+
+            try
+            {
+                if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+                {
+                    RHMessageBox.ShowOKMessage($"The character '{CharacterData.CharacterName}' is online. You can't delete an online character.", "Info");
+                    return;
+                }
+
+                if (RHMessageBox.ConfirmMessage($"Delete the character '{CharacterData.CharacterName}'?"))
+                {
+                    _characterWindowInstance?.Close();
+
+                    await _databaseService.DeleteCharacterAsync(CharacterData.AuthID, CharacterData.CharacterID);
+                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Delete Character", $"<font color=blue>Delete Character</font>]<br><font color=red>Character: {CharacterData.CharacterID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+
+                    RHMessageBox.ShowOKMessage($"Character '{CharacterData.CharacterName}' deleted.", "Success");
+
+                    await ReadCharacterData();
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBox.ShowOKMessage($"Error: {ex.Message}", "Error");
             }
         }
         #endregion
@@ -106,6 +152,9 @@ namespace RHToolkit.ViewModels.Pages
 
         [ObservableProperty]
         private bool _isEditCharacterButtonEnabled = false;
+
+        [ObservableProperty]
+        private bool _isDeleteCharacterButtonEnabled = false;
 
         [ObservableProperty]
         private bool _isFirstTimeInitialized = true;

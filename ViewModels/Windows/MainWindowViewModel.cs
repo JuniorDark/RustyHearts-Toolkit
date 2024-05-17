@@ -21,6 +21,7 @@ public partial class MainWindowViewModel : ObservableObject
         {
             new NavigationViewItem(Resources.Tools, SymbolRegular.WindowDatabase24, typeof(DatabaseToolsPage)),
             new NavigationViewItem("Character Edit", SymbolRegular.WindowDatabase24, typeof(CharacterEditPage)),
+            new NavigationViewItem("Character Restore", SymbolRegular.WindowDatabase24, typeof(CharacterRestorePage)),
              new NavigationViewItem(Resources.Database, SymbolRegular.WindowDatabase24, typeof(DatabasePage)),
         }
     },

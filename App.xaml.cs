@@ -40,6 +40,8 @@ public partial class App : Application
                 _ = services.AddSingleton<DatabaseViewModel>();
                 _ = services.AddSingleton<CharacterEditPage>();
                 _ = services.AddSingleton<CharacterEditViewModel>();
+                _ = services.AddSingleton<CharacterRestorePage>();
+                _ = services.AddSingleton<CharacterRestoreViewModel>();
                 _ = services.AddSingleton<SettingsPage>();
                 _ = services.AddSingleton<SettingsViewModel>();
 
@@ -59,6 +61,8 @@ public partial class App : Application
                 _ = services.AddTransient<CharacterWindowViewModel>();
                 _ = services.AddTransient<TitleWindow>();
                 _ = services.AddTransient<TitleWindowViewModel>();
+                _ = services.AddTransient<SanctionWindow>();
+                _ = services.AddTransient<SanctionWindowViewModel>();
 
             }
         )

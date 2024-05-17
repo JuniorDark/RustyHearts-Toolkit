@@ -371,20 +371,10 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
     private DataRowView? _selectedTitle;
     partial void OnSelectedTitleChanged(DataRowView? value)
     {
-        if (value != null)
-        {
-            SelectedTitleId = (int)value["TitleId"];
-            SelectedTitleUid = (Guid)value["TitleUid"];
-            IsEquipTitleButtonEnabled = true;
-            IsRemoveTitleButtonEnabled = true;
-        }
-        else
-        {
-            SelectedTitleId = 0;
-            SelectedTitleUid = Guid.Empty;
-            IsEquipTitleButtonEnabled = false;
-            IsRemoveTitleButtonEnabled = false;
-        }
+        SelectedTitleId = value != null ? (int)value["TitleId"] : 0;
+        SelectedTitleUid = value != null ? (Guid)value["TitleUid"] : Guid.Empty;
+        IsEquipTitleButtonEnabled = value != null ? true : false;
+        IsRemoveTitleButtonEnabled = value != null ? true : false;
     }
 
     [ObservableProperty]
