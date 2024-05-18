@@ -17,7 +17,7 @@ namespace RHToolkit.Services
         Task<string[]> GetAllOnlineCharacterNamesAsync();
         Task<CharacterData?> GetCharacterDataAsync(string characterIdentifier);
         Task<List<CharacterData>> GetCharacterDataListAsync(string characterIdentifier, string isConnect = "", bool isDeletedCharacter = false);
-        Task<(Guid characterId, Guid authid, string? windyCode)> GetCharacterInfoAsync(string characterName);
+        Task<(Guid characterId, Guid authid, string accountName)> GetCharacterInfoAsync(string characterName);
         Task<string?> GetGuildNameAsync(Guid guildId);
         Task<List<ItemData>> GetItemList(Guid characterId, string tableName);
         Task<(DateTime startTime, DateTime? endTime)> GetSanctionTimesAsync(Guid sanctionUid);

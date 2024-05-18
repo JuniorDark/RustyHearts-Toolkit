@@ -6,10 +6,10 @@
     xmlns:local="clr-namespace:RHToolkit.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:RHToolkit.ViewModels.Pages"
-    Title="Home"
+    Title="Character Edit"
     d:DataContext="{d:DesignInstance local:CharacterEditPage,
                                      IsDesignTimeCreatable=False}"
-    d:DesignHeight="450"
+    d:DesignHeight="600"
     d:DesignWidth="1280"
     mc:Ignorable="d">
 
@@ -20,9 +20,9 @@
             <ColumnDefinition Width="150*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="50" />
+            <RowDefinition Height="300*" />
+            <RowDefinition Height="250" />
         </Grid.RowDefinitions>
         <StackPanel
             Grid.Row="0"
@@ -87,7 +87,7 @@
             </Grid.RowDefinitions>
             <DataGrid
                 x:Name="dataGridView"
-                Height="300"
+                Height="250"
                 Margin="0,5,0,0"
                 HorizontalContentAlignment="Center"
                 VerticalContentAlignment="Center"
@@ -223,7 +223,8 @@
                 Grid.Row="1"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                Orientation="Horizontal">
+                Orientation="Horizontal"
+                Visibility="{Binding ViewModel.IsButtonPanelVisible}">
                 <Button
                     Width="150"
                     Margin="10,10"
@@ -251,5 +252,46 @@
 
             </StackPanel>
         </Grid>
+        <StackPanel
+            Grid.Row="2"
+            Grid.ColumnSpan="3"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Orientation="Horizontal"
+            Visibility="{Binding ViewModel.IsButtonPanelVisible}">
+            <Button
+                x:Name="btnFortune"
+                Width="150"
+                Margin="5,5"
+                Background="Transparent"
+                Command="{Binding ViewModel.OpenFortuneWindowCommand}"
+                Content="Fortune"
+                Cursor="Hand"
+                Foreground="White"
+                IsEnabled="{Binding ViewModel.IsButtonEnabled}"
+                Style="{StaticResource lb_def_button02}" />
+            <Button
+                x:Name="btnTitle"
+                Width="150"
+                Margin="5,5"
+                Background="Transparent"
+                Command="{Binding ViewModel.OpenTitleWindowCommand}"
+                Content="Title"
+                Cursor="Hand"
+                Foreground="White"
+                IsEnabled="{Binding ViewModel.IsButtonEnabled}"
+                Style="{StaticResource lb_def_button02}" />
+            <Button
+                x:Name="btnSanction"
+                Width="150"
+                Margin="5,5"
+                Background="Transparent"
+                Command="{Binding ViewModel.OpenSanctionWindowCommand}"
+                Content="Sanctions"
+                Cursor="Hand"
+                Foreground="White"
+                IsEnabled="{Binding ViewModel.IsButtonEnabled}"
+                Style="{StaticResource lb_def_button02}" />
+        </StackPanel>
     </Grid>
 </Page>

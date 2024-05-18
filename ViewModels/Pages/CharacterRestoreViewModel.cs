@@ -1,4 +1,5 @@
 ﻿using RHToolkit.Models;
+using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Services;
 
@@ -16,6 +17,11 @@ namespace RHToolkit.ViewModels.Pages
         private async Task ReadDeleteCharacterData()
         {
             if (string.IsNullOrWhiteSpace(SearchText)) return;
+
+            if (!SqlCredentialValidator.ValidateCredentials())
+            {
+                return;
+            }
 
             try
             {
@@ -42,10 +48,15 @@ namespace RHToolkit.ViewModels.Pages
         [RelayCommand]
         private async Task RestoreCharacter()
         {
+            if (CharacterData == null) return;
+
+            if (!SqlCredentialValidator.ValidateCredentials())
+            {
+                return;
+            }
+
             try
             {
-                if (CharacterData == null) return;
-
                 if (RHMessageBox.ConfirmMessage($"Restore the character '{CharacterData.CharacterName}'?"))
                 {
                     await _databaseService.RestoreCharacterAsync(CharacterData.CharacterID);

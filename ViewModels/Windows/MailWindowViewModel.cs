@@ -13,7 +13,6 @@ namespace RHToolkit.ViewModels.Windows;
 public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>
 {
     private readonly WindowsProviderService _windowsProviderService;
-    private readonly List<ItemData>? _cachedItemDataList = [];
     private readonly IDatabaseService _databaseService;
 
     public MailWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService)
@@ -25,8 +24,6 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
         {
             ItemDataManager.Instance.InitializeCachedLists();
         }
-
-        _cachedItemDataList = ItemDataManager.Instance.CachedItemDataList;
 
         WeakReferenceMessenger.Default.Register(this);
     }
@@ -58,22 +55,22 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
 
                     _itemWindowInstance.ContentRendered += (sender, args) =>
                     {
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel, "Mail"));
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", "Mail"));
                     };
                 }
             }
             else
             {
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel, "Mail"));
-                Task.Delay(500);
-                _itemWindowInstance.Focus();
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData,"ItemWindowViewModel", "Mail"));
             }
+
+            _itemWindowInstance?.Focus();
         }
     }
 
     public void Receive(ItemDataMessage message)
     {
-        if (message.Recipient == ViewModelType.MailWindowViewModel)
+        if (message.Recipient == "MailWindowViewModel")
         {
             var itemData = message.Value;
 
@@ -284,7 +281,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                         for (int i = 0; i < templateData.ItemIDs?.Count; i++)
                         {
                             // Find the corresponding ItemData object in the _cachedItemDataList
-                            ItemData? cachedItem = _cachedItemDataList?.FirstOrDefault(item => item.ID == templateData.ItemIDs[i]);
+                            ItemData? cachedItem = ItemDataManager.Instance.CachedItemDataList?.FirstOrDefault(item => item.ID == templateData.ItemIDs[i]);
 
                             ItemData itemData = new()
                             {
@@ -342,7 +339,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
         }
     }
 
-    private List<int> GetInvalidItemIDs(List<int>? itemIDs)
+    private static List<int> GetInvalidItemIDs(List<int>? itemIDs)
     {
         List<int> invalidItemIDs = [];
 
@@ -358,9 +355,9 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
             // Check if there is any item in the cached list with the current item ID
             bool found = false;
 
-            if (_cachedItemDataList != null)
+            if (ItemDataManager.Instance.CachedItemDataList != null)
             {
-                foreach (ItemData item in _cachedItemDataList)
+                foreach (ItemData item in ItemDataManager.Instance.CachedItemDataList)
                 {
                     if (item.ID == itemID)
                     {
@@ -428,7 +425,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
             RHMessageBox.ShowOKMessage(Resources.EmptyRecipientDesc, Resources.EmptyRecipient);
             return;
         }
-        if (string.IsNullOrEmpty(Sender))
+        if (string.IsNullOrEmpty(mailSender))
         {
             RHMessageBox.ShowOKMessage(Resources.EmptySenderDesc, Resources.EmptySender);
             return;
@@ -479,7 +476,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                     Guid mailId = Guid.NewGuid();
                     string recipient = currentRecipient;
 
-                    (Guid senderCharacterId, Guid senderAuthId, string senderWindyCode) = await _databaseService.GetCharacterInfoAsync(mailSender!);
+                    (Guid senderCharacterId, Guid senderAuthId, string senderWindyCode) = await _databaseService.GetCharacterInfoAsync(mailSender);
                     (Guid recipientCharacterId, Guid recipientAuthId, string recipientWindyCode) = await _databaseService.GetCharacterInfoAsync(recipient);
 
                     if (senderCharacterId == Guid.Empty && createType == 5)
@@ -538,7 +535,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
 
                     await _databaseService.InsertMailAsync(recipientAuthId, senderCharacterId, mailSender!, recipient, content, gold, returnDay, reqGold, mailId, createType);
 
-                   await _databaseService.GMAuditAsync(recipientWindyCode, recipientCharacterId, recipient, Resources.SendMail, $"<font color=blue>{Resources.SendMail}</font>]<br><font color=red>{Resources.Sender}: RHToolkit: {senderCharacterId}, {Resources.Recipient}: {recipient}, GUID:{{{recipientCharacterId}}}<br></font>" + modify);
+                   await _databaseService.GMAuditAsync(recipientWindyCode!, recipientCharacterId, recipient, Resources.SendMail, $"<font color=blue>{Resources.SendMail}</font>]<br><font color=red>{Resources.Sender}: RHToolkit: {senderCharacterId}, {Resources.Recipient}: {recipient}, GUID:{{{recipientCharacterId}}}<br></font>" + modify);
                 }
 
                 if (sendToAllCharacters)

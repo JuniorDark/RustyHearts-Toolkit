@@ -1,4 +1,5 @@
 ﻿using RHToolkit.Models;
+using RHToolkit.Models.Database;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
@@ -18,6 +19,11 @@ public partial class DatabaseToolsViewModel(WindowsProviderService windowsProvid
     public void OnOpenWindow(string value)
     {
         if (string.IsNullOrEmpty(value))
+        {
+            return;
+        }
+
+        if (!SqlCredentialValidator.ValidateCredentials())
         {
             return;
         }

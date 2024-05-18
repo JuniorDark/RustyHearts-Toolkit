@@ -1,5 +1,6 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
+using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
@@ -11,6 +12,7 @@ namespace RHToolkit.ViewModels.Pages
     {
         private readonly WindowsProviderService _windowsProviderService = windowsProviderService;
         private readonly IDatabaseService _databaseService = databaseService;
+        private readonly CharacterOnlineValidator _characterOnlineValidator = new(databaseService);
 
         #region Character Data
         [ObservableProperty]
@@ -20,6 +22,11 @@ namespace RHToolkit.ViewModels.Pages
         private async Task ReadCharacterData()
         {
             if (string.IsNullOrWhiteSpace(SearchText)) return;
+
+            if (!SqlCredentialValidator.ValidateCredentials())
+            {
+                return;
+            }
 
             try
             {
@@ -55,12 +62,12 @@ namespace RHToolkit.ViewModels.Pages
         private CharacterWindow? _characterWindowInstance;
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsEditCharacterButtonEnabled))]
-        [NotifyPropertyChangedFor(nameof(IsDeleteCharacterButtonEnabled))]
         private CharacterData? _characterData;
         partial void OnCharacterDataChanged(CharacterData? value)
         {
             IsEditCharacterButtonEnabled = value == null ? false : true;
+            IsButtonPanelVisible = value == null ? Visibility.Hidden : Visibility.Visible;
+            IsButtonEnabled = value == null ? false : true;
 
             if (_characterWindowInstance == null)
             {
@@ -73,11 +80,15 @@ namespace RHToolkit.ViewModels.Pages
         {
             if (CharacterData == null) return;
 
+            if (!SqlCredentialValidator.ValidateCredentials())
+            {
+                return;
+            }
+
             try
             {
-                if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+                if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
                 {
-                    RHMessageBox.ShowOKMessage($"The character '{CharacterData.CharacterName}' is online. You can't edit an online character.", "Info");
                     return;
                 }
 
@@ -101,10 +112,12 @@ namespace RHToolkit.ViewModels.Pages
                     }
                 }
 
-                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "CharacterWindow"));
                 WeakReferenceMessenger.Default.Send(new DatabaseItemMessage(inventoryItem, ItemStorageType.Inventory));
                 WeakReferenceMessenger.Default.Send(new DatabaseItemMessage(equipItem, ItemStorageType.Equipment));
                 WeakReferenceMessenger.Default.Send(new DatabaseItemMessage(accountStorage, ItemStorageType.Storage));
+
+                _characterWindowInstance?.Activate();
 
             }
             catch (Exception ex)
@@ -118,11 +131,15 @@ namespace RHToolkit.ViewModels.Pages
         {
             if (CharacterData == null) return;
 
+            if (!SqlCredentialValidator.ValidateCredentials())
+            {
+                return;
+            }
+
             try
             {
-                if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+                if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
                 {
-                    RHMessageBox.ShowOKMessage($"The character '{CharacterData.CharacterName}' is online. You can't delete an online character.", "Info");
                     return;
                 }
 
@@ -145,10 +162,129 @@ namespace RHToolkit.ViewModels.Pages
         }
         #endregion
 
+        #region Buttons
+
+        #region Title
+        private TitleWindow? _titleWindowInstance;
+
+        [RelayCommand]
+        private void OnOpenTitleWindow()
+        {
+            if (CharacterData == null) return;
+
+            if (!SqlCredentialValidator.ValidateCredentials())
+            {
+                return;
+            }
+
+            try
+            {
+                if (_titleWindowInstance == null)
+                {
+                    _windowsProviderService.Show<TitleWindow>();
+                    _titleWindowInstance = Application.Current.Windows.OfType<TitleWindow>().FirstOrDefault();
+
+                    if (_titleWindowInstance != null)
+                    {
+                        _titleWindowInstance.Closed += (sender, args) => _titleWindowInstance = null;
+                    }
+                }
+
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "TitleWindow"));
+
+                _titleWindowInstance?.Focus();
+            }
+            catch (Exception ex)
+            {
+                RHMessageBox.ShowOKMessage($"Error reading Character Title: {ex.Message}", "Error");
+            }
+        }
+        #endregion
+
+        #region Sanction
+        private SanctionWindow? _sanctionWindowInstance;
+
+        [RelayCommand]
+        private void OnOpenSanctionWindow()
+        {
+            if (CharacterData == null) return;
+
+            if (!SqlCredentialValidator.ValidateCredentials())
+            {
+                return;
+            }
+
+            try
+            {
+                if (_sanctionWindowInstance == null)
+                {
+                    _windowsProviderService.Show<SanctionWindow>();
+                    _sanctionWindowInstance = Application.Current.Windows.OfType<SanctionWindow>().FirstOrDefault();
+
+                    if (_sanctionWindowInstance != null)
+                    {
+                        _sanctionWindowInstance.Closed += (sender, args) => _sanctionWindowInstance = null;
+                    }
+                }
+
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "SanctionWindow"));
+                _sanctionWindowInstance?.Focus();
+            }
+            catch (Exception ex)
+            {
+                RHMessageBox.ShowOKMessage($"Error reading Character Sanction: {ex.Message}", "Error");
+            }
+        }
+        #endregion
+
+        #region Fortune
+        private FortuneWindow? _fortuneWindowInstance;
+
+        [RelayCommand]
+        private void OnOpenFortuneWindow()
+        {
+            if (CharacterData == null) return;
+
+            if (!SqlCredentialValidator.ValidateCredentials())
+            {
+                return;
+            }
+
+            try
+            {
+                if (_fortuneWindowInstance == null)
+                {
+                    _windowsProviderService.Show<FortuneWindow>();
+                    _fortuneWindowInstance = Application.Current.Windows.OfType<FortuneWindow>().FirstOrDefault();
+
+                    if (_fortuneWindowInstance != null)
+                    {
+                        _fortuneWindowInstance.Closed += (sender, args) => _fortuneWindowInstance = null;
+                    }
+                }
+
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "FortuneWindow"));
+                _fortuneWindowInstance?.Focus();
+            }
+            catch (Exception ex)
+            {
+                RHMessageBox.ShowOKMessage($"Error reading Character Fortune: {ex.Message}", "Error");
+            }
+        }
+        #endregion
+
+        #endregion
+
         #region Properties
 
         [ObservableProperty]
         private string? _searchText;
+
+        [ObservableProperty]
+        private bool _isButtonEnabled = false;
+
+        [ObservableProperty]
+        private Visibility _isButtonPanelVisible = Visibility.Hidden;
 
         [ObservableProperty]
         private bool _isEditCharacterButtonEnabled = false;

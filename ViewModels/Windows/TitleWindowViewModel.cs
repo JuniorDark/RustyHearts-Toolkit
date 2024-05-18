@@ -1,5 +1,6 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
+using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
@@ -12,11 +13,13 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 {
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
+    private readonly CharacterOnlineValidator _characterOnlineValidator;
 
     public TitleWindowViewModel(IDatabaseService databaseService, IGMDatabaseService gmDatabaseService)
     {
         _databaseService = databaseService;
         _gmDatabaseService = gmDatabaseService;
+        _characterOnlineValidator = new(_databaseService);
 
         PopulateTitleItems();
 
@@ -30,13 +33,16 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
     public async void Receive(CharacterDataMessage message)
     {
-        var characterData = message.Value;
-        CharacterData = null;
-        CharacterData = characterData;
+        if (message.Recipient == "TitleWindow")
+        {
+            var characterData = message.Value;
+            CharacterData = null;
+            CharacterData = characterData;
 
-        Title = $"Character Title ({characterData.CharacterName})";
+            Title = $"Character Title ({characterData.CharacterName})";
 
-        await ReadTitle(characterData.CharacterID);
+            await ReadTitle(characterData.CharacterID);
+        }
     }
 
     [ObservableProperty]
@@ -127,44 +133,44 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
         try
         {
+            if (CharacterData == null) return;
+
             if (TitleListId == 0)
+            {
+                return;
+            }
+
+            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
             {
                 return;
             }
 
             if (RHMessageBox.ConfirmMessage($"Add the title '{titleName}' to this character?"))
             {
-                if (CharacterData != null)
+                // Check if the character already has the same title
+                if (await _databaseService.CharacterHasTitle(CharacterData.CharacterID, selectedTitleID))
                 {
-                    // Check if the character already has the same title
-                    if (await _databaseService.CharacterHasTitle(CharacterData.CharacterID, selectedTitleID))
-                    {
-                        RHMessageBox.ShowOKMessage($"This character already has '{titleName}' title.", "Duplicate Title");
-                        return;
-                    }
+                    RHMessageBox.ShowOKMessage($"This character already has '{titleName}' title.", "Duplicate Title");
+                    return;
+                }
 
-                    // Set selectedTitleExpireTime based on selectedTitleRemainTime
-                    if (selectedTitleRemainTime == -1)
-                    {
-                        selectedTitleExpireTime = 0;
-                    }
-                    else
-                    {
-                        // Convert selectedTitleRemainTime to epoch time
-                        selectedTitleExpireTime = (int)DateTime.UtcNow.AddMinutes(selectedTitleRemainTime).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
-                    }
-
-                    await _databaseService.AddCharacterTitleAsync(CharacterData.CharacterID, selectedTitleID, selectedTitleRemainTime, selectedTitleExpireTime);
-                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Add Title", $"<font color=blue>Add Title</font>]<br><font color=red>Title: {selectedTitleID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
-
-                    RHMessageBox.ShowOKMessage("Title added successfully!", "Success");
-
-                    await ReadTitle(CharacterData.CharacterID);
+                // Set selectedTitleExpireTime based on selectedTitleRemainTime
+                if (selectedTitleRemainTime == -1)
+                {
+                    selectedTitleExpireTime = 0;
                 }
                 else
                 {
-                    RHMessageBox.ShowOKMessage($"CharacterInfo is null. Unable to add title.");
+                    // Convert selectedTitleRemainTime to epoch time
+                    selectedTitleExpireTime = (int)DateTime.UtcNow.AddMinutes(selectedTitleRemainTime).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
                 }
+
+                await _databaseService.AddCharacterTitleAsync(CharacterData.CharacterID, selectedTitleID, selectedTitleRemainTime, selectedTitleExpireTime);
+                await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Add Title", $"<font color=blue>Add Title</font>]<br><font color=red>Title: {selectedTitleID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+
+                RHMessageBox.ShowOKMessage("Title added successfully!", "Success");
+
+                await ReadTitle(CharacterData.CharacterID);
             }
         }
         catch (Exception ex)
@@ -179,8 +185,15 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
     [RelayCommand]
     private async Task EquipTitle()
     {
+        if (CharacterData == null) return;
+
         try
         {
+            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            {
+                return;
+            }
+
             if (SelectedTitle != null)
             {
                 int expireTime = (int)SelectedTitle["ExpireTime"];
@@ -193,19 +206,12 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
                 if (RHMessageBox.ConfirmMessage($"Equip the title '{SelectedTitleName}' to this character?"))
                 {
-                    if (CharacterData != null)
-                    {
-                        await _databaseService.EquipCharacterTitleAsync(CharacterData.CharacterID, SelectedTitleUid);
-                        await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {SelectedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                    await _databaseService.EquipCharacterTitleAsync(CharacterData.CharacterID, SelectedTitleUid);
+                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {SelectedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
-                        RHMessageBox.ShowOKMessage("Title equiped successfully!", "Success");
+                    RHMessageBox.ShowOKMessage("Title equiped successfully!", "Success");
 
-                        await ReadTitle(CharacterData.CharacterID);
-                    }
-                    else
-                    {
-                        RHMessageBox.ShowOKMessage($"CharacterInfo is null. Unable to equip title.");
-                    }
+                    await ReadTitle(CharacterData.CharacterID);
                 }
             }
 
@@ -223,27 +229,30 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
     [RelayCommand]
     private async Task UnequipTitle()
     {
+        if (CharacterData == null) return;
+
         try
         {
-            if (CharacterData != null)
+            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
             {
-                if (EquippedTitle != null)
-                {
-                    if (RHMessageBox.ConfirmMessage($"Unequip the title '{EquippedTitleName}' from this character?"))
-                    {
-                        await _databaseService.UnequipCharacterTitleAsync(EquippedTitleUid);
-                        await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {EquippedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                return;
+            }
 
-                        RHMessageBox.ShowOKMessage("Title unequiped successfully!", "Success");
-                        await ReadTitle(CharacterData.CharacterID);
-                    }
-                }
-                else
+            if (EquippedTitle != null)
+            {
+                if (RHMessageBox.ConfirmMessage($"Unequip the title '{EquippedTitleName}' from this character?"))
                 {
-                    RHMessageBox.ShowOKMessage("This character dont have a title equipped.", "No Title");
-                    return;
-                }
+                    await _databaseService.UnequipCharacterTitleAsync(EquippedTitleUid);
+                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {EquippedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
+                    RHMessageBox.ShowOKMessage("Title unequiped successfully!", "Success");
+                    await ReadTitle(CharacterData.CharacterID);
+                }
+            }
+            else
+            {
+                RHMessageBox.ShowOKMessage("This character dont have a title equipped.", "No Title");
+                return;
             }
         }
         catch (Exception ex)
@@ -258,24 +267,28 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
     [RelayCommand]
     private async Task RemoveTitle()
     {
+        if (CharacterData == null) return;
+
         try
         {
+            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            {
+                return;
+            }
+
             if (SelectedTitle != null)
             {
                 if (RHMessageBox.ConfirmMessage($"Delete the '{SelectedTitleName}' title from this character?"))
                 {
-                    if (CharacterData != null)
-                    {
-                        await _databaseService.UnequipCharacterTitleAsync(SelectedTitleUid);
-                        await _databaseService.RemoveCharacterTitleAsync(CharacterData.CharacterID, SelectedTitleUid);
-                        await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Title Deletion", $"<font color=blue>Character Title Deletion</font>]<br><font color=red>Deleted: {SelectedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                    await _databaseService.UnequipCharacterTitleAsync(SelectedTitleUid);
+                    await _databaseService.RemoveCharacterTitleAsync(CharacterData.CharacterID, SelectedTitleUid);
+                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Title Deletion", $"<font color=blue>Character Title Deletion</font>]<br><font color=red>Deleted: {SelectedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
-                        RHMessageBox.ShowOKMessage($"Title '{SelectedTitleName}' deleted successfully!", "Success");
+                    RHMessageBox.ShowOKMessage($"Title '{SelectedTitleName}' deleted successfully!", "Success");
 
-                        SelectedTitle = null;
+                    SelectedTitle = null;
 
-                        await ReadTitle(CharacterData.CharacterID);
-                    }
+                    await ReadTitle(CharacterData.CharacterID);
                 }
             }
         }
@@ -315,7 +328,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
     #region Properties
     [ObservableProperty]
-    private string? _title;
+    private string _title = "Character Title";
 
     [ObservableProperty]
     private string? _currentTitleText;

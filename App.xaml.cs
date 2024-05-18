@@ -1,4 +1,5 @@
-﻿using RHToolkit.Models.Localization;
+﻿using Microsoft.Extensions.DependencyInjection;
+using RHToolkit.Models.Localization;
 using RHToolkit.Models.UISettings;
 using RHToolkit.Services;
 using RHToolkit.Services.Contracts;
@@ -57,12 +58,14 @@ public partial class App : Application
                 _ = services.AddTransient<ItemWindow>();
                 _ = services.AddTransient<ItemWindowViewModel>();
                 _ = services.AddTransient<FrameViewModel>();
-                _ = services.AddTransient<CharacterWindow>();
-                _ = services.AddTransient<CharacterWindowViewModel>();
+                _ = services.AddSingleton<CharacterWindow>();
+                _ = services.AddSingleton<CharacterWindowViewModel>();
                 _ = services.AddTransient<TitleWindow>();
                 _ = services.AddTransient<TitleWindowViewModel>();
                 _ = services.AddTransient<SanctionWindow>();
                 _ = services.AddTransient<SanctionWindowViewModel>();
+                _ = services.AddTransient<FortuneWindow>();
+                _ = services.AddTransient<FortuneWindowViewModel>();
 
             }
         )

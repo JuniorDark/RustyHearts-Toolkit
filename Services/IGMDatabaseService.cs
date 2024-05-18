@@ -9,6 +9,7 @@ namespace RHToolkit.Services
         string GetCategoryName(int categoryID);
         long GetExperienceFromLevel(int level);
         string GetFortuneDesc(int fortuneID);
+        List<NameID> GetFortuneItems();
         List<NameID> GetFortuneDescItems();
         (string fortuneName, string AddEffectDesc00, string AddEffectDesc01, string AddEffectDesc02, string fortuneDesc) GetFortuneValues(int fortuneID);
         List<ItemData> GetItemDataList(EnumService.ItemType itemType, string itemTableName);

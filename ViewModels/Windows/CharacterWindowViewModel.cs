@@ -14,20 +14,19 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     private readonly WindowsProviderService _windowsProviderService;
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
-    private readonly List<ItemData>? _cachedItemDataList = [];
+    private readonly CharacterOnlineValidator _characterOnlineValidator;
 
     public CharacterWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService)
     {
         _windowsProviderService = windowsProviderService;
         _databaseService = databaseService;
         _gmDatabaseService = gmDatabaseService;
+        _characterOnlineValidator = new CharacterOnlineValidator(_databaseService);
 
         if (ItemDataManager.Instance.CachedItemDataList == null)
         {
             ItemDataManager.Instance.InitializeCachedLists();
         }
-
-        _cachedItemDataList = ItemDataManager.Instance.CachedItemDataList;
 
         PopulateClassItems();
         PopulateLobbyItems();
@@ -45,10 +44,13 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     public void Receive(CharacterDataMessage message)
     {
-        var characterData = message.Value;
-        CharacterData = null;
-        CharacterData = message.Value;
-        LoadCharacterData(characterData);
+        if (message.Recipient == "CharacterWindow")
+        {
+            var characterData = message.Value;
+            ClearData();
+            CharacterData = characterData;
+            LoadCharacterData(characterData);
+        }
     }
 
     private void LoadCharacterData(CharacterData characterData)
@@ -83,23 +85,32 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         }
     }
 
+    private void ClearData()
+    {
+        ClearAllEquipItems();
+        CharacterData = null;
+        ItemDatabaseList = null;
+        DeletedItemDatabaseList = null;
+    }
+
     private async Task ReadCharacterData()
     {
+        if (CharacterData == null) return;
+
         try
         {
-            if (CharacterName != null)
-            {
-                CharacterData? characterData = await _databaseService.GetCharacterDataAsync(CharacterName);
+            CharacterData? characterData = await _databaseService.GetCharacterDataAsync(CharacterData.CharacterName!);
 
-                if (characterData != null)
-                {
-                    LoadCharacterData(characterData);
-                }
-                else
-                {
-                    RHMessageBox.ShowOKMessage($"The character '{CharacterName}' does not exist.", "Invalid Character");
-                    return;
-                }
+            if (characterData != null)
+            {
+                ClearData();
+                CharacterData = characterData;
+                LoadCharacterData(characterData);
+            }
+            else
+            {
+                RHMessageBox.ShowOKMessage($"The character '{CharacterData.CharacterName}' does not exist.", "Invalid Character");
+                return;
             }
         }
         catch (Exception ex)
@@ -114,38 +125,39 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     [RelayCommand]
     private async Task SaveCharacter()
     {
+        if (CharacterData == null) return;
+
+        if (!SqlCredentialValidator.ValidateCredentials())
+        {
+            return;
+        }
+
         try
         {
-            if (CharacterData != null)
+            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
             {
+                return;
+            }
 
-                if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
-                {
-                    RHMessageBox.ShowOKMessage("This character is online. You can't edit an online character.", "Info");
-                    return;
-                }
+            var newCharacterData = GetCharacterChanges();
 
-                var newCharacterData = GetCharacterChanges();
+            if (!CharacterManager.HasCharacterDataChanges(CharacterData, newCharacterData))
+            {
+                RHMessageBox.ShowOKMessage("There are no changes to save.", "Info");
+                return;
+            }
 
-                if (!CharacterManager.HasCharacterDataChanges(CharacterData, newCharacterData))
-                {
-                    RHMessageBox.ShowOKMessage("There are no changes to save.", "Info");
-                    return;
-                }
+            string changes = CharacterManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "changes");
 
-                string changes = CharacterManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "changes");
+            if (RHMessageBox.ConfirmMessage($"Save the following changes to the character {CharacterData.CharacterName}?\n\n{changes}"))
+            {
+                string modify = CharacterManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
 
-                if (RHMessageBox.ConfirmMessage($"Save the following changes to the character {CharacterData.CharacterName}?\n\n{changes}"))
-                {
-                    string modify = CharacterManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
+                await _databaseService.UpdateCharacterDataAsync(CharacterData.CharacterID, newCharacterData);
+                await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Information Change", modify);
 
-                    await _databaseService.UpdateCharacterDataAsync(CharacterData.CharacterID, newCharacterData);
-                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Information Change", modify);
-
-                    RHMessageBox.ShowOKMessage("Character saved successfully!", "Success");
-                    await ReadCharacterData();
-                }
-
+                RHMessageBox.ShowOKMessage("Character saved successfully!", "Success");
+                await ReadCharacterData();
             }
         }
         catch (Exception ex)
@@ -158,8 +170,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     {
         return new NewCharacterData
         {
-            Class = Class,
-            Job = Job,
             Level = Level,
             Experience = CharacterExp,
             SP = SkillPoints,
@@ -190,6 +200,11 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
             return;
         }
 
+        if (!SqlCredentialValidator.ValidateCredentials())
+        {
+            return;
+        }
+
         if (IsNameNotAllowed(newCharacterName))
         {
             RHMessageBox.ShowOKMessage("This character name is not allowed.", "Error");
@@ -206,6 +221,11 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         {
             try
             {
+                if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+                {
+                    return;
+                }
+
                 int result = await _databaseService.UpdateCharacterNameAsync(CharacterData.CharacterID, newCharacterName);
 
                 if (result == -1)
@@ -238,6 +258,40 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     }
     #endregion
 
+    #region SaveCharacterClass
+    [RelayCommand]
+    private async Task SaveCharacterClass()
+    {
+        if (CharacterData == null) return;
+
+        if (!SqlCredentialValidator.ValidateCredentials())
+        {
+            return;
+        }
+
+        try
+        {
+            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            {
+                return;
+            }
+
+            if (RHMessageBox.ConfirmMessage($"Change character {CharacterData.CharacterName} class?"))
+            {
+                
+                await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Information Change", "");
+
+                RHMessageBox.ShowOKMessage("Character class changed successfully!", "Success");
+                await ReadCharacterData();
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBox.ShowOKMessage($"Error saving character changes: {ex.Message}", "Error");
+        }
+    }
+    #endregion
+
     #region Title
     private TitleWindow? _titleWindowInstance;
 
@@ -245,6 +299,11 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     private void OnOpenTitleWindow()
     {
         if (CharacterData == null) return;
+
+        if (!SqlCredentialValidator.ValidateCredentials())
+        {
+            return;
+        }
 
         try
         {
@@ -257,15 +316,11 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 {
                     _titleWindowInstance.Closed += (sender, args) => _titleWindowInstance = null;
                 }
+            }
 
-                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
-            }
-            else
-            {
-                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
-                Task.Delay(500);
-                _titleWindowInstance.Focus();
-            }
+            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "TitleWindow"));
+
+            _titleWindowInstance?.Focus();
         }
         catch (Exception ex)
         {
@@ -282,6 +337,11 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     {
         if (CharacterData == null) return;
 
+        if (!SqlCredentialValidator.ValidateCredentials())
+        {
+            return;
+        }
+
         try
         {
             if (_sanctionWindowInstance == null)
@@ -293,15 +353,10 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 {
                     _sanctionWindowInstance.Closed += (sender, args) => _sanctionWindowInstance = null;
                 }
+            }
 
-                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
-            }
-            else
-            {
-                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
-                Task.Delay(500);
-                _sanctionWindowInstance.Focus();
-            }
+            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "SanctionWindow"));
+            _sanctionWindowInstance?.Focus();
         }
         catch (Exception ex)
         {
@@ -310,10 +365,43 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     }
     #endregion
 
-    #region Comboboxes
+    #region Fortune
+    private FortuneWindow? _fortuneWindowInstance;
 
-    [ObservableProperty]
-    private int _classSelectedIndex;
+    [RelayCommand]
+    private void OnOpenFortuneWindow()
+    {
+        if (CharacterData == null) return;
+
+        if (!SqlCredentialValidator.ValidateCredentials())
+        {
+            return;
+        }
+
+        try
+        {
+            if (_fortuneWindowInstance == null)
+            {
+                _windowsProviderService.Show<FortuneWindow>();
+                _fortuneWindowInstance = Application.Current.Windows.OfType<FortuneWindow>().FirstOrDefault();
+
+                if (_fortuneWindowInstance != null)
+                {
+                    _fortuneWindowInstance.Closed += (sender, args) => _fortuneWindowInstance = null;
+                }
+            }
+
+            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "FortuneWindow"));
+            _fortuneWindowInstance?.Focus();
+        }
+        catch (Exception ex)
+        {
+            RHMessageBox.ShowOKMessage($"Error reading Character Fortune: {ex.Message}", "Error");
+        }
+    }
+    #endregion
+
+    #region Comboboxes
 
     [ObservableProperty]
     private List<NameID>? _classItems;
@@ -326,7 +414,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
             if (ClassItems.Count > 0)
             {
-                ClassSelectedIndex = 0;
+                Class = 1;
             }
         }
         catch (Exception ex)
@@ -336,13 +424,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     }
 
     [ObservableProperty]
-    private int _jobSelectedIndex;
-
-    [ObservableProperty]
     private List<NameID>? _jobItems;
-
-    [ObservableProperty]
-    private int _lobbySelectedIndex;
 
     [ObservableProperty]
     private List<NameID>? _lobbyItems;
@@ -355,7 +437,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
             if (LobbyItems.Count > 0)
             {
-                LobbySelectedIndex = 0;
+                Lobby = 1;
             }
         }
         catch (Exception ex)
@@ -370,7 +452,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     public void Receive(ItemDataMessage message)
     {
-        if (message.Recipient == ViewModelType.CharacterWindowViewModel)
+        if (message.Recipient == "CharacterWindowViewModel")
         {
             var newItemData = message.Value;
 
@@ -517,6 +599,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 // Handle equipment items
                 var equipmentItems = message.Value;
                 LoadEquipmentItems(equipmentItems);
+                ItemDatabaseList = null;
                 ItemDatabaseList = equipmentItems;
                 break;
 
@@ -544,7 +627,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 int code = equipmentItem.ID;
 
                 // Find the corresponding ItemData object in the _cachedItemDataList
-                ItemData? cachedItem = _cachedItemDataList?.FirstOrDefault(item => item.ID == code);
+                ItemData? cachedItem = ItemDataManager.Instance.CachedItemDataList?.FirstOrDefault(item => item.ID == code);
 
                 ItemData itemData = new()
                 {
@@ -580,46 +663,41 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     [RelayCommand]
     private void AddItem(string parameter)
     {
+        if (CharacterData == null) return;
+
         if (int.TryParse(parameter, out int slotIndex))
         {
-            ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex);
+            ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
 
-            itemData ??= new ItemData
+            ShowItemWindow(itemData);
+        }
+    }
+
+    private void ShowItemWindow(ItemData itemData)
+    {
+        if (_itemWindowInstance == null)
+        {
+            _windowsProviderService.Show<ItemWindow>();
+            _itemWindowInstance = Application.Current.Windows.OfType<ItemWindow>().FirstOrDefault();
+
+            if (_itemWindowInstance != null)
             {
-                SlotIndex = slotIndex
-            };
-
-            if (_itemWindowInstance == null)
-            {
-                _windowsProviderService.Show<ItemWindow>();
-                _itemWindowInstance = Application.Current.Windows.OfType<ItemWindow>().FirstOrDefault();
-
-                if (_itemWindowInstance != null)
-                {
-                    _itemWindowInstance.Closed += (sender, args) => _itemWindowInstance = null;
-
-                    _itemWindowInstance.ContentRendered += (sender, args) =>
-                    {
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel, "EquipItem"));
-
-                        if (CharacterData != null)
-                        {
-                            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
-                        }
-                    };
-                }
-            }
-            else
-            {
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.ItemWindowViewModel, "EquipItem"));
-                if (CharacterData != null)
-                {
-                    WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData));
-                }
-                Task.Delay(500);
-                _itemWindowInstance.Focus();
+                _itemWindowInstance.Closed += (sender, args) => _itemWindowInstance = null;
+                _itemWindowInstance.ContentRendered += (sender, args) => SendMessageToItemWindow(itemData);
             }
         }
+        else
+        {
+            SendMessageToItemWindow(itemData);
+        }
+
+        _itemWindowInstance?.Focus();
+    }
+
+    private void SendMessageToItemWindow(ItemData itemData)
+    {
+        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", "EquipItem"));
+        WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData!, "ItemWindow"));
     }
 
     #region Remove Item
@@ -664,16 +742,21 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         }
     }
 
+    private void ClearAllEquipItems()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            RemoveItem(i.ToString());
+        }
+    }
 
     private void ResetItemProperties(int slotIndex)
     {
-        // Construct property names dynamically
         string iconNameProperty = $"ItemIcon{slotIndex}";
         string iconBranchProperty = $"ItemIconBranch{slotIndex}";
         string nameProperty = $"ItemName{slotIndex}";
         string amountProperty = $"ItemAmount{slotIndex}";
 
-        // Set properties using reflection
         GetType().GetProperty(iconNameProperty)?.SetValue(this, null);
         GetType().GetProperty(iconBranchProperty)?.SetValue(this, 0);
         GetType().GetProperty(nameProperty)?.SetValue(this, Resources.AddItemDesc);
@@ -681,7 +764,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     }
 
     #endregion
-
 
     #endregion
 
@@ -691,7 +773,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     private bool _isButtonEnabled = true;
 
     [ObservableProperty]
-    private string? _title;
+    private string _title = "Character Editor";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CharacterClassText))]
@@ -746,6 +828,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     private bool _isAdmin;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Job))]
     [NotifyPropertyChangedFor(nameof(CharacterClassText))]
     [NotifyPropertyChangedFor(nameof(CharSilhouetteImage))]
     private int _class;

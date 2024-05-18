@@ -1,5 +1,6 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
+using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
@@ -11,10 +12,12 @@ namespace RHToolkit.ViewModels.Windows;
 public partial class SanctionWindowViewModel : ObservableObject, IRecipient<CharacterDataMessage>
 {
     private readonly IDatabaseService _databaseService;
+    private readonly CharacterOnlineValidator _characterOnlineValidator;
 
     public SanctionWindowViewModel(IDatabaseService databaseService)
     {
         _databaseService = databaseService;
+        _characterOnlineValidator = new(_databaseService);
 
         PopulateSanctionCountItems();
         PopulateSanctionPeriodItems();
@@ -30,13 +33,16 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
     public async void Receive(CharacterDataMessage message)
     {
-        var characterData = message.Value;
-        CharacterData = null;
-        CharacterData = characterData;
+        if (message.Recipient == "SanctionWindow")
+        {
+            var characterData = message.Value;
+            CharacterData = null;
+            CharacterData = characterData;
 
-        Title = $"Character Sanction ({characterData.CharacterName})";
+            Title = $"Character Sanction ({characterData.CharacterName})";
 
-        await ReadSanction();
+            await ReadSanction();
+        }
     }
 
     [ObservableProperty]
@@ -91,6 +97,11 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
     {
         if (CharacterData == null) return;
 
+        if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+        {
+            return;
+        }
+
         bool isSanctioned = await _databaseService.CharacterHasSanctionAsync(CharacterData.CharacterID);
 
         if ((operationType == SanctionOperationType.Add && isSanctioned) || (operationType == SanctionOperationType.Remove && !isSanctioned))
@@ -100,7 +111,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
         }
 
         string releaser = operationType == SanctionOperationType.Add ? "" : "RHToolkit";
-        string? comment = operationType == SanctionOperationType.Add ? "" : SanctionComment;
+        string comment = operationType == SanctionOperationType.Add ? "" : SanctionComment;
 
         if (operationType == SanctionOperationType.Remove && string.IsNullOrWhiteSpace(SanctionComment))
         {
@@ -120,11 +131,11 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
         }
     }
 
-    private async Task ProcessSanctionInternal(SanctionOperationType operationType, string releaser, string? comment)
+    private async Task ProcessSanctionInternal(SanctionOperationType operationType, string releaser, string comment)
     {
         Guid selectedSanctionUid = operationType == SanctionOperationType.Remove ? SelectedSanctionUid : Guid.Empty;
         int isApplyValue = operationType == SanctionOperationType.Remove ? SelectedIsApplySanction : 0;
-        string? reason = operationType == SanctionOperationType.Remove ? SelectedSanctionReason : string.Empty;
+        string reason = operationType == SanctionOperationType.Remove ? SelectedSanctionReason : string.Empty;
 
         if (operationType == SanctionOperationType.Remove && isApplyValue == 0)
         {
@@ -132,7 +143,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
             return;
         }
 
-        string? reasonDetails = operationType == SanctionOperationType.Add ? GetSanctionDetails() : reason;
+        string reasonDetails = operationType == SanctionOperationType.Add ? GetSanctionDetails() : reason;
 
         (int sanctionType, int sanctionPeriod, int sanctionCount) = GetSanctionDetails(operationType);
 
@@ -242,10 +253,10 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
     #region Properties
     [ObservableProperty]
-    private string? _title;
+    private string _title = "Character Sanction";
 
     [ObservableProperty]
-    private string? _sanctionComment;
+    private string _sanctionComment = string.Empty;
 
     [ObservableProperty]
     private int _sanctionType;
@@ -263,7 +274,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
     private int _selectedIsApplySanction;
 
     [ObservableProperty]
-    private string? _selectedSanctionReason;
+    private string _selectedSanctionReason = string.Empty;
 
     [ObservableProperty]
     private DataRowView? _selectedSanction;

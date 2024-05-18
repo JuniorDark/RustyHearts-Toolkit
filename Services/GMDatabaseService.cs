@@ -191,6 +191,11 @@ namespace RHToolkit.Services
             return GetItemsFromQuery("SELECT nID, wszTitleName FROM charactertitle_string");
         }
 
+        public List<NameID> GetFortuneItems()
+        {
+            return GetItemsFromQuery("SELECT nid, wszFortuneRollDesc FROM fortune WHERE wszFortuneRollDesc <> ''");
+        }
+
         public List<NameID> GetFortuneDescItems()
         {
             return GetItemsFromQuery("SELECT nid, wszDesc FROM fortune WHERE wszFortuneRollDesc = ''");

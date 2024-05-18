@@ -25,7 +25,13 @@ namespace RHToolkit.Views.Windows
         {
             InitializeComponent();
         }
+        static WpfMessageBox()
+        {
+            _messageBox = new WpfMessageBox();
+        }
+
         static WpfMessageBox _messageBox;
+
         static MessageBoxResult _result = MessageBoxResult.No;
         public static MessageBoxResult Show
         (string caption, string msg, MessageBoxType type)
@@ -139,7 +145,6 @@ namespace RHToolkit.Views.Windows
             else
                 _result = MessageBoxResult.None;
             _messageBox.Close();
-            _messageBox = null;
         }
         private void SetImage(string imageName)
         {

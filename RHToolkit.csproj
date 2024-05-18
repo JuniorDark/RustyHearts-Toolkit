@@ -132,6 +132,7 @@
     <None Remove="Assets\ico\lb_main_quick_system_15gm.ico" />
     <None Remove="Assets\ico\title.ico" />
     <None Remove="Assets\images\bg.png" />
+    <None Remove="Assets\images\bg\lb_book04_image.png" />
     <None Remove="Assets\images\Button_d.png" />
     <None Remove="Assets\images\Button_down.png" />
     <None Remove="Assets\images\Button_normal.png" />
@@ -400,6 +401,7 @@
     <Resource Include="Assets\ico\gm.ico" />
     <Resource Include="Assets\ico\icon_mail.png" />
     <Resource Include="Assets\ico\title.ico" />
+    <Resource Include="Assets\images\bg\lb_book04_image.png" />
     <Resource Include="Assets\images\char\ui_silhouette_angela01.png" />
     <Resource Include="Assets\images\char\ui_silhouette_edgar01.png" />
     <Resource Include="Assets\images\char\ui_silhouette_frantz01.png" />
@@ -525,6 +527,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Update="Views\Windows\CharacterWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Windows\FortuneWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Windows\SanctionWindow.xaml.cs">

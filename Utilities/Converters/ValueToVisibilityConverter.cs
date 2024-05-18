@@ -1,8 +1,4 @@
-﻿using System.Globalization;
-using System.Windows;
-using System.Windows.Data;
-
-namespace RHToolkit.Utilities
+﻿namespace RHToolkit.Utilities
 {
     public class ValueToVisibilityConverter : IValueConverter
     {
@@ -10,13 +6,16 @@ namespace RHToolkit.Utilities
         {
             if (value is int intValue && parameter != null)
             {
-                string param = parameter.ToString();
-                string[] conditions = param.Split('|');
-
-                foreach (string condition in conditions)
+                string? param = parameter.ToString();
+                if (param != null)
                 {
-                    if (int.TryParse(condition, out int conditionValue) && intValue == conditionValue)
-                        return Visibility.Visible;
+                    string[] conditions = param.Split('|');
+
+                    foreach (string condition in conditions)
+                    {
+                        if (int.TryParse(condition, out int conditionValue) && intValue == conditionValue)
+                            return Visibility.Visible;
+                    }
                 }
 
                 return Visibility.Collapsed;

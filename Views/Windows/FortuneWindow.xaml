@@ -1,0 +1,197 @@
+﻿<Window
+    x:Class="RHToolkit.Views.Windows.FortuneWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:bh="clr-namespace:RHToolkit.Behaviors"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
+    Title="{Binding Title}"
+    Width="700"
+    Height="600"
+    MinWidth="700"
+    MinHeight="600"
+    bh:WindowBehaviors.EnableDragMove="True"
+    d:DataContext="{d:DesignInstance Type=windows:FortuneWindowViewModel}"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="/Assets/icon/icon_fortune01.png"
+    ResizeMode="CanResizeWithGrip"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <ContentControl Template="{StaticResource box_red02}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35" />
+                <RowDefinition Height="50" />
+                <RowDefinition Height="300" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ui:TitleBar
+                x:Name="TitleBar"
+                Title="{Binding Title}"
+                Grid.ColumnSpan="3"
+                Height="30"
+                Margin="30,5,0,0"
+                VerticalAlignment="Center"
+                d:Title="Character Fortune"
+                ButtonsForeground="White"
+                FontSize="15"
+                Foreground="White">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon
+                        Width="20"
+                        Height="20"
+                        Margin="0,-1,0,-3"
+                        Source="/Assets/icon/icon_fortune01.png" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+
+            <Grid
+                Grid.Row="1"
+                Grid.RowSpan="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Margin="5,5"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="65" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Image
+                    Grid.Row="0"
+                    Grid.RowSpan="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="5"
+                    Width="448"
+                    Height="342"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Source="/Assets/images/bg/lb_book04_image.png" />
+                <TextBlock
+                    Grid.Row="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    d:Text="Fortune"
+                    Background="Transparent"
+                    FontSize="15"
+                    Foreground="Gold"
+                    Style="{StaticResource ArialMS}"
+                    Text="{Binding FortuneTitle}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    Grid.Row="2"
+                    Width="270"
+                    Height="230"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    d:Text="Fortune Description"
+                    Background="Transparent"
+                    FontSize="12"
+                    Foreground="White"
+                    Style="{StaticResource ArialMS}"
+                    Text="{Binding FortuneDescription}"
+                    TextWrapping="Wrap" />
+            </Grid>
+            <StackPanel
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <Label
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    HorizontalContentAlignment="Center"
+                    Content="Fortune"
+                    Style="{StaticResource ArialMSWhite}" />
+                <ComboBox
+                    Width="250"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding FortuneItems}"
+                    SelectedValue="{Binding SelectedFortuneID1, Mode=TwoWay}"
+                    SelectedValuePath="ID"
+                    Style="{StaticResource ComboBoxStyle}"
+                    Template="{StaticResource lb_combobox}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Margin="0,40"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
+                <Label
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    HorizontalContentAlignment="Center"
+                    Content="Fortune Line 1"
+                    Style="{StaticResource ArialMSWhite}" />
+                <ComboBox
+                    Width="220"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding FortuneDescItems}"
+                    SelectedValue="{Binding SelectedFortuneID2, Mode=TwoWay}"
+                    SelectedValuePath="ID"
+                    Style="{StaticResource ComboBoxStyle}"
+                    Template="{StaticResource lb_combobox}" />
+                <Label
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    HorizontalContentAlignment="Center"
+                    Content="Fortune Line 2"
+                    Style="{StaticResource ArialMSWhite}" />
+                <ComboBox
+                    Width="220"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding FortuneDescItems}"
+                    SelectedValue="{Binding SelectedFortuneID3, Mode=TwoWay}"
+                    SelectedValuePath="ID"
+                    Style="{StaticResource ComboBoxStyle}"
+                    Template="{StaticResource lb_combobox}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Margin="0,30"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Bottom"
+                Orientation="Horizontal">
+                <Button
+                    Width="150"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Background="Transparent"
+                    Command="{Binding SaveFortuneCommand}"
+                    Content="Save"
+                    Cursor="Hand"
+                    Foreground="White"
+                    Style="{StaticResource lb_def_button02}"
+                    ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+            </StackPanel>
+        </Grid>
+    </ContentControl>
+</Window>

@@ -25,12 +25,10 @@ namespace RHToolkit.Services
             try
             {
                 await _databaseService.ExecuteNonQueryAsync(
-                    "UPDATE CharacterTable SET Class = @class, Job = @job, Level = @level, Experience = @experience, SP = @sp, Total_SP = @total_sp, LobbyID = @lobbyID, gold = @gold, Hearts = @hearts, Block_YN = @block_YN, storage_gold = @storage_gold, storage_count = @storage_count, IsTradeEnable = @isTradeEnable, Permission = @permission, GuildPoint = @guild_point, IsMoveEnable = @isMoveEnable WHERE character_id = @character_id",
+                    "UPDATE CharacterTable SET Level = @level, Experience = @experience, SP = @sp, Total_SP = @total_sp, LobbyID = @lobbyID, gold = @gold, Hearts = @hearts, Block_YN = @block_YN, storage_gold = @storage_gold, storage_count = @storage_count, IsTradeEnable = @isTradeEnable, Permission = @permission, GuildPoint = @guild_point, IsMoveEnable = @isMoveEnable WHERE character_id = @character_id",
                     connection,
                     transaction,
                     ("@character_id", characterId),
-                    ("@class", characterData.Class),
-                    ("@job", characterData.Job),
                     ("@level", characterData.Level),
                     ("@experience", characterData.Experience),
                     ("@sp", characterData.SP),
@@ -135,19 +133,12 @@ namespace RHToolkit.Services
 
         public async Task<CharacterData?> GetCharacterDataAsync(string characterIdentifier)
         {
-            string selectQuery = "SELECT * FROM CharacterTable WHERE [Name] = @name OR [character_id] = @id";
+            string selectQuery = "SELECT * FROM CharacterTable WHERE [Name] = @characterIdentifier";
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
 
             DataTable dataTable;
 
-            if (Guid.TryParse(characterIdentifier, out Guid characterId))
-            {
-                dataTable = await _databaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@id", characterId));
-            }
-            else
-            {
-                dataTable = await _databaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@name", characterIdentifier));
-            }
+            dataTable = await _databaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@characterIdentifier", characterIdentifier));
 
             if (dataTable.Rows.Count > 0)
             {
@@ -455,7 +446,7 @@ namespace RHToolkit.Services
             return [.. characterNames];
         }
 
-        public async Task<(Guid characterId, Guid authid, string? windyCode)> GetCharacterInfoAsync(string characterName)
+        public async Task<(Guid characterId, Guid authid, string accountName)> GetCharacterInfoAsync(string characterName)
         {
             string selectQuery = "SELECT character_id, authid, bcust_id FROM CharacterTable WHERE name = @characterName";
             var parameters = new (string, object)[] { ("@characterName", characterName) };
@@ -467,13 +458,18 @@ namespace RHToolkit.Services
             if (dataTable.Rows.Count > 0)
             {
                 DataRow row = dataTable.Rows[0];
-                return ((Guid)row["character_id"], (Guid)row["authid"], row["bcust_id"].ToString());
+                return (
+                    (Guid)row["character_id"],
+                    (Guid)row["authid"],
+                    row["bcust_id"]?.ToString() ?? string.Empty
+                );
             }
             else
             {
                 return (Guid.Empty, Guid.Empty, string.Empty);
             }
         }
+
 
         #endregion
 

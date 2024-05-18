@@ -40,9 +40,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         _itemDataView.Filter = FilterItems;
         _optionView = CollectionViewSource.GetDefaultView(OptionItems);
         _optionView.Filter = FilterOption;
-
         ItemTradeFilter = 2;
-
         WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
         
@@ -88,11 +86,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
         if (MessageType == "Mail")
         {
-            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.MailWindowViewModel, "Mail"));
+            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindowViewModel", "Mail"));
         }
         else
         {
-            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, ViewModelType.CharacterWindowViewModel, "EquipItem"));
+            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CharacterWindowViewModel", "EquipItem"));
         }
     }
     #endregion
@@ -116,7 +114,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     public void Receive(ItemDataMessage message)
     {
-        if (message.Recipient == ViewModelType.ItemWindowViewModel)
+        if (message.Recipient == "ItemWindowViewModel")
         {
             var itemData = message.Value;
             ItemData = null;
@@ -556,11 +554,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
             if (CategoryFilterItems.Count > 0)
             {
-                ItemCategoryFilterSelectedIndex = 0;
+                ItemCategoryFilter = 0;
             }
             if (SubCategoryItemsFilter.Count > 0)
             {
-                ItemSubCategoryFilterSelectedIndex = 0;
+                ItemSubCategoryFilter = 0;
             }
         }
         catch (Exception ex)
@@ -578,9 +576,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _itemTypeFilterSelectedIndex;
-
-    [ObservableProperty]
     private bool _itemTypeEnabled = true;
 
     [ObservableProperty]
@@ -591,9 +586,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _itemCategoryFilterSelectedIndex;
-
-    [ObservableProperty]
     private bool _itemCategoryEnabled = true;
 
     [ObservableProperty]
@@ -602,9 +594,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         ItemDataView.Refresh();
     }
-
-    [ObservableProperty]
-    private int _itemSubCategoryFilterSelectedIndex;
 
     [ObservableProperty]
     private bool _itemSubCategoryEnabled = true;
@@ -618,9 +607,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _itemClassFilterSelectedIndex;
-
-    [ObservableProperty]
     private bool _itemClassEnabled = true;
 
     [ObservableProperty]
@@ -630,8 +616,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         ItemDataView.Refresh();
     }
-    [ObservableProperty]
-    private int _itemBranchFilterSelectedIndex;
 
     [ObservableProperty]
     private List<NameID>? _itemTypeItemsFilter;
@@ -644,7 +628,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
             if (ItemTypeItemsFilter.Count > 0)
             {
-                ItemTypeFilterSelectedIndex = 0;
+                ItemTypeFilter = 0;
             }
         }
         catch (Exception ex)
@@ -664,7 +648,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
             if (ClassItemsFilter.Count > 0)
             {
-                ItemClassFilterSelectedIndex = 0;
+                ItemClassFilter = 0;
             }
         }
         catch (Exception ex)
@@ -684,7 +668,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
             if (BranchItemsFilter.Count > 0)
             {
-                ItemBranchFilterSelectedIndex = 0;
+                ItemBranchFilter = 0;
             }
         }
         catch (Exception ex)
