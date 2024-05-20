@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using RHToolkit.Models.Database;
 using RHToolkit.Models.Localization;
 using RHToolkit.Models.UISettings;
 using RHToolkit.Services;
@@ -45,6 +45,8 @@ public partial class App : Application
                 _ = services.AddSingleton<CharacterRestoreViewModel>();
                 _ = services.AddSingleton<SettingsPage>();
                 _ = services.AddSingleton<SettingsViewModel>();
+                _ = services.AddSingleton<RHEditorPage>();
+                _ = services.AddSingleton<RHEditorViewModel>();
 
                 // All other services and view models
                 _ = services.AddSingleton<ISqlDatabaseService, SqlDatabaseService>();
@@ -52,6 +54,7 @@ public partial class App : Application
                 _ = services.AddSingleton<ISqLiteDatabaseService, SqLiteDatabaseService>();
                 _ = services.AddSingleton<IGMDatabaseService, GMDatabaseService>();
                 _ = services.AddSingleton<IFrameService, FrameService>();
+                _ = services.AddSingleton<ItemDataManager>();
 
                 _ = services.AddTransient<MailWindow>();
                 _ = services.AddTransient<MailWindowViewModel>();

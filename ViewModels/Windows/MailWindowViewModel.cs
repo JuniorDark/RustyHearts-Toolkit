@@ -2,28 +2,29 @@
 using Newtonsoft.Json;
 using RHToolkit.Messages;
 using RHToolkit.Models;
+using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
 using System.Data;
+using System.Windows.Controls;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>
+public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemDataMessage>
 {
     private readonly WindowsProviderService _windowsProviderService;
     private readonly IDatabaseService _databaseService;
+    private readonly MailManager _mailManager;
+    private readonly ItemDataManager _itemDataManager;
 
-    public MailWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService)
+    public MailWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, ItemDataManager itemDataManager)
     {
         _windowsProviderService = windowsProviderService;
         _databaseService = databaseService;
-
-        if (ItemDataManager.Instance.CachedItemDataList == null)
-        {
-            ItemDataManager.Instance.InitializeCachedLists();
-        }
+        _mailManager = new MailManager(_databaseService);
+        _itemDataManager = itemDataManager;
 
         WeakReferenceMessenger.Default.Register(this);
     }
@@ -61,7 +62,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
             }
             else
             {
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData,"ItemWindowViewModel", "Mail"));
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", "Mail"));
             }
 
             _itemWindowInstance?.Focus();
@@ -156,7 +157,7 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
                 MailTemplate = true,
                 Sender = Sender,
                 Recipient = Recipient,
-                SendToAll = SendToAll,
+                SendToAll = SelectAllCheckBoxChecked,
                 MailContent = MailContent,
                 AttachGold = AttachGold,
                 ItemCharge = ItemCharge,
@@ -219,26 +220,22 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
         OpenFileDialog openFileDialog = new()
         {
             Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
-            FilterIndex = 1,
-            RestoreDirectory = true
+            FilterIndex = 1
         };
 
         if (openFileDialog.ShowDialog() == true)
         {
             try
             {
-                string json = await File.ReadAllTextAsync(openFileDialog.FileName);
+                string template = await File.ReadAllTextAsync(openFileDialog.FileName);
 
                 IsButtonEnabled = false;
 
-                await Task.Run(() =>
-                {
-                    LoadTemplate(json);
-                });
+                LoadTemplate(template);
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"{Resources.LoadTemplateError}: {ex.Message}", Resources.Error);
+                RHMessageBox.ShowOKMessage($"{Resources.LoadTemplateError}: {ex.Message}", Resources.LoadTemplateError);
             }
             finally
             {
@@ -247,144 +244,113 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
         }
     }
 
-    private void LoadTemplate(string json)
+    private void LoadTemplate(string template)
     {
-        try
+        if (template.Contains("\"MailTemplate\": true"))
         {
-            if (json.Contains("\"MailTemplate\": true"))
+            MailTemplateData? templateData = JsonConvert.DeserializeObject<MailTemplateData>(template);
+
+            if (templateData != null)
             {
-                MailTemplateData? templateData = JsonConvert.DeserializeObject<MailTemplateData>(json);
+                List<int> invalidItemIDs = [];
 
-                if (templateData != null)
+                if (templateData.ItemIDs != null)
                 {
-                    List<int> invalidItemIDs = GetInvalidItemIDs(templateData.ItemIDs);
-
-                    if (invalidItemIDs.Count > 0)
+                    foreach (int itemID in templateData.ItemIDs)
                     {
-                        string invalidItemIDsString = string.Join(", ", invalidItemIDs);
-                        RHMessageBox.ShowOKMessage($"{Resources.TemplateInvalidId}: {invalidItemIDsString}", Resources.LoadTemplateError);
-                        return;
-                    }
-
-                    ClearTemplate();
-
-                    Sender = templateData.Sender;
-                    Recipient = templateData.Recipient;
-                    SendToAll = templateData.SendToAll;
-                    MailContent = templateData.MailContent;
-                    AttachGold = templateData.AttachGold;
-                    ItemCharge = templateData.ItemCharge;
-                    ReturnDays = templateData.ReturnDays;
-
-                    if (templateData != null && templateData.ItemIDs != null)
-                    {
-                        for (int i = 0; i < templateData.ItemIDs?.Count; i++)
+                        if (GetInvalidItemID(itemID))
                         {
-                            // Find the corresponding ItemData object in the _cachedItemDataList
-                            ItemData? cachedItem = ItemDataManager.Instance.CachedItemDataList?.FirstOrDefault(item => item.ID == templateData.ItemIDs[i]);
-
-                            ItemData itemData = new()
-                            {
-                                SlotIndex = i,
-                                ID = templateData.ItemIDs[i],
-                                Name = cachedItem?.Name ?? "",
-                                IconName = cachedItem?.IconName ?? "",
-                                Branch = cachedItem?.Branch ?? 0,
-                                Amount = templateData.ItemAmounts?[i] ?? 0,
-                                Durability = templateData.Durabilities?[i] ?? 0,
-                                EnhanceLevel = templateData.EnchantLevels?[i] ?? 0,
-                                Rank = templateData.Ranks?[i] ?? 0,
-                                Reconstruction = templateData.ReconNums?[i] ?? 0,
-                                ReconstructionMax = templateData.ReconStates?[i] ?? 0,
-                                Option1Code = templateData.Options1?[i] ?? 0,
-                                Option2Code = templateData.Options2?[i] ?? 0,
-                                Option3Code = templateData.Options3?[i] ?? 0,
-                                Option1Value = templateData.OptionValues1?[i] ?? 0,
-                                Option2Value = templateData.OptionValues2?[i] ?? 0,
-                                Option3Value = templateData.OptionValues3?[i] ?? 0,
-                                SocketCount = templateData.SocketCounts?[i] ?? 0,
-                                Socket1Color = templateData.SocketColors1?[i] ?? 0,
-                                Socket2Color = templateData.SocketColors2?[i] ?? 0,
-                                Socket3Color = templateData.SocketColors3?[i] ?? 0,
-                                Socket1Code = templateData.SocketOptions1?[i] ?? 0,
-                                Socket2Code = templateData.SocketOptions2?[i] ?? 0,
-                                Socket3Code = templateData.SocketOptions3?[i] ?? 0,
-                                Socket1Value = templateData.SocketOptionValues1?[i] ?? 0,
-                                Socket2Value = templateData.SocketOptionValues2?[i] ?? 0,
-                                Socket3Value = templateData.SocketOptionValues3?[i] ?? 0,
-                                DurabilityMax = templateData.DurabilityMaxValues?[i] ?? 0,
-                                Weight = templateData.WeightValues?[i] ?? 0,
-                            };
-
-                            ItemDataList ??= [];
-                            ItemDataList.Add(itemData);
-                            SetItemProperties(itemData);
+                            invalidItemIDs.Add(itemID);
                         }
                     }
-
                 }
-                else
+
+                if (invalidItemIDs.Count > 0)
                 {
-                    RHMessageBox.ShowOKMessage(Resources.LoadTemplateJsonError, Resources.Error);
+                    string invalidItemIDsString = string.Join(", ", invalidItemIDs);
+                    RHMessageBox.ShowOKMessage($"{Resources.TemplateInvalidId}: {invalidItemIDsString}", Resources.LoadTemplateError);
+                    return;
+                }
+
+                ClearMailData();
+
+                Sender = templateData.Sender;
+                Recipient = templateData.Recipient;
+                SelectAllCheckBoxChecked = templateData.SendToAll;
+                MailContent = templateData.MailContent;
+                AttachGold = templateData.AttachGold;
+                ItemCharge = templateData.ItemCharge;
+                ReturnDays = templateData.ReturnDays;
+
+                if (templateData.ItemIDs != null)
+                {
+                    for (int i = 0; i < templateData.ItemIDs.Count; i++)
+                    {
+                        // Find the corresponding ItemData in the CachedItemDataList
+                        ItemData? cachedItem = _itemDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == templateData.ItemIDs[i]);
+
+                        ItemData itemData = new()
+                        {
+                            SlotIndex = i,
+                            ID = templateData.ItemIDs[i],
+                            Name = cachedItem?.Name ?? "",
+                            IconName = cachedItem?.IconName ?? "",
+                            Branch = cachedItem?.Branch ?? 0,
+                            Amount = templateData.ItemAmounts?[i] ?? 0,
+                            Durability = templateData.Durabilities?[i] ?? 0,
+                            EnhanceLevel = templateData.EnchantLevels?[i] ?? 0,
+                            Rank = templateData.Ranks?[i] ?? 0,
+                            Reconstruction = templateData.ReconNums?[i] ?? 0,
+                            ReconstructionMax = templateData.ReconStates?[i] ?? 0,
+                            Option1Code = templateData.Options1?[i] ?? 0,
+                            Option2Code = templateData.Options2?[i] ?? 0,
+                            Option3Code = templateData.Options3?[i] ?? 0,
+                            Option1Value = templateData.OptionValues1?[i] ?? 0,
+                            Option2Value = templateData.OptionValues2?[i] ?? 0,
+                            Option3Value = templateData.OptionValues3?[i] ?? 0,
+                            SocketCount = templateData.SocketCounts?[i] ?? 0,
+                            Socket1Color = templateData.SocketColors1?[i] ?? 0,
+                            Socket2Color = templateData.SocketColors2?[i] ?? 0,
+                            Socket3Color = templateData.SocketColors3?[i] ?? 0,
+                            Socket1Code = templateData.SocketOptions1?[i] ?? 0,
+                            Socket2Code = templateData.SocketOptions2?[i] ?? 0,
+                            Socket3Code = templateData.SocketOptions3?[i] ?? 0,
+                            Socket1Value = templateData.SocketOptionValues1?[i] ?? 0,
+                            Socket2Value = templateData.SocketOptionValues2?[i] ?? 0,
+                            Socket3Value = templateData.SocketOptionValues3?[i] ?? 0,
+                            DurabilityMax = templateData.DurabilityMaxValues?[i] ?? 0,
+                            Weight = templateData.WeightValues?[i] ?? 0,
+                        };
+
+                        ItemDataList ??= [];
+                        ItemDataList.Add(itemData);
+                        SetItemProperties(itemData);
+                    }
                 }
             }
             else
             {
-                RHMessageBox.ShowOKMessage(Resources.InvalidTemplate, Resources.Error);
+                RHMessageBox.ShowOKMessage(Resources.LoadTemplateJsonError, Resources.LoadTemplateError);
             }
         }
-        catch (Exception ex)
+        else
         {
-            RHMessageBox.ShowOKMessage($"{Resources.LoadTemplateError}: {ex.Message}", Resources.Error);
+            RHMessageBox.ShowOKMessage(Resources.InvalidTemplate, Resources.LoadTemplateError);
         }
     }
 
-    private static List<int> GetInvalidItemIDs(List<int>? itemIDs)
+    private bool GetInvalidItemID(int itemID)
     {
-        List<int> invalidItemIDs = [];
-
-        if (itemIDs == null || itemIDs.Count == 0)
-        {
-            // ItemIDs is null or empty, so no validation needed
-            return invalidItemIDs;
-        }
-
-        // Validate each ItemID against the cached data table
-        foreach (int itemID in itemIDs)
-        {
-            // Check if there is any item in the cached list with the current item ID
-            bool found = false;
-
-            if (ItemDataManager.Instance.CachedItemDataList != null)
-            {
-                foreach (ItemData item in ItemDataManager.Instance.CachedItemDataList)
-                {
-                    if (item.ID == itemID)
-                    {
-                        found = true;
-                        break;
-                    }
-                }
-
-                // If no matching row is found, the ItemID is invalid
-                if (!found)
-                {
-                    invalidItemIDs.Add(itemID);
-                }
-            }
-
-        }
-
-        return invalidItemIDs;
+        return _itemDataManager.CachedItemDataList == null || !_itemDataManager.CachedItemDataList.Any(item => item.ID == itemID);
     }
 
     [RelayCommand]
-    private void ClearTemplate()
+    private void ClearMailData()
     {
         Recipient = default;
         Sender = "GM";
         MailContent = Resources.GameMasterInsertItem;
-        SendToAll = false;
+        SelectAllCheckBoxChecked = false;
         AttachGold = 0;
         ReturnDays = 7;
         ItemCharge = 0;
@@ -399,153 +365,49 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
 
     #region Send Mail
 
-    private static readonly char[] separator = [','];
-
     [RelayCommand]
     private async Task SendMailAsync()
     {
+        string? mailRecipient = Recipient;
         string? mailSender = Sender;
-        string? content = MailContent;
-        if (content != null)
-        {
-            content = content.Replace("'", "''");
-        }
-        content += $"<br><br><right>{DateTime.Now:yyyy-MM-dd HH:mm:ss}";
-
+        string? message = MailContent;
         int gold = AttachGold;
         int reqGold = ItemCharge;
         int returnDay = ReturnDays;
-        int createType = (reqGold != 0) ? 5 : 0;
-        List<string> failedRecipients = [];
-        bool sendToAllCharacters = SendToAll;
-        string[] recipients;
+        bool sendToAllCharacters = SelectAllCheckBoxChecked;
+        bool sendToAllOnline = OnlineCheckBoxChecked && !OfflineCheckBoxChecked;
+        bool sendToAllOffline = OfflineCheckBoxChecked && !OnlineCheckBoxChecked;
 
-        if (string.IsNullOrEmpty(Recipient) && !sendToAllCharacters)
+        if (string.IsNullOrWhiteSpace(mailRecipient) && !sendToAllCharacters && !sendToAllOnline && !sendToAllOffline)
         {
             RHMessageBox.ShowOKMessage(Resources.EmptyRecipientDesc, Resources.EmptyRecipient);
             return;
         }
-        if (string.IsNullOrEmpty(mailSender))
+
+        if (string.IsNullOrWhiteSpace(mailSender))
         {
             RHMessageBox.ShowOKMessage(Resources.EmptySenderDesc, Resources.EmptySender);
             return;
         }
 
-        if (sendToAllCharacters)
+        string[] recipients = await _mailManager.GetRecipientsAsync(mailRecipient, sendToAllCharacters, sendToAllOnline, sendToAllOffline);
+        if (recipients == null || recipients.Length == 0)
         {
-            recipients = await _databaseService.GetAllCharacterNamesAsync();
-        }
-        else
-        {
-            // Split recipients by comma and trim any extra spaces
-            recipients = Recipient!.Split(separator, StringSplitOptions.RemoveEmptyEntries)
-                                    .Select(r => r.Trim())
-                                    .ToArray();
-
-            // Validate if any recipient is empty or contains non-letter characters
-            if (recipients.Any(string.IsNullOrEmpty) || recipients.Any(r => !r.All(char.IsLetter)))
-            {
-                RHMessageBox.ShowOKMessage(Resources.InvalidRecipientDesc, Resources.InvalidRecipient);
-                return;
-            }
-
-            // Check for duplicate recipients
-            HashSet<string> uniqueRecipients = new(StringComparer.OrdinalIgnoreCase);
-            foreach (var recipient in recipients)
-            {
-                if (!uniqueRecipients.Add(recipient))
-                {
-                    RHMessageBox.ShowOKMessage($"{Resources.DuplicateRecipientDesc}: {recipient}", Resources.DuplicateRecipient);
-                    return;
-                }
-            }
+            return;
         }
 
-        string confirmationMessage = sendToAllCharacters
-            ? Resources.SendMailMessageAll
-            : $"{Resources.SendMailMessage}\n{string.Join(", ", recipients)}";
+        string confirmationMessage = MailManager.GetConfirmationMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, recipients);
 
-        if (RHMessageBox.ConfirmMessage($"{confirmationMessage}"))
+        if (RHMessageBox.ConfirmMessage(confirmationMessage))
         {
             try
             {
                 IsButtonEnabled = false;
 
-                foreach (var currentRecipient in recipients)
-                {
-                    Guid mailId = Guid.NewGuid();
-                    string recipient = currentRecipient;
+                (List<string> successfulRecipients, List<string> failedRecipients) = await _mailManager.SendMailAsync(mailSender, message, gold, reqGold, returnDay, recipients, ItemDataList!);
 
-                    (Guid senderCharacterId, Guid senderAuthId, string senderWindyCode) = await _databaseService.GetCharacterInfoAsync(mailSender);
-                    (Guid recipientCharacterId, Guid recipientAuthId, string recipientWindyCode) = await _databaseService.GetCharacterInfoAsync(recipient);
-
-                    if (senderCharacterId == Guid.Empty && createType == 5)
-                    {
-                        string invalidSenderMessage = string.Format(Resources.InvalidSenderDesc, mailSender);
-                        RHMessageBox.ShowOKMessage(invalidSenderMessage, Resources.InvalidSender);
-                        return;
-                    }
-
-                    if (senderCharacterId == recipientCharacterId)
-                    {
-                        RHMessageBox.ShowOKMessage(Resources.SendMailSameName, Resources.FailedSendMail);
-                        return;
-                    }
-
-                    if (recipientCharacterId == Guid.Empty || recipientAuthId == Guid.Empty)
-                    {
-                        string invalidRecipientMessage = string.Format(Resources.NonExistentRecipient, recipient);
-                        RHMessageBox.ShowOKMessage(invalidRecipientMessage, Resources.FailedSendMail);
-                        continue;
-                    }
-
-                    if (senderCharacterId == Guid.Empty)
-                    {
-                        senderCharacterId = Guid.Parse("00000000-0000-0000-0000-000000000000");
-                    }
-
-                    string modify = "";
-
-                    if (gold > 0)
-                    {
-                        modify += $"[<font color=blue>{Resources.GMAuditAttachGold} - {gold}</font>]<br></font>";
-                    }
-
-                    if (ItemDataList != null)
-                    {
-                        // Iterate over ItemDataList and insert item data for each ItemData
-                        foreach (ItemData itemData in ItemDataList)
-                        {
-                            try
-                            {
-                                if (itemData.ID != 0)
-                                {
-                                    modify += $"[<font color=blue>{Resources.GMAuditAttachItem} - {itemData.ID} ({itemData.Amount})</font>]<br></font>";
-
-                                    await _databaseService.InsertMailItemAsync(itemData, recipientAuthId, recipientCharacterId, mailId, itemData.SlotIndex);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                RHMessageBox.ShowOKMessage($"{Resources.AttachItemErrorDesc}: {ex.Message}", Resources.AttachItemErrorDesc);
-                                return;
-                            }
-                        }
-                    }
-
-                    await _databaseService.InsertMailAsync(recipientAuthId, senderCharacterId, mailSender!, recipient, content, gold, returnDay, reqGold, mailId, createType);
-
-                   await _databaseService.GMAuditAsync(recipientWindyCode!, recipientCharacterId, recipient, Resources.SendMail, $"<font color=blue>{Resources.SendMail}</font>]<br><font color=red>{Resources.Sender}: RHToolkit: {senderCharacterId}, {Resources.Recipient}: {recipient}, GUID:{{{recipientCharacterId}}}<br></font>" + modify);
-                }
-
-                if (sendToAllCharacters)
-                {
-                    RHMessageBox.ShowOKMessage(Resources.SendMailMessageAllSuccess, Resources.Success);
-                }
-                else
-                {
-                    RHMessageBox.ShowOKMessage(Resources.SendMailMessageSuccess, Resources.Success);
-                }
+                string successMessage = MailManager.GetSendMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, successfulRecipients, failedRecipients);
+                RHMessageBox.ShowOKMessage(successMessage, Resources.SendMail);
             }
             catch (Exception ex)
             {
@@ -584,22 +446,64 @@ public partial class MailWindowViewModel : ObservableObject, IRecipient<ItemData
     private int _itemCharge;
 
     [ObservableProperty]
+    private bool _isRecipientEnabled = true;
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsRecipientEnabled))]
-    private bool _sendToAll = false;
-    partial void OnSendToAllChanged(bool value)
+    private bool _selectAllCheckBoxChecked = false;
+    partial void OnSelectAllCheckBoxCheckedChanged(bool value)
     {
-        if (value == true)
-        {
-            IsRecipientEnabled = false;
-        }
-        else
-        {
-            IsRecipientEnabled = true;
-        }
+        IsRecipientEnabled = value == true ? false : true;
     }
 
     [ObservableProperty]
-    private bool _isRecipientEnabled = true;
+    private bool _onlineCheckBoxChecked = false;
+    partial void OnOnlineCheckBoxCheckedChanged(bool value)
+    {
+        IsRecipientEnabled = value == true ? false : true;
+    }
+
+    [ObservableProperty]
+    private bool _offlineCheckBoxChecked = false;
+    partial void OnOfflineCheckBoxCheckedChanged(bool value)
+    {
+        IsRecipientEnabled = value == true ? false : true;
+    }
+
+    [RelayCommand]
+    private void OnSelectAllChecked(object sender)
+    {
+        if (sender is not CheckBox checkBox)
+        {
+            return;
+        }
+
+        checkBox.IsChecked ??=
+            !OnlineCheckBoxChecked || !OfflineCheckBoxChecked;
+
+        if (checkBox.IsChecked == true)
+        {
+            OnlineCheckBoxChecked = true;
+            OfflineCheckBoxChecked = true;
+        }
+        else if (checkBox.IsChecked == false)
+        {
+            OnlineCheckBoxChecked = false;
+            OfflineCheckBoxChecked = false;
+        }
+    }
+
+    [RelayCommand]
+    private void OnSingleChecked(string option)
+    {
+        bool allChecked = OnlineCheckBoxChecked && OfflineCheckBoxChecked;
+        bool allUnchecked =
+            !OnlineCheckBoxChecked && !OfflineCheckBoxChecked;
+
+        SelectAllCheckBoxChecked = allChecked
+        || (allUnchecked
+        && false);
+    }
 
     [ObservableProperty]
     private string? _itemName0 = Resources.AddItemDesc;

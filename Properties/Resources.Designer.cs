@@ -493,6 +493,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} recipients failed to receive the mail: {1}.
+        /// </summary>
+        public static string FailedRecipientsMessage {
+            get {
+                return ResourceManager.GetString("FailedRecipientsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to send Mail.
         /// </summary>
         public static string FailedSendMail {
@@ -646,7 +655,7 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The sender ({0}) does not exist.\nThe sender name must be a valid character name for billing mail..
+        ///   Looks up a localized string similar to The sender ({0}) does not exist. The sender name must be a valid character name for billing mail..
         /// </summary>
         public static string InvalidSenderDesc {
             get {
@@ -1006,11 +1015,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Offline.
+        /// </summary>
+        public static string Offline {
+            get {
+                return ResourceManager.GetString("Offline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string OK {
             get {
                 return ResourceManager.GetString("OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Online.
+        /// </summary>
+        public static string Online {
+            get {
+                return ResourceManager.GetString("Online", resourceCulture);
             }
         }
         
@@ -1573,7 +1600,7 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send this mail to all characters?.
+        ///   Looks up a localized string similar to Send this mail to all &apos;{0}&apos; characters?.
         /// </summary>
         public static string SendMailMessageAll {
             get {
@@ -1582,7 +1609,25 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The mail has been sent successfully to all characters. Please re-login the character/change game server to view the mail..
+        ///   Looks up a localized string similar to Send this mail to all &apos;{0}&apos; {1} characters?.
+        /// </summary>
+        public static string SendMailMessageAllOnline {
+            get {
+                return ResourceManager.GetString("SendMailMessageAllOnline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The mail has been sent successfully to all &apos;{0}&apos; {1} characters..
+        /// </summary>
+        public static string SendMailMessageAllOnlineSuccess {
+            get {
+                return ResourceManager.GetString("SendMailMessageAllOnlineSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The mail has been sent successfully to all &apos;{0}&apos; characters..
         /// </summary>
         public static string SendMailMessageAllSuccess {
             get {
@@ -1591,7 +1636,7 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The mail has been sent successfully. Please re-login the character/change game server to view the mail..
+        ///   Looks up a localized string similar to The mail has been sent successfully to &apos;{0}&apos; characters..
         /// </summary>
         public static string SendMailMessageSuccess {
             get {
@@ -1600,7 +1645,7 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The sender and recipient cannot be the same..
+        ///   Looks up a localized string similar to The sender and recipient &apos;{0}&apos; cannot be the same..
         /// </summary>
         public static string SendMailSameName {
             get {
@@ -1960,7 +2005,7 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Template have invalid Item IDs.\nInvalid Item IDs in the template.
+        ///   Looks up a localized string similar to Template have invalid Item IDs. Invalid Item IDs in the template.
         /// </summary>
         public static string TemplateInvalidId {
             get {

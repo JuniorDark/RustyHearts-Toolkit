@@ -1,8 +1,9 @@
-﻿using RHToolkit.Services;
-using RHToolkit.Models;
+﻿using RHToolkit.Models;
+using RHToolkit.Models.Database;
+using RHToolkit.Properties;
+using RHToolkit.Services;
 using RHToolkit.Views.Windows;
 using Wpf.Ui.Controls;
-using RHToolkit.Properties;
 
 namespace RHToolkit.ViewModels.Pages
 {
@@ -18,6 +19,11 @@ namespace RHToolkit.ViewModels.Pages
         public void OnOpenWindow(string value)
         {
             if (string.IsNullOrEmpty(value))
+            {
+                return;
+            }
+
+            if (!ItemDataManager.GetDatabaseFilePath())
             {
                 return;
             }

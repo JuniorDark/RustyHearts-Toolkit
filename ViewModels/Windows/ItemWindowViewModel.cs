@@ -1,5 +1,6 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
+using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
@@ -12,13 +13,15 @@ namespace RHToolkit.ViewModels.Windows;
 public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<CharacterDataMessage>
 {
     private readonly IGMDatabaseService _gmDatabaseService;
+    private readonly ItemDataManager _itemDataManager;
     private readonly FrameViewModel _frameViewModel;
     private readonly System.Timers.Timer _searchTimer;
     public FrameViewModel FrameViewModel => _frameViewModel;
 
-    public ItemWindowViewModel(IGMDatabaseService gmDatabaseService, FrameViewModel frameViewModel)
+    public ItemWindowViewModel(IGMDatabaseService gmDatabaseService, ItemDataManager itemDataManager, FrameViewModel frameViewModel)
     {
         _gmDatabaseService = gmDatabaseService;
+        _itemDataManager = itemDataManager;
         _frameViewModel = frameViewModel;
         _searchTimer = new()
         {
@@ -389,12 +392,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         try
         {
-            if (ItemDataManager.Instance.CachedItemDataList == null)
-            {
-                ItemDataManager.Instance.InitializeCachedLists();
-            }
-
-            ItemDataItems = ItemDataManager.Instance.CachedItemDataList;
+            ItemDataItems = _itemDataManager.CachedItemDataList;
         }
         catch (Exception ex)
         {
@@ -409,12 +407,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         try
         {
-            if (ItemDataManager.Instance.CachedOptionItems == null)
-            {
-                ItemDataManager.Instance.InitializeCachedLists();
-            }
-
-            OptionItems = ItemDataManager.Instance.CachedOptionItems;
+            OptionItems = _itemDataManager.CachedOptionItems;
         }
         catch (Exception ex)
         {

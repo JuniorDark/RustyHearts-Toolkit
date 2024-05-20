@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:rs="clr-namespace:RHToolkit.Properties"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
     Title="{x:Static rs:Resources.MailTool}"
     Width="720"
     Height="640"
@@ -16,8 +17,7 @@
     MinHeight="640"
     bh:WindowBehaviors.EnableDoubleClickMaximize="True"
     bh:WindowBehaviors.EnableDragMove="True"
-    d:DataContext="{d:DesignInstance local:MailWindow,
-                                     IsDesignTimeCreatable=False}"
+    d:DataContext="{d:DesignInstance Type=windows:MailWindowViewModel}"
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/ico/icon_mail.png"
@@ -99,20 +99,37 @@
                 Background="Black"
                 BorderThickness="0"
                 Foreground="White"
-                IsEnabled="{Binding ViewModel.IsRecipientEnabled}"
+                IsEnabled="{Binding IsRecipientEnabled}"
                 Tag="{x:Static rs:Resources.Recipient}"
                 Template="{StaticResource lb_textbox}"
-                Text="{Binding ViewModel.Recipient, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            <!--  Send To All CheckBox  -->
-            <CheckBox
-                x:Name="chkSendToAll"
+                Text="{Binding Recipient, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <!--  Send To All  -->
+            <StackPanel
                 Grid.Row="1"
+                Grid.RowSpan="2"
                 Grid.Column="2"
-                VerticalAlignment="Top"
-                Content="{x:Static rs:Resources.SendToAllCharacters}"
-                Foreground="White"
-                IsChecked="{Binding ViewModel.SendToAll}"
-                Template="{StaticResource lb_checkbox}" />
+                HorizontalAlignment="Center"
+                Orientation="Vertical">
+                <CheckBox
+                    Command="{Binding SelectAllCheckedCommand, Mode=OneWay}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
+                    Content="{x:Static rs:Resources.SendToAllCharacters}"
+                    IsChecked="{Binding SelectAllCheckBoxChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    IsThreeState="True"
+                    Template="{StaticResource lb_checkbox}" />
+                <CheckBox
+                    Command="{Binding SingleCheckedCommand, Mode=OneWay}"
+                    CommandParameter="1"
+                    Content="Online"
+                    IsChecked="{Binding OnlineCheckBoxChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}" />
+                <CheckBox
+                    Command="{Binding SingleCheckedCommand, Mode=OneWay}"
+                    CommandParameter="2"
+                    Content="Offline"
+                    IsChecked="{Binding OfflineCheckBoxChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}" />
+            </StackPanel>
             <!--  Sender  -->
             <StackPanel
                 Grid.Row="2"
@@ -140,7 +157,7 @@
                 Foreground="White"
                 Tag="{x:Static rs:Resources.Sender}"
                 Template="{StaticResource lb_textbox}"
-                Text="{Binding ViewModel.Sender, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding Sender, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <!--  Message  -->
             <StackPanel
                 Grid.Row="3"
@@ -161,7 +178,7 @@
                     FontFamily="{StaticResource ArialUnicodeMS}"
                     Foreground="White"
                     MaxLength="128"
-                    Text="{Binding ViewModel.MailContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Text="{Binding MailContent, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto">
                     <TextBox.Background>
@@ -207,11 +224,11 @@
                     Margin="0,5"
                     VerticalAlignment="Top"
                     Background="Transparent"
-                    Command="{Binding ViewModel.SaveTemplateCommand}"
+                    Command="{Binding SaveTemplateCommand}"
                     Content="{x:Static rs:Resources.SaveTemplate}"
                     Cursor="Hand"
                     Foreground="White"
-                    IsEnabled="{Binding ViewModel.IsButtonEnabled}"
+                    IsEnabled="{Binding IsButtonEnabled}"
                     Style="{StaticResource lb_def_button02}"
                     ToolTip="{x:Static rs:Resources.SaveTemplateHelp}" />
 
@@ -222,11 +239,11 @@
                     Margin="0,5"
                     VerticalAlignment="Top"
                     Background="Transparent"
-                    Command="{Binding ViewModel.LoadTemplateCommand}"
+                    Command="{Binding LoadTemplateCommand}"
                     Content="{x:Static rs:Resources.LoadTemplate}"
                     Cursor="Hand"
                     Foreground="White"
-                    IsEnabled="{Binding ViewModel.IsButtonEnabled}"
+                    IsEnabled="{Binding IsButtonEnabled}"
                     Style="{StaticResource lb_def_button02}"
                     ToolTip="{x:Static rs:Resources.LoadTemplateHelp}" />
 
@@ -236,11 +253,11 @@
                     Width="137"
                     VerticalAlignment="Top"
                     Background="Transparent"
-                    Command="{Binding ViewModel.ClearTemplateCommand}"
+                    Command="{Binding ClearMailDataCommand}"
                     Content="{x:Static rs:Resources.MailClear}"
                     Cursor="Hand"
                     Foreground="White"
-                    IsEnabled="{Binding ViewModel.IsButtonEnabled}"
+                    IsEnabled="{Binding IsButtonEnabled}"
                     Style="{StaticResource lb_def_button02}"
                     ToolTip="{x:Static rs:Resources.MailClearHelp}" />
             </StackPanel>
@@ -275,38 +292,38 @@
                     <!--  Item 1  -->
                     <control:ItemSlot
                         Grid.Column="0"
-                        AddItemCommand="{Binding ViewModel.AddItemCommand}"
+                        AddItemCommand="{Binding AddItemCommand}"
                         CommandParameter="0"
-                        IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
-                        ItemAmount="{Binding ViewModel.ItemAmount0}"
-                        ItemIcon="{Binding ViewModel.ItemIcon0}"
-                        ItemIconBranch="{Binding ViewModel.ItemIconBranch0}"
-                        ItemName="{Binding ViewModel.ItemName0}"
-                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
+                        IsButtonEnabled="{Binding IsButtonEnabled}"
+                        ItemAmount="{Binding ItemAmount0}"
+                        ItemIcon="{Binding ItemIcon0}"
+                        ItemIconBranch="{Binding ItemIconBranch0}"
+                        ItemName="{Binding ItemName0}"
+                        RemoveItemCommand="{Binding RemoveItemCommand}"
                         SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <!--  Item 2  -->
                     <control:ItemSlot
                         Grid.Column="1"
-                        AddItemCommand="{Binding ViewModel.AddItemCommand}"
+                        AddItemCommand="{Binding AddItemCommand}"
                         CommandParameter="1"
-                        IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
-                        ItemAmount="{Binding ViewModel.ItemAmount1}"
-                        ItemIcon="{Binding ViewModel.ItemIcon1}"
-                        ItemIconBranch="{Binding ViewModel.ItemIconBranch1}"
-                        ItemName="{Binding ViewModel.ItemName1}"
-                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
+                        IsButtonEnabled="{Binding IsButtonEnabled}"
+                        ItemAmount="{Binding ItemAmount1}"
+                        ItemIcon="{Binding ItemIcon1}"
+                        ItemIconBranch="{Binding ItemIconBranch1}"
+                        ItemName="{Binding ItemName1}"
+                        RemoveItemCommand="{Binding RemoveItemCommand}"
                         SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <!--  Item 3  -->
                     <control:ItemSlot
                         Grid.Column="2"
-                        AddItemCommand="{Binding ViewModel.AddItemCommand}"
+                        AddItemCommand="{Binding AddItemCommand}"
                         CommandParameter="2"
-                        IsButtonEnabled="{Binding ViewModel.IsButtonEnabled}"
-                        ItemAmount="{Binding ViewModel.ItemAmount2}"
-                        ItemIcon="{Binding ViewModel.ItemIcon2}"
-                        ItemIconBranch="{Binding ViewModel.ItemIconBranch2}"
-                        ItemName="{Binding ViewModel.ItemName2}"
-                        RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
+                        IsButtonEnabled="{Binding IsButtonEnabled}"
+                        ItemAmount="{Binding ItemAmount2}"
+                        ItemIcon="{Binding ItemIcon2}"
+                        ItemIconBranch="{Binding ItemIconBranch2}"
+                        ItemName="{Binding ItemName2}"
+                        RemoveItemCommand="{Binding RemoveItemCommand}"
                         SlotIcon="/Assets/images/lb_ac_icon.png" />
                 </Grid>
             </StackPanel>
@@ -330,7 +347,7 @@
                     Increment="100"
                     Maximum="2100000000"
                     Minimum="0"
-                    Value="{Binding ViewModel.AttachGold, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Value="{Binding AttachGold, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 <!--  Return Date Label  -->
                 <Label
@@ -348,7 +365,7 @@
                     Increment="1"
                     Maximum="15"
                     Minimum="1"
-                    Value="{Binding ViewModel.ReturnDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Value="{Binding ReturnDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <!--  Item Charge Label  -->
                 <Label
                     x:Name="lbItemCharge"
@@ -365,7 +382,7 @@
                     Increment="100"
                     Maximum="2100000000"
                     Minimum="0"
-                    Value="{Binding ViewModel.ItemCharge, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    Value="{Binding ItemCharge, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <Image
                 Grid.Row="5"
@@ -394,11 +411,11 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom"
                 Background="Transparent"
-                Command="{Binding ViewModel.SendMailCommand}"
+                Command="{Binding SendMailCommand}"
                 Content="{x:Static rs:Resources.MailSend}"
                 Cursor="Hand"
                 Foreground="White"
-                IsEnabled="{Binding ViewModel.IsButtonEnabled}"
+                IsEnabled="{Binding IsButtonEnabled}"
                 Style="{StaticResource lb_def_button02}"
                 ToolTip="{x:Static rs:Resources.MailSendHelp}" />
         </Grid>

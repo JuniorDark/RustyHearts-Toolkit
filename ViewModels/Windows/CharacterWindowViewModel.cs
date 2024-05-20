@@ -14,19 +14,16 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     private readonly WindowsProviderService _windowsProviderService;
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
+    private readonly ItemDataManager _itemDataManager;
     private readonly CharacterOnlineValidator _characterOnlineValidator;
 
-    public CharacterWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService)
+    public CharacterWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, ItemDataManager itemDataManager)
     {
         _windowsProviderService = windowsProviderService;
         _databaseService = databaseService;
         _gmDatabaseService = gmDatabaseService;
+        _itemDataManager = itemDataManager;
         _characterOnlineValidator = new CharacterOnlineValidator(_databaseService);
-
-        if (ItemDataManager.Instance.CachedItemDataList == null)
-        {
-            ItemDataManager.Instance.InitializeCachedLists();
-        }
 
         PopulateClassItems();
         PopulateLobbyItems();
@@ -278,7 +275,10 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
             if (RHMessageBox.ConfirmMessage($"Change character {CharacterData.CharacterName} class?"))
             {
-                
+               Guid senderCharacterId = Guid.Parse("00000000-0000-0000-0000-000000000000");
+               Guid senderAuthId = Guid.Parse("00000000-0000-0000-0000-000000000000");
+
+                await _databaseService.InsertMailAsync(senderCharacterId, senderCharacterId, "GM", CharacterData.CharacterName!, "Class Change", 0, 7, 0, Guid.NewGuid(), 0);
                 await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Information Change", "");
 
                 RHMessageBox.ShowOKMessage("Character class changed successfully!", "Success");
@@ -627,7 +627,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 int code = equipmentItem.ID;
 
                 // Find the corresponding ItemData object in the _cachedItemDataList
-                ItemData? cachedItem = ItemDataManager.Instance.CachedItemDataList?.FirstOrDefault(item => item.ID == code);
+                ItemData? cachedItem = _itemDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == code);
 
                 ItemData itemData = new()
                 {
@@ -636,7 +636,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                     Name = cachedItem?.Name ?? "",
                     IconName = cachedItem?.IconName ?? "",
                     Branch = cachedItem?.Branch ?? 0,
-
                 };
 
                 SetItemProperties(itemData);

@@ -85,6 +85,11 @@ namespace RHToolkit.ViewModels.Pages
                 return;
             }
 
+            if (!ItemDataManager.GetDatabaseFilePath())
+            {
+                return;
+            }
+
             try
             {
                 if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))

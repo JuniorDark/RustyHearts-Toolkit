@@ -751,7 +751,7 @@
     <value>검</value>
   </data>
   <data name="TemplateInvalidId" xml:space="preserve">
-    <value>템플릿에 유효하지 않은 아이템 ID가 있습니다.\n템플릿 내의 유효하지 않은 아이템 ID</value>
+    <value>템플릿에 유효하지 않은 아이템 ID가 있습니다. 템플릿 내의 유효하지 않은 아이템 ID</value>
   </data>
   <data name="TestConnection" xml:space="preserve">
     <value>연결 테스트</value>

@@ -28,6 +28,11 @@ public partial class DatabaseToolsViewModel(WindowsProviderService windowsProvid
             return;
         }
 
+        if (!ItemDataManager.GetDatabaseFilePath())
+        {
+            return;
+        }
+
         switch (value)
         {
             case "mail":

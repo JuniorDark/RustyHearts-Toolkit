@@ -127,6 +127,39 @@ namespace RHToolkit.Services
             }
         }
 
+        public async Task UpdateCharacterClassAsync(Guid characterId, NewCharacterData characterData)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                await _databaseService.ExecuteNonQueryAsync(
+                    "UPDATE CharacterTable SET Class = @class, Job = @job WHERE character_id = @character_id",
+                    connection,
+                    transaction,
+                    ("@character_id", characterId),
+                    ("@class", characterData.Class),
+                    ("@job", characterData.Job)
+                );
+
+                await _databaseService.ExecuteProcedureAsync(
+                     "up_skill_reset",
+                     connection,
+                transaction,
+                ("@character_id", characterId)
+                );
+
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error updating character class: {ex.Message}", ex);
+            }
+        }
+
         #endregion
 
         #region Read
@@ -408,15 +441,25 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task<string[]> GetAllCharacterNamesAsync()
+        public async Task<string[]> GetAllCharacterNamesAsync(string isConnect = "")
         {
             List<string> characterNames = [];
 
-            string query = "SELECT name FROM CharacterTable";
+            string query = "SELECT name FROM CharacterTable WHERE ([Block_YN] = 'N')";
+
+            if (!string.IsNullOrEmpty(isConnect))
+            {
+                query += " AND [IsConnect] = @isConnect";
+            }
 
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
 
-            DataTable dataTable = await _databaseService.ExecuteDataQueryAsync(query, connection);
+            DataTable dataTable = await _databaseService.ExecuteDataQueryAsync(
+                query,
+                connection,
+                null,
+                ("@isConnect", isConnect)
+            );
 
             foreach (DataRow row in dataTable.Rows)
             {
@@ -427,26 +470,7 @@ namespace RHToolkit.Services
             return [.. characterNames];
         }
 
-        public async Task<string[]> GetAllOnlineCharacterNamesAsync()
-        {
-            List<string> characterNames = [];
-
-            string query = "SELECT name FROM CharacterTable WHERE IsConnect = 'Y'";
-
-            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
-
-            DataTable dataTable = await _databaseService.ExecuteDataQueryAsync(query, connection);
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                string characterName = row["name"]?.ToString() ?? string.Empty;
-                characterNames.Add(characterName);
-            }
-
-            return [.. characterNames];
-        }
-
-        public async Task<(Guid characterId, Guid authid, string accountName)> GetCharacterInfoAsync(string characterName)
+        public async Task<(Guid? characterId, Guid? authid, string? accountName)> GetCharacterInfoAsync(string characterName)
         {
             string selectQuery = "SELECT character_id, authid, bcust_id FROM CharacterTable WHERE name = @characterName";
             var parameters = new (string, object)[] { ("@characterName", characterName) };
@@ -461,12 +485,12 @@ namespace RHToolkit.Services
                 return (
                     (Guid)row["character_id"],
                     (Guid)row["authid"],
-                    row["bcust_id"]?.ToString() ?? string.Empty
+                    row["bcust_id"].ToString()
                 );
             }
             else
             {
-                return (Guid.Empty, Guid.Empty, string.Empty);
+                return (null, null, string.Empty);
             }
         }
 
@@ -862,7 +886,7 @@ namespace RHToolkit.Services
         #endregion
 
         #region Mail
-        public async Task InsertMailAsync(Guid senderAuthId, Guid senderCharacterId, string mailSender, string recipient, string content, int gold, int returnDay, int reqGold, Guid mailId, int createType)
+        public async Task InsertMailAsync(Guid? senderAuthId, Guid? senderCharacterId, string mailSender, string recipient, string content, int gold, int returnDay, int reqGold, Guid mailId, int createType)
         {
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -873,8 +897,8 @@ namespace RHToolkit.Services
                     "up_insert_mail",
                     connection,
                     transaction,
-                    ("@sender_auth_id", senderAuthId),
-                    ("@sender_character_id", senderCharacterId),
+                    ("@sender_auth_id", senderAuthId ?? Guid.Empty),
+                    ("@sender_character_id", senderCharacterId ?? Guid.Empty),
                     ("@sender_name", mailSender),
                     ("@recver_name", recipient),
                     ("@msg", content),
@@ -893,7 +917,7 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task InsertMailItemAsync(ItemData itemData, Guid recipientAuthId, Guid recipientCharacterId, Guid mailId, int slotIndex)
+        public async Task InsertMailItemAsync(ItemData itemData, Guid? recipientAuthId, Guid? recipientCharacterId, Guid mailId, int slotIndex)
         {
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -905,8 +929,8 @@ namespace RHToolkit.Services
                      "VALUES (@item_id, @MailId, @character_id, @auth_id, @page_index, @slot_index, @code, @use_cnt, @remain_time, GETDATE(), GETDATE(), @gcode, @durability, @enhance_level, @option_1_code, @option_1_value, @option_2_code, @option_2_value, @option_3_code, @option_3_value, 0, @ReconNum, @ReconState, @socket_count, @socket_1_code, @socket_1_value, @socket_2_code, @socket_2_value, @socket_3_code, @socket_3_value, @expire_time, '', @activity_value, @link_id, 0, @socket_1_color, @socket_2_color, @socket_3_color, @rank, @acquireroute, @physical, @magical, @durabilitymax, @weight)",
                      connection,
                      transaction,
-                     ("@character_id", recipientCharacterId),
-                     ("@auth_id", recipientAuthId),
+                     ("@character_id", recipientCharacterId ?? Guid.Empty),
+                     ("@auth_id", recipientAuthId ?? Guid.Empty),
                      ("@item_id", Guid.NewGuid()),
                      ("@code", itemData.ID),
                      ("@use_cnt", itemData.Amount),
@@ -959,14 +983,14 @@ namespace RHToolkit.Services
         #endregion
 
         #region RustyHearts_Log
-        public async Task GMAuditAsync(string windyCode, Guid characterId, string characterName, string action, string modify)
+        public async Task GMAuditAsync(string windyCode, Guid? characterId, string characterName, string action, string modify)
         {
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("GMRustyHearts");
             using var transaction = connection.BeginTransaction();
 
             try
             {
-                string changes = $"<font color=blue>{action}</font>]<br><font color=red>{modify}<br>{characterName}, GUID:{{{characterId.ToString().ToUpper()}}}<br></font>";
+                string changes = $"<font color=blue>{action}</font>]<br><font color=red>{modify}<br>{characterName}, GUID:{{{characterId?.ToString().ToUpper()}}}<br></font>";
 
                 await _databaseService.ExecuteNonQueryAsync("INSERT INTO GMAudit(audit_id, AdminID, world_index, bcust_id, character_id, char_name, Type, Modify, Memo, date) " +
                        "VALUES (@audit_id, @AdminID, @world_index, @bcust_id, @character_id, @char_name, @Type, @Modify, @Memo, @date)",
@@ -976,7 +1000,7 @@ namespace RHToolkit.Services
                        ("@AdminID", "RHToolkit"),
                        ("@world_index", 1),
                        ("@bcust_id", windyCode),
-                       ("@character_id", characterId),
+                       ("@character_id", characterId ?? Guid.Empty),
                        ("@char_name", characterName),
                        ("@Type", action),
                        ("@Modify", changes),

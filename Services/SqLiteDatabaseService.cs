@@ -1,6 +1,5 @@
 ﻿using System.Data;
 using System.Data.SQLite;
-using System.IO;
 
 namespace RHToolkit.Services
 {
@@ -23,7 +22,7 @@ namespace RHToolkit.Services
         {
             if (!File.Exists(_dbFilePath))
             {
-                throw new FileNotFoundException($"Database file not found...");
+                throw new FileNotFoundException($"Database file {_dbFilePath} not found.");
             }
 
             var connection = new SQLiteConnection($"Data Source={_dbFilePath};Version=3;");

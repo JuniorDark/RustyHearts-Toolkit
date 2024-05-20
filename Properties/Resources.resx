@@ -261,6 +261,9 @@
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="FailedRecipientsMessage" xml:space="preserve">
+    <value>{0} recipients failed to receive the mail: {1}</value>
+  </data>
   <data name="FailedSendMail" xml:space="preserve">
     <value>Failed to send Mail</value>
   </data>
@@ -313,7 +316,7 @@
     <value>Invalid Sender</value>
   </data>
   <data name="InvalidSenderDesc" xml:space="preserve">
-    <value>The sender ({0}) does not exist.\nThe sender name must be a valid character name for billing mail.</value>
+    <value>The sender ({0}) does not exist. The sender name must be a valid character name for billing mail.</value>
   </data>
   <data name="InvalidTemplate" xml:space="preserve">
     <value>Invalid template file.</value>
@@ -432,8 +435,14 @@
   <data name="Normal" xml:space="preserve">
     <value>Normal</value>
   </data>
+  <data name="Offline" xml:space="preserve">
+    <value>Offline</value>
+  </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>Online</value>
   </data>
   <data name="OptionAllElementalDamage" xml:space="preserve">
     <value>All Elemental Damage</value>
@@ -622,16 +631,22 @@
     <value>Send this mail to the following recipients?</value>
   </data>
   <data name="SendMailMessageAll" xml:space="preserve">
-    <value>Send this mail to all characters?</value>
+    <value>Send this mail to all '{0}' characters?</value>
+  </data>
+  <data name="SendMailMessageAllOnline" xml:space="preserve">
+    <value>Send this mail to all '{0}' {1} characters?</value>
+  </data>
+  <data name="SendMailMessageAllOnlineSuccess" xml:space="preserve">
+    <value>The mail has been sent successfully to all '{0}' {1} characters.</value>
   </data>
   <data name="SendMailMessageAllSuccess" xml:space="preserve">
-    <value>The mail has been sent successfully to all characters. Please re-login the character/change game server to view the mail.</value>
+    <value>The mail has been sent successfully to all '{0}' characters.</value>
   </data>
   <data name="SendMailMessageSuccess" xml:space="preserve">
-    <value>The mail has been sent successfully. Please re-login the character/change game server to view the mail.</value>
+    <value>The mail has been sent successfully to '{0}' characters.</value>
   </data>
   <data name="SendMailSameName" xml:space="preserve">
-    <value>The sender and recipient cannot be the same.</value>
+    <value>The sender and recipient '{0}' cannot be the same.</value>
   </data>
   <data name="SendToAllCharacters" xml:space="preserve">
     <value>Send to All Characters</value>
@@ -751,7 +766,7 @@
     <value>Sword</value>
   </data>
   <data name="TemplateInvalidId" xml:space="preserve">
-    <value>Template have invalid Item IDs.\nInvalid Item IDs in the template</value>
+    <value>Template have invalid Item IDs. Invalid Item IDs in the template</value>
   </data>
   <data name="TestConnection" xml:space="preserve">
     <value>Test Connection</value>
