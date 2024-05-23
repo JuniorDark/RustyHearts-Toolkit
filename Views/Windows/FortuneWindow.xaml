@@ -13,6 +13,7 @@
     Height="600"
     MinWidth="700"
     MinHeight="600"
+    MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
     bh:WindowBehaviors.EnableDragMove="True"
     d:DataContext="{d:DesignInstance Type=windows:FortuneWindowViewModel}"
     AllowsTransparency="True"

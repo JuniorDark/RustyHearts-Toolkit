@@ -122,7 +122,6 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
         try
         {
             await ProcessSanctionInternal(operationType, releaser, comment);
-            RHMessageBox.ShowOKMessage(operationType == SanctionOperationType.Add ? "Sanction added successfully!" : "Sanction released successfully!", "Success");
             await ReadSanction();
         }
         catch (Exception ex)
@@ -162,6 +161,8 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
                 await _databaseService.UpdateSanctionLogAsync(sanctionUid, releaser, comment, 1);
                 await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Sanction Release", reasonDetails);
             }
+
+            RHMessageBox.ShowOKMessage(operationType == SanctionOperationType.Add ? "Sanction added successfully!" : "Sanction released successfully!", "Success");
         }
     }
 

@@ -15,6 +15,7 @@
     Height="640"
     MinWidth="720"
     MinHeight="640"
+    MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
     bh:WindowBehaviors.EnableDoubleClickMaximize="True"
     bh:WindowBehaviors.EnableDragMove="True"
     d:DataContext="{d:DesignInstance Type=windows:MailWindowViewModel}"

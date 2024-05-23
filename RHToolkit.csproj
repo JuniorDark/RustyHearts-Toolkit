@@ -532,6 +532,9 @@
     <Compile Update="Views\Windows\FortuneWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Windows\RHEditorWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Windows\SanctionWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

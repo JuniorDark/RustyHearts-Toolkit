@@ -99,12 +99,15 @@
     <Style TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="Blue" />
         <Setter Property="Foreground" Value="White" />
+        <Setter Property="BorderBrush" Value="White" />
+        <Setter Property="BorderThickness" Value="0,0,1,0" />
     </Style>
 
     <!--  Style for DataGridRow  -->
     <Style TargetType="DataGridRow">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Foreground" Value="Gold" />
+
     </Style>
 
 </ResourceDictionary>

@@ -4,7 +4,7 @@ public class WindowsProviderService(IServiceProvider serviceProvider)
 {
     private readonly IServiceProvider _serviceProvider = serviceProvider;
 
-    public void Show<T>()
+    public void Show<T>(bool setOwner = false)
         where T : class
     {
         if (!typeof(Window).IsAssignableFrom(typeof(T)))
@@ -16,14 +16,18 @@ public class WindowsProviderService(IServiceProvider serviceProvider)
             _serviceProvider.GetService<T>() as Window
             ?? throw new InvalidOperationException("Window is not registered as service.");
 
-        // Automatically set the owner to the currently active window
-        Window? owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive);
-        if (owner != null)
+        if (setOwner)
         {
-            windowInstance.Owner = owner;
+            // Automatically set the owner to the currently active window
+            Window? owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive);
+            if (owner != null)
+            {
+                windowInstance.Owner = owner;
+            }
         }
 
         windowInstance.Show();
     }
+
 }
 

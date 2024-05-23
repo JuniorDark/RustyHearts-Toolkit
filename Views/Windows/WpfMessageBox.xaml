@@ -106,7 +106,7 @@
                     <Button
                         Name="btnOk"
                         MinWidth="100"
-                        Margin="30,5"
+                        Margin="10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
@@ -120,7 +120,7 @@
                     <Button
                         Name="btnYes"
                         MinWidth="100"
-                        Margin="30,5"
+                        Margin="10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
@@ -133,7 +133,7 @@
                     <Button
                         Name="btnNo"
                         MinWidth="100"
-                        Margin="30,5"
+                        Margin="10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
@@ -146,7 +146,7 @@
                     <Button
                         Name="btnCancel"
                         MinWidth="100"
-                        Margin="30,5"
+                        Margin="10,5"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"

@@ -46,7 +46,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         ItemTradeFilter = 2;
         WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
-        
+
     }
 
     #region Add Item
@@ -151,7 +151,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
             }), DispatcherPriority.Loaded);
 
-            
+
         }
     }
 
@@ -165,7 +165,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 case 0: // Weapon
                     ItemTypeFilter = 4;
                     ItemSubCategoryFilter = 1;
-                    ItemClassFilter = CharacterData.Class;
+                    ItemClassFilter = GetRealClass(CharacterData.Class);
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
@@ -325,6 +325,18 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     break;
             }
         }
+    }
+
+    private static int GetRealClass(int charClass)
+    {
+        return charClass switch
+        {
+            1 or 101 or 102 => 1,
+            2 or 201 => 2,
+            3 or 301 => 3,
+            4 or 401 => 4,
+            _ => 0,
+        };
     }
 
     private void LoadItemData(ItemData itemData)

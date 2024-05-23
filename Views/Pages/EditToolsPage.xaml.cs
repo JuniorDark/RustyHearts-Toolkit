@@ -3,11 +3,11 @@ using Wpf.Ui.Controls;
 
 namespace RHToolkit.Views.Pages;
 
-public partial class RHEditorPage : INavigableView<RHEditorViewModel>
+public partial class EditToolsPage : INavigableView<EditToolsViewModel>
 {
-    public RHEditorViewModel ViewModel { get; }
+    public EditToolsViewModel ViewModel { get; }
 
-    public RHEditorPage(RHEditorViewModel viewModel)
+    public EditToolsPage(EditToolsViewModel viewModel)
     {
         ViewModel = viewModel;
         DataContext = this;

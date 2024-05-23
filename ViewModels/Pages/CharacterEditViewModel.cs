@@ -14,22 +14,17 @@ namespace RHToolkit.ViewModels.Pages
         private readonly IDatabaseService _databaseService = databaseService;
         private readonly CharacterOnlineValidator _characterOnlineValidator = new(databaseService);
 
-        #region Character Data
-        [ObservableProperty]
-        private List<CharacterData>? _characterDataList;
+        #region Read Character Data
 
         [RelayCommand]
         private async Task ReadCharacterData()
         {
             if (string.IsNullOrWhiteSpace(SearchText)) return;
 
-            if (!SqlCredentialValidator.ValidateCredentials())
-            {
-                return;
-            }
-
             try
             {
+                if (!await ValidateCharacterData(false)) return;
+
                 string filter = IsConnectFilter();
                 CharacterDataList = null;
                 CharacterDataList = await _databaseService.GetCharacterDataListAsync(SearchText, filter);
@@ -61,41 +56,14 @@ namespace RHToolkit.ViewModels.Pages
         #region Character Window
         private CharacterWindow? _characterWindowInstance;
 
-        [ObservableProperty]
-        private CharacterData? _characterData;
-        partial void OnCharacterDataChanged(CharacterData? value)
-        {
-            IsEditCharacterButtonEnabled = value == null ? false : true;
-            IsButtonPanelVisible = value == null ? Visibility.Hidden : Visibility.Visible;
-            IsButtonEnabled = value == null ? false : true;
-
-            if (_characterWindowInstance == null)
-            {
-                IsDeleteCharacterButtonEnabled = value == null ? false : true;
-            }
-        }
-
         [RelayCommand]
         private async Task EditCharacter()
         {
             if (CharacterData == null) return;
 
-            if (!SqlCredentialValidator.ValidateCredentials())
-            {
-                return;
-            }
-
-            if (!ItemDataManager.GetDatabaseFilePath())
-            {
-                return;
-            }
-
             try
             {
-                if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
-                {
-                    return;
-                }
+                if (!await ValidateCharacterData(true, true)) return;
 
                 List<ItemData> inventoryItem = await _databaseService.GetItemList(CharacterData.CharacterID, "N_InventoryItem");
                 List<ItemData> equipItem = await _databaseService.GetItemList(CharacterData.CharacterID, "N_EquipItem");
@@ -122,7 +90,7 @@ namespace RHToolkit.ViewModels.Pages
                 WeakReferenceMessenger.Default.Send(new DatabaseItemMessage(equipItem, ItemStorageType.Equipment));
                 WeakReferenceMessenger.Default.Send(new DatabaseItemMessage(accountStorage, ItemStorageType.Storage));
 
-                _characterWindowInstance?.Activate();
+                _characterWindowInstance?.Focus();
 
             }
             catch (Exception ex)
@@ -136,17 +104,9 @@ namespace RHToolkit.ViewModels.Pages
         {
             if (CharacterData == null) return;
 
-            if (!SqlCredentialValidator.ValidateCredentials())
-            {
-                return;
-            }
-
             try
             {
-                if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
-                {
-                    return;
-                }
+                if (!await ValidateCharacterData()) return;
 
                 if (RHMessageBox.ConfirmMessage($"Delete the character '{CharacterData.CharacterName}'?"))
                 {
@@ -165,6 +125,32 @@ namespace RHToolkit.ViewModels.Pages
                 RHMessageBox.ShowOKMessage($"Error: {ex.Message}", "Error");
             }
         }
+
+        private async Task<bool> ValidateCharacterData(bool checkCharacterOnline = true, bool checkItemDatabase = false)
+        {
+            if (!SqlCredentialValidator.ValidateCredentials())
+            {
+                return false;
+            }
+
+            if (checkCharacterOnline)
+            {
+                if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData!.CharacterName!))
+                {
+                    return false;
+                }
+            }
+
+            if (checkItemDatabase)
+            {
+                if (!ItemDataManager.GetDatabaseFilePath())
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
         #endregion
 
         #region Buttons
@@ -173,17 +159,12 @@ namespace RHToolkit.ViewModels.Pages
         private TitleWindow? _titleWindowInstance;
 
         [RelayCommand]
-        private void OnOpenTitleWindow()
+        private async Task OnOpenTitleWindow()
         {
-            if (CharacterData == null) return;
-
-            if (!SqlCredentialValidator.ValidateCredentials())
-            {
-                return;
-            }
-
             try
             {
+                if (!await ValidateCharacterData(false)) return;
+
                 if (_titleWindowInstance == null)
                 {
                     _windowsProviderService.Show<TitleWindow>();
@@ -195,7 +176,7 @@ namespace RHToolkit.ViewModels.Pages
                     }
                 }
 
-                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "TitleWindow"));
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData!, "TitleWindow"));
 
                 _titleWindowInstance?.Focus();
             }
@@ -210,17 +191,12 @@ namespace RHToolkit.ViewModels.Pages
         private SanctionWindow? _sanctionWindowInstance;
 
         [RelayCommand]
-        private void OnOpenSanctionWindow()
+        private async Task OnOpenSanctionWindow()
         {
-            if (CharacterData == null) return;
-
-            if (!SqlCredentialValidator.ValidateCredentials())
-            {
-                return;
-            }
-
             try
             {
+                if (!await ValidateCharacterData(false)) return;
+
                 if (_sanctionWindowInstance == null)
                 {
                     _windowsProviderService.Show<SanctionWindow>();
@@ -232,7 +208,7 @@ namespace RHToolkit.ViewModels.Pages
                     }
                 }
 
-                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "SanctionWindow"));
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData!, "SanctionWindow"));
                 _sanctionWindowInstance?.Focus();
             }
             catch (Exception ex)
@@ -246,17 +222,12 @@ namespace RHToolkit.ViewModels.Pages
         private FortuneWindow? _fortuneWindowInstance;
 
         [RelayCommand]
-        private void OnOpenFortuneWindow()
+        private async Task OnOpenFortuneWindow()
         {
-            if (CharacterData == null) return;
-
-            if (!SqlCredentialValidator.ValidateCredentials())
-            {
-                return;
-            }
-
             try
             {
+                if (!await ValidateCharacterData(false)) return;
+
                 if (_fortuneWindowInstance == null)
                 {
                     _windowsProviderService.Show<FortuneWindow>();
@@ -268,7 +239,7 @@ namespace RHToolkit.ViewModels.Pages
                     }
                 }
 
-                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "FortuneWindow"));
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData!, "FortuneWindow"));
                 _fortuneWindowInstance?.Focus();
             }
             catch (Exception ex)
@@ -283,7 +254,28 @@ namespace RHToolkit.ViewModels.Pages
         #region Properties
 
         [ObservableProperty]
+        private List<CharacterData>? _characterDataList;
+
+        [ObservableProperty]
+        private CharacterData? _characterData;
+        partial void OnCharacterDataChanged(CharacterData? value)
+        {
+            IsEditCharacterButtonEnabled = value == null ? false : true;
+            IsButtonPanelVisible = value == null ? Visibility.Hidden : Visibility.Visible;
+            IsButtonEnabled = value == null ? false : true;
+            SearchMessage = value == null ? "No data found." : "";
+
+            if (_characterWindowInstance == null)
+            {
+                IsDeleteCharacterButtonEnabled = value == null ? false : true;
+            }
+        }
+
+        [ObservableProperty]
         private string? _searchText;
+
+        [ObservableProperty]
+        private string? _searchMessage = "Search for a character.";
 
         [ObservableProperty]
         private bool _isButtonEnabled = false;
@@ -296,9 +288,6 @@ namespace RHToolkit.ViewModels.Pages
 
         [ObservableProperty]
         private bool _isDeleteCharacterButtonEnabled = false;
-
-        [ObservableProperty]
-        private bool _isFirstTimeInitialized = true;
 
         [ObservableProperty]
         private bool? _selectAllCheckBoxChecked = null;

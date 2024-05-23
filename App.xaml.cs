@@ -45,8 +45,8 @@ public partial class App : Application
                 _ = services.AddSingleton<CharacterRestoreViewModel>();
                 _ = services.AddSingleton<SettingsPage>();
                 _ = services.AddSingleton<SettingsViewModel>();
-                _ = services.AddSingleton<RHEditorPage>();
-                _ = services.AddSingleton<RHEditorViewModel>();
+                _ = services.AddSingleton<EditToolsPage>();
+                _ = services.AddSingleton<EditToolsViewModel>();
 
                 // All other services and view models
                 _ = services.AddSingleton<ISqlDatabaseService, SqlDatabaseService>();
@@ -61,14 +61,16 @@ public partial class App : Application
                 _ = services.AddTransient<ItemWindow>();
                 _ = services.AddTransient<ItemWindowViewModel>();
                 _ = services.AddTransient<FrameViewModel>();
-                _ = services.AddSingleton<CharacterWindow>();
-                _ = services.AddSingleton<CharacterWindowViewModel>();
+                _ = services.AddTransient<CharacterWindow>();
+                _ = services.AddTransient<CharacterWindowViewModel>();
                 _ = services.AddTransient<TitleWindow>();
                 _ = services.AddTransient<TitleWindowViewModel>();
                 _ = services.AddTransient<SanctionWindow>();
                 _ = services.AddTransient<SanctionWindowViewModel>();
                 _ = services.AddTransient<FortuneWindow>();
                 _ = services.AddTransient<FortuneWindowViewModel>();
+                _ = services.AddTransient<RHEditorWindow>();
+                _ = services.AddTransient<RHEditorViewModel>();
 
             }
         )

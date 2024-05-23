@@ -21,10 +21,12 @@ namespace RHToolkit.Views.Windows
             Error,
             None
         }
+
         private WpfMessageBox()
         {
             InitializeComponent();
         }
+
         static WpfMessageBox()
         {
             _messageBox = new WpfMessageBox();
@@ -51,27 +53,32 @@ namespace RHToolkit.Views.Windows
                 _ => MessageBoxResult.No,
             };
         }
+
         public static MessageBoxResult Show(string msg, MessageBoxType type)
         {
             return Show(string.Empty, msg, type);
         }
+
         public static MessageBoxResult Show(string msg)
         {
             return Show(string.Empty, msg,
             MessageBoxButton.OK, MessageBoxImage.None);
         }
+
         public static MessageBoxResult Show
         (string caption, string text)
         {
             return Show(caption, text,
             MessageBoxButton.OK, MessageBoxImage.None);
         }
+
         public static MessageBoxResult Show
         (string caption, string text, MessageBoxButton button)
         {
             return Show(caption, text, button,
             MessageBoxImage.None);
         }
+
         public static MessageBoxResult Show
         (string caption, string text,
         MessageBoxButton button, MessageBoxImage image)
@@ -83,6 +90,7 @@ namespace RHToolkit.Views.Windows
             _messageBox.ShowDialog();
             return _result;
         }
+
         private static void SetVisibilityOfButtons(MessageBoxButton button)
         {
             switch (button)
@@ -111,6 +119,7 @@ namespace RHToolkit.Views.Windows
                     break;
             }
         }
+
         private static void SetImageOfMessageBox(MessageBoxImage image)
         {
             switch (image)
@@ -132,6 +141,7 @@ namespace RHToolkit.Views.Windows
                     break;
             }
         }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (sender == btnOk)
@@ -146,6 +156,7 @@ namespace RHToolkit.Views.Windows
                 _result = MessageBoxResult.None;
             _messageBox.Close();
         }
+
         private void SetImage(string imageName)
         {
             string uri = string.Format("/Resources/images/{0}", imageName);

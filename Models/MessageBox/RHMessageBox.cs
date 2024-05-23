@@ -10,6 +10,11 @@ namespace RHToolkit.Models.MessageBox
             return result == MessageBoxResult.Yes;
         }
 
+        public static MessageBoxResult ConfirmMessageYesNoCancel(string message)
+        {
+            return WpfMessageBox.Show("Confirmation", message, WpfMessageBox.MessageBoxType.ConfirmationWithYesNoCancel);
+        }
+
         public static void ShowOKMessage(string message, string caption = "Information")
         {
             WpfMessageBox.Show(caption, message, WpfMessageBox.MessageBoxType.Information);

@@ -9,9 +9,7 @@ namespace RHToolkit.ViewModels.Pages
     {
         private readonly IDatabaseService _databaseService = databaseService;
 
-        #region Character Data
-        [ObservableProperty]
-        private List<CharacterData>? _characterDataList;
+        #region Read Character Data
 
         [RelayCommand]
         private async Task ReadDeleteCharacterData()
@@ -25,6 +23,7 @@ namespace RHToolkit.ViewModels.Pages
 
             try
             {
+                CharacterDataList = null;
                 CharacterDataList = await _databaseService.GetCharacterDataListAsync(SearchText, string.Empty, true);
             }
             catch (Exception ex)
@@ -36,14 +35,6 @@ namespace RHToolkit.ViewModels.Pages
         #endregion
 
         #region Character Restore
-
-        [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(IsRestoreCharacterButtonEnabled))]
-        private CharacterData? _characterData;
-        partial void OnCharacterDataChanged(CharacterData? value)
-        {
-            IsRestoreCharacterButtonEnabled = value == null ? false : true;
-        }
 
         [RelayCommand]
         private async Task RestoreCharacter()
@@ -76,13 +67,24 @@ namespace RHToolkit.ViewModels.Pages
 
         #region Properties
         [ObservableProperty]
+        private List<CharacterData>? _characterDataList;
+
+        [ObservableProperty]
+        private CharacterData? _characterData;
+        partial void OnCharacterDataChanged(CharacterData? value)
+        {
+            IsRestoreCharacterButtonEnabled = value == null ? false : true;
+            SearchMessage = value == null ? "No data found." : "";
+        }
+
+        [ObservableProperty]
         private string? _searchText;
 
         [ObservableProperty]
-        private bool _isRestoreCharacterButtonEnabled = false;
+        private string? _searchMessage = "Search for a deleted character.";
 
         [ObservableProperty]
-        private bool _isFirstTimeInitialized = true;
+        private bool _isRestoreCharacterButtonEnabled = false;
 
         #endregion
     }

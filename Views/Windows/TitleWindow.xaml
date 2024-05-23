@@ -15,6 +15,7 @@
     Height="720"
     MinWidth="900"
     MinHeight="720"
+    MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
     bh:WindowBehaviors.EnableDragMove="True"
     d:DataContext="{d:DesignInstance Type=windows:TitleWindowViewModel}"
     AllowsTransparency="True"

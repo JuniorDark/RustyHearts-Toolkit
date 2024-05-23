@@ -6,7 +6,6 @@
     xmlns:local="clr-namespace:RHToolkit.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:RHToolkit.ViewModels.Pages"
-    Title="Character Edit"
     d:DataContext="{d:DesignInstance local:CharacterEditPage,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="600"
@@ -200,20 +199,8 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="15"
-                Foreground="White">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Text" Value="Search for a character." />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ViewModel.CharacterDataList.Count}" Value="0">
-                                <Setter Property="Text" Value="No data found." />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding ViewModel.IsFirstTimeInitialized}" Value="False">
-                                <Setter Property="Text" Value="" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
+                Foreground="White"
+                Text="{Binding ViewModel.SearchMessage}">
                 <TextBlock.Visibility>
                     <Binding Converter="{StaticResource ZeroToVisibilityConverter}" Path="ViewModel.CharacterDataList.Count" />
                 </TextBlock.Visibility>

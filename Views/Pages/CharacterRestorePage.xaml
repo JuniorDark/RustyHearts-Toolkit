@@ -180,20 +180,8 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="15"
+                Text="{Binding ViewModel.SearchMessage}"
                 Foreground="White">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Setter Property="Text" Value="Search for a deleted character." />
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ViewModel.CharacterDataList.Count}" Value="0">
-                                <Setter Property="Text" Value="No data found." />
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding ViewModel.IsFirstTimeInitialized}" Value="False">
-                                <Setter Property="Text" Value="" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
                 <TextBlock.Visibility>
                     <Binding Converter="{StaticResource ZeroToVisibilityConverter}" Path="ViewModel.CharacterDataList.Count" />
                 </TextBlock.Visibility>
@@ -212,8 +200,8 @@
                     Command="{Binding ViewModel.RestoreCharacterCommand}"
                     Content="Restore Character"
                     Cursor="Hand"
-                    Foreground="White"
                     IsEnabled="{Binding ViewModel.IsRestoreCharacterButtonEnabled}"
+                    Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
             </StackPanel>
         </Grid>
