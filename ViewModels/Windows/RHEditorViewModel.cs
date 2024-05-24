@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Models.RH;
 using RHToolkit.Properties;
 using System.Data;
 
@@ -9,8 +8,8 @@ namespace RHToolkit.ViewModels.Windows
 {
     public partial class RHEditorViewModel : ObservableObject
     {
-        private Stack<EditHistory> _undoStack = new();
-        private Stack<EditHistory> _redoStack = new();
+        private readonly Stack<EditHistory> _undoStack = new();
+        private readonly Stack<EditHistory> _redoStack = new();
 
         #region Read
 
@@ -27,53 +26,60 @@ namespace RHToolkit.ViewModels.Windows
             {
                 try
                 {
-                    RhData = null;
-                    OriginalRhData = null;
+                    ClearFile();
 
                     CurrentFile = openFileDialog.FileName;
                     CurrentFileName = Path.GetFileName(CurrentFile);
+                    FileData = await FileManager.FileToDataTableAsync(CurrentFile);
                     Title = $"RH Table Editor ({CurrentFileName})";
 
-                    RhData = await ProcessFileAsync(CurrentFile);
-                    OriginalRhData = RhData?.Clone();
+                    if (FileData != null)
+                    {
+                        FileData.TableNewRow += DataTableChanged;
+                        FileData.RowChanged += DataTableChanged;
+                        FileData.RowDeleted += DataTableChanged;
+                        FileData.ColumnChanged += DataTableChanged;
+                    }
 
+                    HasChanges = false;
+                    SaveFileCommand.NotifyCanExecuteChanged();
                 }
                 catch (Exception ex)
                 {
                     RHMessageBox.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
                 }
-                
             }
         }
 
-        private async Task<DataTable?> ProcessFileAsync(string sourceFile)
+        private int _changesCounter = 0;
+        private const int ChangesBeforeSave = 5;
+
+        private async void DataTableChanged(object sender, EventArgs e)
         {
-            using FileStream sourceFileStream = File.OpenRead(sourceFile);
-            byte[] buffer = new byte[4096];
-            int bytesRead;
+            HasChanges = true;
+            Title = $"RH Table Editor ({CurrentFileName})*";
+            SaveFileCommand.NotifyCanExecuteChanged();
 
-            using MemoryStream memoryStream = new();
-            while ((bytesRead = await sourceFileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            _changesCounter++;
+            if (_changesCounter >= ChangesBeforeSave)
             {
-                await memoryStream.WriteAsync(buffer, 0, bytesRead);
+                _changesCounter = 0;
+                await FileManager.SaveTempFile(CurrentFileName!, FileData!);
             }
-
-            byte[] sourceBytes = memoryStream.ToArray();
-
-            return DataTableCryptor.RhToDataTable(sourceBytes);
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteSaveCommand))]
         private async Task SaveFile()
         {
-            if (RhData == null) return;
+            if (FileData == null) return;
             if (CurrentFile == null) return;
             try
             {
-                string file = CurrentFile;
-                byte[] encryptedData = DataTableCryptor.DataTableToRh(RhData);
-                await File.WriteAllBytesAsync(file, encryptedData);
-                OriginalRhData = RhData;
+                await FileManager.DataTableToFileAsync(CurrentFile, FileData);
+                FileManager.ClearTempFile(CurrentFileName!);
+
+                HasChanges = false;
+                SaveFileCommand.NotifyCanExecuteChanged();
             }
             catch (Exception ex)
             {
@@ -81,11 +87,10 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
-        [RelayCommand(CanExecute = nameof(CanExecuteSaveAsCommand))]
+        [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
         private async Task SaveFileAs()
         {
-            if (RhData == null) return;
-            if (CurrentFileName == null) return;
+            if (FileData == null || CurrentFileName == null) return;
 
             SaveFileDialog saveFileDialog = new()
             {
@@ -99,10 +104,13 @@ namespace RHToolkit.ViewModels.Windows
                 try
                 {
                     string file = saveFileDialog.FileName;
-                    byte[] encryptedData = DataTableCryptor.DataTableToRh(RhData);
-                    await File.WriteAllBytesAsync(file, encryptedData);
-                    OriginalRhData = RhData;
-                    RHMessageBox.ShowOKMessage("File saved successfully.", "Save Successful");
+                    await FileManager.DataTableToFileAsync(file, FileData);
+                    FileManager.ClearTempFile(CurrentFileName);
+                    HasChanges = false;
+                    SaveFileCommand.NotifyCanExecuteChanged();
+
+                    CurrentFile = file;
+                    CurrentFileName = Path.GetFileName(file);
                 }
                 catch (Exception ex)
                 {
@@ -111,31 +119,24 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
-        [RelayCommand(CanExecute = nameof(CanExecuteCloseCommand))]
+        [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
         private async Task CloseFile()
         {
-            if (RhData == null) return;
+            if (FileData == null) return;
+
             try
             {
-                if (!RhData.Equals(OriginalRhData))
+                if (HasChanges)
                 {
                     var result = RHMessageBox.ConfirmMessageYesNoCancel($"Save file '{CurrentFileName}' ?");
                     if (result == MessageBoxResult.Yes)
                     {
                         await SaveFile();
-                        RhData = null;
-                        OriginalRhData = null;
-                        CurrentFile = null;
-                        CurrentFileName = null;
-                        Title = $"RH Table Editor";
+                        ClearFile();
                     }
                     else if (result == MessageBoxResult.No)
                     {
-                        RhData = null;
-                        OriginalRhData = null;
-                        CurrentFile = null;
-                        CurrentFileName = null;
-                        Title = $"RH Table Editor";
+                        ClearFile();
                     }
                     else if (result == MessageBoxResult.Cancel)
                     {
@@ -144,11 +145,7 @@ namespace RHToolkit.ViewModels.Windows
                 }
                 else
                 {
-                    RhData = null;
-                    OriginalRhData = null;
-                    CurrentFile = null;
-                    CurrentFileName = null;
-                    Title = $"RH Table Editor";
+                    ClearFile();
                 }
             }
             catch (Exception ex)
@@ -157,65 +154,131 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
-        private bool CanExecuteSaveCommand()
+        private void ClearFile()
         {
-            if (RhData != null)
+            if (FileData != null)
             {
-                return !RhData.Equals(OriginalRhData);
+                FileData.TableNewRow -= DataTableChanged;
+                FileData.RowChanged -= DataTableChanged;
+                FileData.RowDeleted -= DataTableChanged;
+                FileData.ColumnChanged -= DataTableChanged;
             }
 
-            return false;
+            FileManager.ClearTempFile(CurrentFileName);
+            FileData = null;
+            OriginalFileData = null;
+            CurrentFile = null;
+            CurrentFileName = null;
+            Title = $"RH Table Editor";
+            _undoStack.Clear();
+            _redoStack.Clear();
+            HasChanges = false;
+            SaveFileCommand.NotifyCanExecuteChanged();
+            OnCanExecuteChangesChanged();
         }
 
-        private bool CanExecuteSaveAsCommand()
+        private bool CanExecuteSaveCommand()
         {
-            return RhData != null;
+            return HasChanges;
         }
 
-        private bool CanExecuteCloseCommand()
+        private bool CanExecuteFileCommand()
         {
-            return RhData != null;
+            return FileData != null;
         }
+
+        private void OnCanExecuteFileCommandChanged()
+        {
+            SaveFileCommand.NotifyCanExecuteChanged();
+            SaveFileAsCommand.NotifyCanExecuteChanged();
+            CloseFileCommand.NotifyCanExecuteChanged();
+            AddNewRowCommand.NotifyCanExecuteChanged();
+        }
+
+        [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+        private void AddNewRow()
+        {
+            if (FileData != null)
+            {
+                DataRow newRow = FileData.NewRow();
+
+                // Initialize the new row with default values
+                foreach (DataColumn column in FileData.Columns)
+                {
+                    newRow[column] = GetDefaultValue(column.DataType);
+                }
+
+                FileData.Rows.Add(newRow);
+
+                int rowIndex = FileData.Rows.IndexOf(newRow);
+
+                _undoStack.Push(new EditHistory
+                {
+                    Row = rowIndex,
+                    AffectedRow = newRow,
+                    Action = EditAction.RowInsert,
+                    NewValue = newRow.ItemArray
+                });
+                _redoStack.Clear();
+                OnCanExecuteChangesChanged();
+                SelectedItem = FileData.DefaultView[rowIndex];
+            }
+        }
+
+        private static object GetDefaultValue(Type type)
+        {
+            if (type == typeof(int))
+                return 0;
+            if (type == typeof(float))
+                return 0.0;
+            if (type == typeof(string))
+                return string.Empty;
+            if (type == typeof(long))
+                return 0;
+            else return 0;
+        }
+
 
         [RelayCommand(CanExecute = nameof(CanExecuteSelectedRowCommand))]
         private void DuplicateSelectedRow()
         {
-            if (SelectedItem != null && RhData != null)
+            if (SelectedItem != null && FileData != null)
             {
                 DataRow originalRow = SelectedItem.Row;
-                DataRow duplicate = RhData.NewRow();
+                DataRow duplicate = FileData.NewRow();
 
-                for (int i = 0; i < RhData.Columns.Count; i++)
+                for (int i = 0; i < FileData.Columns.Count; i++)
                 {
                     duplicate[i] = originalRow[i];
                 }
 
-                int selectedIndex = RhData.Rows.IndexOf(originalRow);
-                RhData.Rows.InsertAt(duplicate, selectedIndex + 1);
+                int selectedIndex = FileData.Rows.IndexOf(originalRow);
+                FileData.Rows.InsertAt(duplicate, selectedIndex + 1);
 
                 _undoStack.Push(new EditHistory
                 {
                     Row = selectedIndex + 1,
                     AffectedRow = duplicate,
                     Action = EditAction.RowInsert,
-                    OldValue = originalRow.ItemArray
+                    NewValue = duplicate.ItemArray
                 });
                 _redoStack.Clear();
                 OnCanExecuteChangesChanged();
             }
         }
 
+
         [RelayCommand(CanExecute = nameof(CanExecuteSelectedRowCommand))]
         private void DeleteSelectedRow()
         {
-            if (SelectedItem != null && RhData != null)
+            if (SelectedItem != null && FileData != null)
             {
                 DataRow deletedRow = SelectedItem.Row;
-                int rowIndex = RhData.Rows.IndexOf(deletedRow);
+                int rowIndex = FileData.Rows.IndexOf(deletedRow);
 
                 object?[] deletedRowValues = deletedRow.ItemArray;
 
-                RhData.Rows.Remove(deletedRow);
+                FileData.Rows.Remove(deletedRow);
 
                 _undoStack.Push(new EditHistory
                 {
@@ -225,25 +288,29 @@ namespace RHToolkit.ViewModels.Windows
                     OldValue = deletedRowValues
                 });
                 _redoStack.Clear();
-                OnCanExecuteChangesChanged();
-
-                Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+                
+                if (rowIndex > 0)
                 {
-                    if (rowIndex > 0)
-                    {
-                        SelectedItem = RhData.DefaultView[rowIndex - 1];
-                    }
-                    else if (RhData.Rows.Count > 0)
-                    {
-                        SelectedItem = RhData.DefaultView[rowIndex];
-                    }
-                }), DispatcherPriority.ContextIdle);
+                    SelectedItem = FileData.DefaultView[rowIndex - 1];
+                }
+                else if (FileData.Rows.Count > 0)
+                {
+                    SelectedItem = FileData.DefaultView[rowIndex];
+                }
+
+                OnCanExecuteChangesChanged();
             }
         }
 
         private bool CanExecuteSelectedRowCommand()
         {
             return SelectedItem != null;
+        }
+
+        private void OnCanExecuteSelectedRowCommandChanged()
+        {
+            DuplicateSelectedRowCommand.NotifyCanExecuteChanged();
+            DeleteSelectedRowCommand.NotifyCanExecuteChanged();
         }
 
         [RelayCommand(CanExecute = nameof(CanUndo))]
@@ -257,15 +324,24 @@ namespace RHToolkit.ViewModels.Windows
                 switch (edit.Action)
                 {
                     case EditAction.CellEdit:
-                        RhData!.Rows[edit.Row][edit.Column] = edit.OldValue;
+                        if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
+                        {
+                            FileData.Rows[edit.Row][edit.Column] = edit.OldValue;
+                        }
                         break;
                     case EditAction.RowInsert:
-                        RhData!.Rows.RemoveAt(edit.Row);
+                        if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
+                        {
+                            FileData.Rows.RemoveAt(edit.Row);
+                        }
                         break;
                     case EditAction.RowDelete:
-                        DataRow newRow = RhData!.NewRow();
-                        newRow.ItemArray = (object?[])edit.OldValue!;
-                        RhData.Rows.InsertAt(newRow, edit.Row);
+                        if (edit.Row >= 0)
+                        {
+                            DataRow newRow = FileData!.NewRow();
+                            newRow.ItemArray = (object?[])edit.OldValue!;
+                            FileData.Rows.InsertAt(newRow, edit.Row);
+                        }
                         break;
                 }
 
@@ -284,27 +360,37 @@ namespace RHToolkit.ViewModels.Windows
                 switch (edit.Action)
                 {
                     case EditAction.CellEdit:
-                        RhData!.Rows[edit.Row][edit.Column] = edit.NewValue;
+                        if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
+                        {
+                            FileData.Rows[edit.Row][edit.Column] = edit.NewValue;
+                        }
                         break;
                     case EditAction.RowInsert:
-                        if (edit.AffectedRow != null)
+                        if (edit.Row >= 0)
                         {
-                            DataRow duplicatedRow = RhData!.NewRow();
-                            duplicatedRow.ItemArray = ((object?[])edit.OldValue)!;
-                            RhData.Rows.InsertAt(duplicatedRow, edit.Row);
+                            DataRow insertRow = FileData!.NewRow();
+                            insertRow.ItemArray = (object?[])edit.NewValue!;
+                            if (edit.Row < FileData.Rows.Count)
+                            {
+                                FileData.Rows.InsertAt(insertRow, edit.Row);
+                            }
+                            else
+                            {
+                                FileData.Rows.Add(insertRow);
+                            }
                         }
                         break;
                     case EditAction.RowDelete:
-                        RhData!.Rows.RemoveAt(edit.Row);
+                        if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
+                        {
+                            FileData.Rows.RemoveAt(edit.Row);
+                        }
                         break;
                 }
 
                 OnCanExecuteChangesChanged();
             }
         }
-
-        private bool CanUndo() => _undoStack.Count > 0;
-        private bool CanRedo() => _redoStack.Count > 0;
 
         public void RecordEdit(int row, int column, object? oldValue, object? newValue)
         {
@@ -322,7 +408,6 @@ namespace RHToolkit.ViewModels.Windows
 
         public void RecordRowAddition(int rowIndex, object?[] newRowValues)
         {
-            // Record the addition of the row for undo/redo
             _undoStack.Push(new EditHistory
             {
                 Row = rowIndex,
@@ -333,11 +418,13 @@ namespace RHToolkit.ViewModels.Windows
             OnCanExecuteChangesChanged();
         }
 
+        private bool CanUndo() => _undoStack.Count > 0;
+        private bool CanRedo() => _redoStack.Count > 0;
 
         private void OnCanExecuteChangesChanged()
         {
-            ((RelayCommand)UndoChangesCommand).NotifyCanExecuteChanged();
-            ((RelayCommand)RedoChangesCommand).NotifyCanExecuteChanged();
+            UndoChangesCommand.NotifyCanExecuteChanged();
+            RedoChangesCommand.NotifyCanExecuteChanged();
         }
 
         #endregion
@@ -350,25 +437,22 @@ namespace RHToolkit.ViewModels.Windows
         private string? _openMessage = "Open a file";
 
         [ObservableProperty]
-        private DataTable? _rhData;
-        partial void OnRhDataChanged(DataTable? value)
+        private DataTable? _fileData;
+        partial void OnFileDataChanged(DataTable? value)
         {
             OpenMessage = value == null ? "Open a file" : "";
-            IsButtonEnabled = value == null ? false : true;
-            ((AsyncRelayCommand)SaveFileCommand).NotifyCanExecuteChanged();
-            ((AsyncRelayCommand)SaveFileAsCommand).NotifyCanExecuteChanged();
-            ((AsyncRelayCommand)CloseFileCommand).NotifyCanExecuteChanged();
+            OnCanExecuteFileCommandChanged();
         }
 
         [ObservableProperty]
         private DataRowView? _selectedItem;
+        partial void OnSelectedItemChanged(DataRowView? value)
+        {
+            OnCanExecuteSelectedRowCommandChanged();
+        }
 
         [ObservableProperty]
-        private DataTable? _originalRhData;
-        partial void OnOriginalRhDataChanged(DataTable? value)
-        {
-            ((AsyncRelayCommand)SaveFileCommand).NotifyCanExecuteChanged();
-        }
+        private DataTable? _originalFileData;
 
         [ObservableProperty]
         private string? _currentFile;
@@ -377,7 +461,7 @@ namespace RHToolkit.ViewModels.Windows
         private string? _currentFileName;
 
         [ObservableProperty]
-        private bool _isButtonEnabled = false;
+        private bool _hasChanges = false;
 
         #endregion
     }

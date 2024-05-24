@@ -38,17 +38,46 @@ namespace RHToolkit.Views.Windows
             }
         }
 
-        private void DataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        private void DataGridView_InitializingNewItem(object sender, InitializingNewItemEventArgs e)
         {
-            if (e.EditAction == DataGridEditAction.Commit)
+            var viewModel = (RHEditorViewModel)DataContext;
+
+            if (viewModel.FileData == null)
             {
-                var viewModel = (RHEditorViewModel)DataContext;
-                var rowIndex = e.Row.GetIndex();
+                return;
+            }
 
-                var newRow = ((DataRowView)e.Row.Item).Row;
-                var newValue = newRow.ItemArray;
+            // Determine the index of the nID column
+            int nIDColumnIndex = viewModel.FileData.Columns.IndexOf("nID");
+            if (nIDColumnIndex == -1)
+            {
+                return;
+            }
 
-                viewModel.RecordRowAddition(rowIndex, newValue);
+            // Get all existing nID values
+            var existingIDs = new HashSet<int>();
+            foreach (DataRow row in viewModel.FileData.Rows)
+            {
+                if (row.RowState != DataRowState.Deleted)
+                {
+                    existingIDs.Add(Convert.ToInt32(row[nIDColumnIndex]));
+                }
+            }
+
+            // Find the next available nID value
+            int newNID = 1;
+            while (existingIDs.Contains(newNID))
+            {
+                newNID++;
+            }
+
+            // Set the nID value for the new row
+            var newRow = (e.NewItem as DataRowView)?.Row;
+            if (newRow != null)
+            {
+                newRow[nIDColumnIndex] = newNID;
+
+                viewModel.RecordRowAddition(viewModel.FileData.Rows.IndexOf(newRow), newRow.ItemArray);
             }
         }
 

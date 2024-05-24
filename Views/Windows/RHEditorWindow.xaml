@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:bh="clr-namespace:RHToolkit.Behaviors"
-    xmlns:control="clr-namespace:RHToolkit.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -27,6 +26,7 @@
         <KeyBinding Command="{Binding LoadFileCommand}" Gesture="Ctrl+O" />
         <KeyBinding Command="{Binding SaveFileCommand}" Gesture="Ctrl+S" />
         <KeyBinding Command="{Binding SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
+        <KeyBinding Command="{Binding CloseFileCommand}" Gesture="Ctrl+W" />
     </Window.InputBindings>
     <ContentControl Template="{StaticResource box_red02}">
         <Grid>
@@ -50,18 +50,10 @@
                 Height="30"
                 Margin="30,0,0,0"
                 VerticalAlignment="Center"
-                d:Title="RHEditor"
+                d:Title="RH Editor"
                 ButtonsForeground="White"
                 FontSize="15"
-                Foreground="White">
-                <ui:TitleBar.Icon>
-                    <ui:ImageIcon
-                        Width="20"
-                        Height="20"
-                        Margin="0,-1,0,-3"
-                        Source="/Assets/icon/lb_main_quick_system_01character.png" />
-                </ui:TitleBar.Icon>
-            </ui:TitleBar>
+                Foreground="White" />
 
             <Menu
                 Grid.Row="1"
@@ -76,13 +68,15 @@
                     <MenuItem
                         Command="{Binding SaveFileCommand}"
                         Header="Save (Ctrl + S)"
-                        Icon="{ui:SymbolIcon Save24}"
-                        IsEnabled="{Binding IsButtonEnabled}" />
+                        Icon="{ui:SymbolIcon Save24}" />
                     <MenuItem
                         Command="{Binding SaveFileAsCommand}"
                         Header="Save As... (Ctrl + Alt + S)"
-                        Icon="{ui:SymbolIcon DocumentSave24}"
-                        IsEnabled="{Binding IsButtonEnabled}" />
+                        Icon="{ui:SymbolIcon DocumentSave24}" />
+                    <MenuItem
+                        Command="{Binding CloseFileCommand}"
+                        Header="Close (Ctrl + W)"
+                        Icon="{ui:SymbolIcon DocumentDismiss24}" />
                     <Separator />
                     <MenuItem Header="Exit" Icon="{ui:SymbolIcon ArrowExit20}" />
                 </ui:MenuItem>
@@ -98,14 +92,17 @@
                         Icon="{ui:SymbolIcon ArrowRedo20}" />
                     <Separator />
                     <MenuItem
+                        Command="{Binding AddNewRowCommand}"
+                        Header="Add Row (Ctrl + I)"
+                        Icon="{ui:SymbolIcon TableInsertRow24}" />
+                    <MenuItem
                         Command="{Binding DuplicateSelectedRowCommand}"
                         Header="Duplicate Selected Row (Ctrl + D)"
                         Icon="{ui:SymbolIcon Copy24}" />
                     <MenuItem
                         Command="{Binding DeleteSelectedRowCommand}"
                         Header="Delete Selected Row (Delete)"
-                        Icon="{ui:SymbolIcon Delete24}" />
-                    <MenuItem IsEnabled="False" />
+                        Icon="{ui:SymbolIcon TableDeleteRow24}" />
                     <Separator />
                     <MenuItem Header="Find..." Icon="{ui:SymbolIcon DocumentTableSearch24}" />
                     <Separator />
@@ -126,14 +123,17 @@
                     Command="{Binding SaveFileCommand}"
                     Icon="{ui:SymbolIcon Save24,
                                          Filled=True}"
-                    IsEnabled="{Binding IsButtonEnabled}"
                     ToolTip="Save" />
                 <MenuItem
                     Command="{Binding SaveFileAsCommand}"
                     Icon="{ui:SymbolIcon DocumentSave24,
                                          Filled=True}"
-                    IsEnabled="{Binding IsButtonEnabled}"
                     ToolTip="Save As" />
+                <MenuItem
+                    Command="{Binding CloseFileCommand}"
+                    Icon="{ui:SymbolIcon DocumentDismiss24,
+                                         Filled=True}"
+                    ToolTip="Close" />
                 <Separator />
                 <MenuItem
                     Command="{Binding UndoChangesCommand}"
@@ -148,10 +148,19 @@
                 <Separator />
                 <Separator />
                 <MenuItem
-                    Command="{Binding CloseFileCommand}"
-                    Icon="{ui:SymbolIcon DocumentDismiss24,
+                    Command="{Binding AddNewRowCommand}"
+                    Icon="{ui:SymbolIcon TableInsertRow24,
                                          Filled=True}"
-                    ToolTip="Close" />
+                    ToolTip="Add Row" />
+                <MenuItem
+                    Command="{Binding DuplicateSelectedRowCommand}"
+                    Icon="{ui:SymbolIcon Copy24,
+                                         Filled=True}"
+                    ToolTip="Duplicate Selected Row" />
+                <MenuItem
+                    Command="{Binding DeleteSelectedRowCommand}"
+                    Icon="{ui:SymbolIcon TableDeleteRow24}"
+                    ToolTip="Delete Selected Row" />
                 <Separator />
 
             </Menu>
@@ -162,8 +171,6 @@
                 Margin="0,5"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal" />
-
-            <!--  Datagrid  -->
             <Grid
                 Grid.Row="3"
                 Grid.Column="0"
@@ -180,7 +187,7 @@
                     AutoGenerateColumns="True"
                     AutoGeneratedColumns="DataGridView_AutoGeneratedColumns"
                     BorderBrush="#FF0F0D0A"
-                    CanUserAddRows="True"
+                    CanUserAddRows="False"
                     CellEditEnding="DataGrid_CellEditEnding"
                     ColumnWidth="SizeToCells"
                     EnableColumnVirtualization="True"
@@ -190,8 +197,7 @@
                     HeadersVisibility="Column"
                     HorizontalGridLinesBrush="White"
                     HorizontalScrollBarVisibility="Auto"
-                    ItemsSource="{Binding RhData}"
-                    RowEditEnding="DataGrid_RowEditEnding"
+                    ItemsSource="{Binding FileData}"
                     SelectedItem="{Binding SelectedItem}"
                     SelectionChanged="DataGridView_SelectionChanged"
                     SelectionMode="Single"
@@ -209,14 +215,15 @@
                         <ImageBrush />
                     </DataGrid.Background>
                     <DataGrid.InputBindings>
-                        <!--  Key binding for duplicating selected row  -->
+                        <KeyBinding
+                            Key="I"
+                            Command="{Binding AddNewRowCommand}"
+                            Modifiers="Ctrl" />
                         <KeyBinding
                             Key="D"
                             Command="{Binding DuplicateSelectedRowCommand}"
                             Modifiers="Control" />
-                        <!--  Key binding for deleting selected row  -->
                         <KeyBinding Key="Delete" Command="{Binding DeleteSelectedRowCommand}" />
-                        <!--  Key binding for undo  -->
                         <KeyBinding
                             Key="Z"
                             Command="{Binding UndoChangesCommand}"
