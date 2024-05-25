@@ -1,4 +1,5 @@
 ﻿using RHToolkit.Models;
+using RHToolkit.Models.MessageBox;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
 using Wpf.Ui.Controls;
@@ -10,7 +11,7 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
     [ObservableProperty]
     private WindowCard[] _windowCards =
     [
-        new("RH Editor", "RH Editor", SymbolRegular.DocumentEdit24, "rheditor"),
+        new("RH Table Editor", "Edit .rh table files", SymbolRegular.DocumentEdit24, "rheditor"),
 ];
 
     [RelayCommand]
@@ -21,11 +22,19 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
             return;
         }
 
-        switch (value)
+        try
         {
-            case "rheditor":
-                windowsProviderService.Show<RHEditorWindow>();
-                break;
+            switch (value)
+            {
+                case "rheditor":
+                    windowsProviderService.Show<RHEditorWindow>();
+                    break;
+            }
         }
+        catch (Exception ex)
+        {
+            RHMessageBox.ShowOKMessage($"Error: {ex.Message}", "Error");
+        }
+
     }
 }

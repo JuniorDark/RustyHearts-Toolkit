@@ -196,7 +196,7 @@
                                     x:Name="PART_ContentHost"
                                     CanContentScroll="true"
                                     Focusable="false"
-                                    HorizontalScrollBarVisibility="Disabled"
+                                    HorizontalScrollBarVisibility="Visible"
                                     VerticalScrollBarVisibility="Auto">
                                     <ScrollViewer.Style>
                                         <Style TargetType="ScrollViewer">

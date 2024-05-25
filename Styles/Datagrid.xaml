@@ -82,7 +82,6 @@
         </ContentControl>
     </ControlTemplate>
 
-
     <!--  Style for DataGridCell  -->
     <Style TargetType="DataGridCell">
         <Setter Property="Background" Value="Transparent" />
@@ -101,13 +100,13 @@
         <Setter Property="Foreground" Value="White" />
         <Setter Property="BorderBrush" Value="White" />
         <Setter Property="BorderThickness" Value="0,0,1,0" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
     </Style>
 
-    <!--  Style for DataGridRow  -->
-    <Style TargetType="DataGridRow">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="Gold" />
-
+    <!--  Style for DataGridRowHeader  -->
+    <Style TargetType="DataGridRowHeader">
+        <Setter Property="Background" Value="Blue" />
+        <Setter Property="Foreground" Value="White" />
     </Style>
 
 </ResourceDictionary>

@@ -1,4 +1,5 @@
-﻿using RHToolkit.Properties;
+﻿using RHToolkit.Models.UISettings;
+using RHToolkit.Properties;
 using System.Resources;
 
 namespace RHToolkit.Models.Localization;
@@ -29,6 +30,20 @@ public static class LocalizationManager
 
         _ = new ResourceManager(typeof(Resources));
         Resources.Culture = cultureInfo;
+    }
+
+    public static string GetCurrentLanguage()
+    {
+        var languageCode = RegistrySettingsHelper.GetAppLanguage();
+
+        return languageCode ?? "en-US";
+    }
+
+    public static void SetCurrentLanguage()
+    {
+        var currentLanguage = GetCurrentLanguage();
+
+        LoadLocalizedStrings(currentLanguage);
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using RHToolkit.Models;
+using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Utilities;
 using System.Data;
@@ -422,7 +423,7 @@ namespace RHToolkit.Services
             return itemList;
         }
 
-        public async Task<bool> IsCharacterOnlineAsync(string characterName)
+        public async Task<bool> GetCharacterOnlineAsync(string characterName)
         {
             string selectQuery = "SELECT IsConnect FROM CharacterTable WHERE name = @characterName";
             var parameters = new (string, object)[] { ("@characterName", characterName) };
@@ -439,6 +440,17 @@ namespace RHToolkit.Services
             {
                 return false;
             }
+        }
+
+        public async Task<bool> IsCharacterOnlineAsync(string characterName)
+        {
+            if (await GetCharacterOnlineAsync(characterName))
+            {
+                RHMessageBox.ShowOKMessage($"The character '{characterName}' is currently online. You can't edit an online character.", "Info");
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<string[]> GetAllCharacterNamesAsync(string isConnect = "")

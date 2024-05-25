@@ -1,31 +1,103 @@
-﻿using System.Data;
+﻿using RHToolkit.Models.Localization;
+using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.SQLite;
+using System.Data;
 using System.Data.SQLite;
 
 namespace RHToolkit.Services
 {
     public class SqLiteDatabaseService : ISqLiteDatabaseService
     {
-        private readonly string _dbFilePath;
+        public static string? DbFilePath { get; set; }
 
         public SqLiteDatabaseService()
         {
-            _dbFilePath = GetDatabaseFilePath();
+            DbFilePath = GetDatabaseFilePath();
         }
 
         public static string GetDatabaseFilePath()
         {
             string resourcesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
-            return Path.Combine(resourcesFolder, "gmdb.db");
+            string currentLanguage = LocalizationManager.GetCurrentLanguage();
+            string databaseName = $"gmdb_{currentLanguage}.db";
+            string databaseFilePath = Path.Combine(resourcesFolder, databaseName);
+
+            if (File.Exists(databaseFilePath))
+            {
+                return databaseFilePath;
+            }
+
+            // Fallback to default language "en-US"
+            string defaultDatabaseName = "gmdb_en-US.db";
+            string defaultDatabaseFilePath = Path.Combine(resourcesFolder, defaultDatabaseName);
+
+            if (File.Exists(defaultDatabaseFilePath))
+            {
+                return defaultDatabaseFilePath;
+            }
+
+            return string.Empty;
+        }
+
+        public bool ValidateDatabase()
+        {
+            string dbFilePath = GetDatabaseFilePath();
+
+            if (!File.Exists(dbFilePath))
+            {
+                RHMessageBox.ShowOKMessage($"Database file not found. Be sure to create the database first.", "SQlite Database Not Found");
+                return false;
+            }
+
+            if (File.Exists(dbFilePath))
+            {
+                List<string> missingTables = GetMissingTables();
+
+                if (missingTables.Count > 0)
+                {
+                    string missingTablesMessage = $"The database file ({Path.GetFileName(dbFilePath)}) is missing tables.\n\nThe following required tables are missing in the database:";
+                    missingTablesMessage += string.Join("\n", missingTables);
+                    missingTablesMessage += $"Please ensure you have created the database with the required tables.";
+
+                    RHMessageBox.ShowOKMessage(missingTablesMessage, "Table Not Found");
+                    return false;
+                }
+
+            }
+
+            return true;
+        }
+
+        public List<string> GetMissingTables()
+        {
+            List<string> requiredTables = GMDatabaseManager.RequiredTables;
+
+            List<string> missingTables = [];
+
+            using var connection = OpenSQLiteConnection();
+
+            // Check if each required table exists in the database
+            foreach (string tableName in requiredTables)
+            {
+                using var command = new SQLiteCommand($"SELECT name FROM sqlite_master WHERE type='table' AND name='{tableName}'", connection);
+                using var reader = command.ExecuteReader();
+                if (!reader.Read())
+                {
+                    missingTables.Add(tableName);
+                }
+            }
+
+            return missingTables;
         }
 
         public SQLiteConnection OpenSQLiteConnection()
         {
-            if (!File.Exists(_dbFilePath))
+            if (!File.Exists(DbFilePath))
             {
-                throw new FileNotFoundException($"Database file {_dbFilePath} not found.");
+                throw new FileNotFoundException($"SQLite Database file not found.");
             }
 
-            var connection = new SQLiteConnection($"Data Source={_dbFilePath};Version=3;");
+            var connection = new SQLiteConnection($"Data Source={DbFilePath};Version=3;");
             connection.Open();
             return connection;
         }

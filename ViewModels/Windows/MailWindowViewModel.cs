@@ -4,6 +4,7 @@ using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.SQLite;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
@@ -15,17 +16,14 @@ namespace RHToolkit.ViewModels.Windows;
 public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemDataMessage>
 {
     private readonly WindowsProviderService _windowsProviderService;
-    private readonly IDatabaseService _databaseService;
     private readonly MailManager _mailManager;
-    private readonly ItemDataManager _itemDataManager;
+    private readonly CachedDataManager _cachedDataManager;
 
-    public MailWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, ItemDataManager itemDataManager)
+    public MailWindowViewModel(WindowsProviderService windowsProviderService, MailManager mailManager, CachedDataManager cachedDataManager)
     {
         _windowsProviderService = windowsProviderService;
-        _databaseService = databaseService;
-        _mailManager = new MailManager(_databaseService);
-        _itemDataManager = itemDataManager;
-
+        _mailManager = mailManager;
+        _cachedDataManager = cachedDataManager;
         WeakReferenceMessenger.Default.Register(this);
     }
 
@@ -287,7 +285,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                     for (int i = 0; i < templateData.ItemIDs.Count; i++)
                     {
                         // Find the corresponding ItemData in the CachedItemDataList
-                        ItemData? cachedItem = _itemDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == templateData.ItemIDs[i]);
+                        ItemData? cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == templateData.ItemIDs[i]);
 
                         ItemData itemData = new()
                         {
@@ -341,7 +339,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
     private bool GetInvalidItemID(int itemID)
     {
-        return _itemDataManager.CachedItemDataList == null || !_itemDataManager.CachedItemDataList.Any(item => item.ID == itemID);
+        return _cachedDataManager.CachedItemDataList == null || !_cachedDataManager.CachedItemDataList.Any(item => item.ID == itemID);
     }
 
     [RelayCommand]

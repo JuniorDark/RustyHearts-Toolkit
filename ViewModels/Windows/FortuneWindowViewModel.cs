@@ -1,6 +1,5 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
-using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
@@ -12,13 +11,11 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
 {
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
-    private readonly CharacterOnlineValidator _characterOnlineValidator;
 
     public FortuneWindowViewModel(IDatabaseService databaseService, IGMDatabaseService gmDatabaseService)
     {
         _databaseService = databaseService;
         _gmDatabaseService = gmDatabaseService;
-        _characterOnlineValidator = new(_databaseService);
 
         PopulateFortuneItems();
         PopulateFortuneDescItems();
@@ -100,7 +97,7 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
 
         try
         {
-            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
             {
                 return;
             }

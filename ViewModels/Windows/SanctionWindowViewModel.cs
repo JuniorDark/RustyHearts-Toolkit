@@ -1,6 +1,5 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
-using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
@@ -12,12 +11,10 @@ namespace RHToolkit.ViewModels.Windows;
 public partial class SanctionWindowViewModel : ObservableObject, IRecipient<CharacterDataMessage>
 {
     private readonly IDatabaseService _databaseService;
-    private readonly CharacterOnlineValidator _characterOnlineValidator;
 
     public SanctionWindowViewModel(IDatabaseService databaseService)
     {
         _databaseService = databaseService;
-        _characterOnlineValidator = new(_databaseService);
 
         PopulateSanctionCountItems();
         PopulateSanctionPeriodItems();
@@ -97,7 +94,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
     {
         if (CharacterData == null) return;
 
-        if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+        if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
         {
             return;
         }

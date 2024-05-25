@@ -1,5 +1,6 @@
 ﻿using RHToolkit.Models;
 using RHToolkit.Models.Database;
+using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
@@ -7,8 +8,10 @@ using Wpf.Ui.Controls;
 
 namespace RHToolkit.ViewModels.Pages;
 
-public partial class DatabaseToolsViewModel(WindowsProviderService windowsProviderService) : ObservableObject
+public partial class DatabaseToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseService, WindowsProviderService windowsProviderService) : ObservableObject
 {
+    private readonly ISqLiteDatabaseService _sqLiteDatabaseService = sqLiteDatabaseService;
+
     [ObservableProperty]
     private WindowCard[] _windowCards =
     [
@@ -23,21 +26,28 @@ public partial class DatabaseToolsViewModel(WindowsProviderService windowsProvid
             return;
         }
 
-        if (!SqlCredentialValidator.ValidateCredentials())
+        try
         {
-            return;
-        }
+            if (!SqlCredentialValidator.ValidateCredentials())
+            {
+                return;
+            }
 
-        if (!ItemDataManager.GetDatabaseFilePath())
-        {
-            return;
-        }
+            if (!_sqLiteDatabaseService.ValidateDatabase())
+            {
+                return;
+            }
 
-        switch (value)
+            switch (value)
+            {
+                case "mail":
+                    windowsProviderService.Show<MailWindow>();
+                    break;
+            }
+        }
+        catch (Exception ex)
         {
-            case "mail":
-                windowsProviderService.Show<MailWindow>();
-                break;
+            RHMessageBox.ShowOKMessage($"Error: {ex.Message}", "Error");
         }
     }
 }

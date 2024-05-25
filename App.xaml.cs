@@ -1,6 +1,6 @@
 ﻿using RHToolkit.Models.Database;
 using RHToolkit.Models.Localization;
-using RHToolkit.Models.UISettings;
+using RHToolkit.Models.SQLite;
 using RHToolkit.Services;
 using RHToolkit.Services.Contracts;
 using RHToolkit.ViewModels.Controls;
@@ -47,14 +47,17 @@ public partial class App : Application
                 _ = services.AddSingleton<SettingsViewModel>();
                 _ = services.AddSingleton<EditToolsPage>();
                 _ = services.AddSingleton<EditToolsViewModel>();
+                _ = services.AddSingleton<GMDatabaseManagerPage>();
+                _ = services.AddSingleton<GMDatabaseManagerViewModel>();
 
-                // All other services and view models
+                // All other services and viewmodels
                 _ = services.AddSingleton<ISqlDatabaseService, SqlDatabaseService>();
                 _ = services.AddSingleton<IDatabaseService, DatabaseService>();
                 _ = services.AddSingleton<ISqLiteDatabaseService, SqLiteDatabaseService>();
                 _ = services.AddSingleton<IGMDatabaseService, GMDatabaseService>();
                 _ = services.AddSingleton<IFrameService, FrameService>();
-                _ = services.AddSingleton<ItemDataManager>();
+                _ = services.AddSingleton<CachedDataManager>();
+                _ = services.AddSingleton<MailManager>();
 
                 _ = services.AddTransient<MailWindow>();
                 _ = services.AddTransient<MailWindowViewModel>();
@@ -92,16 +95,7 @@ public partial class App : Application
     /// </summary>
     private void OnStartup(object sender, StartupEventArgs e)
     {
-        var languageCode = RegistrySettingsHelper.GetAppLanguage();
-
-        if (languageCode != null)
-        {
-            LocalizationManager.LoadLocalizedStrings(languageCode);
-        }
-        else
-        {
-            LocalizationManager.LoadLocalizedStrings("en-US");
-        }
+        LocalizationManager.SetCurrentLanguage();
 
         _host.Start();
     }

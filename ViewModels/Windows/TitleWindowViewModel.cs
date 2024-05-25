@@ -1,6 +1,5 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
-using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
@@ -13,13 +12,11 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 {
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
-    private readonly CharacterOnlineValidator _characterOnlineValidator;
 
     public TitleWindowViewModel(IDatabaseService databaseService, IGMDatabaseService gmDatabaseService)
     {
         _databaseService = databaseService;
         _gmDatabaseService = gmDatabaseService;
-        _characterOnlineValidator = new(_databaseService);
 
         PopulateTitleItems();
 
@@ -140,7 +137,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
                 return;
             }
 
-            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
             {
                 return;
             }
@@ -189,7 +186,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
         try
         {
-            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
             {
                 return;
             }
@@ -233,7 +230,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
         try
         {
-            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
             {
                 return;
             }
@@ -271,7 +268,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
         try
         {
-            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
             {
                 return;
             }

@@ -2,6 +2,7 @@
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.SQLite;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
@@ -14,16 +15,14 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     private readonly WindowsProviderService _windowsProviderService;
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
-    private readonly ItemDataManager _itemDataManager;
-    private readonly CharacterOnlineValidator _characterOnlineValidator;
+    private readonly CachedDataManager _cachedDataManager;
 
-    public CharacterWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, ItemDataManager itemDataManager)
+    public CharacterWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager)
     {
         _windowsProviderService = windowsProviderService;
         _databaseService = databaseService;
         _gmDatabaseService = gmDatabaseService;
-        _itemDataManager = itemDataManager;
-        _characterOnlineValidator = new CharacterOnlineValidator(_databaseService);
+        _cachedDataManager = cachedDataManager;
 
         PopulateClassItems();
         PopulateLobbyItems();
@@ -131,7 +130,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
         try
         {
-            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
             {
                 return;
             }
@@ -218,7 +217,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         {
             try
             {
-                if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+                if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
                 {
                     return;
                 }
@@ -268,7 +267,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
         try
         {
-            if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
             {
                 return;
             }
@@ -627,7 +626,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 int code = equipmentItem.ID;
 
                 // Find the corresponding ItemData object in the _cachedItemDataList
-                ItemData? cachedItem = _itemDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == code);
+                ItemData? cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == code);
 
                 ItemData itemData = new()
                 {

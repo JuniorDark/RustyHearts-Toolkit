@@ -12,7 +12,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     private ObservableCollection<object> _menuItems =
     [
-        new NavigationViewItem(Resources.Home, SymbolRegular.Home24, typeof(HomePage)),
+    new NavigationViewItem(Resources.Home, SymbolRegular.Home24, typeof(HomePage)),
     new NavigationViewItem()
     {
         Content = Resources.DatabaseTools,
@@ -26,6 +26,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
     },
     new NavigationViewItem("Edit Tools", SymbolRegular.DocumentTextToolbox24, typeof(EditToolsPage)),
+    new NavigationViewItem("SQLite Database Manager", SymbolRegular.Home24, typeof(GMDatabaseManagerPage)),
     ];
 
     [ObservableProperty]

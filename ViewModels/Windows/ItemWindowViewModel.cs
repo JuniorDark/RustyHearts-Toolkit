@@ -1,7 +1,7 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
-using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.SQLite;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
@@ -13,15 +13,15 @@ namespace RHToolkit.ViewModels.Windows;
 public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<CharacterDataMessage>
 {
     private readonly IGMDatabaseService _gmDatabaseService;
-    private readonly ItemDataManager _itemDataManager;
+    private readonly CachedDataManager _cachedDataManager;
     private readonly FrameViewModel _frameViewModel;
     private readonly System.Timers.Timer _searchTimer;
     public FrameViewModel FrameViewModel => _frameViewModel;
 
-    public ItemWindowViewModel(IGMDatabaseService gmDatabaseService, ItemDataManager itemDataManager, FrameViewModel frameViewModel)
+    public ItemWindowViewModel(IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager, FrameViewModel frameViewModel)
     {
         _gmDatabaseService = gmDatabaseService;
-        _itemDataManager = itemDataManager;
+        _cachedDataManager = cachedDataManager;
         _frameViewModel = frameViewModel;
         _searchTimer = new()
         {
@@ -404,7 +404,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         try
         {
-            ItemDataItems = _itemDataManager.CachedItemDataList;
+            ItemDataItems = _cachedDataManager.CachedItemDataList;
         }
         catch (Exception ex)
         {
@@ -419,7 +419,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         try
         {
-            OptionItems = _itemDataManager.CachedOptionItems;
+            OptionItems = _cachedDataManager.CachedOptionItems;
         }
         catch (Exception ex)
         {

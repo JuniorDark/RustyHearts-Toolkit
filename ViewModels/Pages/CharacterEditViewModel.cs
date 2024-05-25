@@ -8,11 +8,11 @@ using System.Windows.Controls;
 
 namespace RHToolkit.ViewModels.Pages
 {
-    public partial class CharacterEditViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService) : ObservableObject
+    public partial class CharacterEditViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService) : ObservableObject
     {
         private readonly WindowsProviderService _windowsProviderService = windowsProviderService;
         private readonly IDatabaseService _databaseService = databaseService;
-        private readonly CharacterOnlineValidator _characterOnlineValidator = new(databaseService);
+        private readonly ISqLiteDatabaseService _sqLiteDatabaseService = sqLiteDatabaseService;
 
         #region Read Character Data
 
@@ -135,7 +135,7 @@ namespace RHToolkit.ViewModels.Pages
 
             if (checkCharacterOnline)
             {
-                if (await _characterOnlineValidator.IsCharacterOnlineAsync(CharacterData!.CharacterName!))
+                if (await _databaseService.IsCharacterOnlineAsync(CharacterData!.CharacterName!))
                 {
                     return false;
                 }
@@ -143,7 +143,7 @@ namespace RHToolkit.ViewModels.Pages
 
             if (checkItemDatabase)
             {
-                if (!ItemDataManager.GetDatabaseFilePath())
+                if (!_sqLiteDatabaseService.ValidateDatabase())
                 {
                     return false;
                 }
