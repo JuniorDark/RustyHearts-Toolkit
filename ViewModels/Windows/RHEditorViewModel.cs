@@ -2,7 +2,9 @@
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
+using RHToolkit.Views.Windows;
 using System.Data;
+using System.Windows.Controls;
 
 namespace RHToolkit.ViewModels.Windows
 {
@@ -16,6 +18,13 @@ namespace RHToolkit.ViewModels.Windows
         [RelayCommand]
         private async Task LoadFile()
         {
+            bool shouldContinue = await CloseFile();
+
+            if (!shouldContinue)
+            {
+                return;
+            }
+
             OpenFileDialog openFileDialog = new()
             {
                 Filter = "Rusty Hearts Table Files (*.rh)|*.rh|All Files (*.*)|*.*",
@@ -120,38 +129,36 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private async Task CloseFile()
+        private async Task<bool> CloseFile()
         {
-            if (FileData == null) return;
+            if (FileData == null) return true;
 
-            try
+            if (HasChanges)
             {
-                if (HasChanges)
+                var result = RHMessageBox.ConfirmMessageYesNoCancel($"Save file '{CurrentFileName}' ?");
+                if (result == MessageBoxResult.Yes)
                 {
-                    var result = RHMessageBox.ConfirmMessageYesNoCancel($"Save file '{CurrentFileName}' ?");
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        await SaveFile();
-                        ClearFile();
-                    }
-                    else if (result == MessageBoxResult.No)
-                    {
-                        ClearFile();
-                    }
-                    else if (result == MessageBoxResult.Cancel)
-                    {
-                        return;
-                    }
+                    await SaveFile();
+                    ClearFile();
+                    return true;
                 }
-                else
+                else if (result == MessageBoxResult.No)
                 {
                     ClearFile();
+                    return true;
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    return false;
                 }
             }
-            catch (Exception ex)
+            else
             {
-                RHMessageBox.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
+                ClearFile();
+                return true;
             }
+
+            return true;
         }
 
         private void ClearFile()
@@ -166,7 +173,6 @@ namespace RHToolkit.ViewModels.Windows
 
             FileManager.ClearTempFile(CurrentFileName);
             FileData = null;
-            OriginalFileData = null;
             CurrentFile = null;
             CurrentFileName = null;
             Title = $"RH Table Editor";
@@ -192,7 +198,113 @@ namespace RHToolkit.ViewModels.Windows
             SaveFileCommand.NotifyCanExecuteChanged();
             SaveFileAsCommand.NotifyCanExecuteChanged();
             CloseFileCommand.NotifyCanExecuteChanged();
+            OpenSearchDialogCommand.NotifyCanExecuteChanged();
             AddNewRowCommand.NotifyCanExecuteChanged();
+        }
+
+        private SearchDialog? searchDialog;
+
+        [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+        private void OpenSearchDialog()
+        {
+            if (searchDialog == null || !searchDialog.IsVisible)
+            {
+                searchDialog = new SearchDialog();
+                searchDialog.FindNext += Search;
+                searchDialog.CountMatches += CountMatches;
+                searchDialog.Show();
+            }
+            else
+            {
+                searchDialog.Focus();
+            }
+        }
+
+        private Point? lastFoundCell = null;
+
+        private void Search(string searchText, bool matchCase)
+        {
+            if (string.IsNullOrEmpty(searchText) || FileData == null)
+                return;
+
+            StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            bool found = false;
+
+            int startRowIndex = 0;
+            int startColIndex = 0;
+
+            if (lastFoundCell != null)
+            {
+                // Start the search from the next cell after the last found cell
+                startRowIndex = (int)lastFoundCell.Value.X;
+                startColIndex = (int)lastFoundCell.Value.Y + 1;
+
+                if (startColIndex >= FileData.Columns.Count)
+                {
+                    // If we've reached the end of the columns, wrap around to the next row
+                    startRowIndex++;
+                    startColIndex = 0;
+
+                    if (startRowIndex >= FileData.Rows.Count)
+                    {
+                        // If we've reached the end of the rows, wrap around to the beginning
+                        startRowIndex = 0;
+                    }
+                }
+            }
+
+            // Iterate through rows starting from the startRowIndex
+            for (int rowIndex = startRowIndex; rowIndex < FileData.Rows.Count; rowIndex++)
+            {
+                int colStartIndex = (rowIndex == startRowIndex) ? startColIndex : 0; // Start from startColIndex if it's the starting row, otherwise start from the first column
+
+                // Iterate through columns starting from the colStartIndex
+                for (int colIndex = colStartIndex; colIndex < FileData.Columns.Count; colIndex++)
+                {
+                    if (FileData.Rows[rowIndex][colIndex].ToString().Contains(searchText, comparison))
+                    {
+                        // Found the value
+                        found = true;
+
+                        SelectedCell = new Point(rowIndex, colIndex);
+                        lastFoundCell = SelectedCell; // Update last found cell
+
+                        break;
+                    }
+                }
+
+                if (found)
+                    break;
+            }
+
+            if (!found)
+            {
+                searchDialog?.ShowMessage($"Search text '{searchText}' not found.", Brushes.Red);
+                lastFoundCell = null;
+            }
+        }
+
+        private void CountMatches(string searchText, bool matchCase)
+        {
+            if (string.IsNullOrEmpty(searchText) || FileData == null)
+                return;
+
+            StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            int count = 0;
+            foreach (DataRow row in FileData.Rows)
+            {
+                foreach (var item in row.ItemArray)
+                {
+                    if (item.ToString().Contains(searchText, comparison))
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            searchDialog?.ShowMessage($"Count: {count} matches in entire table", Brushes.LightBlue);
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
@@ -230,7 +342,7 @@ namespace RHToolkit.ViewModels.Windows
             if (type == typeof(int))
                 return 0;
             if (type == typeof(float))
-                return 0.0;
+                return 0;
             if (type == typeof(string))
                 return string.Empty;
             if (type == typeof(long))
@@ -452,13 +564,16 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
-        private DataTable? _originalFileData;
+        private Point _selectedCell;
 
         [ObservableProperty]
         private string? _currentFile;
 
         [ObservableProperty]
         private string? _currentFileName;
+
+        [ObservableProperty]
+        private string? _searchText;
 
         [ObservableProperty]
         private bool _hasChanges = false;

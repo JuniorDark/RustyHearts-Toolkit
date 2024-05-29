@@ -31,114 +31,73 @@
     </Style>
 
     <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
-        <Setter Property="Height" Value="30" />
-        <Setter Property="Width" Value="15" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Grid x:Name="Grid">
-                        <!--  Top part of the thumb  -->
-                        <Rectangle
-                            x:Name="TopRectangle"
-                            Width="15"
-                            Height="10"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Top"
-                            Fill="{StaticResource ThumbNormalTop}" />
-                        <!--  Middle part of the thumb  -->
-                        <Rectangle
-                            x:Name="MiddleRectangle"
-                            Width="15"
-                            Height="10"
-                            VerticalAlignment="Center"
-                            Fill="{StaticResource ThumbNormalMiddle}" />
-                        <!--  Bottom part of the thumb  -->
-                        <Rectangle
-                            x:Name="BottomRectangle"
-                            Width="15"
-                            Height="10"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Bottom"
-                            Fill="{StaticResource ThumbNormalBottom}" />
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="Normal">
-                                    <Storyboard>
-                                        <!--  Set the Fill for each part of the thumb  -->
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TopRectangle" Storyboard.TargetProperty="Fill">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbNormalTop}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MiddleRectangle" Storyboard.TargetProperty="Fill">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbNormalMiddle}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BottomRectangle" Storyboard.TargetProperty="Fill">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbNormalBottom}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="MouseOver">
-                                    <Storyboard>
-                                        <!--  Set the Fill for each part of the thumb  -->
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TopRectangle" Storyboard.TargetProperty="Fill">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbHoverTop}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MiddleRectangle" Storyboard.TargetProperty="Fill">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbHoverMiddle}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BottomRectangle" Storyboard.TargetProperty="Fill">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbHoverBottom}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Pressed">
-                                    <Storyboard>
-                                        <!--  Set the Fill for each part of the thumb  -->
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TopRectangle" Storyboard.TargetProperty="Fill">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbPressedTop}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MiddleRectangle" Storyboard.TargetProperty="Fill">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbPressedMiddle}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BottomRectangle" Storyboard.TargetProperty="Fill">
-                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource ThumbPressedBottom}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!--  Top Image  -->
+                        <Rectangle Grid.Row="0" Height="10">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Fill" Value="{StaticResource ThumbNormalTop}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbHoverTop}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsDragging, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbPressedTop}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Rectangle.Style>
+                        </Rectangle>
+
+                        <!--  Middle Image  -->
+                        <Rectangle Grid.Row="1" Margin="0,0">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Fill" Value="{StaticResource ThumbNormalMiddle}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbHoverMiddle}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsDragging, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbPressedMiddle}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Rectangle.Style>
+                        </Rectangle>
+
+                        <!--  Bottom Image  -->
+                        <Rectangle Grid.Row="2" Height="10">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Fill" Value="{StaticResource ThumbNormalBottom}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbHoverBottom}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsDragging, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbPressedBottom}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Rectangle.Style>
+                        </Rectangle>
                     </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="Tag" Value="Horizontal">
-                            <!--  Adjust width and height for horizontal thumb  -->
-                            <Setter TargetName="TopRectangle" Property="Width" Value="10" />
-                            <Setter TargetName="MiddleRectangle" Property="Width" Value="10" />
-                            <Setter TargetName="BottomRectangle" Property="Width" Value="10" />
-                            <Setter TargetName="TopRectangle" Property="Height" Value="15" />
-                            <Setter TargetName="MiddleRectangle" Property="Height" Value="15" />
-                            <Setter TargetName="BottomRectangle" Property="Height" Value="15" />
-                            <Setter TargetName="TopRectangle" Property="RenderTransform">
-                                <Setter.Value>
-                                    <RotateTransform Angle="90" />
-                                </Setter.Value>
-                            </Setter>
-                            <Setter TargetName="MiddleRectangle" Property="RenderTransform">
-                                <Setter.Value>
-                                    <RotateTransform Angle="90" />
-                                </Setter.Value>
-                            </Setter>
-                            <Setter TargetName="BottomRectangle" Property="RenderTransform">
-                                <Setter.Value>
-                                    <RotateTransform Angle="90" />
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="CustomScrollBarStyle" TargetType="{x:Type ScrollBar}">
+    <Style x:Key="lb_scroll" TargetType="{x:Type ScrollBar}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollBar}">
@@ -203,10 +162,12 @@
                             ViewportSize="NaN">
                             <Track.DecreaseRepeatButton>
                                 <RepeatButton Command="ScrollBar.PageDownCommand" Opacity="0" />
-
                             </Track.DecreaseRepeatButton>
                             <Track.Thumb>
-                                <Thumb x:Name="Thumb" Style="{DynamicResource ScrollThumbs}" />
+                                <Thumb
+                                    x:Name="Thumb"
+                                    Height="50"
+                                    Style="{StaticResource ScrollThumbs}" />
                             </Track.Thumb>
                             <Track.IncreaseRepeatButton>
                                 <RepeatButton Command="ScrollBar.PageUpCommand" Opacity="0" />
@@ -214,31 +175,191 @@
                         </Track>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger SourceName="Thumb" Property="IsMouseOver" Value="true">
-                            <Setter TargetName="Thumb" Property="Background" Value="{StaticResource ThumbHoverMiddle}" />
-                        </Trigger>
-                        <Trigger SourceName="Thumb" Property="IsDragging" Value="true">
-                            <Setter TargetName="Thumb" Property="Background" Value="{StaticResource ThumbPressedMiddle}" />
-                        </Trigger>
-
-                        <Trigger Property="IsEnabled" Value="false">
+                        <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Thumb" Property="Visibility" Value="Collapsed" />
                         </Trigger>
-                        <Trigger Property="Orientation" Value="Horizontal">
-                            <Setter TargetName="GridRoot" Property="LayoutTransform">
-                                <Setter.Value>
-                                    <RotateTransform Angle="-90" />
-                                </Setter.Value>
-                            </Setter>
-                            <Setter TargetName="PART_Track" Property="LayoutTransform">
-                                <Setter.Value>
-                                    <RotateTransform Angle="-90" />
-                                </Setter.Value>
-                            </Setter>
-                            <Setter TargetName="Thumb" Property="Tag" Value="Horizontal" />
-                            <Setter TargetName="PART_LineUpButton" Property="Command" Value="ScrollBar.PageLeftCommand" />
-                            <Setter TargetName="PART_LineDownButton" Property="Command" Value="ScrollBar.PageRightCommand" />
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
+    <Style x:Key="ScrollThumbs_h" TargetType="{x:Type Thumb}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Left Image  -->
+                        <Rectangle
+                            Grid.Column="0"
+                            Width="15"
+                            RenderTransformOrigin="0.5,0.5">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Fill" Value="{StaticResource ThumbNormalTop}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbHoverTop}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsDragging, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbPressedTop}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Rectangle.Style>
+                            <Rectangle.RenderTransform>
+                                <RotateTransform Angle="-90" />
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+
+                        <!--  Middle Image  -->
+                        <Rectangle
+                            Grid.Column="1"
+                            Width="15"
+                            Margin="0,2"
+                            RenderTransformOrigin="0.5,0.5">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Fill" Value="{StaticResource ThumbNormalMiddle}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbHoverMiddle}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsDragging, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbPressedMiddle}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Rectangle.Style>
+                            <Rectangle.RenderTransform>
+                                <RotateTransform Angle="-90" />
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+
+                        <!--  Right Image  -->
+                        <Rectangle
+                            Grid.Column="2"
+                            Width="15"
+                            RenderTransformOrigin="0.5,0.5">
+                            <Rectangle.Style>
+                                <Style TargetType="Rectangle">
+                                    <Setter Property="Fill" Value="{StaticResource ThumbNormalBottom}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbHoverBottom}" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsDragging, RelativeSource={RelativeSource AncestorType=Thumb}}" Value="True">
+                                            <Setter Property="Fill" Value="{StaticResource ThumbPressedBottom}" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Rectangle.Style>
+                            <Rectangle.RenderTransform>
+                                <RotateTransform Angle="-90" />
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="lb_scroll_h" TargetType="{x:Type ScrollBar}">
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollBar}">
+                    <Grid x:Name="GridRoot">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!--  Repeat buttons  -->
+                        <RepeatButton
+                            x:Name="PART_LineLeftButton"
+                            Command="ScrollBar.LineLeftCommand"
+                            Content="Left">
+                            <RepeatButton.Template>
+                                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                    <Image
+                                        x:Name="LeftArrowImage"
+                                        RenderTransformOrigin="0.5,0.5"
+                                        Source="/Assets/buttons/lb_scroll/lb_scroll01_01_02.png"
+                                        Stretch="None">
+                                        <Image.RenderTransform>
+                                            <RotateTransform Angle="-90" />
+                                        </Image.RenderTransform>
+                                    </Image>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="LeftArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_01_01.png" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="LeftArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_01_03.png" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </RepeatButton.Template>
+                        </RepeatButton>
+                        <RepeatButton
+                            x:Name="PART_LineRightButton"
+                            Grid.Column="2"
+                            Command="ScrollBar.LineRightCommand"
+                            Content="Right">
+                            <RepeatButton.Template>
+                                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                                    <Image
+                                        x:Name="RightArrowImage"
+                                        RenderTransformOrigin="0.5,0.5"
+                                        Source="/Assets/buttons/lb_scroll/lb_scroll01_02_02.png"
+                                        Stretch="None">
+                                        <Image.RenderTransform>
+                                            <RotateTransform Angle="-90" />
+                                        </Image.RenderTransform>
+                                    </Image>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="RightArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_02_01.png" />
+                                        </Trigger>
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter TargetName="RightArrowImage" Property="Source" Value="/Assets/buttons/lb_scroll/lb_scroll01_02_03.png" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </RepeatButton.Template>
+                        </RepeatButton>
+
+                        <!--  Track  -->
+                        <Track
+                            x:Name="PART_Track"
+                            Grid.Column="1"
+                            Focusable="False"
+                            ViewportSize="NaN">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageLeftCommand" Opacity="0" />
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb
+                                    x:Name="Thumb"
+                                    Width="45"
+                                    Style="{StaticResource ScrollThumbs_h}" />
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Command="ScrollBar.PageRightCommand" Opacity="0" />
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Thumb" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -247,7 +368,7 @@
     </Style>
 
     <!--  ScrollViewer Style  -->
-    <Style x:Key="CustomScrollViewer" TargetType="ScrollViewer">
+    <Style x:Key="lb_scrollviewer" TargetType="ScrollViewer">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ScrollViewer">
@@ -265,13 +386,23 @@
                             Name="PART_VerticalScrollBar"
                             Grid.Column="1"
                             Width="Auto"
-                            Margin="0,0,0,0"
                             Maximum="{TemplateBinding ScrollableHeight}"
                             Minimum="0"
-                            Style="{StaticResource CustomScrollBarStyle}"
+                            Style="{StaticResource lb_scroll}"
                             ViewportSize="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type ScrollViewer}}}"
                             Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                             Value="{TemplateBinding VerticalOffset}" />
+                        <ScrollBar
+                            Name="PART_HorizontalScrollBar"
+                            Grid.Row="1"
+                            Height="Auto"
+                            Maximum="{TemplateBinding ScrollableWidth}"
+                            Minimum="0"
+                            Orientation="Horizontal"
+                            Style="{StaticResource lb_scroll}"
+                            ViewportSize="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ScrollViewer}}}"
+                            Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
+                            Value="{TemplateBinding HorizontalOffset}" />
 
                     </Grid>
                 </ControlTemplate>

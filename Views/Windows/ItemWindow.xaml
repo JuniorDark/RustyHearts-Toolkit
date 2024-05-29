@@ -678,7 +678,7 @@
                 Margin="0,5"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                Style="{StaticResource CustomScrollViewer}"
+                Style="{StaticResource lb_scrollviewer}"
                 VerticalScrollBarVisibility="Auto">
                 <Grid>
                     <control:ItemFrame

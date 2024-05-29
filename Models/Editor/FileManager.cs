@@ -15,9 +15,9 @@ namespace RHToolkit.Models.Editor
             int bytesRead;
 
             using MemoryStream memoryStream = new();
-            while ((bytesRead = await sourceFileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+            while ((bytesRead = await sourceFileStream.ReadAsync(buffer)) > 0)
             {
-                await memoryStream.WriteAsync(buffer, 0, bytesRead);
+                await memoryStream.WriteAsync(buffer.AsMemory(0, bytesRead));
             }
 
             byte[] sourceBytes = memoryStream.ToArray();

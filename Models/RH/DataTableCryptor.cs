@@ -41,8 +41,9 @@ namespace RHToolkit.Models.RH
                     int t = reader.ReadInt32();
                     Type columnType = GetColumnType(t);
                     intTypes[i] = t;
-                    listTypes.Add(columnType);
                     dataTable.Columns.Add(listTitles[i], columnType);
+                    // Store columntype as extended property
+                    dataTable.Columns[i].ExtendedProperties["ColumnType"] = t;
                 }
 
                 // Populate the DataTable
@@ -89,8 +90,16 @@ namespace RHToolkit.Models.RH
                 // Write column types
                 foreach (DataColumn column in dataTable.Columns)
                 {
-                    int columnType = GetColumnType(column.DataType);
-                    writer.Write(columnType);
+                    // Get column type from extended property
+                    int? columnType = (int?)column.ExtendedProperties?["ColumnType"];
+                    if (columnType.HasValue)
+                    {
+                        writer.Write(columnType.Value);
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("Column type is missing.");
+                    }
                 }
 
                 // Write rows
@@ -99,8 +108,16 @@ namespace RHToolkit.Models.RH
                     for (int j = 0; j < numCol; j++)
                     {
                         DataColumn column = dataTable.Columns[j];
-                        int columnType = GetColumnType(column.DataType);
-                        WriteValueByType(writer, row[j], columnType);
+                        // Get column type from extended property
+                        int? columnType = (int?)column.ExtendedProperties?["ColumnType"];
+                        if (columnType.HasValue)
+                        {
+                            WriteValueByType(writer, row[j], columnType.Value);
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Column type is missing.");
+                        }
                     }
                 }
 
@@ -116,19 +133,6 @@ namespace RHToolkit.Models.RH
             }
         }
 
-        private static int GetColumnType(Type type)
-        {
-            if (type == typeof(int))
-                return 0;
-            if (type == typeof(float))
-                return 1;
-            if (type == typeof(string))
-                return 3;
-            if (type == typeof(long))
-                return 4;
-            throw new ArgumentOutOfRangeException(nameof(type), $"Unexpected type: {type}");
-        }
-
         private static void WriteValueByType(BinaryWriter writer, object value, int type)
         {
             switch (type)
@@ -139,6 +143,7 @@ namespace RHToolkit.Models.RH
                 case 1:
                     writer.Write(Convert.ToSingle(value));
                     break;
+                case 2:
                 case 3:
                     {
                         string strValue = Convert.ToString(value) ?? string.Empty;

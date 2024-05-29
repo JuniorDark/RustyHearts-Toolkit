@@ -77,7 +77,7 @@
                 VerticalScrollBarVisibility="Auto">
                 <ScrollViewer.Resources>
                     <!--  Apply custom ScrollBar style  -->
-                    <Style BasedOn="{StaticResource CustomScrollBarStyle}" TargetType="ScrollBar" />
+                    <Style BasedOn="{StaticResource lb_scroll}" TargetType="ScrollBar" />
                 </ScrollViewer.Resources>
                 <ScrollViewer.Template>
                     <ControlTemplate TargetType="ScrollViewer">

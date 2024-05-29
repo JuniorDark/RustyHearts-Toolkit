@@ -42,7 +42,7 @@ namespace RHToolkit.Models.RH
             }
             catch (Exception ex)
             {
-                throw new Exception("Encryption failed: " + ex.Message, ex);
+                throw new Exception("Decryption failed: " + ex.Message, ex);
             }
         }
 

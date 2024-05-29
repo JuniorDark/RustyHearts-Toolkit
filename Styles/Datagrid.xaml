@@ -53,6 +53,7 @@
                                     Grid.Column="2"
                                     Maximum="{TemplateBinding ScrollableHeight}"
                                     Orientation="Vertical"
+                                    Style="{StaticResource lb_scroll}"
                                     ViewportSize="{TemplateBinding ViewportHeight}"
                                     Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
                                     Value="{Binding VerticalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -66,6 +67,7 @@
                                         Grid.Column="1"
                                         Maximum="{TemplateBinding ScrollableWidth}"
                                         Orientation="Horizontal"
+                                        Style="{StaticResource lb_scroll_h}"
                                         ViewportSize="{TemplateBinding ViewportWidth}"
                                         Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
                                         Value="{Binding HorizontalOffset, Mode=OneWay, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -73,9 +75,6 @@
                             </Grid>
                         </ControlTemplate>
                     </ScrollViewer.Template>
-                    <ScrollViewer.Resources>
-                        <Style BasedOn="{StaticResource CustomScrollBarStyle}" TargetType="ScrollBar" />
-                    </ScrollViewer.Resources>
                     <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                 </ScrollViewer>
             </Border>

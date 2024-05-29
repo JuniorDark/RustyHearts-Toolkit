@@ -133,7 +133,7 @@
                             Margin="4,6,4,6"
                             CanContentScroll="True"
                             SnapsToDevicePixels="True"
-                            Style="{StaticResource CustomScrollViewer}">
+                            Style="{StaticResource lb_scrollviewer}">
                             <ItemsPresenter />
                         </ScrollViewer>
                     </Border>
@@ -248,7 +248,7 @@
                         <ScrollViewer
                             Margin="4,6,4,6"
                             SnapsToDevicePixels="True"
-                            Style="{StaticResource CustomScrollViewer}">
+                            Style="{StaticResource lb_scrollviewer}">
                             <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
                         </ScrollViewer>
                     </Border>

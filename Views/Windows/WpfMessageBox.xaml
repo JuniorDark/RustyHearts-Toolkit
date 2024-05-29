@@ -89,7 +89,7 @@
                                     </Style>
                                 </ScrollViewer.Style>
                                 <ScrollViewer.Resources>
-                                    <Style BasedOn="{StaticResource CustomScrollBarStyle}" TargetType="ScrollBar" />
+                                    <Style BasedOn="{StaticResource lb_scroll}" TargetType="ScrollBar" />
                                 </ScrollViewer.Resources>
                             </ScrollViewer>
                         </Border>
