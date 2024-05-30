@@ -4,7 +4,6 @@ using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Views.Windows;
 using System.Data;
-using System.Windows.Controls;
 
 namespace RHToolkit.ViewModels.Windows
 {
@@ -88,6 +87,7 @@ namespace RHToolkit.ViewModels.Windows
                 FileManager.ClearTempFile(CurrentFileName!);
 
                 HasChanges = false;
+                Title = $"RH Table Editor ({CurrentFileName})";
                 SaveFileCommand.NotifyCanExecuteChanged();
             }
             catch (Exception ex)
@@ -116,6 +116,7 @@ namespace RHToolkit.ViewModels.Windows
                     await FileManager.DataTableToFileAsync(file, FileData);
                     FileManager.ClearTempFile(CurrentFileName);
                     HasChanges = false;
+                    Title = $"RH Table Editor ({CurrentFileName})";
                     SaveFileCommand.NotifyCanExecuteChanged();
 
                     CurrentFile = file;
@@ -205,18 +206,30 @@ namespace RHToolkit.ViewModels.Windows
         private SearchDialog? searchDialog;
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private void OpenSearchDialog()
+        private void OpenSearchDialog(string? parameter)
         {
             if (searchDialog == null || !searchDialog.IsVisible)
             {
                 searchDialog = new SearchDialog();
                 searchDialog.FindNext += Search;
+                searchDialog.ReplaceFindNext += Search;
+                searchDialog.Replace += Replace;
+                searchDialog.ReplaceAll += ReplaceAll;
                 searchDialog.CountMatches += CountMatches;
                 searchDialog.Show();
             }
             else
             {
                 searchDialog.Focus();
+            }
+
+            if (parameter == "Find")
+            {
+                searchDialog.SearchTabControl.SelectedIndex = 0;
+            }
+            else if (parameter == "Replace")
+            {
+                searchDialog.SearchTabControl.SelectedIndex = 1;
             }
         }
 
@@ -262,7 +275,8 @@ namespace RHToolkit.ViewModels.Windows
                 // Iterate through columns starting from the colStartIndex
                 for (int colIndex = colStartIndex; colIndex < FileData.Columns.Count; colIndex++)
                 {
-                    if (FileData.Rows[rowIndex][colIndex].ToString().Contains(searchText, comparison))
+                    var cellValue = FileData.Rows[rowIndex][colIndex];
+                    if (cellValue?.ToString()?.Contains(searchText, comparison) == true)
                     {
                         // Found the value
                         found = true;
@@ -285,6 +299,7 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+
         private void CountMatches(string searchText, bool matchCase)
         {
             if (string.IsNullOrEmpty(searchText) || FileData == null)
@@ -297,7 +312,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 foreach (var item in row.ItemArray)
                 {
-                    if (item.ToString().Contains(searchText, comparison))
+                    if (item != null && item.ToString()?.Contains(searchText, comparison) == true)
                     {
                         count++;
                     }
@@ -305,6 +320,94 @@ namespace RHToolkit.ViewModels.Windows
             }
 
             searchDialog?.ShowMessage($"Count: {count} matches in entire table", Brushes.LightBlue);
+        }
+
+
+        private void Replace(string searchText, string replaceText, bool matchCase)
+        {
+            if (string.IsNullOrEmpty(searchText) || FileData == null)
+                return;
+
+            StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            if (lastFoundCell != null)
+            {
+                int rowIndex = (int)lastFoundCell.Value.X;
+                int colIndex = (int)lastFoundCell.Value.Y;
+
+                object cellValue = FileData.Rows[rowIndex][colIndex];
+                string oldValue = cellValue?.ToString() ?? string.Empty;
+                string newValue = oldValue.Replace(searchText, replaceText, comparison);
+
+                if (!string.IsNullOrEmpty(oldValue) && oldValue.Contains(searchText, comparison))
+                {
+                    FileData.Rows[rowIndex][colIndex] = newValue;
+                    _undoStack.Push(new EditHistory
+                    {
+                        Row = rowIndex,
+                        Column = colIndex,
+                        OldValue = oldValue,
+                        NewValue = newValue,
+                        Action = EditAction.CellEdit
+                    });
+                    _redoStack.Clear();
+                    OnCanExecuteChangesChanged();
+
+                    searchDialog?.ShowMessage($"Replaced text in row {rowIndex + 1}, column {colIndex + 1}.", Brushes.Green);
+                    lastFoundCell = null;
+                    return;
+                }
+            }
+
+            Search(searchText, matchCase);
+        }
+
+
+        private void ReplaceAll(string searchText, string replaceText, bool matchCase)
+        {
+            if (string.IsNullOrEmpty(searchText) || FileData == null)
+                return;
+
+            StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
+
+            int replaceCount = 0;
+            List<EditHistory> groupedEdits = [];
+
+            for (int rowIndex = 0; rowIndex < FileData.Rows.Count; rowIndex++)
+            {
+                for (int colIndex = 0; colIndex < FileData.Columns.Count; colIndex++)
+                {
+                    string? oldValue = FileData.Rows[rowIndex][colIndex].ToString();
+                    if (!string.IsNullOrEmpty(oldValue) && oldValue.Contains(searchText, comparison))
+                    {
+                        string newValue = oldValue.Replace(searchText, replaceText, comparison);
+                        FileData.Rows[rowIndex][colIndex] = newValue;
+                        replaceCount++;
+
+                        groupedEdits.Add(new EditHistory
+                        {
+                            Row = rowIndex,
+                            Column = colIndex,
+                            OldValue = oldValue,
+                            NewValue = newValue,
+                            Action = EditAction.CellEdit
+                        });
+                    }
+                }
+            }
+
+            if (replaceCount > 0)
+            {
+                _undoStack.Push(new EditHistory
+                {
+                    Action = EditAction.CellEdit,
+                    GroupedEdits = groupedEdits
+                });
+                _redoStack.Clear();
+                OnCanExecuteChangesChanged();
+            }
+
+            searchDialog?.ShowMessage($"Replaced {replaceCount} occurrences.", Brushes.Green);
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
@@ -433,28 +536,38 @@ namespace RHToolkit.ViewModels.Windows
                 var edit = _undoStack.Pop();
                 _redoStack.Push(edit);
 
-                switch (edit.Action)
+                if (edit.GroupedEdits != null)
                 {
-                    case EditAction.CellEdit:
-                        if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
-                        {
-                            FileData.Rows[edit.Row][edit.Column] = edit.OldValue;
-                        }
-                        break;
-                    case EditAction.RowInsert:
-                        if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
-                        {
-                            FileData.Rows.RemoveAt(edit.Row);
-                        }
-                        break;
-                    case EditAction.RowDelete:
-                        if (edit.Row >= 0)
-                        {
-                            DataRow newRow = FileData!.NewRow();
-                            newRow.ItemArray = (object?[])edit.OldValue!;
-                            FileData.Rows.InsertAt(newRow, edit.Row);
-                        }
-                        break;
+                    foreach (var groupedEdit in edit.GroupedEdits)
+                    {
+                        FileData!.Rows[groupedEdit.Row][groupedEdit.Column] = groupedEdit.OldValue;
+                    }
+                }
+                else
+                {
+                    switch (edit.Action)
+                    {
+                        case EditAction.CellEdit:
+                            if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
+                            {
+                                FileData.Rows[edit.Row][edit.Column] = edit.OldValue;
+                            }
+                            break;
+                        case EditAction.RowInsert:
+                            if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
+                            {
+                                FileData.Rows.RemoveAt(edit.Row);
+                            }
+                            break;
+                        case EditAction.RowDelete:
+                            if (edit.Row >= 0)
+                            {
+                                DataRow newRow = FileData!.NewRow();
+                                newRow.ItemArray = (object?[])edit.OldValue!;
+                                FileData.Rows.InsertAt(newRow, edit.Row);
+                            }
+                            break;
+                    }
                 }
 
                 OnCanExecuteChangesChanged();
@@ -469,35 +582,45 @@ namespace RHToolkit.ViewModels.Windows
                 var edit = _redoStack.Pop();
                 _undoStack.Push(edit);
 
-                switch (edit.Action)
+                if (edit.GroupedEdits != null)
                 {
-                    case EditAction.CellEdit:
-                        if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
-                        {
-                            FileData.Rows[edit.Row][edit.Column] = edit.NewValue;
-                        }
-                        break;
-                    case EditAction.RowInsert:
-                        if (edit.Row >= 0)
-                        {
-                            DataRow insertRow = FileData!.NewRow();
-                            insertRow.ItemArray = (object?[])edit.NewValue!;
-                            if (edit.Row < FileData.Rows.Count)
+                    foreach (var groupedEdit in edit.GroupedEdits)
+                    {
+                        FileData!.Rows[groupedEdit.Row][groupedEdit.Column] = groupedEdit.NewValue;
+                    }
+                }
+                else
+                {
+                    switch (edit.Action)
+                    {
+                        case EditAction.CellEdit:
+                            if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
                             {
-                                FileData.Rows.InsertAt(insertRow, edit.Row);
+                                FileData.Rows[edit.Row][edit.Column] = edit.NewValue;
                             }
-                            else
+                            break;
+                        case EditAction.RowInsert:
+                            if (edit.Row >= 0)
                             {
-                                FileData.Rows.Add(insertRow);
+                                DataRow insertRow = FileData!.NewRow();
+                                insertRow.ItemArray = (object?[])edit.NewValue!;
+                                if (edit.Row < FileData.Rows.Count)
+                                {
+                                    FileData.Rows.InsertAt(insertRow, edit.Row);
+                                }
+                                else
+                                {
+                                    FileData.Rows.Add(insertRow);
+                                }
                             }
-                        }
-                        break;
-                    case EditAction.RowDelete:
-                        if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
-                        {
-                            FileData.Rows.RemoveAt(edit.Row);
-                        }
-                        break;
+                            break;
+                        case EditAction.RowDelete:
+                            if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
+                            {
+                                FileData.Rows.RemoveAt(edit.Row);
+                            }
+                            break;
+                    }
                 }
 
                 OnCanExecuteChangesChanged();
@@ -540,6 +663,19 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         #endregion
+
+        [RelayCommand]
+        private async Task CloseWindow(Window window)
+        {
+            bool shouldContinue = await CloseFile();
+
+            if (!shouldContinue)
+            {
+                return;
+            }
+
+            window?.Close();
+        }
 
         #region Properties
         [ObservableProperty]

@@ -3,7 +3,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="lb_def_box04.xaml" />
         <ResourceDictionary Source="ScrollBar.xaml" />
-
     </ResourceDictionary.MergedDictionaries>
 
     <ControlTemplate x:Key="lb_datagrid" TargetType="{x:Type DataGrid}">
@@ -104,7 +103,7 @@
 
     <!--  Style for DataGridRowHeader  -->
     <Style TargetType="DataGridRowHeader">
-        <Setter Property="Background" Value="Blue" />
+        <Setter Property="Background" Value="Gray" />
         <Setter Property="Foreground" Value="White" />
     </Style>
 

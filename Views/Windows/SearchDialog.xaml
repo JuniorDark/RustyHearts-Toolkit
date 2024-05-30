@@ -6,9 +6,9 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:rs="clr-namespace:RHToolkit.Properties"
-    Title="Find"
+    Title="Find/Replace"
     MinWidth="420"
-    MinHeight="200"
+    MinHeight="260"
     MaxWidth="720"
     MaxHeight="240"
     bh:WindowBehaviors.EnableDragMove="True"
@@ -34,14 +34,14 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <TabControl
+                x:Name="SearchTabControl"
                 Grid.RowSpan="3"
                 Grid.ColumnSpan="3"
                 Width="700"
-                Height="220"
-                Margin="0,0,0,0"
+                Height="195"
+                Margin="0,2,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top">
-
                 <TabItem
                     Width="350"
                     Foreground="White"
@@ -50,7 +50,7 @@
                     Style="{StaticResource lb_tab}">
                     <Grid
                         Width="700"
-                        Height="200"
+                        Height="150"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top">
                         <Grid.RowDefinitions>
@@ -78,7 +78,7 @@
                                 Foreground="White"
                                 Text="Find what:" />
                             <TextBox
-                                x:Name="SearchTextBox"
+                                x:Name="FindTextBox"
                                 Width="400"
                                 Height="35"
                                 Margin="10,0"
@@ -132,25 +132,6 @@
                                 Foreground="White"
                                 Style="{StaticResource lb_def_button02}" />
                         </StackPanel>
-                        <CheckBox
-                            x:Name="MatchCaseCheckBox"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Margin="10,0"
-                            VerticalAlignment="Top"
-                            Content="Match case"
-                            Template="{StaticResource lb_checkbox}" />
-                        <TextBlock
-                            x:Name="MessageTextBlock"
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                            Margin="10,10"
-                            VerticalAlignment="Bottom"
-                            d:Text="Search Result:"
-                            Background="Transparent"
-                            FontSize="12"
-                            Foreground="White" />
                     </Grid>
                 </TabItem>
                 <TabItem
@@ -161,7 +142,7 @@
                     Style="{StaticResource lb_tab}">
                     <Grid
                         Width="700"
-                        Height="200"
+                        Height="140"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top">
                         <Grid.RowDefinitions>
@@ -178,6 +159,7 @@
                             Grid.Row="0"
                             Grid.ColumnSpan="3"
                             HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
                             Orientation="Horizontal">
                             <TextBlock
                                 Grid.Column="0"
@@ -189,10 +171,10 @@
                                 Foreground="White"
                                 Text="Find what:" />
                             <TextBox
-                                x:Name="FindTextBox"
+                                x:Name="ReplaceFindTextBox"
                                 Width="400"
                                 Height="35"
-                                Margin="10,0"
+                                Margin="15,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Background="Black"
@@ -214,12 +196,12 @@
                                 Background="Transparent"
                                 FontSize="12"
                                 Foreground="White"
-                                Text="Find what:" />
+                                Text="Replace with:" />
                             <TextBox
                                 x:Name="ReplaceTextBox"
                                 Width="400"
                                 Height="35"
-                                Margin="10,0"
+                                Margin="0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Background="Black"
@@ -233,6 +215,18 @@
                             Margin="10,0"
                             HorizontalAlignment="Right"
                             Orientation="Vertical">
+                            <Button
+                                x:Name="btnFind"
+                                Width="100"
+                                Margin="0,5"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                Click="ReplaceFindNext_Click"
+                                Content="Find Next"
+                                Cursor="Hand"
+                                Foreground="White"
+                                Style="{StaticResource lb_def_button02}" />
                             <Button
                                 x:Name="btnReplace"
                                 Width="100"
@@ -270,29 +264,28 @@
                                 Foreground="White"
                                 Style="{StaticResource lb_def_button02}" />
                         </StackPanel>
-                        <CheckBox
-                            x:Name="ReplaceMatchCaseCheckBox"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Margin="10,0"
-                            VerticalAlignment="Bottom"
-                            Content="Match case"
-                            Template="{StaticResource lb_checkbox}" />
-                        <TextBlock
-                            x:Name="ReplaceMessageTextBlock"
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                            Margin="10,10"
-                            VerticalAlignment="Bottom"
-                            d:Text="Search Result:"
-                            Background="Transparent"
-                            FontSize="12"
-                            Foreground="White" />
                     </Grid>
                 </TabItem>
             </TabControl>
-
+            <TextBlock
+                x:Name="MessageTextBlock"
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Margin="10,10"
+                VerticalAlignment="Bottom"
+                d:Text="Search Result:"
+                Background="Transparent"
+                FontSize="12"
+                Foreground="White" />
+            <CheckBox
+                x:Name="MatchCaseCheckBox"
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="10,10"
+                VerticalAlignment="Top"
+                Content="Match case"
+                Template="{StaticResource lb_checkbox}" />
         </Grid>
 
     </ContentControl>
