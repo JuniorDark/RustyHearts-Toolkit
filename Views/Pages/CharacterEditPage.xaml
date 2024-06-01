@@ -222,7 +222,6 @@
                     Content="Edit Character"
                     Cursor="Hand"
                     Foreground="White"
-                    IsEnabled="{Binding ViewModel.IsEditCharacterButtonEnabled}"
                     Style="{StaticResource lb_def_button02}" />
                 <Button
                     Width="150"
@@ -234,7 +233,6 @@
                     Content="Delete Character"
                     Cursor="Hand"
                     Foreground="White"
-                    IsEnabled="{Binding ViewModel.IsDeleteCharacterButtonEnabled}"
                     Style="{StaticResource lb_def_button02}" />
 
             </StackPanel>
@@ -255,7 +253,6 @@
                 Content="Fortune"
                 Cursor="Hand"
                 Foreground="White"
-                IsEnabled="{Binding ViewModel.IsButtonEnabled}"
                 Style="{StaticResource lb_def_button02}" />
             <Button
                 x:Name="btnTitle"
@@ -266,7 +263,6 @@
                 Content="Title"
                 Cursor="Hand"
                 Foreground="White"
-                IsEnabled="{Binding ViewModel.IsButtonEnabled}"
                 Style="{StaticResource lb_def_button02}" />
             <Button
                 x:Name="btnSanction"
@@ -277,7 +273,6 @@
                 Content="Sanctions"
                 Cursor="Hand"
                 Foreground="White"
-                IsEnabled="{Binding ViewModel.IsButtonEnabled}"
                 Style="{StaticResource lb_def_button02}" />
         </StackPanel>
     </Grid>

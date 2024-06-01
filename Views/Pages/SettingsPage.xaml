@@ -150,35 +150,6 @@
             </StackPanel>
         </ui:CardExpander>
 
-        <ui:TextBlock
-            d:Text="Manage SQLite Database"
-            FontTypography="BodyStrong"
-            Text="SQLite Database" />
-        <ui:CardExpander ContentPadding="0" Icon="{ui:SymbolIcon DatabaseLink24}">
-            <ui:CardExpander.Header>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="51*" />
-                        <ColumnDefinition Width="307*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <ui:TextBlock
-                        Grid.Row="0"
-                        Grid.RowSpan="2"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
-                        d:Text="SQLite Database"
-                        FontTypography="Body"
-                        Text="SQLite Database" />
-                </Grid>
-            </ui:CardExpander.Header>
-            
-        </ui:CardExpander>
-
         <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Resources.About}" />
         <ui:CardExpander ContentPadding="0" Icon="{ui:ImageIcon 'pack://application:,,,/Assets/icon/gearbox.png', Width=36, Height=36}">
             <ui:CardExpander.Header>

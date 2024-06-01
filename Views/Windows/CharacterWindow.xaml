@@ -106,8 +106,8 @@
 
             <!--  Character Info  -->
             <Grid
-                Grid.Row="1"
-                Grid.Column="0"
+                Grid.Row="2"
+                Grid.Column="1"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top">
                 <Grid.RowDefinitions>
@@ -188,9 +188,9 @@
             </Grid>
             <!--  Character  -->
             <Grid
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.RowSpan="2"
-                HorizontalAlignment="Center"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200*" />
@@ -198,6 +198,7 @@
                     <ColumnDefinition Width="150*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -247,7 +248,7 @@
                 <StackPanel
                     Grid.Row="1"
                     Grid.ColumnSpan="3"
-                    HorizontalAlignment="Center"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Horizontal">
                     <Label
@@ -271,8 +272,29 @@
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
+                    <Button
+                        x:Name="btnSaveClass"
+                        Width="150"
+                        Margin="5,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        Command="{Binding SaveCharacterClassCommand}"
+                        Content="Save Class"
+                        Cursor="Hand"
+                        Foreground="White"
+                        IsEnabled="{Binding IsButtonEnabled}"
+                        Style="{StaticResource lb_def_button02}"
+                        ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.ColumnSpan="3"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
                     <Label
-                        x:Name="lbItemTrade"
+                        x:Name="lbJob"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
@@ -292,14 +314,14 @@
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
                     <Button
-                        x:Name="btnSaveClass"
+                        x:Name="btnSaveJob"
                         Width="150"
                         Margin="5,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Background="Transparent"
-                        Command="{Binding SaveCharacterClassCommand}"
-                        Content="Save Class"
+                        Command="{Binding SaveCharacterJobCommand}"
+                        Content="Save Focus"
                         Cursor="Hand"
                         Foreground="White"
                         IsEnabled="{Binding IsButtonEnabled}"
@@ -307,7 +329,7 @@
                         ToolTip="{x:Static rs:Resources.MailSendHelp}" />
                 </StackPanel>
                 <StackPanel
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Grid.Column="0"
                     HorizontalAlignment="Center"
                     Orientation="Vertical">
@@ -357,7 +379,7 @@
                 </StackPanel>
                 <!--  center Column  -->
                 <StackPanel
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Grid.Column="1"
                     HorizontalAlignment="Center"
                     Orientation="Vertical">
@@ -408,7 +430,7 @@
                 </StackPanel>
                 <!--  Right Column  -->
                 <StackPanel
-                    Grid.Row="2"
+                    Grid.Row="3"
                     Grid.Column="3"
                     HorizontalAlignment="Center"
                     Orientation="Vertical">
@@ -456,7 +478,7 @@
                         Value="{Binding GuildExp, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
-                    Grid.Row="3"
+                    Grid.Row="4"
                     Grid.ColumnSpan="3"
                     Margin="0,20"
                     HorizontalAlignment="Center"
@@ -492,7 +514,7 @@
                         Template="{StaticResource lb_checkbox}" />
                 </StackPanel>
                 <StackPanel
-                    Grid.Row="4"
+                    Grid.Row="5"
                     Grid.ColumnSpan="3"
                     Margin="0,20"
                     HorizontalAlignment="Center"
@@ -520,7 +542,7 @@
                 </StackPanel>
                 <Button
                     x:Name="btnSave"
-                    Grid.Row="5"
+                    Grid.Row="6"
                     Grid.Column="1"
                     Width="150"
                     Margin="0,10"

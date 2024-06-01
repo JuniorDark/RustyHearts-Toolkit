@@ -28,15 +28,14 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
             }
         }
-
         #endregion
 
         #region Character Restore
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
         private async Task RestoreCharacter()
         {
             if (CharacterData == null) return;
@@ -48,20 +47,25 @@ namespace RHToolkit.ViewModels.Pages
 
             try
             {
-                if (RHMessageBox.ConfirmMessage($"Restore the character '{CharacterData.CharacterName}'?"))
+                if (RHMessageBoxHelper.ConfirmMessage($"Restore the character '{CharacterData.CharacterName}'?"))
                 {
                     await _databaseService.RestoreCharacterAsync(CharacterData.CharacterID);
                     await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Restore Character", $"<font color=blue>Restore Character</font>]<br><font color=red>Character: {CharacterData.CharacterID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
-                    RHMessageBox.ShowOKMessage($"Character '{CharacterData.CharacterName}' restored.", "Success");
+                    RHMessageBoxHelper.ShowOKMessage($"Character '{CharacterData.CharacterName}' restored.", "Success");
 
                     await ReadDeleteCharacterData();
                 }
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
             }
+        }
+
+        private bool CanExecuteCommand()
+        {
+            return CharacterData != null;
         }
         #endregion
 
@@ -73,8 +77,8 @@ namespace RHToolkit.ViewModels.Pages
         private CharacterData? _characterData;
         partial void OnCharacterDataChanged(CharacterData? value)
         {
-            IsRestoreCharacterButtonEnabled = value == null ? false : true;
             SearchMessage = value == null ? "No data found." : "";
+            RestoreCharacterCommand.NotifyCanExecuteChanged();
         }
 
         [ObservableProperty]
@@ -82,9 +86,6 @@ namespace RHToolkit.ViewModels.Pages
 
         [ObservableProperty]
         private string? _searchMessage = "Search for a deleted character.";
-
-        [ObservableProperty]
-        private bool _isRestoreCharacterButtonEnabled = false;
 
         #endregion
     }

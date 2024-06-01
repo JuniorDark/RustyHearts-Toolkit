@@ -12,7 +12,21 @@ namespace RHToolkit.ViewModels.Windows
         private readonly Stack<EditHistory> _undoStack = new();
         private readonly Stack<EditHistory> _redoStack = new();
 
-        #region Read
+        #region Commands
+        [RelayCommand]
+        private async Task CloseWindow(Window window)
+        {
+            bool shouldContinue = await CloseFile();
+
+            if (!shouldContinue)
+            {
+                return;
+            }
+
+            window?.Close();
+        }
+
+        #region File
 
         [RelayCommand]
         private async Task LoadFile()
@@ -54,13 +68,13 @@ namespace RHToolkit.ViewModels.Windows
                 }
                 catch (Exception ex)
                 {
-                    RHMessageBox.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
+                    RHMessageBoxHelper.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
                 }
             }
         }
 
         private int _changesCounter = 0;
-        private const int ChangesBeforeSave = 5;
+        private const int ChangesBeforeSave = 10;
 
         private async void DataTableChanged(object sender, EventArgs e)
         {
@@ -92,7 +106,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
             }
         }
 
@@ -116,27 +130,26 @@ namespace RHToolkit.ViewModels.Windows
                     await FileManager.DataTableToFileAsync(file, FileData);
                     FileManager.ClearTempFile(CurrentFileName);
                     HasChanges = false;
-                    Title = $"RH Table Editor ({CurrentFileName})";
-                    SaveFileCommand.NotifyCanExecuteChanged();
-
                     CurrentFile = file;
                     CurrentFileName = Path.GetFileName(file);
+                    Title = $"RH Table Editor ({CurrentFileName})";
+                    SaveFileCommand.NotifyCanExecuteChanged();
                 }
                 catch (Exception ex)
                 {
-                    RHMessageBox.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+                    RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
                 }
             }
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private async Task<bool> CloseFile()
+        public async Task<bool> CloseFile()
         {
             if (FileData == null) return true;
 
             if (HasChanges)
             {
-                var result = RHMessageBox.ConfirmMessageYesNoCancel($"Save file '{CurrentFileName}' ?");
+                var result = RHMessageBoxHelper.ConfirmMessageYesNoCancel($"Save file '{CurrentFileName}' ?");
                 if (result == MessageBoxResult.Yes)
                 {
                     await SaveFile();
@@ -237,7 +250,7 @@ namespace RHToolkit.ViewModels.Windows
 
         private void Search(string searchText, bool matchCase)
         {
-            if (string.IsNullOrEmpty(searchText) || FileData == null)
+            if (string.IsNullOrWhiteSpace(searchText) || FileData == null)
                 return;
 
             StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
@@ -298,7 +311,6 @@ namespace RHToolkit.ViewModels.Windows
                 lastFoundCell = null;
             }
         }
-
 
         private void CountMatches(string searchText, bool matchCase)
         {
@@ -361,7 +373,6 @@ namespace RHToolkit.ViewModels.Windows
 
             Search(searchText, matchCase);
         }
-
 
         private void ReplaceAll(string searchText, string replaceText, bool matchCase)
         {
@@ -503,7 +514,7 @@ namespace RHToolkit.ViewModels.Windows
                     OldValue = deletedRowValues
                 });
                 _redoStack.Clear();
-                
+
                 if (rowIndex > 0)
                 {
                     SelectedItem = FileData.DefaultView[rowIndex - 1];
@@ -527,6 +538,10 @@ namespace RHToolkit.ViewModels.Windows
             DuplicateSelectedRowCommand.NotifyCanExecuteChanged();
             DeleteSelectedRowCommand.NotifyCanExecuteChanged();
         }
+
+        #endregion
+
+        #region Edit History
 
         [RelayCommand(CanExecute = nameof(CanUndo))]
         private void UndoChanges()
@@ -661,21 +676,9 @@ namespace RHToolkit.ViewModels.Windows
             UndoChangesCommand.NotifyCanExecuteChanged();
             RedoChangesCommand.NotifyCanExecuteChanged();
         }
-
         #endregion
 
-        [RelayCommand]
-        private async Task CloseWindow(Window window)
-        {
-            bool shouldContinue = await CloseFile();
-
-            if (!shouldContinue)
-            {
-                return;
-            }
-
-            window?.Close();
-        }
+        #endregion
 
         #region Properties
         [ObservableProperty]

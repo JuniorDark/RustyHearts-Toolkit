@@ -180,8 +180,8 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="15"
-                Text="{Binding ViewModel.SearchMessage}"
-                Foreground="White">
+                Foreground="White"
+                Text="{Binding ViewModel.SearchMessage}">
                 <TextBlock.Visibility>
                     <Binding Converter="{StaticResource ZeroToVisibilityConverter}" Path="ViewModel.CharacterDataList.Count" />
                 </TextBlock.Visibility>
@@ -200,7 +200,6 @@
                     Command="{Binding ViewModel.RestoreCharacterCommand}"
                     Content="Restore Character"
                     Cursor="Hand"
-                    IsEnabled="{Binding ViewModel.IsRestoreCharacterButtonEnabled}"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
             </StackPanel>

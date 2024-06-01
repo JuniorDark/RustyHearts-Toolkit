@@ -35,9 +35,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     #region Load Character
 
-    [ObservableProperty]
-    private CharacterData? _characterData;
-
     public void Receive(CharacterDataMessage message)
     {
         if (message.Recipient == "CharacterWindow")
@@ -105,20 +102,20 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
             }
             else
             {
-                RHMessageBox.ShowOKMessage($"The character '{CharacterData.CharacterName}' does not exist.", "Invalid Character");
+                RHMessageBoxHelper.ShowOKMessage($"The character '{CharacterData.CharacterName}' does not exist.", "Invalid Character");
                 return;
             }
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
         }
     }
 
     #endregion
 
     #region Save Character
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private async Task SaveCharacter()
     {
         if (CharacterData == null) return;
@@ -139,26 +136,25 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
             if (!CharacterManager.HasCharacterDataChanges(CharacterData, newCharacterData))
             {
-                RHMessageBox.ShowOKMessage("There are no changes to save.", "Info");
+                RHMessageBoxHelper.ShowOKMessage("There are no changes to save.", "Info");
                 return;
             }
 
             string changes = CharacterManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "changes");
 
-            if (RHMessageBox.ConfirmMessage($"Save the following changes to the character {CharacterData.CharacterName}?\n\n{changes}"))
+            if (RHMessageBoxHelper.ConfirmMessage($"Save the following changes to the character {CharacterData.CharacterName}?\n\n{changes}"))
             {
-                string modify = CharacterManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
+                string auditMessage = CharacterManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
 
-                await _databaseService.UpdateCharacterDataAsync(CharacterData.CharacterID, newCharacterData);
-                await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Information Change", modify);
+                await _databaseService.UpdateCharacterDataAsync(CharacterData.CharacterID, newCharacterData, CharacterData.AccountName!, CharacterData.CharacterName!, "Character Information Change", auditMessage);
 
-                RHMessageBox.ShowOKMessage("Character saved successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage("Character saved successfully!", "Success");
                 await ReadCharacterData();
             }
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error saving character changes: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"Error saving character changes: {ex.Message}", "Error");
         }
     }
 
@@ -183,10 +179,25 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         };
     }
 
+    private bool CanExecuteCommand()
+    {
+        return CharacterData != null;
+    }
+
+    private void OnCanExecuteCommandChanged()
+    {
+        SaveCharacterCommand.NotifyCanExecuteChanged();
+        SaveCharacterNameCommand.NotifyCanExecuteChanged();
+        SaveCharacterClassCommand.NotifyCanExecuteChanged();
+        SaveCharacterJobCommand.NotifyCanExecuteChanged();
+        OpenTitleWindowCommand.NotifyCanExecuteChanged();
+        OpenSanctionWindowCommand.NotifyCanExecuteChanged();
+        OpenFortuneWindowCommand.NotifyCanExecuteChanged();
+    }
     #endregion
 
     #region Character Name
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanExecuteSaveCharacterNameCommand))]
     private async Task SaveCharacterName()
     {
         string? newCharacterName = CharacterName;
@@ -203,17 +214,17 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
         if (IsNameNotAllowed(newCharacterName))
         {
-            RHMessageBox.ShowOKMessage("This character name is not allowed.", "Error");
+            RHMessageBoxHelper.ShowOKMessage("This character name is not allowed.", "Error");
             return;
         }
 
         if (!ValidateCharacterName(newCharacterName))
         {
-            RHMessageBox.ShowOKMessage("Invalid character name.", "Error");
+            RHMessageBoxHelper.ShowOKMessage("Invalid character name.", "Error");
             return;
         }
 
-        if (RHMessageBox.ConfirmMessage($"Change this character name to '{newCharacterName}'?"))
+        if (RHMessageBoxHelper.ConfirmMessage($"Change this character name to '{newCharacterName}'?"))
         {
             try
             {
@@ -226,18 +237,18 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
                 if (result == -1)
                 {
-                    RHMessageBox.ShowOKMessage("Character name already exists.", "Error");
+                    RHMessageBoxHelper.ShowOKMessage("Character name already exists.", "Error");
                     return;
                 }
 
                 await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, newCharacterName, "Character Name Change", $"Old Name:{CharacterData.CharacterName}, New Name: {newCharacterName}");
 
-                RHMessageBox.ShowOKMessage("Character name updated successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage("Character name updated successfully!", "Success");
                 CharacterData.CharacterName = newCharacterName;
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error updating character name: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error updating character name: {ex.Message}", "Error");
             }
         }
 
@@ -252,10 +263,15 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     {
         return !string.IsNullOrEmpty(name) && name.Length >= 3 && name.Length <= 16;
     }
+
+    private bool CanExecuteSaveCharacterNameCommand()
+    {
+        return CharacterData != null && CharacterName != null && CharacterData.CharacterName != CharacterName;
+    }
     #endregion
 
-    #region SaveCharacterClass
-    [RelayCommand]
+    #region Save Character Class/ Job
+    [RelayCommand(CanExecute = nameof(CanExecuteCharacterClassCommand))]
     private async Task SaveCharacterClass()
     {
         if (CharacterData == null) return;
@@ -272,30 +288,67 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 return;
             }
 
-            if (RHMessageBox.ConfirmMessage($"Change character {CharacterData.CharacterName} class?"))
+            if (RHMessageBoxHelper.ConfirmMessage($"Change character '{CharacterData.CharacterName}' class?"))
             {
-               Guid senderCharacterId = Guid.Parse("00000000-0000-0000-0000-000000000000");
-               Guid senderAuthId = Guid.Parse("00000000-0000-0000-0000-000000000000");
+                await _databaseService.UpdateCharacterClassAsync(CharacterData.CharacterID, CharacterData.AccountName!, CharacterData.CharacterName!, CharacterData.Class, Class);
 
-                await _databaseService.InsertMailAsync(senderCharacterId, senderCharacterId, "GM", CharacterData.CharacterName!, "Class Change", 0, 7, 0, Guid.NewGuid(), 0);
-                await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Information Change", "");
-
-                RHMessageBox.ShowOKMessage("Character class changed successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage("Character class changed successfully!", "Success");
                 await ReadCharacterData();
             }
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error saving character changes: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"Error changing character class: {ex.Message}", "Error");
         }
+    }
+
+    private bool CanExecuteCharacterClassCommand()
+    {
+        return CharacterData != null && CharacterData.Class != Class;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecuteCharacterJobCommand))]
+    private async Task SaveCharacterJob()
+    {
+        if (CharacterData == null) return;
+
+        if (!SqlCredentialValidator.ValidateCredentials())
+        {
+            return;
+        }
+
+        try
+        {
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            {
+                return;
+            }
+
+            if (RHMessageBoxHelper.ConfirmMessage($"Change character '{CharacterData.CharacterName}' job?"))
+            {
+                await _databaseService.UpdateCharacterClassAsync(CharacterData.CharacterID, CharacterData.AccountName!, CharacterData.CharacterName!, CharacterData.Class, Class);
+
+                RHMessageBoxHelper.ShowOKMessage("Character focus changed successfully!", "Success");
+                await ReadCharacterData();
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error changing character focus: {ex.Message}", "Error");
+        }
+    }
+
+    private bool CanExecuteCharacterJobCommand()
+    {
+        return CharacterData != null && CharacterData.Job != Job;
     }
     #endregion
 
     #region Title
     private TitleWindow? _titleWindowInstance;
 
-    [RelayCommand]
-    private void OnOpenTitleWindow()
+    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+    private void OpenTitleWindow()
     {
         if (CharacterData == null) return;
 
@@ -323,7 +376,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error reading Character Title: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Title: {ex.Message}", "Error");
         }
     }
     #endregion
@@ -331,8 +384,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     #region Sanction
     private SanctionWindow? _sanctionWindowInstance;
 
-    [RelayCommand]
-    private void OnOpenSanctionWindow()
+    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+    private void OpenSanctionWindow()
     {
         if (CharacterData == null) return;
 
@@ -359,7 +412,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error reading Character Sanction: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Sanction: {ex.Message}", "Error");
         }
     }
     #endregion
@@ -367,8 +420,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     #region Fortune
     private FortuneWindow? _fortuneWindowInstance;
 
-    [RelayCommand]
-    private void OnOpenFortuneWindow()
+    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+    private void OpenFortuneWindow()
     {
         if (CharacterData == null) return;
 
@@ -395,16 +448,12 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error reading Character Fortune: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Fortune: {ex.Message}", "Error");
         }
     }
     #endregion
 
     #region Comboboxes
-
-    [ObservableProperty]
-    private List<NameID>? _classItems;
-
     private void PopulateClassItems()
     {
         try
@@ -418,15 +467,9 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
-
-    [ObservableProperty]
-    private List<NameID>? _jobItems;
-
-    [ObservableProperty]
-    private List<NameID>? _lobbyItems;
 
     private void PopulateLobbyItems()
     {
@@ -441,7 +484,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -765,7 +808,23 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     #endregion
 
-    #region Character Data Properties
+    #region Properties
+
+    [ObservableProperty]
+    private CharacterData? _characterData;
+    partial void OnCharacterDataChanged(CharacterData? value)
+    {
+        OnCanExecuteCommandChanged();
+    }
+
+    [ObservableProperty]
+    private List<NameID>? _classItems;
+
+    [ObservableProperty]
+    private List<NameID>? _jobItems;
+
+    [ObservableProperty]
+    private List<NameID>? _lobbyItems;
 
     [ObservableProperty]
     private bool _isButtonEnabled = true;
@@ -795,7 +854,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     [NotifyPropertyChangedFor(nameof(CharacterIDText))]
     private Guid _characterID;
 
-    public string? CharacterIDText => $"{CharacterID.ToString().ToUpper()} ";
+    public string? CharacterIDText => $"{CharacterID.ToString().ToUpper()}";
 
     [ObservableProperty]
     private DateTime _createTime;
@@ -806,6 +865,10 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CharacterNameText))]
     private string? _characterName;
+    partial void OnCharacterNameChanged(string? value)
+    {
+        SaveCharacterNameCommand.NotifyCanExecuteChanged();
+    }
 
     [ObservableProperty]
     private bool _hasGuild;
@@ -840,6 +903,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         {
             Job = CharacterData.Job;
         }
+        SaveCharacterClassCommand.NotifyCanExecuteChanged();
     }
 
     [ObservableProperty]
@@ -849,6 +913,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     {
         Enum jobEnum = GetJobEnum((CharClass)Class, value);
         JobName = GetEnumDescription(jobEnum);
+        SaveCharacterJobCommand.NotifyCanExecuteChanged();
     }
 
     [ObservableProperty]

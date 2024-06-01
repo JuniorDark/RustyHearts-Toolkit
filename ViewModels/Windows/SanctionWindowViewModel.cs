@@ -56,7 +56,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error: {ex.Message}");
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
         }
     }
 
@@ -73,7 +73,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error: {ex.Message}");
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
         }
     }
 
@@ -86,7 +86,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error: {ex.Message}");
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
         }
     }
 
@@ -103,7 +103,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
         if ((operationType == SanctionOperationType.Add && isSanctioned) || (operationType == SanctionOperationType.Remove && !isSanctioned))
         {
-            RHMessageBox.ShowOKMessage(operationType == SanctionOperationType.Add ? "This character is already sanctioned.\nRemove the current sanction before adding other." : "This character has no active sanctions.", "Info");
+            RHMessageBoxHelper.ShowOKMessage(operationType == SanctionOperationType.Add ? "This character is already sanctioned.\nRemove the current sanction before adding other." : "This character has no active sanctions.", "Info");
             return;
         }
 
@@ -112,7 +112,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
         if (operationType == SanctionOperationType.Remove && string.IsNullOrWhiteSpace(SanctionComment))
         {
-            RHMessageBox.ShowOKMessage("Enter a comment for the sanction removal", "Info");
+            RHMessageBoxHelper.ShowOKMessage("Enter a comment for the sanction removal", "Info");
             return;
         }
 
@@ -123,7 +123,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error {(operationType == SanctionOperationType.Add ? "adding" : "removing")} sanction: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"Error {(operationType == SanctionOperationType.Add ? "adding" : "removing")} sanction: {ex.Message}", "Error");
         }
     }
 
@@ -135,7 +135,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
         if (operationType == SanctionOperationType.Remove && isApplyValue == 0)
         {
-            RHMessageBox.ShowOKMessage("Selected sanction was already removed.", "Info");
+            RHMessageBoxHelper.ShowOKMessage("Selected sanction was already removed.", "Info");
             return;
         }
 
@@ -143,7 +143,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
         (int sanctionType, int sanctionPeriod, int sanctionCount) = GetSanctionDetails(operationType);
 
-        if (RHMessageBox.ConfirmMessage((operationType == SanctionOperationType.Add ? "Sanction this character for: " : "Remove the sanction from this character for: ") + reasonDetails + "?"))
+        if (RHMessageBoxHelper.ConfirmMessage((operationType == SanctionOperationType.Add ? "Sanction this character for: " : "Remove the sanction from this character for: ") + reasonDetails + "?"))
         {
             (Guid sanctionUid, _) = await _databaseService.CharacterSanctionAsync(CharacterData!.CharacterID, operationType == SanctionOperationType.Add ? Guid.NewGuid() : selectedSanctionUid, (int)operationType, releaser, comment, sanctionType, sanctionPeriod, sanctionCount);
 
@@ -159,7 +159,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
                 await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Sanction Release", reasonDetails);
             }
 
-            RHMessageBox.ShowOKMessage(operationType == SanctionOperationType.Add ? "Sanction added successfully!" : "Sanction released successfully!", "Success");
+            RHMessageBoxHelper.ShowOKMessage(operationType == SanctionOperationType.Add ? "Sanction added successfully!" : "Sanction released successfully!", "Success");
         }
     }
 
@@ -203,7 +203,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -223,7 +223,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -243,7 +243,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 

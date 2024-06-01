@@ -2,27 +2,27 @@
 
 namespace RHToolkit.Models.MessageBox
 {
-    public class RHMessageBox
+    public class RHMessageBoxHelper
     {
         public static bool ConfirmMessage(string message)
         {
-            MessageBoxResult result = WpfMessageBox.Show("Confirmation", message, WpfMessageBox.MessageBoxType.ConfirmationWithYesNo);
+            MessageBoxResult result = RHMessageBox.Show("Confirmation", message, RHMessageBox.MessageBoxType.ConfirmationWithYesNo);
             return result == MessageBoxResult.Yes;
         }
 
         public static MessageBoxResult ConfirmMessageYesNoCancel(string message)
         {
-            return WpfMessageBox.Show("Confirmation", message, WpfMessageBox.MessageBoxType.ConfirmationWithYesNoCancel);
+            return RHMessageBox.Show("Confirmation", message, RHMessageBox.MessageBoxType.ConfirmationWithYesNoCancel);
         }
 
         public static void ShowOKMessage(string message, string caption = "Information")
         {
-            WpfMessageBox.Show(caption, message, WpfMessageBox.MessageBoxType.Information);
+            RHMessageBox.Show(caption, message, RHMessageBox.MessageBoxType.Information);
         }
 
         public static MessageBoxResult ShowOKCancelMessage(string message, string caption = "Confirmation")
         {
-            return WpfMessageBox.Show(caption, message, MessageBoxButton.OKCancel, WpfMessageBox.MessageBoxImage.Question);
+            return RHMessageBox.Show(caption, message, MessageBoxButton.OKCancel, RHMessageBox.MessageBoxImage.Question);
         }
     }
 }

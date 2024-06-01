@@ -18,7 +18,7 @@ namespace RHToolkit.Services
         #region Character
 
         #region Write
-        public async Task UpdateCharacterDataAsync(Guid characterId, NewCharacterData characterData)
+        public async Task UpdateCharacterDataAsync(Guid characterId, NewCharacterData characterData, string accountName, string characterName, string action, string auditMessage)
         {
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -45,6 +45,8 @@ namespace RHToolkit.Services
                     ("@guild_point", characterData.GuildPoint),
                     ("@isMoveEnable", characterData.IsMoveEnable)
                 );
+
+                await GMAuditAsync(accountName, characterId, characterName, action, auditMessage);
 
                 transaction.Commit();
             }
@@ -128,7 +130,7 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task UpdateCharacterClassAsync(Guid characterId, NewCharacterData characterData)
+        public async Task UpdateCharacterClassAsync(Guid characterId, string accountName, string characterName, int currentCharacterClass, int newCharacterClass)
         {
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -136,12 +138,11 @@ namespace RHToolkit.Services
             try
             {
                 await _databaseService.ExecuteNonQueryAsync(
-                    "UPDATE CharacterTable SET Class = @class, Job = @job WHERE character_id = @character_id",
+                    "UPDATE CharacterTable SET Class = @class WHERE character_id = @character_id",
                     connection,
                     transaction,
                     ("@character_id", characterId),
-                    ("@class", characterData.Class),
-                    ("@job", characterData.Job)
+                    ("@class", newCharacterClass)
                 );
 
                 await _databaseService.ExecuteProcedureAsync(
@@ -151,6 +152,13 @@ namespace RHToolkit.Services
                 ("@character_id", characterId)
                 );
 
+                Guid senderId = Guid.Empty;
+
+                string message = $"Class Change<br><br>Your character class was changed, your skills have been reset and your equipped weapon/costumes was attached via mail.";
+                message += $"<br><br><right>{DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+
+                await InsertMailAsync(senderId, senderId, "GM", characterName, message, 0, 7, 0, Guid.NewGuid(), 0);
+                await GMAuditAsync(accountName, characterId, characterName!, "Character Class Change", $"Old Class: {currentCharacterClass} => New Class: {newCharacterClass}");
 
                 transaction.Commit();
             }
@@ -158,6 +166,45 @@ namespace RHToolkit.Services
             {
                 transaction.Rollback();
                 throw new Exception($"Error updating character class: {ex.Message}", ex);
+            }
+        }
+
+        public async Task UpdateCharacterJobAsync(Guid characterId, string accountName, string characterName, int currentCharacterJob, int newCharacterJob)
+        {
+            using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                await _databaseService.ExecuteNonQueryAsync(
+                    "UPDATE CharacterTable SET Job = @job WHERE character_id = @character_id",
+                    connection,
+                    transaction,
+                    ("@character_id", characterId),
+                    ("@job", newCharacterJob)
+                );
+
+                await _databaseService.ExecuteProcedureAsync(
+                     "up_skill_reset",
+                     connection,
+                transaction,
+                ("@character_id", characterId)
+                );
+
+                Guid senderId = Guid.Empty;
+
+                string message = $"Focus Change<br><br>Your character focus was changed, your skills have been reset.";
+                message += $"<br><br><right>{DateTime.Now:yyyy-MM-dd HH:mm:ss}";
+
+                await InsertMailAsync(senderId, senderId, "GM", characterName, message, 0, 7, 0, Guid.NewGuid(), 0);
+                await GMAuditAsync(accountName, characterId, characterName!, "Character Focus Change", $"Old Focus: {currentCharacterJob} => New Focus: {newCharacterJob}");
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error updating character job: {ex.Message}", ex);
             }
         }
 
@@ -446,7 +493,7 @@ namespace RHToolkit.Services
         {
             if (await GetCharacterOnlineAsync(characterName))
             {
-                RHMessageBox.ShowOKMessage($"The character '{characterName}' is currently online. You can't edit an online character.", "Info");
+                RHMessageBoxHelper.ShowOKMessage($"The character '{characterName}' is currently online. You can't edit an online character.", "Info");
                 return true;
             }
 
@@ -995,14 +1042,14 @@ namespace RHToolkit.Services
         #endregion
 
         #region RustyHearts_Log
-        public async Task GMAuditAsync(string windyCode, Guid? characterId, string characterName, string action, string modify)
+        public async Task GMAuditAsync(string accountName, Guid? characterId, string characterName, string action, string auditMessage)
         {
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("GMRustyHearts");
             using var transaction = connection.BeginTransaction();
 
             try
             {
-                string changes = $"<font color=blue>{action}</font>]<br><font color=red>{modify}<br>{characterName}, GUID:{{{characterId?.ToString().ToUpper()}}}<br></font>";
+                string changes = $"<font color=blue>{action}</font>]<br><font color=red>{auditMessage}<br>{characterName}, GUID:{{{characterId?.ToString().ToUpper()}}}<br></font>";
 
                 await _databaseService.ExecuteNonQueryAsync("INSERT INTO GMAudit(audit_id, AdminID, world_index, bcust_id, character_id, char_name, Type, Modify, Memo, date) " +
                        "VALUES (@audit_id, @AdminID, @world_index, @bcust_id, @character_id, @char_name, @Type, @Modify, @Memo, @date)",
@@ -1011,7 +1058,7 @@ namespace RHToolkit.Services
                        ("@audit_id", Guid.NewGuid()),
                        ("@AdminID", "RHToolkit"),
                        ("@world_index", 1),
-                       ("@bcust_id", windyCode),
+                       ("@bcust_id", accountName),
                        ("@character_id", characterId ?? Guid.Empty),
                        ("@char_name", characterName),
                        ("@Type", action),
@@ -1028,7 +1075,7 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task SanctionLogAsync(Guid sanctionUid, Guid characterId, string windyCode, string characterName, DateTime startTime, DateTime? endTime, string reason)
+        public async Task SanctionLogAsync(Guid sanctionUid, Guid characterId, string accountName, string characterName, DateTime startTime, DateTime? endTime, string reason)
         {
             using SqlConnection connection = await _databaseService.OpenConnectionAsync("RustyHearts_Log");
             using var transaction = connection.BeginTransaction();
@@ -1043,7 +1090,7 @@ namespace RHToolkit.Services
                       ("@log_type", 1),
                       ("@sanction_uid", sanctionUid),
                       ("@world_id", 1),
-                      ("@bcust_id", windyCode),
+                      ("@bcust_id", accountName),
                       ("@item_uid", "00000000-0000-0000-0000-000000000000"),
                       ("@character_id", characterId),
                       ("@char_name", characterName),

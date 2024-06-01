@@ -65,7 +65,7 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error: {ex.Message}");
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
         }
     }
 
@@ -105,13 +105,13 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
             bool fortuneChanged = HandleFortuneUpdate(SelectedFortuneID1, SelectedFortuneID2, SelectedFortuneID3);
             if (fortuneChanged)
             {
-                RHMessageBox.ShowOKMessage("Fortune updated successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage("Fortune updated successfully!", "Success");
                 await ReadFortune();
             }
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error updating fortune: {ex.Message}");
+            RHMessageBoxHelper.ShowOKMessage($"Error updating fortune: {ex.Message}");
         }
     }
 
@@ -124,7 +124,7 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
 
         if (selectedFortuneID1 != 0 && selectedFortuneID1 != FortuneID1 || selectedFortuneID2 != FortuneID2 || selectedFortuneID3 != FortuneID3)
         {
-            if (RHMessageBox.ConfirmMessage($"Update {CharacterData!.CharacterName} fortune?"))
+            if (RHMessageBoxHelper.ConfirmMessage($"Update {CharacterData!.CharacterName} fortune?"))
             {
                 _databaseService.UpdateFortuneAsync(CharacterData!.CharacterID, ActiveFortune, selectedFortuneID1, selectedFortuneID2, selectedFortuneID3);
                 _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, UpdateAction, $"{FortuneID1} -> {selectedFortuneID1}, {FortuneID2} -> {selectedFortuneID2}, {FortuneID3} -> {selectedFortuneID3}");
@@ -133,7 +133,7 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
         }
         else if (selectedFortuneID1 != FortuneID1)
         {
-            if (RHMessageBox.ConfirmMessage($"Remove {CharacterData!.CharacterName} fortune?"))
+            if (RHMessageBoxHelper.ConfirmMessage($"Remove {CharacterData!.CharacterName} fortune?"))
             {
                 _databaseService.RemoveFortuneAsync(CharacterData!.CharacterID, NoFortune);
                 _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, RemoveAction, $"{FortuneID1} -> {selectedFortuneID1}, {FortuneID2} -> {selectedFortuneID2}, {FortuneID3} -> {selectedFortuneID3}");
@@ -164,7 +164,7 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -185,7 +185,7 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 

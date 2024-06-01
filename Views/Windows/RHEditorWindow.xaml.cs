@@ -1,4 +1,5 @@
 ﻿using RHToolkit.ViewModels.Windows;
+using System.ComponentModel;
 using System.Data;
 using System.Windows.Controls;
 using Wpf.Ui.Appearance;
@@ -16,9 +17,8 @@ namespace RHToolkit.Views.Windows
 
         private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            if (e.EditAction == DataGridEditAction.Commit)
+            if (DataContext is RHEditorViewModel viewModel && e.EditAction == DataGridEditAction.Commit)
             {
-                var viewModel = (RHEditorViewModel)DataContext;
                 var columnIndex = e.Column.DisplayIndex;
                 var rowIndex = e.Row.GetIndex();
                 var oldValue = ((DataRowView)e.Row.Item).Row[columnIndex];
@@ -31,6 +31,21 @@ namespace RHToolkit.Views.Windows
         private void DataGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             dataGridView.Focus();
+        }
+
+        protected override async void OnClosing(CancelEventArgs e)
+        {
+            base.OnClosing(e);
+
+            if (DataContext is RHEditorViewModel viewModel)
+            {
+                bool canClose = await viewModel.CloseFile();
+
+                if (!canClose)
+                {
+                    e.Cancel = true;
+                }
+            }
         }
     }
 }

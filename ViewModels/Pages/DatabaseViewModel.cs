@@ -41,7 +41,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
             }
         }
     }

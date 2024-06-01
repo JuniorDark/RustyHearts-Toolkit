@@ -2,7 +2,7 @@
 
 namespace RHToolkit.Views.Windows
 {
-    public partial class WpfMessageBox : Window
+    public partial class RHMessageBox : Window
     {
         public enum MessageBoxType
         {
@@ -22,17 +22,17 @@ namespace RHToolkit.Views.Windows
             None
         }
 
-        private WpfMessageBox()
+        private RHMessageBox()
         {
             InitializeComponent();
         }
 
-        static WpfMessageBox()
+        static RHMessageBox()
         {
-            _messageBox = new WpfMessageBox();
+            _messageBox = new RHMessageBox();
         }
 
-        static WpfMessageBox _messageBox;
+        static RHMessageBox _messageBox;
 
         static MessageBoxResult _result = MessageBoxResult.No;
         public static MessageBoxResult Show
@@ -83,7 +83,7 @@ namespace RHToolkit.Views.Windows
         (string caption, string text,
         MessageBoxButton button, MessageBoxImage image)
         {
-            _messageBox = new WpfMessageBox
+            _messageBox = new RHMessageBox
             { txtMsg = { Text = text }, MessageTitle = { Text = caption } };
             SetVisibilityOfButtons(button);
             SetImageOfMessageBox(image);

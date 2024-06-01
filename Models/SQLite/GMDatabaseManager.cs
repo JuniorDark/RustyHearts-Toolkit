@@ -31,7 +31,7 @@ public class GMDatabaseManager
 
             if (files.Count == 0)
             {
-                RHMessageBox.ShowOKMessage("The selected folder does not contain required .rh files.", "No Files");
+                RHMessageBoxHelper.ShowOKMessage("The selected folder does not contain required .rh files.", "No Files");
                 return;
             }
 
@@ -60,7 +60,7 @@ public class GMDatabaseManager
             if (missingFiles.Count != 0)
             {
                 string missingFilesMessage = "Required table files are missing. The following required files are missing:\n" + string.Join("\n", missingFiles.Select(f => $"{f}.rh"));
-                RHMessageBox.ShowOKMessage(missingFilesMessage, "Missing Files");
+                RHMessageBoxHelper.ShowOKMessage(missingFilesMessage, "Missing Files");
                 return;
             }
 

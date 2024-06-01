@@ -47,7 +47,7 @@ public partial class DatabaseToolsViewModel(ISqLiteDatabaseService sqLiteDatabas
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"Error: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
         }
     }
 }

@@ -32,7 +32,7 @@ namespace RHToolkit.ViewModels.Pages
 
             try
             {
-                if (RHMessageBox.ConfirmMessage("Create a new gmdb?"))
+                if (RHMessageBoxHelper.ConfirmMessage("Create a new gmdb?"))
                 {
                     _cancellationTokenSource = new CancellationTokenSource();
 
@@ -44,16 +44,16 @@ namespace RHToolkit.ViewModels.Pages
 
                     _cachedDataManager.InitializeCachedLists();
 
-                    RHMessageBox.ShowOKMessage("Database created successfully!", "Success");
+                    RHMessageBoxHelper.ShowOKMessage("Database created successfully!", "Success");
                 }
             }
             catch (OperationCanceledException)
             {
-                RHMessageBox.ShowOKMessage("Operation was canceled.", "Canceled");
+                RHMessageBoxHelper.ShowOKMessage("Operation was canceled.", "Canceled");
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error creating database file: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error creating database file: {ex.Message}", "Error");
             }
             finally
             {

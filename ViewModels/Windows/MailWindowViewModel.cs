@@ -203,12 +203,12 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                     };
                     serializer.Serialize(file, templateData);
                 }
-                RHMessageBox.ShowOKMessage(Resources.SaveTemplateSucess, Resources.Success);
+                RHMessageBoxHelper.ShowOKMessage(Resources.SaveTemplateSucess, Resources.Success);
             }
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.SaveTemplateError}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.SaveTemplateError}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -233,7 +233,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"{Resources.LoadTemplateError}: {ex.Message}", Resources.LoadTemplateError);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.LoadTemplateError}: {ex.Message}", Resources.LoadTemplateError);
             }
             finally
             {
@@ -266,7 +266,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                 if (invalidItemIDs.Count > 0)
                 {
                     string invalidItemIDsString = string.Join(", ", invalidItemIDs);
-                    RHMessageBox.ShowOKMessage($"{Resources.TemplateInvalidId}: {invalidItemIDsString}", Resources.LoadTemplateError);
+                    RHMessageBoxHelper.ShowOKMessage($"{Resources.TemplateInvalidId}: {invalidItemIDsString}", Resources.LoadTemplateError);
                     return;
                 }
 
@@ -328,12 +328,12 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
             }
             else
             {
-                RHMessageBox.ShowOKMessage(Resources.LoadTemplateJsonError, Resources.LoadTemplateError);
+                RHMessageBoxHelper.ShowOKMessage(Resources.LoadTemplateJsonError, Resources.LoadTemplateError);
             }
         }
         else
         {
-            RHMessageBox.ShowOKMessage(Resources.InvalidTemplate, Resources.LoadTemplateError);
+            RHMessageBoxHelper.ShowOKMessage(Resources.InvalidTemplate, Resources.LoadTemplateError);
         }
     }
 
@@ -378,13 +378,13 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
         if (string.IsNullOrWhiteSpace(mailRecipient) && !sendToAllCharacters && !sendToAllOnline && !sendToAllOffline)
         {
-            RHMessageBox.ShowOKMessage(Resources.EmptyRecipientDesc, Resources.EmptyRecipient);
+            RHMessageBoxHelper.ShowOKMessage(Resources.EmptyRecipientDesc, Resources.EmptyRecipient);
             return;
         }
 
         if (string.IsNullOrWhiteSpace(mailSender))
         {
-            RHMessageBox.ShowOKMessage(Resources.EmptySenderDesc, Resources.EmptySender);
+            RHMessageBoxHelper.ShowOKMessage(Resources.EmptySenderDesc, Resources.EmptySender);
             return;
         }
 
@@ -396,7 +396,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
         string confirmationMessage = MailManager.GetConfirmationMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, recipients);
 
-        if (RHMessageBox.ConfirmMessage(confirmationMessage))
+        if (RHMessageBoxHelper.ConfirmMessage(confirmationMessage))
         {
             try
             {
@@ -405,11 +405,11 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                 (List<string> successfulRecipients, List<string> failedRecipients) = await _mailManager.SendMailAsync(mailSender, message, gold, reqGold, returnDay, recipients, ItemDataList!);
 
                 string successMessage = MailManager.GetSendMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, successfulRecipients, failedRecipients);
-                RHMessageBox.ShowOKMessage(successMessage, Resources.SendMail);
+                RHMessageBoxHelper.ShowOKMessage(successMessage, Resources.SendMail);
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"{Resources.SendMailError}: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.SendMailError}: {ex.Message}", Resources.Error);
             }
             finally
             {

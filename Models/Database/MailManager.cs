@@ -134,7 +134,7 @@ namespace RHToolkit.Models.Database
 
                 if (recipients.Any(string.IsNullOrEmpty) || recipients.Any(r => !r.All(char.IsLetter)))
                 {
-                    RHMessageBox.ShowOKMessage(Resources.InvalidRecipientDesc, Resources.InvalidRecipient);
+                    RHMessageBoxHelper.ShowOKMessage(Resources.InvalidRecipientDesc, Resources.InvalidRecipient);
                     return [];
                 }
 
@@ -143,7 +143,7 @@ namespace RHToolkit.Models.Database
                 {
                     if (!uniqueRecipients.Add(recipient))
                     {
-                        RHMessageBox.ShowOKMessage($"{Resources.DuplicateRecipientDesc}: {recipient}", Resources.DuplicateRecipient);
+                        RHMessageBoxHelper.ShowOKMessage($"{Resources.DuplicateRecipientDesc}: {recipient}", Resources.DuplicateRecipient);
                         return [];
                     }
                 }

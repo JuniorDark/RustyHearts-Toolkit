@@ -408,7 +408,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -423,7 +423,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -568,7 +568,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -638,7 +638,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -658,7 +658,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -678,7 +678,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -709,7 +709,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -724,7 +724,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         catch (Exception ex)
         {
-            RHMessageBox.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 

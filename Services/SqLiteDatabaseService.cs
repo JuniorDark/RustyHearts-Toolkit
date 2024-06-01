@@ -45,7 +45,7 @@ namespace RHToolkit.Services
 
             if (!File.Exists(dbFilePath))
             {
-                RHMessageBox.ShowOKMessage($"Database file not found. Be sure to create the database first.", "SQlite Database Not Found");
+                RHMessageBoxHelper.ShowOKMessage($"Database file not found. Be sure to create the database first.", "SQlite Database Not Found");
                 return false;
             }
 
@@ -59,7 +59,7 @@ namespace RHToolkit.Services
                     missingTablesMessage += string.Join("\n", missingTables);
                     missingTablesMessage += $"Please ensure you have created the database with the required tables.";
 
-                    RHMessageBox.ShowOKMessage(missingTablesMessage, "Table Not Found");
+                    RHMessageBoxHelper.ShowOKMessage(missingTablesMessage, "Table Not Found");
                     return false;
                 }
 

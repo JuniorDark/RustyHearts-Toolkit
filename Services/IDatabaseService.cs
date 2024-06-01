@@ -20,7 +20,7 @@ namespace RHToolkit.Services
         Task<string?> GetGuildNameAsync(Guid guildId);
         Task<List<ItemData>> GetItemList(Guid characterId, string tableName);
         Task<(DateTime startTime, DateTime? endTime)> GetSanctionTimesAsync(Guid sanctionUid);
-        Task GMAuditAsync(string windyCode, Guid? characterId, string characterName, string action, string modify);
+        Task GMAuditAsync(string accountName, Guid? characterId, string characterName, string action, string auditMessage);
         Task InsertMailAsync(Guid? senderAuthId, Guid? senderCharacterId, string mailSender, string recipient, string content, int gold, int returnDay, int reqGold, Guid mailId, int createType);
         Task InsertMailItemAsync(ItemData itemData, Guid? recipientAuthId, Guid? recipientCharacterId, Guid mailId, int slotIndex);
         Task<bool> IsCharacterOnlineAsync(string characterName);
@@ -31,10 +31,11 @@ namespace RHToolkit.Services
         Task RemoveCharacterTitleAsync(Guid characterId, Guid titleUid);
         Task RemoveFortuneAsync(Guid characterId, int fortuneState);
         Task RestoreCharacterAsync(Guid characterId);
-        Task SanctionLogAsync(Guid sanctionUid, Guid characterId, string windyCode, string characterName, DateTime startTime, DateTime? endTime, string reason);
+        Task SanctionLogAsync(Guid sanctionUid, Guid characterId, string accountName, string characterName, DateTime startTime, DateTime? endTime, string reason);
         Task UnequipCharacterTitleAsync(Guid titleId);
-        Task UpdateCharacterClassAsync(Guid characterId, NewCharacterData characterData);
-        Task UpdateCharacterDataAsync(Guid characterId, NewCharacterData characterData);
+        Task UpdateCharacterClassAsync(Guid characterId, string accountName, string characterName, int currentCharacterClass, int newCharacterClass);
+        Task UpdateCharacterDataAsync(Guid characterId, NewCharacterData characterData, string accountName, string characterName, string action, string auditMessage);
+        Task UpdateCharacterJobAsync(Guid characterId, string accountName, string characterName, int currentCharacterJob, int newCharacterJob);
         Task<int> UpdateCharacterNameAsync(Guid characterId, string characterName);
         Task UpdateFortuneAsync(Guid characterId, int fortune, int selectedFortuneID1, int selectedFortuneID2, int selectedFortuneID3);
         Task UpdateSanctionLogAsync(Guid sanctionUid, string releaser, string comment, int isRelease);

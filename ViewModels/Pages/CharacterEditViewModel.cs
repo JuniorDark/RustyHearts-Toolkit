@@ -32,7 +32,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
             }
         }
 
@@ -56,7 +56,7 @@ namespace RHToolkit.ViewModels.Pages
         #region Character Window
         private CharacterWindow? _characterWindowInstance;
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
         private async Task EditCharacter()
         {
             if (CharacterData == null) return;
@@ -76,11 +76,10 @@ namespace RHToolkit.ViewModels.Pages
 
                     if (_characterWindowInstance != null)
                     {
-                        IsDeleteCharacterButtonEnabled = false;
                         _characterWindowInstance.Closed += (sender, args) =>
                         {
                             _characterWindowInstance = null;
-                            IsDeleteCharacterButtonEnabled = true;
+                            DeleteCharacterCommand.NotifyCanExecuteChanged();
                         };
                     }
                 }
@@ -92,14 +91,15 @@ namespace RHToolkit.ViewModels.Pages
 
                 _characterWindowInstance?.Focus();
 
+                DeleteCharacterCommand.NotifyCanExecuteChanged();
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
             }
         }
 
-        [RelayCommand]
+        [RelayCommand(CanExecute = nameof(CanExecuteDeleteCommand))]
         private async Task DeleteCharacter()
         {
             if (CharacterData == null) return;
@@ -108,21 +108,21 @@ namespace RHToolkit.ViewModels.Pages
             {
                 if (!await ValidateCharacterData()) return;
 
-                if (RHMessageBox.ConfirmMessage($"Delete the character '{CharacterData.CharacterName}'?"))
+                if (RHMessageBoxHelper.ConfirmMessage($"Delete the character '{CharacterData.CharacterName}'?"))
                 {
                     _characterWindowInstance?.Close();
 
                     await _databaseService.DeleteCharacterAsync(CharacterData.AuthID, CharacterData.CharacterID);
                     await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Delete Character", $"<font color=blue>Delete Character</font>]<br><font color=red>Character: {CharacterData.CharacterID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
-                    RHMessageBox.ShowOKMessage($"Character '{CharacterData.CharacterName}' deleted.", "Success");
+                    RHMessageBoxHelper.ShowOKMessage($"Character '{CharacterData.CharacterName}' deleted.", "Success");
 
                     await ReadCharacterData();
                 }
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
             }
         }
 
@@ -151,6 +151,26 @@ namespace RHToolkit.ViewModels.Pages
 
             return true;
         }
+
+        private bool CanExecuteCommand()
+        {
+            return CharacterData != null;
+        }
+
+        private bool CanExecuteDeleteCommand()
+        {
+            return CharacterData != null && _characterWindowInstance == null;
+        }
+
+        private void OnCanExecuteCommandChanged()
+        {
+            EditCharacterCommand.NotifyCanExecuteChanged();
+            DeleteCharacterCommand.NotifyCanExecuteChanged();
+            OpenTitleWindowCommand.NotifyCanExecuteChanged();
+            OpenSanctionWindowCommand.NotifyCanExecuteChanged();
+            OpenFortuneWindowCommand.NotifyCanExecuteChanged();
+
+        }
         #endregion
 
         #region Buttons
@@ -158,8 +178,8 @@ namespace RHToolkit.ViewModels.Pages
         #region Title
         private TitleWindow? _titleWindowInstance;
 
-        [RelayCommand]
-        private async Task OnOpenTitleWindow()
+        [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+        private async Task OpenTitleWindow()
         {
             try
             {
@@ -182,7 +202,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error reading Character Title: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error reading Character Title: {ex.Message}", "Error");
             }
         }
         #endregion
@@ -190,8 +210,8 @@ namespace RHToolkit.ViewModels.Pages
         #region Sanction
         private SanctionWindow? _sanctionWindowInstance;
 
-        [RelayCommand]
-        private async Task OnOpenSanctionWindow()
+        [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+        private async Task OpenSanctionWindow()
         {
             try
             {
@@ -213,7 +233,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error reading Character Sanction: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error reading Character Sanction: {ex.Message}", "Error");
             }
         }
         #endregion
@@ -221,8 +241,8 @@ namespace RHToolkit.ViewModels.Pages
         #region Fortune
         private FortuneWindow? _fortuneWindowInstance;
 
-        [RelayCommand]
-        private async Task OnOpenFortuneWindow()
+        [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+        private async Task OpenFortuneWindow()
         {
             try
             {
@@ -244,7 +264,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBox.ShowOKMessage($"Error reading Character Fortune: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error reading Character Fortune: {ex.Message}", "Error");
             }
         }
         #endregion
@@ -260,15 +280,9 @@ namespace RHToolkit.ViewModels.Pages
         private CharacterData? _characterData;
         partial void OnCharacterDataChanged(CharacterData? value)
         {
-            IsEditCharacterButtonEnabled = value == null ? false : true;
             IsButtonPanelVisible = value == null ? Visibility.Hidden : Visibility.Visible;
-            IsButtonEnabled = value == null ? false : true;
             SearchMessage = value == null ? "No data found." : "";
-
-            if (_characterWindowInstance == null)
-            {
-                IsDeleteCharacterButtonEnabled = value == null ? false : true;
-            }
+            OnCanExecuteCommandChanged();
         }
 
         [ObservableProperty]
@@ -278,16 +292,7 @@ namespace RHToolkit.ViewModels.Pages
         private string? _searchMessage = "Search for a character.";
 
         [ObservableProperty]
-        private bool _isButtonEnabled = false;
-
-        [ObservableProperty]
         private Visibility _isButtonPanelVisible = Visibility.Hidden;
-
-        [ObservableProperty]
-        private bool _isEditCharacterButtonEnabled = false;
-
-        [ObservableProperty]
-        private bool _isDeleteCharacterButtonEnabled = false;
 
         [ObservableProperty]
         private bool? _selectAllCheckBoxChecked = null;
