@@ -4,6 +4,7 @@
     {
         public Guid CharacterID { get; set; }
         public Guid AuthID { get; set; }
+        public string? AccountName { get; set; }
         public string? CharacterName { get; set; }
         public int Class { get; set; }
         public int Job { get; set; }

@@ -262,7 +262,6 @@
                     Content="Remove Sanction"
                     Cursor="Hand"
                     Foreground="White"
-                    IsEnabled="{Binding IsRemoveSanctionButtonEnabled}"
                     Style="{StaticResource lb_def_button02}"
                     ToolTip="{x:Static rs:Resources.MailSendHelp}" />
             </StackPanel>

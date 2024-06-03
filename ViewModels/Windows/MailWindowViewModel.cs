@@ -16,12 +16,14 @@ namespace RHToolkit.ViewModels.Windows;
 public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemDataMessage>
 {
     private readonly WindowsProviderService _windowsProviderService;
+    private readonly IDatabaseService _databaseService;
     private readonly MailManager _mailManager;
     private readonly CachedDataManager _cachedDataManager;
 
-    public MailWindowViewModel(WindowsProviderService windowsProviderService, MailManager mailManager, CachedDataManager cachedDataManager)
+    public MailWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, MailManager mailManager, CachedDataManager cachedDataManager)
     {
         _windowsProviderService = windowsProviderService;
+        _databaseService = databaseService;
         _mailManager = mailManager;
         _cachedDataManager = cachedDataManager;
         WeakReferenceMessenger.Default.Register(this);
@@ -402,7 +404,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
             {
                 IsButtonEnabled = false;
 
-                (List<string> successfulRecipients, List<string> failedRecipients) = await _mailManager.SendMailAsync(mailSender, message, gold, reqGold, returnDay, recipients, ItemDataList!);
+                (List<string> successfulRecipients, List<string> failedRecipients) = await _databaseService.SendMailAsync(mailSender, message, gold, reqGold, returnDay, recipients, ItemDataList!);
 
                 string successMessage = MailManager.GetSendMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, successfulRecipients, failedRecipients);
                 RHMessageBoxHelper.ShowOKMessage(successMessage, Resources.SendMail);

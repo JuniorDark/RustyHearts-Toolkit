@@ -53,17 +53,15 @@ namespace RHToolkit.Models.Database
                 {
                     if (messageType == "audit")
                     {
-                        message += $"[<font color=blue>{property} Change</font>]<br><font color=red>Old: {oldValue} -> New: {newValue}<br></font>";
+                        message += $"[<font color=blue>{property} Change</font>]<br><font color=red>Old -> {oldValue}, New ->  {newValue}<br></font>";
                     }
                     else if (messageType == "changes")
                     {
-                        message += $"{property}: Old - {oldValue}, New - {newValue}\n";
+                        message += $"{property}: Old -> {oldValue}, New -> {newValue}\n";
                     }
                 }
             }
 
-            AppendChange("Class", oldData.Class, newData.Class);
-            AppendChange("Job", oldData.Job, newData.Job);
             AppendChange("Level", oldData.Level, newData.Level);
             AppendChange("Experience", oldData.Experience, newData.Experience);
             AppendChange("Skill Points", oldData.SP, newData.SP);
@@ -84,9 +82,7 @@ namespace RHToolkit.Models.Database
 
         public static bool HasCharacterDataChanges(CharacterData oldData, NewCharacterData newData)
         {
-            return oldData.Class != newData.Class ||
-                   oldData.Job != newData.Job ||
-                   oldData.Level != newData.Level ||
+            return oldData.Level != newData.Level ||
                    oldData.Experience != newData.Experience ||
                    oldData.SP != newData.SP ||
                    oldData.TotalSP != newData.TotalSP ||

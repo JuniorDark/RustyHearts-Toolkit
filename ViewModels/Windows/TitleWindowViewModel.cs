@@ -8,7 +8,7 @@ using System.Data;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class TitleWindowViewModel : ObservableObject, IRecipient<CharacterDataMessage>
+public partial class TitleWindowViewModel : ObservableObject, IRecipient<CharacterInfoMessage>
 {
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
@@ -25,33 +25,31 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
     #region Read Title
 
-    [ObservableProperty]
-    private CharacterData? _characterData;
-
-    public async void Receive(CharacterDataMessage message)
+    public async void Receive(CharacterInfoMessage message)
     {
         if (message.Recipient == "TitleWindow")
         {
-            var characterData = message.Value;
-            CharacterData = null;
-            CharacterData = characterData;
+            var characterInfo = message.Value;
 
-            Title = $"Character Title ({characterData.CharacterName})";
+            CharacterInfo = null;
+            CharacterInfo = characterInfo;
 
-            await ReadTitle(characterData.CharacterID);
+            Title = $"Character Title ({CharacterInfo.CharacterName})";
+
+            await ReadTitle(CharacterInfo.CharacterID);
         }
     }
 
     [ObservableProperty]
     private DataTable? _titleData;
 
-    private async Task ReadTitle(Guid characterId)
+    private async Task ReadTitle(Guid characterID)
     {
         TitleData = null;
-        TitleData = await _databaseService.ReadCharacterTitleListAsync(characterId);
+        TitleData = await _databaseService.ReadCharacterTitleListAsync(characterID);
 
         EquippedTitle = null;
-        EquippedTitle = await _databaseService.ReadCharacterEquipTitleAsync(characterId);
+        EquippedTitle = await _databaseService.ReadCharacterEquipTitleAsync(characterID);
 
         if (EquippedTitle != null)
         {
@@ -59,12 +57,10 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
             EquippedTitleId = (int)EquippedTitle["title_code"];
             EquippedTitleName = _gmDatabaseService.GetTitleName(EquippedTitleId);
             CurrentTitleText = $"{EquippedTitleName}";
-            IsUnequipTitleButtonEnabled = true;
         }
         else
         {
             CurrentTitleText = $"No Title";
-            IsUnequipTitleButtonEnabled = false;
         }
 
     }
@@ -120,32 +116,27 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
     #endregion
 
     #region Add Title
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanExecuteAddTitleCommand))]
     private async Task AddTitle()
     {
-        int selectedTitleID = TitleListId;
-        int selectedTitleRemainTime = _gmDatabaseService.GetTitleRemainTime(selectedTitleID);
-        int selectedTitleExpireTime;
-        string titleName = _gmDatabaseService.GetTitleName(selectedTitleID);
+        if (CharacterInfo == null) return;
 
         try
         {
-            if (CharacterData == null) return;
-
-            if (TitleListId == 0)
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterInfo.CharacterName!))
             {
                 return;
             }
 
-            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
-            {
-                return;
-            }
+            int selectedTitleID = TitleListId;
+            int selectedTitleRemainTime = _gmDatabaseService.GetTitleRemainTime(selectedTitleID);
+            int selectedTitleExpireTime;
+            string titleName = _gmDatabaseService.GetTitleName(selectedTitleID);
 
             if (RHMessageBoxHelper.ConfirmMessage($"Add the title '{titleName}' to this character?"))
             {
                 // Check if the character already has the same title
-                if (await _databaseService.CharacterHasTitle(CharacterData.CharacterID, selectedTitleID))
+                if (await _databaseService.CharacterHasTitle(CharacterInfo.CharacterID, selectedTitleID))
                 {
                     RHMessageBoxHelper.ShowOKMessage($"This character already has '{titleName}' title.", "Duplicate Title");
                     return;
@@ -159,15 +150,14 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
                 else
                 {
                     // Convert selectedTitleRemainTime to epoch time
-                    selectedTitleExpireTime = (int)DateTime.UtcNow.AddMinutes(selectedTitleRemainTime).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+                    selectedTitleExpireTime = (int)DateTime.Now.AddMinutes(selectedTitleRemainTime).Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
                 }
 
-                await _databaseService.AddCharacterTitleAsync(CharacterData.CharacterID, selectedTitleID, selectedTitleRemainTime, selectedTitleExpireTime);
-                await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Add Title", $"<font color=blue>Add Title</font>]<br><font color=red>Title: {selectedTitleID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                await _databaseService.AddCharacterTitleAsync(CharacterInfo, selectedTitleID, selectedTitleRemainTime, selectedTitleExpireTime);
 
-                RHMessageBoxHelper.ShowOKMessage("Title added successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage($"Title '{titleName}' added successfully!", "Success");
 
-                await ReadTitle(CharacterData.CharacterID);
+                await ReadTitle(CharacterInfo.CharacterID);
             }
         }
         catch (Exception ex)
@@ -176,17 +166,30 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
         }
     }
 
+    private bool CanExecuteAddTitleCommand()
+    {
+        return CharacterInfo != null && TitleListId != 0;
+    }
+
+    private void OnCanExecuteCommandChanged()
+    {
+        AddTitleCommand.NotifyCanExecuteChanged();
+        EquipTitleCommand.NotifyCanExecuteChanged();
+        UnequipTitleCommand.NotifyCanExecuteChanged();
+        DeleteTitleCommand.NotifyCanExecuteChanged();
+    }
+
     #endregion
 
     #region Equip Title
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanExecuteTitleCommand))]
     private async Task EquipTitle()
     {
-        if (CharacterData == null) return;
+        if (CharacterInfo == null) return;
 
         try
         {
-            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterInfo.CharacterName!))
             {
                 return;
             }
@@ -195,7 +198,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
             {
                 int expireTime = (int)SelectedTitle["ExpireTime"];
 
-                if (expireTime != 0 && DateTimeFormatter.ConvertFromEpoch(expireTime) < DateTime.UtcNow)
+                if (expireTime != 0 && DateTimeFormatter.ConvertFromEpoch(expireTime) < DateTime.Now)
                 {
                     RHMessageBoxHelper.ShowOKMessage($"The title '{SelectedTitleName}' has expired.", "Expirated Title");
                     return;
@@ -203,12 +206,11 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
                 if (RHMessageBoxHelper.ConfirmMessage($"Equip the title '{SelectedTitleName}' to this character?"))
                 {
-                    await _databaseService.EquipCharacterTitleAsync(CharacterData.CharacterID, SelectedTitleUid);
-                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {SelectedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                    await _databaseService.EquipCharacterTitleAsync(CharacterInfo, SelectedTitleUid);
 
                     RHMessageBoxHelper.ShowOKMessage("Title equiped successfully!", "Success");
 
-                    await ReadTitle(CharacterData.CharacterID);
+                    await ReadTitle(CharacterInfo.CharacterID);
                 }
             }
 
@@ -219,18 +221,23 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
         }
     }
 
+    private bool CanExecuteTitleCommand()
+    {
+        return CharacterInfo != null && SelectedTitle != null;
+    }
+
     #endregion
 
     #region Unequip Title
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanExecuteUnequipTitleCommand))]
     private async Task UnequipTitle()
     {
-        if (CharacterData == null) return;
+        if (CharacterInfo == null) return;
 
         try
         {
-            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterInfo.CharacterName!))
             {
                 return;
             }
@@ -239,11 +246,10 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
             {
                 if (RHMessageBoxHelper.ConfirmMessage($"Unequip the title '{EquippedTitleName}' from this character?"))
                 {
-                    await _databaseService.UnequipCharacterTitleAsync(EquippedTitleUid);
-                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {EquippedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                    await _databaseService.UnequipCharacterTitleAsync(CharacterInfo, EquippedTitleUid);
 
                     RHMessageBoxHelper.ShowOKMessage("Title unequiped successfully!", "Success");
-                    await ReadTitle(CharacterData.CharacterID);
+                    await ReadTitle(CharacterInfo.CharacterID);
                 }
             }
             else
@@ -257,18 +263,23 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
             RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
         }
     }
+
+    private bool CanExecuteUnequipTitleCommand()
+    {
+        return CharacterInfo != null && EquippedTitle != null;
+    }
     #endregion
 
-    #region Remove Title
+    #region Delete Title
 
-    [RelayCommand]
-    private async Task RemoveTitle()
+    [RelayCommand(CanExecute = nameof(CanExecuteTitleCommand))]
+    private async Task DeleteTitle()
     {
-        if (CharacterData == null) return;
+        if (CharacterInfo == null) return;
 
         try
         {
-            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterInfo.CharacterName!))
             {
                 return;
             }
@@ -277,15 +288,14 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
             {
                 if (RHMessageBoxHelper.ConfirmMessage($"Delete the '{SelectedTitleName}' title from this character?"))
                 {
-                    await _databaseService.UnequipCharacterTitleAsync(SelectedTitleUid);
-                    await _databaseService.RemoveCharacterTitleAsync(CharacterData.CharacterID, SelectedTitleUid);
-                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Character Title Deletion", $"<font color=blue>Character Title Deletion</font>]<br><font color=red>Deleted: {SelectedTitleId}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                    await _databaseService.UnequipCharacterTitleAsync(CharacterInfo, SelectedTitleUid);
+                    await _databaseService.DeleteCharacterTitleAsync(CharacterInfo, SelectedTitleUid);
 
                     RHMessageBoxHelper.ShowOKMessage($"Title '{SelectedTitleName}' deleted successfully!", "Success");
 
                     SelectedTitle = null;
 
-                    await ReadTitle(CharacterData.CharacterID);
+                    await ReadTitle(CharacterInfo.CharacterID);
                 }
             }
         }
@@ -299,9 +309,6 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
     #region Comboboxes
 
     [ObservableProperty]
-    private int _titleListSelectedIndex;
-
-    [ObservableProperty]
     private List<NameID>? _titleListItems;
 
     private void PopulateTitleItems()
@@ -312,7 +319,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
             if (TitleListItems.Count > 0)
             {
-                TitleListSelectedIndex = 0;
+                TitleListId = 0;
             }
         }
         catch (Exception ex)
@@ -326,6 +333,13 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
     #region Properties
     [ObservableProperty]
     private string _title = "Character Title";
+
+    [ObservableProperty]
+    private CharacterInfo? _characterInfo;
+    partial void OnCharacterInfoChanged(CharacterInfo? value)
+    {
+       AddTitleCommand.NotifyCanExecuteChanged();
+    }
 
     [ObservableProperty]
     private string? _currentTitleText;
@@ -344,6 +358,10 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
     [ObservableProperty]
     private DataRow? _equippedTitle;
+    partial void OnEquippedTitleChanged(DataRow? value)
+    {
+        UnequipTitleCommand.NotifyCanExecuteChanged();
+    }
 
     [ObservableProperty]
     private string? _equippedTitleName;
@@ -356,12 +374,11 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SelectedAddTitleText))]
-    [NotifyPropertyChangedFor(nameof(IsAddTitleButtonEnabled))]
     private int _TitleListId;
     partial void OnTitleListIdChanged(int value)
     {
         SelectedAddTitleText = GetTitleDesc(value, true);
-        IsAddTitleButtonEnabled = value == 0 ? false : true;
+        AddTitleCommand.NotifyCanExecuteChanged();
     }
 
     [ObservableProperty]
@@ -376,28 +393,14 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SelectedTitleId))]
-    [NotifyPropertyChangedFor(nameof(IsEquipTitleButtonEnabled))]
-    [NotifyPropertyChangedFor(nameof(IsRemoveTitleButtonEnabled))]
     private DataRowView? _selectedTitle;
     partial void OnSelectedTitleChanged(DataRowView? value)
     {
         SelectedTitleId = value != null ? (int)value["TitleId"] : 0;
         SelectedTitleUid = value != null ? (Guid)value["TitleUid"] : Guid.Empty;
-        IsEquipTitleButtonEnabled = value != null ? true : false;
-        IsRemoveTitleButtonEnabled = value != null ? true : false;
+        EquipTitleCommand.NotifyCanExecuteChanged();
+        DeleteTitleCommand.NotifyCanExecuteChanged();
     }
-
-    [ObservableProperty]
-    private bool _isEquipTitleButtonEnabled = false;
-
-    [ObservableProperty]
-    private bool _isRemoveTitleButtonEnabled = false;
-
-    [ObservableProperty]
-    private bool _isUnequipTitleButtonEnabled = false;
-
-    [ObservableProperty]
-    private bool _isAddTitleButtonEnabled = false;
 
     #endregion
 

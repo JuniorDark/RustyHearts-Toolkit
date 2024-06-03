@@ -99,7 +99,6 @@
                     FontSize="15"
                     Foreground="White"
                     Text="{Binding ViewModel.ProgressMessage}" />
-                <ProgressBar />
             </StackPanel>
         </Grid>
     </Grid>

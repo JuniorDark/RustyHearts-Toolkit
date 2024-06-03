@@ -10,7 +10,7 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class CharacterWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<CharacterDataMessage>, IRecipient<DatabaseItemMessage>
+public partial class CharacterWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<CharacterInfoMessage>
 {
     private readonly WindowsProviderService _windowsProviderService;
     private readonly IDatabaseService _databaseService;
@@ -28,81 +28,39 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         PopulateLobbyItems();
 
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
-        WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
-        WeakReferenceMessenger.Default.Register<DatabaseItemMessage>(this);
-
+        WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
     }
 
     #region Load Character
 
-    public void Receive(CharacterDataMessage message)
+    public async void Receive(CharacterInfoMessage message)
     {
         if (message.Recipient == "CharacterWindow")
         {
-            var characterData = message.Value;
-            ClearData();
-            CharacterData = characterData;
-            LoadCharacterData(characterData);
+            var characterInfo = message.Value;
+
+            await ReadCharacterData(characterInfo.CharacterName!);
         }
     }
 
-    private void LoadCharacterData(CharacterData characterData)
+    private async Task ReadCharacterData(string characterName)
     {
-        if (characterData != null)
-        {
-            CharacterID = characterData.CharacterID;
-            CharacterName = characterData.CharacterName;
-            Account = characterData.AccountName;
-            Class = characterData.Class;
-            Job = characterData.Job;
-            Level = characterData.Level;
-            CharacterExp = characterData.Experience;
-            TotalSkillPoints = characterData.TotalSP;
-            SkillPoints = characterData.SP;
-            Lobby = characterData.LobbyID;
-            CreateTime = characterData.CreateTime;
-            LastLoginTime = characterData.LastLogin;
-            InventoryGold = characterData.Gold;
-            RessurectionScrolls = characterData.Hearts;
-            WarehouseGold = characterData.StorageGold;
-            WarehouseSlots = characterData.StorageCount;
-            GuildExp = characterData.GuildPoint;
-            GuildName = characterData.GuildName;
-            HasGuild = characterData.HasGuild;
-            RestrictCharacter = characterData.BlockYN == "Y";
-            IsConnect = characterData.IsConnect == "Y";
-            IsTradeEnable = characterData.IsTradeEnable == "Y";
-            IsMoveEnable = characterData.IsMoveEnable == "Y";
-            IsAdmin = characterData.Permission == 100;
-            Title = $"Character Editor ({characterData.CharacterName})";
-        }
-    }
-
-    private void ClearData()
-    {
-        ClearAllEquipItems();
-        CharacterData = null;
-        ItemDatabaseList = null;
-        DeletedItemDatabaseList = null;
-    }
-
-    private async Task ReadCharacterData()
-    {
-        if (CharacterData == null) return;
-
         try
         {
-            CharacterData? characterData = await _databaseService.GetCharacterDataAsync(CharacterData.CharacterName!);
+            CharacterData? characterData = await _databaseService.GetCharacterDataAsync(characterName);
 
             if (characterData != null)
             {
                 ClearData();
                 CharacterData = characterData;
                 LoadCharacterData(characterData);
+                List<ItemData> equipItems = await _databaseService.GetItemList(characterData.CharacterID, "N_EquipItem");
+                LoadEquipmentItems(equipItems);
+                ItemDatabaseList = equipItems;
             }
             else
             {
-                RHMessageBoxHelper.ShowOKMessage($"The character '{CharacterData.CharacterName}' does not exist.", "Invalid Character");
+                RHMessageBoxHelper.ShowOKMessage($"The character '{characterName}' does not exist.", "Invalid Character");
                 return;
             }
         }
@@ -112,6 +70,42 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         }
     }
 
+    private void LoadCharacterData(CharacterData characterData)
+    {
+        Title = $"Character Editor ({characterData.CharacterName})";
+        CharacterID = characterData.CharacterID;
+        CharacterName = characterData.CharacterName;
+        Account = characterData.AccountName;
+        Class = characterData.Class;
+        Job = characterData.Job;
+        Level = characterData.Level;
+        CharacterExp = characterData.Experience;
+        TotalSkillPoints = characterData.TotalSP;
+        SkillPoints = characterData.SP;
+        Lobby = characterData.LobbyID;
+        CreateTime = characterData.CreateTime;
+        LastLoginTime = characterData.LastLogin;
+        InventoryGold = characterData.Gold;
+        RessurectionScrolls = characterData.Hearts;
+        WarehouseGold = characterData.StorageGold;
+        WarehouseSlots = characterData.StorageCount;
+        GuildExp = characterData.GuildPoint;
+        GuildName = characterData.GuildName;
+        HasGuild = characterData.HasGuild;
+        RestrictCharacter = characterData.BlockYN == "Y";
+        IsConnect = characterData.IsConnect == "Y";
+        IsTradeEnable = characterData.IsTradeEnable == "Y";
+        IsMoveEnable = characterData.IsMoveEnable == "Y";
+        IsAdmin = characterData.Permission == 100;
+    }
+
+    private void ClearData()
+    {
+        ClearAllEquipItems();
+        CharacterData = null;
+        ItemDatabaseList = null;
+        DeletedItemDatabaseList = null;
+    }
     #endregion
 
     #region Save Character
@@ -146,10 +140,10 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
             {
                 string auditMessage = CharacterManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
 
-                await _databaseService.UpdateCharacterDataAsync(CharacterData.CharacterID, newCharacterData, CharacterData.AccountName!, CharacterData.CharacterName!, "Character Information Change", auditMessage);
+                await _databaseService.UpdateCharacterDataAsync(newCharacterData, "Character Information Change", auditMessage);
 
-                RHMessageBoxHelper.ShowOKMessage("Character saved successfully!", "Success");
-                await ReadCharacterData();
+                RHMessageBoxHelper.ShowOKMessage("Character changes saved.", "Success");
+                await ReadCharacterData(CharacterData.CharacterName!);
             }
         }
         catch (Exception ex)
@@ -162,6 +156,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     {
         return new NewCharacterData
         {
+            AccountName = Account,
             Level = Level,
             Experience = CharacterExp,
             SP = SkillPoints,
@@ -259,14 +254,14 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         return _gmDatabaseService.IsNameInNickFilter(characterName);
     }
 
-    private static bool ValidateCharacterName(string name)
+    private static bool ValidateCharacterName(string characterName)
     {
-        return !string.IsNullOrEmpty(name) && name.Length >= 3 && name.Length <= 16;
+        return !string.IsNullOrWhiteSpace(characterName) && characterName.Length >= 3 && characterName.Length <= 16;
     }
 
     private bool CanExecuteSaveCharacterNameCommand()
     {
-        return CharacterData != null && CharacterName != null && CharacterData.CharacterName != CharacterName;
+        return CharacterData != null && !string.IsNullOrWhiteSpace(CharacterName) && CharacterData.CharacterName != CharacterName;
     }
     #endregion
 
@@ -288,12 +283,12 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 return;
             }
 
-            if (RHMessageBoxHelper.ConfirmMessage($"Change character '{CharacterData.CharacterName}' class?"))
+            if (RHMessageBoxHelper.ConfirmMessage($"EXPERIMENTAL FEATURE\n\nThis will reset all character skills and unequip the character weapon/costumes and send via mail.\n\nAre you sure you want to change character '{CharacterData.CharacterName}' class to '{GetEnumDescription((CharClass)Class)}'?"))
             {
                 await _databaseService.UpdateCharacterClassAsync(CharacterData.CharacterID, CharacterData.AccountName!, CharacterData.CharacterName!, CharacterData.Class, Class);
 
                 RHMessageBoxHelper.ShowOKMessage("Character class changed successfully!", "Success");
-                await ReadCharacterData();
+                await ReadCharacterData(CharacterData.CharacterName!);
             }
         }
         catch (Exception ex)
@@ -324,12 +319,12 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 return;
             }
 
-            if (RHMessageBoxHelper.ConfirmMessage($"Change character '{CharacterData.CharacterName}' job?"))
+            if (RHMessageBoxHelper.ConfirmMessage($"This will reset all character skills.\nAre you sure you want to change character '{CharacterData.CharacterName}' focus?"))
             {
                 await _databaseService.UpdateCharacterClassAsync(CharacterData.CharacterID, CharacterData.AccountName!, CharacterData.CharacterName!, CharacterData.Class, Class);
 
                 RHMessageBoxHelper.ShowOKMessage("Character focus changed successfully!", "Success");
-                await ReadCharacterData();
+                await ReadCharacterData(CharacterData.CharacterName!);
             }
         }
         catch (Exception ex)
@@ -370,7 +365,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 }
             }
 
-            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "TitleWindow"));
+            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.CharacterName!, CharacterData.AccountName!);
+            WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "TitleWindow"));
 
             _titleWindowInstance?.Focus();
         }
@@ -407,7 +403,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 }
             }
 
-            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "SanctionWindow"));
+            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.CharacterName!, CharacterData.AccountName!);
+            WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "SanctionWindow"));
             _sanctionWindowInstance?.Focus();
         }
         catch (Exception ex)
@@ -443,7 +440,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 }
             }
 
-            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "FortuneWindow"));
+            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.CharacterName!, CharacterData.AccountName!);
+            WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "FortuneWindow"));
             _fortuneWindowInstance?.Focus();
         }
         catch (Exception ex)
@@ -624,38 +622,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         return newItem;
     }
 
-    [ObservableProperty]
-    private List<ItemData>? _itemDatabaseList;
-
-    public void Receive(DatabaseItemMessage message)
-    {
-        switch (message.ItemStorageType)
-        {
-            case ItemStorageType.Inventory:
-                // Handle inventory items
-                List<ItemData> inventoryItems = message.Value;
-
-                break;
-
-            case ItemStorageType.Equipment:
-                // Handle equipment items
-                var equipmentItems = message.Value;
-                LoadEquipmentItems(equipmentItems);
-                ItemDatabaseList = null;
-                ItemDatabaseList = equipmentItems;
-                break;
-
-            case ItemStorageType.Storage:
-                // Handle equipment items
-                List<ItemData> storageItems = message.Value;
-                // Do something with the storage items...
-                break;
-
-            default:
-                break;
-        }
-    }
-
     private void LoadEquipmentItems(List<ItemData> equipmentItems)
     {
         if (equipmentItems != null)
@@ -810,6 +776,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     #region Properties
 
+    #region Character
     [ObservableProperty]
     private CharacterData? _characterData;
     partial void OnCharacterDataChanged(CharacterData? value)
@@ -901,6 +868,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         JobItems = CharacterManager.GetJobItems((CharClass)value);
         if (CharacterData != null)
         {
+            Job = 0;
             Job = CharacterData.Job;
         }
         SaveCharacterClassCommand.NotifyCanExecuteChanged();
@@ -961,8 +929,11 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     [ObservableProperty]
     private string? _guildName;
+    #endregion
 
     #region Equipament 
+    [ObservableProperty]
+    private List<ItemData>? _itemDatabaseList;
 
     [ObservableProperty]
     private string? _itemName0 = Resources.AddItemDesc;

@@ -100,7 +100,6 @@
                     Content="Unequip Title"
                     Cursor="Hand"
                     Foreground="White"
-                    IsEnabled="{Binding IsUnequipTitleButtonEnabled}"
                     Style="{StaticResource lb_def_button02}"
                     ToolTip="{x:Static rs:Resources.MailSendHelp}" />
 
@@ -194,20 +193,18 @@
                     Content="Equip Title"
                     Cursor="Hand"
                     Foreground="White"
-                    IsEnabled="{Binding IsEquipTitleButtonEnabled}"
                     Style="{StaticResource lb_def_button02}"
                     ToolTip="{x:Static rs:Resources.MailSendHelp}" />
                 <Button
-                    x:Name="btnRemoveTitle"
+                    x:Name="btnDeleteTitle"
                     Width="150"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Background="Transparent"
-                    Command="{Binding RemoveTitleCommand}"
-                    Content="Remove Title"
+                    Command="{Binding DeleteTitleCommand}"
+                    Content="Delete Title"
                     Cursor="Hand"
                     Foreground="White"
-                    IsEnabled="{Binding IsRemoveTitleButtonEnabled}"
                     Style="{StaticResource lb_def_button02}"
                     ToolTip="{x:Static rs:Resources.MailSendHelp}" />
 
@@ -252,7 +249,6 @@
                     VerticalAlignment="Center"
                     IsReadOnly="True"
                     ItemsSource="{Binding TitleListItems}"
-                    SelectedIndex="{Binding TitleListSelectedIndex}"
                     SelectedValue="{Binding TitleListId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     SelectedValuePath="ID"
                     Style="{StaticResource ComboBoxStyle}"
@@ -268,7 +264,6 @@
                     Content="Add Title"
                     Cursor="Hand"
                     Foreground="White"
-                    IsEnabled="{Binding IsAddTitleButtonEnabled}"
                     Style="{StaticResource lb_def_button02}"
                     ToolTip="{x:Static rs:Resources.MailSendHelp}" />
             </StackPanel>
@@ -291,7 +286,5 @@
                     Visibility="{Binding TitleListId, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
             </StackPanel>
         </Grid>
-
     </ContentControl>
-
 </Window>

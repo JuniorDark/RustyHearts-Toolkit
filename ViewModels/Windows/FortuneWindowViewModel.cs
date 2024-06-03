@@ -7,7 +7,7 @@ using System.Data;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class FortuneWindowViewModel : ObservableObject, IRecipient<CharacterDataMessage>
+public partial class FortuneWindowViewModel : ObservableObject, IRecipient<CharacterInfoMessage>
 {
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
@@ -25,43 +25,29 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
 
     #region Read Fortune
 
-    [ObservableProperty]
-    private CharacterData? _characterData;
-
-    public async void Receive(CharacterDataMessage message)
+    public async void Receive(CharacterInfoMessage message)
     {
         if (message.Recipient == "FortuneWindow")
         {
-            var characterData = message.Value;
-            CharacterData = null;
-            CharacterData = characterData;
+            var characterInfo = message.Value;
 
-            Title = $"Character Fortune ({characterData.CharacterName})";
+            CharacterInfo = null;
+            CharacterInfo = characterInfo;
+
+            Title = $"Character Fortune ({characterInfo.CharacterName})";
 
             await ReadFortune();
         }
     }
 
-    [ObservableProperty]
-    private DataRow? _fortuneData;
-    partial void OnFortuneDataChanged(DataRow? value)
-    {
-        FortuneID1 = value != null ? (int)value["type_1"] : 0;
-        FortuneID2 = value != null ? (int)value["type_2"] : 0;
-        FortuneID3 = value != null ? (int)value["type_3"] : 0;
-        SelectedFortuneID1 = value != null ? (int)value["type_1"] : 0;
-        SelectedFortuneID2 = value != null ? (int)value["type_2"] : 0;
-        SelectedFortuneID3 = value != null ? (int)value["type_3"] : 0;
-    }
-
     private async Task ReadFortune()
     {
-        if (CharacterData == null) return;
+        if (CharacterInfo == null) return;
 
         try
         {
             FortuneData = null;
-            FortuneData = await _databaseService.ReadCharacterFortuneAsync(CharacterData.CharacterID);
+            FortuneData = await _databaseService.ReadCharacterFortuneAsync(CharacterInfo.CharacterID);
         }
         catch (Exception ex)
         {
@@ -90,14 +76,14 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
 
     #region Save Fortune
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private async Task SaveFortune()
     {
-        if (CharacterData == null) return;
+        if (CharacterInfo == null) return;
 
         try
         {
-            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterInfo.CharacterName!))
             {
                 return;
             }
@@ -119,29 +105,30 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
     {
         const int NoFortune = 0;
         const int ActiveFortune = 1;
-        const string UpdateAction = "Character Fortune Change";
-        const string RemoveAction = "Character Fortune Remove";
 
         if (selectedFortuneID1 != 0 && selectedFortuneID1 != FortuneID1 || selectedFortuneID2 != FortuneID2 || selectedFortuneID3 != FortuneID3)
         {
-            if (RHMessageBoxHelper.ConfirmMessage($"Update {CharacterData!.CharacterName} fortune?"))
+            if (RHMessageBoxHelper.ConfirmMessage($"Update {CharacterInfo!.CharacterName} fortune?"))
             {
-                _databaseService.UpdateFortuneAsync(CharacterData!.CharacterID, ActiveFortune, selectedFortuneID1, selectedFortuneID2, selectedFortuneID3);
-                _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, UpdateAction, $"{FortuneID1} -> {selectedFortuneID1}, {FortuneID2} -> {selectedFortuneID2}, {FortuneID3} -> {selectedFortuneID3}");
+                _databaseService.UpdateFortuneAsync(CharacterInfo, ActiveFortune, selectedFortuneID1, selectedFortuneID2, selectedFortuneID3);
                 return true;
             }
         }
         else if (selectedFortuneID1 != FortuneID1)
         {
-            if (RHMessageBoxHelper.ConfirmMessage($"Remove {CharacterData!.CharacterName} fortune?"))
+            if (RHMessageBoxHelper.ConfirmMessage($"Remove {CharacterInfo!.CharacterName} fortune?"))
             {
-                _databaseService.RemoveFortuneAsync(CharacterData!.CharacterID, NoFortune);
-                _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, RemoveAction, $"{FortuneID1} -> {selectedFortuneID1}, {FortuneID2} -> {selectedFortuneID2}, {FortuneID3} -> {selectedFortuneID3}");
+                _databaseService.RemoveFortuneAsync(CharacterInfo, NoFortune, FortuneID1, FortuneID2, FortuneID3);
                 return true;
             }
         }
 
         return false;
+    }
+
+    private bool CanExecuteCommand()
+    {
+        return CharacterInfo != null;
     }
 
     #endregion
@@ -200,6 +187,25 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
 
     [ObservableProperty]
     private string _fortuneDescription = "No Fortune";
+
+    [ObservableProperty]
+    private CharacterInfo? _characterInfo;
+    partial void OnCharacterInfoChanged(CharacterInfo? value)
+    {
+        SaveFortuneCommand.NotifyCanExecuteChanged();
+    }
+
+    [ObservableProperty]
+    private DataRow? _fortuneData;
+    partial void OnFortuneDataChanged(DataRow? value)
+    {
+        FortuneID1 = value != null ? (int)value["type_1"] : 0;
+        FortuneID2 = value != null ? (int)value["type_2"] : 0;
+        FortuneID3 = value != null ? (int)value["type_3"] : 0;
+        SelectedFortuneID1 = value != null ? (int)value["type_1"] : 0;
+        SelectedFortuneID2 = value != null ? (int)value["type_2"] : 0;
+        SelectedFortuneID3 = value != null ? (int)value["type_3"] : 0;
+    }
 
     [ObservableProperty]
     private int _fortuneID1;
