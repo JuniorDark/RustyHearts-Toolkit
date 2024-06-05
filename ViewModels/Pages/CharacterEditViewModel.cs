@@ -57,49 +57,6 @@ namespace RHToolkit.ViewModels.Pages
         private CharacterWindow? _characterWindowInstance;
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
-        private async Task EditCharacterOLD()
-        {
-            if (CharacterData == null) return;
-
-            try
-            {
-                if (!await ValidateCharacterData(true, true)) return;
-
-                List<ItemData> inventoryItem = await _databaseService.GetItemList(CharacterData.CharacterID, "N_InventoryItem");
-                List<ItemData> equipItem = await _databaseService.GetItemList(CharacterData.CharacterID, "N_EquipItem");
-                List<ItemData> accountStorage = await _databaseService.GetAccountItemList(CharacterData.AuthID);
-
-                if (_characterWindowInstance == null)
-                {
-                    _windowsProviderService.Show<CharacterWindow>();
-                    _characterWindowInstance = Application.Current.Windows.OfType<CharacterWindow>().FirstOrDefault();
-
-                    if (_characterWindowInstance != null)
-                    {
-                        _characterWindowInstance.Closed += (sender, args) =>
-                        {
-                            _characterWindowInstance = null;
-                            DeleteCharacterCommand.NotifyCanExecuteChanged();
-                        };
-                    }
-                }
-
-                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "CharacterWindow"));
-                WeakReferenceMessenger.Default.Send(new DatabaseItemMessage(inventoryItem, ItemStorageType.Inventory));
-                WeakReferenceMessenger.Default.Send(new DatabaseItemMessage(equipItem, ItemStorageType.Equipment));
-                WeakReferenceMessenger.Default.Send(new DatabaseItemMessage(accountStorage, ItemStorageType.Storage));
-
-                _characterWindowInstance?.Focus();
-
-                DeleteCharacterCommand.NotifyCanExecuteChanged();
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
-            }
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
         private async Task EditCharacter()
         {
             if (CharacterData == null) return;
@@ -123,7 +80,7 @@ namespace RHToolkit.ViewModels.Pages
                     }
                 }
 
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.CharacterName!, CharacterData.AccountName!);
+                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
                 WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "CharacterWindow"));
 
                 _characterWindowInstance?.Focus();
@@ -239,7 +196,7 @@ namespace RHToolkit.ViewModels.Pages
                     }
                 }
 
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.CharacterName!, CharacterData.AccountName!);
+                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
                 WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "TitleWindow"));
 
                 _titleWindowInstance?.Focus();
@@ -277,7 +234,7 @@ namespace RHToolkit.ViewModels.Pages
                     }
                 }
 
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.CharacterName!, CharacterData.AccountName!);
+                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
                 WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "SanctionWindow"));
                 _sanctionWindowInstance?.Focus();
             }
@@ -314,7 +271,7 @@ namespace RHToolkit.ViewModels.Pages
                     }
                 }
 
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.CharacterName!, CharacterData.AccountName!);
+                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
                 WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "FortuneWindow"));
                 _fortuneWindowInstance?.Focus();
             }

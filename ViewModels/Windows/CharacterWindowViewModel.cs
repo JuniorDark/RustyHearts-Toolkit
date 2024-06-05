@@ -365,7 +365,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 }
             }
 
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.CharacterName!, CharacterData.AccountName!);
+            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
             WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "TitleWindow"));
 
             _titleWindowInstance?.Focus();
@@ -403,7 +403,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 }
             }
 
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.CharacterName!, CharacterData.AccountName!);
+            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
             WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "SanctionWindow"));
             _sanctionWindowInstance?.Focus();
         }
@@ -440,7 +440,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 }
             }
 
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.CharacterName!, CharacterData.AccountName!);
+            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
             WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "FortuneWindow"));
             _fortuneWindowInstance?.Focus();
         }
@@ -690,21 +690,14 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
             if (_itemWindowInstance != null)
             {
                 _itemWindowInstance.Closed += (sender, args) => _itemWindowInstance = null;
-                _itemWindowInstance.ContentRendered += (sender, args) => SendMessageToItemWindow(itemData);
             }
         }
-        else
-        {
-            SendMessageToItemWindow(itemData);
-        }
+
+        var characterInfo = new CharacterInfo(CharacterData!.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
+        WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "ItemWindow"));
+        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", "EquipItem"));
 
         _itemWindowInstance?.Focus();
-    }
-
-    private void SendMessageToItemWindow(ItemData itemData)
-    {
-        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", "EquipItem"));
-        WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData!, "ItemWindow"));
     }
 
     #region Remove Item

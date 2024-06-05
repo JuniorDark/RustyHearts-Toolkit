@@ -738,6 +738,7 @@
                     Margin="0,5,0,0"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
+                    bh:DataGridBehavior.EnableScrollIntoView="True"
                     AutoGenerateColumns="False"
                     BorderBrush="#FF0F0D0A"
                     CanUserAddRows="False"
@@ -824,9 +825,6 @@
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
                     </DataGrid.Columns>
-                    <i:Interaction.Behaviors>
-                        <bh:ScrollIntoViewBehavior />
-                    </i:Interaction.Behaviors>
                 </DataGrid>
             </Grid>
             <!--  Datagrid filter  -->

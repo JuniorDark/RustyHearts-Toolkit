@@ -10,7 +10,7 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<CharacterDataMessage>
+public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<CharacterInfoMessage>
 {
     private readonly IGMDatabaseService _gmDatabaseService;
     private readonly CachedDataManager _cachedDataManager;
@@ -44,13 +44,13 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         _optionView = CollectionViewSource.GetDefaultView(OptionItems);
         _optionView.Filter = FilterOption;
         ItemTradeFilter = 2;
-        WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
+        WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
 
     }
 
     #region Add Item
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void SelectItem(object parameter)
     {
         ItemData itemData = new()
@@ -91,22 +91,27 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         {
             WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindowViewModel", "Mail"));
         }
-        else
+        else if (MessageType == "EquipItem")
         {
             WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CharacterWindowViewModel", "EquipItem"));
         }
     }
+
+    private bool CanExecuteCommand()
+    {
+        return SelectedItem != null;
+    }
     #endregion
 
-    #region Load Item 
+    #region Load Item
 
     [ObservableProperty]
-    private CharacterData? _characterData;
+    private CharacterInfo? _characterInfo;
 
-    public void Receive(CharacterDataMessage message)
+    public void Receive(CharacterInfoMessage message)
     {
-        CharacterData = null;
-        CharacterData = message.Value;
+        CharacterInfo = null;
+        CharacterInfo = message.Value;
     }
 
     [ObservableProperty]
@@ -157,21 +162,19 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     private void SlotFilter(int slotIndex)
     {
-        if (CharacterData != null)
+        if (CharacterInfo != null)
         {
             switch (slotIndex)
             {
                 //Equipment
                 case 0: // Weapon
-                    ItemTypeFilter = 4;
                     ItemSubCategoryFilter = 1;
-                    ItemClassFilter = GetRealClass(CharacterData.Class);
+                    ItemClassFilter = GetRealClass(CharacterInfo.Class);
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
                     break;
                 case 1: //Chest
-                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 2;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -179,7 +182,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 2: //Head
-                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 3;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -187,7 +189,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 3: //Legs
-                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 4;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -195,7 +196,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 4: //Feet
-                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 5;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -203,7 +203,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 5: //Waist
-                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 6;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -211,7 +210,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 6: //Necklace
-                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 7;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -219,7 +217,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 7: //Earrings
-                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 8;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -227,7 +224,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 8: //Ring
-                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 9;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -235,7 +231,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 9: //Hands
-                    ItemTypeFilter = 3;
+                    ItemCategoryFilter = 0;
                     ItemSubCategoryFilter = 10;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -244,15 +240,13 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     break;
                 //Costume
                 case 10: //Hair
-                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 11;
-                    ItemClassFilter = CharacterData.Class;
+                    ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
                     break;
                 case 11: //Face
-                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 12;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -260,63 +254,55 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 12: //Neck
-                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 13;
-                    ItemClassFilter = CharacterData.Class;
+                    ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
                     break;
                 case 13: //Outerwear
-                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 14;
-                    ItemClassFilter = CharacterData.Class;
+                    ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
                     break;
                 case 14: //Top
-                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 15;
-                    ItemClassFilter = CharacterData.Class;
+                    ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
                     break;
                 case 15: //Bottom
-                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 16;
-                    ItemClassFilter = CharacterData.Class;
+                    ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
                     break;
                 case 16: //Gloves
-                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 17;
-                    ItemClassFilter = CharacterData.Class;
+                    ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
                     break;
                 case 17: //Shoes
-                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 18;
-                    ItemClassFilter = CharacterData.Class;
+                    ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
                     break;
                 case 18: //Accessory 1
-                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 19;
-                    ItemClassFilter = CharacterData.Class;
+                    ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
                     break;
                 case 19: //Accessory 2
-                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 20;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -391,6 +377,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         {
             UpdateItemData(value);
         }));
+
+        SelectItemCommand.NotifyCanExecuteChanged();
     }
 
     #endregion

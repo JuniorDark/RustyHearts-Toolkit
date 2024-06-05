@@ -137,9 +137,6 @@
                             Header="Comment"
                             IsReadOnly="True" />
                     </DataGrid.Columns>
-                    <i:Interaction.Behaviors>
-                        <bh:ScrollIntoViewBehavior />
-                    </i:Interaction.Behaviors>
                 </DataGrid>
             </Grid>
 
