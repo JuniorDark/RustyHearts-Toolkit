@@ -19,9 +19,12 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
     private readonly IDatabaseService _databaseService;
     private readonly MailManager _mailManager;
     private readonly CachedDataManager _cachedDataManager;
+    private readonly Guid _token;
 
     public MailWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, MailManager mailManager, CachedDataManager cachedDataManager)
     {
+        _token = Guid.NewGuid();
+        Title = $"Send Mail";
         _windowsProviderService = windowsProviderService;
         _databaseService = databaseService;
         _mailManager = mailManager;
@@ -31,7 +34,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
     #region Add Item
 
-    private ItemWindow? _itemWindowInstance;
+    private readonly Dictionary<Guid, ItemWindow> _itemWindows = [];
 
     [RelayCommand]
     private void AddItem(string parameter)
@@ -45,33 +48,34 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                 SlotIndex = slotIndex
             };
 
-            if (_itemWindowInstance == null)
+            var token = _token;
+
+            if (_itemWindows.TryGetValue(token, out ItemWindow? existingWindow))
             {
-                _windowsProviderService.Show<ItemWindow>();
-                _itemWindowInstance = Application.Current.Windows.OfType<ItemWindow>().FirstOrDefault();
-
-                if (_itemWindowInstance != null)
+                if (existingWindow.WindowState == WindowState.Minimized)
                 {
-                    _itemWindowInstance.Closed += (sender, args) => _itemWindowInstance = null;
-
-                    _itemWindowInstance.ContentRendered += (sender, args) =>
-                    {
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", "Mail"));
-                    };
+                    existingWindow.WindowState = WindowState.Normal;
                 }
+
+                existingWindow.Focus();
             }
             else
             {
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", "Mail"));
+                var itemWindow = _windowsProviderService.ShowInstance<ItemWindow>(true);
+                if (itemWindow != null)
+                {
+                    itemWindow.Closed += (s, e) => _itemWindows.Remove(token);
+                    _itemWindows[token] = itemWindow;
+                }
             }
 
-            _itemWindowInstance?.Focus();
+            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", "Mail", token));
         }
     }
 
     public void Receive(ItemDataMessage message)
     {
-        if (message.Recipient == "MailWindowViewModel")
+        if (message.Recipient == "MailWindowViewModel" && message.Token == _token)
         {
             var itemData = message.Value;
 
@@ -423,6 +427,9 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
     #endregion
 
     #region Properties
+
+    [ObservableProperty]
+    private string _title = "Send Mail";
 
     [ObservableProperty]
     private bool _isButtonEnabled = true;

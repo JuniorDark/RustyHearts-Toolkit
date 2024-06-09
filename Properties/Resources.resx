@@ -258,6 +258,66 @@
   <data name="Epic" xml:space="preserve">
     <value>Epic</value>
   </data>
+  <data name="EquipCategory0" xml:space="preserve">
+    <value>Weapon</value>
+  </data>
+  <data name="EquipCategory1" xml:space="preserve">
+    <value>Chest</value>
+  </data>
+  <data name="EquipCategory10" xml:space="preserve">
+    <value>Hair</value>
+  </data>
+  <data name="EquipCategory11" xml:space="preserve">
+    <value>Face</value>
+  </data>
+  <data name="EquipCategory12" xml:space="preserve">
+    <value>Neck</value>
+  </data>
+  <data name="EquipCategory13" xml:space="preserve">
+    <value>Outerwear</value>
+  </data>
+  <data name="EquipCategory14" xml:space="preserve">
+    <value>Top</value>
+  </data>
+  <data name="EquipCategory15" xml:space="preserve">
+    <value>Bottom</value>
+  </data>
+  <data name="EquipCategory16" xml:space="preserve">
+    <value>Gloves</value>
+  </data>
+  <data name="EquipCategory17" xml:space="preserve">
+    <value>Shoes</value>
+  </data>
+  <data name="EquipCategory18" xml:space="preserve">
+    <value>Accessory 1</value>
+  </data>
+  <data name="EquipCategory19" xml:space="preserve">
+    <value>Accessory 2</value>
+  </data>
+  <data name="EquipCategory2" xml:space="preserve">
+    <value>Head</value>
+  </data>
+  <data name="EquipCategory3" xml:space="preserve">
+    <value>Legs</value>
+  </data>
+  <data name="EquipCategory4" xml:space="preserve">
+    <value>Feet</value>
+  </data>
+  <data name="EquipCategory5" xml:space="preserve">
+    <value>Waist</value>
+  </data>
+  <data name="EquipCategory6" xml:space="preserve">
+    <value>Necklace</value>
+  </data>
+  <data name="EquipCategory7" xml:space="preserve">
+    <value>Earrings</value>
+  </data>
+  <data name="EquipCategory8" xml:space="preserve">
+    <value>Ring</value>
+  </data>
+  <data name="EquipCategory9" xml:space="preserve">
+    <value>Hands</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>

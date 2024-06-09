@@ -41,7 +41,7 @@ namespace RHToolkit.Models.SQLite
             ];
 
                 // Initialize CachedOptionItems
-                CachedOptionItems = new List<NameID>(_gmDatabaseService.GetOptionItems());
+                CachedOptionItems = _gmDatabaseService.GetOptionItems();
             }
         }
     }

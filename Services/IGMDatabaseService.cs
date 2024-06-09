@@ -16,8 +16,7 @@ namespace RHToolkit.Services
         List<NameID> GetLobbyItems();
         List<NameID> GetOptionItems();
         string GetOptionName(int optionID);
-        (int minValue, int maxValue) GetOptionValue(int itemID);
-        (int secTime, float value, int maxValue) GetOptionValues(int optionID);
+        (int secTime, float value) GetOptionValues(int optionID);
         (int nSetOption00, int nSetOptionvlue00, int nSetOption01, int nSetOptionvlue01, int nSetOption02, int nSetOptionvlue02, int nSetOption03, int nSetOptionvlue03, int nSetOption04, int nSetOptionvlue04) GetSetInfo(int setID);
         string GetSetName(int setId);
         string GetSubCategoryName(int categoryID);

@@ -39,7 +39,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         PopulateBranchItemsFilter();
         PopulateItemTradeItemsFilter();
 
-        _itemDataView = CollectionViewSource.GetDefaultView(ItemDataItems);
+        _itemDataView = new CollectionViewSource { Source = ItemDataItems }.View;
         _itemDataView.Filter = FilterItems;
         _optionView = CollectionViewSource.GetDefaultView(OptionItems);
         _optionView.Filter = FilterOption;
@@ -89,11 +89,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
         if (MessageType == "Mail")
         {
-            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindowViewModel", "Mail"));
+            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindowViewModel", "Mail", Token));
         }
         else if (MessageType == "EquipItem")
         {
-            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CharacterWindowViewModel", "EquipItem"));
+            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CharacterWindowViewModel", "EquipItem", Token));
         }
     }
 
@@ -108,10 +108,20 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     [ObservableProperty]
     private CharacterInfo? _characterInfo;
 
+    [ObservableProperty]
+    private Guid? _token = Guid.Empty;
+
     public void Receive(CharacterInfoMessage message)
     {
-        CharacterInfo = null;
-        CharacterInfo = message.Value;
+        if (Token == Guid.Empty)
+        {
+            Token = message.Token;
+
+            CharacterInfo = null;
+            CharacterInfo = message.Value;
+        }
+
+        WeakReferenceMessenger.Default.Unregister<CharacterInfoMessage>(this);
     }
 
     [ObservableProperty]
@@ -122,7 +132,14 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     public void Receive(ItemDataMessage message)
     {
-        if (message.Recipient == "ItemWindowViewModel")
+        if (Token == Guid.Empty)
+        {
+            Token = message.Token;
+        }
+
+        if (message.Token != Token) return;
+
+        if (message.Recipient == "ItemWindowViewModel" && message.Token == Token)
         {
             var itemData = message.Value;
             ItemData = null;
@@ -132,11 +149,14 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             {
                 if (message.MessageType == "Mail")
                 {
+                    Title = $"Add Mail Item";
                     SlotIndexMin = 0;
                     SlotIndexMax = 2;
                 }
                 else if (message.MessageType == "EquipItem")
                 {
+                    Title = $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterInfo?.CharacterName}] ";
+
                     SlotIndexMin = itemData.SlotIndex;
                     SlotIndexMax = itemData.SlotIndex;
 
@@ -155,8 +175,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 LoadItemData(itemData);
 
             }), DispatcherPriority.Loaded);
-
-
         }
     }
 
@@ -168,6 +186,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             {
                 //Equipment
                 case 0: // Weapon
+                    ItemTypeFilter = 4;
                     ItemSubCategoryFilter = 1;
                     ItemClassFilter = GetRealClass(CharacterInfo.Class);
                     ItemTypeEnabled = false;
@@ -175,6 +194,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = false;
                     break;
                 case 1: //Chest
+                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 2;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -182,6 +202,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 2: //Head
+                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 3;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -189,6 +210,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 3: //Legs
+                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 4;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -196,6 +218,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 4: //Feet
+                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 5;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -203,6 +226,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 5: //Waist
+                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 6;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -210,6 +234,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 6: //Necklace
+                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 7;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -217,6 +242,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 7: //Earrings
+                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 8;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -224,6 +250,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 8: //Ring
+                    ItemTypeFilter = 3;
                     ItemSubCategoryFilter = 9;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -231,6 +258,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 9: //Hands
+                    ItemTypeFilter = 3;
                     ItemCategoryFilter = 0;
                     ItemSubCategoryFilter = 10;
                     ItemClassFilter = 0;
@@ -240,6 +268,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     break;
                 //Costume
                 case 10: //Hair
+                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 11;
                     ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
@@ -247,6 +276,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = false;
                     break;
                 case 11: //Face
+                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 12;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -254,6 +284,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = true;
                     break;
                 case 12: //Neck
+                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 13;
                     ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
@@ -261,6 +292,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = false;
                     break;
                 case 13: //Outerwear
+                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 14;
                     ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
@@ -268,6 +300,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = false;
                     break;
                 case 14: //Top
+                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 15;
                     ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
@@ -275,6 +308,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = false;
                     break;
                 case 15: //Bottom
+                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 16;
                     ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
@@ -282,6 +316,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = false;
                     break;
                 case 16: //Gloves
+                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 17;
                     ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
@@ -289,6 +324,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = false;
                     break;
                 case 17: //Shoes
+                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 18;
                     ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
@@ -296,6 +332,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = false;
                     break;
                 case 18: //Accessory 1
+                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 19;
                     ItemClassFilter = CharacterInfo.Class;
                     ItemTypeEnabled = false;
@@ -303,6 +340,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     ItemClassEnabled = false;
                     break;
                 case 19: //Accessory 2
+                    ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 20;
                     ItemClassFilter = 0;
                     ItemTypeEnabled = false;
@@ -542,16 +580,18 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         try
         {
-            CategoryFilterItems = new List<NameID>(_gmDatabaseService.GetCategoryItems(itemType, false));
-            SubCategoryItemsFilter = new List<NameID>(_gmDatabaseService.GetCategoryItems(itemType, true));
+            CategoryFilterItems = _gmDatabaseService.GetCategoryItems(itemType, false);
+            SubCategoryItemsFilter = _gmDatabaseService.GetCategoryItems(itemType, true);
 
             if (CategoryFilterItems.Count > 0)
             {
-                ItemCategoryFilter = 0;
+                ItemCategoryFilter = CategoryFilterItems.First().ID;
+                OnPropertyChanged(nameof(ItemCategoryFilter));
             }
             if (SubCategoryItemsFilter.Count > 0)
             {
-                ItemSubCategoryFilter = 0;
+                ItemSubCategoryFilter = SubCategoryItemsFilter.First().ID;
+                OnPropertyChanged(nameof(ItemSubCategoryFilter));
             }
         }
         catch (Exception ex)
@@ -717,6 +757,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     #endregion
+
+    #region Properties
+
+    [ObservableProperty]
+    private string _title = "Add Item";
 
     #region ItemData
 
@@ -996,8 +1041,32 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     #region Random Option
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MinValue))]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MaxValue))]
+    private int _optionMinValue;
+
+    [ObservableProperty]
+    private int _optionMaxValue;
+
+    private int CalculateOptionValue(int option, int value)
+    {
+        if (option != 0)
+        {
+            if (value == 0)
+            {
+                OptionMinValue = 1;
+                OptionMaxValue = 10000;
+                return OptionMaxValue;
+            }
+        }
+        else
+        {
+            OptionMinValue = 0;
+            OptionMaxValue = 0;
+            return 0;
+        }
+        return value;
+    }
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption01Value))]
     private int _optionCount;
     partial void OnOptionCountChanged(int value)
@@ -1006,8 +1075,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MinValue))]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MaxValue))]
     [NotifyPropertyChangedFor(nameof(RandomOption01Value))]
     private int _OptionCountMax;
     partial void OnOptionCountMaxChanged(int value)
@@ -1016,14 +1083,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MinValue))]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MaxValue))]
     private int _randomOption01;
 
     partial void OnRandomOption01Changed(int value)
     {
-        (RandomOption01MinValue, RandomOption01MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        RandomOption01Value = CalculateOptionValue(value, RandomOption01Value, RandomOption01MaxValue);
+        RandomOption01Value = CalculateOptionValue(value, RandomOption01Value);
         _frameViewModel.RandomOption01 = value;
     }
 
@@ -1035,30 +1099,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _randomOption01MinValue;
-    partial void OnRandomOption01MinValueChanged(int value)
-    {
-        _frameViewModel.RandomOption01MinValue = value;
-    }
-
-    [ObservableProperty]
-    private int _randomOption01MaxValue;
-    partial void OnRandomOption01MaxValueChanged(int value)
-    {
-        if (RandomOption01Value > value)
-            RandomOption01Value = value;
-        _frameViewModel.RandomOption01MaxValue = value;
-    }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RandomOption02MinValue))]
-    [NotifyPropertyChangedFor(nameof(RandomOption02MaxValue))]
     private int _randomOption02;
-
     partial void OnRandomOption02Changed(int value)
     {
-        (RandomOption02MinValue, RandomOption02MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        RandomOption02Value = CalculateOptionValue(value, RandomOption02Value, RandomOption02MaxValue);
+        RandomOption02Value = CalculateOptionValue(value, RandomOption02Value);
         _frameViewModel.RandomOption02 = value;
     }
 
@@ -1070,29 +1114,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _randomOption02MinValue;
-    partial void OnRandomOption02MinValueChanged(int value)
-    {
-        _frameViewModel.RandomOption02MinValue = value;
-    }
-
-    [ObservableProperty]
-    private int _randomOption02MaxValue;
-    partial void OnRandomOption02MaxValueChanged(int value)
-    {
-        if (RandomOption02Value > value)
-            RandomOption02Value = value;
-        _frameViewModel.RandomOption02MaxValue = value;
-    }
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RandomOption03MinValue))]
-    [NotifyPropertyChangedFor(nameof(RandomOption03MaxValue))]
     private int _randomOption03;
 
     partial void OnRandomOption03Changed(int value)
     {
-        (RandomOption03MinValue, RandomOption03MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        RandomOption03Value = CalculateOptionValue(value, RandomOption03Value, RandomOption03MaxValue);
+        RandomOption03Value = CalculateOptionValue(value, RandomOption03Value);
         _frameViewModel.RandomOption03 = value;
     }
 
@@ -1101,38 +1127,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     partial void OnRandomOption03ValueChanged(int value)
     {
         _frameViewModel.RandomOption03Value = value;
-    }
-
-    [ObservableProperty]
-    private int _randomOption03MinValue;
-    partial void OnRandomOption03MinValueChanged(int value)
-    {
-        _frameViewModel.RandomOption03MinValue = value;
-    }
-
-    [ObservableProperty]
-    private int _randomOption03MaxValue;
-    partial void OnRandomOption03MaxValueChanged(int value)
-    {
-        if (RandomOption03Value > value)
-            RandomOption03Value = value;
-        _frameViewModel.RandomOption03MaxValue = value;
-    }
-
-    private static int CalculateOptionValue(int option, int value, int maxValue)
-    {
-        if (option != 0)
-        {
-            if (value == 0)
-            {
-                return maxValue;
-            }
-        }
-        else
-        {
-            return 0;
-        }
-        return value;
     }
     #endregion
 
@@ -1174,13 +1168,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(SocketOption01MinValue))]
-    [NotifyPropertyChangedFor(nameof(SocketOption01MaxValue))]
     private int _socketOption01;
     partial void OnSocketOption01Changed(int value)
     {
-        (SocketOption01MinValue, SocketOption01MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        SocketOption01Value = CalculateOptionValue(value, SocketOption01Value, SocketOption01MaxValue);
+        SocketOption01Value = CalculateOptionValue(value, SocketOption01Value);
         _frameViewModel.SocketOption01 = value;
     }
 
@@ -1192,29 +1183,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _socketOption01MinValue;
-    partial void OnSocketOption01MinValueChanged(int value)
-    {
-        _frameViewModel.SocketOption01MinValue = value;
-    }
-
-    [ObservableProperty]
-    private int _socketOption01MaxValue;
-    partial void OnSocketOption01MaxValueChanged(int value)
-    {
-        if (SocketOption01Value > value)
-            SocketOption01Value = value;
-        _frameViewModel.SocketOption01MaxValue = value;
-    }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(SocketOption02MinValue))]
-    [NotifyPropertyChangedFor(nameof(SocketOption02MaxValue))]
     private int _socketOption02;
     partial void OnSocketOption02Changed(int value)
     {
-        (SocketOption02MinValue, SocketOption02MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        SocketOption02Value = CalculateOptionValue(value, SocketOption02Value, SocketOption02MaxValue);
+        SocketOption02Value = CalculateOptionValue(value, SocketOption02Value);
         _frameViewModel.SocketOption02 = value;
     }
 
@@ -1226,29 +1198,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _socketOption02MinValue;
-    partial void OnSocketOption02MinValueChanged(int value)
-    {
-        _frameViewModel.SocketOption02MinValue = value;
-    }
-
-    [ObservableProperty]
-    private int _socketOption02MaxValue;
-    partial void OnSocketOption02MaxValueChanged(int value)
-    {
-        if (SocketOption02Value > value)
-            SocketOption02Value = value;
-        _frameViewModel.SocketOption02MaxValue = value;
-    }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(SocketOption03MinValue))]
-    [NotifyPropertyChangedFor(nameof(SocketOption03MaxValue))]
     private int _socketOption03;
     partial void OnSocketOption03Changed(int value)
     {
-        (SocketOption03MinValue, SocketOption03MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        SocketOption03Value = CalculateOptionValue(value, SocketOption03Value, SocketOption03MaxValue);
+        SocketOption03Value = CalculateOptionValue(value, SocketOption03Value);
         _frameViewModel.SocketOption03 = value;
     }
 
@@ -1259,21 +1212,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         _frameViewModel.SocketOption03Value = value;
     }
 
-    [ObservableProperty]
-    private int _socketOption03MinValue;
-    partial void OnSocketOption03MinValueChanged(int value)
-    {
-        _frameViewModel.SocketOption03MinValue = value;
-    }
-
-    [ObservableProperty]
-    private int _socketOption03MaxValue;
-    partial void OnSocketOption03MaxValueChanged(int value)
-    {
-        if (SocketOption03Value > value)
-            SocketOption03Value = value;
-        _frameViewModel.SocketOption03MaxValue = value;
-    }
+    #endregion
 
     #endregion
 }

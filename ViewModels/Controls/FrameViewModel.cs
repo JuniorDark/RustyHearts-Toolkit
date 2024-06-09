@@ -170,15 +170,11 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     #region Random Option
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MinValue))]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MaxValue))]
     [NotifyPropertyChangedFor(nameof(RandomOption01Value))]
     private int _optionCount;
 
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MinValue))]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MaxValue))]
     [NotifyPropertyChangedFor(nameof(RandomOption01Value))]
     private int _OptionCountMax;
 
@@ -187,15 +183,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption01Text))]
     [NotifyPropertyChangedFor(nameof(RandomOption01Color))]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MinValue))]
-    [NotifyPropertyChangedFor(nameof(RandomOption01MaxValue))]
     private int _randomOption01;
-
-    partial void OnRandomOption01Changed(int value)
-    {
-        (RandomOption01MinValue, RandomOption01MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        RandomOption01Value = CalculateOptionValue(value, RandomOption01Value, RandomOption01MaxValue);
-    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption01Text))]
@@ -206,28 +194,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     public string? RandomOption01Color => _frameService.GetColorFromOption(RandomOption01);
 
     [ObservableProperty]
-    private int _randomOption01MinValue;
-
-    [ObservableProperty]
-    private int _randomOption01MaxValue;
-    partial void OnRandomOption01MaxValueChanged(int value)
-    {
-        if (RandomOption01Value > value)
-            RandomOption01Value = value;
-    }
-
-    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption02Text))]
     [NotifyPropertyChangedFor(nameof(RandomOption02Color))]
-    [NotifyPropertyChangedFor(nameof(RandomOption02MinValue))]
-    [NotifyPropertyChangedFor(nameof(RandomOption02MaxValue))]
     private int _randomOption02;
-
-    partial void OnRandomOption02Changed(int value)
-    {
-        (RandomOption02MinValue, RandomOption02MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        RandomOption02Value = CalculateOptionValue(value, RandomOption02Value, RandomOption02MaxValue);
-    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption02Text))]
@@ -238,28 +207,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     public string? RandomOption02Color => _frameService.GetColorFromOption(RandomOption02);
 
     [ObservableProperty]
-    private int _randomOption02MinValue;
-
-    [ObservableProperty]
-    private int _randomOption02MaxValue;
-    partial void OnRandomOption02MaxValueChanged(int value)
-    {
-        if (RandomOption02Value > value)
-            RandomOption02Value = value;
-    }
-
-    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption03Text))]
     [NotifyPropertyChangedFor(nameof(RandomOption03Color))]
-    [NotifyPropertyChangedFor(nameof(RandomOption03MinValue))]
-    [NotifyPropertyChangedFor(nameof(RandomOption03MaxValue))]
     private int _randomOption03;
-
-    partial void OnRandomOption03Changed(int value)
-    {
-        (RandomOption03MinValue, RandomOption03MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        RandomOption03Value = CalculateOptionValue(value, RandomOption03Value, RandomOption03MaxValue);
-    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption03Text))]
@@ -269,32 +219,6 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
 
     public string? RandomOption03Color => _frameService.GetColorFromOption(RandomOption03);
 
-    [ObservableProperty]
-    private int _randomOption03MinValue;
-
-    [ObservableProperty]
-    private int _randomOption03MaxValue;
-    partial void OnRandomOption03MaxValueChanged(int value)
-    {
-        if (RandomOption03Value > value)
-            RandomOption03Value = value;
-    }
-
-    private static int CalculateOptionValue(int option, int value, int maxValue)
-    {
-        if (option != 0)
-        {
-            if (value == 0)
-            {
-                return maxValue;
-            }
-        }
-        else
-        {
-            return 0;
-        }
-        return value;
-    }
     #endregion
 
     #region Socket Option
@@ -327,15 +251,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption01Text))]
     [NotifyPropertyChangedFor(nameof(SocketOption01Color))]
-    [NotifyPropertyChangedFor(nameof(SocketOption01MinValue))]
-    [NotifyPropertyChangedFor(nameof(SocketOption01MaxValue))]
     private int _socketOption01;
-
-    partial void OnSocketOption01Changed(int value)
-    {
-        (SocketOption01MinValue, SocketOption01MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        SocketOption01Value = CalculateOptionValue(value, SocketOption01Value, SocketOption01MaxValue);
-    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption01Text))]
@@ -346,28 +262,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     public string SocketOption01Color => SocketOption01 != 0 ? _frameService.GetColorFromOption(SocketOption01) : _frameService.GetSocketColor(Socket01Color);
 
     [ObservableProperty]
-    private int _socketOption01MinValue;
-
-    [ObservableProperty]
-    private int _socketOption01MaxValue;
-    partial void OnSocketOption01MaxValueChanged(int value)
-    {
-        if (SocketOption01Value > value)
-            SocketOption01Value = value;
-    }
-
-    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption02Text))]
     [NotifyPropertyChangedFor(nameof(SocketOption02Color))]
-    [NotifyPropertyChangedFor(nameof(SocketOption02MinValue))]
-    [NotifyPropertyChangedFor(nameof(SocketOption02MaxValue))]
     private int _socketOption02;
-
-    partial void OnSocketOption02Changed(int value)
-    {
-        (SocketOption02MinValue, SocketOption02MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        SocketOption02Value = CalculateOptionValue(value, SocketOption02Value, SocketOption02MaxValue);
-    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption02Text))]
@@ -378,28 +275,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     public string? SocketOption02Color => SocketOption02 != 0 ? _frameService.GetColorFromOption(SocketOption02) : _frameService.GetSocketColor(Socket02Color);
 
     [ObservableProperty]
-    private int _socketOption02MinValue;
-
-    [ObservableProperty]
-    private int _socketOption02MaxValue;
-    partial void OnSocketOption02MaxValueChanged(int value)
-    {
-        if (SocketOption02Value > value)
-            SocketOption02Value = value;
-    }
-
-    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption03Text))]
     [NotifyPropertyChangedFor(nameof(SocketOption03Color))]
-    [NotifyPropertyChangedFor(nameof(SocketOption03MinValue))]
-    [NotifyPropertyChangedFor(nameof(SocketOption03MaxValue))]
     private int _socketOption03;
-
-    partial void OnSocketOption03Changed(int value)
-    {
-        (SocketOption03MinValue, SocketOption03MaxValue) = _gmDatabaseService.GetOptionValue(value);
-        SocketOption03Value = CalculateOptionValue(value, SocketOption03Value, SocketOption03MaxValue);
-    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption03Text))]
@@ -408,17 +286,6 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     public string SocketOption03Text => SocketOption03 != 0 ? _frameService.GetOptionName(SocketOption03, SocketOption03Value) : _frameService.GetSocketText(Socket03Color);
 
     public string? SocketOption03Color => SocketOption03 != 0 ? _frameService.GetColorFromOption(SocketOption03) : _frameService.GetSocketColor(Socket03Color);
-
-    [ObservableProperty]
-    private int _socketOption03MinValue;
-
-    [ObservableProperty]
-    private int _socketOption03MaxValue;
-    partial void OnSocketOption03MaxValueChanged(int value)
-    {
-        if (SocketOption03Value > value)
-            SocketOption03Value = value;
-    }
 
     #endregion
 }

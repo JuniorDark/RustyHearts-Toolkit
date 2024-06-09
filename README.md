@@ -14,58 +14,39 @@ A collection of tools for editing the Rusty Hearts game files/database.
 To begin using this tool, download the latest release from the [GitHub repository](https://github.com/JuniorDark/RustyHearts-Toolkit/releases/latest).
 
 ## Current Features
-Please note that this tool is still in development and more features are planned.
-- **Edit Character:** Edit Character informations.
-- **Portable Item Database:** View items in a user-friendly datagrid. Selecting an item provides detailed information displayed in a in-game similar tooltip, and items can be sorted using various filters. The search functionality allows find items by name or ID.
+- **Database Editor:** Edit Character informations.
 - **Send Mail:** Send in-game mail to characters and attach any item with custom stats.
-- **Mail Templates:** Save mail configurations to JSON templates for future use. This allows for quick and easy loading of predefined mail settings.
+- **Mail Templates:** Save mail  to JSON templates for future use.
+
+- **Item Database:** View items in a user-friendly datagrid. Selecting an item provides detailed information displayed in a in-game similar tooltip, and items can be sorted using various filters. The search functionality allows find items by name or ID.
+
 
 ## Setup
-The tool relies on a Sqlite database (`gmdb.db`). Follow these steps to set up and generate a new database:
+The tool relies on a Sqlite database (`gmdb_(Lang).db`). Follow these steps to set up and generate a new database:
 
-1. Run `CreateGMDatabase` by placing the necessary XLSX table files in the `xlsx` folder. These files are used to create a new database. Move the generated `gmdb.db` to the `Resources` folder in the program directory.
-
-   Required table files in xlsx format:
-   - angelaweapon.rh
-   - exp.rh
-   - fortune.rh
-   - frantzweapon.rh
-   - itemcategory.rh
-   - itemlist.rh
-   - itemlist_string.rh
-   - itemlist_armor.rh
-   - itemlist_armor_string.rh
-   - itemlist_costume.rh
-   - itemlist_costume_string.rh
-   - itemlist_weapon.rh
-   - itemlist_weapon_string.rh
-   - itemoptionlist.rh
-   - natashaweapon.rh
-   - nick_filter.rh
-   - serverlobbyid.rh
-   - setitem.rh
-   - setitem_string.rh
-   - tudeweapon.rh
-
-2. Place item icons in the `Resources` folder.
+1. Go to `SQLite Database Manager` page and select the folder with `.rh` table files and click `Create Dabatase`. It will create the database with the required tables.
 
 A prebuild database and icons are avaliable on [`Resources.rar`](Resources.rar)
+
+## Language
+The language can be changed on `Settings` page.
+
+### Avaliable Languages
+* **en** - English (en-US) default language
+* **ko** - Korean ("ko-KR) (Machine Translated)
 
 ## Prerequisites for Building Locally/Development
 The tool uses .NET 8 and as such, the packages listed below are required to create a local and development build of the tool. Furthermore, it uses many submodules and packages outside of this, which will automatically be loaded when the user sets up a local environment of the application.
 * Visual Studio 2022 (Any Edition - 17.9 or later)
-* Windows 10 SDK (10.0.19043.0) or Windows 11 SDK (10.0.22000.0) via Visual Studio Installer
-* .NET: [.NET Core 8 SDK (8.0.203 or later)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+* Windows 10 SDK or Windows 11 SDK via Visual Studio Installer
+* .NET: [.NET Core 8 SDK (8.0.301 or later)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
 ## System Requirements for Ready-to-use build
-* OS: Windows 10 1809 Update (build 17763) or later / Windows 11 (Any builds)
+* OS: Windows 10 (build 19045) or later / Windows 11
 * Architecture: x64/AMD64
 
 ## License
 This project is licensed under the terms found in [`LICENSE-0BSD`](LICENSE).
-
-## Contributing
-Contributions from the community are welcome! If you encounter a bug or have a feature request, please submit an issue on GitHub. If you would like to contribute code, please fork the repository and submit a pull request.
 
 ## FAQ
 * Q: How do I report a bug?
@@ -86,6 +67,3 @@ The following nuget packages are used in this project:
 * [Newtonsoft.Json](https://www.nuget.org/packages/Newtonsoft.Json)
 * [System.Data.SQLite.Core](https://www.nuget.org/packages/System.Data.SQLite.Core)
 * [WPF-UI](https://www.nuget.org/packages/WPF-UI/)
-
-## Support
-If you need help with the tool, please submit an issue on GitHub.

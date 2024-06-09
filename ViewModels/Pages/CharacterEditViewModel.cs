@@ -1,16 +1,14 @@
-﻿using RHToolkit.Messages;
-using RHToolkit.Models;
+﻿using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Services;
-using RHToolkit.Views.Windows;
 using System.Windows.Controls;
 
 namespace RHToolkit.ViewModels.Pages
 {
-    public partial class CharacterEditViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService) : ObservableObject
+    public partial class CharacterEditViewModel(IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService, CharacterManager characterManager) : ObservableObject
     {
-        private readonly WindowsProviderService _windowsProviderService = windowsProviderService;
+        private readonly CharacterManager _characterManager = characterManager;
         private readonly IDatabaseService _databaseService = databaseService;
         private readonly ISqLiteDatabaseService _sqLiteDatabaseService = sqLiteDatabaseService;
 
@@ -54,7 +52,6 @@ namespace RHToolkit.ViewModels.Pages
         #endregion
 
         #region Character Window
-        private CharacterWindow? _characterWindowInstance;
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
         private async Task EditCharacter()
@@ -65,27 +62,8 @@ namespace RHToolkit.ViewModels.Pages
             {
                 if (!await ValidateCharacterData(true, true)) return;
 
-                if (_characterWindowInstance == null)
-                {
-                    _windowsProviderService.Show<CharacterWindow>();
-                    _characterWindowInstance = Application.Current.Windows.OfType<CharacterWindow>().FirstOrDefault();
-
-                    if (_characterWindowInstance != null)
-                    {
-                        _characterWindowInstance.Closed += (sender, args) =>
-                        {
-                            _characterWindowInstance = null;
-                            DeleteCharacterCommand.NotifyCanExecuteChanged();
-                        };
-                    }
-                }
-
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-                WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "CharacterWindow"));
-
-                _characterWindowInstance?.Focus();
-
-                DeleteCharacterCommand.NotifyCanExecuteChanged();
+                OpenWindow(_characterManager.OpenCharacterWindow, "Character");
+                OnCanExecuteWindowCommandChanged();
             }
             catch (Exception ex)
             {
@@ -93,8 +71,7 @@ namespace RHToolkit.ViewModels.Pages
             }
         }
 
-
-        [RelayCommand(CanExecute = nameof(CanExecuteDeleteCommand))]
+        [RelayCommand(CanExecute = nameof(CanExecuteWindowCommand))]
         private async Task DeleteCharacter()
         {
             if (CharacterData == null) return;
@@ -105,8 +82,6 @@ namespace RHToolkit.ViewModels.Pages
 
                 if (RHMessageBoxHelper.ConfirmMessage($"Delete the character '{CharacterData.CharacterName}'?"))
                 {
-                    _characterWindowInstance?.Close();
-
                     await _databaseService.DeleteCharacterAsync(CharacterData.AuthID, CharacterData.CharacterID);
                     await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Delete Character", $"<font color=blue>Delete Character</font>]<br><font color=red>Character: {CharacterData.CharacterID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
@@ -152,134 +127,70 @@ namespace RHToolkit.ViewModels.Pages
             return CharacterData != null;
         }
 
-        private bool CanExecuteDeleteCommand()
+        private bool CanExecuteWindowCommand()
         {
-            return CharacterData != null && _characterWindowInstance == null;
+            return CharacterData != null && _characterManager.OpenWindowsCount == 0;
         }
 
         private void OnCanExecuteCommandChanged()
         {
             EditCharacterCommand.NotifyCanExecuteChanged();
+        }
+
+        private void OnCanExecuteWindowCommandChanged()
+        {
             DeleteCharacterCommand.NotifyCanExecuteChanged();
             OpenTitleWindowCommand.NotifyCanExecuteChanged();
             OpenSanctionWindowCommand.NotifyCanExecuteChanged();
             OpenFortuneWindowCommand.NotifyCanExecuteChanged();
-
         }
+
         #endregion
 
-        #region Buttons
+        #region Windows Buttons
+        private void OpenWindow(Action<CharacterInfo> openWindowAction, string errorMessage)
+        {
+            if (CharacterData == null) return;
+
+            try
+            {
+                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
+                openWindowAction(characterInfo);
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error reading Character {errorMessage}: {ex.Message}", "Error");
+            }
+        }
 
         #region Title
-        private TitleWindow? _titleWindowInstance;
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
         private void OpenTitleWindow()
         {
-            if (CharacterData == null) return;
-
-            if (!SqlCredentialValidator.ValidateCredentials())
-            {
-                return;
-            }
-
-            try
-            {
-                if (_titleWindowInstance == null)
-                {
-                    _windowsProviderService.Show<TitleWindow>();
-                    _titleWindowInstance = Application.Current.Windows.OfType<TitleWindow>().FirstOrDefault();
-
-                    if (_titleWindowInstance != null)
-                    {
-                        _titleWindowInstance.Closed += (sender, args) => _titleWindowInstance = null;
-                    }
-                }
-
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-                WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "TitleWindow"));
-
-                _titleWindowInstance?.Focus();
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error reading Character Title: {ex.Message}", "Error");
-            }
+            OpenWindow(_characterManager.OpenTitleWindow, "Title");
         }
+
         #endregion
 
         #region Sanction
-        private SanctionWindow? _sanctionWindowInstance;
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
         private void OpenSanctionWindow()
         {
-            if (CharacterData == null) return;
-
-            if (!SqlCredentialValidator.ValidateCredentials())
-            {
-                return;
-            }
-
-            try
-            {
-                if (_sanctionWindowInstance == null)
-                {
-                    _windowsProviderService.Show<SanctionWindow>();
-                    _sanctionWindowInstance = Application.Current.Windows.OfType<SanctionWindow>().FirstOrDefault();
-
-                    if (_sanctionWindowInstance != null)
-                    {
-                        _sanctionWindowInstance.Closed += (sender, args) => _sanctionWindowInstance = null;
-                    }
-                }
-
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-                WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "SanctionWindow"));
-                _sanctionWindowInstance?.Focus();
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error reading Character Sanction: {ex.Message}", "Error");
-            }
+            OpenWindow(_characterManager.OpenSanctionWindow, "Sanction");
         }
+
         #endregion
 
         #region Fortune
-        private FortuneWindow? _fortuneWindowInstance;
 
         [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
         private void OpenFortuneWindow()
         {
-            if (CharacterData == null) return;
-
-            if (!SqlCredentialValidator.ValidateCredentials())
-            {
-                return;
-            }
-
-            try
-            {
-                if (_fortuneWindowInstance == null)
-                {
-                    _windowsProviderService.Show<FortuneWindow>();
-                    _fortuneWindowInstance = Application.Current.Windows.OfType<FortuneWindow>().FirstOrDefault();
-
-                    if (_fortuneWindowInstance != null)
-                    {
-                        _fortuneWindowInstance.Closed += (sender, args) => _fortuneWindowInstance = null;
-                    }
-                }
-
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-                WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "FortuneWindow"));
-                _fortuneWindowInstance?.Focus();
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error reading Character Fortune: {ex.Message}", "Error");
-            }
+            OpenWindow(_characterManager.OpenFortuneWindow, "Fortune");
         }
+
         #endregion
 
         #endregion
@@ -296,6 +207,7 @@ namespace RHToolkit.ViewModels.Pages
             IsButtonPanelVisible = value == null ? Visibility.Hidden : Visibility.Visible;
             SearchMessage = value == null ? "No data found." : "";
             OnCanExecuteCommandChanged();
+            OnCanExecuteWindowCommandChanged();
         }
 
         [ObservableProperty]

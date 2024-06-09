@@ -5,21 +5,20 @@ using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.SQLite;
 using RHToolkit.Properties;
 using RHToolkit.Services;
-using RHToolkit.Views.Windows;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class CharacterWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<CharacterInfoMessage>
+public partial class CharacterWindowViewModel : ObservableObject, IRecipient<CharacterInfoMessage>, IRecipient<ItemDataMessage>
 {
-    private readonly WindowsProviderService _windowsProviderService;
+    private readonly CharacterManager _characterManager;
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
     private readonly CachedDataManager _cachedDataManager;
 
-    public CharacterWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager)
+    public CharacterWindowViewModel(CharacterManager characterManager, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager)
     {
-        _windowsProviderService = windowsProviderService;
+        _characterManager = characterManager;
         _databaseService = databaseService;
         _gmDatabaseService = gmDatabaseService;
         _cachedDataManager = cachedDataManager;
@@ -35,12 +34,19 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     public async void Receive(CharacterInfoMessage message)
     {
-        if (message.Recipient == "CharacterWindow")
+        if (Token == Guid.Empty)
+        {
+            Token = message.Token;
+        }
+
+        if (message.Recipient == "CharacterWindow" && message.Token == Token)
         {
             var characterInfo = message.Value;
 
             await ReadCharacterData(characterInfo.CharacterName!);
         }
+
+        WeakReferenceMessenger.Default.Unregister<CharacterInfoMessage>(this);
     }
 
     private async Task ReadCharacterData(string characterName)
@@ -107,6 +113,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         DeletedItemDatabaseList = null;
     }
     #endregion
+
+    #region Commands
 
     #region Save Character
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
@@ -209,7 +217,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
         if (IsNameNotAllowed(newCharacterName))
         {
-            RHMessageBoxHelper.ShowOKMessage("This character name is not allowed.", "Error");
+            RHMessageBoxHelper.ShowOKMessage("This character name is on the nick filter and its not allowed.", "Error");
             return;
         }
 
@@ -232,7 +240,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
                 if (result == -1)
                 {
-                    RHMessageBoxHelper.ShowOKMessage("Character name already exists.", "Error");
+                    RHMessageBoxHelper.ShowOKMessage($"The character name '{newCharacterName}' already exists.", "Error");
                     return;
                 }
 
@@ -283,7 +291,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
                 return;
             }
 
-            if (RHMessageBoxHelper.ConfirmMessage($"EXPERIMENTAL FEATURE\n\nThis will reset all character skills and unequip the character weapon/costumes and send via mail.\n\nAre you sure you want to change character '{CharacterData.CharacterName}' class to '{GetEnumDescription((CharClass)Class)}'?"))
+            if (RHMessageBoxHelper.ConfirmMessage($"EXPERIMENTAL\n\nThis will reset all character skills and unequip the character weapon/costumes and send via mail.\n\nAre you sure you want to change character '{CharacterData.CharacterName}' class to '{GetEnumDescription((CharClass)Class)}'?"))
             {
                 await _databaseService.UpdateCharacterClassAsync(CharacterData.CharacterID, CharacterData.AccountName!, CharacterData.CharacterName!, CharacterData.Class, Class);
 
@@ -339,116 +347,54 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     }
     #endregion
 
+    #region Windows Buttons
+    private void OpenWindow(Action<CharacterInfo> openWindowAction, string errorMessage)
+    {
+        if (CharacterData == null) return;
+
+        try
+        {
+            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
+            openWindowAction(characterInfo);
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error reading Character {errorMessage}: {ex.Message}", "Error");
+        }
+    }
+
     #region Title
-    private TitleWindow? _titleWindowInstance;
 
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void OpenTitleWindow()
     {
-        if (CharacterData == null) return;
-
-        if (!SqlCredentialValidator.ValidateCredentials())
-        {
-            return;
-        }
-
-        try
-        {
-            if (_titleWindowInstance == null)
-            {
-                _windowsProviderService.Show<TitleWindow>();
-                _titleWindowInstance = Application.Current.Windows.OfType<TitleWindow>().FirstOrDefault();
-
-                if (_titleWindowInstance != null)
-                {
-                    _titleWindowInstance.Closed += (sender, args) => _titleWindowInstance = null;
-                }
-            }
-
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-            WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "TitleWindow"));
-
-            _titleWindowInstance?.Focus();
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Title: {ex.Message}", "Error");
-        }
+        OpenWindow(_characterManager.OpenTitleWindow, "Title");
     }
+
     #endregion
 
     #region Sanction
-    private SanctionWindow? _sanctionWindowInstance;
 
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void OpenSanctionWindow()
     {
-        if (CharacterData == null) return;
-
-        if (!SqlCredentialValidator.ValidateCredentials())
-        {
-            return;
-        }
-
-        try
-        {
-            if (_sanctionWindowInstance == null)
-            {
-                _windowsProviderService.Show<SanctionWindow>();
-                _sanctionWindowInstance = Application.Current.Windows.OfType<SanctionWindow>().FirstOrDefault();
-
-                if (_sanctionWindowInstance != null)
-                {
-                    _sanctionWindowInstance.Closed += (sender, args) => _sanctionWindowInstance = null;
-                }
-            }
-
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-            WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "SanctionWindow"));
-            _sanctionWindowInstance?.Focus();
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Sanction: {ex.Message}", "Error");
-        }
+        OpenWindow(_characterManager.OpenSanctionWindow, "Sanction");
     }
+
     #endregion
 
     #region Fortune
-    private FortuneWindow? _fortuneWindowInstance;
 
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void OpenFortuneWindow()
     {
-        if (CharacterData == null) return;
-
-        if (!SqlCredentialValidator.ValidateCredentials())
-        {
-            return;
-        }
-
-        try
-        {
-            if (_fortuneWindowInstance == null)
-            {
-                _windowsProviderService.Show<FortuneWindow>();
-                _fortuneWindowInstance = Application.Current.Windows.OfType<FortuneWindow>().FirstOrDefault();
-
-                if (_fortuneWindowInstance != null)
-                {
-                    _fortuneWindowInstance.Closed += (sender, args) => _fortuneWindowInstance = null;
-                }
-            }
-
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-            WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "FortuneWindow"));
-            _fortuneWindowInstance?.Focus();
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Fortune: {ex.Message}", "Error");
-        }
+        OpenWindow(_characterManager.OpenFortuneWindow, "Fortune");
     }
+
+    #endregion
+
+    #endregion
+
     #endregion
 
     #region Comboboxes
@@ -490,9 +436,10 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
 
     #region Item Data
 
+    #region Receive
     public void Receive(ItemDataMessage message)
     {
-        if (message.Recipient == "CharacterWindowViewModel")
+        if (message.Recipient == "CharacterWindowViewModel" && message.Token == Token)
         {
             var newItemData = message.Value;
 
@@ -665,8 +612,9 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         GetType().GetProperty(nameProperty)?.SetValue(this, itemData.Name);
     }
 
-    private ItemWindow? _itemWindowInstance;
+    #endregion
 
+    #region Send
     [RelayCommand]
     private void AddItem(string parameter)
     {
@@ -675,30 +623,13 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
         if (int.TryParse(parameter, out int slotIndex))
         {
             ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
-
-            ShowItemWindow(itemData);
+            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
+            
+            _characterManager.OpenItemWindow(characterInfo, itemData);
         }
     }
 
-    private void ShowItemWindow(ItemData itemData)
-    {
-        if (_itemWindowInstance == null)
-        {
-            _windowsProviderService.Show<ItemWindow>();
-            _itemWindowInstance = Application.Current.Windows.OfType<ItemWindow>().FirstOrDefault();
-
-            if (_itemWindowInstance != null)
-            {
-                _itemWindowInstance.Closed += (sender, args) => _itemWindowInstance = null;
-            }
-        }
-
-        var characterInfo = new CharacterInfo(CharacterData!.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-        WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "ItemWindow"));
-        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", "EquipItem"));
-
-        _itemWindowInstance?.Focus();
-    }
+    #endregion
 
     #region Remove Item
 
@@ -768,6 +699,9 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Ite
     #endregion
 
     #region Properties
+
+    [ObservableProperty]
+    private Guid? _token = Guid.Empty;
 
     #region Character
     [ObservableProperty]

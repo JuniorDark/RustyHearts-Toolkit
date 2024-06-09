@@ -137,29 +137,6 @@ namespace RHToolkit.Services
             return optionItems;
         }
 
-        public (int minValue, int maxValue) GetOptionValue(int itemID)
-        {
-            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
-            try
-            {
-                string query = "SELECT nCheckMinValue, nCheckMaxValue FROM itemoptionlist WHERE nID = @itemID";
-                using var optionReader = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@itemID", itemID));
-                if (optionReader.Read())
-                {
-                    return (optionReader.GetInt32(0), optionReader.GetInt32(1));
-                }
-                else
-                {
-                    return (0, 0);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error retrieving option value from the database.", ex);
-            }
-        }
-
-
         private List<NameID> GetItemsFromQuery(string query)
         {
             List<NameID> items = [];
@@ -355,15 +332,15 @@ namespace RHToolkit.Services
             return GetIntValueFromQuery(query, ("@titleID", titleID));
         }
 
-        public (int secTime, float value, int maxValue) GetOptionValues(int optionID)
+        public (int secTime, float value) GetOptionValues(int optionID)
         {
             using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
-                string query = "SELECT nSecTime, fValue, nCheckMaxValue FROM itemoptionlist WHERE nID = @optionID";
+                string query = "SELECT nSecTime, fValue FROM itemoptionlist WHERE nID = @optionID";
                 using var optionCommand = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@optionID", optionID));
 
-                return optionCommand.Read() ? (optionCommand.GetInt32(0), optionCommand.GetFloat(1), optionCommand.GetInt32(2)) : (0, 0, 0);
+                return optionCommand.Read() ? (optionCommand.GetInt32(0), optionCommand.GetFloat(1)) : (0, 0);
             }
             catch (Exception ex)
             {

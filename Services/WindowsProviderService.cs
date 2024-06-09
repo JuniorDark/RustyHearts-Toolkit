@@ -29,5 +29,31 @@ public class WindowsProviderService(IServiceProvider serviceProvider)
         windowInstance.Show();
     }
 
+    public T? ShowInstance<T>(bool setOwner = false) where T : class
+    {
+        if (!typeof(Window).IsAssignableFrom(typeof(T)))
+        {
+            throw new InvalidOperationException($"The window class should be derived from {typeof(Window)}.");
+        }
+
+        if (_serviceProvider.GetService<T>() is not Window windowInstance)
+        {
+            throw new InvalidOperationException("Window is not registered as service.");
+        }
+
+        if (setOwner)
+        {
+            // Automatically set the owner to the currently active window
+            Window? owner = Application.Current.Windows.OfType<Window>().SingleOrDefault(w => w.IsActive);
+            if (owner != null)
+            {
+                windowInstance.Owner = owner;
+            }
+        }
+
+        windowInstance.Show();
+        return windowInstance as T;
+    }
+
 }
 

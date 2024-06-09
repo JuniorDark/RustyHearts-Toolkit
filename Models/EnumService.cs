@@ -245,5 +245,69 @@ namespace RHToolkit.Models
             [LocalizedDescription("SanctionPermanent")]
             Permanent = 5
         }
+
+        public enum EquipCategory
+        {
+            [LocalizedDescription("EquipCategory0")]
+            Weapon = 0,
+
+            [LocalizedDescription("EquipCategory1")]
+            Chest = 1,
+
+            [LocalizedDescription("EquipCategory2")]
+            Head = 2,
+
+            [LocalizedDescription("EquipCategory3")]
+            Legs = 3,
+
+            [LocalizedDescription("EquipCategory4")]
+            Feet = 4,
+
+            [LocalizedDescription("EquipCategory5")]
+            Waist = 5,
+
+            [LocalizedDescription("EquipCategory6")]
+            Necklace = 6,
+
+            [LocalizedDescription("EquipCategory7")]
+            Earrings = 7,
+
+            [LocalizedDescription("EquipCategory8")]
+            Ring = 8,
+
+            [LocalizedDescription("EquipCategory9")]
+            Hands = 9,
+
+            [LocalizedDescription("EquipCategory10")]
+            Hair = 10,
+
+            [LocalizedDescription("EquipCategory11")]
+            Face = 11,
+
+            [LocalizedDescription("EquipCategory12")]
+            Neck = 12,
+
+            [LocalizedDescription("EquipCategory13")]
+            Outerwear = 13,
+
+            [LocalizedDescription("EquipCategory14")]
+            Top = 14,
+
+            [LocalizedDescription("EquipCategory15")]
+            Bottom = 15,
+
+            [LocalizedDescription("EquipCategory16")]
+            Gloves = 16,
+
+            [LocalizedDescription("EquipCategory17")]
+            Shoes = 17,
+
+            [LocalizedDescription("EquipCategory18")]
+            Accessory1 = 18,
+
+            [LocalizedDescription("EquipCategory19")]
+            Accessory2 = 19,
+        }
+
     }
 }

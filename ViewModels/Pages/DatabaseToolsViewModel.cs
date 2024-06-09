@@ -41,7 +41,7 @@ public partial class DatabaseToolsViewModel(ISqLiteDatabaseService sqLiteDatabas
             switch (value)
             {
                 case "mail":
-                    windowsProviderService.Show<MailWindow>();
+                    windowsProviderService.Show<MailWindow>(true);
                     break;
             }
         }

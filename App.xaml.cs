@@ -57,6 +57,7 @@ public partial class App : Application
                 _ = services.AddSingleton<IGMDatabaseService, GMDatabaseService>();
                 _ = services.AddSingleton<IFrameService, FrameService>();
                 _ = services.AddSingleton<CachedDataManager>();
+                _ = services.AddSingleton<CharacterManager>();
                 _ = services.AddSingleton<MailManager>();
 
                 _ = services.AddTransient<MailWindow>();

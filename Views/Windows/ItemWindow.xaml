@@ -10,7 +10,7 @@
     xmlns:rs="clr-namespace:RHToolkit.Properties"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
-    Title="Add Item"
+    Title="{Binding Title}"
     Width="1280"
     Height="720"
     MinWidth="1280"
@@ -25,10 +25,6 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-    <Window.Resources>
-        <CollectionViewSource x:Key="ItemDataViewSource" Source="{Binding ItemDataItems}" />
-        <CollectionViewSource x:Key="OptionViewSource" Source="{Binding OptionItems}" />
-    </Window.Resources>
     <ContentControl Template="{StaticResource box_red02}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -46,7 +42,7 @@
 
             <ui:TitleBar
                 x:Name="TitleBar"
-                Title="{x:Static rs:Resources.AddItem}"
+                Title="{Binding Title}"
                 Grid.Row="0"
                 Grid.ColumnSpan="3"
                 Height="30"
@@ -218,10 +214,10 @@
                     <TextBox
                         x:Name="tbOptionSearch"
                         Width="250"
-                        Height="30"
+                        Height="35"
                         CaretBrush="White"
                         FontFamily="{StaticResource ArialUnicodeMS}"
-                        FontSize="11"
+                        FontSize="12"
                         Foreground="Gold"
                         Tag="{x:Static rs:Resources.OptionNameID}"
                         Template="{StaticResource lb_textbox}"
@@ -250,7 +246,7 @@
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionItems}"
+                        ItemsSource="{Binding OptionView}"
                         SelectedValue="{Binding RandomOption01, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -273,7 +269,7 @@
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionItems}"
+                        ItemsSource="{Binding OptionView}"
                         SelectedValue="{Binding RandomOption02, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -296,7 +292,7 @@
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionItems}"
+                        ItemsSource="{Binding OptionView}"
                         SelectedValue="{Binding RandomOption03, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -316,10 +312,10 @@
                     <control:IntegerUpDown
                         x:Name="intOptionValue1"
                         Width="100"
-                        Increment="{Binding RandomOption01MaxValue, Converter={StaticResource IncrementConverter}}"
+                        Increment="{Binding OptionMaxValue, Converter={StaticResource IncrementConverter}}"
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
-                        Maximum="{Binding RandomOption01MaxValue}"
-                        Minimum="{Binding RandomOption01MinValue}"
+                        Maximum="{Binding OptionMaxValue}"
+                        Minimum="{Binding OptionMinValue}"
                         Value="{Binding RandomOption01Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbRandomOptionValue2"
@@ -330,10 +326,10 @@
                     <control:IntegerUpDown
                         x:Name="intOptionValue2"
                         Width="100"
-                        Increment="{Binding RandomOption02MaxValue, Converter={StaticResource IncrementConverter}}"
+                        Increment="{Binding OptionMaxValue, Converter={StaticResource IncrementConverter}}"
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
-                        Maximum="{Binding RandomOption02MaxValue}"
-                        Minimum="{Binding RandomOption02MinValue}"
+                        Maximum="{Binding OptionMaxValue}"
+                        Minimum="{Binding OptionMinValue}"
                         Value="{Binding RandomOption02Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbRandomOptionValue3"
@@ -345,10 +341,10 @@
                     <control:IntegerUpDown
                         x:Name="intOptionValue3"
                         Width="100"
-                        Increment="{Binding RandomOption03MaxValue, Converter={StaticResource IncrementConverter}}"
+                        Increment="{Binding OptionMaxValue, Converter={StaticResource IncrementConverter}}"
                         IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
-                        Maximum="{Binding RandomOption03MaxValue}"
-                        Minimum="{Binding RandomOption03MinValue}"
+                        Maximum="{Binding OptionMaxValue}"
+                        Minimum="{Binding OptionMinValue}"
                         Value="{Binding RandomOption03Value, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
@@ -486,7 +482,7 @@
                         IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionItems}"
+                        ItemsSource="{Binding OptionView}"
                         SelectedValue="{Binding SocketOption01, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -510,7 +506,7 @@
                         IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionItems}"
+                        ItemsSource="{Binding OptionView}"
                         SelectedValue="{Binding SocketOption02, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -534,7 +530,7 @@
                         IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionItems}"
+                        ItemsSource="{Binding OptionView}"
                         SelectedValue="{Binding SocketOption03, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -556,10 +552,10 @@
                         x:Name="intSocketValue1"
                         Width="100"
                         Margin="0,10,0,0"
-                        Increment="{Binding SocketOption01MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        Increment="{Binding OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
                         IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
-                        Maximum="{Binding SocketOption01MaxValue, Mode=TwoWay}"
-                        Minimum="{Binding SocketOption01MinValue, Mode=TwoWay}"
+                        Maximum="{Binding OptionMaxValue}"
+                        Minimum="{Binding OptionMinValue}"
                         Value="{Binding SocketOption01Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbSocketOptionValue2"
@@ -571,10 +567,10 @@
                         x:Name="intSocketValue2"
                         Width="100"
                         Margin="0,10,0,0"
-                        Increment="{Binding SocketOption02MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        Increment="{Binding OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
                         IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
-                        Maximum="{Binding SocketOption02MaxValue, Mode=TwoWay}"
-                        Minimum="{Binding SocketOption02MinValue, Mode=TwoWay}"
+                        Maximum="{Binding OptionMaxValue}"
+                        Minimum="{Binding OptionMinValue}"
                         Value="{Binding SocketOption02Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbSocketOptionValue3"
@@ -586,10 +582,10 @@
                         x:Name="intSocketValue3"
                         Width="100"
                         Margin="0,10,0,0"
-                        Increment="{Binding SocketOption03MaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        Increment="{Binding OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
                         IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
-                        Maximum="{Binding SocketOption03MaxValue, Mode=TwoWay}"
-                        Minimum="{Binding SocketOption03MinValue, Mode=TwoWay}"
+                        Maximum="{Binding OptionMaxValue}"
+                        Minimum="{Binding OptionMinValue}"
                         Value="{Binding SocketOption03Value, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
@@ -750,7 +746,7 @@
                     HeadersVisibility="Column"
                     HorizontalGridLinesBrush="White"
                     HorizontalScrollBarVisibility="Disabled"
-                    ItemsSource="{Binding ItemDataItems}"
+                    ItemsSource="{Binding ItemDataView}"
                     Loaded="DataGridView_Loaded"
                     SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                     SelectionMode="Single"

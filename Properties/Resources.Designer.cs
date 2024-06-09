@@ -484,6 +484,186 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Weapon.
+        /// </summary>
+        public static string EquipCategory0 {
+            get {
+                return ResourceManager.GetString("EquipCategory0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chest.
+        /// </summary>
+        public static string EquipCategory1 {
+            get {
+                return ResourceManager.GetString("EquipCategory1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hair.
+        /// </summary>
+        public static string EquipCategory10 {
+            get {
+                return ResourceManager.GetString("EquipCategory10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Face.
+        /// </summary>
+        public static string EquipCategory11 {
+            get {
+                return ResourceManager.GetString("EquipCategory11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Neck.
+        /// </summary>
+        public static string EquipCategory12 {
+            get {
+                return ResourceManager.GetString("EquipCategory12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Outerwear.
+        /// </summary>
+        public static string EquipCategory13 {
+            get {
+                return ResourceManager.GetString("EquipCategory13", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Top.
+        /// </summary>
+        public static string EquipCategory14 {
+            get {
+                return ResourceManager.GetString("EquipCategory14", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bottom.
+        /// </summary>
+        public static string EquipCategory15 {
+            get {
+                return ResourceManager.GetString("EquipCategory15", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gloves.
+        /// </summary>
+        public static string EquipCategory16 {
+            get {
+                return ResourceManager.GetString("EquipCategory16", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shoes.
+        /// </summary>
+        public static string EquipCategory17 {
+            get {
+                return ResourceManager.GetString("EquipCategory17", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accessory 1.
+        /// </summary>
+        public static string EquipCategory18 {
+            get {
+                return ResourceManager.GetString("EquipCategory18", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accessory 2.
+        /// </summary>
+        public static string EquipCategory19 {
+            get {
+                return ResourceManager.GetString("EquipCategory19", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Head.
+        /// </summary>
+        public static string EquipCategory2 {
+            get {
+                return ResourceManager.GetString("EquipCategory2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Legs.
+        /// </summary>
+        public static string EquipCategory3 {
+            get {
+                return ResourceManager.GetString("EquipCategory3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Feet.
+        /// </summary>
+        public static string EquipCategory4 {
+            get {
+                return ResourceManager.GetString("EquipCategory4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waist.
+        /// </summary>
+        public static string EquipCategory5 {
+            get {
+                return ResourceManager.GetString("EquipCategory5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Necklace.
+        /// </summary>
+        public static string EquipCategory6 {
+            get {
+                return ResourceManager.GetString("EquipCategory6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Earrings.
+        /// </summary>
+        public static string EquipCategory7 {
+            get {
+                return ResourceManager.GetString("EquipCategory7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ring.
+        /// </summary>
+        public static string EquipCategory8 {
+            get {
+                return ResourceManager.GetString("EquipCategory8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hands.
+        /// </summary>
+        public static string EquipCategory9 {
+            get {
+                return ResourceManager.GetString("EquipCategory9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {

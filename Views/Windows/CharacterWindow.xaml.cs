@@ -10,8 +10,4 @@ public partial class CharacterWindow : Window
         DataContext = viewModel;
     }
 
-    private void Window_Closed(object sender, EventArgs e)
-    {
-
-    }
 }

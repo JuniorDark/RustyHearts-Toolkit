@@ -10,7 +10,7 @@
     xmlns:rs="clr-namespace:RHToolkit.Properties"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
-    Title="Character Editor"
+    Title="{Binding Title}"
     Width="1280"
     Height="720"
     MinWidth="1280"
@@ -20,7 +20,6 @@
     d:DataContext="{d:DesignInstance Type=windows:CharacterWindowViewModel}"
     AllowsTransparency="True"
     Background="Transparent"
-    Closed="Window_Closed"
     Icon="/Assets/icon/lb_main_quick_system_01character.png"
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
@@ -480,10 +479,10 @@
                 <StackPanel
                     Grid.Row="4"
                     Grid.ColumnSpan="3"
-                    Margin="0,20"
-                    HorizontalAlignment="Center"
+                    Margin="15,20"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
-                    Orientation="Horizontal">
+                    Orientation="Vertical">
                     <CheckBox
                         Margin="5,0"
                         VerticalAlignment="Top"

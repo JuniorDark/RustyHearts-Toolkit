@@ -27,7 +27,7 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
             switch (value)
             {
                 case "rheditor":
-                    windowsProviderService.Show<RHEditorWindow>();
+                    windowsProviderService.Show<RHEditorWindow>(true);
                     break;
             }
         }

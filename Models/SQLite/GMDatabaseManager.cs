@@ -35,19 +35,6 @@ public class GMDatabaseManager
                 return;
             }
 
-            if (!Directory.Exists(resourcesFolder))
-            {
-                Directory.CreateDirectory(resourcesFolder);
-            }
-
-            reportProgress("Creating database...");
-
-            if (File.Exists(database))
-            {
-                File.Delete(database);
-                reportProgress("Existing database file deleted.");
-            }
-
             List<string> missingFiles = [];
             foreach (string requiredTable in RequiredTables)
             {
@@ -62,6 +49,19 @@ public class GMDatabaseManager
                 string missingFilesMessage = "Required table files are missing. The following required files are missing:\n" + string.Join("\n", missingFiles.Select(f => $"{f}.rh"));
                 RHMessageBoxHelper.ShowOKMessage(missingFilesMessage, "Missing Files");
                 return;
+            }
+
+            if (!Directory.Exists(resourcesFolder))
+            {
+                Directory.CreateDirectory(resourcesFolder);
+            }
+
+            reportProgress("Creating database...");
+
+            if (File.Exists(database))
+            {
+                File.Delete(database);
+                reportProgress("Existing database file deleted.");
             }
 
             foreach (var file in files)

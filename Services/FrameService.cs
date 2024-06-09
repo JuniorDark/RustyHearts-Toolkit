@@ -66,9 +66,9 @@ namespace RHToolkit.Services
         public string GetOptionName(int option, int optionValue, bool isFixedOption = false)
         {
             string optionName = _gmDatabaseService.GetOptionName(option);
-            (int secTime, float value, int maxValue) = _gmDatabaseService.GetOptionValues(option);
+            (int secTime, float value) = _gmDatabaseService.GetOptionValues(option);
 
-            string formattedOption = FormatNameID(optionName, $"{optionValue}", $"{secTime}", $"{value}", maxValue, isFixedOption);
+            string formattedOption = FormatNameID(option, optionName, $"{optionValue}", $"{secTime}", $"{value}", isFixedOption);
 
             return option != 0 ? formattedOption : Resources.NoBuff;
         }
@@ -188,97 +188,130 @@ namespace RHToolkit.Services
         private const string ColorTagClose = "</COLOR>";
         private const string LineBreakTag = "<br>";
 
-        public string FormatNameID(string option, string replacement01, string replacement02, string replacement03, int maxValue, bool isFixedOption = false)
+        public string FormatNameID(int optionID, string optionName, string replacement01, string replacement02, string replacement03, bool isFixedOption = false)
         {
-            option = RemoveColorTags(option);
+            optionName = RemoveColorTags(optionName);
 
-            option = option.Replace(ColorTagClose, "")
+            optionName = optionName.Replace(ColorTagClose, "")
                            .Replace(ColorTagStart, "")
                            .Replace(LineBreakTag, " ");
 
-            string valuePlaceholder01 = option.Contains("#@value01@#%") ? "#@value01@#%" : "#@value01@#";
-            string valuePlaceholder02 = option.Contains("#@value02@#%") ? "#@value02@#%" : "#@value02@#";
-            string valuePlaceholder03 = option.Contains("#@value03@#%") ? "#@value03@#%" : "#@value03@#";
+            string valuePlaceholder01 = optionName.Contains("#@value01@#%") ? "#@value01@#%" : "#@value01@#";
+            string valuePlaceholder02 = optionName.Contains("#@value02@#%") ? "#@value02@#%" : "#@value02@#";
+            string valuePlaceholder03 = optionName.Contains("#@value03@#%") ? "#@value03@#%" : "#@value03@#";
 
-            bool hasValuePlaceholder01 = option.Contains(valuePlaceholder01);
-            bool hasValuePlaceholder02 = option.Contains(valuePlaceholder02);
-            bool hasValuePlaceholder03 = option.Contains(valuePlaceholder03);
+            bool hasValuePlaceholder01 = optionName.Contains(valuePlaceholder01);
+            bool hasValuePlaceholder02 = optionName.Contains(valuePlaceholder02);
+            bool hasValuePlaceholder03 = optionName.Contains(valuePlaceholder03);
 
             if (hasValuePlaceholder01 && !hasValuePlaceholder02 && !hasValuePlaceholder03)
             {
-                option = FormatPercentage(option, valuePlaceholder01, replacement01, maxValue);
+                optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
             }
             else if (!hasValuePlaceholder01 && hasValuePlaceholder02 && !hasValuePlaceholder03)
             {
-                option = FormatPercentage(option, valuePlaceholder02, replacement01, maxValue);
+                optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01);
             }
             else if (hasValuePlaceholder01 && hasValuePlaceholder02 && !hasValuePlaceholder03)
             {
-                if (option.Contains(Resources.OptionChanceToCast))
+                if (optionName.Contains(Resources.OptionChanceToCast))
                 {
-                    option = FormatPercentage(option, valuePlaceholder01, replacement01, maxValue);
-                    option = FormatPercentage(option, valuePlaceholder02, replacement03, maxValue);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement03);
                 }
-                else if (option.Contains(Resources.OptionDamageConverted))
+                else if (optionName.Contains(Resources.OptionDamageConverted))
                 {
-                    option = option.Replace(valuePlaceholder01, Resources.PhysicalMagic);
-                    option = FormatPercentage(option, valuePlaceholder02, replacement01, maxValue, isFixedOption);
+                    optionName = optionName.Replace(valuePlaceholder01, Resources.PhysicalMagic);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01, isFixedOption);
                 }
-                else if (option.Contains(Resources.OptionRecoverPlus))
+                else if (optionName.Contains(Resources.OptionRecoverPlus))
                 {
-                    option = FormatPercentage(option, valuePlaceholder01, replacement01, maxValue);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
                     if (int.TryParse(replacement02, out int seconds))
                     {
                         int minutes = seconds / 60;
                         replacement02 = minutes.ToString();
                     }
 
-                    option = option.Replace(valuePlaceholder02, replacement02);
+                    optionName = optionName.Replace(valuePlaceholder02, replacement02);
                 }
-                else if (option.Contains(Resources.OptionChanceOf) || option.Contains(Resources.OptionChanceTo))
+                else if (optionName.Contains(Resources.OptionChanceOf) || optionName.Contains(Resources.OptionChanceTo))
                 {
-                    option = FormatPercentage(option, valuePlaceholder01, replacement01, maxValue);
-                    option = FormatPercentage(option, valuePlaceholder02, replacement03, maxValue);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement03);
+                }
+                else if (optionName.Contains("Skill Damage +") || optionName.Contains("Skill Cooldown -"))
+                {
+                    string skillName = GetSkillName(optionID);
+
+                    optionName = optionName.Replace(valuePlaceholder01, skillName);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01);
                 }
                 else
                 {
-                    option = FormatPercentage(option, valuePlaceholder01, replacement02, maxValue);
-                    option = FormatPercentage(option, valuePlaceholder02, replacement01, maxValue);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement02);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01);
                 }
             }
             else if (hasValuePlaceholder01 && hasValuePlaceholder02 && hasValuePlaceholder03)
             {
-                if (option.Contains(Resources.OptionChanceOf) || option.Contains(Resources.OptionChanceTo))
+                if (optionName.Contains(Resources.OptionChanceOf) || optionName.Contains(Resources.OptionChanceTo))
                 {
-                    option = FormatPercentage(option, valuePlaceholder01, replacement01, maxValue);
-                    option = FormatPercentage(option, valuePlaceholder02, replacement02, maxValue);
-                    option = FormatPercentage(option, valuePlaceholder03, replacement03, maxValue);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement02);
+                    optionName = FormatPercentage(optionName, valuePlaceholder03, replacement03);
                 }
                 else
                 {
-                    option = FormatPercentage(option, valuePlaceholder01, replacement01, maxValue);
-                    option = FormatPercentage(option, valuePlaceholder02, replacement02, maxValue);
-                    option = FormatPercentage(option, valuePlaceholder03, replacement03, maxValue);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement02);
+                    optionName = FormatPercentage(optionName, valuePlaceholder03, replacement03);
                 }
             }
             else if (!hasValuePlaceholder01 && hasValuePlaceholder02 && hasValuePlaceholder03)
             {
-                if (option.Contains(Resources.OptionWhenHit))
+                if (optionName.Contains(Resources.OptionWhenHit))
                 {
-                    option = FormatPercentage(option, valuePlaceholder02, replacement02, maxValue);
-                    option = FormatPercentage(option, valuePlaceholder02, replacement01, maxValue);
-                    option = FormatPercentage(option, valuePlaceholder03, replacement01, maxValue);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement02);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01);
+                    optionName = FormatPercentage(optionName, valuePlaceholder03, replacement01);
 
                 }
                 else
                 {
-                    option = FormatPercentage(option, valuePlaceholder03, replacement03, maxValue);
-                    option = FormatPercentage(option, valuePlaceholder02, replacement02, maxValue);
+                    optionName = FormatPercentage(optionName, valuePlaceholder03, replacement03);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement02);
                 }
 
             }
 
-            return option;
+            return optionName;
+        }
+
+        private static string GetSkillName(int optionID)
+        {
+            return optionID switch
+            {
+                5002 or 5014 or 5017 or 5029 or 5038 or 5043 => "NotFound",
+                5003 or 5018 => "Weapon",
+                5004 or 5019 => "Curse",
+                5005 or 5020 => "Black Sorcery",
+                5006 or 5021 => "Summon",
+                5007 or 5022 => "Wind",
+                5008 or 5023 => "Water",
+                5009 or 5024 => "Fire",
+                5010 or 5025 => "Light",
+                5011 or 5026 => "Earth",
+                5012 or 5027 => "Ki Gong",
+                5013 or 5028 => "Savage",
+                5015 or 5030 or 5041 or 5046 => "Special",
+                5016 or 5031 => "Fighting",
+                5032 or 5033 or 5034 or 5035 or 5036 or 5037 or 5048 or 5049 => "Unknown Skill Name",
+                5039 or 5044 => "Tactical",
+                5040 or 5045 => "Heavy Weapon",
+                5042 or 5047 => "Firearm",
+                _ => "Unknown Skill Name",
+            };
         }
 
         private static string RemoveColorTags(string input)
@@ -300,36 +333,19 @@ namespace RHToolkit.Services
             return input;
         }
 
-        private static string FormatPercentage(string input, string placeholder, string replacement, int maxValue, bool isFixedOption = false)
+        private static string FormatPercentage(string input, string placeholder, string replacement, bool isFixedOption = false)
         {
             if (placeholder.Contains('%') && int.TryParse(replacement, out int numericValue))
             {
                 double formattedValue;
 
-                if (maxValue == 10000)
+                if (input.Contains(Resources.OptionDamageConverted) && isFixedOption)
                 {
-                    if (input.Contains(Resources.OptionDamageConverted) && isFixedOption)
-                    {
-                        formattedValue = numericValue;
-                    }
-                    else
-                    {
-                        formattedValue = (double)numericValue / 100;
-                    }
-                    
+                    formattedValue = numericValue;
                 }
-                
                 else
                 {
-                    if (input.Contains(Resources.OptionAllElementalDamage))
-                    {
-                        formattedValue = (double)numericValue / maxValue;
-                    }
-                    else
-                    {
-                        formattedValue = numericValue;
-                    }
-
+                    formattedValue = (double)numericValue / 100;
                 }
 
                 string formattedPercentage = formattedValue.ToString("0.00");

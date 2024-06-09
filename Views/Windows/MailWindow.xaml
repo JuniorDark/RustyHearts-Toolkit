@@ -10,7 +10,7 @@
     xmlns:rs="clr-namespace:RHToolkit.Properties"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
-    Title="{x:Static rs:Resources.MailTool}"
+    Title="{Binding Title}"
     Width="720"
     Height="640"
     MinWidth="720"
@@ -48,11 +48,12 @@
             <!--  Close Button  -->
             <ui:TitleBar
                 x:Name="TitleBar"
-                Title="{x:Static rs:Resources.SendMail}"
+                Title="{Binding Title}"
                 Grid.Row="0"
                 Grid.ColumnSpan="3"
                 Height="28"
                 Margin="0,5,0,0"
+                d:Title="Send Mail"
                 ButtonsForeground="White"
                 CloseWindowByDoubleClickOnIcon="True"
                 FontSize="15"
