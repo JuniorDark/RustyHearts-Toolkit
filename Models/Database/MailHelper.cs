@@ -4,7 +4,7 @@ using RHToolkit.Services;
 
 namespace RHToolkit.Models.Database
 {
-    public class MailManager(IDatabaseService databaseService)
+    public class MailHelper(IDatabaseService databaseService)
     {
         private readonly IDatabaseService _databaseService = databaseService;
 

@@ -44,12 +44,14 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         _optionView = CollectionViewSource.GetDefaultView(OptionItems);
         _optionView.Filter = FilterOption;
         ItemTradeFilter = 2;
+
         WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
-
     }
 
-    #region Add Item
+    #region Messenger
+
+    #region Send ItemData
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void SelectItem(object parameter)
     {
@@ -87,18 +89,21 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             Socket3Value = SocketOption03Value,
         };
 
-        if (MessageType == "Mail")
+        switch (MessageType)
         {
-            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindowViewModel", "Mail", Token));
+            case "Mail":
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindowViewModel", "Mail", Token));
+                break;
+            case "EquipItem":
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CharacterWindowViewModel", "EquipItem", Token));
+                break;
+            case "Coupon":
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponViewModel", "Coupon", Token));
+                break;
+            default:
+                break;
         }
-        else if (MessageType == "EquipItem")
-        {
-            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CharacterWindowViewModel", "EquipItem", Token));
-        }
-        else if (MessageType == "Coupon")
-        {
-            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponViewModel", "Coupon", Token));
-        }
+
     }
 
     private bool CanExecuteCommand()
@@ -107,8 +112,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
     #endregion
 
-    #region Load Item
-
+    #region Receive CharacterInfo
     [ObservableProperty]
     private CharacterInfo? _characterInfo;
 
@@ -128,6 +132,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         WeakReferenceMessenger.Default.Unregister<CharacterInfoMessage>(this);
     }
 
+    #endregion
+
+    #region Receive ItemData
     [ObservableProperty]
     private ItemData? _itemData;
 
@@ -188,6 +195,12 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             }), DispatcherPriority.Loaded);
         }
     }
+
+    #endregion
+
+    #endregion
+
+    #region Load ItemData
 
     private void SlotFilter(int slotIndex)
     {
@@ -430,6 +443,44 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         SelectItemCommand.NotifyCanExecuteChanged();
     }
 
+    private void UpdateItemData(ItemData? itemData)
+    {
+        if (itemData != null)
+        {
+            ItemId = itemData.ID;
+            ItemName = itemData.Name;
+            Description = itemData.Description;
+            ItemBranch = itemData.Branch;
+            IconName = itemData.IconName;
+            ItemTrade = itemData.ItemTrade;
+            MaxDurability = itemData.Durability;
+            Weight = itemData.Weight;
+            ReconstructionMax = itemData.ReconstructionMax;
+            Reconstruction = itemData.ReconstructionMax;
+            OverlapCnt = OverlapCnt == 0 ? 1 : itemData.OverlapCnt;
+            Amount = Amount == 0 ? 1 : Amount;
+            Rank = (byte)(Rank == 0 ? 1 : Rank);
+            Type = itemData.Type;
+            Category = itemData.Category;
+            SubCategory = itemData.SubCategory;
+            JobClass = itemData.JobClass;
+            Defense = itemData.Defense;
+            MagicDefense = itemData.MagicDefense;
+            WeaponID00 = itemData.WeaponID00;
+            SellPrice = itemData.SellPrice;
+            RequiredLevel = itemData.LevelLimit;
+            SetId = itemData.SetId;
+            PetFood = itemData.PetFood;
+            FixedOption01 = itemData.FixOption1Code;
+            FixedOption01Value = itemData.FixOption1Value;
+            FixedOption02 = itemData.FixOption2Code;
+            FixedOption02Value = itemData.FixOption2Value;
+            OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
+            SocketCountMax = itemData.SocketCountMax;
+            SocketCount = itemData.SocketCountMax;
+        }
+
+    }
     #endregion
 
     #region Item Data List
@@ -776,45 +827,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     #region ItemData
 
-    private void UpdateItemData(ItemData? itemData)
-    {
-        if (itemData != null)
-        {
-            ItemId = itemData.ID;
-            ItemName = itemData.Name;
-            Description = itemData.Description;
-            ItemBranch = itemData.Branch;
-            IconName = itemData.IconName;
-            ItemTrade = itemData.ItemTrade;
-            MaxDurability = itemData.Durability;
-            Weight = itemData.Weight;
-            ReconstructionMax = itemData.ReconstructionMax;
-            Reconstruction = itemData.ReconstructionMax;
-            OverlapCnt = OverlapCnt == 0 ? 1 : itemData.OverlapCnt;
-            Amount = Amount == 0 ? 1 : Amount;
-            Rank = (byte)(Rank == 0 ? 1 : Rank);
-            Type = itemData.Type;
-            Category = itemData.Category;
-            SubCategory = itemData.SubCategory;
-            JobClass = itemData.JobClass;
-            Defense = itemData.Defense;
-            MagicDefense = itemData.MagicDefense;
-            WeaponID00 = itemData.WeaponID00;
-            SellPrice = itemData.SellPrice;
-            RequiredLevel = itemData.LevelLimit;
-            SetId = itemData.SetId;
-            PetFood = itemData.PetFood;
-            FixedOption01 = itemData.FixOption1Code;
-            FixedOption01Value = itemData.FixOption1Value;
-            FixedOption02 = itemData.FixOption2Code;
-            FixedOption02Value = itemData.FixOption2Value;
-            OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
-            SocketCountMax = itemData.SocketCountMax;
-            SocketCount = itemData.SocketCountMax;
-        }
-
-    }
-
     [ObservableProperty]
     private int _slotIndex;
 
@@ -1035,8 +1047,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     #endregion
 
-    #endregion
-
     #region Random Option
 
     [ObservableProperty]
@@ -1210,6 +1220,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         _frameViewModel.SocketOption03Value = value;
     }
+
+    #endregion
 
     #endregion
 

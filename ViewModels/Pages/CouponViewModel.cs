@@ -2,7 +2,6 @@
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
 using System.Data;
@@ -13,13 +12,15 @@ namespace RHToolkit.ViewModels.Pages
     {
         private readonly WindowsProviderService _windowsProviderService;
         private readonly IDatabaseService _databaseService;
+        private readonly ISqLiteDatabaseService _sqLiteDatabaseService;
         private readonly Guid _token;
 
-        public CouponViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService)
+        public CouponViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService)
         {
             _token = Guid.NewGuid();
             _windowsProviderService = windowsProviderService;
             _databaseService = databaseService;
+            _sqLiteDatabaseService = sqLiteDatabaseService;
             WeakReferenceMessenger.Default.Register(this);
         }
 
@@ -53,25 +54,25 @@ namespace RHToolkit.ViewModels.Pages
         {
             if (ItemData == null || CouponCode == null) return;
 
+            if (!ValidateCouponCode(CouponCode))
+            {
+                RHMessageBoxHelper.ShowOKMessage("The coupon code is invalid. It must have 20 characters and contain only letters and numbers.", "Invalid Coupon");
+                return;
+            }
+
             try
             {
-                if (RHMessageBoxHelper.ConfirmMessage($"Add the coupon '{CouponCode}'?"))
+                string couponCode = CouponCode.Replace("-", "");
+
+                if (RHMessageBoxHelper.ConfirmMessage($"Add the coupon '{couponCode}' valid until '{ValidDate}'?"))
                 {
-                    if (!ValidateCouponCode(CouponCode))
-                    {
-                        RHMessageBoxHelper.ShowOKMessage("The coupon code is invalid. It must have 20 characters and contain only letters and numbers.", "Invalid Coupon");
-                        return;
-                    }
-
-                    string couponCode = CouponCode.Replace("-", "");
-
                     if (await _databaseService.CouponExists(couponCode))
                     {
                         RHMessageBoxHelper.ShowOKMessage($"The coupon '{couponCode}' already exists.", "Duplicate Coupon");
                         return;
                     }
 
-                    await _databaseService.AddCouponAsync(couponCode, ItemData);
+                    await _databaseService.AddCouponAsync(couponCode, ValidDate, ItemData);
 
                     RHMessageBoxHelper.ShowOKMessage("Coupon added successfully!", "Success");
 
@@ -195,6 +196,11 @@ namespace RHToolkit.ViewModels.Pages
         {
             if (int.TryParse(parameter, out int slotIndex))
             {
+                if (!_sqLiteDatabaseService.ValidateDatabase())
+                {
+                    return;
+                }
+
                 ItemData? itemData = ItemData;
 
                 itemData ??= new ItemData
@@ -283,7 +289,10 @@ namespace RHToolkit.ViewModels.Pages
         }
 
         [ObservableProperty]
-        private string? _itemName = Resources.AddItemDesc;
+        private DateTime _validDate = DateTime.Today;
+
+        [ObservableProperty]
+        private string? _itemName = "Select a Item";
 
         public string ItemNameColor => FrameService.GetBranchColor(ItemIconBranch);
 

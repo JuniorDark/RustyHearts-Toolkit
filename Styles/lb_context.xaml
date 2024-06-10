@@ -1,0 +1,32 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--  lb_context01  -->
+    <ControlTemplate x:Key="lb_context01" TargetType="ContentControl">
+        <Grid>
+            <!--  Left  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/lb_box/lb_context01.png"
+                Stretch="None" />
+
+            <!--  Center  -->
+            <Image
+                Height="30"
+                Margin="30,0,30,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/lb_box/lb_context02.png"
+                Stretch="Fill" />
+
+            <!--  Right  -->
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/lb_box/lb_context03.png"
+                Stretch="None" />
+
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
+    </ControlTemplate>
+
+</ResourceDictionary>

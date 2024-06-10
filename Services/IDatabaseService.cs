@@ -7,7 +7,7 @@ namespace RHToolkit.Services
     public interface IDatabaseService
     {
         Task AddCharacterTitleAsync(CharacterInfo characterInfo, int titleId, int remainTime, int expireTime);
-        Task AddCouponAsync(string couponCode, ItemData itemData);
+        Task AddCouponAsync(string couponCode, DateTime validDate, ItemData itemData);
         Task<bool> CharacterHasSanctionAsync(Guid characterId);
         Task<bool> CharacterHasTitle(Guid characterId, int titleID);
         Task CharacterSanctionAsync(CharacterInfo characterInfo, EnumService.SanctionOperationType operationType, Guid sanctionUid, int sanctionKind, string reasonDetails, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount);

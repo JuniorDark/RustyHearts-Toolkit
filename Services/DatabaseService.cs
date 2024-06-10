@@ -1,5 +1,4 @@
 ﻿using Microsoft.Data.SqlClient;
-using Microsoft.VisualBasic.ApplicationServices;
 using RHToolkit.Models;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
@@ -1318,7 +1317,7 @@ namespace RHToolkit.Services
             return couponCount > 0;
         }
 
-        public async Task AddCouponAsync(string couponCode, ItemData itemData)
+        public async Task AddCouponAsync(string couponCode, DateTime validDate, ItemData itemData)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -1326,14 +1325,15 @@ namespace RHToolkit.Services
             try
             {
                 await _sqlDatabaseService.ExecuteNonQueryAsync(
-                     "INSERT INTO Coupon ([use], use_date, coupon_type, coupon, item_code, item_count) " +
-                     "VALUES (@use, @use_date, @coupon_type, @coupon, @item_code, @item_count)",
+                     "INSERT INTO Coupon ([use], use_date, coupon_type, coupon, valid_date, item_code, item_count) " +
+                     "VALUES (@use, @use_date, @coupon_type, @coupon, @valid_date, @item_code, @item_count)",
                      connection,
                      transaction,
                      ("@use", 0),
                      ("@use_date", DateTime.Now),
                      ("@coupon_type", 2),
                      ("@coupon", couponCode),
+                     ("@valid_date", validDate),
                      ("@item_code", itemData.ID),
                      ("@item_count", itemData.Amount)
                  );

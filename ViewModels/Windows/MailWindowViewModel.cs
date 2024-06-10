@@ -7,7 +7,6 @@ using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.SQLite;
 using RHToolkit.Properties;
 using RHToolkit.Services;
-using RHToolkit.Views.Windows;
 using System.Data;
 using System.Windows.Controls;
 
@@ -15,32 +14,31 @@ namespace RHToolkit.ViewModels.Windows;
 
 public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemDataMessage>
 {
-    private readonly WindowsProviderService _windowsProviderService;
+    private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
-    private readonly MailManager _mailManager;
+    private readonly MailHelper _mailHelper;
     private readonly CachedDataManager _cachedDataManager;
     private readonly Guid _token;
 
-    public MailWindowViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, MailManager mailManager, CachedDataManager cachedDataManager)
+    public MailWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, MailHelper mailHelper, CachedDataManager cachedDataManager)
     {
         _token = Guid.NewGuid();
-        Title = $"Send Mail";
-        _windowsProviderService = windowsProviderService;
+        _windowsService = windowsService;
         _databaseService = databaseService;
-        _mailManager = mailManager;
+        _mailHelper = mailHelper;
         _cachedDataManager = cachedDataManager;
         WeakReferenceMessenger.Default.Register(this);
     }
 
     #region Add Item
 
-    private readonly Dictionary<Guid, ItemWindow> _itemWindows = [];
-
     [RelayCommand]
     private void AddItem(string parameter)
     {
         if (int.TryParse(parameter, out int slotIndex))
         {
+            var token = _token;
+
             ItemData? itemData = ItemDataList?.FirstOrDefault(m => m.SlotIndex == slotIndex);
 
             itemData ??= new ItemData
@@ -48,28 +46,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                 SlotIndex = slotIndex
             };
 
-            var token = _token;
-
-            if (_itemWindows.TryGetValue(token, out ItemWindow? existingWindow))
-            {
-                if (existingWindow.WindowState == WindowState.Minimized)
-                {
-                    existingWindow.WindowState = WindowState.Normal;
-                }
-
-                existingWindow.Focus();
-            }
-            else
-            {
-                var itemWindow = _windowsProviderService.ShowInstance<ItemWindow>(true);
-                if (itemWindow != null)
-                {
-                    itemWindow.Closed += (s, e) => _itemWindows.Remove(token);
-                    _itemWindows[token] = itemWindow;
-                }
-            }
-
-            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", "Mail", token));
+            _windowsService.OpenItemWindow(token, "Mail", itemData);
         }
     }
 
@@ -114,6 +91,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
     #endregion
 
     #region Remove Item
+
     [RelayCommand]
     private void RemoveItem(string parameter)
     {
@@ -369,7 +347,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
     #region Send Mail
 
-    [RelayCommand]
+    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private async Task SendMailAsync()
     {
         string? mailRecipient = Recipient;
@@ -394,36 +372,41 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
             return;
         }
 
-        string[] recipients = await _mailManager.GetRecipientsAsync(mailRecipient, sendToAllCharacters, sendToAllOnline, sendToAllOffline);
-        if (recipients == null || recipients.Length == 0)
+        try
         {
-            return;
-        }
+            string[] recipients = await _mailHelper.GetRecipientsAsync(mailRecipient, sendToAllCharacters, sendToAllOnline, sendToAllOffline);
+            if (recipients == null || recipients.Length == 0)
+            {
+                return;
+            }
 
-        string confirmationMessage = MailManager.GetConfirmationMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, recipients);
+            string confirmationMessage = MailHelper.GetConfirmationMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, recipients);
 
-        if (RHMessageBoxHelper.ConfirmMessage(confirmationMessage))
-        {
-            try
+            if (RHMessageBoxHelper.ConfirmMessage(confirmationMessage))
             {
                 IsButtonEnabled = false;
 
                 (List<string> successfulRecipients, List<string> failedRecipients) = await _databaseService.SendMailAsync(mailSender, message, gold, reqGold, returnDay, recipients, ItemDataList!);
 
-                string successMessage = MailManager.GetSendMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, successfulRecipients, failedRecipients);
+                string successMessage = MailHelper.GetSendMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, successfulRecipients, failedRecipients);
                 RHMessageBoxHelper.ShowOKMessage(successMessage, Resources.SendMail);
             }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.SendMailError}: {ex.Message}", Resources.Error);
-            }
-            finally
-            {
-                IsButtonEnabled = true;
-            }
         }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.SendMailError}: {ex.Message}", Resources.Error);
+        }
+        finally
+        {
+            IsButtonEnabled = true;
+        }
+        
     }
 
+    private bool CanExecuteCommand()
+    {
+        return !string.IsNullOrWhiteSpace(Recipient) && !string.IsNullOrWhiteSpace(Sender);
+    }
     #endregion
 
     #region Properties
@@ -436,9 +419,17 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
     [ObservableProperty]
     private string? _recipient;
+    partial void OnRecipientChanged(string? value)
+    {
+       SendMailCommand.NotifyCanExecuteChanged();
+    }
 
     [ObservableProperty]
     private string? _sender = "GM";
+    partial void OnSenderChanged(string? value)
+    {
+        SendMailCommand.NotifyCanExecuteChanged();
+    }
 
     [ObservableProperty]
     private string? _mailContent = Resources.GameMasterInsertItem;

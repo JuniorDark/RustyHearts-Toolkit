@@ -6,9 +6,9 @@ using System.Windows.Controls;
 
 namespace RHToolkit.ViewModels.Pages
 {
-    public partial class CharacterEditViewModel(IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService, CharacterManager characterManager) : ObservableObject
+    public partial class CharacterEditViewModel(IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService, IWindowsService windowsService) : ObservableObject
     {
-        private readonly CharacterManager _characterManager = characterManager;
+        private readonly IWindowsService _windowsService = windowsService;
         private readonly IDatabaseService _databaseService = databaseService;
         private readonly ISqLiteDatabaseService _sqLiteDatabaseService = sqLiteDatabaseService;
 
@@ -62,7 +62,7 @@ namespace RHToolkit.ViewModels.Pages
             {
                 if (!await ValidateCharacterData(true, true)) return;
 
-                OpenWindow(_characterManager.OpenCharacterWindow, "Character");
+                OpenWindow(_windowsService.OpenCharacterWindow, "Character");
                 OnCanExecuteWindowCommandChanged();
             }
             catch (Exception ex)
@@ -129,7 +129,7 @@ namespace RHToolkit.ViewModels.Pages
 
         private bool CanExecuteWindowCommand()
         {
-            return CharacterData != null && _characterManager.OpenWindowsCount == 0;
+            return CharacterData != null && WindowsService.OpenWindowsCount == 0;
         }
 
         private void OnCanExecuteCommandChanged()
@@ -168,7 +168,7 @@ namespace RHToolkit.ViewModels.Pages
         [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
         private void OpenTitleWindow()
         {
-            OpenWindow(_characterManager.OpenTitleWindow, "Title");
+            OpenWindow(_windowsService.OpenTitleWindow, "Title");
         }
 
         #endregion
@@ -178,7 +178,7 @@ namespace RHToolkit.ViewModels.Pages
         [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
         private void OpenSanctionWindow()
         {
-            OpenWindow(_characterManager.OpenSanctionWindow, "Sanction");
+            OpenWindow(_windowsService.OpenSanctionWindow, "Sanction");
         }
 
         #endregion
@@ -188,7 +188,7 @@ namespace RHToolkit.ViewModels.Pages
         [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
         private void OpenFortuneWindow()
         {
-            OpenWindow(_characterManager.OpenFortuneWindow, "Fortune");
+            OpenWindow(_windowsService.OpenFortuneWindow, "Fortune");
         }
 
         #endregion

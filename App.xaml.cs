@@ -32,6 +32,7 @@ public partial class App : Application
                 _ = services.AddSingleton<ISnackbarService, SnackbarService>();
                 _ = services.AddSingleton<IContentDialogService, ContentDialogService>();
                 _ = services.AddSingleton<WindowsProviderService>();
+                _ = services.AddSingleton<IWindowsService, WindowsService>();
 
                 // Top-level pages
                 _ = services.AddSingleton<HomePage>();
@@ -59,8 +60,8 @@ public partial class App : Application
                 _ = services.AddSingleton<IGMDatabaseService, GMDatabaseService>();
                 _ = services.AddSingleton<IFrameService, FrameService>();
                 _ = services.AddSingleton<CachedDataManager>();
-                _ = services.AddSingleton<CharacterManager>();
-                _ = services.AddSingleton<MailManager>();
+                _ = services.AddSingleton<CharacterHelper>();
+                _ = services.AddSingleton<MailHelper>();
 
                 _ = services.AddTransient<MailWindow>();
                 _ = services.AddTransient<MailWindowViewModel>();

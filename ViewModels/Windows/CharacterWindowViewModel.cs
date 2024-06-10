@@ -11,14 +11,14 @@ namespace RHToolkit.ViewModels.Windows;
 
 public partial class CharacterWindowViewModel : ObservableObject, IRecipient<CharacterInfoMessage>, IRecipient<ItemDataMessage>
 {
-    private readonly CharacterManager _characterManager;
+    private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
     private readonly CachedDataManager _cachedDataManager;
 
-    public CharacterWindowViewModel(CharacterManager characterManager, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager)
+    public CharacterWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager)
     {
-        _characterManager = characterManager;
+        _windowsService = windowsService;
         _databaseService = databaseService;
         _gmDatabaseService = gmDatabaseService;
         _cachedDataManager = cachedDataManager;
@@ -136,17 +136,17 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
             var newCharacterData = GetCharacterChanges();
 
-            if (!CharacterManager.HasCharacterDataChanges(CharacterData, newCharacterData))
+            if (!CharacterHelper.HasCharacterDataChanges(CharacterData, newCharacterData))
             {
                 RHMessageBoxHelper.ShowOKMessage("There are no changes to save.", "Info");
                 return;
             }
 
-            string changes = CharacterManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "changes");
+            string changes = CharacterHelper.GenerateCharacterDataMessage(CharacterData, newCharacterData, "changes");
 
             if (RHMessageBoxHelper.ConfirmMessage($"Save the following changes to the character {CharacterData.CharacterName}?\n\n{changes}"))
             {
-                string auditMessage = CharacterManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
+                string auditMessage = CharacterHelper.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
 
                 await _databaseService.UpdateCharacterDataAsync(newCharacterData, "Character Information Change", auditMessage);
 
@@ -368,7 +368,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void OpenTitleWindow()
     {
-        OpenWindow(_characterManager.OpenTitleWindow, "Title");
+        OpenWindow(_windowsService.OpenTitleWindow, "Title");
     }
 
     #endregion
@@ -378,7 +378,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void OpenSanctionWindow()
     {
-        OpenWindow(_characterManager.OpenSanctionWindow, "Sanction");
+        OpenWindow(_windowsService.OpenSanctionWindow, "Sanction");
     }
 
     #endregion
@@ -388,7 +388,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void OpenFortuneWindow()
     {
-        OpenWindow(_characterManager.OpenFortuneWindow, "Fortune");
+        OpenWindow(_windowsService.OpenFortuneWindow, "Fortune");
     }
 
     #endregion
@@ -624,8 +624,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         {
             ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
             var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-            
-            _characterManager.OpenItemWindow(characterInfo, itemData);
+
+            _windowsService.OpenItemWindow(characterInfo.CharacterID, "EquipItem", itemData, characterInfo);
         }
     }
 
@@ -790,9 +790,9 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     partial void OnClassChanged(int value)
     {
         ClassName = GetEnumDescription((CharClass)value);
-        CharSilhouetteImage = CharacterManager.GetClassImage(value);
+        CharSilhouetteImage = CharacterHelper.GetClassImage(value);
         JobItems?.Clear();
-        JobItems = CharacterManager.GetJobItems((CharClass)value);
+        JobItems = CharacterHelper.GetJobItems((CharClass)value);
         if (CharacterData != null)
         {
             Job = 0;
