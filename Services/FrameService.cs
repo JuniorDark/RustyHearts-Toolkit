@@ -7,7 +7,7 @@ namespace RHToolkit.Services
     {
         private readonly IGMDatabaseService _gmDatabaseService = gmDatabaseService;
 
-        public string GetBranchColor(int branch)
+        public static string GetBranchColor(int branch)
         {
             return branch switch
             {
@@ -19,7 +19,7 @@ namespace RHToolkit.Services
             };
         }
 
-        public string GetRankText(int rank)
+        public static string GetRankText(int rank)
         {
             return rank switch
             {
@@ -32,7 +32,7 @@ namespace RHToolkit.Services
             };
         }
 
-        public string GetSocketText(int colorId)
+        public static string GetSocketText(int colorId)
         {
             return ((SocketColor)colorId) switch
             {
@@ -47,7 +47,7 @@ namespace RHToolkit.Services
             };
         }
 
-        public string GetSocketColor(int colorId)
+        public static string GetSocketColor(int colorId)
         {
             return ((SocketColor)colorId) switch
             {
@@ -61,7 +61,6 @@ namespace RHToolkit.Services
                 _ => "White",
             };
         }
-
 
         public string GetOptionName(int option, int optionValue, bool isFixedOption = false)
         {
@@ -138,47 +137,47 @@ namespace RHToolkit.Services
             return setEffect;
         }
 
-        public string FormatSellValue(int sellPrice)
+        public static string FormatSellValue(int sellPrice)
         {
             return sellPrice > 0 ? $"{sellPrice:N0} {Resources.Gold}" : "";
         }
 
-        public string FormatRequiredLevel(int levelLimit)
+        public static string FormatRequiredLevel(int levelLimit)
         {
             return $"{Resources.RequiredLevel}: {levelLimit}";
         }
 
-        public string FormatItemTrade(int itemTrade)
+        public static string FormatItemTrade(int itemTrade)
         {
             return itemTrade == 0 ? $"{Resources.TradeUnavailable}" : "";
         }
 
-        public string FormatDurability(int durability)
+        public static string FormatDurability(int durability)
         {
             return durability > 0 ? $"{Resources.Durability}: {durability / 100}/{durability / 100}" : "";
         }
 
-        public string FormatWeight(int weight)
+        public static string FormatWeight(int weight)
         {
             return weight > 0 ? $"{weight / 1000.0:0.000}{Resources.Kg}" : "";
         }
 
-        public string FormatReconstruction(int reconstruction, int reconstructionMax, int itemTrade)
+        public static string FormatReconstruction(int reconstruction, int reconstructionMax, int itemTrade)
         {
             return reconstructionMax > 0 && itemTrade != 0 ? $"{Resources.AttributeItem} ({reconstruction} {Resources.Times}/{reconstructionMax} {Resources.Times})" : $"{Resources.BoundItem}";
         }
 
-        public string FormatPetFood(int petFood)
+        public static string FormatPetFood(int petFood)
         {
             return petFood == 0 ? $"{Resources.PetFoodDescNo}" : $"{Resources.PetFoodDescYes}";
         }
 
-        public string FormatPetFoodColor(int petFood)
+        public static string FormatPetFoodColor(int petFood)
         {
             return petFood == 0 ? "#e75151" : "#eed040";
         }
 
-        public string FormatAugmentStone(int value)
+        public static string FormatAugmentStone(int value)
         {
             return value > 0 ? $"{Resources.PhysicalMagicDamage} +{value}" : "";
         }
@@ -188,7 +187,7 @@ namespace RHToolkit.Services
         private const string ColorTagClose = "</COLOR>";
         private const string LineBreakTag = "<br>";
 
-        public string FormatNameID(int optionID, string optionName, string replacement01, string replacement02, string replacement03, bool isFixedOption = false)
+        public static string FormatNameID(int optionID, string optionName, string replacement01, string replacement02, string replacement03, bool isFixedOption = false)
         {
             optionName = RemoveColorTags(optionName);
 

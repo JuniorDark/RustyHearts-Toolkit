@@ -273,7 +273,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     }
     #endregion
 
-    #region Save Character Class/ Job
+    #region Save Character Class / Job
     [RelayCommand(CanExecute = nameof(CanExecuteCharacterClassCommand))]
     private async Task SaveCharacterClass()
     {

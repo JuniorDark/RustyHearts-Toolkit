@@ -27,7 +27,12 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
     public async void Receive(CharacterInfoMessage message)
     {
-        if (message.Recipient == "SanctionWindow")
+        if (Token == Guid.Empty)
+        {
+            Token = message.Token;
+        }
+
+        if (message.Recipient == "SanctionWindow" && message.Token == Token)
         {
             var characterInfo = message.Value;
             CharacterInfo = null;
@@ -244,6 +249,9 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
     #endregion
 
     #region Properties
+    [ObservableProperty]
+    private Guid? _token = Guid.Empty;
+
     [ObservableProperty]
     private string _title = "Character Sanction";
 

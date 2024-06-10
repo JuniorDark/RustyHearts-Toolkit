@@ -9,10 +9,12 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     private readonly IFrameService _frameService = frameService;
     private readonly IGMDatabaseService _gmDatabaseService = gmDatabaseService;
 
+    #region Properties
+
     [ObservableProperty]
     private string? _itemName;
 
-    public string ItemNameColor => _frameService.GetBranchColor(ItemBranch);
+    public string ItemNameColor => FrameService.GetBranchColor(ItemBranch);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ItemNameColor))]
@@ -31,13 +33,13 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(WeightText))]
     private int _weight;
 
-    public string WeightText => _frameService.FormatWeight(Weight);
+    public string WeightText => FrameService.FormatWeight(Weight);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DurabilityText))]
     private int _maxDurability;
 
-    public string DurabilityText => _frameService.FormatDurability(MaxDurability);
+    public string DurabilityText => FrameService.FormatDurability(MaxDurability);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ReconstructionText))]
@@ -47,13 +49,13 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(ReconstructionText))]
     private int _reconstructionMax;
 
-    public string ReconstructionText => _frameService.FormatReconstruction(Reconstruction, ReconstructionMax, ItemTrade);
+    public string ReconstructionText => FrameService.FormatReconstruction(Reconstruction, ReconstructionMax, ItemTrade);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RankText))]
     private int _rank = 1;
 
-    public string RankText => _frameService.GetRankText(Rank);
+    public string RankText => FrameService.GetRankText(Rank);
 
     [ObservableProperty]
     private int _enhanceLevel;
@@ -89,19 +91,19 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(SellValueText))]
     private int _sellPrice;
 
-    public string SellValueText => _frameService.FormatSellValue(SellPrice);
+    public string SellValueText => FrameService.FormatSellValue(SellPrice);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RequiredLevelText))]
     private int _requiredLevel;
 
-    public string RequiredLevelText => _frameService.FormatRequiredLevel(RequiredLevel);
+    public string RequiredLevelText => FrameService.FormatRequiredLevel(RequiredLevel);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ItemTradeText))]
     private int _itemTrade;
 
-    public string ItemTradeText => _frameService.FormatItemTrade(ItemTrade);
+    public string ItemTradeText => FrameService.FormatItemTrade(ItemTrade);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(JobClassText))]
@@ -122,9 +124,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(PetFoodColor))]
     private int _petFood;
 
-    public string PetFoodText => _frameService.FormatPetFood(PetFood);
+    public string PetFoodText => FrameService.FormatPetFood(PetFood);
 
-    public string PetFoodColor => _frameService.FormatPetFoodColor(PetFood);
+    public string PetFoodColor => FrameService.FormatPetFoodColor(PetFood);
 
     public static string AugmentStone => Resources.AugmentStone;
 
@@ -132,7 +134,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(AugmentText))]
     private int _augmentValue;
 
-    public string AugmentText => _frameService.FormatAugmentStone(AugmentValue);
+    public string AugmentText => FrameService.FormatAugmentStone(AugmentValue);
+
+#endregion
 
     #region Fixed Option
 
@@ -257,9 +261,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(SocketOption01Text))]
     private int _socketOption01Value;
 
-    public string SocketOption01Text => SocketOption01 != 0 ? _frameService.GetOptionName(SocketOption01, SocketOption01Value) : _frameService.GetSocketText(Socket01Color);
+    public string SocketOption01Text => SocketOption01 != 0 ? _frameService.GetOptionName(SocketOption01, SocketOption01Value) : FrameService.GetSocketText(Socket01Color);
 
-    public string SocketOption01Color => SocketOption01 != 0 ? _frameService.GetColorFromOption(SocketOption01) : _frameService.GetSocketColor(Socket01Color);
+    public string SocketOption01Color => SocketOption01 != 0 ? _frameService.GetColorFromOption(SocketOption01) : FrameService.GetSocketColor(Socket01Color);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption02Text))]
@@ -270,9 +274,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(SocketOption02Text))]
     private int _socketOption02Value;
 
-    public string SocketOption02Text => SocketOption02 != 0 ? _frameService.GetOptionName(SocketOption02, SocketOption02Value) : _frameService.GetSocketText(Socket02Color);
+    public string SocketOption02Text => SocketOption02 != 0 ? _frameService.GetOptionName(SocketOption02, SocketOption02Value) : FrameService.GetSocketText(Socket02Color);
 
-    public string? SocketOption02Color => SocketOption02 != 0 ? _frameService.GetColorFromOption(SocketOption02) : _frameService.GetSocketColor(Socket02Color);
+    public string? SocketOption02Color => SocketOption02 != 0 ? _frameService.GetColorFromOption(SocketOption02) : FrameService.GetSocketColor(Socket02Color);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption03Text))]
@@ -283,9 +287,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(SocketOption03Text))]
     private int _socketOption03Value;
 
-    public string SocketOption03Text => SocketOption03 != 0 ? _frameService.GetOptionName(SocketOption03, SocketOption03Value) : _frameService.GetSocketText(Socket03Color);
+    public string SocketOption03Text => SocketOption03 != 0 ? _frameService.GetOptionName(SocketOption03, SocketOption03Value) : FrameService.GetSocketText(Socket03Color);
 
-    public string? SocketOption03Color => SocketOption03 != 0 ? _frameService.GetColorFromOption(SocketOption03) : _frameService.GetSocketColor(Socket03Color);
+    public string? SocketOption03Color => SocketOption03 != 0 ? _frameService.GetColorFromOption(SocketOption03) : FrameService.GetSocketColor(Socket03Color);
 
     #endregion
 }

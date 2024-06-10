@@ -27,7 +27,12 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
 
     public async void Receive(CharacterInfoMessage message)
     {
-        if (message.Recipient == "FortuneWindow")
+        if (Token == Guid.Empty)
+        {
+            Token = message.Token;
+        }
+
+        if (message.Recipient == "FortuneWindow" && message.Token == Token)
         {
             var characterInfo = message.Value;
 
@@ -179,6 +184,9 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
     #endregion
 
     #region Properties
+    [ObservableProperty]
+    private Guid? _token = Guid.Empty;
+
     [ObservableProperty]
     private string _title = "Character Fortune";
 

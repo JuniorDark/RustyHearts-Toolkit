@@ -22,11 +22,20 @@ public partial class MainWindowViewModel : ObservableObject
             new NavigationViewItem(Resources.Tools, SymbolRegular.WindowDatabase24, typeof(DatabaseToolsPage)),
             new NavigationViewItem("Character Edit", SymbolRegular.WindowDatabase24, typeof(CharacterEditPage)),
             new NavigationViewItem("Character Restore", SymbolRegular.WindowDatabase24, typeof(CharacterRestorePage)),
+            new NavigationViewItem("Coupon", SymbolRegular.WindowDatabase24, typeof(CouponPage)),
+        }
+    },
+    new NavigationViewItem()
+    {
+        Content = "SQLite Database",
+        Icon = new SymbolIcon { Symbol = SymbolRegular.TextBulletListSquareToolbox20 },
+        MenuItemsSource = new object[]
+        {
+             new NavigationViewItem("SQLite Database Manager", SymbolRegular.HomeDatabase24, typeof(GMDatabaseManagerPage)),
              new NavigationViewItem(Resources.Database, SymbolRegular.WindowDatabase24, typeof(DatabasePage)),
         }
     },
     new NavigationViewItem("Edit Tools", SymbolRegular.DocumentTextToolbox24, typeof(EditToolsPage)),
-    new NavigationViewItem("SQLite Database Manager", SymbolRegular.Home24, typeof(GMDatabaseManagerPage)),
     ];
 
     [ObservableProperty]

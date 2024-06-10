@@ -27,7 +27,12 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
     public async void Receive(CharacterInfoMessage message)
     {
-        if (message.Recipient == "TitleWindow")
+        if (Token == Guid.Empty)
+        {
+            Token = message.Token;
+        }
+
+        if (message.Recipient == "TitleWindow" && message.Token == Token)
         {
             var characterInfo = message.Value;
 
@@ -331,6 +336,9 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
     #endregion
 
     #region Properties
+    [ObservableProperty]
+    private Guid? _token = Guid.Empty;
+
     [ObservableProperty]
     private string _title = "Character Title";
 

@@ -95,6 +95,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         {
             WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CharacterWindowViewModel", "EquipItem", Token));
         }
+        else if (MessageType == "Coupon")
+        {
+            WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponViewModel", "Coupon", Token));
+        }
     }
 
     private bool CanExecuteCommand()
@@ -162,6 +166,13 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
                     SlotFilter(itemData.SlotIndex);
 
+                }
+                else if (message.MessageType == "Coupon")
+                {
+                    Title = $"Add Coupon Item";
+
+                    SlotIndexMin = itemData.SlotIndex;
+                    SlotIndexMax = itemData.SlotIndex;
                 }
                 else
                 {
@@ -820,19 +831,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         _frameViewModel.ItemName = value;
     }
 
-    public string ItemNameColor => GetBranchColor(ItemBranch);
-
-    private static string GetBranchColor(int branch)
-    {
-        return branch switch
-        {
-            2 => "#2adf00",
-            4 => "#009cff",
-            5 => "#eed040",
-            6 => "#d200f8",
-            _ => "White",
-        };
-    }
+    public string ItemNameColor => FrameService.GetBranchColor(ItemBranch);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ItemNameColor))]

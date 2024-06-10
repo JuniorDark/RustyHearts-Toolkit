@@ -7,11 +7,14 @@ namespace RHToolkit.Services
     public interface IDatabaseService
     {
         Task AddCharacterTitleAsync(CharacterInfo characterInfo, int titleId, int remainTime, int expireTime);
+        Task AddCouponAsync(string couponCode, ItemData itemData);
         Task<bool> CharacterHasSanctionAsync(Guid characterId);
         Task<bool> CharacterHasTitle(Guid characterId, int titleID);
         Task CharacterSanctionAsync(CharacterInfo characterInfo, EnumService.SanctionOperationType operationType, Guid sanctionUid, int sanctionKind, string reasonDetails, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount);
+        Task<bool> CouponExists(string couponCode);
         Task DeleteCharacterAsync(Guid authId, Guid characterId);
         Task DeleteCharacterTitleAsync(CharacterInfo characterInfo, Guid titleUid);
+        Task DeleteCouponAsync(int couponNumber);
         Task EquipCharacterTitleAsync(CharacterInfo characterInfo, Guid titleId);
         Task<List<ItemData>> GetAccountItemList(Guid authId);
         Task<string[]> GetAllCharacterNamesAsync(string isConnect = "");
@@ -30,6 +33,7 @@ namespace RHToolkit.Services
         Task<DataRow?> ReadCharacterFortuneAsync(Guid characterId);
         Task<DataTable> ReadCharacterSanctionListAsync(Guid characterId);
         Task<DataTable?> ReadCharacterTitleListAsync(Guid characterId);
+        Task<DataTable?> ReadCouponListAsync();
         Task RemoveFortuneAsync(CharacterInfo characterInfo, int fortuneState, int fortuneID1, int fortuneID2, int fortuneID3);
         Task RestoreCharacterAsync(Guid characterId);
         Task SanctionLogAsync(CharacterInfo characterInfo, Guid sanctionUid, DateTime startTime, DateTime endTime, string reason);

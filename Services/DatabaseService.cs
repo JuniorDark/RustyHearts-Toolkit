@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.VisualBasic.ApplicationServices;
 using RHToolkit.Models;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
@@ -886,7 +887,7 @@ namespace RHToolkit.Services
                 connection,
                 transaction,
                 ("@character_id", characterInfo.CharacterID)
-            );
+                );
 
                 await _sqlDatabaseService.ExecuteProcedureAsync(
                      "up_update_character_fortune",
@@ -1245,6 +1246,128 @@ namespace RHToolkit.Services
             }
         }
 
+        #endregion
+
+        #region Coupon
+        public async Task<DataTable?> ReadCouponListAsync()
+        {
+            DataTable dataTable = new();
+            dataTable.Columns.Add("no", typeof(int));
+            dataTable.Columns.Add("use", typeof(byte));
+            dataTable.Columns.Add("use_date", typeof(DateTime));
+            dataTable.Columns.Add("bcust_id", typeof(string));
+            dataTable.Columns.Add("Name", typeof(string));
+            dataTable.Columns.Add("coupon_type", typeof(short));
+            dataTable.Columns.Add("coupon", typeof(string));
+            dataTable.Columns.Add("valid_date", typeof(DateTime));
+            dataTable.Columns.Add("item_code", typeof(int));
+            dataTable.Columns.Add("item_count", typeof(short));
+            dataTable.Columns.Add("CouponStatus", typeof(string));
+
+            try
+            {
+                string selectQuery = "SELECT * FROM Coupon";
+
+                using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
+
+                await _sqlDatabaseService.ExecuteQueryAsync(
+                     selectQuery,
+                     connection,
+                     reader =>
+                     {
+                         while (reader.Read())
+                         {
+                             int no = reader.GetInt32(0);
+                             byte use = reader.GetByte(1);
+                             DateTime useDate = reader.GetDateTime(2);
+                             string? accountName = !reader.IsDBNull(5) ? reader.GetString(5) : string.Empty;
+                             string? characterName = !reader.IsDBNull(6) ? reader.GetString(6) : string.Empty;
+                             short couponType = reader.GetInt16(7);
+                             string couponCode = reader.GetString(8);
+                             DateTime? validDate = !reader.IsDBNull(10) ? reader.GetDateTime(10) : null;
+                             int itemCode = reader.GetInt32(11);
+                             short itemCount = reader.GetInt16(12);
+
+                             string couponStatus = use == 0 ? "Unused" : "Used";
+
+                             dataTable.Rows.Add(no, use, useDate, accountName, characterName, couponType, couponCode, validDate, itemCode, itemCount, couponStatus);
+                         }
+                     }
+                 );
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error reading coupon: {ex.Message}");
+            }
+
+            return dataTable;
+        }
+
+        public async Task<bool> CouponExists(string couponCode)
+        {
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
+
+            object? result = await _sqlDatabaseService.ExecuteScalarAsync(
+                "SELECT COUNT(*) FROM Coupon WHERE coupon = @coupon",
+                connection,
+                ("@coupon", couponCode)
+            );
+
+            int couponCount = result != null ? (int)result : 0;
+
+            return couponCount > 0;
+        }
+
+        public async Task AddCouponAsync(string couponCode, ItemData itemData)
+        {
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                await _sqlDatabaseService.ExecuteNonQueryAsync(
+                     "INSERT INTO Coupon ([use], use_date, coupon_type, coupon, item_code, item_count) " +
+                     "VALUES (@use, @use_date, @coupon_type, @coupon, @item_code, @item_count)",
+                     connection,
+                     transaction,
+                     ("@use", 0),
+                     ("@use_date", DateTime.Now),
+                     ("@coupon_type", 2),
+                     ("@coupon", couponCode),
+                     ("@item_code", itemData.ID),
+                     ("@item_count", itemData.Amount)
+                 );
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error adding coupon: {ex.Message}", ex);
+            }
+        }
+
+        public async Task DeleteCouponAsync(int couponNumber)
+        {
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                await _sqlDatabaseService.ExecuteNonQueryAsync(
+               "DELETE FROM Coupon WHERE no = @couponNumber",
+               connection,
+               transaction,
+               ("@couponNumber", couponNumber)
+               );
+
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error deleting coupon: {ex.Message}", ex);
+            }
+        }
         #endregion
 
         #endregion
