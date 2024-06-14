@@ -140,6 +140,7 @@ namespace RHToolkit.ViewModels.Pages
         private void OnCanExecuteWindowCommandChanged()
         {
             DeleteCharacterCommand.NotifyCanExecuteChanged();
+            OpenEquipmentWindowCommand.NotifyCanExecuteChanged();
             OpenTitleWindowCommand.NotifyCanExecuteChanged();
             OpenSanctionWindowCommand.NotifyCanExecuteChanged();
             OpenFortuneWindowCommand.NotifyCanExecuteChanged();
@@ -162,6 +163,16 @@ namespace RHToolkit.ViewModels.Pages
                 RHMessageBoxHelper.ShowOKMessage($"Error reading Character {errorMessage}: {ex.Message}", "Error");
             }
         }
+
+        #region Equipment
+
+        [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+        private void OpenEquipmentWindow()
+        {
+            OpenWindow(_windowsService.OpenEquipmentWindow, "Equipment");
+        }
+
+        #endregion
 
         #region Title
 

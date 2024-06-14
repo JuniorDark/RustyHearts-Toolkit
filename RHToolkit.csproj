@@ -550,6 +550,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Views\Windows\EquipmentWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Windows\CharacterWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -579,6 +582,9 @@
 
   <ItemGroup>
     <Page Update="Views\Pages\CouponPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Windows\EquipmentWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

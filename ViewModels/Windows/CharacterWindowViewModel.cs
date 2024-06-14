@@ -9,7 +9,7 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class CharacterWindowViewModel : ObservableObject, IRecipient<CharacterInfoMessage>, IRecipient<ItemDataMessage>
+public partial class CharacterWindowViewModel : ObservableObject, IRecipient<CharacterInfoMessage>
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
@@ -26,7 +26,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         PopulateClassItems();
         PopulateLobbyItems();
 
-        WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
         WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
     }
 
@@ -46,7 +45,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
             await ReadCharacterData(characterInfo.CharacterName!);
         }
 
-        WeakReferenceMessenger.Default.Unregister<CharacterInfoMessage>(this);
     }
 
     private async Task ReadCharacterData(string characterName)
@@ -110,7 +108,27 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         ClearAllEquipItems();
         CharacterData = null;
         ItemDatabaseList = null;
-        DeletedItemDatabaseList = null;
+    }
+
+    private void ClearAllEquipItems()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            ResetItemProperties(i);
+        }
+    }
+
+    private void ResetItemProperties(int slotIndex)
+    {
+        string iconNameProperty = $"ItemIcon{slotIndex}";
+        string iconBranchProperty = $"ItemIconBranch{slotIndex}";
+        string nameProperty = $"ItemName{slotIndex}";
+        string amountProperty = $"ItemAmount{slotIndex}";
+
+        GetType().GetProperty(iconNameProperty)?.SetValue(this, null);
+        GetType().GetProperty(iconBranchProperty)?.SetValue(this, 0);
+        GetType().GetProperty(nameProperty)?.SetValue(this, null);
+        GetType().GetProperty(amountProperty)?.SetValue(this, 0);
     }
     #endregion
 
@@ -193,6 +211,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         SaveCharacterNameCommand.NotifyCanExecuteChanged();
         SaveCharacterClassCommand.NotifyCanExecuteChanged();
         SaveCharacterJobCommand.NotifyCanExecuteChanged();
+        OpenEquipmentWindowCommand.NotifyCanExecuteChanged();
         OpenTitleWindowCommand.NotifyCanExecuteChanged();
         OpenSanctionWindowCommand.NotifyCanExecuteChanged();
         OpenFortuneWindowCommand.NotifyCanExecuteChanged();
@@ -347,6 +366,18 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     }
     #endregion
 
+    #region Show Item
+    [RelayCommand]
+    private void ShowItem(string parameter)
+    {
+        if (int.TryParse(parameter, out int slotIndex))
+        {
+            ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
+            
+        }
+    }
+    #endregion
+
     #region Windows Buttons
     private void OpenWindow(Action<CharacterInfo> openWindowAction, string errorMessage)
     {
@@ -362,6 +393,16 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
             RHMessageBoxHelper.ShowOKMessage($"Error reading Character {errorMessage}: {ex.Message}", "Error");
         }
     }
+
+    #region Equipment
+
+    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+    private void OpenEquipmentWindow()
+    {
+        OpenWindow(_windowsService.OpenEquipmentWindow, "Equipment");
+    }
+
+    #endregion
 
     #region Title
 
@@ -434,140 +475,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
     #endregion
 
-    #region Item Data
-
-    #region Receive
-    public void Receive(ItemDataMessage message)
-    {
-        if (message.Recipient == "CharacterWindowViewModel" && message.Token == Token)
-        {
-            var newItemData = message.Value;
-
-            ItemDatabaseList ??= [];
-
-            // Find the existing item in ItemDatabaseList
-            var existingItem = ItemDatabaseList.FirstOrDefault(item => item.SlotIndex == newItemData.SlotIndex);
-
-            if (existingItem != null)
-            {
-                // Update existing item with the received data
-                UpdateItem(existingItem, newItemData);
-
-            }
-            else
-            {
-                // Create a new item with the received data
-                var newItem = CreateNewItem(newItemData);
-
-                // Add the new item to the list
-                ItemDatabaseList.Add(newItem);
-            }
-
-            SetItemProperties(newItemData);
-        }
-    }
-
-    private void UpdateItem(ItemData existingItem, ItemData newItemData)
-    {
-        // Check if the IDs are different
-        if (existingItem.ID != newItemData.ID)
-        {
-            // Move the existing item to DeletedItemDatabaseList
-            DeletedItemDatabaseList ??= [];
-            DeletedItemDatabaseList.Add(existingItem);
-
-            // Remove the existing item from ItemDatabaseList
-            ItemDatabaseList?.Remove(existingItem);
-
-            // Create a new item with the received data
-            var newItem = CreateNewItem(newItemData);
-
-            // Add the new item to the list
-            ItemDatabaseList?.Add(newItem);
-        }
-        else
-        {
-            // Update only the properties sent by SelectItem
-            existingItem.Name = newItemData.Name;
-            existingItem.IconName = newItemData.IconName;
-            existingItem.Durability = newItemData.Durability;
-            existingItem.DurabilityMax = newItemData.DurabilityMax;
-            existingItem.EnhanceLevel = newItemData.EnhanceLevel;
-            existingItem.AugmentStone = newItemData.AugmentStone;
-            existingItem.Rank = newItemData.Rank;
-            existingItem.Weight = newItemData.Weight;
-            existingItem.Reconstruction = newItemData.Reconstruction;
-            existingItem.ReconstructionMax = newItemData.ReconstructionMax;
-            existingItem.Amount = newItemData.Amount;
-            existingItem.Option1Code = newItemData.Option1Code;
-            existingItem.Option2Code = newItemData.Option2Code;
-            existingItem.Option3Code = newItemData.Option3Code;
-            existingItem.Option1Value = newItemData.Option1Value;
-            existingItem.Option2Value = newItemData.Option2Value;
-            existingItem.Option3Value = newItemData.Option3Value;
-            existingItem.SocketCount = newItemData.SocketCount;
-            existingItem.Socket1Color = newItemData.Socket1Color;
-            existingItem.Socket2Color = newItemData.Socket2Color;
-            existingItem.Socket3Color = newItemData.Socket3Color;
-            existingItem.Socket1Code = newItemData.Socket1Code;
-            existingItem.Socket2Code = newItemData.Socket2Code;
-            existingItem.Socket3Code = newItemData.Socket3Code;
-            existingItem.Socket1Value = newItemData.Socket1Value;
-            existingItem.Socket2Value = newItemData.Socket2Value;
-            existingItem.Socket3Value = newItemData.Socket3Value;
-            existingItem.UpdateTime = DateTime.Now;
-
-            // Update UI with the new values
-            SetItemProperties(existingItem);
-        }
-    }
-
-    private ItemData CreateNewItem(ItemData newItemData)
-    {
-        // Create a new item with the received data
-        var newItem = new ItemData
-        {
-            // Assign received data
-            SlotIndex = newItemData.SlotIndex,
-            ID = newItemData.ID,
-            Name = newItemData.Name,
-            IconName = newItemData.IconName,
-            Durability = newItemData.Durability,
-            DurabilityMax = newItemData.DurabilityMax,
-            EnhanceLevel = newItemData.EnhanceLevel,
-            AugmentStone = newItemData.AugmentStone,
-            Rank = newItemData.Rank,
-            Weight = newItemData.Weight,
-            Reconstruction = newItemData.Reconstruction,
-            ReconstructionMax = newItemData.ReconstructionMax,
-            Amount = newItemData.Amount,
-            Option1Code = newItemData.Option1Code,
-            Option2Code = newItemData.Option2Code,
-            Option3Code = newItemData.Option3Code,
-            Option1Value = newItemData.Option1Value,
-            Option2Value = newItemData.Option2Value,
-            Option3Value = newItemData.Option3Value,
-            SocketCount = newItemData.SocketCount,
-            Socket1Color = newItemData.Socket1Color,
-            Socket2Color = newItemData.Socket2Color,
-            Socket3Color = newItemData.Socket3Color,
-            Socket1Code = newItemData.Socket1Code,
-            Socket2Code = newItemData.Socket2Code,
-            Socket3Code = newItemData.Socket3Code,
-            Socket1Value = newItemData.Socket1Value,
-            Socket2Value = newItemData.Socket2Value,
-            Socket3Value = newItemData.Socket3Value,
-            // Generate values for additional properties
-            CharacterId = CharacterData!.CharacterID,
-            AuthId = CharacterData.AuthID,
-            ItemUid = Guid.NewGuid(),
-            CreateTime = DateTime.Now,
-            UpdateTime = DateTime.Now,
-
-        };
-
-        return newItem;
-    }
+    #region Load Item Data
 
     private void LoadEquipmentItems(List<ItemData> equipmentItems)
     {
@@ -611,90 +519,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         GetType().GetProperty(iconBranchProperty)?.SetValue(this, itemData.Branch);
         GetType().GetProperty(nameProperty)?.SetValue(this, itemData.Name);
     }
-
-    #endregion
-
-    #region Send
-    [RelayCommand]
-    private void AddItem(string parameter)
-    {
-        if (CharacterData == null) return;
-
-        if (int.TryParse(parameter, out int slotIndex))
-        {
-            ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-
-            _windowsService.OpenItemWindow(characterInfo.CharacterID, "EquipItem", itemData, characterInfo);
-        }
-    }
-
-    #endregion
-
-    #region Remove Item
-
-    [ObservableProperty]
-    private List<ItemData>? _deletedItemDatabaseList;
-
-    [RelayCommand]
-    private void RemoveItem(string parameter)
-    {
-        if (int.TryParse(parameter, out int slotIndex))
-        {
-            if (ItemDatabaseList != null)
-            {
-                var removedItemIndex = ItemDatabaseList.FindIndex(i => i.SlotIndex == slotIndex);
-                if (removedItemIndex != -1)
-                {
-                    // Get the removed item
-                    var removedItem = ItemDatabaseList[removedItemIndex];
-
-                    // Set the SlotIndex to a negative value
-                    if (slotIndex == 0)
-                    {
-                        removedItem.SlotIndex = -1;
-                    }
-                    else
-                    {
-                        removedItem.SlotIndex = -slotIndex;
-                    }
-
-                    // Remove the ItemData with the specified SlotIndex from ItemDatabaseList
-                    ItemDatabaseList.RemoveAt(removedItemIndex);
-
-                    // Add the removed item to DeletedItemDatabaseList
-                    DeletedItemDatabaseList ??= [];
-                    DeletedItemDatabaseList.Add(removedItem);
-
-                    // Update properties to default values for the removed SlotIndex
-                    ResetItemProperties(slotIndex);
-                }
-            }
-        }
-    }
-
-    private void ClearAllEquipItems()
-    {
-        for (int i = 0; i < 20; i++)
-        {
-            RemoveItem(i.ToString());
-        }
-    }
-
-    private void ResetItemProperties(int slotIndex)
-    {
-        string iconNameProperty = $"ItemIcon{slotIndex}";
-        string iconBranchProperty = $"ItemIconBranch{slotIndex}";
-        string nameProperty = $"ItemName{slotIndex}";
-        string amountProperty = $"ItemAmount{slotIndex}";
-
-        GetType().GetProperty(iconNameProperty)?.SetValue(this, null);
-        GetType().GetProperty(iconBranchProperty)?.SetValue(this, 0);
-        GetType().GetProperty(nameProperty)?.SetValue(this, Resources.AddItemDesc);
-        GetType().GetProperty(amountProperty)?.SetValue(this, 0);
-    }
-
-    #endregion
 
     #endregion
 

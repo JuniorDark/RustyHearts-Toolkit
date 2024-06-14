@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using RHToolkit.ViewModels.Controls;
+using System.Windows.Controls;
 
 namespace RHToolkit.Controls
 {
@@ -7,6 +8,12 @@ namespace RHToolkit.Controls
         public GearFrame()
         {
             InitializeComponent();
+        }
+
+        public GearFrame(FrameViewModel viewModel)
+        {
+            InitializeComponent();
+            DataContext = viewModel;
         }
     }
 }

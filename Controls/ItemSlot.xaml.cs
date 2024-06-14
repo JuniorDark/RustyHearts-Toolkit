@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using RHToolkit.Models;
+using RHToolkit.ViewModels.Controls;
+using System.Windows.Controls;
 
 namespace RHToolkit.Controls
 {
@@ -30,6 +32,24 @@ namespace RHToolkit.Controls
 
         public static readonly DependencyProperty ItemAmountProperty = DependencyProperty.Register(
             "ItemAmount", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
+
+        public static readonly DependencyProperty ItemDataProperty = DependencyProperty.Register(
+            "ItemData", typeof(ItemData), typeof(ItemSlot), new PropertyMetadata(null));
+
+        public static readonly DependencyProperty FrameViewModelProperty = DependencyProperty.Register(
+            "FrameViewModel", typeof(FrameViewModel), typeof(ItemSlot), new PropertyMetadata(null));
+
+        public ItemData ItemData
+        {
+            get => (ItemData)GetValue(ItemDataProperty);
+            set => SetValue(ItemDataProperty, value);
+        }
+
+        public FrameViewModel FrameViewModel
+        {
+            get => (FrameViewModel)GetValue(FrameViewModelProperty);
+            set => SetValue(FrameViewModelProperty, value);
+        }
 
         public bool IsButtonEnabled
         {
@@ -89,5 +109,6 @@ namespace RHToolkit.Controls
         {
             InitializeComponent();
         }
+
     }
 }

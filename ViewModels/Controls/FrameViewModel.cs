@@ -1,4 +1,5 @@
-﻿using RHToolkit.Properties;
+﻿using RHToolkit.Models;
+using RHToolkit.Properties;
 using RHToolkit.Services;
 using static RHToolkit.Models.EnumService;
 
@@ -9,7 +10,80 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     private readonly IFrameService _frameService = frameService;
     private readonly IGMDatabaseService _gmDatabaseService = gmDatabaseService;
 
+
     #region Properties
+
+    [ObservableProperty]
+    private ItemData? _itemData;
+    partial void OnItemDataChanged(ItemData? value)
+    {
+        UpdateItemData(value);
+    }
+
+    private void UpdateItemData(ItemData? itemData)
+    {
+        if (itemData != null)
+        {
+            ItemId = itemData.ID;
+            ItemName = itemData.Name;
+            Description = itemData.Description;
+            ItemBranch = itemData.Branch;
+            IconName = itemData.IconName;
+            ItemTrade = itemData.ItemTrade;
+            MaxDurability = itemData.Durability;
+            ReconstructionMax = itemData.ReconstructionMax;
+            Reconstruction = itemData.ReconstructionMax;
+            Type = itemData.Type;
+            Category = itemData.Category;
+            SubCategory = itemData.SubCategory;
+            JobClass = itemData.JobClass;
+            Defense = itemData.Defense;
+            MagicDefense = itemData.MagicDefense;
+            WeaponID00 = itemData.WeaponID00;
+            SellPrice = itemData.SellPrice;
+            RequiredLevel = itemData.LevelLimit;
+            SetId = itemData.SetId;
+            PetFood = itemData.PetFood;
+            FixedOption01 = itemData.FixOption1Code;
+            FixedOption01Value = itemData.FixOption1Value;
+            FixedOption02 = itemData.FixOption2Code;
+            FixedOption02Value = itemData.FixOption2Value;
+            SocketCountMax = itemData.SocketCountMax;
+            SocketCount = itemData.SocketCountMax;
+
+            SlotIndex = itemData.SlotIndex;
+            MaxDurability = itemData.DurabilityMax;
+            EnhanceLevel = itemData.EnhanceLevel;
+            AugmentValue = itemData.AugmentStone;
+            Rank = itemData.Rank;
+            Weight = itemData.Weight;
+            ReconstructionMax = itemData.ReconstructionMax;
+            Reconstruction = itemData.Reconstruction;
+            RandomOption01 = itemData.Option1Code;
+            RandomOption02 = itemData.Option2Code;
+            RandomOption03 = itemData.Option3Code;
+            RandomOption01Value = itemData.Option1Value;
+            RandomOption02Value = itemData.Option2Value;
+            RandomOption03Value = itemData.Option3Value;
+            SocketCount = itemData.SocketCount;
+            Socket01Color = itemData.Socket1Color;
+            Socket02Color = itemData.Socket2Color;
+            Socket03Color = itemData.Socket3Color;
+            SocketOption01 = itemData.Socket1Code;
+            SocketOption02 = itemData.Socket2Code;
+            SocketOption03 = itemData.Socket3Code;
+            SocketOption01Value = itemData.Socket1Value;
+            SocketOption02Value = itemData.Socket2Value;
+            SocketOption03Value = itemData.Socket3Value;
+        }
+
+    }
+
+    [ObservableProperty]
+    private int _slotIndex;
+
+    [ObservableProperty]
+    private int _itemId;
 
     [ObservableProperty]
     private string? _itemName;

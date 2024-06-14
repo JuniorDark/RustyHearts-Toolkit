@@ -628,6 +628,7 @@
                         Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}"
                         Text="{Binding ItemName}" />
                     <control:ItemSlot
+                        FrameViewModel="{Binding FrameViewModel}"
                         ItemIcon="{Binding IconName}"
                         ItemIconBranch="{Binding ItemBranch}"
                         ItemName="{Binding ItemName}"

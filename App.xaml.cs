@@ -78,6 +78,8 @@ public partial class App : Application
                 _ = services.AddTransient<FortuneWindowViewModel>();
                 _ = services.AddTransient<RHEditorWindow>();
                 _ = services.AddTransient<RHEditorViewModel>();
+                _ = services.AddTransient<EquipmentWindow>();
+                _ = services.AddTransient<EquipmentWindowViewModel>();
 
             }
         )

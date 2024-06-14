@@ -50,6 +50,7 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
 
     private static int _openWindowsCount = 0;
     private readonly Dictionary<Guid, Window> _characterWindows = [];
+    private readonly Dictionary<Guid, Window> _equipmentWindows = [];
     private readonly Dictionary<Guid, Window> _titleWindows = [];
     private readonly Dictionary<Guid, Window> _sanctionWindows = [];
     private readonly Dictionary<Guid, Window> _fortuneWindows = [];
@@ -100,6 +101,11 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
     public void OpenCharacterWindow(CharacterInfo characterInfo)
     {
         OpenWindow<CharacterWindow>(characterInfo, () => _windowsProviderService.ShowInstance<CharacterWindow>(true), _characterWindows, "CharacterWindow");
+    }
+
+    public void OpenEquipmentWindow(CharacterInfo characterInfo)
+    {
+        OpenWindow<EquipmentWindow>(characterInfo, () => _windowsProviderService.ShowInstance<EquipmentWindow>(true), _equipmentWindows, "EquipmentWindow");
     }
 
     public void OpenTitleWindow(CharacterInfo characterInfo)
