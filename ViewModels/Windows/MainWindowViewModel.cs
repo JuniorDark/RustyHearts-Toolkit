@@ -19,10 +19,10 @@ public partial class MainWindowViewModel : ObservableObject
         Icon = new SymbolIcon { Symbol = SymbolRegular.TextBulletListSquareToolbox20 },
         MenuItemsSource = new object[]
         {
-            new NavigationViewItem(Resources.Tools, SymbolRegular.WindowDatabase24, typeof(DatabaseToolsPage)),
             new NavigationViewItem("Character Edit", SymbolRegular.WindowDatabase24, typeof(CharacterEditPage)),
             new NavigationViewItem("Character Restore", SymbolRegular.WindowDatabase24, typeof(CharacterRestorePage)),
             new NavigationViewItem("Coupon", SymbolRegular.WindowDatabase24, typeof(CouponPage)),
+            new NavigationViewItem(Resources.Tools, SymbolRegular.WindowDatabase24, typeof(DatabaseToolsPage)),
         }
     },
     new NavigationViewItem()

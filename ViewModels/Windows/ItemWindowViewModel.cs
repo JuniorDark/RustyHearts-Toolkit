@@ -92,10 +92,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         switch (MessageType)
         {
             case "Mail":
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindowViewModel", "Mail", Token));
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindow", "Mail", Token));
                 break;
             case "EquipItem":
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CharacterWindowViewModel", "EquipItem", Token));
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "EquipWindow", "EquipItem", Token));
                 break;
             case "Coupon":
                 WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponViewModel", "Coupon", Token));

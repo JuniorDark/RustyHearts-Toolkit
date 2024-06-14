@@ -7,6 +7,7 @@ using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.SQLite;
 using RHToolkit.Properties;
 using RHToolkit.Services;
+using RHToolkit.ViewModels.Controls;
 using System.Data;
 using System.Windows.Controls;
 
@@ -16,15 +17,19 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
+    private readonly IFrameService _frameService;
+    private readonly IGMDatabaseService _gmDatabaseService;
     private readonly MailHelper _mailHelper;
     private readonly CachedDataManager _cachedDataManager;
     private readonly Guid _token;
 
-    public MailWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, MailHelper mailHelper, CachedDataManager cachedDataManager)
+    public MailWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, IFrameService frameService, IGMDatabaseService gmDatabaseService, MailHelper mailHelper, CachedDataManager cachedDataManager)
     {
         _token = Guid.NewGuid();
         _windowsService = windowsService;
         _databaseService = databaseService;
+        _frameService = frameService;
+        _gmDatabaseService = gmDatabaseService;
         _mailHelper = mailHelper;
         _cachedDataManager = cachedDataManager;
         WeakReferenceMessenger.Default.Register(this);
@@ -52,7 +57,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
     public void Receive(ItemDataMessage message)
     {
-        if (message.Recipient == "MailWindowViewModel" && message.Token == _token)
+        if (message.Recipient == "MailWindow" && message.Token == _token)
         {
             var itemData = message.Value;
 
@@ -68,9 +73,81 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
             // Add the new ItemData to the Item list
             ItemDataList.Add(itemData);
 
-            SetItemProperties(itemData);
-
+            SetItemData(itemData);
         }
+    }
+
+    private void SetItemData(ItemData selectedItemData)
+    {
+        // Find the corresponding ItemData in the _cachedItemDataList
+        ItemData cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == selectedItemData.ID) ?? new ItemData();
+
+        ItemData itemData = new()
+        {
+            ID = cachedItem.ID,
+            Name = cachedItem.Name ?? "",
+            Description = cachedItem.Description ?? "",
+            IconName = cachedItem.IconName ?? "",
+            Type = cachedItem.Type,
+            WeaponID00 = cachedItem.WeaponID00,
+            Category = cachedItem.Category,
+            SubCategory = cachedItem.SubCategory,
+            LevelLimit = cachedItem.LevelLimit,
+            ItemTrade = cachedItem.ItemTrade,
+            OverlapCnt = cachedItem.OverlapCnt,
+            Defense = cachedItem.Defense,
+            MagicDefense = cachedItem.MagicDefense,
+            Branch = cachedItem.Branch,
+            OptionCountMax = cachedItem.OptionCountMax,
+            SocketCountMax = cachedItem.SocketCountMax,
+            SellPrice = cachedItem.SellPrice,
+            PetFood = cachedItem.PetFood,
+            JobClass = cachedItem.JobClass,
+            SetId = cachedItem.SetId,
+            FixOption1Code = cachedItem.FixOption1Code,
+            FixOption1Value = cachedItem.FixOption1Value,
+            FixOption2Code = cachedItem.FixOption2Code,
+            FixOption2Value = cachedItem.FixOption2Value,
+
+            SlotIndex = selectedItemData.SlotIndex,
+            Amount = selectedItemData.Amount,
+            Reconstruction = selectedItemData.Reconstruction,
+            ReconstructionMax = selectedItemData.ReconstructionMax,
+            AugmentStone = selectedItemData.AugmentStone,
+            Rank = selectedItemData.Rank,
+            AcquireRoute = selectedItemData.AcquireRoute,
+            Physical = selectedItemData.Physical,
+            Magical = selectedItemData.Magical,
+            DurabilityMax = selectedItemData.DurabilityMax,
+            Weight = selectedItemData.Weight,
+            Durability = selectedItemData.Durability,
+            EnhanceLevel = selectedItemData.EnhanceLevel,
+            Option1Code = selectedItemData.Option1Code,
+            Option1Value = selectedItemData.Option1Value,
+            Option2Code = selectedItemData.Option2Code,
+            Option2Value = selectedItemData.Option2Value,
+            Option3Code = selectedItemData.Option3Code,
+            Option3Value = selectedItemData.Option3Value,
+            OptionGroup = selectedItemData.OptionGroup,
+            SocketCount = selectedItemData.SocketCount,
+            Socket1Code = selectedItemData.Socket1Code,
+            Socket1Value = selectedItemData.Socket1Value,
+            Socket2Code = selectedItemData.Socket2Code,
+            Socket2Value = selectedItemData.Socket2Value,
+            Socket3Code = selectedItemData.Socket3Code,
+            Socket3Value = selectedItemData.Socket3Value,
+            Socket1Color = selectedItemData.Socket1Color,
+            Socket2Color = selectedItemData.Socket2Color,
+            Socket3Color = selectedItemData.Socket3Color,
+        };
+
+        var frameViewModel = new FrameViewModel(_frameService, _gmDatabaseService)
+        {
+            ItemData = itemData
+        };
+
+        SetItemProperties(itemData);
+        SetFrameViewModelProperties(frameViewModel);
     }
 
     [ObservableProperty]
@@ -88,6 +165,14 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
         GetType().GetProperty(nameProperty)?.SetValue(this, itemData.Name);
         GetType().GetProperty(itemAmountProperty)?.SetValue(this, itemData.Amount);
     }
+
+    private void SetFrameViewModelProperties(FrameViewModel frameViewModel)
+    {
+        string frameViewModelProperty = $"FrameViewModel{frameViewModel.SlotIndex}";
+
+        GetType().GetProperty(frameViewModelProperty)?.SetValue(this, frameViewModel);
+    }
+
     #endregion
 
     #region Remove Item
@@ -118,11 +203,13 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
         string iconBranchProperty = $"ItemIconBranch{slotIndex}";
         string nameProperty = $"ItemName{slotIndex}";
         string amountProperty = $"ItemAmount{slotIndex}";
+        string frameViewModelProperty = $"FrameViewModel{slotIndex}";
 
         GetType().GetProperty(iconNameProperty)?.SetValue(this, null);
         GetType().GetProperty(iconBranchProperty)?.SetValue(this, 0);
         GetType().GetProperty(nameProperty)?.SetValue(this, Resources.AddItemDesc);
         GetType().GetProperty(amountProperty)?.SetValue(this, 0);
+        GetType().GetProperty(frameViewModelProperty)?.SetValue(this, null);
     }
 
     #endregion
@@ -502,6 +589,15 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
         || (allUnchecked
         && false);
     }
+
+    [ObservableProperty]
+    private FrameViewModel? _frameViewModel0;
+
+    [ObservableProperty]
+    private FrameViewModel? _frameViewModel1;
+
+    [ObservableProperty]
+    private FrameViewModel? _frameViewModel2;
 
     [ObservableProperty]
     private string? _itemName0 = Resources.AddItemDesc;

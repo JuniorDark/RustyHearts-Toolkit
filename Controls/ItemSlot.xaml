@@ -18,7 +18,8 @@
                 <ToolTip
                     MaxWidth="350"
                     Background="Transparent"
-                    BorderBrush="Transparent">
+                    BorderBrush="Transparent"
+                    Visibility="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource NullToVisibilityConverter}}">
                     <control:GearFrame DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ToolTip}}" />
                 </ToolTip>
             </Button.ToolTip>

@@ -15,6 +15,7 @@
     <local:IncrementConverter x:Key="IncrementConverter" />
     <local:IsConnectConverter x:Key="IsConnectConverter" />
     <local:ItemIdToSelectedItemConverter x:Key="ItemIdToSelectedItemConverter" />
+    <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
     <local:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter" />
     <local:StringFormatConverter x:Key="StringFormatConverter" />
     <local:StringToBrushConverter x:Key="StringToBrushConverter" />

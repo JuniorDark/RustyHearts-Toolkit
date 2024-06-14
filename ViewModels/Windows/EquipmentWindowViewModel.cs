@@ -150,9 +150,9 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
                 // Add the new item to the list
                 ItemDatabaseList.Add(newItem);
-            }
 
-            SetItemProperties(newItemData);
+                SetItemData(newItem);
+            }
         }
     }
 
@@ -173,6 +173,8 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
             // Add the new item to the list
             ItemDatabaseList?.Add(newItem);
+
+            SetItemData(newItem);
         }
         else
         {
@@ -206,17 +208,28 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             existingItem.Socket3Value = newItemData.Socket3Value;
             existingItem.UpdateTime = DateTime.Now;
 
-            // Update UI with the new values
-            SetItemProperties(existingItem);
+            SetItemData(existingItem);
         }
     }
 
     private ItemData CreateNewItem(ItemData newItemData)
     {
-        // Create a new item with the received data
         var newItem = new ItemData
         {
-            // Assign received data
+            CharacterId = CharacterData!.CharacterID,
+            AuthId = CharacterData.AuthID,
+            ItemUid = Guid.NewGuid(),
+            PageIndex = 0,
+            CreateTime = DateTime.Now,
+            UpdateTime = DateTime.Now,
+            ExpireTime = 0,
+            RemainTime = 0,
+            GCode = 1,
+            LockPassword = "",
+            LinkId = Guid.Empty,
+            IsSeizure = 0,
+            DefermentTime = 0,
+
             SlotIndex = newItemData.SlotIndex,
             ID = newItemData.ID,
             Name = newItemData.Name,
@@ -246,13 +259,6 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             Socket1Value = newItemData.Socket1Value,
             Socket2Value = newItemData.Socket2Value,
             Socket3Value = newItemData.Socket3Value,
-            // Generate values for additional properties
-            CharacterId = CharacterData!.CharacterID,
-            AuthId = CharacterData.AuthID,
-            ItemUid = Guid.NewGuid(),
-            CreateTime = DateTime.Now,
-            UpdateTime = DateTime.Now,
-
         };
 
         return newItem;
@@ -271,45 +277,51 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
     private void SetItemData(ItemData equipmentItem)
     {
-        // Find the corresponding ItemData object in the _cachedItemDataList
+        // Find the corresponding ItemData in the _cachedItemDataList
         ItemData cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == equipmentItem.ID) ?? new ItemData();
 
-        // Merge properties from equipmentItem and cachedItem into a single ItemData instance
         ItemData itemData = new()
         {
-            ItemUid = equipmentItem.ItemUid,
-            CharacterId = equipmentItem.CharacterId,
-            AuthId = equipmentItem.AuthId,
-            PageIndex = equipmentItem.PageIndex,
-            SlotIndex = equipmentItem.SlotIndex,
+            ID = cachedItem.ID,
             Name = cachedItem.Name ?? "",
             Description = cachedItem.Description ?? "",
             IconName = cachedItem.IconName ?? "",
             Type = cachedItem.Type,
-            ID = cachedItem.ID,
             WeaponID00 = cachedItem.WeaponID00,
             Category = cachedItem.Category,
             SubCategory = cachedItem.SubCategory,
             LevelLimit = cachedItem.LevelLimit,
             ItemTrade = cachedItem.ItemTrade,
             OverlapCnt = cachedItem.OverlapCnt,
-            Amount = equipmentItem.Amount,
             Defense = cachedItem.Defense,
             MagicDefense = cachedItem.MagicDefense,
             Branch = cachedItem.Branch,
             OptionCountMax = cachedItem.OptionCountMax,
             SocketCountMax = cachedItem.SocketCountMax,
-            Reconstruction = equipmentItem.Reconstruction,
-            ReconstructionMax = equipmentItem.ReconstructionMax,
             SellPrice = cachedItem.SellPrice,
             PetFood = cachedItem.PetFood,
             JobClass = cachedItem.JobClass,
             SetId = cachedItem.SetId,
-            AugmentStone = equipmentItem.AugmentStone,
             FixOption1Code = cachedItem.FixOption1Code,
             FixOption1Value = cachedItem.FixOption1Value,
             FixOption2Code = cachedItem.FixOption2Code,
             FixOption2Value = cachedItem.FixOption2Value,
+
+            ItemUid = equipmentItem.ItemUid,
+            CharacterId = equipmentItem.CharacterId,
+            AuthId = equipmentItem.AuthId,
+            PageIndex = equipmentItem.PageIndex,
+            SlotIndex = equipmentItem.SlotIndex,
+            Amount = equipmentItem.Amount,
+            Reconstruction = equipmentItem.Reconstruction,
+            ReconstructionMax = equipmentItem.ReconstructionMax,
+            AugmentStone = equipmentItem.AugmentStone,
+            Rank = equipmentItem.Rank,
+            AcquireRoute = equipmentItem.AcquireRoute,
+            Physical = equipmentItem.Physical,
+            Magical = equipmentItem.Magical,
+            DurabilityMax = equipmentItem.DurabilityMax,
+            Weight = equipmentItem.Weight,
             RemainTime = equipmentItem.RemainTime,
             CreateTime = equipmentItem.CreateTime,
             UpdateTime = equipmentItem.UpdateTime,
@@ -338,12 +350,6 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             Socket2Color = equipmentItem.Socket2Color,
             Socket3Color = equipmentItem.Socket3Color,
             DefermentTime = equipmentItem.DefermentTime,
-            Rank = equipmentItem.Rank,
-            AcquireRoute = equipmentItem.AcquireRoute,
-            Physical = equipmentItem.Physical,
-            Magical = equipmentItem.Magical,
-            DurabilityMax = equipmentItem.DurabilityMax,
-            Weight = equipmentItem.Weight
         };
 
         var frameViewModel = new FrameViewModel(_frameService, _gmDatabaseService)
@@ -442,7 +448,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
     {
         for (int i = 0; i < 20; i++)
         {
-            RemoveItem(i.ToString());
+            ResetItemProperties(i);
         }
     }
 
