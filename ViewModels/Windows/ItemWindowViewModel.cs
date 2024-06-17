@@ -37,6 +37,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         PopulateCategoryItemsFilter(ItemType.Item);
         PopulateClassItemsFilter();
         PopulateBranchItemsFilter();
+        PopulateInventoryTypeFilter();
         PopulateItemTradeItemsFilter();
 
         _itemDataView = new CollectionViewSource { Source = ItemDataItems }.View;
@@ -98,7 +99,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "EquipWindow", "EquipItem", Token));
                 break;
             case "Coupon":
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponViewModel", "Coupon", Token));
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponWindow", "Coupon", Token));
                 break;
             default:
                 break;
@@ -594,6 +595,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             if (ItemTradeFilter != 2 && item.ItemTrade != ItemTradeFilter)
                 return false;
 
+            if (InventoryTypeFilter != 0 && item.InventoryType != InventoryTypeFilter)
+                return false;
+
             // text search filter
             if (!string.IsNullOrEmpty(SearchText))
             {
@@ -694,6 +698,13 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private bool _itemSubCategoryEnabled = true;
 
     [ObservableProperty]
+    private int _itemTradeFilter;
+    partial void OnItemTradeFilterChanged(int value)
+    {
+        ItemDataView.Refresh();
+    }
+
+    [ObservableProperty]
     private int _itemClassFilter;
 
     partial void OnItemClassFilterChanged(int value)
@@ -773,14 +784,36 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private int _itemTradeFilter;
-    partial void OnItemTradeFilterChanged(int value)
+    private int _inventoryTypeFilter;
+    partial void OnInventoryTypeFilterChanged(int value)
     {
         ItemDataView.Refresh();
     }
 
     [ObservableProperty]
-    private int _itemTradeFilterSelectedIndex;
+    private List<NameID>? _inventoryTypeFilterItems;
+
+    private void PopulateInventoryTypeFilter()
+    {
+        try
+        {
+            InventoryTypeFilterItems =
+            [
+                new NameID { ID = 0, Name = Resources.All },
+                new NameID { ID = 1, Name = "Equipment" },
+                new NameID { ID = 2, Name = "Consume" },
+                new NameID { ID = 3, Name = "Other" },
+                new NameID { ID = 4, Name = "Quest" },
+                new NameID { ID = 5, Name = "Costume" }
+            ];
+
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+        }
+    }
+
 
     [ObservableProperty]
     private List<NameID>? _itemTradeFilterItems;

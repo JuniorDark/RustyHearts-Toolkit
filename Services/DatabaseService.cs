@@ -656,6 +656,448 @@ namespace RHToolkit.Services
 
         #endregion
 
+        #region Item
+
+        public async Task SaveEquipItemAsync(List<ItemData>? newItemDataList, List<ItemData>? updateItemDataList, List<ItemData>? deletedItemDataList)
+        {
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                if (newItemDataList != null)
+                {
+                    foreach (var item in newItemDataList)
+                    {
+                        await InsertInventoryItemAsync(connection, transaction, item);
+                    }
+                }
+
+                if (updateItemDataList != null)
+                {
+                    foreach (var item in updateItemDataList)
+                    {
+                        await UpdateInventoryItemAsync(connection, transaction, item);
+                    }
+                }
+
+                if (deletedItemDataList != null)
+                {
+                    foreach (var item in deletedItemDataList)
+                    {
+                        await DeleteInventoryItemAsync(connection, transaction, item);
+                    }
+                }
+
+                transaction.Commit();
+
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error: {ex.Message}", ex);
+            }
+        }
+
+        public async Task InsertInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData)
+        {
+            try
+            {
+                string tableName = GetItemTableName(itemData.PageIndex);
+
+                await _sqlDatabaseService.ExecuteNonQueryAsync(
+                    $"INSERT INTO {tableName} (" +
+                    "item_uid, character_id, auth_id, page_index, slot_index, code, use_cnt, remain_time, " +
+                    "create_time, update_time, gcode, durability, enhance_level, option_1_code, option_1_value, " +
+                    "option_2_code, option_2_value, option_3_code, option_3_value, option_group, ReconNum, " +
+                    "ReconState, socket_count, socket_1_code, socket_1_value, socket_2_code, socket_2_value, " +
+                    "socket_3_code, socket_3_value, expire_time, lock_pwd, activity_value, link_id, is_seizure, " +
+                    "socket_1_color, socket_2_color, socket_3_color, deferment_time, rank, acquireroute, physical, " +
+                    "magical, durabilitymax, weight) " +
+                    "VALUES (" +
+                    "@item_uid, @character_id, @auth_id, @page_index, @slot_index, @code, @use_cnt, @remain_time, " +
+                    "@create_time, @update_time, @gcode, @durability, @enhance_level, @option_1_code, @option_1_value, " +
+                    "@option_2_code, @option_2_value, @option_3_code, @option_3_value, @option_group, @ReconNum, " +
+                    "@ReconState, @socket_count, @socket_1_code, @socket_1_value, @socket_2_code, @socket_2_value, " +
+                    "@socket_3_code, @socket_3_value, @expire_time, @lock_pwd, @activity_value, @link_id, @is_seizure, " +
+                    "@socket_1_color, @socket_2_color, @socket_3_color, @deferment_time, @rank, @acquireroute, @physical, " +
+                    "@magical, @durabilitymax, @weight)",
+                    connection,
+                    transaction,
+                    ("@item_uid", itemData.ItemUid),
+                    ("@character_id", itemData.CharacterId),
+                    ("@auth_id", itemData.AuthId),
+                    ("@page_index", itemData.PageIndex),
+                    ("@slot_index", itemData.SlotIndex),
+                    ("@code", itemData.ID),
+                    ("@use_cnt", itemData.Amount),
+                    ("@remain_time", itemData.RemainTime),
+                    ("@create_time", itemData.CreateTime),
+                    ("@update_time", itemData.UpdateTime),
+                    ("@gcode", itemData.GCode),
+                    ("@durability", itemData.Durability),
+                    ("@enhance_level", itemData.EnhanceLevel),
+                    ("@option_1_code", itemData.Option1Code),
+                    ("@option_1_value", itemData.Option1Value),
+                    ("@option_2_code", itemData.Option2Code),
+                    ("@option_2_value", itemData.Option2Value),
+                    ("@option_3_code", itemData.Option3Code),
+                    ("@option_3_value", itemData.Option3Value),
+                    ("@option_group", itemData.OptionGroup),
+                    ("@ReconNum", itemData.ReconstructionMax),
+                    ("@ReconState", itemData.Reconstruction),
+                    ("@socket_count", itemData.SocketCount),
+                    ("@socket_1_code", itemData.Socket1Code),
+                    ("@socket_1_value", itemData.Socket1Value),
+                    ("@socket_2_code", itemData.Socket2Code),
+                    ("@socket_2_value", itemData.Socket2Value),
+                    ("@socket_3_code", itemData.Socket3Code),
+                    ("@socket_3_value", itemData.Socket3Value),
+                    ("@expire_time", itemData.ExpireTime),
+                    ("@lock_pwd", itemData.LockPassword ?? string.Empty),
+                    ("@activity_value", itemData.AugmentStone),
+                    ("@link_id", itemData.LinkId),
+                    ("@is_seizure", itemData.IsSeizure),
+                    ("@socket_1_color", itemData.Socket1Color),
+                    ("@socket_2_color", itemData.Socket2Color),
+                    ("@socket_3_color", itemData.Socket3Color),
+                    ("@deferment_time", itemData.DefermentTime),
+                    ("@rank", itemData.Rank),
+                    ("@acquireroute", itemData.AcquireRoute),
+                    ("@physical", itemData.Physical),
+                    ("@magical", itemData.Magical),
+                    ("@durabilitymax", itemData.DurabilityMax),
+                    ("@weight", itemData.Weight)
+                );
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error inserting item: {ex.Message}", ex);
+            }
+        }
+
+        public async Task UpdateInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData)
+        {
+            try
+            {
+                string tableName = GetItemTableName(itemData.PageIndex);
+
+                await _sqlDatabaseService.ExecuteNonQueryAsync(
+                    $"UPDATE {tableName} SET " +
+                    "page_index = @page_index, " +
+                    "slot_index = @slot_index, " +
+                    "use_cnt = @use_cnt, " +
+                    "remain_time = @remain_time, " +
+                    "update_time = @update_time, " +
+                    "gcode = @gcode, " +
+                    "durability = @durability, " +
+                    "enhance_level = @enhance_level, " +
+                    "option_1_code = @option_1_code, " +
+                    "option_1_value = @option_1_value, " +
+                    "option_2_code = @option_2_code, " +
+                    "option_2_value = @option_2_value, " +
+                    "option_3_code = @option_3_code, " +
+                    "option_3_value = @option_3_value, " +
+                    "option_group = @option_group, " +
+                    "ReconNum = @ReconNum, " +
+                    "ReconState = @ReconState, " +
+                    "socket_count = @socket_count, " +
+                    "socket_1_code = @socket_1_code, " +
+                    "socket_1_value = @socket_1_value, " +
+                    "socket_2_code = @socket_2_code, " +
+                    "socket_2_value = @socket_2_value, " +
+                    "socket_3_code = @socket_3_code, " +
+                    "socket_3_value = @socket_3_value, " +
+                    "expire_time = @expire_time, " +
+                    "lock_pwd = @lock_pwd, " +
+                    "activity_value = @activity_value, " +
+                    "is_seizure = @is_seizure, " +
+                    "socket_1_color = @socket_1_color, " +
+                    "socket_2_color = @socket_2_color, " +
+                    "socket_3_color = @socket_3_color, " +
+                    "rank = @rank, " +
+                    "acquireroute = @acquireroute, " +
+                    "physical = @physical, " +
+                    "magical = @magical, " +
+                    "durabilitymax = @durabilitymax, " +
+                    "weight = @weight " +
+                    "WHERE item_uid = @item_uid",
+                    connection,
+                    transaction,
+                    ("@item_uid", itemData.ItemUid),
+                    ("@page_index", itemData.PageIndex),
+                    ("@slot_index", itemData.SlotIndex),
+                    ("@use_cnt", itemData.Amount),
+                    ("@remain_time", itemData.RemainTime),
+                    ("@update_time", itemData.UpdateTime),
+                    ("@gcode", itemData.GCode),
+                    ("@durability", itemData.Durability),
+                    ("@enhance_level", itemData.EnhanceLevel),
+                    ("@option_1_code", itemData.Option1Code),
+                    ("@option_1_value", itemData.Option1Value),
+                    ("@option_2_code", itemData.Option2Code),
+                    ("@option_2_value", itemData.Option2Value),
+                    ("@option_3_code", itemData.Option3Code),
+                    ("@option_3_value", itemData.Option3Value),
+                    ("@option_group", itemData.OptionGroup),
+                    ("@ReconNum", itemData.ReconstructionMax),
+                    ("@ReconState", itemData.Reconstruction),
+                    ("@socket_count", itemData.SocketCount),
+                    ("@socket_1_code", itemData.Socket1Code),
+                    ("@socket_1_value", itemData.Socket1Value),
+                    ("@socket_2_code", itemData.Socket2Code),
+                    ("@socket_2_value", itemData.Socket2Value),
+                    ("@socket_3_code", itemData.Socket3Code),
+                    ("@socket_3_value", itemData.Socket3Value),
+                    ("@expire_time", itemData.ExpireTime),
+                    ("@lock_pwd", itemData.LockPassword ?? string.Empty),
+                    ("@activity_value", itemData.AugmentStone),
+                    ("@is_seizure", itemData.IsSeizure),
+                    ("@socket_1_color", itemData.Socket1Color),
+                    ("@socket_2_color", itemData.Socket2Color),
+                    ("@socket_3_color", itemData.Socket3Color),
+                    ("@rank", itemData.Rank),
+                    ("@acquireroute", itemData.AcquireRoute),
+                    ("@physical", itemData.Physical),
+                    ("@magical", itemData.Magical),
+                    ("@durabilitymax", itemData.DurabilityMax),
+                    ("@weight", itemData.Weight)
+                );
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating item: {ex.Message}", ex);
+            }
+        }
+
+        public async Task DeleteInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData)
+        {
+            try
+            {
+                string tableName = GetItemTableName(itemData.PageIndex);
+
+                if (itemData.PageIndex == 0)
+                {
+                    await _sqlDatabaseService.ExecuteProcedureAsync(
+                                         "up_item_move_equip_to_inventory",
+                                         connection,
+                                         transaction,
+                                         ("@character_id", itemData.CharacterId),
+                                         ("@auth_id", itemData.AuthId),
+                                         ("@item_id", itemData.ItemUid),
+                                         ("@page_index", itemData.PageIndex),
+                                         ("@slot_index", itemData.SlotIndex)
+                                     );
+
+                    await _sqlDatabaseService.ExecuteNonQueryAsync(
+                                        "UPDATE N_InventoryItem SET page_index = @page_index WHERE item_uid = @item_uid",
+                                        connection,
+                                        transaction,
+                                        ("@item_uid", itemData.ItemUid),
+                                        ("@page_index", -25)
+                                    );
+                }
+                else
+                {
+                    await _sqlDatabaseService.ExecuteNonQueryAsync(
+                                        $"UPDATE {tableName} SET page_index = @page_index WHERE item_uid = @item_uid",
+                                        connection,
+                                        transaction,
+                                        ("@item_uid", itemData.ItemUid),
+                                        ("@page_index", -25)
+                                    );
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error deleting item: {ex.Message}", ex);
+            }
+        }
+
+        //Pet
+
+        public async Task InsertPetInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, Guid petId)
+        {
+            try
+            {
+                await _sqlDatabaseService.ExecuteNonQueryAsync(
+                    "INSERT INTO tbl_Pet_Inventory (" +
+                    "item_uid, pet_id, auth_id, page_index, slot_index, code, use_cnt, remain_time, " +
+                    "create_time, update_time, gcode, durability, enhance_level, option_1_code, option_1_value, " +
+                    "option_2_code, option_2_value, option_3_code, option_3_value, option_group, ReconNum, " +
+                    "ReconState, socket_count, socket_1_code, socket_1_value, socket_2_code, socket_2_value, " +
+                    "socket_3_code, socket_3_value, expire_time, lock_pwd, activity_value, is_seizure, " +
+                    "socket_1_color, socket_2_color, socket_3_color, rank, acquireroute, physical, " +
+                    "magical, durabilitymax, weight) " +
+                    "VALUES (" +
+                    "@item_uid, pet_id, @auth_id, @page_index, @slot_index, @code, @use_cnt, @remain_time, " +
+                    "@create_time, @update_time, @gcode, @durability, @enhance_level, @option_1_code, @option_1_value, " +
+                    "@option_2_code, @option_2_value, @option_3_code, @option_3_value, @option_group, @ReconNum, " +
+                    "@ReconState, @socket_count, @socket_1_code, @socket_1_value, @socket_2_code, @socket_2_value, " +
+                    "@socket_3_code, @socket_3_value, @expire_time, @lock_pwd, @activity_value, @is_seizure, " +
+                    "@socket_1_color, @socket_2_color, @socket_3_color, @rank, @acquireroute, @physical, " +
+                    "@magical, @durabilitymax, @weight)",
+                    connection,
+                    transaction,
+                    ("@item_uid", itemData.ItemUid),
+                    ("@pet_id", petId),
+                    ("@auth_id", itemData.AuthId),
+                    ("@page_index", itemData.PageIndex),
+                    ("@slot_index", itemData.SlotIndex),
+                    ("@code", itemData.ID),
+                    ("@use_cnt", itemData.Amount),
+                    ("@remain_time", itemData.RemainTime),
+                    ("@create_time", itemData.CreateTime),
+                    ("@update_time", itemData.UpdateTime),
+                    ("@gcode", itemData.GCode),
+                    ("@durability", itemData.Durability),
+                    ("@enhance_level", itemData.EnhanceLevel),
+                    ("@option_1_code", itemData.Option1Code),
+                    ("@option_1_value", itemData.Option1Value),
+                    ("@option_2_code", itemData.Option2Code),
+                    ("@option_2_value", itemData.Option2Value),
+                    ("@option_3_code", itemData.Option3Code),
+                    ("@option_3_value", itemData.Option3Value),
+                    ("@option_group", itemData.OptionGroup),
+                    ("@ReconNum", itemData.ReconstructionMax),
+                    ("@ReconState", itemData.Reconstruction),
+                    ("@socket_count", itemData.SocketCount),
+                    ("@socket_1_code", itemData.Socket1Code),
+                    ("@socket_1_value", itemData.Socket1Value),
+                    ("@socket_2_code", itemData.Socket2Code),
+                    ("@socket_2_value", itemData.Socket2Value),
+                    ("@socket_3_code", itemData.Socket3Code),
+                    ("@socket_3_value", itemData.Socket3Value),
+                    ("@expire_time", itemData.ExpireTime),
+                    ("@lock_pwd", itemData.LockPassword ?? string.Empty),
+                    ("@activity_value", itemData.AugmentStone),
+                    ("@is_seizure", itemData.IsSeizure),
+                    ("@socket_1_color", itemData.Socket1Color),
+                    ("@socket_2_color", itemData.Socket2Color),
+                    ("@socket_3_color", itemData.Socket3Color),
+                    ("@rank", itemData.Rank),
+                    ("@acquireroute", itemData.AcquireRoute),
+                    ("@physical", itemData.Physical),
+                    ("@magical", itemData.Magical),
+                    ("@durabilitymax", itemData.DurabilityMax),
+                    ("@weight", itemData.Weight)
+                );
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error inserting item: {ex.Message}", ex);
+            }
+        }
+
+        public async Task UpdatePetInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData)
+        {
+            try
+            {
+                await _sqlDatabaseService.ExecuteNonQueryAsync(
+                    $"UPDATE tbl_Pet_Inventory SET " +
+                    "page_index = @page_index, " +
+                    "slot_index = @slot_index, " +
+                    "use_cnt = @use_cnt, " +
+                    "remain_time = @remain_time, " +
+                    "update_time = @update_time, " +
+                    "gcode = @gcode, " +
+                    "durability = @durability, " +
+                    "enhance_level = @enhance_level, " +
+                    "option_1_code = @option_1_code, " +
+                    "option_1_value = @option_1_value, " +
+                    "option_2_code = @option_2_code, " +
+                    "option_2_value = @option_2_value, " +
+                    "option_3_code = @option_3_code, " +
+                    "option_3_value = @option_3_value, " +
+                    "option_group = @option_group, " +
+                    "ReconNum = @ReconNum, " +
+                    "ReconState = @ReconState, " +
+                    "socket_count = @socket_count, " +
+                    "socket_1_code = @socket_1_code, " +
+                    "socket_1_value = @socket_1_value, " +
+                    "socket_2_code = @socket_2_code, " +
+                    "socket_2_value = @socket_2_value, " +
+                    "socket_3_code = @socket_3_code, " +
+                    "socket_3_value = @socket_3_value, " +
+                    "expire_time = @expire_time, " +
+                    "lock_pwd = @lock_pwd, " +
+                    "activity_value = @activity_value, " +
+                    "is_seizure = @is_seizure, " +
+                    "socket_1_color = @socket_1_color, " +
+                    "socket_2_color = @socket_2_color, " +
+                    "socket_3_color = @socket_3_color, " +
+                    "rank = @rank, " +
+                    "acquireroute = @acquireroute, " +
+                    "physical = @physical, " +
+                    "magical = @magical, " +
+                    "durabilitymax = @durabilitymax, " +
+                    "weight = @weight " +
+                    "WHERE item_uid = @item_uid",
+                    connection,
+                    transaction,
+                    ("@item_uid", itemData.ItemUid),
+                    ("@page_index", itemData.PageIndex),
+                    ("@slot_index", itemData.SlotIndex),
+                    ("@use_cnt", itemData.Amount),
+                    ("@remain_time", itemData.RemainTime),
+                    ("@update_time", itemData.UpdateTime),
+                    ("@gcode", itemData.GCode),
+                    ("@durability", itemData.Durability),
+                    ("@enhance_level", itemData.EnhanceLevel),
+                    ("@option_1_code", itemData.Option1Code),
+                    ("@option_1_value", itemData.Option1Value),
+                    ("@option_2_code", itemData.Option2Code),
+                    ("@option_2_value", itemData.Option2Value),
+                    ("@option_3_code", itemData.Option3Code),
+                    ("@option_3_value", itemData.Option3Value),
+                    ("@option_group", itemData.OptionGroup),
+                    ("@ReconNum", itemData.ReconstructionMax),
+                    ("@ReconState", itemData.Reconstruction),
+                    ("@socket_count", itemData.SocketCount),
+                    ("@socket_1_code", itemData.Socket1Code),
+                    ("@socket_1_value", itemData.Socket1Value),
+                    ("@socket_2_code", itemData.Socket2Code),
+                    ("@socket_2_value", itemData.Socket2Value),
+                    ("@socket_3_code", itemData.Socket3Code),
+                    ("@socket_3_value", itemData.Socket3Value),
+                    ("@expire_time", itemData.ExpireTime),
+                    ("@lock_pwd", itemData.LockPassword ?? string.Empty),
+                    ("@activity_value", itemData.AugmentStone),
+                    ("@is_seizure", itemData.IsSeizure),
+                    ("@socket_1_color", itemData.Socket1Color),
+                    ("@socket_2_color", itemData.Socket2Color),
+                    ("@socket_3_color", itemData.Socket3Color),
+                    ("@rank", itemData.Rank),
+                    ("@acquireroute", itemData.AcquireRoute),
+                    ("@physical", itemData.Physical),
+                    ("@magical", itemData.Magical),
+                    ("@durabilitymax", itemData.DurabilityMax),
+                    ("@weight", itemData.Weight)
+                );
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error updating item: {ex.Message}", ex);
+            }
+        }
+
+        private static string GetItemTableName(int pageIndex)
+        {
+            return pageIndex switch
+            {
+                0 => "N_EquipItem",
+                1 or 2 or 3 or 4 or 5 or 11 or 21 => "N_InventoryItem",
+                _ => throw new ArgumentException($"Invalid PageIndex value '{pageIndex}'")
+            };
+        }
+
+        #endregion
+
         #region Character Title
 
         public async Task<DataTable?> ReadCharacterTitleListAsync(Guid characterId)

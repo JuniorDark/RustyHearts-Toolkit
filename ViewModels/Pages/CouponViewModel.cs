@@ -2,7 +2,10 @@
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.SQLite;
+using RHToolkit.Properties;
 using RHToolkit.Services;
+using RHToolkit.ViewModels.Controls;
 using RHToolkit.Views.Windows;
 using System.Data;
 
@@ -13,14 +16,20 @@ namespace RHToolkit.ViewModels.Pages
         private readonly WindowsProviderService _windowsProviderService;
         private readonly IDatabaseService _databaseService;
         private readonly ISqLiteDatabaseService _sqLiteDatabaseService;
+        private readonly IFrameService _frameService;
+        private readonly IGMDatabaseService _gmDatabaseService;
+        private readonly CachedDataManager _cachedDataManager;
         private readonly Guid _token;
 
-        public CouponViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService)
+        public CouponViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService, CachedDataManager cachedDataManager, IFrameService frameService, IGMDatabaseService gmDatabaseService)
         {
             _token = Guid.NewGuid();
             _windowsProviderService = windowsProviderService;
             _databaseService = databaseService;
             _sqLiteDatabaseService = sqLiteDatabaseService;
+            _cachedDataManager = cachedDataManager;
+            _frameService = frameService;
+            _gmDatabaseService = gmDatabaseService;
             WeakReferenceMessenger.Default.Register(this);
         }
 
@@ -229,34 +238,134 @@ namespace RHToolkit.ViewModels.Pages
                     }
                 }
 
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", "Coupon", token));
+                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindow", "Coupon", token));
             }
         }
 
         public void Receive(ItemDataMessage message)
         {
-            if (message.Recipient == "CouponViewModel" && message.Token == _token)
+            if (message.Recipient == "CouponWindow" && message.Token == _token)
             {
                 var itemData = message.Value;
 
-                ItemData = itemData;
-
-                SetItemProperties(itemData);
+                SetItemData(itemData);
             }
         }
 
-        private void SetItemProperties(ItemData itemData)
+        private void SetItemData(ItemData selectedItemData)
+        {
+            // Find the corresponding ItemData in the _cachedItemDataList
+            ItemData cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == selectedItemData.ID) ?? new ItemData();
+
+            ItemData itemData = new()
+            {
+                ID = cachedItem.ID,
+                Name = cachedItem.Name ?? "",
+                Description = cachedItem.Description ?? "",
+                IconName = cachedItem.IconName ?? "",
+                Type = cachedItem.Type,
+                WeaponID00 = cachedItem.WeaponID00,
+                Category = cachedItem.Category,
+                SubCategory = cachedItem.SubCategory,
+                LevelLimit = cachedItem.LevelLimit,
+                ItemTrade = cachedItem.ItemTrade,
+                OverlapCnt = cachedItem.OverlapCnt,
+                Defense = cachedItem.Defense,
+                MagicDefense = cachedItem.MagicDefense,
+                Branch = cachedItem.Branch,
+                OptionCountMax = cachedItem.OptionCountMax,
+                SocketCountMax = cachedItem.SocketCountMax,
+                SellPrice = cachedItem.SellPrice,
+                PetFood = cachedItem.PetFood,
+                JobClass = cachedItem.JobClass,
+                SetId = cachedItem.SetId,
+                FixOption1Code = cachedItem.FixOption1Code,
+                FixOption1Value = cachedItem.FixOption1Value,
+                FixOption2Code = cachedItem.FixOption2Code,
+                FixOption2Value = cachedItem.FixOption2Value,
+
+                SlotIndex = selectedItemData.SlotIndex,
+                Amount = selectedItemData.Amount,
+                Reconstruction = selectedItemData.Reconstruction,
+                ReconstructionMax = selectedItemData.ReconstructionMax,
+                AugmentStone = selectedItemData.AugmentStone,
+                Rank = selectedItemData.Rank,
+                AcquireRoute = selectedItemData.AcquireRoute,
+                Physical = selectedItemData.Physical,
+                Magical = selectedItemData.Magical,
+                DurabilityMax = selectedItemData.DurabilityMax,
+                Weight = selectedItemData.Weight,
+                Durability = selectedItemData.Durability,
+                EnhanceLevel = selectedItemData.EnhanceLevel,
+                Option1Code = selectedItemData.Option1Code,
+                Option1Value = selectedItemData.Option1Value,
+                Option2Code = selectedItemData.Option2Code,
+                Option2Value = selectedItemData.Option2Value,
+                Option3Code = selectedItemData.Option3Code,
+                Option3Value = selectedItemData.Option3Value,
+                OptionGroup = selectedItemData.OptionGroup,
+                SocketCount = selectedItemData.SocketCount,
+                Socket1Code = selectedItemData.Socket1Code,
+                Socket1Value = selectedItemData.Socket1Value,
+                Socket2Code = selectedItemData.Socket2Code,
+                Socket2Value = selectedItemData.Socket2Value,
+                Socket3Code = selectedItemData.Socket3Code,
+                Socket3Value = selectedItemData.Socket3Value,
+                Socket1Color = selectedItemData.Socket1Color,
+                Socket2Color = selectedItemData.Socket2Color,
+                Socket3Color = selectedItemData.Socket3Color,
+            };
+
+            var frameViewModel = new FrameViewModel(_frameService, _gmDatabaseService)
+            {
+                ItemData = itemData
+            };
+
+            ItemData = itemData;
+            SetItemProperties(itemData, frameViewModel);
+        }
+
+        private void SetItemProperties(ItemData itemData, FrameViewModel frameViewModel)
         {
             string iconNameProperty = $"ItemIcon";
             string iconBranchProperty = $"ItemIconBranch";
             string nameProperty = $"ItemName";
             string itemAmountProperty = $"ItemAmount";
+            string frameViewModelProperty = $"FrameViewModel";
 
+            GetType().GetProperty(frameViewModelProperty)?.SetValue(this, frameViewModel);
             GetType().GetProperty(iconNameProperty)?.SetValue(this, itemData.IconName);
             GetType().GetProperty(iconBranchProperty)?.SetValue(this, itemData.Branch);
             GetType().GetProperty(nameProperty)?.SetValue(this, itemData.Name);
             GetType().GetProperty(itemAmountProperty)?.SetValue(this, itemData.Amount);
         }
+
+        #endregion
+
+        #region Remove Item
+
+        [RelayCommand]
+        private void RemoveItem(string parameter)
+        {
+            ItemData = null;
+            ResetItemProperties();
+        }
+
+        private void ResetItemProperties()
+        {
+            string iconNameProperty = $"ItemIcon";
+            string iconBranchProperty = $"ItemIconBranch";
+            string nameProperty = $"ItemName";
+            string amountProperty = $"ItemAmount";
+            string frameViewModelProperty = $"FrameViewModel";
+
+            GetType().GetProperty(iconNameProperty)?.SetValue(this, null);
+            GetType().GetProperty(iconBranchProperty)?.SetValue(this, 0);
+            GetType().GetProperty(nameProperty)?.SetValue(this, Resources.AddItemDesc);
+            GetType().GetProperty(amountProperty)?.SetValue(this, 0);
+            GetType().GetProperty(frameViewModelProperty)?.SetValue(this, null);
+        }
+
         #endregion
 
         #region Properties
@@ -290,6 +399,9 @@ namespace RHToolkit.ViewModels.Pages
 
         [ObservableProperty]
         private DateTime _validDate = DateTime.Today;
+
+        [ObservableProperty]
+        private FrameViewModel? _frameViewModel;
 
         [ObservableProperty]
         private string? _itemName = "Select a Item";

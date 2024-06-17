@@ -159,6 +159,9 @@
   <data name="AttachItem" xml:space="preserve">
     <value>Attach Item</value>
   </data>
+  <data name="AttachItemCouponHelp" xml:space="preserve">
+    <value>Click on the slot to add/edit a item, Right click to remove. Note: Coupon Items do not support custom stats.</value>
+  </data>
   <data name="AttachItemError" xml:space="preserve">
     <value>Failed to Attach item</value>
   </data>
@@ -392,6 +395,9 @@
   </data>
   <data name="ItemDatabaseDesc" xml:space="preserve">
     <value>Open a Item Database</value>
+  </data>
+  <data name="ItemQuality" xml:space="preserve">
+    <value>Item Quality</value>
   </data>
   <data name="ItemTrade" xml:space="preserve">
     <value>Item Trade</value>

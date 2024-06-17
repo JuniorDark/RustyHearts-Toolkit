@@ -200,14 +200,24 @@
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
                 Orientation="Horizontal">
+                <Image
+                    Margin="0,0,10,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Cursor="Help"
+                    Source="/Assets/icon/icon_help_tip.png"
+                    Stretch="None"
+                    ToolTip="{x:Static rs:Resources.AttachItemCouponHelp}" />
                 <control:ItemSlot
                     Margin="0,10,0,0"
                     AddItemCommand="{Binding ViewModel.AddItemCommand}"
                     CommandParameter="0"
+                    FrameViewModel="{Binding ViewModel.FrameViewModel}"
                     ItemAmount="{Binding ViewModel.ItemAmount}"
                     ItemIcon="{Binding ViewModel.ItemIcon}"
                     ItemIconBranch="{Binding ViewModel.ItemIconBranch}"
                     ItemName="{Binding ViewModel.ItemName}"
+                    RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
                     SlotIcon="/Assets/images/lb_ac_icon.png" />
                 <TextBlock
                     x:Name="lbSelectedItem"

@@ -49,7 +49,6 @@
                 Margin="30,5,0,0"
                 VerticalAlignment="Center"
                 ButtonsForeground="White"
-                CloseWindowByDoubleClickOnIcon="True"
                 FontSize="15"
                 Foreground="White">
                 <ui:TitleBar.Icon>
@@ -642,6 +641,7 @@
                         VerticalAlignment="Center"
                         Command="{Binding SelectItemCommand}"
                         Content="{x:Static rs:Resources.Add}"
+                        Cursor="Hand"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}" />
                     <Label
@@ -829,7 +829,7 @@
                 x:Name="datagridFilter"
                 Grid.Row="3"
                 Grid.Column="0"
-                Margin="0,0,90,30"
+                Margin="0,0,50,20"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Bottom">
                 <Grid.ColumnDefinitions>
@@ -944,7 +944,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="{x:Static rs:Resources.Quality}"
+                        Content="{x:Static rs:Resources.ItemQuality}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemBranch"

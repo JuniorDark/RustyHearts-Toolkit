@@ -6,6 +6,21 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <UserControl.Resources>
+        <!--  DataTemplates for different tooltip content based on ItemType  -->
+        <DataTemplate x:Key="ItemFrameTemplate">
+            <control:ItemFrame DataContext="{Binding}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="CostumeFrameTemplate">
+            <control:CostumeFrame DataContext="{Binding}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="GearFrameTemplate">
+            <control:GearFrame DataContext="{Binding}" />
+        </DataTemplate>
+    </UserControl.Resources>
+
     <Grid>
         <Button
             Width="44"
@@ -20,7 +35,28 @@
                     Background="Transparent"
                     BorderBrush="Transparent"
                     Visibility="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource NullToVisibilityConverter}}">
-                    <control:GearFrame DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ToolTip}}" />
+                    <!--  Content control with dynamic template  -->
+                    <ContentControl Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ToolTip}}">
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Setter Property="ContentTemplate" Value="{StaticResource GearFrameTemplate}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.ItemType, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="1">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource ItemFrameTemplate}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.ItemType, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="2">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource CostumeFrameTemplate}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.ItemType, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="3">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource GearFrameTemplate}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.ItemType, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="4">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource GearFrameTemplate}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
                 </ToolTip>
             </Button.ToolTip>
             <Button.InputBindings>

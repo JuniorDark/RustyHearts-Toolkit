@@ -187,6 +187,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click on the slot to add/edit a item, Right click to remove. Note: Coupon Items do not support custom stats..
+        /// </summary>
+        public static string AttachItemCouponHelp {
+            get {
+                return ResourceManager.GetString("AttachItemCouponHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to Attach item.
         /// </summary>
         public static string AttachItemError {
@@ -885,6 +894,15 @@ namespace RHToolkit.Properties {
         public static string ItemDatabaseDesc {
             get {
                 return ResourceManager.GetString("ItemDatabaseDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Quality.
+        /// </summary>
+        public static string ItemQuality {
+            get {
+                return ResourceManager.GetString("ItemQuality", resourceCulture);
             }
         }
         

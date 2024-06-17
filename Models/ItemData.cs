@@ -22,6 +22,7 @@
         public int Defense { get; set; }
         public int MagicDefense { get; set; }
         public int Branch { get; set; }
+        public int InventoryType { get; set; }
         public int OptionCountMax { get; set; }
         public int SocketCountMax { get; set; }
         public int Reconstruction { get; set; }

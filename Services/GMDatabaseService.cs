@@ -44,6 +44,7 @@ namespace RHToolkit.Services
                         Defense = Convert.ToInt32(reader["nDefense"]),
                         MagicDefense = Convert.ToInt32(reader["nMagicDefense"]),
                         Branch = Convert.ToInt32(reader["nBranch"]),
+                        InventoryType = Convert.ToInt32(reader["nInventoryType"]),
                         OptionCountMax = Convert.ToInt32(reader["nOptionCountMax"]),
                         SocketCountMax = Convert.ToInt32(reader["nSocketCountMax"]),
                         ReconstructionMax = Convert.ToByte(reader["nReconstructionMax"]),
@@ -79,7 +80,7 @@ namespace RHToolkit.Services
                 {
                     return $@"
                 SELECT 
-                    nID, nWeaponID00, szIconName, nCategory, nSubCategory, nBranch, nSocketCountMax, nReconstructionMax, nJobClass, nLevelLimit, 
+                    nID, nWeaponID00, szIconName, nCategory, nSubCategory, nBranch, nInventoryType, nSocketCountMax, nReconstructionMax, nJobClass, nLevelLimit, 
                     nItemTrade, nOverlapCnt, nDurability, nDefense, nMagicDefense, nWeight, nSellPrice, nOptionCountMax, nSetId, 
                     nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup,
                     wszDesc, {descriptionField}
@@ -89,7 +90,7 @@ namespace RHToolkit.Services
                 {
                     return $@"
                 SELECT 
-                    nID, nWeaponID00, szIconName, nCategory, nSubCategory, nBranch, nSocketCountMax, nReconstructionMax, nJobClass, nLevelLimit, 
+                    nID, nWeaponID00, szIconName, nCategory, nSubCategory, nBranch, nInventoryType, nSocketCountMax, nReconstructionMax, nJobClass, nLevelLimit, 
                     nItemTrade, nOverlapCnt, nDurability, nDefense, nMagicDefense, nWeight, nSellPrice, nOptionCountMax, nSetId, 
                     nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup,
                     wszDesc, {descriptionField}
@@ -100,7 +101,7 @@ namespace RHToolkit.Services
             {
                 return $@"
             SELECT 
-                i.nID, i.nWeaponID00, i.szIconName, i.nCategory, i.nSubCategory, i.nBranch, i.nSocketCountMax, i.nReconstructionMax, i.nJobClass, i.nLevelLimit, 
+                i.nID, i.nWeaponID00, i.szIconName, i.nCategory, i.nSubCategory, i.nBranch, i.nInventoryType, i.nSocketCountMax, i.nReconstructionMax, i.nJobClass, i.nLevelLimit, 
                 i.nItemTrade, i.nOverlapCnt, i.nDurability, i.nDefense, i.nMagicDefense, i.nWeight, i.nSellPrice, i.nOptionCountMax, i.nSetId, 
                 i.nFixOption00, i.nFixOptionValue00, i.nFixOption01, i.nFixOptionValue01, i.nPetEatGroup,
                 s.wszDesc, s.{descriptionField}

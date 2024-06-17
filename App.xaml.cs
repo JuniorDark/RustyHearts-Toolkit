@@ -62,6 +62,7 @@ public partial class App : Application
                 _ = services.AddSingleton<CachedDataManager>();
                 _ = services.AddSingleton<CharacterHelper>();
                 _ = services.AddSingleton<MailHelper>();
+                _ = services.AddSingleton<ItemHelper>();
 
                 _ = services.AddTransient<MailWindow>();
                 _ = services.AddTransient<MailWindowViewModel>();

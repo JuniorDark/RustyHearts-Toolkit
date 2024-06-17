@@ -26,6 +26,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
         {
             ItemId = itemData.ID;
             ItemName = itemData.Name;
+            ItemType = itemData.Type;
             Description = itemData.Description;
             ItemBranch = itemData.Branch;
             IconName = itemData.IconName;
@@ -89,6 +90,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     private string? _itemName;
 
     public string ItemNameColor => FrameService.GetBranchColor(ItemBranch);
+
+    [ObservableProperty]
+    private int _itemType;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ItemNameColor))]

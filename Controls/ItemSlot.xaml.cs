@@ -1,5 +1,4 @@
-﻿using RHToolkit.Models;
-using RHToolkit.ViewModels.Controls;
+﻿using RHToolkit.ViewModels.Controls;
 using System.Windows.Controls;
 
 namespace RHToolkit.Controls
@@ -11,6 +10,9 @@ namespace RHToolkit.Controls
 
         public static readonly DependencyProperty ItemNameProperty = DependencyProperty.Register(
             "ItemName", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
+
+        public static readonly DependencyProperty ItemTypeProperty = DependencyProperty.Register(
+            "ItemType", typeof(int), typeof(ItemSlot), new PropertyMetadata(0));
 
         public static readonly DependencyProperty AddItemCommandProperty = DependencyProperty.Register(
             "AddItemCommand", typeof(ICommand), typeof(ItemSlot));
@@ -33,17 +35,8 @@ namespace RHToolkit.Controls
         public static readonly DependencyProperty ItemAmountProperty = DependencyProperty.Register(
             "ItemAmount", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
 
-        public static readonly DependencyProperty ItemDataProperty = DependencyProperty.Register(
-            "ItemData", typeof(ItemData), typeof(ItemSlot), new PropertyMetadata(null));
-
         public static readonly DependencyProperty FrameViewModelProperty = DependencyProperty.Register(
             "FrameViewModel", typeof(FrameViewModel), typeof(ItemSlot), new PropertyMetadata(null));
-
-        public ItemData ItemData
-        {
-            get => (ItemData)GetValue(ItemDataProperty);
-            set => SetValue(ItemDataProperty, value);
-        }
 
         public FrameViewModel FrameViewModel
         {
@@ -61,6 +54,12 @@ namespace RHToolkit.Controls
         {
             get => (string)GetValue(ItemNameProperty);
             set => SetValue(ItemNameProperty, value);
+        }
+
+        public int ItemType
+        {
+            get => (int)GetValue(ItemTypeProperty);
+            set => SetValue(ItemTypeProperty, value);
         }
 
         public ICommand AddItemCommand

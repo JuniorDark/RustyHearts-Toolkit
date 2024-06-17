@@ -2,7 +2,6 @@
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Models.SQLite;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
@@ -14,22 +13,17 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
-    private readonly IFrameService _frameService;
-    private readonly IGMDatabaseService _gmDatabaseService;
-    private readonly CachedDataManager _cachedDataManager;
+    private readonly ItemHelper _itemHelper;
 
-    public EquipmentWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, CachedDataManager cachedDataManager, IFrameService frameService, IGMDatabaseService gmDatabaseService)
+    public EquipmentWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemHelper itemHelper)
     {
         _windowsService = windowsService;
         _databaseService = databaseService;
-        _cachedDataManager = cachedDataManager;
-        _frameService = frameService;
-        _gmDatabaseService = gmDatabaseService;
+        _itemHelper = itemHelper;
 
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
         WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
     }
-
 
     #region Load Character
 
@@ -91,6 +85,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         ClearAllEquipItems();
         CharacterData = null;
         ItemDatabaseList = null;
+        NewItemDatabaseList = null;
         DeletedItemDatabaseList = null;
     }
     #endregion
@@ -110,7 +105,18 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
         try
         {
-            
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            {
+                return;
+            }
+
+            if (RHMessageBoxHelper.ConfirmMessage($"Save equipment changes?"))
+            {
+                await _databaseService.SaveEquipItemAsync(NewItemDatabaseList, UpdatedItemDatabaseList, DeletedItemDatabaseList);
+                RHMessageBoxHelper.ShowOKMessage("Equipment saved successfully!", "Success");
+                await ReadCharacterData(CharacterData.CharacterName!);
+            }
+           
         }
         catch (Exception ex)
         {
@@ -139,48 +145,47 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
             if (existingItem != null)
             {
-                // Update existing item with the received data
+                // Update existing item
                 UpdateItem(existingItem, newItemData);
 
             }
             else
             {
-                // Create a new item with the received data
-                var newItem = CreateNewItem(newItemData);
-
-                // Add the new item to the list
-                ItemDatabaseList.Add(newItem);
-
-                SetItemData(newItem);
+                // Create new item
+                CreateItem(newItemData);
             }
         }
     }
 
     private void UpdateItem(ItemData existingItem, ItemData newItemData)
     {
+        if (CharacterData == null) return;
+
         // Check if the IDs are different
         if (existingItem.ID != newItemData.ID)
         {
-            // Move the existing item to DeletedItemDatabaseList
-            DeletedItemDatabaseList ??= [];
-            DeletedItemDatabaseList.Add(existingItem);
+            // Create a new item if the IDs are different
+            var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 0);
+
+            // Add the new item to the list
+            NewItemDatabaseList ??= [];
+            NewItemDatabaseList.Add(newItem);
 
             // Remove the existing item from ItemDatabaseList
             ItemDatabaseList?.Remove(existingItem);
 
-            // Create a new item with the received data
-            var newItem = CreateNewItem(newItemData);
+            // Move the existing item to DeletedItemDatabaseList
+            DeletedItemDatabaseList ??= [];
+            DeletedItemDatabaseList.Add(existingItem);
 
-            // Add the new item to the list
-            ItemDatabaseList?.Add(newItem);
+            (var itemData, var frameViewModel) = _itemHelper.GetItemData(newItem);
 
-            SetItemData(newItem);
+            SetItemProperties(itemData, frameViewModel);
         }
         else
         {
-            // Update only the properties sent by SelectItem
-            existingItem.Name = newItemData.Name;
-            existingItem.IconName = newItemData.IconName;
+            // Update existingItem
+            existingItem.UpdateTime = DateTime.Now;
             existingItem.Durability = newItemData.Durability;
             existingItem.DurabilityMax = newItemData.DurabilityMax;
             existingItem.EnhanceLevel = newItemData.EnhanceLevel;
@@ -206,62 +211,36 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             existingItem.Socket1Value = newItemData.Socket1Value;
             existingItem.Socket2Value = newItemData.Socket2Value;
             existingItem.Socket3Value = newItemData.Socket3Value;
-            existingItem.UpdateTime = DateTime.Now;
 
-            SetItemData(existingItem);
+            UpdatedItemDatabaseList ??= [];
+
+            var newItemIndex = UpdatedItemDatabaseList.FindIndex(item => item.SlotIndex == existingItem.SlotIndex);
+
+            if (newItemIndex != -1)
+            {
+                UpdatedItemDatabaseList.RemoveAt(newItemIndex);
+            }
+
+            UpdatedItemDatabaseList.Add(existingItem);
+
+            (var itemData, var frameViewModel) = _itemHelper.GetItemData(existingItem);
+
+            SetItemProperties(itemData, frameViewModel);
         }
     }
 
-    private ItemData CreateNewItem(ItemData newItemData)
+    private void CreateItem(ItemData newItemData)
     {
-        var newItem = new ItemData
-        {
-            CharacterId = CharacterData!.CharacterID,
-            AuthId = CharacterData.AuthID,
-            ItemUid = Guid.NewGuid(),
-            PageIndex = 0,
-            CreateTime = DateTime.Now,
-            UpdateTime = DateTime.Now,
-            ExpireTime = 0,
-            RemainTime = 0,
-            GCode = 1,
-            LockPassword = "",
-            LinkId = Guid.Empty,
-            IsSeizure = 0,
-            DefermentTime = 0,
+        if (CharacterData == null) return;
 
-            SlotIndex = newItemData.SlotIndex,
-            ID = newItemData.ID,
-            Name = newItemData.Name,
-            IconName = newItemData.IconName,
-            Durability = newItemData.Durability,
-            DurabilityMax = newItemData.DurabilityMax,
-            EnhanceLevel = newItemData.EnhanceLevel,
-            AugmentStone = newItemData.AugmentStone,
-            Rank = newItemData.Rank,
-            Weight = newItemData.Weight,
-            Reconstruction = newItemData.Reconstruction,
-            ReconstructionMax = newItemData.ReconstructionMax,
-            Amount = newItemData.Amount,
-            Option1Code = newItemData.Option1Code,
-            Option2Code = newItemData.Option2Code,
-            Option3Code = newItemData.Option3Code,
-            Option1Value = newItemData.Option1Value,
-            Option2Value = newItemData.Option2Value,
-            Option3Value = newItemData.Option3Value,
-            SocketCount = newItemData.SocketCount,
-            Socket1Color = newItemData.Socket1Color,
-            Socket2Color = newItemData.Socket2Color,
-            Socket3Color = newItemData.Socket3Color,
-            Socket1Code = newItemData.Socket1Code,
-            Socket2Code = newItemData.Socket2Code,
-            Socket3Code = newItemData.Socket3Code,
-            Socket1Value = newItemData.Socket1Value,
-            Socket2Value = newItemData.Socket2Value,
-            Socket3Value = newItemData.Socket3Value,
-        };
+        var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 0);
 
-        return newItem;
+        NewItemDatabaseList ??= [];
+        NewItemDatabaseList.Add(newItem);
+
+        (var itemData, var frameViewModel) = _itemHelper.GetItemData(newItem);
+
+        SetItemProperties(itemData, frameViewModel);
     }
 
     private void LoadEquipmentItems(List<ItemData> equipmentItems)
@@ -270,116 +249,25 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         {
             foreach (var equipmentItem in equipmentItems)
             {
-                SetItemData(equipmentItem);
+                (var itemData, var frameViewModel) = _itemHelper.GetItemData(equipmentItem);
+
+                SetItemProperties(itemData, frameViewModel);
             }
         }
     }
 
-    private void SetItemData(ItemData equipmentItem)
-    {
-        // Find the corresponding ItemData in the _cachedItemDataList
-        ItemData cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == equipmentItem.ID) ?? new ItemData();
-
-        ItemData itemData = new()
-        {
-            ID = cachedItem.ID,
-            Name = cachedItem.Name ?? "",
-            Description = cachedItem.Description ?? "",
-            IconName = cachedItem.IconName ?? "",
-            Type = cachedItem.Type,
-            WeaponID00 = cachedItem.WeaponID00,
-            Category = cachedItem.Category,
-            SubCategory = cachedItem.SubCategory,
-            LevelLimit = cachedItem.LevelLimit,
-            ItemTrade = cachedItem.ItemTrade,
-            OverlapCnt = cachedItem.OverlapCnt,
-            Defense = cachedItem.Defense,
-            MagicDefense = cachedItem.MagicDefense,
-            Branch = cachedItem.Branch,
-            OptionCountMax = cachedItem.OptionCountMax,
-            SocketCountMax = cachedItem.SocketCountMax,
-            SellPrice = cachedItem.SellPrice,
-            PetFood = cachedItem.PetFood,
-            JobClass = cachedItem.JobClass,
-            SetId = cachedItem.SetId,
-            FixOption1Code = cachedItem.FixOption1Code,
-            FixOption1Value = cachedItem.FixOption1Value,
-            FixOption2Code = cachedItem.FixOption2Code,
-            FixOption2Value = cachedItem.FixOption2Value,
-
-            ItemUid = equipmentItem.ItemUid,
-            CharacterId = equipmentItem.CharacterId,
-            AuthId = equipmentItem.AuthId,
-            PageIndex = equipmentItem.PageIndex,
-            SlotIndex = equipmentItem.SlotIndex,
-            Amount = equipmentItem.Amount,
-            Reconstruction = equipmentItem.Reconstruction,
-            ReconstructionMax = equipmentItem.ReconstructionMax,
-            AugmentStone = equipmentItem.AugmentStone,
-            Rank = equipmentItem.Rank,
-            AcquireRoute = equipmentItem.AcquireRoute,
-            Physical = equipmentItem.Physical,
-            Magical = equipmentItem.Magical,
-            DurabilityMax = equipmentItem.DurabilityMax,
-            Weight = equipmentItem.Weight,
-            RemainTime = equipmentItem.RemainTime,
-            CreateTime = equipmentItem.CreateTime,
-            UpdateTime = equipmentItem.UpdateTime,
-            GCode = equipmentItem.GCode,
-            Durability = equipmentItem.Durability,
-            EnhanceLevel = equipmentItem.EnhanceLevel,
-            Option1Code = equipmentItem.Option1Code,
-            Option1Value = equipmentItem.Option1Value,
-            Option2Code = equipmentItem.Option2Code,
-            Option2Value = equipmentItem.Option2Value,
-            Option3Code = equipmentItem.Option3Code,
-            Option3Value = equipmentItem.Option3Value,
-            OptionGroup = equipmentItem.OptionGroup,
-            SocketCount = equipmentItem.SocketCount,
-            Socket1Code = equipmentItem.Socket1Code,
-            Socket1Value = equipmentItem.Socket1Value,
-            Socket2Code = equipmentItem.Socket2Code,
-            Socket2Value = equipmentItem.Socket2Value,
-            Socket3Code = equipmentItem.Socket3Code,
-            Socket3Value = equipmentItem.Socket3Value,
-            ExpireTime = equipmentItem.ExpireTime,
-            LockPassword = equipmentItem.LockPassword,
-            LinkId = equipmentItem.LinkId,
-            IsSeizure = equipmentItem.IsSeizure,
-            Socket1Color = equipmentItem.Socket1Color,
-            Socket2Color = equipmentItem.Socket2Color,
-            Socket3Color = equipmentItem.Socket3Color,
-            DefermentTime = equipmentItem.DefermentTime,
-        };
-
-        var frameViewModel = new FrameViewModel(_frameService, _gmDatabaseService)
-        {
-            ItemData = itemData
-        };
-
-        SetItemProperties(itemData);
-        SetFrameViewModelProperties(frameViewModel);
-    }
-
-    private void SetItemProperties(ItemData itemData)
+    private void SetItemProperties(ItemData itemData, FrameViewModel frameViewModel)
     {
         // Construct property names dynamically
         string iconNameProperty = $"ItemIcon{itemData.SlotIndex}";
         string iconBranchProperty = $"ItemIconBranch{itemData.SlotIndex}";
         string nameProperty = $"ItemName{itemData.SlotIndex}";
+        string frameViewModelProperty = $"FrameViewModel{itemData.SlotIndex}";
 
         // Set properties using reflection
         GetType().GetProperty(iconNameProperty)?.SetValue(this, itemData.IconName);
         GetType().GetProperty(iconBranchProperty)?.SetValue(this, itemData.Branch);
         GetType().GetProperty(nameProperty)?.SetValue(this, itemData.Name);
-    }
-
-    private void SetFrameViewModelProperties(FrameViewModel frameViewModel)
-    {
-        // Construct property names dynamically
-        string frameViewModelProperty = $"FrameViewModel{frameViewModel.SlotIndex}";
-
-        // Set properties using reflection
         GetType().GetProperty(frameViewModelProperty)?.SetValue(this, frameViewModel);
     }
 
@@ -404,43 +292,37 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
     #region Remove Item
 
-    [ObservableProperty]
-    private List<ItemData>? _deletedItemDatabaseList;
-
     [RelayCommand]
     private void RemoveItem(string parameter)
     {
-        if (int.TryParse(parameter, out int slotIndex))
+        if (int.TryParse(parameter, out int slotIndex) && ItemDatabaseList != null)
         {
-            if (ItemDatabaseList != null)
+            var removedItemIndex = ItemDatabaseList.FindIndex(item => item.SlotIndex == slotIndex);
+
+            if (removedItemIndex != -1)
             {
-                var removedItemIndex = ItemDatabaseList.FindIndex(i => i.SlotIndex == slotIndex);
-                if (removedItemIndex != -1)
+                // Get the removed item
+                var removedItem = ItemDatabaseList[removedItemIndex];
+
+                // Add the removed item to DeletedItemDatabaseList
+                DeletedItemDatabaseList ??= [];
+                DeletedItemDatabaseList.Add(removedItem);
+
+                // Remove the item with the specified SlotIndex from ItemDatabaseList
+                ItemDatabaseList.RemoveAt(removedItemIndex);
+            }
+            else if (NewItemDatabaseList != null)
+            {
+                var newItemIndex = NewItemDatabaseList.FindIndex(item => item.SlotIndex == slotIndex);
+
+                if (newItemIndex != -1)
                 {
-                    // Get the removed item
-                    var removedItem = ItemDatabaseList[removedItemIndex];
-
-                    // Set the SlotIndex to a negative value
-                    if (slotIndex == 0)
-                    {
-                        removedItem.SlotIndex = -1;
-                    }
-                    else
-                    {
-                        removedItem.SlotIndex = -slotIndex;
-                    }
-
-                    // Remove the ItemData with the specified SlotIndex from ItemDatabaseList
-                    ItemDatabaseList.RemoveAt(removedItemIndex);
-
-                    // Add the removed item to DeletedItemDatabaseList
-                    DeletedItemDatabaseList ??= [];
-                    DeletedItemDatabaseList.Add(removedItem);
-
-                    // Update properties to default values for the removed SlotIndex
-                    ResetItemProperties(slotIndex);
+                    NewItemDatabaseList.RemoveAt(newItemIndex);
                 }
             }
+
+            // Update properties to default values for the removed SlotIndex
+            ResetItemProperties(slotIndex);
         }
     }
 
@@ -538,6 +420,19 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
     #endregion
 
     #region Equipament 
+
+    [ObservableProperty]
+    private List<ItemData>? _itemDatabaseList;
+
+    [ObservableProperty]
+    private List<ItemData>? _newItemDatabaseList;
+
+    [ObservableProperty]
+    private List<ItemData>? _updatedItemDatabaseList;
+
+    [ObservableProperty]
+    private List<ItemData>? _deletedItemDatabaseList;
+
     [ObservableProperty]
     private FrameViewModel? _frameViewModel0;
 
@@ -597,9 +492,6 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
     [ObservableProperty]
     private FrameViewModel? _frameViewModel19;
-
-    [ObservableProperty]
-    private List<ItemData>? _itemDatabaseList;
 
     [ObservableProperty]
     private string? _itemName0 = Resources.AddItemDesc;
