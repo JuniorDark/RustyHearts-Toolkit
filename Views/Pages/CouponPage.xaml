@@ -213,10 +213,6 @@
                     AddItemCommand="{Binding ViewModel.AddItemCommand}"
                     CommandParameter="0"
                     FrameViewModel="{Binding ViewModel.FrameViewModel}"
-                    ItemAmount="{Binding ViewModel.ItemAmount}"
-                    ItemIcon="{Binding ViewModel.ItemIcon}"
-                    ItemIconBranch="{Binding ViewModel.ItemIconBranch}"
-                    ItemName="{Binding ViewModel.ItemName}"
                     RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
                     SlotIcon="/Assets/images/lb_ac_icon.png" />
                 <TextBlock
@@ -227,7 +223,7 @@
                     d:Foreground="White"
                     d:Text="Item Name"
                     FontSize="12"
-                    Foreground="{Binding ViewModel.ItemNameColor, Converter={StaticResource StringToBrushConverter}}"
+                    Foreground="{Binding ViewModel.FrameViewModel.ItemNameColor, Converter={StaticResource StringToBrushConverter}, FallbackValue=White}"
                     Text="{Binding ViewModel.ItemName}" />
             </StackPanel>
             <Button

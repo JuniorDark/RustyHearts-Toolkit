@@ -29,8 +29,8 @@ namespace RHToolkit.Services
                 {
                     ItemData item = new()
                     {
-                        ID = Convert.ToInt32(reader["nID"]),
-                        Name = reader["wszDesc"].ToString(),
+                        ItemId = Convert.ToInt32(reader["nID"]),
+                        ItemName = reader["wszDesc"].ToString(),
                         Description = currentLanguage == "ko-KR" && itemTableName == "itemlist_costume" ? reader["szItemDescription"].ToString() : reader["wszItemDescription"].ToString(),
                         Type = (int)itemType,
                         WeaponID00 = Convert.ToInt32(reader["nWeaponID00"]),

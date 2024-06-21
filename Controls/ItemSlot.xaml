@@ -41,16 +41,16 @@
                             <Style TargetType="ContentControl">
                                 <Setter Property="ContentTemplate" Value="{StaticResource GearFrameTemplate}" />
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.ItemType, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="1">
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.Type, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="1">
                                         <Setter Property="ContentTemplate" Value="{StaticResource ItemFrameTemplate}" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.ItemType, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="2">
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.Type, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="2">
                                         <Setter Property="ContentTemplate" Value="{StaticResource CostumeFrameTemplate}" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.ItemType, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="3">
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.Type, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="3">
                                         <Setter Property="ContentTemplate" Value="{StaticResource GearFrameTemplate}" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.ItemType, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="4">
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.Type, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="4">
                                         <Setter Property="ContentTemplate" Value="{StaticResource GearFrameTemplate}" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -88,7 +88,7 @@
             Margin="0,4,1,0"
             VerticalAlignment="Top"
             IsHitTestVisible="False"
-            Source="{Binding ItemIcon, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource IconNameToImageSourceConverter}}"
+            Source="{Binding FrameViewModel.IconName, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource IconNameToImageSourceConverter}}"
             Stretch="Fill" />
         <Image
             x:Name="imgItemIconBranch"
@@ -97,7 +97,7 @@
             Margin="0,0,0,0"
             VerticalAlignment="Top"
             IsHitTestVisible="False"
-            Source="{Binding ItemIconBranch, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BranchToImageSourceConverter}}"
+            Source="{Binding FrameViewModel.ItemBranch, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BranchToImageSourceConverter}}"
             Stretch="Fill" />
         <TextBlock
             x:Name="tbItemAmount"
@@ -111,7 +111,7 @@
             FontWeight="Bold"
             Foreground="White"
             IsHitTestVisible="False"
-            Text="{Binding ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}}"
-            Visibility="{Binding ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+            Text="{Binding FrameViewModel.ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Visibility="{Binding FrameViewModel.ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
     </Grid>
 </UserControl>

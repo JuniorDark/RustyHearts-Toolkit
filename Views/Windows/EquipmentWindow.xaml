@@ -11,9 +11,9 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
     Title="{Binding Title}"
-    Width="400"
+    Width="450"
     Height="400"
-    MinWidth="420"
+    MinWidth="450"
     MinHeight="400"
     MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
     bh:WindowBehaviors.EnableDragMove="True"
@@ -122,25 +122,16 @@
                             Grid.Column="3"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="0"
-                            FrameViewModel="{Binding FrameViewModel0}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon0}"
-                            ItemIconBranch="{Binding ItemIconBranch0}"
-                            ItemName="{Binding ItemName0}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=0}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_07.png" />
-
                         <control:ItemSlot
                             x:Name="ItemSlotIndex1"
                             Grid.Row="1"
                             Grid.Column="0"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="1"
-                            FrameViewModel="{Binding FrameViewModel1}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon1}"
-                            ItemIconBranch="{Binding ItemIconBranch1}"
-                            ItemName="{Binding ItemName1}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_02.png" />
                         <control:ItemSlot
@@ -149,11 +140,7 @@
                             Grid.Column="0"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="2"
-                            FrameViewModel="{Binding FrameViewModel2}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon2}"
-                            ItemIconBranch="{Binding ItemIconBranch2}"
-                            ItemName="{Binding ItemName2}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_01.png" />
                         <control:ItemSlot
@@ -162,11 +149,7 @@
                             Grid.Column="1"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="3"
-                            FrameViewModel="{Binding FrameViewModel3}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon3}"
-                            ItemIconBranch="{Binding ItemIconBranch3}"
-                            ItemName="{Binding ItemName3}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_05.png" />
                         <control:ItemSlot
@@ -175,11 +158,7 @@
                             Grid.Column="0"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="4"
-                            FrameViewModel="{Binding FrameViewModel4}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon4}"
-                            ItemIconBranch="{Binding ItemIconBranch4}"
-                            ItemName="{Binding ItemName4}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_03.png" />
                         <control:ItemSlot
@@ -188,11 +167,7 @@
                             Grid.Column="1"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="5"
-                            FrameViewModel="{Binding FrameViewModel5}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon5}"
-                            ItemIconBranch="{Binding ItemIconBranch5}"
-                            ItemName="{Binding ItemName5}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_04.png" />
                         <control:ItemSlot
@@ -201,11 +176,7 @@
                             Grid.Column="4"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="6"
-                            FrameViewModel="{Binding FrameViewModel6}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon6}"
-                            ItemIconBranch="{Binding ItemIconBranch6}"
-                            ItemName="{Binding ItemName6}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_09.png" />
                         <control:ItemSlot
@@ -215,11 +186,7 @@
                             Margin="0,0,1,0"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="7"
-                            FrameViewModel="{Binding FrameViewModel7}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon7}"
-                            ItemIconBranch="{Binding ItemIconBranch7}"
-                            ItemName="{Binding ItemName7}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=7}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_10.png" />
                         <control:ItemSlot
@@ -228,11 +195,7 @@
                             Grid.Column="4"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="8"
-                            FrameViewModel="{Binding FrameViewModel8}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon8}"
-                            ItemIconBranch="{Binding ItemIconBranch8}"
-                            ItemName="{Binding ItemName8}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=8}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_08.png" />
                         <control:ItemSlot
@@ -241,11 +204,7 @@
                             Grid.Column="3"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="9"
-                            FrameViewModel="{Binding FrameViewModel9}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon9}"
-                            ItemIconBranch="{Binding ItemIconBranch9}"
-                            ItemName="{Binding ItemName9}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=9}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_06.png" />
                     </Grid>
@@ -306,96 +265,86 @@
                             Text="{Binding CharacterClassText}"
                             TextWrapping="Wrap" />
                         <control:ItemSlot
-                            x:Name="ItemSlotIndex16"
-                            Grid.Row="1"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="16"
-                            FrameViewModel="{Binding FrameViewModel16}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon16}"
-                            ItemIconBranch="{Binding ItemIconBranch16}"
-                            ItemName="{Binding ItemName16}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_17.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex13"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="13"
-                            FrameViewModel="{Binding FrameViewModel13}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon13}"
-                            ItemIconBranch="{Binding ItemIconBranch13}"
-                            ItemName="{Binding ItemName13}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_12.png" />
-                        <control:ItemSlot
                             x:Name="ItemSlotIndex10"
                             Grid.Row="0"
                             Grid.Column="0"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="10"
-                            FrameViewModel="{Binding FrameViewModel10}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon10}"
-                            ItemIconBranch="{Binding ItemIconBranch10}"
-                            ItemName="{Binding ItemName10}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=10}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_11.png" />
                         <control:ItemSlot
-                            x:Name="ItemSlotIndex15"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="15"
-                            FrameViewModel="{Binding FrameViewModel15}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon15}"
-                            ItemIconBranch="{Binding ItemIconBranch15}"
-                            ItemName="{Binding ItemName15}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_15.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex17"
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="17"
-                            FrameViewModel="{Binding FrameViewModel17}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon17}"
-                            ItemIconBranch="{Binding ItemIconBranch17}"
-                            ItemName="{Binding ItemName17}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_13.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex14"
+                            x:Name="ItemSlotIndex11"
                             Grid.Row="0"
-                            Grid.Column="1"
+                            Grid.Column="3"
                             AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="14"
-                            FrameViewModel="{Binding FrameViewModel14}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon14}"
-                            ItemIconBranch="{Binding ItemIconBranch14}"
-                            ItemName="{Binding ItemName14}"
+                            CommandParameter="11"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=11}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_14.png" />
+                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_16.png" />
                         <control:ItemSlot
                             x:Name="ItemSlotIndex12"
                             Grid.Row="1"
                             Grid.Column="4"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="12"
-                            FrameViewModel="{Binding FrameViewModel12}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon12}"
-                            ItemIconBranch="{Binding ItemIconBranch12}"
-                            ItemName="{Binding ItemName12}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=12}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_18.png" />
+                        <control:ItemSlot
+                            x:Name="ItemSlotIndex13"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="13"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=13}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}"
+                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_12.png" />
+                        <control:ItemSlot
+                            x:Name="ItemSlotIndex14"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="14"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=14}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}"
+                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_14.png" />
+                        <control:ItemSlot
+                            x:Name="ItemSlotIndex15"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="15"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=15}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}"
+                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_15.png" />
+                        <control:ItemSlot
+                            x:Name="ItemSlotIndex16"
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="16"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=16}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}"
+                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_17.png" />
+                        <control:ItemSlot
+                            x:Name="ItemSlotIndex17"
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="17"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=17}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}"
+                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_13.png" />
+                        <control:ItemSlot
+                            x:Name="ItemSlotIndex18"
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="18"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=18}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}"
+                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_19.png" />
                         <control:ItemSlot
                             x:Name="ItemSlotIndex19"
                             Grid.Row="2"
@@ -403,52 +352,21 @@
                             Margin="0,0,1,0"
                             AddItemCommand="{Binding AddItemCommand}"
                             CommandParameter="19"
-                            FrameViewModel="{Binding FrameViewModel19}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon19}"
-                            ItemIconBranch="{Binding ItemIconBranch19}"
-                            ItemName="{Binding ItemName19}"
+                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=19}"
                             RemoveItemCommand="{Binding RemoveItemCommand}"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_20.png" />
                         <control:ItemSlot
                             x:Name="ItemSlotIndex21"
                             Grid.Row="0"
                             Grid.Column="4"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemName="{Binding ItemName21}"
+                            IsButtonEnabled="False"
                             SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_21.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex11"
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="11"
-                            FrameViewModel="{Binding FrameViewModel11}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon11}"
-                            ItemIconBranch="{Binding ItemIconBranch11}"
-                            ItemName="{Binding ItemName11}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_16.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex18"
-                            Grid.Row="2"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="18"
-                            FrameViewModel="{Binding FrameViewModel18}"
-                            IsButtonEnabled="{Binding IsButtonEnabled}"
-                            ItemIcon="{Binding ItemIcon18}"
-                            ItemIconBranch="{Binding ItemIconBranch18}"
-                            ItemName="{Binding ItemName18}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_19.png" />
                     </Grid>
                 </TabItem>
             </TabControl>
             <Image
                 Grid.Row="2"
-                Grid.Column="2"
+                Grid.Column="4"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Cursor="Help"

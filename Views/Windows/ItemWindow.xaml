@@ -91,10 +91,10 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Increment="1"
-                        IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
+                        IsEnabled="{Binding FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="20"
                         Minimum="0"
-                        Value="{Binding EnhanceLevel, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.EnhanceLevel, Mode=TwoWay}" />
                     <Label
                         x:Name="lbRank"
                         VerticalAlignment="Top"
@@ -106,10 +106,10 @@
                         Width="120"
                         Height="26"
                         Increment="1"
-                        IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
+                        IsEnabled="{Binding FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="5"
                         Minimum="1"
-                        Value="{Binding Rank, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.Rank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                 </StackPanel>
                 <!--  center Column  -->
@@ -130,10 +130,10 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Increment="1"
-                        IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
+                        IsEnabled="{Binding FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="100000"
                         Minimum="0"
-                        Value="{Binding AugmentValue, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.AugmentValue, Mode=TwoWay}" />
                     <Label
                         x:Name="lbCurrentAttribute"
                         VerticalAlignment="Top"
@@ -145,10 +145,10 @@
                         Width="120"
                         Height="26"
                         Increment="1"
-                        IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
-                        Maximum="{Binding ReconstructionMax}"
+                        IsEnabled="{Binding FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
+                        Maximum="{Binding FrameViewModel.ReconstructionMax}"
                         Minimum="0"
-                        Value="{Binding Reconstruction, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.Reconstruction, Mode=TwoWay}" />
                 </StackPanel>
                 <!--  Right Column  -->
                 <StackPanel
@@ -165,11 +165,11 @@
                         x:Name="intMaxDurability"
                         Width="120"
                         Height="26"
-                        Increment="{Binding MaxDurability, Converter={StaticResource IncrementConverter}}"
-                        IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
+                        Increment="{Binding FrameViewModel.MaxDurability, Converter={StaticResource IncrementConverter}}"
+                        IsEnabled="{Binding FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="100000"
                         Minimum="100"
-                        Value="{Binding MaxDurability, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.MaxDurability, Mode=TwoWay}" />
                     <Label
                         x:Name="lbWeight"
                         VerticalAlignment="Top"
@@ -181,10 +181,10 @@
                         Width="120"
                         Height="26"
                         Increment="100"
-                        IsEnabled="{Binding Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
+                        IsEnabled="{Binding FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="200000"
                         Minimum="1"
-                        Value="{Binding Weight, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.Weight, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
             <!--  Random Option  -->
@@ -242,11 +242,11 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                        IsEnabled="{Binding FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding OptionView}"
-                        SelectedValue="{Binding RandomOption01, Mode=TwoWay}"
+                        SelectedValue="{Binding FrameViewModel.RandomOption01, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -265,11 +265,11 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                        IsEnabled="{Binding FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding OptionView}"
-                        SelectedValue="{Binding RandomOption02, Mode=TwoWay}"
+                        SelectedValue="{Binding FrameViewModel.RandomOption02, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -288,11 +288,11 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                        IsEnabled="{Binding FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding OptionView}"
-                        SelectedValue="{Binding RandomOption03, Mode=TwoWay}"
+                        SelectedValue="{Binding FrameViewModel.RandomOption03, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -311,11 +311,11 @@
                     <control:IntegerUpDown
                         x:Name="intOptionValue1"
                         Width="100"
-                        Increment="{Binding OptionMaxValue, Converter={StaticResource IncrementConverter}}"
-                        IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
-                        Maximum="{Binding OptionMaxValue}"
-                        Minimum="{Binding OptionMinValue}"
-                        Value="{Binding RandomOption01Value, Mode=TwoWay}" />
+                        Increment="{Binding FrameViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
+                        IsEnabled="{Binding FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                        Maximum="{Binding FrameViewModel.OptionMaxValue}"
+                        Minimum="{Binding FrameViewModel.OptionMinValue}"
+                        Value="{Binding FrameViewModel.RandomOption01Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbRandomOptionValue2"
                         VerticalAlignment="Top"
@@ -325,11 +325,11 @@
                     <control:IntegerUpDown
                         x:Name="intOptionValue2"
                         Width="100"
-                        Increment="{Binding OptionMaxValue, Converter={StaticResource IncrementConverter}}"
-                        IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
-                        Maximum="{Binding OptionMaxValue}"
-                        Minimum="{Binding OptionMinValue}"
-                        Value="{Binding RandomOption02Value, Mode=TwoWay}" />
+                        Increment="{Binding FrameViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
+                        IsEnabled="{Binding FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                        Maximum="{Binding FrameViewModel.OptionMaxValue}"
+                        Minimum="{Binding FrameViewModel.OptionMinValue}"
+                        Value="{Binding FrameViewModel.RandomOption02Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbRandomOptionValue3"
                         VerticalAlignment="Top"
@@ -340,11 +340,11 @@
                     <control:IntegerUpDown
                         x:Name="intOptionValue3"
                         Width="100"
-                        Increment="{Binding OptionMaxValue, Converter={StaticResource IncrementConverter}}"
-                        IsEnabled="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
-                        Maximum="{Binding OptionMaxValue}"
-                        Minimum="{Binding OptionMinValue}"
-                        Value="{Binding RandomOption03Value, Mode=TwoWay}" />
+                        Increment="{Binding FrameViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
+                        IsEnabled="{Binding FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                        Maximum="{Binding FrameViewModel.OptionMaxValue}"
+                        Minimum="{Binding FrameViewModel.OptionMinValue}"
+                        Value="{Binding FrameViewModel.RandomOption03Value, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
             <!--  Socket Option  -->
@@ -377,9 +377,9 @@
                         Width="100"
                         Margin="0,-25,0,0"
                         Increment="1"
-                        Maximum="{Binding SocketCountMax, Mode=TwoWay}"
+                        Maximum="{Binding FrameViewModel.SocketCountMax, Mode=TwoWay}"
                         Minimum="0"
-                        Value="{Binding SocketCount, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.SocketCount, Mode=TwoWay}" />
                 </StackPanel>
                 <!--  left Column socket color  -->
                 <StackPanel
@@ -402,12 +402,12 @@
                         Height="44"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                        IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding SocketColorItems}"
                         RenderTransformOrigin="0.417,1.091"
-                        SelectedValue="{Binding Socket01Color, Mode=TwoWay}"
+                        SelectedValue="{Binding FrameViewModel.Socket01Color, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox_image}" />
@@ -425,11 +425,11 @@
                         Margin="0,-5,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                        IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding SocketColorItems}"
-                        SelectedValue="{Binding Socket02Color, Mode=TwoWay}"
+                        SelectedValue="{Binding FrameViewModel.Socket02Color, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox_image}" />
@@ -447,11 +447,11 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                        IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding SocketColorItems}"
-                        SelectedValue="{Binding Socket03Color, Mode=TwoWay}"
+                        SelectedValue="{Binding FrameViewModel.Socket03Color, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox_image}" />
@@ -478,11 +478,11 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                        IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding OptionView}"
-                        SelectedValue="{Binding SocketOption01, Mode=TwoWay}"
+                        SelectedValue="{Binding FrameViewModel.SocketOption01, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -502,11 +502,11 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                        IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding OptionView}"
-                        SelectedValue="{Binding SocketOption02, Mode=TwoWay}"
+                        SelectedValue="{Binding FrameViewModel.SocketOption02, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -526,11 +526,11 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                        IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding OptionView}"
-                        SelectedValue="{Binding SocketOption03, Mode=TwoWay}"
+                        SelectedValue="{Binding FrameViewModel.SocketOption03, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -551,11 +551,11 @@
                         x:Name="intSocketValue1"
                         Width="100"
                         Margin="0,10,0,0"
-                        Increment="{Binding OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
-                        IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
-                        Maximum="{Binding OptionMaxValue}"
-                        Minimum="{Binding OptionMinValue}"
-                        Value="{Binding SocketOption01Value, Mode=TwoWay}" />
+                        Increment="{Binding FrameViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                        Maximum="{Binding FrameViewModel.OptionMaxValue}"
+                        Minimum="{Binding FrameViewModel.OptionMinValue}"
+                        Value="{Binding FrameViewModel.SocketOption01Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbSocketOptionValue2"
                         VerticalAlignment="Top"
@@ -566,11 +566,11 @@
                         x:Name="intSocketValue2"
                         Width="100"
                         Margin="0,10,0,0"
-                        Increment="{Binding OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
-                        IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
-                        Maximum="{Binding OptionMaxValue}"
-                        Minimum="{Binding OptionMinValue}"
-                        Value="{Binding SocketOption02Value, Mode=TwoWay}" />
+                        Increment="{Binding FrameViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                        Maximum="{Binding FrameViewModel.OptionMaxValue}"
+                        Minimum="{Binding FrameViewModel.OptionMinValue}"
+                        Value="{Binding FrameViewModel.SocketOption02Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbSocketOptionValue3"
                         VerticalAlignment="Top"
@@ -581,11 +581,11 @@
                         x:Name="intSocketValue3"
                         Width="100"
                         Margin="0,10,0,0"
-                        Increment="{Binding OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
-                        IsEnabled="{Binding SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
-                        Maximum="{Binding OptionMaxValue}"
-                        Minimum="{Binding OptionMinValue}"
-                        Value="{Binding SocketOption03Value, Mode=TwoWay}" />
+                        Increment="{Binding FrameViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                        Maximum="{Binding FrameViewModel.OptionMaxValue}"
+                        Minimum="{Binding FrameViewModel.OptionMinValue}"
+                        Value="{Binding FrameViewModel.SocketOption03Value, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
             <!--  Selected Item  -->
@@ -612,9 +612,9 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Increment="1"
-                        Maximum="{Binding OverlapCnt}"
+                        Maximum="{Binding FrameViewModel.OverlapCnt}"
                         Minimum="1"
-                        Value="{Binding Amount, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.ItemAmount, Mode=TwoWay}" />
                     <TextBlock
                         x:Name="lbSelectedItem"
                         Canvas.Left="63"
@@ -624,14 +624,9 @@
                         d:Foreground="White"
                         d:Text="Item Name"
                         FontSize="12"
-                        Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}"
-                        Text="{Binding ItemName}" />
-                    <control:ItemSlot
-                        FrameViewModel="{Binding FrameViewModel}"
-                        ItemIcon="{Binding IconName}"
-                        ItemIconBranch="{Binding ItemBranch}"
-                        ItemName="{Binding ItemName}"
-                        SlotIcon="/Assets/images/lb_ac_icon.png" />
+                        Foreground="{Binding FrameViewModel.ItemNameColor, Converter={StaticResource StringToBrushConverter}, FallbackValue=White}"
+                        Text="{Binding FrameViewModel.ItemName}" />
+                    <control:ItemSlot FrameViewModel="{Binding FrameViewModel, Mode=OneWay}" SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <Button
                         x:Name="btnSelectItem"
                         Canvas.Left="105"
@@ -664,7 +659,7 @@
                         Increment="1"
                         Maximum="{Binding SlotIndexMax}"
                         Minimum="{Binding SlotIndexMin}"
-                        Value="{Binding SlotIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding FrameViewModel.SlotIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Canvas>
             </Grid>
             <!--  Frame Controls  -->
@@ -767,12 +762,12 @@
                         <DataGridTextColumn
                             Width="*"
                             MaxWidth="80"
-                            Binding="{Binding ID}"
+                            Binding="{Binding ItemId}"
                             Header="{x:Static rs:Resources.ID}"
                             IsReadOnly="True" />
                         <DataGridTextColumn
                             Width="*"
-                            Binding="{Binding Name}"
+                            Binding="{Binding ItemName}"
                             Header="{x:Static rs:Resources.Name}"
                             IsReadOnly="True">
                             <DataGridTextColumn.CellStyle>

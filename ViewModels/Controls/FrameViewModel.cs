@@ -10,26 +10,16 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     private readonly IFrameService _frameService = frameService;
     private readonly IGMDatabaseService _gmDatabaseService = gmDatabaseService;
 
-
-    #region Properties
-
-    [ObservableProperty]
-    private ItemData? _itemData;
-    partial void OnItemDataChanged(ItemData? value)
-    {
-        UpdateItemData(value);
-    }
-
     private void UpdateItemData(ItemData? itemData)
     {
         if (itemData != null)
         {
-            ItemId = itemData.ID;
-            ItemName = itemData.Name;
-            ItemType = itemData.Type;
+            ItemId = itemData.ItemId;
+            ItemName = itemData.ItemName;
             Description = itemData.Description;
             ItemBranch = itemData.Branch;
             IconName = itemData.IconName;
+            ItemAmount = itemData.ItemAmount;
             ItemTrade = itemData.ItemTrade;
             MaxDurability = itemData.Durability;
             ReconstructionMax = itemData.ReconstructionMax;
@@ -52,11 +42,15 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
             SocketCountMax = itemData.SocketCountMax;
             SocketCount = itemData.SocketCountMax;
 
+            OverlapCnt = itemData.OverlapCnt == 0 ? 1 : itemData.OverlapCnt;
+            ItemAmount = itemData.ItemAmount == 0 ? 1 : itemData.ItemAmount;
+            Rank = itemData.Rank == 0 ? 1 : itemData.Rank;
+            OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
+
             SlotIndex = itemData.SlotIndex;
             MaxDurability = itemData.DurabilityMax;
             EnhanceLevel = itemData.EnhanceLevel;
             AugmentValue = itemData.AugmentStone;
-            Rank = itemData.Rank;
             Weight = itemData.Weight;
             ReconstructionMax = itemData.ReconstructionMax;
             Reconstruction = itemData.Reconstruction;
@@ -80,6 +74,53 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
 
     }
 
+    public ItemData GetItemData()
+    {
+        ItemData itemData = new()
+        {
+            SlotIndex = SlotIndex,
+            ItemId = ItemId,
+            ItemAmount = ItemAmount,
+            ReconstructionMax = (byte)ReconstructionMax,
+            Reconstruction = Reconstruction,
+            Rank = (byte)Rank,
+            OptionCountMax = OptionCountMax,
+            EnhanceLevel = EnhanceLevel,
+            Weight = Weight,
+            Durability = MaxDurability,
+            DurabilityMax = MaxDurability,
+            AugmentStone = AugmentValue,
+            Option1Code = RandomOption01,
+            Option2Code = RandomOption02,
+            Option3Code = RandomOption03,
+            Option1Value = RandomOption01Value,
+            Option2Value = RandomOption02Value,
+            Option3Value = RandomOption03Value,
+            SocketCount = SocketCount,
+            SocketCountMax = SocketCountMax,
+            Socket1Color = Socket01Color,
+            Socket2Color = Socket02Color,
+            Socket3Color = Socket03Color,
+            Socket1Code = SocketOption01,
+            Socket2Code = SocketOption02,
+            Socket3Code = SocketOption03,
+            Socket1Value = SocketOption01Value,
+            Socket2Value = SocketOption02Value,
+            Socket3Value = SocketOption03Value,
+        };
+
+        return itemData;
+    }
+
+    #region Properties
+
+    [ObservableProperty]
+    private ItemData? _itemData;
+    partial void OnItemDataChanged(ItemData? value)
+    {
+        UpdateItemData(value);
+    }
+
     [ObservableProperty]
     private int _slotIndex;
 
@@ -92,7 +133,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     public string ItemNameColor => FrameService.GetBranchColor(ItemBranch);
 
     [ObservableProperty]
-    private int _itemType;
+    private int _itemAmount = 1;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ItemNameColor))]
@@ -102,7 +143,17 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     private string? _iconName;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(EnhanceLevel))]
+    [NotifyPropertyChangedFor(nameof(AugmentValue))]
     private int _type;
+    partial void OnTypeChanged(int value)
+    {
+        if (value == 1 || value == 2)
+        {
+            EnhanceLevel = 0;
+            AugmentValue = 0;
+        }
+    }
 
     [ObservableProperty]
     private string? _description;
@@ -112,6 +163,15 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     private int _weight;
 
     public string WeightText => FrameService.FormatWeight(Weight);
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ItemAmount))]
+    private int _overlapCnt;
+    partial void OnOverlapCntChanged(int value)
+    {
+        if (ItemAmount > value)
+            ItemAmount = value;
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DurabilityText))]
@@ -252,9 +312,34 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     #region Random Option
 
     [ObservableProperty]
+    private int _optionMinValue;
+
+    [ObservableProperty]
+    private int _optionMaxValue;
+
+    private int CalculateOptionValue(int option, int value)
+    {
+        if (option != 0)
+        {
+            if (value == 0)
+            {
+                OptionMinValue = 1;
+                OptionMaxValue = 10000;
+                return OptionMaxValue;
+            }
+        }
+        else
+        {
+            OptionMinValue = 0;
+            OptionMaxValue = 0;
+            return 0;
+        }
+        return value;
+    }
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption01Value))]
     private int _optionCount;
-
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption01Value))]
@@ -266,6 +351,10 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(RandomOption01Text))]
     [NotifyPropertyChangedFor(nameof(RandomOption01Color))]
     private int _randomOption01;
+    partial void OnRandomOption01Changed(int value)
+    {
+        RandomOption01Value = CalculateOptionValue(value, RandomOption01Value);
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption01Text))]
@@ -279,6 +368,10 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(RandomOption02Text))]
     [NotifyPropertyChangedFor(nameof(RandomOption02Color))]
     private int _randomOption02;
+    partial void OnRandomOption02Changed(int value)
+    {
+        RandomOption02Value = CalculateOptionValue(value, RandomOption02Value);
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption02Text))]
@@ -292,6 +385,10 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(RandomOption03Text))]
     [NotifyPropertyChangedFor(nameof(RandomOption03Color))]
     private int _randomOption03;
+    partial void OnRandomOption03Changed(int value)
+    {
+        RandomOption03Value = CalculateOptionValue(value, RandomOption03Value);
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RandomOption03Text))]
@@ -334,6 +431,10 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(SocketOption01Text))]
     [NotifyPropertyChangedFor(nameof(SocketOption01Color))]
     private int _socketOption01;
+    partial void OnSocketOption01Changed(int value)
+    {
+        SocketOption01Value = CalculateOptionValue(value, SocketOption01Value);
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption01Text))]
@@ -347,6 +448,10 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(SocketOption02Text))]
     [NotifyPropertyChangedFor(nameof(SocketOption02Color))]
     private int _socketOption02;
+    partial void OnSocketOption02Changed(int value)
+    {
+        SocketOption02Value = CalculateOptionValue(value, SocketOption02Value);
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption02Text))]
@@ -360,6 +465,10 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(SocketOption03Text))]
     [NotifyPropertyChangedFor(nameof(SocketOption03Color))]
     private int _socketOption03;
+    partial void OnSocketOption03Changed(int value)
+    {
+        SocketOption03Value = CalculateOptionValue(value, SocketOption03Value);
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SocketOption03Text))]

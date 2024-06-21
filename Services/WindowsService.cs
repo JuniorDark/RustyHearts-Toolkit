@@ -45,7 +45,7 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
             WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "ItemWindow", token));
         }
 
-        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindowViewModel", messageType, token));
+        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindow", messageType, token));
     }
 
     private static int _openWindowsCount = 0;

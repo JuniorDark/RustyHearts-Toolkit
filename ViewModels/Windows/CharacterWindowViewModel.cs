@@ -2,9 +2,9 @@
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Models.SQLite;
 using RHToolkit.Properties;
 using RHToolkit.Services;
+using RHToolkit.ViewModels.Controls;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
@@ -14,19 +14,21 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
-    private readonly CachedDataManager _cachedDataManager;
+    private readonly ItemHelper _itemHelper;
 
-    public CharacterWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager)
+    public CharacterWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, ItemHelper itemHelper)
     {
         _windowsService = windowsService;
         _databaseService = databaseService;
         _gmDatabaseService = gmDatabaseService;
-        _cachedDataManager = cachedDataManager;
+        _itemHelper = itemHelper;
+
+        FrameViewModels ??= [];
 
         PopulateClassItems();
         PopulateLobbyItems();
 
-        WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
+        WeakReferenceMessenger.Default.Register(this);
     }
 
     #region Load Character
@@ -105,31 +107,12 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
     private void ClearData()
     {
-        ClearAllEquipItems();
         CharacterData = null;
         ItemDatabaseList = null;
+        FrameViewModels?.Clear();
+        OnPropertyChanged(nameof(FrameViewModels));
     }
 
-    private void ClearAllEquipItems()
-    {
-        for (int i = 0; i < 20; i++)
-        {
-            ResetItemProperties(i);
-        }
-    }
-
-    private void ResetItemProperties(int slotIndex)
-    {
-        string iconNameProperty = $"ItemIcon{slotIndex}";
-        string iconBranchProperty = $"ItemIconBranch{slotIndex}";
-        string nameProperty = $"ItemName{slotIndex}";
-        string amountProperty = $"ItemAmount{slotIndex}";
-
-        GetType().GetProperty(iconNameProperty)?.SetValue(this, null);
-        GetType().GetProperty(iconBranchProperty)?.SetValue(this, 0);
-        GetType().GetProperty(nameProperty)?.SetValue(this, null);
-        GetType().GetProperty(amountProperty)?.SetValue(this, 0);
-    }
     #endregion
 
     #region Commands
@@ -366,18 +349,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     }
     #endregion
 
-    #region Show Item
-    [RelayCommand]
-    private void ShowItem(string parameter)
-    {
-        if (int.TryParse(parameter, out int slotIndex))
-        {
-            ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
-            
-        }
-    }
-    #endregion
-
     #region Windows Buttons
     private void OpenWindow(Action<CharacterInfo> openWindowAction, string errorMessage)
     {
@@ -481,43 +452,19 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     {
         if (equipmentItems != null)
         {
-            for (int i = 0; i < equipmentItems.Count; i++)
+            foreach (var equipmentItem in equipmentItems)
             {
-                ItemData equipmentItem = equipmentItems[i];
-
-                // Access the property from the DatabaseItem object
-                int index = equipmentItem.SlotIndex;
-                int code = equipmentItem.ID;
-
-                // Find the corresponding ItemData object in the _cachedItemDataList
-                ItemData? cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == code);
-
-                ItemData itemData = new()
-                {
-                    SlotIndex = index,
-                    ID = code,
-                    Name = cachedItem?.Name ?? "",
-                    IconName = cachedItem?.IconName ?? "",
-                    Branch = cachedItem?.Branch ?? 0,
-                };
-
-                SetItemProperties(itemData);
+                var frameViewModel = _itemHelper.GetItemData(equipmentItem);
+                SetFrameViewModel(frameViewModel);
             }
-
         }
     }
 
-    private void SetItemProperties(ItemData itemData)
+    private void SetFrameViewModel(FrameViewModel frameViewModel)
     {
-        // Construct property names dynamically
-        string iconNameProperty = $"ItemIcon{itemData.SlotIndex}";
-        string iconBranchProperty = $"ItemIconBranch{itemData.SlotIndex}";
-        string nameProperty = $"ItemName{itemData.SlotIndex}";
-
-        // Set properties using reflection
-        GetType().GetProperty(iconNameProperty)?.SetValue(this, itemData.IconName);
-        GetType().GetProperty(iconBranchProperty)?.SetValue(this, itemData.Branch);
-        GetType().GetProperty(nameProperty)?.SetValue(this, itemData.Name);
+        FrameViewModels ??= [];
+        FrameViewModels.Add(frameViewModel);
+        OnPropertyChanged(nameof(FrameViewModels));
     }
 
     #endregion
@@ -687,187 +634,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     private List<ItemData>? _itemDatabaseList;
 
     [ObservableProperty]
-    private string? _itemName0 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName1 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName2 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName3 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName4 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName5 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName6 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName7 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName8 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName9 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName10 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName11 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName12 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName13 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName14 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName15 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName16 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName17 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName18 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName19 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName21 = "Spirit (Not Implemented)";
-
-    [ObservableProperty]
-    private string? _itemIcon0;
-
-    [ObservableProperty]
-    private string? _itemIcon1;
-
-    [ObservableProperty]
-    private string? _itemIcon2;
-
-    [ObservableProperty]
-    private string? _itemIcon3;
-
-    [ObservableProperty]
-    private string? _itemIcon4;
-
-    [ObservableProperty]
-    private string? _itemIcon5;
-
-    [ObservableProperty]
-    private string? _itemIcon6;
-
-    [ObservableProperty]
-    private string? _itemIcon7;
-
-    [ObservableProperty]
-    private string? _itemIcon8;
-
-    [ObservableProperty]
-    private string? _itemIcon9;
-
-    [ObservableProperty]
-    private string? _itemIcon10;
-
-    [ObservableProperty]
-    private string? _itemIcon11;
-
-    [ObservableProperty]
-    private string? _itemIcon12;
-
-    [ObservableProperty]
-    private string? _itemIcon13;
-
-    [ObservableProperty]
-    private string? _itemIcon14;
-
-    [ObservableProperty]
-    private string? _itemIcon15;
-
-    [ObservableProperty]
-    private string? _itemIcon16;
-
-    [ObservableProperty]
-    private string? _itemIcon17;
-
-    [ObservableProperty]
-    private string? _itemIcon18;
-
-    [ObservableProperty]
-    private string? _itemIcon19;
-
-    [ObservableProperty]
-    private int? _itemIconBranch0;
-
-    [ObservableProperty]
-    private int? _itemIconBranch1;
-
-    [ObservableProperty]
-    private int? _itemIconBranch2;
-
-    [ObservableProperty]
-    private int? _itemIconBranch3;
-
-    [ObservableProperty]
-    private int? _itemIconBranch4;
-
-    [ObservableProperty]
-    private int? _itemIconBranch5;
-
-    [ObservableProperty]
-    private int? _itemIconBranch6;
-
-    [ObservableProperty]
-    private int? _itemIconBranch7;
-
-    [ObservableProperty]
-    private int? _itemIconBranch8;
-
-    [ObservableProperty]
-    private int? _itemIconBranch9;
-
-    [ObservableProperty]
-    private int? _itemIconBranch10;
-
-    [ObservableProperty]
-    private int? _itemIconBranch11;
-
-    [ObservableProperty]
-    private int? _itemIconBranch12;
-
-    [ObservableProperty]
-    private int? _itemIconBranch13;
-
-    [ObservableProperty]
-    private int? _itemIconBranch14;
-
-    [ObservableProperty]
-    private int? _itemIconBranch15;
-
-    [ObservableProperty]
-    private int? _itemIconBranch16;
-
-    [ObservableProperty]
-    private int? _itemIconBranch17;
-
-    [ObservableProperty]
-    private int? _itemIconBranch18;
-
-    [ObservableProperty]
-    private int? _itemIconBranch19;
+    private List<FrameViewModel>? _frameViewModels;
 
     #endregion
 

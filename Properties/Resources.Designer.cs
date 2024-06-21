@@ -349,6 +349,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Consume.
+        /// </summary>
+        public static string Consume {
+            get {
+                return ResourceManager.GetString("Consume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Costume.
         /// </summary>
         public static string Costume {
@@ -669,6 +678,15 @@ namespace RHToolkit.Properties {
         public static string EquipCategory9 {
             get {
                 return ResourceManager.GetString("EquipCategory9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equipment.
+        /// </summary>
+        public static string Equipment {
+            get {
+                return ResourceManager.GetString("Equipment", resourceCulture);
             }
         }
         
@@ -1321,6 +1339,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Other.
+        /// </summary>
+        public static string Other {
+            get {
+                return ResourceManager.GetString("Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This item cannot be used as Pet Food.
         /// </summary>
         public static string PetFoodDescNo {
@@ -1380,6 +1407,15 @@ namespace RHToolkit.Properties {
         public static string Quality {
             get {
                 return ResourceManager.GetString("Quality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quest.
+        /// </summary>
+        public static string Quest {
+            get {
+                return ResourceManager.GetString("Quest", resourceCulture);
             }
         }
         

@@ -7,6 +7,8 @@
         public string? Sender { get; set; }
         public string? Recipient { get; set; }
         public bool SendToAll { get; set; }
+        public bool SendToAllOnline { get; set; }
+        public bool SendToAllOffline { get; set; }
         public string? MailContent { get; set; }
         public int AttachGold { get; set; }
         public int ItemCharge { get; set; }
@@ -17,6 +19,7 @@
         public List<int>? DurabilityMaxValues { get; set; }
         public List<int>? WeightValues { get; set; }
         public List<int>? EnchantLevels { get; set; }
+        public List<int>? AugmentStoneValues { get; set; }
         public List<byte>? Ranks { get; set; }
         public List<int>? ReconNums { get; set; }
         public List<byte>? ReconStates { get; set; }

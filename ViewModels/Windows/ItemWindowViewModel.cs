@@ -1,5 +1,6 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
+using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.SQLite;
 using RHToolkit.Properties;
@@ -14,18 +15,17 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 {
     private readonly IGMDatabaseService _gmDatabaseService;
     private readonly CachedDataManager _cachedDataManager;
-    private readonly FrameViewModel _frameViewModel;
+    private readonly ItemHelper _itemHelper;
     private readonly System.Timers.Timer _searchTimer;
-    public FrameViewModel FrameViewModel => _frameViewModel;
 
-    public ItemWindowViewModel(IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager, FrameViewModel frameViewModel)
+    public ItemWindowViewModel(IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager, ItemHelper itemHelper)
     {
         _gmDatabaseService = gmDatabaseService;
         _cachedDataManager = cachedDataManager;
-        _frameViewModel = frameViewModel;
+        _itemHelper = itemHelper;
         _searchTimer = new()
         {
-            Interval = 500,
+            Interval = 1000,
             AutoReset = false
         };
         _searchTimer.Elapsed += SearchTimerElapsed;
@@ -37,7 +37,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         PopulateCategoryItemsFilter(ItemType.Item);
         PopulateClassItemsFilter();
         PopulateBranchItemsFilter();
-        PopulateInventoryTypeFilter();
         PopulateItemTradeItemsFilter();
 
         _itemDataView = new CollectionViewSource { Source = ItemDataItems }.View;
@@ -56,55 +55,29 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void SelectItem(object parameter)
     {
-        ItemData itemData = new()
+        if (FrameViewModel != null)
         {
-            SlotIndex = SlotIndex,
-            ID = ItemId,
-            Name = ItemName,
-            Branch = ItemBranch,
-            IconName = IconName,
-            Durability = MaxDurability,
-            DurabilityMax = MaxDurability,
-            EnhanceLevel = EnhanceLevel,
-            AugmentStone = AugmentValue,
-            Rank = Rank,
-            Weight = Weight,
-            Reconstruction = Reconstruction,
-            ReconstructionMax = ReconstructionMax,
-            Amount = Amount,
-            Option1Code = RandomOption01,
-            Option2Code = RandomOption02,
-            Option3Code = RandomOption03,
-            Option1Value = RandomOption01Value,
-            Option2Value = RandomOption02Value,
-            Option3Value = RandomOption03Value,
-            SocketCount = SocketCount,
-            Socket1Color = Socket01Color,
-            Socket2Color = Socket02Color,
-            Socket3Color = Socket03Color,
-            Socket1Code = SocketOption01,
-            Socket2Code = SocketOption02,
-            Socket3Code = SocketOption03,
-            Socket1Value = SocketOption01Value,
-            Socket2Value = SocketOption02Value,
-            Socket3Value = SocketOption03Value,
-        };
+            var itemData = FrameViewModel.GetItemData();
 
-        switch (MessageType)
-        {
-            case "Mail":
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindow", "Mail", Token));
-                break;
-            case "EquipItem":
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "EquipWindow", "EquipItem", Token));
-                break;
-            case "Coupon":
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponWindow", "Coupon", Token));
-                break;
-            default:
-                break;
+            if (itemData != null)
+            {
+                switch (MessageType)
+                {
+                    case "Mail":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindow", "Mail", Token));
+                        break;
+                    case "EquipItem":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "EquipWindow", "EquipItem", Token));
+                        break;
+                    case "Coupon":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponWindow", "Coupon", Token));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
         }
-
     }
 
     private bool CanExecuteCommand()
@@ -137,9 +110,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     #region Receive ItemData
     [ObservableProperty]
-    private ItemData? _itemData;
-
-    [ObservableProperty]
     private string? _messageType;
 
     public void Receive(ItemDataMessage message)
@@ -151,50 +121,56 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
         if (message.Token != Token) return;
 
-        if (message.Recipient == "ItemWindowViewModel" && message.Token == Token)
+        if (message.Recipient == "ItemWindow" && message.Token == Token)
         {
             var itemData = message.Value;
-            ItemData = null;
             MessageType = message.MessageType;
 
             Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
             {
+                Title = GetTitle(MessageType, itemData);
+
                 if (message.MessageType == "Mail")
                 {
-                    Title = $"Add Mail Item";
                     SlotIndexMin = 0;
                     SlotIndexMax = 2;
                 }
                 else if (message.MessageType == "EquipItem")
                 {
-                    Title = $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterInfo?.CharacterName}] ";
-
                     SlotIndexMin = itemData.SlotIndex;
                     SlotIndexMax = itemData.SlotIndex;
-
                     SlotFilter(itemData.SlotIndex);
-
                 }
-                else if (message.MessageType == "Coupon")
+                else if (message.MessageType == "Inventory")
                 {
-                    Title = $"Add Coupon Item";
-
                     SlotIndexMin = itemData.SlotIndex;
                     SlotIndexMax = itemData.SlotIndex;
+                    InventoryTypeFilter = itemData.InventoryType;
                 }
                 else
                 {
                     SlotIndexMin = itemData.SlotIndex;
                     SlotIndexMax = itemData.SlotIndex;
-                    SlotFilter(itemData.SlotIndex);
                 }
 
-                ItemId = itemData.ID;
+                ItemId = itemData.ItemId;
 
                 LoadItemData(itemData);
 
             }), DispatcherPriority.Loaded);
         }
+    }
+
+    private string GetTitle(string? messageType, ItemData itemData)
+    {
+        return messageType switch
+        {
+            "Coupon" => $"Add Coupon Item",
+            "EquipItem" => $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterInfo?.CharacterName}] ",
+            "Inventory" => $"Add Inventory Item ({(InventoryType)itemData.InventoryType}) [{CharacterInfo?.CharacterName}] ",
+            "Mail" => $"Add Mail Item",
+            _ => "Add Item",
+        };
     }
 
     #endregion
@@ -213,7 +189,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 case 0: // Weapon
                     ItemTypeFilter = 4;
                     ItemSubCategoryFilter = 1;
-                    ItemClassFilter = GetRealClass(CharacterInfo.Class);
+                    ItemClassFilter = ItemHelper.GetRealClass(CharacterInfo.Class);
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
@@ -376,109 +352,82 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
     }
 
-    private static int GetRealClass(int charClass)
-    {
-        return charClass switch
-        {
-            1 or 101 or 102 => 1,
-            2 or 201 => 2,
-            3 or 301 => 3,
-            4 or 401 => 4,
-            _ => 0,
-        };
-    }
-
     private void LoadItemData(ItemData itemData)
     {
-        SlotIndex = itemData.SlotIndex;
-        Amount = itemData.Amount;
-        MaxDurability = itemData.DurabilityMax;
-        EnhanceLevel = itemData.EnhanceLevel;
-        AugmentValue = itemData.AugmentStone;
-        Rank = itemData.Rank;
-        Weight = itemData.Weight;
-        ReconstructionMax = itemData.ReconstructionMax;
-        Reconstruction = itemData.Reconstruction;
-        RandomOption01 = itemData.Option1Code;
-        RandomOption02 = itemData.Option2Code;
-        RandomOption03 = itemData.Option3Code;
-        RandomOption01Value = itemData.Option1Value;
-        RandomOption02Value = itemData.Option2Value;
-        RandomOption03Value = itemData.Option3Value;
-        SocketCount = itemData.SocketCount;
-        Socket01Color = itemData.Socket1Color;
-        Socket02Color = itemData.Socket2Color;
-        Socket03Color = itemData.Socket3Color;
-        SocketOption01 = itemData.Socket1Code;
-        SocketOption02 = itemData.Socket2Code;
-        SocketOption03 = itemData.Socket3Code;
-        SocketOption01Value = itemData.Socket1Value;
-        SocketOption02Value = itemData.Socket2Value;
-        SocketOption03Value = itemData.Socket3Value;
+        var frameViewModel = _itemHelper.GetItemData(itemData);
+
+        FrameViewModel = frameViewModel;
+
+        FrameViewModel.SlotIndex = itemData.SlotIndex;
+        FrameViewModel.ItemAmount = itemData.ItemAmount;
+        FrameViewModel.MaxDurability = itemData.DurabilityMax;
+        FrameViewModel.EnhanceLevel = itemData.EnhanceLevel;
+        FrameViewModel.AugmentValue = itemData.AugmentStone;
+        FrameViewModel.Rank = itemData.Rank;
+        FrameViewModel.Weight = itemData.Weight;
+        FrameViewModel.ReconstructionMax = itemData.ReconstructionMax;
+        FrameViewModel.Reconstruction = itemData.Reconstruction;
+        FrameViewModel.RandomOption01 = itemData.Option1Code;
+        FrameViewModel.RandomOption02 = itemData.Option2Code;
+        FrameViewModel.RandomOption03 = itemData.Option3Code;
+        FrameViewModel.RandomOption01Value = itemData.Option1Value;
+        FrameViewModel.RandomOption02Value = itemData.Option2Value;
+        FrameViewModel.RandomOption03Value = itemData.Option3Value;
+        FrameViewModel.SocketCount = itemData.SocketCount;
+        FrameViewModel.Socket01Color = itemData.Socket1Color;
+        FrameViewModel.Socket02Color = itemData.Socket2Color;
+        FrameViewModel.Socket03Color = itemData.Socket3Color;
+        FrameViewModel.SocketOption01 = itemData.Socket1Code;
+        FrameViewModel.SocketOption02 = itemData.Socket2Code;
+        FrameViewModel.SocketOption03 = itemData.Socket3Code;
+        FrameViewModel.SocketOption01Value = itemData.Socket1Value;
+        FrameViewModel.SocketOption02Value = itemData.Socket2Value;
+        FrameViewModel.SocketOption03Value = itemData.Socket3Value;
+
     }
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(SelectedItem))]
-    private int _itemId;
-    partial void OnItemIdChanged(int value)
+    private void UpdateItemData(ItemData itemData)
     {
-        if (value == 0)
+        if (FrameViewModel != null)
         {
-            SelectedItem = ItemDataView?.Cast<ItemData>()?.FirstOrDefault(FilterItems);
+            FrameViewModel.ItemId = itemData.ItemId;
+            FrameViewModel.ItemName = itemData.ItemName;
+            FrameViewModel.Description = itemData.Description;
+            FrameViewModel.ItemBranch = itemData.Branch;
+            FrameViewModel.IconName = itemData.IconName;
+            FrameViewModel.ItemTrade = itemData.ItemTrade;
+            FrameViewModel.MaxDurability = itemData.Durability;
+            FrameViewModel.Weight = itemData.Weight;
+            FrameViewModel.ReconstructionMax = itemData.ReconstructionMax;
+            FrameViewModel.Reconstruction = itemData.ReconstructionMax;
+            FrameViewModel.OverlapCnt = itemData.OverlapCnt;
+            FrameViewModel.ItemAmount = itemData.ItemAmount;
+            FrameViewModel.Rank = itemData.Rank;
+            FrameViewModel.Type = itemData.Type;
+            FrameViewModel.Category = itemData.Category;
+            FrameViewModel.SubCategory = itemData.SubCategory;
+            FrameViewModel.JobClass = itemData.JobClass;
+            FrameViewModel.Defense = itemData.Defense;
+            FrameViewModel.MagicDefense = itemData.MagicDefense;
+            FrameViewModel.WeaponID00 = itemData.WeaponID00;
+            FrameViewModel.SellPrice = itemData.SellPrice;
+            FrameViewModel.RequiredLevel = itemData.LevelLimit;
+            FrameViewModel.SetId = itemData.SetId;
+            FrameViewModel.PetFood = itemData.PetFood;
+            FrameViewModel.FixedOption01 = itemData.FixOption1Code;
+            FrameViewModel.FixedOption01Value = itemData.FixOption1Value;
+            FrameViewModel.FixedOption02 = itemData.FixOption2Code;
+            FrameViewModel.FixedOption02Value = itemData.FixOption2Value;
+            FrameViewModel.OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
+            FrameViewModel.SocketCountMax = itemData.SocketCountMax;
+            FrameViewModel.SocketCount = itemData.SocketCountMax;
         }
         else
         {
-            SelectedItem = ItemDataItems?.FirstOrDefault(item => item.ID == value);
-        }
-    }
-
-    [ObservableProperty]
-    private ItemData? _selectedItem;
-    partial void OnSelectedItemChanged(ItemData? value)
-    {
-        Dispatcher.CurrentDispatcher.Invoke(new Action(() =>
-        {
-            UpdateItemData(value);
-        }));
-
-        SelectItemCommand.NotifyCanExecuteChanged();
-    }
-
-    private void UpdateItemData(ItemData? itemData)
-    {
-        if (itemData != null)
-        {
-            ItemId = itemData.ID;
-            ItemName = itemData.Name;
-            Description = itemData.Description;
-            ItemBranch = itemData.Branch;
-            IconName = itemData.IconName;
-            ItemTrade = itemData.ItemTrade;
-            MaxDurability = itemData.Durability;
-            Weight = itemData.Weight;
-            ReconstructionMax = itemData.ReconstructionMax;
-            Reconstruction = itemData.ReconstructionMax;
-            OverlapCnt = OverlapCnt == 0 ? 1 : itemData.OverlapCnt;
-            Amount = Amount == 0 ? 1 : Amount;
-            Rank = (byte)(Rank == 0 ? 1 : Rank);
-            Type = itemData.Type;
-            Category = itemData.Category;
-            SubCategory = itemData.SubCategory;
-            JobClass = itemData.JobClass;
-            Defense = itemData.Defense;
-            MagicDefense = itemData.MagicDefense;
-            WeaponID00 = itemData.WeaponID00;
-            SellPrice = itemData.SellPrice;
-            RequiredLevel = itemData.LevelLimit;
-            SetId = itemData.SetId;
-            PetFood = itemData.PetFood;
-            FixedOption01 = itemData.FixOption1Code;
-            FixedOption01Value = itemData.FixOption1Value;
-            FixedOption02 = itemData.FixOption2Code;
-            FixedOption02Value = itemData.FixOption2Value;
-            OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
-            SocketCountMax = itemData.SocketCountMax;
-            SocketCount = itemData.SocketCountMax;
+            var frameViewModel = _itemHelper.GetItemData(itemData);
+            FrameViewModel = frameViewModel;
+            ItemId = frameViewModel.ItemId;
+            ItemName = frameViewModel.ItemName;
         }
 
     }
@@ -527,15 +476,18 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             if (option.ID == 0)
                 return true;
 
-            selectedOptions.Add(RandomOption01);
-            selectedOptions.Add(RandomOption02);
-            selectedOptions.Add(RandomOption03);
-            selectedOptions.Add(SocketOption01);
-            selectedOptions.Add(SocketOption02);
-            selectedOptions.Add(SocketOption03);
+            if (FrameViewModel != null)
+            {
+                selectedOptions.Add(FrameViewModel.RandomOption01);
+                selectedOptions.Add(FrameViewModel.RandomOption02);
+                selectedOptions.Add(FrameViewModel.RandomOption03);
+                selectedOptions.Add(FrameViewModel.SocketOption01);
+                selectedOptions.Add(FrameViewModel.SocketOption02);
+                selectedOptions.Add(FrameViewModel.SocketOption03);
 
-            if (selectedOptions.Contains(option.ID))
-                return true;
+                if (selectedOptions.Contains(option.ID))
+                    return true;
+            }
 
             // text search filter
             if (!string.IsNullOrEmpty(OptionSearch))
@@ -567,7 +519,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     #endregion
 
-    #region CollectionView
+    #region CollectionView Filter
 
     [ObservableProperty]
     private ICollectionView _itemDataView;
@@ -604,10 +556,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 string searchText = SearchText.ToLower();
 
                 // Check if either item ID or item Name contains the search text
-                if (!string.IsNullOrEmpty(item.ID.ToString()) && item.ID.ToString().Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
+                if (!string.IsNullOrEmpty(item.ItemId.ToString()) && item.ItemId.ToString().Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
                     return true;
 
-                if (!string.IsNullOrEmpty(item.Name) && item.Name.Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
+                if (!string.IsNullOrEmpty(item.ItemName) && item.ItemName.Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
                     return true;
 
                 return false;
@@ -791,31 +743,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private List<NameID>? _inventoryTypeFilterItems;
-
-    private void PopulateInventoryTypeFilter()
-    {
-        try
-        {
-            InventoryTypeFilterItems =
-            [
-                new NameID { ID = 0, Name = Resources.All },
-                new NameID { ID = 1, Name = "Equipment" },
-                new NameID { ID = 2, Name = "Consume" },
-                new NameID { ID = 3, Name = "Other" },
-                new NameID { ID = 4, Name = "Quest" },
-                new NameID { ID = 5, Name = "Costume" }
-            ];
-
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-        }
-    }
-
-
-    [ObservableProperty]
     private List<NameID>? _itemTradeFilterItems;
 
     private void PopulateItemTradeItemsFilter()
@@ -861,401 +788,49 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     #region ItemData
 
     [ObservableProperty]
-    private int _slotIndex;
+    [NotifyPropertyChangedFor(nameof(SelectedItem))]
+    private int _itemId;
+    partial void OnItemIdChanged(int value)
+    {
+        if (value == 0)
+        {
+            SelectedItem = ItemDataView?.Cast<ItemData>()?.FirstOrDefault(FilterItems);
+        }
+        else
+        {
+            SelectedItem = ItemDataItems?.FirstOrDefault(item => item.ItemId == value);
+        }
+    }
+
+    [ObservableProperty]
+    private ItemData? _selectedItem;
+    partial void OnSelectedItemChanged(ItemData? value)
+    {
+        if (value != null)
+        {
+            UpdateItemData(value);
+        }
+
+        SelectItemCommand.NotifyCanExecuteChanged();
+    }
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ItemName))]
+    private FrameViewModel? _frameViewModel;
+    partial void OnFrameViewModelChanged(FrameViewModel? value)
+    {
+        ItemName = value != null ? value.ItemName : "Select a Item";
+    }
+
+    [ObservableProperty]
+    private string? _itemName = "Select a Item";
 
     [ObservableProperty]
     private int _slotIndexMin;
 
     [ObservableProperty]
     private int _slotIndexMax;
-
-    [ObservableProperty]
-    private string? _itemName;
-    partial void OnItemNameChanged(string? value)
-    {
-        _frameViewModel.ItemName = value;
-    }
-
-    public string ItemNameColor => FrameService.GetBranchColor(ItemBranch);
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ItemNameColor))]
-    private int _itemBranch;
-    partial void OnItemBranchChanged(int value)
-    {
-        _frameViewModel.ItemBranch = value;
-    }
-
-    [ObservableProperty]
-    private string? _iconName;
-
-    [ObservableProperty]
-    private string? _description;
-    partial void OnDescriptionChanged(string? value)
-    {
-        _frameViewModel.Description = value;
-    }
-
-    [ObservableProperty]
-    private int _amount = 1;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(EnhanceLevel))]
-    [NotifyPropertyChangedFor(nameof(AugmentValue))]
-    private int _type;
-    partial void OnTypeChanged(int value)
-    {
-        if (value == 1 || value == 2)
-        {
-            EnhanceLevel = 0;
-            AugmentValue = 0;
-        }
-        _frameViewModel.Type = value;
-    }
-
-    [ObservableProperty]
-    private int _weight;
-    partial void OnWeightChanged(int value)
-    {
-        _frameViewModel.Weight = value;
-    }
-
-    [ObservableProperty]
-    private int _maxDurability;
-    partial void OnMaxDurabilityChanged(int value)
-    {
-        _frameViewModel.MaxDurability = value;
-    }
-
-    [ObservableProperty]
-    private int _reconstruction;
-    partial void OnReconstructionChanged(int value)
-    {
-        _frameViewModel.Reconstruction = value;
-    }
-
-    [ObservableProperty]
-    private byte _reconstructionMax;
-    partial void OnReconstructionMaxChanged(byte value)
-    {
-        _frameViewModel.ReconstructionMax = value;
-    }
-
-    [ObservableProperty]
-    private byte _rank = 1;
-    partial void OnRankChanged(byte value)
-    {
-        _frameViewModel.Rank = value;
-    }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(Amount))]
-    private int _overlapCnt;
-    partial void OnOverlapCntChanged(int value)
-    {
-        if (Amount > value)
-            Amount = value;
-    }
-
-    [ObservableProperty]
-    private int _enhanceLevel;
-    partial void OnEnhanceLevelChanged(int value)
-    {
-        _frameViewModel.EnhanceLevel = value;
-    }
-
-    [ObservableProperty]
-    private int _category;
-    partial void OnCategoryChanged(int value)
-    {
-        _frameViewModel.Category = value;
-    }
-
-    [ObservableProperty]
-    private int _subCategory;
-    partial void OnSubCategoryChanged(int value)
-    {
-        _frameViewModel.SubCategory = value;
-    }
-
-    [ObservableProperty]
-    private int _defense;
-    partial void OnDefenseChanged(int value)
-    {
-        _frameViewModel.Defense = value;
-    }
-
-    [ObservableProperty]
-    private int _magicDefense;
-    partial void OnMagicDefenseChanged(int value)
-    {
-        _frameViewModel.MagicDefense = value;
-    }
-
-    [ObservableProperty]
-    private int _weaponID00;
-    partial void OnWeaponID00Changed(int value)
-    {
-        _frameViewModel.WeaponID00 = value;
-    }
-
-    [ObservableProperty]
-    private int _sellPrice;
-    partial void OnSellPriceChanged(int value)
-    {
-        _frameViewModel.SellPrice = value;
-    }
-
-    [ObservableProperty]
-    private int _requiredLevel;
-    partial void OnRequiredLevelChanged(int value)
-    {
-        _frameViewModel.RequiredLevel = value;
-    }
-
-    [ObservableProperty]
-    private int _itemTrade;
-    partial void OnItemTradeChanged(int value)
-    {
-        _frameViewModel.ItemTrade = value;
-    }
-
-    [ObservableProperty]
-    private int _jobClass;
-    partial void OnJobClassChanged(int value)
-    {
-        _frameViewModel.JobClass = value;
-    }
-
-    [ObservableProperty]
-    private int _setId;
-    partial void OnSetIdChanged(int value)
-    {
-        _frameViewModel.SetId = value;
-    }
-
-    [ObservableProperty]
-    private int _petFood;
-    partial void OnPetFoodChanged(int value)
-    {
-        _frameViewModel.PetFood = value;
-    }
-
-    [ObservableProperty]
-    private int _augmentValue;
-    partial void OnAugmentValueChanged(int value)
-    {
-        _frameViewModel.AugmentValue = value;
-    }
-
-    #region Fixed Option
-
-    [ObservableProperty]
-    private int _fixedOption01;
-    partial void OnFixedOption01Changed(int value)
-    {
-        _frameViewModel.FixedOption01 = value;
-    }
-
-    [ObservableProperty]
-    private int _fixedOption01Value;
-    partial void OnFixedOption01ValueChanged(int value)
-    {
-        _frameViewModel.FixedOption01Value = value;
-    }
-
-    [ObservableProperty]
-    private int _fixedOption02;
-    partial void OnFixedOption02Changed(int value)
-    {
-        _frameViewModel.FixedOption02 = value;
-    }
-
-    [ObservableProperty]
-    private int _fixedOption02Value;
-    partial void OnFixedOption02ValueChanged(int value)
-    {
-        _frameViewModel.FixedOption02Value = value;
-    }
-
-    #endregion
-
-    #region Random Option
-
-    [ObservableProperty]
-    private int _optionMinValue;
-
-    [ObservableProperty]
-    private int _optionMaxValue;
-
-    private int CalculateOptionValue(int option, int value)
-    {
-        if (option != 0)
-        {
-            if (value == 0)
-            {
-                OptionMinValue = 1;
-                OptionMaxValue = 10000;
-                return OptionMaxValue;
-            }
-        }
-        else
-        {
-            OptionMinValue = 0;
-            OptionMaxValue = 0;
-            return 0;
-        }
-        return value;
-    }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RandomOption01Value))]
-    private int _optionCount;
-    partial void OnOptionCountChanged(int value)
-    {
-        _frameViewModel.OptionCount = value;
-    }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(RandomOption01Value))]
-    private int _OptionCountMax;
-    partial void OnOptionCountMaxChanged(int value)
-    {
-        _frameViewModel.OptionCountMax = value;
-    }
-
-    [ObservableProperty]
-    private int _randomOption01;
-
-    partial void OnRandomOption01Changed(int value)
-    {
-        RandomOption01Value = CalculateOptionValue(value, RandomOption01Value);
-        _frameViewModel.RandomOption01 = value;
-    }
-
-    [ObservableProperty]
-    private int _randomOption01Value;
-    partial void OnRandomOption01ValueChanged(int value)
-    {
-        _frameViewModel.RandomOption01Value = value;
-    }
-
-    [ObservableProperty]
-    private int _randomOption02;
-    partial void OnRandomOption02Changed(int value)
-    {
-        RandomOption02Value = CalculateOptionValue(value, RandomOption02Value);
-        _frameViewModel.RandomOption02 = value;
-    }
-
-    [ObservableProperty]
-    private int _randomOption02Value;
-    partial void OnRandomOption02ValueChanged(int value)
-    {
-        _frameViewModel.RandomOption02Value = value;
-    }
-
-    [ObservableProperty]
-    private int _randomOption03;
-
-    partial void OnRandomOption03Changed(int value)
-    {
-        RandomOption03Value = CalculateOptionValue(value, RandomOption03Value);
-        _frameViewModel.RandomOption03 = value;
-    }
-
-    [ObservableProperty]
-    private int _randomOption03Value;
-    partial void OnRandomOption03ValueChanged(int value)
-    {
-        _frameViewModel.RandomOption03Value = value;
-    }
-    #endregion
-
-    #region Socket Option
-
-    [ObservableProperty]
-    private int _socketCount;
-    partial void OnSocketCountChanged(int value)
-    {
-        _frameViewModel.SocketCount = value;
-    }
-
-    [ObservableProperty]
-    private int _socketCountMax;
-    partial void OnSocketCountMaxChanged(int value)
-    {
-        _frameViewModel.SocketCountMax = value;
-    }
-
-    [ObservableProperty]
-    private int _socket01Color;
-    partial void OnSocket01ColorChanged(int value)
-    {
-        _frameViewModel.Socket01Color = value;
-    }
-
-    [ObservableProperty]
-    private int _socket02Color;
-    partial void OnSocket02ColorChanged(int value)
-    {
-        _frameViewModel.Socket02Color = value;
-    }
-
-    [ObservableProperty]
-    private int _socket03Color;
-    partial void OnSocket03ColorChanged(int value)
-    {
-        _frameViewModel.Socket03Color = value;
-    }
-
-    [ObservableProperty]
-    private int _socketOption01;
-    partial void OnSocketOption01Changed(int value)
-    {
-        SocketOption01Value = CalculateOptionValue(value, SocketOption01Value);
-        _frameViewModel.SocketOption01 = value;
-    }
-
-    [ObservableProperty]
-    private int _socketOption01Value;
-    partial void OnSocketOption01ValueChanged(int value)
-    {
-        _frameViewModel.SocketOption01Value = value;
-    }
-
-    [ObservableProperty]
-    private int _socketOption02;
-    partial void OnSocketOption02Changed(int value)
-    {
-        SocketOption02Value = CalculateOptionValue(value, SocketOption02Value);
-        _frameViewModel.SocketOption02 = value;
-    }
-
-    [ObservableProperty]
-    private int _socketOption02Value;
-    partial void OnSocketOption02ValueChanged(int value)
-    {
-        _frameViewModel.SocketOption02Value = value;
-    }
-
-    [ObservableProperty]
-    private int _socketOption03;
-    partial void OnSocketOption03Changed(int value)
-    {
-        SocketOption03Value = CalculateOptionValue(value, SocketOption03Value);
-        _frameViewModel.SocketOption03 = value;
-    }
-
-    [ObservableProperty]
-    private int _socketOption03Value;
-    partial void OnSocketOption03ValueChanged(int value)
-    {
-        _frameViewModel.SocketOption03Value = value;
-    }
-
-    #endregion
-
+    
     #endregion
 
     #endregion

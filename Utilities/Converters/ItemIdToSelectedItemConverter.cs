@@ -19,7 +19,7 @@ namespace RHToolkit.Utilities
                 return null;
 
             // Find the item with the matching ID
-            var selectedItem = dataGrid.Items.Cast<ItemData>().FirstOrDefault(item => item.ID == itemId);
+            var selectedItem = dataGrid.Items.Cast<ItemData>().FirstOrDefault(item => item.ItemId == itemId);
             return selectedItem;
         }
 

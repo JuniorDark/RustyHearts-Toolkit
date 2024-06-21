@@ -309,5 +309,24 @@ namespace RHToolkit.Models
             Accessory2 = 19,
         }
 
+        public enum InventoryType
+        {
+
+            [LocalizedDescription("Equipment")]
+            Equipment = 1,
+
+            [LocalizedDescription("Consume")]
+            Consume = 2,
+
+            [LocalizedDescription("Other")]
+            Other = 3,
+
+            [LocalizedDescription("Quest")]
+            Quest = 4,
+
+            [LocalizedDescription("Costume")]
+            Costume = 5,
+        }
+
     }
 }

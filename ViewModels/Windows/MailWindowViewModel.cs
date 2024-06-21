@@ -4,7 +4,6 @@ using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Models.SQLite;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
@@ -17,21 +16,17 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
-    private readonly IFrameService _frameService;
-    private readonly IGMDatabaseService _gmDatabaseService;
     private readonly MailHelper _mailHelper;
-    private readonly CachedDataManager _cachedDataManager;
+    private readonly ItemHelper _itemHelper;
     private readonly Guid _token;
 
-    public MailWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, IFrameService frameService, IGMDatabaseService gmDatabaseService, MailHelper mailHelper, CachedDataManager cachedDataManager)
+    public MailWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, MailHelper mailHelper, ItemHelper itemHelper)
     {
         _token = Guid.NewGuid();
         _windowsService = windowsService;
         _databaseService = databaseService;
-        _frameService = frameService;
-        _gmDatabaseService = gmDatabaseService;
         _mailHelper = mailHelper;
-        _cachedDataManager = cachedDataManager;
+        _itemHelper = itemHelper;
         WeakReferenceMessenger.Default.Register(this);
     }
 
@@ -67,110 +62,22 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
             if (existingItemIndex != -1)
             {
                 // Remove the existing ItemData with the same SlotIndex
-                ItemDataList.RemoveAt(existingItemIndex);
+                RemoveFrameViewModel(existingItemIndex);
             }
 
             // Add the new ItemData to the Item list
             ItemDataList.Add(itemData);
 
-            SetItemData(itemData);
+            var frameViewModel = _itemHelper.GetItemData(itemData);
+            SetFrameViewModel(frameViewModel);
         }
     }
 
-    private void SetItemData(ItemData selectedItemData)
+    private void SetFrameViewModel(FrameViewModel frameViewModel)
     {
-        // Find the corresponding ItemData in the _cachedItemDataList
-        ItemData cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == selectedItemData.ID) ?? new ItemData();
-
-        ItemData itemData = new()
-        {
-            ID = cachedItem.ID,
-            Name = cachedItem.Name ?? "",
-            Description = cachedItem.Description ?? "",
-            IconName = cachedItem.IconName ?? "",
-            Type = cachedItem.Type,
-            WeaponID00 = cachedItem.WeaponID00,
-            Category = cachedItem.Category,
-            SubCategory = cachedItem.SubCategory,
-            LevelLimit = cachedItem.LevelLimit,
-            ItemTrade = cachedItem.ItemTrade,
-            OverlapCnt = cachedItem.OverlapCnt,
-            Defense = cachedItem.Defense,
-            MagicDefense = cachedItem.MagicDefense,
-            Branch = cachedItem.Branch,
-            OptionCountMax = cachedItem.OptionCountMax,
-            SocketCountMax = cachedItem.SocketCountMax,
-            SellPrice = cachedItem.SellPrice,
-            PetFood = cachedItem.PetFood,
-            JobClass = cachedItem.JobClass,
-            SetId = cachedItem.SetId,
-            FixOption1Code = cachedItem.FixOption1Code,
-            FixOption1Value = cachedItem.FixOption1Value,
-            FixOption2Code = cachedItem.FixOption2Code,
-            FixOption2Value = cachedItem.FixOption2Value,
-
-            SlotIndex = selectedItemData.SlotIndex,
-            Amount = selectedItemData.Amount,
-            Reconstruction = selectedItemData.Reconstruction,
-            ReconstructionMax = selectedItemData.ReconstructionMax,
-            AugmentStone = selectedItemData.AugmentStone,
-            Rank = selectedItemData.Rank,
-            AcquireRoute = selectedItemData.AcquireRoute,
-            Physical = selectedItemData.Physical,
-            Magical = selectedItemData.Magical,
-            DurabilityMax = selectedItemData.DurabilityMax,
-            Weight = selectedItemData.Weight,
-            Durability = selectedItemData.Durability,
-            EnhanceLevel = selectedItemData.EnhanceLevel,
-            Option1Code = selectedItemData.Option1Code,
-            Option1Value = selectedItemData.Option1Value,
-            Option2Code = selectedItemData.Option2Code,
-            Option2Value = selectedItemData.Option2Value,
-            Option3Code = selectedItemData.Option3Code,
-            Option3Value = selectedItemData.Option3Value,
-            OptionGroup = selectedItemData.OptionGroup,
-            SocketCount = selectedItemData.SocketCount,
-            Socket1Code = selectedItemData.Socket1Code,
-            Socket1Value = selectedItemData.Socket1Value,
-            Socket2Code = selectedItemData.Socket2Code,
-            Socket2Value = selectedItemData.Socket2Value,
-            Socket3Code = selectedItemData.Socket3Code,
-            Socket3Value = selectedItemData.Socket3Value,
-            Socket1Color = selectedItemData.Socket1Color,
-            Socket2Color = selectedItemData.Socket2Color,
-            Socket3Color = selectedItemData.Socket3Color,
-        };
-
-        var frameViewModel = new FrameViewModel(_frameService, _gmDatabaseService)
-        {
-            ItemData = itemData
-        };
-
-        SetItemProperties(itemData);
-        SetFrameViewModelProperties(frameViewModel);
-    }
-
-    [ObservableProperty]
-    private List<ItemData>? _itemDataList;
-
-    private void SetItemProperties(ItemData itemData)
-    {
-        string iconNameProperty = $"ItemIcon{itemData.SlotIndex}";
-        string iconBranchProperty = $"ItemIconBranch{itemData.SlotIndex}";
-        string nameProperty = $"ItemName{itemData.SlotIndex}";
-        string itemAmountProperty = $"ItemAmount{itemData.SlotIndex}";
-
-        GetType().GetProperty(iconNameProperty)?.SetValue(this, itemData.IconName);
-        GetType().GetProperty(iconBranchProperty)?.SetValue(this, itemData.Branch);
-        GetType().GetProperty(nameProperty)?.SetValue(this, itemData.Name);
-        GetType().GetProperty(itemAmountProperty)?.SetValue(this, itemData.Amount);
-    }
-
-    private void SetFrameViewModelProperties(FrameViewModel frameViewModel)
-    {
-        string frameViewModelProperty = $"FrameViewModel{frameViewModel.SlotIndex}";
-
-        GetType().GetProperty(frameViewModelProperty)?.SetValue(this, frameViewModel);
+        FrameViewModels ??= [];
+        FrameViewModels.Add(frameViewModel);
+        OnPropertyChanged(nameof(FrameViewModels));
     }
 
     #endregion
@@ -187,31 +94,18 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                 var removedItemIndex = ItemDataList.FindIndex(i => i.SlotIndex == slotIndex);
                 if (removedItemIndex != -1)
                 {
-                    // Remove the ItemData with the specified SlotIndex
-                    ItemDataList.RemoveAt(removedItemIndex);
-
-                    // Update properties to default values for the removed SlotIndex
-                    ResetItemProperties(slotIndex);
+                    RemoveFrameViewModel(removedItemIndex);
                 }
             }
         }
     }
 
-    private void ResetItemProperties(int slotIndex)
+    private void RemoveFrameViewModel(int itemIndex)
     {
-        string iconNameProperty = $"ItemIcon{slotIndex}";
-        string iconBranchProperty = $"ItemIconBranch{slotIndex}";
-        string nameProperty = $"ItemName{slotIndex}";
-        string amountProperty = $"ItemAmount{slotIndex}";
-        string frameViewModelProperty = $"FrameViewModel{slotIndex}";
-
-        GetType().GetProperty(iconNameProperty)?.SetValue(this, null);
-        GetType().GetProperty(iconBranchProperty)?.SetValue(this, 0);
-        GetType().GetProperty(nameProperty)?.SetValue(this, Resources.AddItemDesc);
-        GetType().GetProperty(amountProperty)?.SetValue(this, 0);
-        GetType().GetProperty(frameViewModelProperty)?.SetValue(this, null);
+        ItemDataList?.RemoveAt(itemIndex);
+        FrameViewModels?.RemoveAt(itemIndex);
+        OnPropertyChanged(nameof(FrameViewModels));
     }
-
     #endregion
 
     #region Template
@@ -227,14 +121,17 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                 Sender = Sender,
                 Recipient = Recipient,
                 SendToAll = SelectAllCheckBoxChecked,
+                SendToAllOnline = OnlineCheckBoxChecked,
+                SendToAllOffline = OfflineCheckBoxChecked,
                 MailContent = MailContent,
                 AttachGold = AttachGold,
                 ItemCharge = ItemCharge,
                 ReturnDays = ReturnDays,
-                ItemIDs = ItemDataList?.Select(item => item.ID).ToList(),
-                ItemAmounts = ItemDataList?.Select(item => item.Amount).ToList(),
+                ItemIDs = ItemDataList?.Select(item => item.ItemId).ToList(),
+                ItemAmounts = ItemDataList?.Select(item => item.ItemAmount).ToList(),
                 Durabilities = ItemDataList?.Select(item => item.DurabilityMax).ToList(),
                 EnchantLevels = ItemDataList?.Select(item => item.EnhanceLevel).ToList(),
+                AugmentStoneValues = ItemDataList?.Select(item => item.AugmentStone).ToList(),
                 Ranks = ItemDataList?.Select(item => item.Rank).ToList(),
                 ReconNums = ItemDataList?.Select(item => item.Reconstruction).ToList(),
                 ReconStates = ItemDataList?.Select(item => item.ReconstructionMax).ToList(),
@@ -327,7 +224,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                 {
                     foreach (int itemID in templateData.ItemIDs)
                     {
-                        if (GetInvalidItemID(itemID))
+                        if (_itemHelper.IsInvalidItemID(itemID))
                         {
                             invalidItemIDs.Add(itemID);
                         }
@@ -346,6 +243,8 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                 Sender = templateData.Sender;
                 Recipient = templateData.Recipient;
                 SelectAllCheckBoxChecked = templateData.SendToAll;
+                OnlineCheckBoxChecked = templateData.SendToAllOnline;
+                OfflineCheckBoxChecked = templateData.SendToAllOffline;
                 MailContent = templateData.MailContent;
                 AttachGold = templateData.AttachGold;
                 ItemCharge = templateData.ItemCharge;
@@ -355,19 +254,14 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                 {
                     for (int i = 0; i < templateData.ItemIDs.Count; i++)
                     {
-                        // Find the corresponding ItemData in the CachedItemDataList
-                        ItemData? cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == templateData.ItemIDs[i]);
-
                         ItemData itemData = new()
                         {
                             SlotIndex = i,
-                            ID = templateData.ItemIDs[i],
-                            Name = cachedItem?.Name ?? "",
-                            IconName = cachedItem?.IconName ?? "",
-                            Branch = cachedItem?.Branch ?? 0,
-                            Amount = templateData.ItemAmounts?[i] ?? 0,
+                            ItemId = templateData.ItemIDs[i],
+                            ItemAmount = templateData.ItemAmounts?[i] ?? 0,
                             Durability = templateData.Durabilities?[i] ?? 0,
                             EnhanceLevel = templateData.EnchantLevels?[i] ?? 0,
+                            AugmentStone = templateData.AugmentStoneValues?[i] ?? 0,
                             Rank = templateData.Ranks?[i] ?? 0,
                             Reconstruction = templateData.ReconNums?[i] ?? 0,
                             ReconstructionMax = templateData.ReconStates?[i] ?? 0,
@@ -393,7 +287,8 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
                         ItemDataList ??= [];
                         ItemDataList.Add(itemData);
-                        SetItemProperties(itemData);
+                        var frameViewModel = _itemHelper.GetItemData(itemData);
+                        SetFrameViewModel(frameViewModel);
                     }
                 }
             }
@@ -408,11 +303,6 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
         }
     }
 
-    private bool GetInvalidItemID(int itemID)
-    {
-        return _cachedDataManager.CachedItemDataList == null || !_cachedDataManager.CachedItemDataList.Any(item => item.ID == itemID);
-    }
-
     [RelayCommand]
     private void ClearMailData()
     {
@@ -420,15 +310,14 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
         Sender = "GM";
         MailContent = Resources.GameMasterInsertItem;
         SelectAllCheckBoxChecked = false;
+        OnlineCheckBoxChecked = false;
+        OfflineCheckBoxChecked = false;
         AttachGold = 0;
         ReturnDays = 7;
         ItemCharge = 0;
 
         ItemDataList?.Clear();
-
-        ResetItemProperties(0);
-        ResetItemProperties(1);
-        ResetItemProperties(2);
+        FrameViewModels?.Clear();
     }
     #endregion
 
@@ -497,9 +386,14 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
     #endregion
 
     #region Properties
-
     [ObservableProperty]
     private string _title = "Send Mail";
+
+    [ObservableProperty]
+    private List<ItemData>? _itemDataList;
+
+    [ObservableProperty]
+    private List<FrameViewModel>? _frameViewModels;
 
     [ObservableProperty]
     private bool _isButtonEnabled = true;
@@ -589,51 +483,6 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
         || (allUnchecked
         && false);
     }
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel0;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel1;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel2;
-
-    [ObservableProperty]
-    private string? _itemName0 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName1 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName2 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private int? _itemAmount0;
-
-    [ObservableProperty]
-    private int? _itemAmount1;
-
-    [ObservableProperty]
-    private int? _itemAmount2;
-
-    [ObservableProperty]
-    private string? _itemIcon0;
-
-    [ObservableProperty]
-    private string? _itemIcon1;
-
-    [ObservableProperty]
-    private string? _itemIcon2;
-
-    [ObservableProperty]
-    private int? _itemIconBranch0;
-
-    [ObservableProperty]
-    private int? _itemIconBranch1;
-
-    [ObservableProperty]
-    private int? _itemIconBranch2;
 
     #endregion
 

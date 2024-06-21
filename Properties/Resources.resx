@@ -213,6 +213,9 @@
   <data name="ConnectionSuccess" xml:space="preserve">
     <value>Connection success</value>
   </data>
+  <data name="Consume" xml:space="preserve">
+    <value>Consume</value>
+  </data>
   <data name="Costume" xml:space="preserve">
     <value>Costume</value>
   </data>
@@ -320,6 +323,9 @@
   </data>
   <data name="EquipCategory9" xml:space="preserve">
     <value>Hands</value>
+  </data>
+  <data name="Equipment" xml:space="preserve">
+    <value>Equipment</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
@@ -537,6 +543,9 @@
   <data name="OptionWhenHit" xml:space="preserve">
     <value>When hit</value>
   </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
   <data name="PetFoodDescNo" xml:space="preserve">
     <value>This item cannot be used as Pet Food</value>
   </data>
@@ -557,6 +566,9 @@
   </data>
   <data name="Quality" xml:space="preserve">
     <value>Quality</value>
+  </data>
+  <data name="Quest" xml:space="preserve">
+    <value>Quest</value>
   </data>
   <data name="RandomBuff" xml:space="preserve">
     <value>Random Buff</value>

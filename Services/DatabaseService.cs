@@ -460,8 +460,8 @@ namespace RHToolkit.Services
                     AuthId = (Guid)row["auth_id"],
                     PageIndex = (int)row["page_index"],
                     SlotIndex = (int)row["slot_index"],
-                    ID = (int)row["code"],
-                    Amount = (int)row["use_cnt"],
+                    ItemId = (int)row["code"],
+                    ItemAmount = (int)row["use_cnt"],
                     RemainTime = (int)row["remain_time"],
                     CreateTime = (DateTime)row["create_time"],
                     UpdateTime = (DateTime)row["update_time"],
@@ -523,8 +523,8 @@ namespace RHToolkit.Services
                     AuthId = (Guid)row["auth_id"],
                     PageIndex = (int)row["page_index"],
                     SlotIndex = (int)row["slot_index"],
-                    ID = (int)row["code"],
-                    Amount = (int)row["use_cnt"],
+                    ItemId = (int)row["code"],
+                    ItemAmount = (int)row["use_cnt"],
                     RemainTime = (int)row["remain_time"],
                     CreateTime = (DateTime)row["create_time"],
                     UpdateTime = (DateTime)row["update_time"],
@@ -658,34 +658,28 @@ namespace RHToolkit.Services
 
         #region Item
 
-        public async Task SaveEquipItemAsync(List<ItemData>? newItemDataList, List<ItemData>? updateItemDataList, List<ItemData>? deletedItemDataList)
+        public async Task SaveEquipItemAsync(Guid characterID, List<ItemData>? itemDataList)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
 
             try
             {
-                if (newItemDataList != null)
-                {
-                    foreach (var item in newItemDataList)
-                    {
-                        await InsertInventoryItemAsync(connection, transaction, item);
-                    }
-                }
+                List<ItemData> currentEquipItems = await GetItemList(characterID, "N_EquipItem");
 
-                if (updateItemDataList != null)
+                if (currentEquipItems != null)
                 {
-                    foreach (var item in updateItemDataList)
-                    {
-                        await UpdateInventoryItemAsync(connection, transaction, item);
-                    }
-                }
-
-                if (deletedItemDataList != null)
-                {
-                    foreach (var item in deletedItemDataList)
+                    foreach (var item in currentEquipItems)
                     {
                         await DeleteInventoryItemAsync(connection, transaction, item);
+                    }
+                }
+
+                if (itemDataList != null)
+                {
+                    foreach (var item in itemDataList)
+                    {
+                        await InsertInventoryItemAsync(connection, transaction, item);
                     }
                 }
 
@@ -729,8 +723,8 @@ namespace RHToolkit.Services
                     ("@auth_id", itemData.AuthId),
                     ("@page_index", itemData.PageIndex),
                     ("@slot_index", itemData.SlotIndex),
-                    ("@code", itemData.ID),
-                    ("@use_cnt", itemData.Amount),
+                    ("@code", itemData.ItemId),
+                    ("@use_cnt", itemData.ItemAmount),
                     ("@remain_time", itemData.RemainTime),
                     ("@create_time", itemData.CreateTime),
                     ("@update_time", itemData.UpdateTime),
@@ -828,7 +822,7 @@ namespace RHToolkit.Services
                     ("@item_uid", itemData.ItemUid),
                     ("@page_index", itemData.PageIndex),
                     ("@slot_index", itemData.SlotIndex),
-                    ("@use_cnt", itemData.Amount),
+                    ("@use_cnt", itemData.ItemAmount),
                     ("@remain_time", itemData.RemainTime),
                     ("@update_time", itemData.UpdateTime),
                     ("@gcode", itemData.GCode),
@@ -880,6 +874,13 @@ namespace RHToolkit.Services
 
                 if (itemData.PageIndex == 0)
                 {
+                    await _sqlDatabaseService.ExecuteNonQueryAsync(
+                                        "DELETE FROM N_InventoryItem WHERE [item_uid] = @item_uid AND [page_index] = @page_index",
+                                        connection,
+                                        transaction,
+                                        ("@item_uid", itemData.ItemUid),
+                                        ("@page_index", -25)
+                                    );
                     await _sqlDatabaseService.ExecuteProcedureAsync(
                                          "up_item_move_equip_to_inventory",
                                          connection,
@@ -947,8 +948,8 @@ namespace RHToolkit.Services
                     ("@auth_id", itemData.AuthId),
                     ("@page_index", itemData.PageIndex),
                     ("@slot_index", itemData.SlotIndex),
-                    ("@code", itemData.ID),
-                    ("@use_cnt", itemData.Amount),
+                    ("@code", itemData.ItemId),
+                    ("@use_cnt", itemData.ItemAmount),
                     ("@remain_time", itemData.RemainTime),
                     ("@create_time", itemData.CreateTime),
                     ("@update_time", itemData.UpdateTime),
@@ -1042,7 +1043,7 @@ namespace RHToolkit.Services
                     ("@item_uid", itemData.ItemUid),
                     ("@page_index", itemData.PageIndex),
                     ("@slot_index", itemData.SlotIndex),
-                    ("@use_cnt", itemData.Amount),
+                    ("@use_cnt", itemData.ItemAmount),
                     ("@remain_time", itemData.RemainTime),
                     ("@update_time", itemData.UpdateTime),
                     ("@gcode", itemData.GCode),
@@ -1579,9 +1580,9 @@ namespace RHToolkit.Services
                     {
                         foreach (ItemData itemData in itemDataList)
                         {
-                            if (itemData.ID != 0)
+                            if (itemData.ItemId != 0)
                             {
-                                auditMessage += $"[<font color=blue>{Resources.GMAuditAttachItem} - {itemData.ID} ({itemData.Amount})</font>]<br></font>";
+                                auditMessage += $"[<font color=blue>{Resources.GMAuditAttachItem} - {itemData.ItemId} ({itemData.ItemAmount})</font>]<br></font>";
                                 await InsertMailItemAsync(connection, transaction, itemData, recipientAuthId, recipientCharacterId, mailId, itemData.SlotIndex);
                             }
                         }
@@ -1643,8 +1644,8 @@ namespace RHToolkit.Services
                      ("@character_id", recipientCharacterId ?? Guid.Empty),
                      ("@auth_id", recipientAuthId ?? Guid.Empty),
                      ("@item_id", Guid.NewGuid()),
-                     ("@code", itemData.ID),
-                     ("@use_cnt", itemData.Amount),
+                     ("@code", itemData.ItemId),
+                     ("@use_cnt", itemData.ItemAmount),
                      ("@remain_time", 0),
                      ("@gcode", 0),
                      ("@page_index", 61),
@@ -1776,8 +1777,8 @@ namespace RHToolkit.Services
                      ("@coupon_type", 2),
                      ("@coupon", couponCode),
                      ("@valid_date", validDate),
-                     ("@item_code", itemData.ID),
-                     ("@item_count", itemData.Amount)
+                     ("@item_code", itemData.ItemId),
+                     ("@item_count", itemData.ItemAmount)
                  );
                 transaction.Commit();
             }

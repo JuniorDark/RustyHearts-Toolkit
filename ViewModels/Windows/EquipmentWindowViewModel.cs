@@ -21,6 +21,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         _databaseService = databaseService;
         _itemHelper = itemHelper;
 
+        FrameViewModels ??= [];
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
         WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
     }
@@ -82,11 +83,10 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
     private void ClearData()
     {
-        ClearAllEquipItems();
+        FrameViewModels?.Clear();
+        OnPropertyChanged(nameof(FrameViewModels));
         CharacterData = null;
         ItemDatabaseList = null;
-        NewItemDatabaseList = null;
-        DeletedItemDatabaseList = null;
     }
     #endregion
 
@@ -112,11 +112,11 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
             if (RHMessageBoxHelper.ConfirmMessage($"Save equipment changes?"))
             {
-                await _databaseService.SaveEquipItemAsync(NewItemDatabaseList, UpdatedItemDatabaseList, DeletedItemDatabaseList);
+                await _databaseService.SaveEquipItemAsync(CharacterData.CharacterID, ItemDatabaseList);
                 RHMessageBoxHelper.ShowOKMessage("Equipment saved successfully!", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
-           
+
         }
         catch (Exception ex)
         {
@@ -162,25 +162,20 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         if (CharacterData == null) return;
 
         // Check if the IDs are different
-        if (existingItem.ID != newItemData.ID)
+        if (existingItem.ItemId != newItemData.ItemId)
         {
             // Create a new item if the IDs are different
             var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 0);
 
-            // Add the new item to the list
-            NewItemDatabaseList ??= [];
-            NewItemDatabaseList.Add(newItem);
-
             // Remove the existing item from ItemDatabaseList
-            ItemDatabaseList?.Remove(existingItem);
+            ItemDatabaseList!.Remove(existingItem);
 
-            // Move the existing item to DeletedItemDatabaseList
-            DeletedItemDatabaseList ??= [];
-            DeletedItemDatabaseList.Add(existingItem);
+            // Add the new item to the list
+            ItemDatabaseList.Add(newItem);
 
-            (var itemData, var frameViewModel) = _itemHelper.GetItemData(newItem);
+            var frameViewModel = _itemHelper.GetItemData(newItem);
 
-            SetItemProperties(itemData, frameViewModel);
+            SetFrameViewModel(frameViewModel);
         }
         else
         {
@@ -194,7 +189,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             existingItem.Weight = newItemData.Weight;
             existingItem.Reconstruction = newItemData.Reconstruction;
             existingItem.ReconstructionMax = newItemData.ReconstructionMax;
-            existingItem.Amount = newItemData.Amount;
+            existingItem.ItemAmount = newItemData.ItemAmount;
             existingItem.Option1Code = newItemData.Option1Code;
             existingItem.Option2Code = newItemData.Option2Code;
             existingItem.Option3Code = newItemData.Option3Code;
@@ -212,20 +207,13 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             existingItem.Socket2Value = newItemData.Socket2Value;
             existingItem.Socket3Value = newItemData.Socket3Value;
 
-            UpdatedItemDatabaseList ??= [];
+            ItemDatabaseList!.RemoveAt(existingItem.SlotIndex);
 
-            var newItemIndex = UpdatedItemDatabaseList.FindIndex(item => item.SlotIndex == existingItem.SlotIndex);
+            ItemDatabaseList.Add(existingItem);
 
-            if (newItemIndex != -1)
-            {
-                UpdatedItemDatabaseList.RemoveAt(newItemIndex);
-            }
+            var frameViewModel = _itemHelper.GetItemData(existingItem);
 
-            UpdatedItemDatabaseList.Add(existingItem);
-
-            (var itemData, var frameViewModel) = _itemHelper.GetItemData(existingItem);
-
-            SetItemProperties(itemData, frameViewModel);
+            SetFrameViewModel(frameViewModel);
         }
     }
 
@@ -235,12 +223,12 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
         var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 0);
 
-        NewItemDatabaseList ??= [];
-        NewItemDatabaseList.Add(newItem);
+        ItemDatabaseList ??= [];
+        ItemDatabaseList.Add(newItem);
 
-        (var itemData, var frameViewModel) = _itemHelper.GetItemData(newItem);
+        var frameViewModel = _itemHelper.GetItemData(newItem);
 
-        SetItemProperties(itemData, frameViewModel);
+        SetFrameViewModel(frameViewModel);
     }
 
     private void LoadEquipmentItems(List<ItemData> equipmentItems)
@@ -249,26 +237,17 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         {
             foreach (var equipmentItem in equipmentItems)
             {
-                (var itemData, var frameViewModel) = _itemHelper.GetItemData(equipmentItem);
-
-                SetItemProperties(itemData, frameViewModel);
+                var frameViewModel = _itemHelper.GetItemData(equipmentItem);
+                SetFrameViewModel(frameViewModel);
             }
         }
     }
 
-    private void SetItemProperties(ItemData itemData, FrameViewModel frameViewModel)
+    private void SetFrameViewModel(FrameViewModel frameViewModel)
     {
-        // Construct property names dynamically
-        string iconNameProperty = $"ItemIcon{itemData.SlotIndex}";
-        string iconBranchProperty = $"ItemIconBranch{itemData.SlotIndex}";
-        string nameProperty = $"ItemName{itemData.SlotIndex}";
-        string frameViewModelProperty = $"FrameViewModel{itemData.SlotIndex}";
-
-        // Set properties using reflection
-        GetType().GetProperty(iconNameProperty)?.SetValue(this, itemData.IconName);
-        GetType().GetProperty(iconBranchProperty)?.SetValue(this, itemData.Branch);
-        GetType().GetProperty(nameProperty)?.SetValue(this, itemData.Name);
-        GetType().GetProperty(frameViewModelProperty)?.SetValue(this, frameViewModel);
+        FrameViewModels ??= [];
+        FrameViewModels.Add(frameViewModel);
+        OnPropertyChanged(nameof(FrameViewModels));
     }
 
     #endregion
@@ -301,54 +280,18 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
             if (removedItemIndex != -1)
             {
-                // Get the removed item
-                var removedItem = ItemDatabaseList[removedItemIndex];
-
-                // Add the removed item to DeletedItemDatabaseList
-                DeletedItemDatabaseList ??= [];
-                DeletedItemDatabaseList.Add(removedItem);
-
                 // Remove the item with the specified SlotIndex from ItemDatabaseList
-                ItemDatabaseList.RemoveAt(removedItemIndex);
+                RemoveFrameViewModel(removedItemIndex);
             }
-            else if (NewItemDatabaseList != null)
-            {
-                var newItemIndex = NewItemDatabaseList.FindIndex(item => item.SlotIndex == slotIndex);
-
-                if (newItemIndex != -1)
-                {
-                    NewItemDatabaseList.RemoveAt(newItemIndex);
-                }
-            }
-
-            // Update properties to default values for the removed SlotIndex
-            ResetItemProperties(slotIndex);
         }
     }
 
-    private void ClearAllEquipItems()
+    private void RemoveFrameViewModel(int itemIndex)
     {
-        for (int i = 0; i < 20; i++)
-        {
-            ResetItemProperties(i);
-        }
+        ItemDatabaseList?.RemoveAt(itemIndex);
+        FrameViewModels?.RemoveAt(itemIndex);
+        OnPropertyChanged(nameof(FrameViewModels));
     }
-
-    private void ResetItemProperties(int slotIndex)
-    {
-        string iconNameProperty = $"ItemIcon{slotIndex}";
-        string iconBranchProperty = $"ItemIconBranch{slotIndex}";
-        string nameProperty = $"ItemName{slotIndex}";
-        string amountProperty = $"ItemAmount{slotIndex}";
-        string frameViewModelProperty = $"FrameViewModel{slotIndex}";
-
-        GetType().GetProperty(iconNameProperty)?.SetValue(this, null);
-        GetType().GetProperty(iconBranchProperty)?.SetValue(this, 0);
-        GetType().GetProperty(nameProperty)?.SetValue(this, Resources.AddItemDesc);
-        GetType().GetProperty(amountProperty)?.SetValue(this, 0);
-        GetType().GetProperty(frameViewModelProperty)?.SetValue(this, null);
-    }
-
     #endregion
 
     #endregion
@@ -425,256 +368,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
     private List<ItemData>? _itemDatabaseList;
 
     [ObservableProperty]
-    private List<ItemData>? _newItemDatabaseList;
-
-    [ObservableProperty]
-    private List<ItemData>? _updatedItemDatabaseList;
-
-    [ObservableProperty]
-    private List<ItemData>? _deletedItemDatabaseList;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel0;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel1;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel2;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel3;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel4;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel5;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel6;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel7;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel8;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel9;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel10;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel11;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel12;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel13;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel14;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel15;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel16;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel17;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel18;
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel19;
-
-    [ObservableProperty]
-    private string? _itemName0 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName1 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName2 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName3 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName4 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName5 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName6 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName7 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName8 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName9 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName10 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName11 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName12 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName13 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName14 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName15 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName16 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName17 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName18 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName19 = Resources.AddItemDesc;
-
-    [ObservableProperty]
-    private string? _itemName21 = "Spirit (Not Implemented)";
-
-    [ObservableProperty]
-    private string? _itemIcon0;
-
-    [ObservableProperty]
-    private string? _itemIcon1;
-
-    [ObservableProperty]
-    private string? _itemIcon2;
-
-    [ObservableProperty]
-    private string? _itemIcon3;
-
-    [ObservableProperty]
-    private string? _itemIcon4;
-
-    [ObservableProperty]
-    private string? _itemIcon5;
-
-    [ObservableProperty]
-    private string? _itemIcon6;
-
-    [ObservableProperty]
-    private string? _itemIcon7;
-
-    [ObservableProperty]
-    private string? _itemIcon8;
-
-    [ObservableProperty]
-    private string? _itemIcon9;
-
-    [ObservableProperty]
-    private string? _itemIcon10;
-
-    [ObservableProperty]
-    private string? _itemIcon11;
-
-    [ObservableProperty]
-    private string? _itemIcon12;
-
-    [ObservableProperty]
-    private string? _itemIcon13;
-
-    [ObservableProperty]
-    private string? _itemIcon14;
-
-    [ObservableProperty]
-    private string? _itemIcon15;
-
-    [ObservableProperty]
-    private string? _itemIcon16;
-
-    [ObservableProperty]
-    private string? _itemIcon17;
-
-    [ObservableProperty]
-    private string? _itemIcon18;
-
-    [ObservableProperty]
-    private string? _itemIcon19;
-
-    [ObservableProperty]
-    private int? _itemIconBranch0;
-
-    [ObservableProperty]
-    private int? _itemIconBranch1;
-
-    [ObservableProperty]
-    private int? _itemIconBranch2;
-
-    [ObservableProperty]
-    private int? _itemIconBranch3;
-
-    [ObservableProperty]
-    private int? _itemIconBranch4;
-
-    [ObservableProperty]
-    private int? _itemIconBranch5;
-
-    [ObservableProperty]
-    private int? _itemIconBranch6;
-
-    [ObservableProperty]
-    private int? _itemIconBranch7;
-
-    [ObservableProperty]
-    private int? _itemIconBranch8;
-
-    [ObservableProperty]
-    private int? _itemIconBranch9;
-
-    [ObservableProperty]
-    private int? _itemIconBranch10;
-
-    [ObservableProperty]
-    private int? _itemIconBranch11;
-
-    [ObservableProperty]
-    private int? _itemIconBranch12;
-
-    [ObservableProperty]
-    private int? _itemIconBranch13;
-
-    [ObservableProperty]
-    private int? _itemIconBranch14;
-
-    [ObservableProperty]
-    private int? _itemIconBranch15;
-
-    [ObservableProperty]
-    private int? _itemIconBranch16;
-
-    [ObservableProperty]
-    private int? _itemIconBranch17;
-
-    [ObservableProperty]
-    private int? _itemIconBranch18;
-
-    [ObservableProperty]
-    private int? _itemIconBranch19;
+    private List<FrameViewModel>? _frameViewModels;
 
     #endregion
 

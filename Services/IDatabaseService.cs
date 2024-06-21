@@ -40,7 +40,7 @@ namespace RHToolkit.Services
         Task RemoveFortuneAsync(CharacterInfo characterInfo, int fortuneState, int fortuneID1, int fortuneID2, int fortuneID3);
         Task RestoreCharacterAsync(Guid characterId);
         Task SanctionLogAsync(CharacterInfo characterInfo, Guid sanctionUid, DateTime startTime, DateTime endTime, string reason);
-        Task SaveEquipItemAsync(List<ItemData>? newItemDataList, List<ItemData>? updateItemDataList, List<ItemData>? deletedItemDataList);
+        Task SaveEquipItemAsync(Guid characterID, List<ItemData>? itemDataList);
         Task<(List<string> successfulRecipients, List<string> failedRecipients)> SendMailAsync(string sender, string? message, int gold, int itemCharge, int returnDays, string[] recipients, List<ItemData> itemDataList);
         Task UnequipCharacterTitleAsync(CharacterInfo characterInfo, Guid titleId);
         Task UpdateCharacterClassAsync(Guid characterId, string accountName, string characterName, int currentCharacterClass, int newCharacterClass);

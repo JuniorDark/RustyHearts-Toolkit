@@ -7,18 +7,18 @@
         public Guid AuthId { get; set; }
         public int PageIndex { get; set; }
         public int SlotIndex { get; set; }
-        public string? Name { get; set; }
+        public string? ItemName { get; set; }
         public string? Description { get; set; }
         public string? IconName { get; set; }
         public int Type { get; set; }
-        public int ID { get; set; }
+        public int ItemId { get; set; }
         public int WeaponID00 { get; set; }
         public int Category { get; set; }
         public int SubCategory { get; set; }
         public int LevelLimit { get; set; }
         public int ItemTrade { get; set; }
         public int OverlapCnt { get; set; }
-        public int Amount { get; set; }
+        public int ItemAmount { get; set; }
         public int Defense { get; set; }
         public int MagicDefense { get; set; }
         public int Branch { get; set; }

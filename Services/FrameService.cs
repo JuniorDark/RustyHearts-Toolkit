@@ -28,7 +28,7 @@ namespace RHToolkit.Services
                 3 => $"{Resources.Rank3}",
                 2 => $"{Resources.Rank4}",
                 1 => $"{Resources.Rank5}",
-                _ => $"{rank} {Resources.Rank}",
+                _ => $"{Resources.Rank5}",
             };
         }
 
@@ -67,7 +67,7 @@ namespace RHToolkit.Services
             string optionName = _gmDatabaseService.GetOptionName(option);
             (int secTime, float value) = _gmDatabaseService.GetOptionValues(option);
 
-            string formattedOption = FormatNameID(option, optionName, $"{optionValue}", $"{secTime}", $"{value}", false);
+            string formattedOption = FormatNameID(option, optionName, $"{optionValue}", $"{secTime}", $"{value}", isFixedOption);
 
             return option != 0 ? formattedOption : Resources.NoBuff;
         }

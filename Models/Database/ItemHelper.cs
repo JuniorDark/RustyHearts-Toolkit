@@ -10,6 +10,11 @@ public class ItemHelper(CachedDataManager cachedDataManager, IFrameService frame
     private readonly IGMDatabaseService _gmDatabaseService = gmDatabaseService;
     private readonly CachedDataManager _cachedDataManager = cachedDataManager;
 
+    public bool IsInvalidItemID(int itemID)
+    {
+        return _cachedDataManager.CachedItemDataList == null || !_cachedDataManager.CachedItemDataList.Any(item => item.ItemId == itemID);
+    }
+
     public static ItemData CreateNewItem(CharacterData characterData, ItemData newItemData, int pageIndex)
     {
         var newItem = new ItemData
@@ -29,8 +34,8 @@ public class ItemHelper(CachedDataManager cachedDataManager, IFrameService frame
             DefermentTime = 0,
 
             SlotIndex = newItemData.SlotIndex,
-            ID = newItemData.ID,
-            Name = newItemData.Name,
+            ItemId = newItemData.ItemId,
+            ItemName = newItemData.ItemName,
             IconName = newItemData.IconName,
             Durability = newItemData.Durability,
             DurabilityMax = newItemData.DurabilityMax,
@@ -40,7 +45,7 @@ public class ItemHelper(CachedDataManager cachedDataManager, IFrameService frame
             Weight = newItemData.Weight,
             Reconstruction = newItemData.Reconstruction,
             ReconstructionMax = newItemData.ReconstructionMax,
-            Amount = newItemData.Amount,
+            ItemAmount = newItemData.ItemAmount,
             Option1Code = newItemData.Option1Code,
             Option2Code = newItemData.Option2Code,
             Option3Code = newItemData.Option3Code,
@@ -62,15 +67,15 @@ public class ItemHelper(CachedDataManager cachedDataManager, IFrameService frame
         return newItem;
     }
 
-    public (ItemData, FrameViewModel) GetItemData(ItemData equipmentItem)
+    public FrameViewModel GetItemData(ItemData equipmentItem)
     {
         // Find the corresponding ItemData in the _cachedItemDataList
-        ItemData cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(item => item.ID == equipmentItem.ID) ?? new ItemData();
+        ItemData cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(item => item.ItemId == equipmentItem.ItemId) ?? new ItemData();
 
         ItemData itemData = new()
         {
-            ID = cachedItem.ID,
-            Name = cachedItem.Name ?? "",
+            ItemId = cachedItem.ItemId,
+            ItemName = cachedItem.ItemName ?? "",
             Description = cachedItem.Description ?? "",
             IconName = cachedItem.IconName ?? "",
             Type = cachedItem.Type,
@@ -99,7 +104,7 @@ public class ItemHelper(CachedDataManager cachedDataManager, IFrameService frame
             AuthId = equipmentItem.AuthId,
             PageIndex = equipmentItem.PageIndex,
             SlotIndex = equipmentItem.SlotIndex,
-            Amount = equipmentItem.Amount,
+            ItemAmount = equipmentItem.ItemAmount,
             Reconstruction = equipmentItem.Reconstruction,
             ReconstructionMax = equipmentItem.ReconstructionMax,
             AugmentStone = equipmentItem.AugmentStone,
@@ -144,6 +149,18 @@ public class ItemHelper(CachedDataManager cachedDataManager, IFrameService frame
             ItemData = itemData
         };
 
-        return (itemData, frameViewModel);
+        return frameViewModel;
+    }
+
+    public static int GetRealClass(int charClass)
+    {
+        return charClass switch
+        {
+            1 or 101 or 102 => 1,
+            2 or 201 => 2,
+            3 or 301 => 3,
+            4 or 401 => 4,
+            _ => 0,
+        };
     }
 }

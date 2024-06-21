@@ -9,6 +9,7 @@
     <local:EmptyStringToDefaultConverter x:Key="EmptyStringToDefaultConverter" />
     <local:EnabledToSelectedIndexConverter x:Key="EnabledToSelectedIndexConverter" />
     <local:EqualValueToVisibilityConverter x:Key="EqualValueToVisibilityConverter" />
+    <local:FrameViewModelConverter x:Key="FrameViewModelConverter" />
     <local:GreaterOrEqualConverter x:Key="GreaterOrEqualConverter" />
     <local:GreaterOrEqualToVisibilityConverter x:Key="GreaterOrEqualToVisibilityConverter" />
     <local:IconNameToImageSourceConverter x:Key="IconNameToImageSourceConverter" />

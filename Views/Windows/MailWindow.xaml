@@ -296,12 +296,8 @@
                         Grid.Column="0"
                         AddItemCommand="{Binding AddItemCommand}"
                         CommandParameter="0"
-                        FrameViewModel="{Binding FrameViewModel0}"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=0}"
                         IsButtonEnabled="{Binding IsButtonEnabled}"
-                        ItemAmount="{Binding ItemAmount0}"
-                        ItemIcon="{Binding ItemIcon0}"
-                        ItemIconBranch="{Binding ItemIconBranch0}"
-                        ItemName="{Binding ItemName0}"
                         RemoveItemCommand="{Binding RemoveItemCommand}"
                         SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <!--  Item 2  -->
@@ -309,12 +305,8 @@
                         Grid.Column="1"
                         AddItemCommand="{Binding AddItemCommand}"
                         CommandParameter="1"
-                        FrameViewModel="{Binding FrameViewModel1}"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
                         IsButtonEnabled="{Binding IsButtonEnabled}"
-                        ItemAmount="{Binding ItemAmount1}"
-                        ItemIcon="{Binding ItemIcon1}"
-                        ItemIconBranch="{Binding ItemIconBranch1}"
-                        ItemName="{Binding ItemName1}"
                         RemoveItemCommand="{Binding RemoveItemCommand}"
                         SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <!--  Item 3  -->
@@ -322,12 +314,8 @@
                         Grid.Column="2"
                         AddItemCommand="{Binding AddItemCommand}"
                         CommandParameter="2"
-                        FrameViewModel="{Binding FrameViewModel2}"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
                         IsButtonEnabled="{Binding IsButtonEnabled}"
-                        ItemAmount="{Binding ItemAmount2}"
-                        ItemIcon="{Binding ItemIcon2}"
-                        ItemIconBranch="{Binding ItemIconBranch2}"
-                        ItemName="{Binding ItemName2}"
                         RemoveItemCommand="{Binding RemoveItemCommand}"
                         SlotIcon="/Assets/images/lb_ac_icon.png" />
                 </Grid>
