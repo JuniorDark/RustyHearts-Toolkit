@@ -169,7 +169,7 @@ namespace RHToolkit.ViewModels.Pages
         [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
         private void OpenEquipmentWindow()
         {
-            OpenWindow(_windowsService.OpenEquipmentWindow, "Equipment");
+            OpenWindow(_windowsService.OpenEquipmentWindow, "EquipItem");
         }
 
         #endregion

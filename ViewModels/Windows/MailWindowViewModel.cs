@@ -318,6 +318,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
         ItemDataList?.Clear();
         FrameViewModels?.Clear();
+        OnPropertyChanged(nameof(FrameViewModels));
     }
     #endregion
 

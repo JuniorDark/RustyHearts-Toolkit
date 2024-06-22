@@ -236,11 +236,15 @@ namespace RHToolkit.Behaviors
                 {
                     dataGrid.Dispatcher.InvokeAsync(() =>
                     {
-                        dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                        if (dataGrid.SelectedItem != null)
+                        {
+                            dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+                        }
                     }, DispatcherPriority.ContextIdle);
                 }
             }
         }
+
 
         #endregion
     }

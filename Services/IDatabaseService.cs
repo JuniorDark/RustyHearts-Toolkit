@@ -27,6 +27,7 @@ namespace RHToolkit.Services
         Task<List<ItemData>> GetItemList(Guid characterId, string tableName);
         Task<(DateTime startTime, DateTime endTime)> GetSanctionTimesAsync(Guid sanctionUid);
         Task GMAuditAsync(string accountName, Guid? characterId, string characterName, string action, string auditMessage);
+        Task InsertInventoryDeleteItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData);
         Task InsertInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData);
         Task InsertMailAsync(SqlConnection connection, SqlTransaction transaction, Guid? senderAuthId, Guid? senderCharacterId, string mailSender, string recipient, string content, int gold, int returnDay, int reqGold, Guid mailId, int createType);
         Task InsertMailItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, Guid? recipientAuthId, Guid? recipientCharacterId, Guid mailId, int slotIndex);
@@ -40,7 +41,7 @@ namespace RHToolkit.Services
         Task RemoveFortuneAsync(CharacterInfo characterInfo, int fortuneState, int fortuneID1, int fortuneID2, int fortuneID3);
         Task RestoreCharacterAsync(Guid characterId);
         Task SanctionLogAsync(CharacterInfo characterInfo, Guid sanctionUid, DateTime startTime, DateTime endTime, string reason);
-        Task SaveEquipItemAsync(Guid characterID, List<ItemData>? itemDataList);
+        Task SaveInventoryItem(CharacterInfo characterInfo, List<ItemData>? itemDataList, List<ItemData>? deletedItemDataList);
         Task<(List<string> successfulRecipients, List<string> failedRecipients)> SendMailAsync(string sender, string? message, int gold, int itemCharge, int returnDays, string[] recipients, List<ItemData> itemDataList);
         Task UnequipCharacterTitleAsync(CharacterInfo characterInfo, Guid titleId);
         Task UpdateCharacterClassAsync(Guid characterId, string accountName, string characterName, int currentCharacterClass, int newCharacterClass);

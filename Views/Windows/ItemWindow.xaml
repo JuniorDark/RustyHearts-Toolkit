@@ -92,9 +92,9 @@
                         VerticalAlignment="Top"
                         Increment="1"
                         IsEnabled="{Binding FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
-                        Maximum="20"
+                        Maximum="{Binding FrameViewModel.EnhanceLevelMax}"
                         Minimum="0"
-                        Value="{Binding FrameViewModel.EnhanceLevel, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.EnhanceLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
                         x:Name="lbRank"
                         VerticalAlignment="Top"
@@ -110,7 +110,6 @@
                         Maximum="5"
                         Minimum="1"
                         Value="{Binding FrameViewModel.Rank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
                 </StackPanel>
                 <!--  center Column  -->
                 <StackPanel
@@ -131,9 +130,9 @@
                         VerticalAlignment="Top"
                         Increment="1"
                         IsEnabled="{Binding FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
-                        Maximum="100000"
+                        Maximum="{Binding FrameViewModel.AugmentValueMax}"
                         Minimum="0"
-                        Value="{Binding FrameViewModel.AugmentValue, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.AugmentValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
                         x:Name="lbCurrentAttribute"
                         VerticalAlignment="Top"
@@ -148,7 +147,7 @@
                         IsEnabled="{Binding FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="{Binding FrameViewModel.ReconstructionMax}"
                         Minimum="0"
-                        Value="{Binding FrameViewModel.Reconstruction, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.Reconstruction, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <!--  Right Column  -->
                 <StackPanel
@@ -167,9 +166,9 @@
                         Height="26"
                         Increment="{Binding FrameViewModel.MaxDurability, Converter={StaticResource IncrementConverter}}"
                         IsEnabled="{Binding FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
-                        Maximum="100000"
-                        Minimum="100"
-                        Value="{Binding FrameViewModel.MaxDurability, Mode=TwoWay}" />
+                        Maximum="{Binding FrameViewModel.MaxDurabilityMax}"
+                        Minimum="0"
+                        Value="{Binding FrameViewModel.MaxDurability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
                         x:Name="lbWeight"
                         VerticalAlignment="Top"
@@ -184,7 +183,7 @@
                         IsEnabled="{Binding FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="200000"
                         Minimum="1"
-                        Value="{Binding FrameViewModel.Weight, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </Grid>
             <!--  Random Option  -->
@@ -614,7 +613,7 @@
                         Increment="1"
                         Maximum="{Binding FrameViewModel.OverlapCnt}"
                         Minimum="1"
-                        Value="{Binding FrameViewModel.ItemAmount, Mode=TwoWay}" />
+                        Value="{Binding FrameViewModel.ItemAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <TextBlock
                         x:Name="lbSelectedItem"
                         Canvas.Left="63"
@@ -626,7 +625,7 @@
                         FontSize="12"
                         Foreground="{Binding FrameViewModel.ItemNameColor, Converter={StaticResource StringToBrushConverter}, FallbackValue=White}"
                         Text="{Binding FrameViewModel.ItemName}" />
-                    <control:ItemSlot FrameViewModel="{Binding FrameViewModel, Mode=OneWay}" SlotIcon="/Assets/images/lb_ac_icon.png" />
+                    <control:ItemSlot FrameViewModel="{Binding FrameViewModel}" SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <Button
                         x:Name="btnSelectItem"
                         Canvas.Left="105"
@@ -744,7 +743,7 @@
                     HorizontalScrollBarVisibility="Disabled"
                     ItemsSource="{Binding ItemDataView}"
                     Loaded="DataGridView_Loaded"
-                    SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                    SelectedItem="{Binding SelectedItem}"
                     SelectionMode="Single"
                     Template="{StaticResource lb_datagrid}"
                     VerticalGridLinesBrush="White">

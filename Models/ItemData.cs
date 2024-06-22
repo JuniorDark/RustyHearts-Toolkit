@@ -2,6 +2,7 @@
 {
     public class ItemData
     {
+        public bool IsNewItem { get; set; }
         public Guid ItemUid { get; set; }
         public Guid CharacterId { get; set; }
         public Guid AuthId { get; set; }

@@ -31,6 +31,10 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         WeakReferenceMessenger.Default.Register(this);
     }
 
+    #region Messenger
+
+    #endregion
+
     #region Load Character
 
     public async void Receive(CharacterInfoMessage message)
@@ -370,7 +374,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void OpenEquipmentWindow()
     {
-        OpenWindow(_windowsService.OpenEquipmentWindow, "Equipment");
+        OpenWindow(_windowsService.OpenEquipmentWindow, "EquipItem");
     }
 
     #endregion

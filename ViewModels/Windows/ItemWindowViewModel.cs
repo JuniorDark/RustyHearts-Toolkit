@@ -51,41 +51,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     #region Messenger
 
-    #region Send ItemData
-    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
-    private void SelectItem(object parameter)
-    {
-        if (FrameViewModel != null)
-        {
-            var itemData = FrameViewModel.GetItemData();
-
-            if (itemData != null)
-            {
-                switch (MessageType)
-                {
-                    case "Mail":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindow", "Mail", Token));
-                        break;
-                    case "EquipItem":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "EquipWindow", "EquipItem", Token));
-                        break;
-                    case "Coupon":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponWindow", "Coupon", Token));
-                        break;
-                    default:
-                        break;
-                }
-            }
-            
-        }
-    }
-
-    private bool CanExecuteCommand()
-    {
-        return SelectedItem != null;
-    }
-    #endregion
-
     #region Receive CharacterInfo
     [ObservableProperty]
     private CharacterInfo? _characterInfo;
@@ -108,6 +73,41 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     #endregion
 
+    #region Send ItemData
+    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+    private void SelectItem(object parameter)
+    {
+        if (FrameViewModel != null)
+        {
+            var itemData = FrameViewModel.GetItemData();
+
+            if (itemData != null)
+            {
+                switch (MessageType)
+                {
+                    case "Mail":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindow", MessageType, Token));
+                        break;
+                    case "EquipItem":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "EquipWindow", MessageType, Token));
+                        break;
+                    case "Coupon":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponWindow", MessageType, Token));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            
+        }
+    }
+
+    private bool CanExecuteCommand()
+    {
+        return SelectedItem != null;
+    }
+    #endregion
+
     #region Receive ItemData
     [ObservableProperty]
     private string? _messageType;
@@ -118,8 +118,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         {
             Token = message.Token;
         }
-
-        if (message.Token != Token) return;
 
         if (message.Recipient == "ItemWindow" && message.Token == Token)
         {
@@ -157,7 +155,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
                 LoadItemData(itemData);
 
-            }), DispatcherPriority.Loaded);
+            }), DispatcherPriority.ContextIdle);
         }
     }
 
@@ -359,6 +357,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         FrameViewModel = frameViewModel;
 
         FrameViewModel.SlotIndex = itemData.SlotIndex;
+        FrameViewModel.ItemId = itemData.ItemId;
         FrameViewModel.ItemAmount = itemData.ItemAmount;
         FrameViewModel.MaxDurability = itemData.DurabilityMax;
         FrameViewModel.EnhanceLevel = itemData.EnhanceLevel;
@@ -794,7 +793,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         if (value == 0)
         {
-            SelectedItem = ItemDataView?.Cast<ItemData>()?.FirstOrDefault(FilterItems);
+            SelectedItem = ItemDataItems?.FirstOrDefault();
         }
         else
         {
@@ -823,7 +822,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
-    private string? _itemName = "Select a Item";
+    private string? _itemName;
 
     [ObservableProperty]
     private int _slotIndexMin;

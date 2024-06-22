@@ -658,20 +658,19 @@ namespace RHToolkit.Services
 
         #region Item
 
-        public async Task SaveEquipItemAsync(Guid characterID, List<ItemData>? itemDataList)
+        public async Task SaveInventoryItem(CharacterInfo characterInfo, List<ItemData>? itemDataList, List<ItemData>? deletedItemDataList)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
 
             try
             {
-                List<ItemData> currentEquipItems = await GetItemList(characterID, "N_EquipItem");
-
-                if (currentEquipItems != null)
+                if (deletedItemDataList != null)
                 {
-                    foreach (var item in currentEquipItems)
+                    foreach (var deletedItem in deletedItemDataList)
                     {
-                        await DeleteInventoryItemAsync(connection, transaction, item);
+                        await DeleteInventoryItemAsync(connection, transaction, deletedItem);
+                        await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Delete Item", $"<font color=blue>Delete Item</font>]<br><font color=red>Item GUID:{{{deletedItem.ItemUid}}}<br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
                     }
                 }
 
@@ -679,7 +678,16 @@ namespace RHToolkit.Services
                 {
                     foreach (var item in itemDataList)
                     {
-                        await InsertInventoryItemAsync(connection, transaction, item);
+                        if (item.IsNewItem)
+                        {
+                            await InsertInventoryItemAsync(connection, transaction, item);
+                            await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Add Item", $"<font color=blue>Add Item</font>]<br><font color=red>Item GUID:{{{item.ItemUid}}} <br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
+                        }
+                        else
+                        {
+                            await UpdateInventoryItemAsync(connection, transaction, item);
+                            await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Update Item", $"<font color=blue>Update Item</font>]<br><font color=red>Item GUID:{{{item.ItemUid}}}<br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
+                        }
                     }
                 }
 
@@ -872,49 +880,103 @@ namespace RHToolkit.Services
             {
                 string tableName = GetItemTableName(itemData.PageIndex);
 
-                if (itemData.PageIndex == 0)
-                {
-                    await _sqlDatabaseService.ExecuteNonQueryAsync(
-                                        "DELETE FROM N_InventoryItem WHERE [item_uid] = @item_uid AND [page_index] = @page_index",
+                await _sqlDatabaseService.ExecuteNonQueryAsync(
+                                        $"DELETE FROM {tableName} WHERE [item_uid] = @item_uid",
                                         connection,
                                         transaction,
-                                        ("@item_uid", itemData.ItemUid),
-                                        ("@page_index", -25)
+                                        ("@item_uid", itemData.ItemUid)
                                     );
-                    await _sqlDatabaseService.ExecuteProcedureAsync(
-                                         "up_item_move_equip_to_inventory",
-                                         connection,
-                                         transaction,
-                                         ("@character_id", itemData.CharacterId),
-                                         ("@auth_id", itemData.AuthId),
-                                         ("@item_id", itemData.ItemUid),
-                                         ("@page_index", itemData.PageIndex),
-                                         ("@slot_index", itemData.SlotIndex)
-                                     );
 
-                    await _sqlDatabaseService.ExecuteNonQueryAsync(
-                                        "UPDATE N_InventoryItem SET page_index = @page_index WHERE item_uid = @item_uid",
-                                        connection,
-                                        transaction,
-                                        ("@item_uid", itemData.ItemUid),
-                                        ("@page_index", -25)
-                                    );
-                }
-                else
-                {
-                    await _sqlDatabaseService.ExecuteNonQueryAsync(
-                                        $"UPDATE {tableName} SET page_index = @page_index WHERE item_uid = @item_uid",
-                                        connection,
-                                        transaction,
-                                        ("@item_uid", itemData.ItemUid),
-                                        ("@page_index", -25)
-                                    );
-                }
+                await _sqlDatabaseService.ExecuteNonQueryAsync(
+                                       "DELETE FROM N_InventoryItem_DELETE WHERE [item_uid] = @item_uid AND [page_index] = @page_index",
+                                       connection,
+                                       transaction,
+                                       ("@item_uid", itemData.ItemUid),
+                                       ("@page_index", -25)
+                                   );
+                await InsertInventoryDeleteItemAsync(connection, transaction, itemData);
 
             }
             catch (Exception ex)
             {
                 throw new Exception($"Error deleting item: {ex.Message}", ex);
+            }
+        }
+
+        public async Task InsertInventoryDeleteItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData)
+        {
+            try
+            {
+
+                await _sqlDatabaseService.ExecuteNonQueryAsync(
+                    $"INSERT INTO N_InventoryItem_DELETE (" +
+                    "item_uid, character_id, auth_id, page_index, slot_index, code, use_cnt, remain_time, " +
+                    "create_time, update_time, gcode, durability, enhance_level, option_1_code, option_1_value, " +
+                    "option_2_code, option_2_value, option_3_code, option_3_value, option_group, ReconNum, " +
+                    "ReconState, socket_count, socket_1_code, socket_1_value, socket_2_code, socket_2_value, " +
+                    "socket_3_code, socket_3_value, expire_time, lock_pwd, activity_value, link_id, is_seizure, " +
+                    "socket_1_color, socket_2_color, socket_3_color, deferment_time, rank, acquireroute, physical, " +
+                    "magical, durabilitymax, weight) " +
+                    "VALUES (" +
+                    "@item_uid, @character_id, @auth_id, @page_index, @slot_index, @code, @use_cnt, @remain_time, " +
+                    "@create_time, @update_time, @gcode, @durability, @enhance_level, @option_1_code, @option_1_value, " +
+                    "@option_2_code, @option_2_value, @option_3_code, @option_3_value, @option_group, @ReconNum, " +
+                    "@ReconState, @socket_count, @socket_1_code, @socket_1_value, @socket_2_code, @socket_2_value, " +
+                    "@socket_3_code, @socket_3_value, @expire_time, @lock_pwd, @activity_value, @link_id, @is_seizure, " +
+                    "@socket_1_color, @socket_2_color, @socket_3_color, @deferment_time, @rank, @acquireroute, @physical, " +
+                    "@magical, @durabilitymax, @weight)",
+                    connection,
+                    transaction,
+                    ("@item_uid", itemData.ItemUid),
+                    ("@character_id", itemData.CharacterId),
+                    ("@auth_id", itemData.AuthId),
+                    ("@page_index", -25),
+                    ("@slot_index", itemData.SlotIndex),
+                    ("@code", itemData.ItemId),
+                    ("@use_cnt", itemData.ItemAmount),
+                    ("@remain_time", itemData.RemainTime),
+                    ("@create_time", itemData.CreateTime),
+                    ("@update_time", DateTime.Now),
+                    ("@gcode", itemData.GCode),
+                    ("@durability", itemData.Durability),
+                    ("@enhance_level", itemData.EnhanceLevel),
+                    ("@option_1_code", itemData.Option1Code),
+                    ("@option_1_value", itemData.Option1Value),
+                    ("@option_2_code", itemData.Option2Code),
+                    ("@option_2_value", itemData.Option2Value),
+                    ("@option_3_code", itemData.Option3Code),
+                    ("@option_3_value", itemData.Option3Value),
+                    ("@option_group", itemData.OptionGroup),
+                    ("@ReconNum", itemData.ReconstructionMax),
+                    ("@ReconState", itemData.Reconstruction),
+                    ("@socket_count", itemData.SocketCount),
+                    ("@socket_1_code", itemData.Socket1Code),
+                    ("@socket_1_value", itemData.Socket1Value),
+                    ("@socket_2_code", itemData.Socket2Code),
+                    ("@socket_2_value", itemData.Socket2Value),
+                    ("@socket_3_code", itemData.Socket3Code),
+                    ("@socket_3_value", itemData.Socket3Value),
+                    ("@expire_time", itemData.ExpireTime),
+                    ("@lock_pwd", itemData.LockPassword ?? string.Empty),
+                    ("@activity_value", itemData.AugmentStone),
+                    ("@link_id", itemData.LinkId),
+                    ("@is_seizure", itemData.IsSeizure),
+                    ("@socket_1_color", itemData.Socket1Color),
+                    ("@socket_2_color", itemData.Socket2Color),
+                    ("@socket_3_color", itemData.Socket3Color),
+                    ("@deferment_time", itemData.DefermentTime),
+                    ("@rank", itemData.Rank),
+                    ("@acquireroute", itemData.AcquireRoute),
+                    ("@physical", itemData.Physical),
+                    ("@magical", itemData.Magical),
+                    ("@durabilitymax", itemData.DurabilityMax),
+                    ("@weight", itemData.Weight)
+                );
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error inserting delete item: {ex.Message}", ex);
             }
         }
 

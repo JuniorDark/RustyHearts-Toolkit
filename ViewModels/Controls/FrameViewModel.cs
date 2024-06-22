@@ -41,12 +41,10 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
             FixedOption02Value = itemData.FixOption2Value;
             SocketCountMax = itemData.SocketCountMax;
             SocketCount = itemData.SocketCountMax;
-
             OverlapCnt = itemData.OverlapCnt == 0 ? 1 : itemData.OverlapCnt;
             ItemAmount = itemData.ItemAmount == 0 ? 1 : itemData.ItemAmount;
             Rank = itemData.Rank == 0 ? 1 : itemData.Rank;
             OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
-
             SlotIndex = itemData.SlotIndex;
             MaxDurability = itemData.DurabilityMax;
             EnhanceLevel = itemData.EnhanceLevel;
@@ -134,6 +132,13 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
 
     [ObservableProperty]
     private int _itemAmount = 1;
+    partial void OnItemAmountChanged(int value)
+    {
+        if (value == 0)
+        {
+            ItemAmount = 1;
+        }
+    }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ItemNameColor))]
@@ -177,6 +182,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(DurabilityText))]
     private int _maxDurability;
 
+    [ObservableProperty]
+    private int _maxDurabilityMax;
+
     public string DurabilityText => FrameService.FormatDurability(MaxDurability);
 
     [ObservableProperty]
@@ -199,9 +207,30 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     private int _enhanceLevel;
 
     [ObservableProperty]
+    private int _enhanceLevelMax = 20;
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CategoryText))]
     [NotifyPropertyChangedFor(nameof(RandomOption))]
     private int _category;
+    partial void OnCategoryChanged(int value)
+    {
+        if (value == 17) // Accesories
+        {
+            EnhanceLevel = 0;
+            EnhanceLevelMax = 0;
+            AugmentValue = 0;
+            AugmentValueMax = 0;
+            MaxDurability = 0;
+            MaxDurabilityMax = 0;
+        }
+        else
+        {
+            EnhanceLevelMax = 20;
+            AugmentValueMax = 100000;
+            MaxDurabilityMax = 100000;
+        }
+    }
 
     public string CategoryText => _gmDatabaseService.GetCategoryName(Category);
 
@@ -271,6 +300,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AugmentText))]
     private int _augmentValue;
+
+    [ObservableProperty]
+    private int _augmentValueMax = 100000;
 
     public string AugmentText => FrameService.FormatAugmentStone(AugmentValue);
 

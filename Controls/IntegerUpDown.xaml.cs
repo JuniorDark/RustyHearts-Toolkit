@@ -153,7 +153,7 @@ namespace RHToolkit.Controls
         {
             while (_isIncrementing || _isDecrementing)
             {
-                await Task.Delay(500);
+                await Task.Delay(100);
                 if (_isIncrementing)
                 {
                     action.Invoke();

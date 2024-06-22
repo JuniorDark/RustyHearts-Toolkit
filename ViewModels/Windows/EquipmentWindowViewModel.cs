@@ -26,7 +26,89 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
     }
 
-    #region Load Character
+    #region Commands
+
+    #region Save Equipment
+    [RelayCommand]
+    private async Task SaveEquipment()
+    {
+        if (CharacterData == null) return;
+
+        if (!SqlCredentialValidator.ValidateCredentials())
+        {
+            return;
+        }
+
+        try
+        {
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            {
+                return;
+            }
+
+            if (RHMessageBoxHelper.ConfirmMessage($"Save equipment changes?"))
+            {
+                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
+                
+                await _databaseService.SaveInventoryItem(characterInfo, ItemDatabaseList, DeletedItemDatabaseList);
+                RHMessageBoxHelper.ShowOKMessage("Equipment saved successfully!", "Success");
+                await ReadCharacterData(CharacterData.CharacterName!);
+
+                WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "CharacterWindow", characterInfo.CharacterID));
+            }
+
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error saving equipment changes: {ex.Message}", "Error");
+        }
+    }
+
+    #endregion
+
+    #region Remove Item
+
+    [RelayCommand]
+    private void RemoveItem(string parameter)
+    {
+        if (int.TryParse(parameter, out int slotIndex))
+        {
+            if (ItemDatabaseList != null)
+            {
+                // Find the existing item in ItemDatabaseList
+                var removedItem = ItemDatabaseList.FirstOrDefault(item => item.SlotIndex == slotIndex);
+                var removedItemIndex = ItemDatabaseList.FindIndex(item => item.SlotIndex == slotIndex);
+
+                if (removedItem != null)
+                {
+                    // Remove the item with the specified SlotIndex from ItemDatabaseList
+                    ItemDatabaseList?.Remove(removedItem);
+
+                    if (!removedItem.IsNewItem)
+                    {
+                        DeletedItemDatabaseList ??= [];
+                        DeletedItemDatabaseList.Add(removedItem);
+                    }
+
+                    RemoveFrameViewModel(removedItemIndex);
+                }
+                
+            }
+        }
+    }
+
+    private void RemoveFrameViewModel(int itemIndex)
+    {
+        FrameViewModels?.RemoveAt(itemIndex);
+        OnPropertyChanged(nameof(FrameViewModels));
+    }
+    #endregion
+
+    #endregion
+
+    #region Messenger
+
+    #region Load CharacterData
 
     public async void Receive(CharacterInfoMessage message)
     {
@@ -83,55 +165,33 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
     private void ClearData()
     {
-        FrameViewModels?.Clear();
-        OnPropertyChanged(nameof(FrameViewModels));
         CharacterData = null;
         ItemDatabaseList = null;
+        DeletedItemDatabaseList = null;
+        FrameViewModels?.Clear();
+        OnPropertyChanged(nameof(FrameViewModels));
     }
     #endregion
 
-    #region Commands
+    #region Send ItemData
 
-    #region Save
     [RelayCommand]
-    private async Task SaveEquipment()
+    private void AddItem(string parameter)
     {
         if (CharacterData == null) return;
 
-        if (!SqlCredentialValidator.ValidateCredentials())
+        if (int.TryParse(parameter, out int slotIndex))
         {
-            return;
-        }
+            ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
+            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
 
-        try
-        {
-            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
-            {
-                return;
-            }
-
-            if (RHMessageBoxHelper.ConfirmMessage($"Save equipment changes?"))
-            {
-                await _databaseService.SaveEquipItemAsync(CharacterData.CharacterID, ItemDatabaseList);
-                RHMessageBoxHelper.ShowOKMessage("Equipment saved successfully!", "Success");
-                await ReadCharacterData(CharacterData.CharacterName!);
-            }
-
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error saving equipment changes: {ex.Message}", "Error");
+            _windowsService.OpenItemWindow(characterInfo.CharacterID, "EquipItem", itemData, characterInfo);
         }
     }
 
     #endregion
 
-
-    #endregion
-
-    #region Item Data
-
-    #region Receive
+    #region Receive ItemData
     public void Receive(ItemDataMessage message)
     {
         if (message.Recipient == "EquipWindow" && message.Token == Token)
@@ -151,15 +211,43 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             }
             else
             {
-                // Create new item
-                CreateItem(newItemData);
+                if (newItemData.ItemId != 0)
+                {
+                    // Create new item
+                    CreateItem(newItemData);
+                }
+
             }
         }
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Item Methods
+
+    private void CreateItem(ItemData newItemData)
+    {
+        if (CharacterData == null) return;
+
+        var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 0);
+
+        ItemDatabaseList ??= [];
+        ItemDatabaseList.Add(newItem);
+
+        var frameViewModel = _itemHelper.GetItemData(newItem);
+
+        SetFrameViewModel(frameViewModel);
     }
 
     private void UpdateItem(ItemData existingItem, ItemData newItemData)
     {
         if (CharacterData == null) return;
+
+        ItemDatabaseList ??= [];
+
+        var existingItemIndex = ItemDatabaseList.FindIndex(item => item.SlotIndex == existingItem.SlotIndex);
 
         // Check if the IDs are different
         if (existingItem.ItemId != newItemData.ItemId)
@@ -168,10 +256,16 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 0);
 
             // Remove the existing item from ItemDatabaseList
-            ItemDatabaseList!.Remove(existingItem);
-
-            // Add the new item to the list
+            ItemDatabaseList.Remove(existingItem);
             ItemDatabaseList.Add(newItem);
+
+            if (!existingItem.IsNewItem)
+            {
+                DeletedItemDatabaseList ??= [];
+                DeletedItemDatabaseList.Add(existingItem);
+            }
+
+            RemoveFrameViewModel(existingItemIndex);
 
             var frameViewModel = _itemHelper.GetItemData(newItem);
 
@@ -179,6 +273,9 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         }
         else
         {
+            ItemDatabaseList.Remove(existingItem);
+            RemoveFrameViewModel(existingItemIndex);
+
             // Update existingItem
             existingItem.UpdateTime = DateTime.Now;
             existingItem.Durability = newItemData.Durability;
@@ -207,28 +304,12 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             existingItem.Socket2Value = newItemData.Socket2Value;
             existingItem.Socket3Value = newItemData.Socket3Value;
 
-            ItemDatabaseList!.RemoveAt(existingItem.SlotIndex);
-
             ItemDatabaseList.Add(existingItem);
 
             var frameViewModel = _itemHelper.GetItemData(existingItem);
 
             SetFrameViewModel(frameViewModel);
         }
-    }
-
-    private void CreateItem(ItemData newItemData)
-    {
-        if (CharacterData == null) return;
-
-        var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 0);
-
-        ItemDatabaseList ??= [];
-        ItemDatabaseList.Add(newItem);
-
-        var frameViewModel = _itemHelper.GetItemData(newItem);
-
-        SetFrameViewModel(frameViewModel);
     }
 
     private void LoadEquipmentItems(List<ItemData> equipmentItems)
@@ -249,50 +330,6 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         FrameViewModels.Add(frameViewModel);
         OnPropertyChanged(nameof(FrameViewModels));
     }
-
-    #endregion
-
-    #region Send
-    [RelayCommand]
-    private void AddItem(string parameter)
-    {
-        if (CharacterData == null) return;
-
-        if (int.TryParse(parameter, out int slotIndex))
-        {
-            ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-
-            _windowsService.OpenItemWindow(characterInfo.CharacterID, "EquipItem", itemData, characterInfo);
-        }
-    }
-
-    #endregion
-
-    #region Remove Item
-
-    [RelayCommand]
-    private void RemoveItem(string parameter)
-    {
-        if (int.TryParse(parameter, out int slotIndex) && ItemDatabaseList != null)
-        {
-            var removedItemIndex = ItemDatabaseList.FindIndex(item => item.SlotIndex == slotIndex);
-
-            if (removedItemIndex != -1)
-            {
-                // Remove the item with the specified SlotIndex from ItemDatabaseList
-                RemoveFrameViewModel(removedItemIndex);
-            }
-        }
-    }
-
-    private void RemoveFrameViewModel(int itemIndex)
-    {
-        ItemDatabaseList?.RemoveAt(itemIndex);
-        FrameViewModels?.RemoveAt(itemIndex);
-        OnPropertyChanged(nameof(FrameViewModels));
-    }
-    #endregion
 
     #endregion
 
@@ -325,7 +362,6 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
     [ObservableProperty]
     private string? _charSilhouetteImage;
-
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CharacterNameText))]
@@ -366,6 +402,9 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
     [ObservableProperty]
     private List<ItemData>? _itemDatabaseList;
+
+    [ObservableProperty]
+    private List<ItemData>? _deletedItemDatabaseList;
 
     [ObservableProperty]
     private List<FrameViewModel>? _frameViewModels;
