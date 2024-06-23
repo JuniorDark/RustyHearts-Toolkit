@@ -306,7 +306,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
 
     public string AugmentText => FrameService.FormatAugmentStone(AugmentValue);
 
-#endregion
+    #endregion
 
     #region Fixed Option
 

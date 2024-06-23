@@ -151,10 +151,19 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     SlotIndexMax = itemData.SlotIndex;
                 }
 
-                ItemId = itemData.ItemId;
-
-                LoadItemData(itemData);
-
+                if (itemData.ItemId != 0)
+                {
+                    SelectedItem = ItemDataItems?.FirstOrDefault(item => item.ItemId == itemData.ItemId);
+                    LoadItemData(itemData);
+                }
+                else
+                {
+                    if (FrameViewModel != null)
+                    {
+                        FrameViewModel.SlotIndex = itemData.SlotIndex;
+                    }
+                    
+                }
             }), DispatcherPriority.ContextIdle);
         }
     }
@@ -425,7 +434,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         {
             var frameViewModel = _itemHelper.GetItemData(itemData);
             FrameViewModel = frameViewModel;
-            ItemId = frameViewModel.ItemId;
             ItemName = frameViewModel.ItemName;
         }
 
@@ -785,21 +793,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private string _title = "Add Item";
 
     #region ItemData
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(SelectedItem))]
-    private int _itemId;
-    partial void OnItemIdChanged(int value)
-    {
-        if (value == 0)
-        {
-            SelectedItem = ItemDataItems?.FirstOrDefault();
-        }
-        else
-        {
-            SelectedItem = ItemDataItems?.FirstOrDefault(item => item.ItemId == value);
-        }
-    }
 
     [ObservableProperty]
     private ItemData? _selectedItem;

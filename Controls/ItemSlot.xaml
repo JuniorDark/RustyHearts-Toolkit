@@ -31,7 +31,7 @@
             Tag="{Binding FrameViewModel, RelativeSource={RelativeSource AncestorType=UserControl}}">
             <Button.ToolTip>
                 <ToolTip
-                    MaxWidth="350"
+                    MaxWidth="325"
                     Background="Transparent"
                     BorderBrush="Transparent"
                     Visibility="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource NullToVisibilityConverter}}">
