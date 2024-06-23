@@ -222,7 +222,7 @@
                         <Rectangle
                             Grid.Column="1"
                             Width="15"
-                            Margin="0,2"
+                            Margin="0,0"
                             RenderTransformOrigin="0.5,0.5">
                             <Rectangle.Style>
                                 <Style TargetType="Rectangle">
@@ -350,6 +350,7 @@
                                 <Thumb
                                     x:Name="Thumb"
                                     Width="45"
+                                    Height="15"
                                     Style="{StaticResource ScrollThumbs_h}" />
                             </Track.Thumb>
                             <Track.IncreaseRepeatButton>

@@ -4,11 +4,13 @@ using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Views.Windows;
 using System.Data;
+using static RHToolkit.Models.MIP.MIPCoder;
 
 namespace RHToolkit.ViewModels.Windows
 {
     public partial class RHEditorViewModel : ObservableObject
     {
+        private readonly FileManager _fileManager = new();
         private readonly Stack<EditHistory> _undoStack = new();
         private readonly Stack<EditHistory> _redoStack = new();
 
@@ -52,7 +54,7 @@ namespace RHToolkit.ViewModels.Windows
 
                     CurrentFile = openFileDialog.FileName;
                     CurrentFileName = Path.GetFileName(CurrentFile);
-                    FileData = await FileManager.FileToDataTableAsync(CurrentFile);
+                    FileData = await _fileManager.FileToDataTableAsync(CurrentFile);
                     Title = $"RH Table Editor ({CurrentFileName})";
 
                     if (FileData != null)
@@ -85,8 +87,15 @@ namespace RHToolkit.ViewModels.Windows
             _changesCounter++;
             if (_changesCounter >= ChangesBeforeSave)
             {
-                _changesCounter = 0;
-                await FileManager.SaveTempFile(CurrentFileName!, FileData!);
+                try
+                {
+                    _changesCounter = 0;
+                    await _fileManager.SaveTempFile(CurrentFileName!, FileData!);
+                }
+                catch (Exception ex)
+                {
+                    RHMessageBoxHelper.ShowOKMessage($"Error saving backup file: {ex.Message}", "Save File Error");
+                }
             }
         }
 
@@ -97,7 +106,7 @@ namespace RHToolkit.ViewModels.Windows
             if (CurrentFile == null) return;
             try
             {
-                await FileManager.DataTableToFileAsync(CurrentFile, FileData);
+                await _fileManager.DataTableToFileAsync(CurrentFile, FileData);
                 FileManager.ClearTempFile(CurrentFileName!);
 
                 HasChanges = false;
@@ -127,7 +136,7 @@ namespace RHToolkit.ViewModels.Windows
                 try
                 {
                     string file = saveFileDialog.FileName;
-                    await FileManager.DataTableToFileAsync(file, FileData);
+                    await _fileManager.DataTableToFileAsync(file, FileData);
                     FileManager.ClearTempFile(CurrentFileName);
                     HasChanges = false;
                     CurrentFile = file;
@@ -211,6 +220,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             SaveFileCommand.NotifyCanExecuteChanged();
             SaveFileAsCommand.NotifyCanExecuteChanged();
+            SaveFileAsMIPCommand.NotifyCanExecuteChanged();
             CloseFileCommand.NotifyCanExecuteChanged();
             OpenSearchDialogCommand.NotifyCanExecuteChanged();
             AddNewRowCommand.NotifyCanExecuteChanged();
@@ -224,6 +234,15 @@ namespace RHToolkit.ViewModels.Windows
             if (searchDialog == null || !searchDialog.IsVisible)
             {
                 searchDialog = new SearchDialog();
+                Window? rhEditorWindow = Application.Current.Windows.OfType<RHEditorWindow>().FirstOrDefault();
+                if (rhEditorWindow != null)
+                {
+                    searchDialog.Owner = rhEditorWindow;
+                }
+                else
+                {
+                    searchDialog.Owner = Application.Current.MainWindow;
+                }
                 searchDialog.FindNext += Search;
                 searchDialog.ReplaceFindNext += Search;
                 searchDialog.Replace += Replace;
@@ -675,6 +694,35 @@ namespace RHToolkit.ViewModels.Windows
         {
             UndoChangesCommand.NotifyCanExecuteChanged();
             RedoChangesCommand.NotifyCanExecuteChanged();
+        }
+        #endregion
+
+        #region MIP
+        [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+        private async Task SaveFileAsMIP()
+        {
+            if (FileData == null || CurrentFileName == null) return;
+
+            SaveFileDialog saveFileDialog = new()
+            {
+                Filter = "Rusty Hearts Patch Files (*.mip)|*.mip|All Files (*.*)|*.*",
+                FilterIndex = 1,
+                FileName = CurrentFileName
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    string file = saveFileDialog.FileName;
+                    await _fileManager.CompressToMipAsync(FileData, file, MIPCompressionMode.Compress);
+                    SaveFileCommand.NotifyCanExecuteChanged();
+                }
+                catch (Exception ex)
+                {
+                    RHMessageBoxHelper.ShowOKMessage($"Error saving MIP file: {ex.Message}", "Save File Error");
+                }
+            }
         }
         #endregion
 

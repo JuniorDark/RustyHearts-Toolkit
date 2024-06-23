@@ -8,6 +8,8 @@ namespace RHToolkit.Models.SQLite;
 
 public class GMDatabaseManager
 {
+    private readonly FileManager _fileManager = new();
+
     public static readonly List<string> RequiredTables =
 [
     "addeffect_string", "angelaweapon", "charactertitle", "charactertitle_string", "exp", "fortune", "frantzweapon", "itemcategory", "itemlist", "itemlist_string",
@@ -16,7 +18,7 @@ public class GMDatabaseManager
     "setitem", "setitem_string", "tudeweapon"
 ];
 
-    public static async Task CreateGMDatabase(string dataFolder, Action<string> reportProgress, CancellationToken cancellationToken)
+    public async Task CreateGMDatabase(string dataFolder, Action<string> reportProgress, CancellationToken cancellationToken)
     {
         string resourcesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
         string currentLanguage = LocalizationManager.GetCurrentLanguage();
@@ -71,7 +73,7 @@ public class GMDatabaseManager
                 string tableName = Path.GetFileNameWithoutExtension(file);
                 reportProgress($"Processing {tableName}...");
 
-                DataTable? dataTable = await FileManager.FileToDataTableAsync(file);
+                DataTable? dataTable = await _fileManager.FileToDataTableAsync(file);
 
                 if (dataTable != null)
                 {

@@ -4,12 +4,14 @@ namespace RHToolkit.Models.RH
 {
     public class DataTableCryptor
     {
-        public static DataTable RhToDataTable(byte[] encryptedData)
+        private readonly RHCryptor _rhCryptor = new();
+
+        public DataTable RhToDataTable(byte[] encryptedData)
         {
             try
             {
                 // Decrypt RH
-                byte[] decryptedData = RHCryptor.Decrypt(encryptedData);
+                byte[] decryptedData = _rhCryptor.Decrypt(encryptedData);
 
                 using MemoryStream stream = new(decryptedData);
                 using BinaryReader reader = new(stream);
@@ -20,7 +22,7 @@ namespace RHToolkit.Models.RH
 
                 if (numCol <= 0)
                 {
-                    throw new Exception("The rh file data format is incorrect");
+                    throw new Exception("The rh file data format is incorrect.");
                 }
 
                 List<string> listTitles = new(numCol);
@@ -65,7 +67,7 @@ namespace RHToolkit.Models.RH
             }
         }
 
-        public static byte[] DataTableToRh(DataTable dataTable)
+        public byte[] DataTableToRh(DataTable dataTable)
         {
             try
             {
@@ -125,7 +127,7 @@ namespace RHToolkit.Models.RH
                 stream.Flush();
 
                 byte[] buffer = stream.ToArray();
-                return RHCryptor.Encrypt(buffer);
+                return _rhCryptor.Encrypt(buffer);
             }
             catch (Exception ex)
             {

@@ -1,5 +1,7 @@
-﻿using RHToolkit.Models.RH;
+﻿using RHToolkit.Models.MIP;
+using RHToolkit.Models.RH;
 using System.Data;
+using static RHToolkit.Models.MIP.MIPCoder;
 
 namespace RHToolkit.Models.Editor
 {
@@ -7,8 +9,9 @@ namespace RHToolkit.Models.Editor
     {
         private static readonly string _appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         private static readonly string _backupDirectory = Path.Combine(_appDataPath, "RHToolkit", "RHEditor", "backup");
+        private readonly DataTableCryptor _dataTableCryptor = new();
 
-        public static async Task<DataTable?> FileToDataTableAsync(string sourceFile)
+        public async Task<DataTable?> FileToDataTableAsync(string sourceFile)
         {
             using FileStream sourceFileStream = File.OpenRead(sourceFile);
             byte[] buffer = new byte[4096];
@@ -22,16 +25,16 @@ namespace RHToolkit.Models.Editor
 
             byte[] sourceBytes = memoryStream.ToArray();
 
-            return DataTableCryptor.RhToDataTable(sourceBytes);
+            return _dataTableCryptor.RhToDataTable(sourceBytes);
         }
 
-        public static async Task DataTableToFileAsync(string file, DataTable fileData)
+        public async Task DataTableToFileAsync(string file, DataTable fileData)
         {
-            byte[] encryptedData = DataTableCryptor.DataTableToRh(fileData);
+            byte[] encryptedData = _dataTableCryptor.DataTableToRh(fileData);
             await File.WriteAllBytesAsync(file, encryptedData);
         }
 
-        public static async Task SaveTempFile(string fileName, DataTable fileData)
+        public async Task SaveTempFile(string fileName, DataTable fileData)
         {
             if (fileData == null || fileName == null) return;
 
@@ -67,7 +70,7 @@ namespace RHToolkit.Models.Editor
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error saving backup file: {ex.Message}");
+                throw new Exception($"{ex.Message}");
             }
         }
 
@@ -92,7 +95,19 @@ namespace RHToolkit.Models.Editor
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error clearing backup file: {ex.Message}");
+                throw new Exception($"{ex.Message}");
+            }
+        }
+
+        public async Task CompressToMipAsync(DataTable fileData, string file, MIPCompressionMode compressionMode)
+        {
+            if (compressionMode == MIPCompressionMode.Compress)
+            {
+                byte[] encryptedData = _dataTableCryptor.DataTableToRh(fileData);
+                // Compress file
+                byte[] compressedData = MIPCoder.CompressFileZlibAsync(encryptedData);
+
+                await File.WriteAllBytesAsync(file, compressedData);
             }
         }
     }

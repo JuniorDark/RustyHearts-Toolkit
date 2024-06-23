@@ -10,6 +10,7 @@ namespace RHToolkit.ViewModels.Pages
         private readonly ISqLiteDatabaseService _sqLiteDatabaseService = sqLiteDatabaseService;
         private readonly IGMDatabaseService _gmDatabaseService = gmDatabaseService;
         private readonly CachedDataManager _cachedDataManager = cachedDataManager;
+        private readonly GMDatabaseManager _gmDatabaseManager = new();
         private CancellationTokenSource? _cancellationTokenSource;
 
         #region Commands
@@ -32,13 +33,13 @@ namespace RHToolkit.ViewModels.Pages
 
             try
             {
-                if (RHMessageBoxHelper.ConfirmMessage("Create a new gmdb?"))
+                if (RHMessageBoxHelper.ConfirmMessage("Create a new gmdb database?"))
                 {
                     _cancellationTokenSource = new CancellationTokenSource();
 
                     CancelOperationCommand.NotifyCanExecuteChanged();
 
-                    await GMDatabaseManager.CreateGMDatabase(SelectedFolder, ReportProgress, _cancellationTokenSource.Token);
+                    await _gmDatabaseManager.CreateGMDatabase(SelectedFolder, ReportProgress, _cancellationTokenSource.Token);
 
                     await Task.Delay(100);
 
