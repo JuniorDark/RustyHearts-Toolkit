@@ -1420,6 +1420,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quick Slot.
+        /// </summary>
+        public static string QuickSlot {
+            get {
+                return ResourceManager.GetString("QuickSlot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Random Buff.
         /// </summary>
         public static string RandomBuff {
@@ -2208,6 +2217,15 @@ namespace RHToolkit.Properties {
         public static string SQLUser {
             get {
                 return ResourceManager.GetString("SQLUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Storage.
+        /// </summary>
+        public static string Storage {
+            get {
+                return ResourceManager.GetString("Storage", resourceCulture);
             }
         }
         

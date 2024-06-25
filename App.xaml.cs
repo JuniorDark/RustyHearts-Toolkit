@@ -81,6 +81,8 @@ public partial class App : Application
                 _ = services.AddTransient<RHEditorViewModel>();
                 _ = services.AddTransient<EquipmentWindow>();
                 _ = services.AddTransient<EquipmentWindowViewModel>();
+                _ = services.AddTransient<InventoryWindow>();
+                _ = services.AddTransient<InventoryWindowViewModel>();
 
             }
         )

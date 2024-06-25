@@ -84,6 +84,7 @@ public class ItemHelper(CachedDataManager cachedDataManager, IFrameService frame
             SubCategory = cachedItem.SubCategory,
             LevelLimit = cachedItem.LevelLimit,
             ItemTrade = cachedItem.ItemTrade,
+            InventoryType = cachedItem.InventoryType,
             OverlapCnt = cachedItem.OverlapCnt,
             Defense = cachedItem.Defense,
             MagicDefense = cachedItem.MagicDefense,

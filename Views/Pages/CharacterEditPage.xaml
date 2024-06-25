@@ -245,6 +245,16 @@
             Orientation="Horizontal"
             Visibility="{Binding ViewModel.IsButtonPanelVisible}">
             <Button
+                x:Name="btnInventory"
+                Width="150"
+                Margin="0,5"
+                Background="Transparent"
+                Command="{Binding ViewModel.OpenInventoryWindowCommand}"
+                Content="Inventory"
+                Cursor="Hand"
+                Foreground="White"
+                Style="{StaticResource lb_def_button02}" />
+            <Button
                 x:Name="btnEquip"
                 Width="150"
                 Margin="0,5"

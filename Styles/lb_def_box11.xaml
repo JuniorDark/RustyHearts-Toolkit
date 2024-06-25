@@ -1,0 +1,112 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!--  lb_def_box11  -->
+    <ControlTemplate x:Key="lb_def_box11" TargetType="ContentControl">
+        <Grid>
+            <!--  Corners  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/lb_def_box11/lb_def_box11_01.png"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/lb_def_box11/lb_def_box11_03.png"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/lb_def_box11/lb_def_box11_07.png"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/lb_def_box11/lb_def_box11_09.png"
+                Stretch="None" />
+
+            <!--  Edges  -->
+            <Image
+                Height="6"
+                Margin="6,0,6,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/lb_def_box11/lb_def_box11_02.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_box11/lb_def_box11_02.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <Image
+                Height="6"
+                Margin="6,0,6,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/lb_def_box11/lb_def_box11_08.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_box11/lb_def_box11_08.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <Image
+                Width="6"
+                Margin="0,6,0,6"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/lb_def_box11/lb_def_box11_04.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_box11/lb_def_box11_04.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,0.25,1"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <Image
+                Width="6"
+                Margin="0,6,0,6"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/lb_def_box11/lb_def_box11_06.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/lb_def_box11/lb_def_box11_06.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,0.25,1"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <!--  Center  -->
+            <Image
+                Margin="2,2,2,2"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/lb_def_box11/lb_def_box11_05.png"
+                Stretch="UniformToFill" />
+
+            <!--  Content  -->
+            <ContentPresenter
+                Margin="6,6,6,6"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Content="{TemplateBinding Content}" />
+        </Grid>
+    </ControlTemplate>
+</ResourceDictionary>

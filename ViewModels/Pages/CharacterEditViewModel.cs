@@ -141,6 +141,7 @@ namespace RHToolkit.ViewModels.Pages
         {
             DeleteCharacterCommand.NotifyCanExecuteChanged();
             OpenEquipmentWindowCommand.NotifyCanExecuteChanged();
+            OpenInventoryWindowCommand.NotifyCanExecuteChanged();
             OpenTitleWindowCommand.NotifyCanExecuteChanged();
             OpenSanctionWindowCommand.NotifyCanExecuteChanged();
             OpenFortuneWindowCommand.NotifyCanExecuteChanged();
@@ -170,6 +171,16 @@ namespace RHToolkit.ViewModels.Pages
         private void OpenEquipmentWindow()
         {
             OpenWindow(_windowsService.OpenEquipmentWindow, "EquipItem");
+        }
+
+        #endregion
+
+        #region Inventory
+
+        [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+        private void OpenInventoryWindow()
+        {
+            OpenWindow(_windowsService.OpenInventoryWindow, "Inventory");
         }
 
         #endregion

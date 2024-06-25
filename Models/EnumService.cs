@@ -311,7 +311,6 @@ namespace RHToolkit.Models
 
         public enum InventoryType
         {
-
             [LocalizedDescription("Equipment")]
             Equipment = 1,
 
@@ -326,6 +325,12 @@ namespace RHToolkit.Models
 
             [LocalizedDescription("Costume")]
             Costume = 5,
+
+            [LocalizedDescription("QuickSlot")]
+            QuickSlot = 11,
+
+            [LocalizedDescription("Storage")]
+            Storage = 21,
         }
 
     }

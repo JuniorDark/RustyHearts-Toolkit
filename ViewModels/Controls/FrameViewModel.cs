@@ -45,6 +45,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
             ItemAmount = itemData.ItemAmount == 0 ? 1 : itemData.ItemAmount;
             Rank = itemData.Rank == 0 ? 1 : itemData.Rank;
             OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
+            PageIndex = itemData.PageIndex;
             SlotIndex = itemData.SlotIndex;
             MaxDurability = itemData.DurabilityMax;
             EnhanceLevel = itemData.EnhanceLevel;
@@ -77,6 +78,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
         ItemData itemData = new()
         {
             SlotIndex = SlotIndex,
+            PageIndex = PageIndex,
             ItemId = ItemId,
             ItemAmount = ItemAmount,
             ReconstructionMax = (byte)ReconstructionMax,
@@ -118,6 +120,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     {
         UpdateItemData(value);
     }
+
+    [ObservableProperty]
+    private int _pageIndex;
 
     [ObservableProperty]
     private int _slotIndex;

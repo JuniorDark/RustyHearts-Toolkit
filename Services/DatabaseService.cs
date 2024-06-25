@@ -445,7 +445,7 @@ namespace RHToolkit.Services
 
         public async Task<List<ItemData>> GetItemList(Guid characterId, string tableName)
         {
-            string selectQuery = $"SELECT * FROM {tableName} WHERE character_id = @character_id;";
+            string selectQuery = $"SELECT * FROM {tableName} WHERE character_id = @character_id AND page_index >= 0 AND slot_index >= 0;";
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             DataTable dataTable = await _sqlDatabaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@character_id", characterId));
 
@@ -506,6 +506,7 @@ namespace RHToolkit.Services
 
             return itemList;
         }
+
 
         public async Task<List<ItemData>> GetAccountItemList(Guid authId)
         {

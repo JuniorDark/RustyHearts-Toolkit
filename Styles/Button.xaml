@@ -138,6 +138,145 @@
         </Style.Triggers>
     </Style>
 
+    <!--  lb_def_button04  -->
+    <ControlTemplate x:Key="lb_def_button04_normal" TargetType="Button">
+        <Grid>
+            <!--  Left  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_01.png"
+                Stretch="None" />
+
+            <!--  Center  -->
+            <Image
+                Height="22"
+                Margin="16,0,16,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_02.png"
+                Stretch="Fill" />
+
+            <!--  Right  -->
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_03.png"
+                Stretch="None" />
+
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
+    </ControlTemplate>
+    <ControlTemplate x:Key="lb_def_button04_hover" TargetType="Button">
+        <Grid>
+            <!--  Left  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_04.png"
+                Stretch="None" />
+
+            <!--  Center  -->
+            <Image
+                Height="22"
+                Margin="16,0,16,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_05.png"
+                Stretch="Fill" />
+
+            <!--  Right  -->
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_06.png"
+                Stretch="None" />
+
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
+    </ControlTemplate>
+    <ControlTemplate x:Key="lb_def_button04_down" TargetType="Button">
+        <Grid>
+            <!--  Left  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_07.png"
+                Stretch="None" />
+
+            <!--  Center  -->
+            <Image
+                Height="22"
+                Margin="16,0,16,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_08.png"
+                Stretch="Fill" />
+
+            <!--  Right  -->
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_09.png"
+                Stretch="None" />
+
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="lb_def_button04_disabled" TargetType="Button">
+        <Grid>
+            <!--  Left  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_10.png"
+                Stretch="None" />
+
+            <!--  Center  -->
+            <Image
+                Height="22"
+                Margin="16,0,16,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_11.png"
+                Stretch="Fill" />
+
+            <!--  Right  -->
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/buttons/lb_def_button04/lb_def_button04_12.png"
+                Stretch="None" />
+
+            <ContentPresenter
+                x:Name="contentPresenter"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center" />
+        </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="contentPresenter" Property="TextElement.Foreground" Value="Gray" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="lb_def_button04" TargetType="Button">
+        <Setter Property="Template" Value="{StaticResource lb_def_button04_normal}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Template" Value="{StaticResource lb_def_button04_hover}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Template" Value="{StaticResource lb_def_button04_down}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Template" Value="{StaticResource lb_def_button04_disabled}" />
+                <Setter Property="Foreground" Value="Gray" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="ImageButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />

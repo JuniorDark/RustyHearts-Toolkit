@@ -91,6 +91,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     case "EquipItem":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "EquipWindow", MessageType, Token));
                         break;
+                    case "InventoryItem":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "InventoryWindow", MessageType, Token));
+                        break;
                     case "Coupon":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponWindow", MessageType, Token));
                         break;
@@ -139,11 +142,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     SlotIndexMax = itemData.SlotIndex;
                     SlotFilter(itemData.SlotIndex);
                 }
-                else if (message.MessageType == "Inventory")
+                else if (message.MessageType == "InventoryItem")
                 {
                     SlotIndexMin = itemData.SlotIndex;
                     SlotIndexMax = itemData.SlotIndex;
-                    InventoryTypeFilter = itemData.InventoryType;
+                    InventoryTypeFilter = itemData.PageIndex;
                 }
                 else
                 {
@@ -160,6 +163,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 {
                     if (FrameViewModel != null)
                     {
+                        FrameViewModel.PageIndex = itemData.PageIndex;
                         FrameViewModel.SlotIndex = itemData.SlotIndex;
                     }
                     
@@ -174,7 +178,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         {
             "Coupon" => $"Add Coupon Item",
             "EquipItem" => $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterInfo?.CharacterName}] ",
-            "Inventory" => $"Add Inventory Item ({(InventoryType)itemData.InventoryType}) [{CharacterInfo?.CharacterName}] ",
+            "InventoryItem" => $"Add Inventory Item ({(InventoryType)itemData.PageIndex}) [{CharacterInfo?.CharacterName}] ",
             "Mail" => $"Add Mail Item",
             _ => "Add Item",
         };
