@@ -24,9 +24,11 @@
                 <ResourceDictionary Source="Styles/Datagrid.xaml" />
                 <ResourceDictionary Source="Styles/IntegerUpDown.xaml" />
                 <ResourceDictionary Source="Styles/Label.xaml" />
+                <ResourceDictionary Source="Styles/lb_arrow.xaml" />
                 <ResourceDictionary Source="Styles/lb_context.xaml" />
                 <ResourceDictionary Source="Styles/lb_def_box01.xaml" />
                 <ResourceDictionary Source="Styles/lb_def_box04.xaml" />
+                <ResourceDictionary Source="Styles/lb_def_box10.xaml" />
                 <ResourceDictionary Source="Styles/lb_def_box11.xaml" />
                 <ResourceDictionary Source="Styles/lb_def_box17.xaml" />
                 <ResourceDictionary Source="Styles/lb_def_msg_box.xaml" />

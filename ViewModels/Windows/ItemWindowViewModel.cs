@@ -144,8 +144,17 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 }
                 else if (message.MessageType == "InventoryItem")
                 {
-                    SlotIndexMin = itemData.SlotIndex;
-                    SlotIndexMax = itemData.SlotIndex;
+                    switch (itemData.PageIndex)
+                    {
+                        case 5:
+                            SlotIndexMin = 0;
+                            SlotIndexMax = 119;
+                            break;
+                        default:
+                            SlotIndexMin = 0;
+                            SlotIndexMax = 23;
+                            break;
+                    }
                     InventoryTypeFilter = itemData.PageIndex;
                 }
                 else

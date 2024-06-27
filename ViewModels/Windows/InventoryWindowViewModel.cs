@@ -1,7 +1,9 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
+using RHToolkit.Models.DataTemplates;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
 
@@ -12,12 +14,23 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
     private readonly ItemHelper _itemHelper;
+    private readonly PageTemplateSelector _pageTemplateSelector;
 
     public InventoryWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemHelper itemHelper)
     {
         _windowsService = windowsService;
         _databaseService = databaseService;
         _itemHelper = itemHelper;
+
+        _pageTemplateSelector = new PageTemplateSelector
+        {
+            Page1 = (DataTemplate)Application.Current.Resources["Page1"],
+            Page2 = (DataTemplate)Application.Current.Resources["Page2"],
+            Page3 = (DataTemplate)Application.Current.Resources["Page3"],
+            Page4 = (DataTemplate)Application.Current.Resources["Page4"],
+            Page5 = (DataTemplate)Application.Current.Resources["Page5"]
+        };
+        CurrentPage = 1;
 
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
         WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
@@ -59,6 +72,14 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         }
     }
 
+    #endregion
+
+    #region Sort
+    [RelayCommand]
+    private void SortEquipment()
+    {
+
+    }
     #endregion
 
     #region Remove Item
@@ -132,6 +153,26 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
                 OnPropertyChanged(nameof(CostumeFrameViewModels));
                 break;
             default: break;
+        }
+    }
+    #endregion
+
+    #region Page
+    [RelayCommand(CanExecute = nameof(CanExecuteNextPageCommand))]
+    private void NextPage()
+    {
+        if (CurrentPage < 5)
+        {
+            CurrentPage++;
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecutePreviousPageCommand))]
+    private void PreviousPage()
+    {
+        if (CurrentPage > 1)
+        {
+            CurrentPage--;
         }
     }
     #endregion
@@ -290,8 +331,6 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
 
         ItemDatabaseList ??= [];
 
-        var existingItemIndex = ItemDatabaseList.FindIndex(item => item.SlotIndex == existingItem.SlotIndex && item.PageIndex == existingItem.PageIndex);
-
         // Check if the IDs are different
         if (existingItem.ItemId != newItemData.ItemId)
         {
@@ -429,6 +468,31 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
 
     [ObservableProperty]
     private int _ressurecionScrolls;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PageText))]
+    private int _currentPage;
+
+    public string PageText => $"{CurrentPage}/5";
+
+    [ObservableProperty]
+    private int _selectedPageContent;
+    partial void OnCurrentPageChanged(int value)
+    {
+        SelectedPageContent = value;
+        NextPageCommand.NotifyCanExecuteChanged();
+        PreviousPageCommand.NotifyCanExecuteChanged();
+    }
+
+    private bool CanExecutePreviousPageCommand()
+    {
+        return CurrentPage > 1;
+    }
+
+    private bool CanExecuteNextPageCommand()
+    {
+        return CurrentPage < 5;
+    }
 
     #endregion
 

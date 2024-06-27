@@ -79,7 +79,7 @@
             VerticalAlignment="Top"
             d:Source="/Assets/images/lb_ac_icon.png"
             IsHitTestVisible="False"
-            Source="{Binding SlotIcon, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Source="{Binding SlotIcon, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource SlotIconConverter}}"
             Stretch="Fill" />
         <Image
             x:Name="imgItemIcon"

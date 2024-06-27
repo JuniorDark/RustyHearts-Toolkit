@@ -42,6 +42,14 @@
     <None Remove="Assets\buttons\lb_arrow\lb_arrow_bottom02.png" />
     <None Remove="Assets\buttons\lb_arrow\lb_arrow_bottom03.png" />
     <None Remove="Assets\buttons\lb_arrow\lb_arrow_bottom04.png" />
+    <None Remove="Assets\buttons\lb_arrow\lb_arrow_left01.png" />
+    <None Remove="Assets\buttons\lb_arrow\lb_arrow_left02.png" />
+    <None Remove="Assets\buttons\lb_arrow\lb_arrow_left03.png" />
+    <None Remove="Assets\buttons\lb_arrow\lb_arrow_left04.png" />
+    <None Remove="Assets\buttons\lb_arrow\lb_arrow_right01.png" />
+    <None Remove="Assets\buttons\lb_arrow\lb_arrow_right02.png" />
+    <None Remove="Assets\buttons\lb_arrow\lb_arrow_right03.png" />
+    <None Remove="Assets\buttons\lb_arrow\lb_arrow_right04.png" />
     <None Remove="Assets\buttons\lb_arrow\lb_arrow_top01.png" />
     <None Remove="Assets\buttons\lb_arrow\lb_arrow_top02.png" />
     <None Remove="Assets\buttons\lb_arrow\lb_arrow_top03.png" />
@@ -261,6 +269,10 @@
     <None Remove="Assets\images\window\lb_box\lb_context10.png" />
     <None Remove="Assets\images\window\lb_box\lb_context11.png" />
     <None Remove="Assets\images\window\lb_box\lb_context12.png" />
+    <None Remove="Assets\images\window\lb_box\lb_def_box10.png" />
+    <None Remove="Assets\images\window\lb_box\lb_def_box10_01.png" />
+    <None Remove="Assets\images\window\lb_box\lb_def_box10_02.png" />
+    <None Remove="Assets\images\window\lb_box\lb_def_box10_03.png" />
     <None Remove="Assets\images\window\lb_def_box01\Center.png" />
     <None Remove="Assets\images\window\lb_def_box01\CornerBottomLeft.png" />
     <None Remove="Assets\images\window\lb_def_box01\CornerBottomRight.png" />
@@ -352,6 +364,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\buttons\lb_arrow\lb_arrow_left01.png" />
+    <Resource Include="Assets\buttons\lb_arrow\lb_arrow_left02.png" />
+    <Resource Include="Assets\buttons\lb_arrow\lb_arrow_left03.png" />
+    <Resource Include="Assets\buttons\lb_arrow\lb_arrow_left04.png" />
+    <Resource Include="Assets\buttons\lb_arrow\lb_arrow_right01.png" />
+    <Resource Include="Assets\buttons\lb_arrow\lb_arrow_right02.png" />
+    <Resource Include="Assets\buttons\lb_arrow\lb_arrow_right03.png" />
+    <Resource Include="Assets\buttons\lb_arrow\lb_arrow_right04.png" />
     <Resource Include="Assets\buttons\lb_def_button02\lb_def_button02_01.png" />
     <Resource Include="Assets\buttons\lb_def_button02\lb_def_button02_02.png" />
     <Resource Include="Assets\buttons\lb_def_button02\lb_def_button02_03.png" />
@@ -532,6 +552,10 @@
     <Resource Include="Assets\images\window\lb_box\lb_context10.png" />
     <Resource Include="Assets\images\window\lb_box\lb_context11.png" />
     <Resource Include="Assets\images\window\lb_box\lb_context12.png" />
+    <Resource Include="Assets\images\window\lb_box\lb_def_box10.png" />
+    <Resource Include="Assets\images\window\lb_box\lb_def_box10_01.png" />
+    <Resource Include="Assets\images\window\lb_box\lb_def_box10_02.png" />
+    <Resource Include="Assets\images\window\lb_box\lb_def_box10_03.png" />
     <Resource Include="Assets\images\window\lb_def_box01\lb_def_box01_base01.png" />
     <Resource Include="Assets\images\window\lb_def_box01\lb_def_box01_base02.png" />
     <Resource Include="Assets\images\window\lb_def_box01\lb_def_box01_base03.png" />
