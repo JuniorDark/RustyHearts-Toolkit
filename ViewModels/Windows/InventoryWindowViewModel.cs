@@ -1,9 +1,7 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
-using RHToolkit.Models.DataTemplates;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
 
@@ -14,7 +12,6 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
     private readonly ItemHelper _itemHelper;
-    private readonly PageTemplateSelector _pageTemplateSelector;
 
     public InventoryWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemHelper itemHelper)
     {
@@ -22,14 +19,6 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         _databaseService = databaseService;
         _itemHelper = itemHelper;
 
-        _pageTemplateSelector = new PageTemplateSelector
-        {
-            Page1 = (DataTemplate)Application.Current.Resources["Page1"],
-            Page2 = (DataTemplate)Application.Current.Resources["Page2"],
-            Page3 = (DataTemplate)Application.Current.Resources["Page3"],
-            Page4 = (DataTemplate)Application.Current.Resources["Page4"],
-            Page5 = (DataTemplate)Application.Current.Resources["Page5"]
-        };
         CurrentPage = 1;
 
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
@@ -74,14 +63,6 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
 
     #endregion
 
-    #region Sort
-    [RelayCommand]
-    private void SortEquipment()
-    {
-
-    }
-    #endregion
-
     #region Remove Item
 
     [RelayCommand]
@@ -124,6 +105,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         OtherFrameViewModels ??= [];
         QuestFrameViewModels ??= [];
         CostumeFrameViewModels ??= [];
+        HiddenFrameViewModels ??= [];
 
         switch (removedItem.PageIndex)
         {
@@ -152,6 +134,11 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
                 CostumeFrameViewModels.RemoveAt(removedCostumeItemIndex);
                 OnPropertyChanged(nameof(CostumeFrameViewModels));
                 break;
+            case 6:
+                var removedHiddenItemIndex = HiddenFrameViewModels.FindIndex(f => f.SlotIndex == removedItem.SlotIndex);
+                HiddenFrameViewModels.RemoveAt(removedHiddenItemIndex);
+                OnPropertyChanged(nameof(HiddenFrameViewModels));
+                break;
             default: break;
         }
     }
@@ -174,6 +161,16 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         {
             CurrentPage--;
         }
+    }
+
+    private bool CanExecutePreviousPageCommand()
+    {
+        return CurrentPage > 1;
+    }
+
+    private bool CanExecuteNextPageCommand()
+    {
+        return CurrentPage < 5;
     }
     #endregion
 
@@ -204,7 +201,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
     {
         try
         {
-            CharacterData? characterData = await _databaseService.GetCharacterDataAsync(characterName);
+            var characterData = await _databaseService.GetCharacterDataAsync(characterName);
 
             if (characterData != null)
             {
@@ -214,6 +211,13 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
                 List<ItemData> inventoryItems = await _databaseService.GetItemList(characterData.CharacterID, "N_InventoryItem");
                 LoadInventoryItems(inventoryItems);
                 ItemDatabaseList = inventoryItems;
+                var accountData = await _databaseService.GetAccountDataAsync(characterData.AccountName!);
+
+                if (accountData != null)
+                {
+                    CashValue = accountData.Zen;
+                    BonusCashValue = accountData.CashMileage;
+                }
             }
             else
             {
@@ -334,24 +338,8 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         // Check if the IDs are different
         if (existingItem.ItemId != newItemData.ItemId)
         {
-            // Create a new item if the IDs are different
-            var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, newItemData.PageIndex);
-
-            // Remove the existing item from ItemDatabaseList
-            ItemDatabaseList.Remove(existingItem);
-            ItemDatabaseList.Add(newItem);
-
-            if (!existingItem.IsNewItem)
-            {
-                DeletedItemDatabaseList ??= [];
-                DeletedItemDatabaseList.Add(existingItem);
-            }
-
-            RemoveFrameViewModel(existingItem);
-
-            var frameViewModel = _itemHelper.GetItemData(newItem);
-
-            SetFrameViewModel(frameViewModel);
+            RHMessageBoxHelper.ShowOKMessage($"The slot '{newItemData.SlotIndex}' is already in use.", "Info");
+            return;
         }
         else
         {
@@ -359,6 +347,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
             RemoveFrameViewModel(existingItem);
 
             // Update existingItem
+            existingItem.IsEditedItem = true;
             existingItem.UpdateTime = DateTime.Now;
             existingItem.Durability = newItemData.Durability;
             existingItem.DurabilityMax = newItemData.DurabilityMax;
@@ -413,6 +402,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         OtherFrameViewModels ??= [];
         QuestFrameViewModels ??= [];
         CostumeFrameViewModels ??= [];
+        HiddenFrameViewModels ??= [];
 
         switch (frameViewModel.PageIndex)
         {
@@ -436,6 +426,10 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
                 CostumeFrameViewModels.Add(frameViewModel);
                 OnPropertyChanged(nameof(CostumeFrameViewModels));
                 break;
+            case 6:
+                HiddenFrameViewModels.Add(frameViewModel);
+                OnPropertyChanged(nameof(HiddenFrameViewModels));
+                break;
             default: break;
         }
     }
@@ -448,6 +442,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
     private Guid? _token = Guid.Empty;
 
     #region Character
+
     [ObservableProperty]
     private CharacterData? _characterData;
 
@@ -461,7 +456,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
     private int _goldValue;
 
     [ObservableProperty]
-    private int _cashValue;
+    private long _cashValue;
 
     [ObservableProperty]
     private int _bonusCashValue;
@@ -472,27 +467,13 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PageText))]
     private int _currentPage;
-
-    public string PageText => $"{CurrentPage}/5";
-
-    [ObservableProperty]
-    private int _selectedPageContent;
     partial void OnCurrentPageChanged(int value)
     {
-        SelectedPageContent = value;
         NextPageCommand.NotifyCanExecuteChanged();
         PreviousPageCommand.NotifyCanExecuteChanged();
     }
 
-    private bool CanExecutePreviousPageCommand()
-    {
-        return CurrentPage > 1;
-    }
-
-    private bool CanExecuteNextPageCommand()
-    {
-        return CurrentPage < 5;
-    }
+    public string PageText => $"{CurrentPage}/5";
 
     #endregion
 
@@ -518,6 +499,9 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
 
     [ObservableProperty]
     private List<FrameViewModel>? _costumeFrameViewModels;
+
+    [ObservableProperty]
+    private List<FrameViewModel>? _hiddenFrameViewModels;
 
     #endregion
 

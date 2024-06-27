@@ -155,6 +155,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                             SlotIndexMax = 23;
                             break;
                     }
+
                     InventoryTypeFilter = itemData.PageIndex;
                 }
                 else
@@ -188,6 +189,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             "Coupon" => $"Add Coupon Item",
             "EquipItem" => $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterInfo?.CharacterName}] ",
             "InventoryItem" => $"Add Inventory Item ({(InventoryType)itemData.PageIndex}) [{CharacterInfo?.CharacterName}] ",
+            "StorageItem" => $"Add Storage Item [{CharacterInfo?.CharacterName}] ",
+            "AccountStorageItem" => $"Add Account Storage Item [{CharacterInfo?.AccountName}] ",
             "Mail" => $"Add Mail Item",
             _ => "Add Item",
         };

@@ -12,9 +12,9 @@
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
     Title="{Binding Title}"
-    Width="430"
+    Width="460"
     Height="450"
-    MinWidth="430"
+    MinWidth="460"
     MinHeight="450"
     MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
     bh:WindowBehaviors.EnableDragMove="True"
@@ -28,7 +28,7 @@
     mc:Ignorable="d">
     <Window.Resources>
         <!--  Costume Pages  -->
-        <DataTemplate x:Key="Page1">
+        <DataTemplate x:Key="CostumePage1">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
@@ -241,7 +241,7 @@
                     RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="Page2">
+        <DataTemplate x:Key="CostumePage2">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
@@ -454,7 +454,7 @@
                     RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="Page3">
+        <DataTemplate x:Key="CostumePage3">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
@@ -667,7 +667,7 @@
                     RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="Page4">
+        <DataTemplate x:Key="CostumePage4">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
@@ -880,7 +880,7 @@
                     RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="Page5">
+        <DataTemplate x:Key="CostumePage5">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
@@ -1096,11 +1096,11 @@
 
         <dt:PageTemplateSelector
             x:Key="PageTemplateSelector"
-            Page1="{StaticResource Page1}"
-            Page2="{StaticResource Page2}"
-            Page3="{StaticResource Page3}"
-            Page4="{StaticResource Page4}"
-            Page5="{StaticResource Page5}" />
+            Page1="{StaticResource CostumePage1}"
+            Page2="{StaticResource CostumePage2}"
+            Page3="{StaticResource CostumePage3}"
+            Page4="{StaticResource CostumePage4}"
+            Page5="{StaticResource CostumePage5}" />
     </Window.Resources>
 
     <ContentControl Template="{StaticResource box_red02}">
@@ -1129,7 +1129,7 @@
                 TabStripPlacement="Left">
                 <TabItem
                     x:Name="EquipmentTab"
-                    Width="120"
+                    Width="150"
                     Foreground="White"
                     Header="Equipment"
                     IsSelected="True"
@@ -1350,7 +1350,7 @@
                 </TabItem>
                 <TabItem
                     x:Name="ConsumeTab"
-                    Width="120"
+                    Width="150"
                     Foreground="White"
                     Header="Consume"
                     Style="{StaticResource lb_tab13}">
@@ -1568,7 +1568,7 @@
                 </TabItem>
                 <TabItem
                     x:Name="OtherTab"
-                    Width="120"
+                    Width="150"
                     Foreground="White"
                     Header="Other"
                     Style="{StaticResource lb_tab13}">
@@ -1786,7 +1786,7 @@
                 </TabItem>
                 <TabItem
                     x:Name="QuestTab"
-                    Width="120"
+                    Width="150"
                     Foreground="White"
                     Header="Quest"
                     Style="{StaticResource lb_tab13}">
@@ -2004,11 +2004,229 @@
                 </TabItem>
                 <TabItem
                     x:Name="CostumeTab"
-                    Width="120"
+                    Width="150"
                     Foreground="White"
                     Header="Costume"
                     Style="{StaticResource lb_tab13}">
                     <ContentControl Content="{Binding CurrentPage}" ContentTemplateSelector="{StaticResource PageTemplateSelector}" />
+                </TabItem>
+                <TabItem
+                    x:Name="HiddenTab"
+                    Width="150"
+                    Foreground="White"
+                    Header="(Hidden) Trigger Items"
+                    Style="{StaticResource lb_tab13}">
+                    <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
+                        </Grid.Background>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex0"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="0,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=0}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex1"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="1,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex2"
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="2,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex3"
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="3,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex4"
+                            Grid.Row="0"
+                            Grid.Column="4"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="4,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex5"
+                            Grid.Row="0"
+                            Grid.Column="5"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="5,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex6"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="6,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex7"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="7,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=7}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex8"
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="8,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=8}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex9"
+                            Grid.Row="1"
+                            Grid.Column="3"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="9,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=9}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex10"
+                            Grid.Row="1"
+                            Grid.Column="4"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="10,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=10}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex11"
+                            Grid.Row="1"
+                            Grid.Column="5"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="11,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=11}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex12"
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="12,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=12}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex13"
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="13,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=13}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex14"
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="14,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=14}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex15"
+                            Grid.Row="2"
+                            Grid.Column="3"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="15,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=15}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex16"
+                            Grid.Row="2"
+                            Grid.Column="4"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="16,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=16}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex17"
+                            Grid.Row="2"
+                            Grid.Column="5"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="17,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=17}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex18"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="18,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=18}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex19"
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="19,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=19}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex20"
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="20,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=20}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex21"
+                            Grid.Row="3"
+                            Grid.Column="3"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="21,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=21}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex22"
+                            Grid.Row="3"
+                            Grid.Column="4"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="22,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=22}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <control:ItemSlot
+                            x:Name="ItemHiddenSlotIndex23"
+                            Grid.Row="3"
+                            Grid.Column="5"
+                            AddItemCommand="{Binding AddItemCommand}"
+                            CommandParameter="23,6"
+                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=23}"
+                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                    </Grid>
                 </TabItem>
             </ui:TabView>
             <!--  Close Button  -->
@@ -2041,33 +2259,6 @@
                     Source="/Assets/icon/icon_help_tip.png"
                     Stretch="None"
                     ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
-                <Image
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Cursor="Help"
-                    Source="/Assets/icon/icon_help_tip.png"
-                    Stretch="None"
-                    ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
-                <Image
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Cursor="Help"
-                    Source="/Assets/icon/icon_help_tip.png"
-                    Stretch="None"
-                    ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
-                <Button
-                    x:Name="btnSort"
-                    Grid.Row="4"
-                    Grid.ColumnSpan="3"
-                    Width="70"
-                    Margin="74,0,0,0"
-                    Command="{Binding SortEquipmentCommand}"
-                    Content="Sort"
-                    Cursor="Hand"
-                    Foreground="White"
-                    IsEnabled="{Binding IsButtonEnabled}"
-                    Style="{StaticResource lb_def_button04}"
-                    ToolTip="{x:Static rs:Resources.MailSendHelp}" />
             </StackPanel>
             <StackPanel
                 Grid.Row="2"
@@ -2144,7 +2335,7 @@
                     d:Text="100"
                     IsReadOnly="True"
                     Template="{StaticResource lb_textbox11}"
-                    Text="{Binding GoldValue}" />
+                    Text="{Binding GoldValue, StringFormat={}{0:N0}}" />
                 <TextBox
                     Grid.Row="3"
                     Grid.Column="1"
@@ -2155,7 +2346,7 @@
                     d:Text="0"
                     IsReadOnly="True"
                     Template="{StaticResource lb_textbox11}"
-                    Text="{Binding CashValue}" />
+                    Text="{Binding CashValue, StringFormat={}{0:N0}}" />
                 <TextBox
                     Grid.Row="3"
                     Grid.Column="1"
@@ -2166,7 +2357,7 @@
                     d:Text="0"
                     IsReadOnly="True"
                     Template="{StaticResource lb_textbox11}"
-                    Text="{Binding BonusCashValue}" />
+                    Text="{Binding BonusCashValue, StringFormat={}{0:N0}}" />
                 <TextBox
                     Grid.Row="3"
                     Grid.Column="1"

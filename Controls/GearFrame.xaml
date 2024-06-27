@@ -61,12 +61,15 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
+            <Run Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}" Text="{Binding OptionGroupText}" />
             <Run
                 d:Foreground="White"
                 d:Text="Item Name"
                 Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}"
                 Text="{Binding ItemName}" />
+
         </TextBlock>
+
         <!--  Category and SubCategory  -->
         <TextBlock
             x:Name="tbCategory"

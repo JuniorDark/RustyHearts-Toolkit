@@ -443,132 +443,6 @@ namespace RHToolkit.Services
             return characterDataList;
         }
 
-        public async Task<List<ItemData>> GetItemList(Guid characterId, string tableName)
-        {
-            string selectQuery = $"SELECT * FROM {tableName} WHERE character_id = @character_id AND page_index >= 0 AND slot_index >= 0;";
-            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
-            DataTable dataTable = await _sqlDatabaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@character_id", characterId));
-
-            List<ItemData> itemList = [];
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                ItemData item = new()
-                {
-                    ItemUid = (Guid)row["item_uid"],
-                    CharacterId = (Guid)row["character_id"],
-                    AuthId = (Guid)row["auth_id"],
-                    PageIndex = (int)row["page_index"],
-                    SlotIndex = (int)row["slot_index"],
-                    ItemId = (int)row["code"],
-                    ItemAmount = (int)row["use_cnt"],
-                    RemainTime = (int)row["remain_time"],
-                    CreateTime = (DateTime)row["create_time"],
-                    UpdateTime = (DateTime)row["update_time"],
-                    GCode = (int)row["gcode"],
-                    Durability = (int)row["durability"],
-                    EnhanceLevel = (int)row["enhance_level"],
-                    Option1Code = (int)row["option_1_code"],
-                    Option1Value = (int)row["option_1_value"],
-                    Option2Code = (int)row["option_2_code"],
-                    Option2Value = (int)row["option_2_value"],
-                    Option3Code = (int)row["option_3_code"],
-                    Option3Value = (int)row["option_3_value"],
-                    OptionGroup = (int)row["option_group"],
-                    Reconstruction = (int)row["ReconNum"],
-                    ReconstructionMax = (byte)row["ReconState"],
-                    SocketCount = (int)row["socket_count"],
-                    Socket1Code = (int)row["socket_1_code"],
-                    Socket1Value = (int)row["socket_1_value"],
-                    Socket2Code = (int)row["socket_2_code"],
-                    Socket2Value = (int)row["socket_2_value"],
-                    Socket3Code = (int)row["socket_3_code"],
-                    Socket3Value = (int)row["socket_3_value"],
-                    ExpireTime = (int)row["expire_time"],
-                    LockPassword = (string)row["lock_pwd"],
-                    AugmentStone = (int)row["activity_value"],
-                    LinkId = (Guid)row["link_id"],
-                    IsSeizure = (byte)row["is_seizure"],
-                    Socket1Color = (byte)row["socket_1_color"],
-                    Socket2Color = (byte)row["socket_2_color"],
-                    Socket3Color = (byte)row["socket_3_color"],
-                    DefermentTime = (int)row["deferment_time"],
-                    Rank = (byte)row["rank"],
-                    AcquireRoute = (byte)row["acquireroute"],
-                    Physical = (int)row["physical"],
-                    Magical = (int)row["magical"],
-                    DurabilityMax = (int)row["durabilitymax"],
-                    Weight = (int)row["weight"]
-                };
-
-                itemList.Add(item);
-            }
-
-            return itemList;
-        }
-
-
-        public async Task<List<ItemData>> GetAccountItemList(Guid authId)
-        {
-            string selectQuery = $"SELECT * FROM tbl_Account_Storage WHERE auth_id = @auth_id;";
-            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
-            DataTable dataTable = await _sqlDatabaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@auth_id", authId));
-
-            List<ItemData> itemList = [];
-
-            foreach (DataRow row in dataTable.Rows)
-            {
-                ItemData item = new()
-                {
-                    ItemUid = (Guid)row["item_uid"],
-                    AuthId = (Guid)row["auth_id"],
-                    PageIndex = (int)row["page_index"],
-                    SlotIndex = (int)row["slot_index"],
-                    ItemId = (int)row["code"],
-                    ItemAmount = (int)row["use_cnt"],
-                    RemainTime = (int)row["remain_time"],
-                    CreateTime = (DateTime)row["create_time"],
-                    UpdateTime = (DateTime)row["update_time"],
-                    GCode = (int)row["gcode"],
-                    Durability = (int)row["durability"],
-                    EnhanceLevel = (int)row["enhance_level"],
-                    Option1Code = (int)row["option_1_code"],
-                    Option1Value = (int)row["option_1_value"],
-                    Option2Code = (int)row["option_2_code"],
-                    Option2Value = (int)row["option_2_value"],
-                    Option3Code = (int)row["option_3_code"],
-                    Option3Value = (int)row["option_3_value"],
-                    OptionGroup = (int)row["option_group"],
-                    Reconstruction = (int)row["ReconNum"],
-                    ReconstructionMax = (byte)row["ReconState"],
-                    SocketCount = (int)row["socket_count"],
-                    Socket1Code = (int)row["socket_1_code"],
-                    Socket1Value = (int)row["socket_1_value"],
-                    Socket2Code = (int)row["socket_2_code"],
-                    Socket2Value = (int)row["socket_2_value"],
-                    Socket3Code = (int)row["socket_3_code"],
-                    Socket3Value = (int)row["socket_3_value"],
-                    ExpireTime = (int)row["expire_time"],
-                    LockPassword = (string)row["lock_pwd"],
-                    AugmentStone = (int)row["activity_value"],
-                    IsSeizure = (byte)row["is_seizure"],
-                    Socket1Color = (byte)row["socket_1_color"],
-                    Socket2Color = (byte)row["socket_2_color"],
-                    Socket3Color = (byte)row["socket_3_color"],
-                    Rank = (byte)row["rank"],
-                    AcquireRoute = (byte)row["acquireroute"],
-                    Physical = (int)row["physical"],
-                    Magical = (int)row["magical"],
-                    DurabilityMax = (int)row["durabilitymax"],
-                    Weight = (int)row["weight"]
-                };
-
-                itemList.Add(item);
-            }
-
-            return itemList;
-        }
-
         public async Task<bool> GetCharacterOnlineAsync(string characterName)
         {
             string selectQuery = "SELECT IsConnect FROM CharacterTable WHERE name = @characterName";
@@ -659,6 +533,78 @@ namespace RHToolkit.Services
 
         #region Item
 
+        public async Task<List<ItemData>> GetItemList(Guid characterId, string tableName)
+        {
+            string selectQuery = tableName switch
+            {
+                "N_EquipItem" => $"SELECT * FROM N_EquipItem WHERE character_id = @character_id AND page_index = 0 AND slot_index >= 0;",
+                "N_InventoryItem" => $"SELECT * FROM N_InventoryItem WHERE character_id = @character_id AND page_index BETWEEN 1 AND 6 AND slot_index >= 0;",
+                "tbl_Personal_Storage" => $"SELECT * FROM N_InventoryItem WHERE character_id = @character_id AND page_index = 21 AND slot_index >= 0;",
+                "tbl_Account_Storage" => $"SELECT * FROM tbl_Account_Storage WHERE character_id = @character_id AND page_index = 3 AND slot_index >= 0;",
+                _ => throw new ArgumentException($"Invalid Item table name {tableName}.")
+            };
+
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
+            DataTable dataTable = await _sqlDatabaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@character_id", characterId));
+
+            List<ItemData> itemList = [];
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                ItemData item = new()
+                {
+                    ItemUid = (Guid)row["item_uid"],
+                    CharacterId = (Guid)row["character_id"],
+                    AuthId = (Guid)row["auth_id"],
+                    PageIndex = (int)row["page_index"],
+                    SlotIndex = (int)row["slot_index"],
+                    ItemId = (int)row["code"],
+                    ItemAmount = (int)row["use_cnt"],
+                    RemainTime = (int)row["remain_time"],
+                    CreateTime = (DateTime)row["create_time"],
+                    UpdateTime = (DateTime)row["update_time"],
+                    GCode = (int)row["gcode"],
+                    Durability = (int)row["durability"],
+                    EnhanceLevel = (int)row["enhance_level"],
+                    Option1Code = (int)row["option_1_code"],
+                    Option1Value = (int)row["option_1_value"],
+                    Option2Code = (int)row["option_2_code"],
+                    Option2Value = (int)row["option_2_value"],
+                    Option3Code = (int)row["option_3_code"],
+                    Option3Value = (int)row["option_3_value"],
+                    OptionGroup = (int)row["option_group"],
+                    Reconstruction = (int)row["ReconNum"],
+                    ReconstructionMax = (byte)row["ReconState"],
+                    SocketCount = (int)row["socket_count"],
+                    Socket1Code = (int)row["socket_1_code"],
+                    Socket1Value = (int)row["socket_1_value"],
+                    Socket2Code = (int)row["socket_2_code"],
+                    Socket2Value = (int)row["socket_2_value"],
+                    Socket3Code = (int)row["socket_3_code"],
+                    Socket3Value = (int)row["socket_3_value"],
+                    ExpireTime = (int)row["expire_time"],
+                    LockPassword = (string)row["lock_pwd"],
+                    AugmentStone = (int)row["activity_value"],
+                    LinkId = (Guid)row["link_id"],
+                    IsSeizure = (byte)row["is_seizure"],
+                    Socket1Color = (byte)row["socket_1_color"],
+                    Socket2Color = (byte)row["socket_2_color"],
+                    Socket3Color = (byte)row["socket_3_color"],
+                    DefermentTime = (int)row["deferment_time"],
+                    Rank = (byte)row["rank"],
+                    AcquireRoute = (byte)row["acquireroute"],
+                    Physical = (int)row["physical"],
+                    Magical = (int)row["magical"],
+                    DurabilityMax = (int)row["durabilitymax"],
+                    Weight = (int)row["weight"]
+                };
+
+                itemList.Add(item);
+            }
+
+            return itemList;
+        }
+
         public async Task SaveInventoryItem(CharacterInfo characterInfo, List<ItemData>? itemDataList, List<ItemData>? deletedItemDataList)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -684,7 +630,7 @@ namespace RHToolkit.Services
                             await InsertInventoryItemAsync(connection, transaction, item);
                             await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Add Item", $"<font color=blue>Add Item</font>]<br><font color=red>Item GUID:{{{item.ItemUid}}} <br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
                         }
-                        else
+                        else if (item.IsEditedItem)
                         {
                             await UpdateInventoryItemAsync(connection, transaction, item);
                             await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Update Item", $"<font color=blue>Update Item</font>]<br><font color=red>Item GUID:{{{item.ItemUid}}}<br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
@@ -1155,7 +1101,7 @@ namespace RHToolkit.Services
             return pageIndex switch
             {
                 0 => "N_EquipItem",
-                1 or 2 or 3 or 4 or 5 or 11 or 21 => "N_InventoryItem",
+                1 or 2 or 3 or 4 or 5 or 6 or 11 or 21 => "N_InventoryItem",
                 _ => throw new ArgumentException($"Invalid PageIndex value '{pageIndex}'")
             };
         }
@@ -1978,11 +1924,94 @@ namespace RHToolkit.Services
         #endregion
 
         #region RustyHeats_Auth
+        public async Task<AccountData?> GetAccountDataAsync(string accountIdentifier)
+        {
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts_Auth");
 
+            string selectAuthQuery = "SELECT WindyCode, AuthID, CashMileage, online FROM AuthTable WHERE [WindyCode] = @accountIdentifier";
+            DataTable? authDataTable = await _sqlDatabaseService.ExecuteDataQueryAsync(selectAuthQuery, connection, null, ("@accountIdentifier", accountIdentifier));
+
+            DataTable? accountDataTable = await GetAccountInfoAsync(accountIdentifier);
+
+            if (authDataTable.Rows.Count > 0 && accountDataTable != null && accountDataTable.Rows.Count > 0)
+            {
+                DataRow authRow = authDataTable.Rows[0];
+                DataRow accountRow = accountDataTable.Rows[0];
+                long zen = await GetAccountCashAsync(accountIdentifier);
+
+                var accountData = new AccountData
+                {
+                    AccountID = (int)accountRow["AccountID"],
+                    AccountName = (string)accountRow["WindyCode"],
+                    Email = (string)accountRow["Email"],
+                    CreateTime = (DateTime)accountRow["CreatedAt"],
+                    LastLogin = (DateTime)accountRow["LastLogin"],
+                    IsLocked = (bool)accountRow["IsLocked"],
+                    LastLoginIP = (string)accountRow["LastLoginIP"],
+                    AuthID = (Guid)authRow["AuthID"],
+                    CashMileage = (int)authRow["CashMileage"],
+                    IsConnect = (string)authRow["online"],
+                    Zen = zen,
+                };
+
+                return accountData;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<int> GetAccountCashMileageAsync(string accountName)
+        {
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts_Auth");
+
+            object? result = await _sqlDatabaseService.ExecuteScalarAsync(
+                "SELECT CashMileage FROM AuthTable WHERE [WindyCode] = @accountName",
+                connection,
+                ("@accountName", accountName)
+            );
+
+            int mileage = result != null ? (int)result : 0;
+
+            return mileage;
+        }
         #endregion
 
         #region RustyHeats_Account
 
+        public async Task<DataTable?> GetAccountInfoAsync(string accountName)
+        {
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts_Account");
+
+            string selectAccountQuery = "SELECT AccountID, WindyCode, Email, CreatedAt, LastLogin, IsLocked, LastLoginIP FROM AccountTable WHERE [WindyCode] = @accountIdentifier";
+
+            DataTable? accountDataTable = await _sqlDatabaseService.ExecuteDataQueryAsync(selectAccountQuery, connection, null, ("@accountIdentifier", accountName));
+
+            if (accountDataTable.Rows.Count > 0)
+            {
+                return accountDataTable;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public async Task<long> GetAccountCashAsync(string accountName)
+        {
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts_Account");
+
+            object? result = await _sqlDatabaseService.ExecuteScalarAsync(
+                "SELECT Zen FROM CashTable WHERE [WindyCode] = @accountName",
+                connection,
+                ("@accountName", accountName)
+            );
+
+            long zen = result != null ? (long)result : 0;
+
+            return zen;
+        }
         #endregion
     }
 

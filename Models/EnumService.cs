@@ -326,6 +326,9 @@ namespace RHToolkit.Models
             [LocalizedDescription("Costume")]
             Costume = 5,
 
+            [LocalizedDescription("TriggerItem")]
+            Trigger = 6,
+
             [LocalizedDescription("QuickSlot")]
             QuickSlot = 11,
 

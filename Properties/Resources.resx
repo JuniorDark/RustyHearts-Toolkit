@@ -873,6 +873,9 @@
   <data name="TradeUnavailable" xml:space="preserve">
     <value>Trade Unavailable</value>
   </data>
+  <data name="TriggerItem" xml:space="preserve">
+    <value>Trigger</value>
+  </data>
   <data name="Tude" xml:space="preserve">
     <value>Tude</value>
   </data>

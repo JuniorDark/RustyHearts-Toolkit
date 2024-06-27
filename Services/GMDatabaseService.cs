@@ -289,6 +289,12 @@ namespace RHToolkit.Services
             return GetStringValueFromQuery(query, ("@optionID", optionID));
         }
 
+        public string GetOptionGroupName(int optionID)
+        {
+            string query = "SELECT wszDesc FROM new_itemoptioncondition_string WHERE nID = @optionID";
+            return GetStringValueFromQuery(query, ("@optionID", optionID));
+        }
+
         public string GetFortuneDesc(int fortuneID)
         {
             string query = "SELECT wszDesc FROM fortune WHERE nID = @fortuneID";

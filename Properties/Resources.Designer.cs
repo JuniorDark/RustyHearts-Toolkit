@@ -2329,6 +2329,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trigger.
+        /// </summary>
+        public static string TriggerItem {
+            get {
+                return ResourceManager.GetString("TriggerItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tude.
         /// </summary>
         public static string Tude {

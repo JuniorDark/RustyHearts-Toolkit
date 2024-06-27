@@ -252,24 +252,32 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         // Check if the IDs are different
         if (existingItem.ItemId != newItemData.ItemId)
         {
-            // Create a new item if the IDs are different
-            var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 0);
-
-            // Remove the existing item from ItemDatabaseList
-            ItemDatabaseList.Remove(existingItem);
-            ItemDatabaseList.Add(newItem);
-
-            if (!existingItem.IsNewItem)
+            if (RHMessageBoxHelper.ConfirmMessage($"The '{(EquipCategory)newItemData.SlotIndex}' slot is already in use. Do you want to overwrite the current item?"))
             {
-                DeletedItemDatabaseList ??= [];
-                DeletedItemDatabaseList.Add(existingItem);
+                // Create a new item if the IDs are different
+                var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 0);
+
+                // Remove the existing item from ItemDatabaseList
+                ItemDatabaseList.Remove(existingItem);
+                ItemDatabaseList.Add(newItem);
+
+                if (!existingItem.IsNewItem)
+                {
+                    DeletedItemDatabaseList ??= [];
+                    DeletedItemDatabaseList.Add(existingItem);
+                }
+
+                RemoveFrameViewModel(existingItemIndex);
+
+                var frameViewModel = _itemHelper.GetItemData(newItem);
+
+                SetFrameViewModel(frameViewModel);
             }
-
-            RemoveFrameViewModel(existingItemIndex);
-
-            var frameViewModel = _itemHelper.GetItemData(newItem);
-
-            SetFrameViewModel(frameViewModel);
+            else
+            {
+                return;
+            }
+            
         }
         else
         {
@@ -277,6 +285,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             RemoveFrameViewModel(existingItemIndex);
 
             // Update existingItem
+            existingItem.IsEditedItem = true;
             existingItem.UpdateTime = DateTime.Now;
             existingItem.Durability = newItemData.Durability;
             existingItem.DurabilityMax = newItemData.DurabilityMax;

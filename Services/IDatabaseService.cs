@@ -17,7 +17,10 @@ namespace RHToolkit.Services
         Task DeleteCouponAsync(int couponNumber);
         Task DeleteInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData);
         Task EquipCharacterTitleAsync(CharacterInfo characterInfo, Guid titleId);
-        Task<List<ItemData>> GetAccountItemList(Guid authId);
+        Task<long> GetAccountCashAsync(string accountName);
+        Task<int> GetAccountCashMileageAsync(string accountName);
+        Task<AccountData?> GetAccountDataAsync(string accountIdentifier);
+        Task<DataTable?> GetAccountInfoAsync(string accountName);
         Task<string[]> GetAllCharacterNamesAsync(string isConnect = "");
         Task<CharacterData?> GetCharacterDataAsync(string characterIdentifier);
         Task<List<CharacterData>> GetCharacterDataListAsync(string characterIdentifier, string isConnect = "", bool isDeletedCharacter = false);

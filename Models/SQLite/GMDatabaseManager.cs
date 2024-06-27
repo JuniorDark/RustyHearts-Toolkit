@@ -14,7 +14,7 @@ public class GMDatabaseManager
 [
     "addeffect_string", "angelaweapon", "charactertitle", "charactertitle_string", "exp", "fortune", "frantzweapon", "itemcategory", "itemlist", "itemlist_string",
     "itemlist_armor", "itemlist_armor_string", "itemlist_costume", "itemlist_costume_string",
-    "itemlist_weapon", "itemlist_weapon_string", "itemoptionlist", "natashaweapon", "nick_filter", "startpoint_renewal", "serverlobbyid",
+    "itemlist_weapon", "itemlist_weapon_string", "itemoptionlist", "new_itemoptioncondition_string", "natashaweapon", "nick_filter", "startpoint_renewal", "serverlobbyid",
     "setitem", "setitem_string", "tudeweapon"
 ];
 

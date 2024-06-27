@@ -59,6 +59,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
             RandomOption01Value = itemData.Option1Value;
             RandomOption02Value = itemData.Option2Value;
             RandomOption03Value = itemData.Option3Value;
+            OptionGroup = itemData.OptionGroup;
             SocketCount = itemData.SocketCount;
             Socket01Color = itemData.Socket1Color;
             Socket02Color = itemData.Socket2Color;
@@ -96,6 +97,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
             Option1Value = RandomOption01Value,
             Option2Value = RandomOption02Value,
             Option3Value = RandomOption03Value,
+            OptionGroup = OptionGroup,
             SocketCount = SocketCount,
             SocketCountMax = SocketCountMax,
             Socket1Color = Socket01Color,
@@ -132,6 +134,17 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
 
     [ObservableProperty]
     private string? _itemName;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(OptionGroupText))]
+    private int _optionGroup;
+    partial void OnOptionGroupChanged(int value)
+    {
+        OptionGroupText = _gmDatabaseService.GetOptionGroupName(value);
+    }
+
+    [ObservableProperty]
+    public string? _optionGroupText;
 
     public string ItemNameColor => FrameService.GetBranchColor(ItemBranch);
 
