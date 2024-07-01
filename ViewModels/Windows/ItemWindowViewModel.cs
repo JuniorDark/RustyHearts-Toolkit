@@ -94,6 +94,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     case "InventoryItem":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "InventoryWindow", MessageType, Token));
                         break;
+                    case "StorageItem":
+                    case "AccountStorageItem":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "StorageWindow", MessageType, Token));
+                        break;
                     case "Coupon":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponWindow", MessageType, Token));
                         break;
@@ -101,7 +105,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                         break;
                 }
             }
-            
+
         }
     }
 
@@ -131,37 +135,44 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             {
                 Title = GetTitle(MessageType, itemData);
 
-                if (message.MessageType == "Mail")
+                switch (message.MessageType)
                 {
-                    SlotIndexMin = 0;
-                    SlotIndexMax = 2;
-                }
-                else if (message.MessageType == "EquipItem")
-                {
-                    SlotIndexMin = itemData.SlotIndex;
-                    SlotIndexMax = itemData.SlotIndex;
-                    SlotFilter(itemData.SlotIndex);
-                }
-                else if (message.MessageType == "InventoryItem")
-                {
-                    switch (itemData.PageIndex)
-                    {
-                        case 5:
-                            SlotIndexMin = 0;
-                            SlotIndexMax = 119;
-                            break;
-                        default:
-                            SlotIndexMin = 0;
-                            SlotIndexMax = 23;
-                            break;
-                    }
-
-                    InventoryTypeFilter = itemData.PageIndex;
-                }
-                else
-                {
-                    SlotIndexMin = itemData.SlotIndex;
-                    SlotIndexMax = itemData.SlotIndex;
+                    case "Mail":
+                        SlotIndexMin = 0;
+                        SlotIndexMax = 2;
+                        break;
+                    case "EquipItem":
+                        SlotIndexMin = itemData.SlotIndex;
+                        SlotIndexMax = itemData.SlotIndex;
+                        SlotFilter(itemData.SlotIndex);
+                        break;
+                    case "InventoryItem":
+                        switch (itemData.PageIndex)
+                        {
+                            case 5:
+                                SlotIndexMin = 0;
+                                SlotIndexMax = 119;
+                                break;
+                            default:
+                                SlotIndexMin = 0;
+                                SlotIndexMax = 23;
+                                break;
+                        }
+                        InventoryTypeFilter = itemData.PageIndex;
+                        break;
+                    case "StorageItem":
+                        SlotIndexMin = 0;
+                        SlotIndexMax = 179;
+                        break;
+                    case "AccountStorageItem":
+                        SlotIndexMin = 0;
+                        SlotIndexMax = 179;
+                        AccountStorageFilter = 1;
+                        break;
+                    default:
+                        SlotIndexMin = itemData.SlotIndex;
+                        SlotIndexMax = itemData.SlotIndex;
+                        break;
                 }
 
                 if (itemData.ItemId != 0)
@@ -176,7 +187,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                         FrameViewModel.PageIndex = itemData.PageIndex;
                         FrameViewModel.SlotIndex = itemData.SlotIndex;
                     }
-                    
+
                 }
             }), DispatcherPriority.ContextIdle);
         }
@@ -573,6 +584,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             if (InventoryTypeFilter != 0 && item.InventoryType != InventoryTypeFilter)
                 return false;
 
+            if (AccountStorageFilter != 0 && item.AccountStorage != AccountStorageFilter)
+                return false;
+
             // text search filter
             if (!string.IsNullOrEmpty(SearchText))
             {
@@ -766,6 +780,13 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
 
     [ObservableProperty]
+    private int _accountStorageFilter;
+    partial void OnAccountStorageFilterChanged(int value)
+    {
+        ItemDataView.Refresh();
+    }
+
+    [ObservableProperty]
     private List<NameID>? _itemTradeFilterItems;
 
     private void PopulateItemTradeItemsFilter()
@@ -838,7 +859,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     [ObservableProperty]
     private int _slotIndexMax;
-    
+
     #endregion
 
     #endregion

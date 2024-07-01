@@ -2007,7 +2007,8 @@
                     Width="150"
                     Foreground="White"
                     Header="Costume"
-                    Style="{StaticResource lb_tab13}">
+                    Style="{StaticResource lb_tab13}"
+                    Tag="Page">
                     <ContentControl Content="{Binding CurrentPage}" ContentTemplateSelector="{StaticResource PageTemplateSelector}" />
                 </TabItem>
                 <TabItem
@@ -2335,7 +2336,7 @@
                     d:Text="100"
                     IsReadOnly="True"
                     Template="{StaticResource lb_textbox11}"
-                    Text="{Binding GoldValue, StringFormat={}{0:N0}}" />
+                    Text="{Binding CharacterData.Gold, StringFormat={}{0:N0}}" />
                 <TextBox
                     Grid.Row="3"
                     Grid.Column="1"
@@ -2368,7 +2369,7 @@
                     d:Text="0"
                     IsReadOnly="True"
                     Template="{StaticResource lb_textbox11}"
-                    Text="{Binding RessurecionScrolls}" />
+                    Text="{Binding CharacterData.Hearts}" />
             </StackPanel>
             <Button
                 x:Name="btnSave"

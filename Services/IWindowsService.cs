@@ -7,6 +7,7 @@ namespace RHToolkit.Services
         void OpenCharacterWindow(CharacterInfo characterInfo);
         void OpenEquipmentWindow(CharacterInfo characterInfo);
         void OpenInventoryWindow(CharacterInfo characterInfo);
+        void OpenStorageWindow(CharacterInfo characterInfo);
         void OpenFortuneWindow(CharacterInfo characterInfo);
         void OpenItemWindow(Guid token, string messageType, ItemData itemData, CharacterInfo? characterInfo = null);
         void OpenSanctionWindow(CharacterInfo characterInfo);

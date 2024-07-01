@@ -50,7 +50,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             {
                 var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
                 
-                await _databaseService.SaveInventoryItem(characterInfo, ItemDatabaseList, DeletedItemDatabaseList);
+                await _databaseService.SaveInventoryItem(characterInfo, ItemDatabaseList, DeletedItemDatabaseList, "N_EquipItem");
                 RHMessageBoxHelper.ShowOKMessage("Equipment saved successfully!", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
 

@@ -49,7 +49,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
             {
                 var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
 
-                await _databaseService.SaveInventoryItem(characterInfo, ItemDatabaseList, DeletedItemDatabaseList);
+                await _databaseService.SaveInventoryItem(characterInfo, ItemDatabaseList, DeletedItemDatabaseList, "N_InventoryItem");
                 RHMessageBoxHelper.ShowOKMessage("Inventory saved successfully!", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
@@ -207,7 +207,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
             {
                 ClearData();
                 CharacterData = characterData;
-                LoadCharacterData(characterData);
+                Title = $"Character Inventory ({characterData.CharacterName})";
                 List<ItemData> inventoryItems = await _databaseService.GetItemList(characterData.CharacterID, "N_InventoryItem");
                 LoadInventoryItems(inventoryItems);
                 ItemDatabaseList = inventoryItems;
@@ -229,13 +229,6 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         {
             RHMessageBoxHelper.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
         }
-    }
-
-    private void LoadCharacterData(CharacterData characterData)
-    {
-        Title = $"Character Inventory ({characterData.CharacterName})";
-        GoldValue = characterData.Gold;
-        RessurecionScrolls = characterData.Hearts;
     }
 
     private void ClearData()
@@ -453,16 +446,10 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
     private string _title = "Character Inventory";
 
     [ObservableProperty]
-    private int _goldValue;
-
-    [ObservableProperty]
     private long _cashValue;
 
     [ObservableProperty]
     private int _bonusCashValue;
-
-    [ObservableProperty]
-    private int _ressurecionScrolls;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(PageText))]

@@ -647,6 +647,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Views\Windows\StorageWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Windows\InventoryWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

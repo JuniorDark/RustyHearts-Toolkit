@@ -7,7 +7,7 @@ public class TabToVisibilityConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         // Check if the selected tab's is "Costume"
-        if (value is TabItem tabItem && tabItem.Name == "CostumeTab")
+        if (value is TabItem tabItem && tabItem.Tag.ToString() == "Page")
         {
             return Visibility.Visible;
         }

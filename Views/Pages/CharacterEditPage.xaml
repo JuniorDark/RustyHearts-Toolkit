@@ -247,7 +247,7 @@
             <Button
                 x:Name="btnInventory"
                 Width="150"
-                Margin="0,5"
+                Margin="5,5"
                 Background="Transparent"
                 Command="{Binding ViewModel.OpenInventoryWindowCommand}"
                 Content="Inventory"
@@ -257,10 +257,20 @@
             <Button
                 x:Name="btnEquip"
                 Width="150"
-                Margin="0,5"
+                Margin="5,5"
                 Background="Transparent"
                 Command="{Binding ViewModel.OpenEquipmentWindowCommand}"
                 Content="Equipment"
+                Cursor="Hand"
+                Foreground="White"
+                Style="{StaticResource lb_def_button02}" />
+            <Button
+                x:Name="btnStorage"
+                Width="150"
+                Margin="5,5"
+                Background="Transparent"
+                Command="{Binding ViewModel.OpenStorageWindowCommand}"
+                Content="Personal Storage"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />

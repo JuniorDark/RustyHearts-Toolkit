@@ -531,6 +531,20 @@ namespace RHToolkit.Services
 
         #endregion
 
+        #region AccountInfo
+
+        public async Task<DataRow?> GetUniAccountInfoAsync(Guid authId)
+        {
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
+
+            string selectQuery = "SELECT AccountStorage_Count, AccountStorage_Gold FROM UniAccountInfo WHERE AuthID = @authId";
+
+            DataTable? dataTable = await _sqlDatabaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@authId", authId));
+
+            return dataTable.Rows.Count > 0 ? dataTable.Rows[0] : null;
+        }
+        #endregion
+
         #region Item
 
         public async Task<List<ItemData>> GetItemList(Guid characterId, string tableName)
@@ -540,7 +554,7 @@ namespace RHToolkit.Services
                 "N_EquipItem" => $"SELECT * FROM N_EquipItem WHERE character_id = @character_id AND page_index = 0 AND slot_index >= 0;",
                 "N_InventoryItem" => $"SELECT * FROM N_InventoryItem WHERE character_id = @character_id AND page_index BETWEEN 1 AND 6 AND slot_index >= 0;",
                 "tbl_Personal_Storage" => $"SELECT * FROM N_InventoryItem WHERE character_id = @character_id AND page_index = 21 AND slot_index >= 0;",
-                "tbl_Account_Storage" => $"SELECT * FROM tbl_Account_Storage WHERE character_id = @character_id AND page_index = 3 AND slot_index >= 0;",
+                "tbl_Account_Storage" => $"SELECT * FROM tbl_Account_Storage WHERE auth_id = @character_id AND page_index = 3 AND slot_index >= 0;",
                 _ => throw new ArgumentException($"Invalid Item table name {tableName}.")
             };
 
@@ -554,7 +568,7 @@ namespace RHToolkit.Services
                 ItemData item = new()
                 {
                     ItemUid = (Guid)row["item_uid"],
-                    CharacterId = (Guid)row["character_id"],
+                    CharacterId = row.Table.Columns.Contains("character_id") ? (Guid)row["character_id"] : Guid.Empty,
                     AuthId = (Guid)row["auth_id"],
                     PageIndex = (int)row["page_index"],
                     SlotIndex = (int)row["slot_index"],
@@ -585,12 +599,12 @@ namespace RHToolkit.Services
                     ExpireTime = (int)row["expire_time"],
                     LockPassword = (string)row["lock_pwd"],
                     AugmentStone = (int)row["activity_value"],
-                    LinkId = (Guid)row["link_id"],
+                    LinkId = row.Table.Columns.Contains("link_id") ? (Guid)row["link_id"] : Guid.Empty,
                     IsSeizure = (byte)row["is_seizure"],
                     Socket1Color = (byte)row["socket_1_color"],
                     Socket2Color = (byte)row["socket_2_color"],
                     Socket3Color = (byte)row["socket_3_color"],
-                    DefermentTime = (int)row["deferment_time"],
+                    DefermentTime = row.Table.Columns.Contains("deferment_time") ? (int)row["deferment_time"] : 0,
                     Rank = (byte)row["rank"],
                     AcquireRoute = (byte)row["acquireroute"],
                     Physical = (int)row["physical"],
@@ -605,7 +619,7 @@ namespace RHToolkit.Services
             return itemList;
         }
 
-        public async Task SaveInventoryItem(CharacterInfo characterInfo, List<ItemData>? itemDataList, List<ItemData>? deletedItemDataList)
+        public async Task SaveInventoryItem(CharacterInfo characterInfo, List<ItemData>? itemDataList, List<ItemData>? deletedItemDataList, string tableName)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -616,7 +630,7 @@ namespace RHToolkit.Services
                 {
                     foreach (var deletedItem in deletedItemDataList)
                     {
-                        await DeleteInventoryItemAsync(connection, transaction, deletedItem);
+                        await DeleteInventoryItemAsync(connection, transaction, deletedItem, tableName);
                         await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Delete Item", $"<font color=blue>Delete Item</font>]<br><font color=red>Item GUID:{{{deletedItem.ItemUid}}}<br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
                     }
                 }
@@ -627,12 +641,12 @@ namespace RHToolkit.Services
                     {
                         if (item.IsNewItem)
                         {
-                            await InsertInventoryItemAsync(connection, transaction, item);
+                            await InsertInventoryItemAsync(connection, transaction, item, tableName);
                             await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Add Item", $"<font color=blue>Add Item</font>]<br><font color=red>Item GUID:{{{item.ItemUid}}} <br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
                         }
                         else if (item.IsEditedItem)
                         {
-                            await UpdateInventoryItemAsync(connection, transaction, item);
+                            await UpdateInventoryItemAsync(connection, transaction, item, tableName);
                             await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Update Item", $"<font color=blue>Update Item</font>]<br><font color=red>Item GUID:{{{item.ItemUid}}}<br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
                         }
                     }
@@ -648,33 +662,34 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task InsertInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData)
+        public async Task InsertInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, string tableName)
         {
             try
             {
-                string tableName = GetItemTableName(itemData.PageIndex);
+                string columns = "item_uid, ";
+                string values = "@item_uid, ";
 
-                await _sqlDatabaseService.ExecuteNonQueryAsync(
-                    $"INSERT INTO {tableName} (" +
-                    "item_uid, character_id, auth_id, page_index, slot_index, code, use_cnt, remain_time, " +
-                    "create_time, update_time, gcode, durability, enhance_level, option_1_code, option_1_value, " +
-                    "option_2_code, option_2_value, option_3_code, option_3_value, option_group, ReconNum, " +
-                    "ReconState, socket_count, socket_1_code, socket_1_value, socket_2_code, socket_2_value, " +
-                    "socket_3_code, socket_3_value, expire_time, lock_pwd, activity_value, link_id, is_seizure, " +
-                    "socket_1_color, socket_2_color, socket_3_color, deferment_time, rank, acquireroute, physical, " +
-                    "magical, durabilitymax, weight) " +
-                    "VALUES (" +
-                    "@item_uid, @character_id, @auth_id, @page_index, @slot_index, @code, @use_cnt, @remain_time, " +
-                    "@create_time, @update_time, @gcode, @durability, @enhance_level, @option_1_code, @option_1_value, " +
-                    "@option_2_code, @option_2_value, @option_3_code, @option_3_value, @option_group, @ReconNum, " +
-                    "@ReconState, @socket_count, @socket_1_code, @socket_1_value, @socket_2_code, @socket_2_value, " +
-                    "@socket_3_code, @socket_3_value, @expire_time, @lock_pwd, @activity_value, @link_id, @is_seizure, " +
-                    "@socket_1_color, @socket_2_color, @socket_3_color, @deferment_time, @rank, @acquireroute, @physical, " +
-                    "@magical, @durabilitymax, @weight)",
-                    connection,
-                    transaction,
+                if (tableName != "tbl_Account_Storage")
+                {
+                    columns += "character_id, link_id, deferment_time ";
+                    values += "character_id, link_id, deferment_time ";
+                }
+
+                columns += "auth_id, page_index, slot_index, code, use_cnt, remain_time, create_time, update_time, gcode, durability, " +
+                           "enhance_level, option_1_code, option_1_value, option_2_code, option_2_value, option_3_code, option_3_value, " +
+                           "option_group, ReconNum, ReconState, socket_count, socket_1_code, socket_1_value, socket_2_code, socket_2_value, " +
+                           "socket_3_code, socket_3_value, expire_time, lock_pwd, activity_value, is_seizure, socket_1_color, " +
+                           "socket_2_color, socket_3_color, rank, acquireroute, physical, magical, durabilitymax, weight";
+
+                values += "@auth_id, @page_index, @slot_index, @code, @use_cnt, @remain_time, @create_time, @update_time, @gcode, @durability, " +
+                          "@enhance_level, @option_1_code, @option_1_value, @option_2_code, @option_2_value, @option_3_code, @option_3_value, " +
+                          "@option_group, @ReconNum, @ReconState, @socket_count, @socket_1_code, @socket_1_value, @socket_2_code, @socket_2_value, " +
+                          "@socket_3_code, @socket_3_value, @expire_time, @lock_pwd, @activity_value, @is_seizure, @socket_1_color, " +
+                          "@socket_2_color, @socket_3_color, @rank, @acquireroute, @physical, @magical, @durabilitymax, @weight";
+
+                var parameters = new List<(string, object)>
+                {
                     ("@item_uid", itemData.ItemUid),
-                    ("@character_id", itemData.CharacterId),
                     ("@auth_id", itemData.AuthId),
                     ("@page_index", itemData.PageIndex),
                     ("@slot_index", itemData.SlotIndex),
@@ -693,8 +708,8 @@ namespace RHToolkit.Services
                     ("@option_3_code", itemData.Option3Code),
                     ("@option_3_value", itemData.Option3Value),
                     ("@option_group", itemData.OptionGroup),
-                    ("@ReconNum", itemData.ReconstructionMax),
-                    ("@ReconState", itemData.Reconstruction),
+                    ("@ReconNum", itemData.Reconstruction),
+                    ("@ReconState", itemData.ReconstructionMax),
                     ("@socket_count", itemData.SocketCount),
                     ("@socket_1_code", itemData.Socket1Code),
                     ("@socket_1_value", itemData.Socket1Value),
@@ -717,8 +732,21 @@ namespace RHToolkit.Services
                     ("@magical", itemData.Magical),
                     ("@durabilitymax", itemData.DurabilityMax),
                     ("@weight", itemData.Weight)
-                );
+                };
 
+                if (tableName != "tbl_Account_Storage")
+                {
+                    parameters.Add(("@character_id", itemData.CharacterId));
+                    parameters.Add(("@link_id", itemData.LinkId));
+                    parameters.Add(("@deferment_time", itemData.DefermentTime));
+                }
+
+                await _sqlDatabaseService.ExecuteNonQueryAsync(
+                    $"INSERT INTO {tableName} ({columns}) VALUES ({values})",
+                    connection,
+                    transaction,
+                    [.. parameters]
+                );
             }
             catch (Exception ex)
             {
@@ -726,12 +754,10 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task UpdateInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData)
+        public async Task UpdateInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, string tableName)
         {
             try
             {
-                string tableName = GetItemTableName(itemData.PageIndex);
-
                 await _sqlDatabaseService.ExecuteNonQueryAsync(
                     $"UPDATE {tableName} SET " +
                     "page_index = @page_index, " +
@@ -821,12 +847,10 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task DeleteInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData)
+        public async Task DeleteInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, string tableName)
         {
             try
             {
-                string tableName = GetItemTableName(itemData.PageIndex);
-
                 await _sqlDatabaseService.ExecuteNonQueryAsync(
                                         $"DELETE FROM {tableName} WHERE [item_uid] = @item_uid",
                                         connection,
@@ -928,7 +952,6 @@ namespace RHToolkit.Services
         }
 
         //Pet
-
         public async Task InsertPetInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, Guid petId)
         {
             try
