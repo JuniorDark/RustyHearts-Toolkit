@@ -13,6 +13,7 @@
     <local:GreaterOrEqualConverter x:Key="GreaterOrEqualConverter" />
     <local:GreaterOrEqualToVisibilityConverter x:Key="GreaterOrEqualToVisibilityConverter" />
     <local:IconNameToImageSourceConverter x:Key="IconNameToImageSourceConverter" />
+    <local:IconNameToImageSourceMultiConverter x:Key="IconNameToImageSourceMultiConverter" />
     <local:IncrementConverter x:Key="IncrementConverter" />
     <local:IsConnectConverter x:Key="IsConnectConverter" />
     <local:ItemIdToSelectedItemConverter x:Key="ItemIdToSelectedItemConverter" />

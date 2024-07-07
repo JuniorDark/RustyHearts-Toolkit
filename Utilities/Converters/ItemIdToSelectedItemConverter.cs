@@ -1,7 +1,5 @@
 ﻿using RHToolkit.Models;
-using System.Globalization;
 using System.Windows.Controls;
-using System.Windows.Data;
 
 namespace RHToolkit.Utilities
 {
@@ -9,13 +7,12 @@ namespace RHToolkit.Utilities
     {
         public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || !(value is int))
+            if (value == null || value is not int)
                 return null;
 
             int itemId = (int)value;
 
-            var dataGrid = parameter as DataGrid;
-            if (dataGrid == null || dataGrid.Items.Count == 0)
+            if (parameter is not DataGrid dataGrid || dataGrid.Items.Count == 0)
                 return null;
 
             // Find the item with the matching ID

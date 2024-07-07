@@ -23,6 +23,7 @@
 
     <Grid>
         <Button
+            x:Name="buttonItem"
             Width="44"
             Height="44"
             Background="Transparent"
@@ -87,9 +88,15 @@
             Height="36"
             Margin="0,4,1,0"
             VerticalAlignment="Top"
-            IsHitTestVisible="False"
-            Source="{Binding FrameViewModel.IconName, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource IconNameToImageSourceConverter}}"
-            Stretch="Fill" />
+            IsHitTestVisible="False">
+            <Image.Source>
+                <MultiBinding Converter="{StaticResource IconNameToImageSourceMultiConverter}">
+                    <Binding Path="FrameViewModel.IconName" RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                    <Binding ElementName="buttonItem" Path="IsEnabled" />
+                </MultiBinding>
+            </Image.Source>
+        </Image>
+
         <Image
             x:Name="imgItemIconBranch"
             Width="42"

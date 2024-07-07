@@ -17,15 +17,11 @@ namespace RHToolkit.Utilities
 
             if (!string.IsNullOrEmpty(imagePath) && File.Exists(imagePath))
             {
-                BitmapImage bitmapImage = new();
-                bitmapImage.BeginInit();
-                bitmapImage.UriSource = new Uri(imagePath);
-                bitmapImage.EndInit();
-                return bitmapImage;
+                return LoadImageFromResources(imagePath);
             }
             else
             {
-                return new BitmapImage(new Uri("pack://application:,,,/Assets/images/question_icon.png"));
+                return LoadImageFromResources("pack://application:,,,/Assets/images/question_icon.png");
             }
         }
 
@@ -52,6 +48,15 @@ namespace RHToolkit.Utilities
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
+        }
+
+        private static BitmapImage LoadImageFromResources(string uri)
+        {
+            BitmapImage bitmapImage = new();
+            bitmapImage.BeginInit();
+            bitmapImage.UriSource = new Uri(uri, UriKind.RelativeOrAbsolute);
+            bitmapImage.EndInit();
+            return bitmapImage;
         }
     }
 

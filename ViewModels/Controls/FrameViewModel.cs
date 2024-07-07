@@ -117,6 +117,9 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     #region Properties
 
     [ObservableProperty]
+    private int _inventorySize;
+
+    [ObservableProperty]
     private ItemData? _itemData;
     partial void OnItemDataChanged(ItemData? value)
     {

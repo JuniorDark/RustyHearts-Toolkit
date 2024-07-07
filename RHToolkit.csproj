@@ -199,6 +199,8 @@
     <None Remove="Assets\images\equipment_slot\lb_equipment_slot_19.png" />
     <None Remove="Assets\images\equipment_slot\lb_equipment_slot_20.png" />
     <None Remove="Assets\images\equipment_slot\lb_equipment_slot_21.png" />
+    <None Remove="Assets\images\icon_closed.png" />
+    <None Remove="Assets\images\icon_item_disable.png" />
     <None Remove="Assets\images\labelbg.png" />
     <None Remove="Assets\images\lb_ac_icon.png" />
     <None Remove="Assets\images\lb_ac_icon_gold.png" />
@@ -524,6 +526,8 @@
     <Resource Include="Assets\images\equipment_slot\lb_equipment_slot_19.png" />
     <Resource Include="Assets\images\equipment_slot\lb_equipment_slot_20.png" />
     <Resource Include="Assets\images\equipment_slot\lb_equipment_slot_21.png" />
+    <Resource Include="Assets\images\icon_closed.png" />
+    <Resource Include="Assets\images\icon_item_disable.png" />
     <Resource Include="Assets\images\lb_ac_icon.png" />
     <Resource Include="Assets\images\socket_a.png" />
     <Resource Include="Assets\images\socket_all.png" />

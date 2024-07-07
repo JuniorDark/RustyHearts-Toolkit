@@ -15,18 +15,27 @@ namespace RHToolkit.Controls
             "RemoveItemCommand", typeof(ICommand), typeof(ItemSlot));
 
         public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(
-            "CommandParameter", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
+            "CommandParameter", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty, OnCommandParameterChanged));
 
         public static readonly DependencyProperty SlotIconProperty = DependencyProperty.Register(
-           "SlotIcon", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
+            "SlotIcon", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty FrameViewModelProperty = DependencyProperty.Register(
             "FrameViewModel", typeof(FrameViewModel), typeof(ItemSlot), new PropertyMetadata(null));
+
+        public static readonly DependencyProperty InventorySizeProperty = DependencyProperty.Register(
+            "InventorySize", typeof(string), typeof(ItemSlot), new PropertyMetadata(null, OnInventorySizeChanged));
 
         public FrameViewModel FrameViewModel
         {
             get => (FrameViewModel)GetValue(FrameViewModelProperty);
             set => SetValue(FrameViewModelProperty, value);
+        }
+
+        public string InventorySize
+        {
+            get => (string)GetValue(InventorySizeProperty);
+            set => SetValue(InventorySizeProperty, value);
         }
 
         public bool IsButtonEnabled
@@ -64,5 +73,26 @@ namespace RHToolkit.Controls
             InitializeComponent();
         }
 
+        private static void OnCommandParameterChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var itemSlot = d as ItemSlot;
+            itemSlot?.UpdateUIState();
+        }
+
+        private static void OnInventorySizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var itemSlot = d as ItemSlot;
+            itemSlot?.UpdateUIState();
+        }
+
+        private void UpdateUIState()
+        {
+            if (int.TryParse(CommandParameter, out int commandParameterIndex) && int.TryParse(InventorySize, out int inventorySize))
+            {
+                bool isEnabled = commandParameterIndex < inventorySize;
+                buttonItem.IsEnabled = isEnabled;
+            }
+        }
     }
+
 }

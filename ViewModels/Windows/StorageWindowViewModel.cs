@@ -27,224 +27,6 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
     }
 
-    #region Commands
-
-    #region Save Storage
-    [RelayCommand]
-    private async Task SaveStorage()
-    {
-        if (CharacterData == null) return;
-
-        if (!SqlCredentialValidator.ValidateCredentials())
-        {
-            return;
-        }
-
-        try
-        {
-            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
-            {
-                return;
-            }
-
-            if (RHMessageBoxHelper.ConfirmMessage($"Save storage changes?"))
-            {
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-
-                await _databaseService.SaveInventoryItem(characterInfo, StorageItemDatabaseList, DeletedStorageItemDatabaseList, "N_InventoryItem");
-                RHMessageBoxHelper.ShowOKMessage("Storage saved successfully!", "Success");
-                await ReadCharacterData(CharacterData.CharacterName!);
-            }
-
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error saving storage changes: {ex.Message}", "Error");
-        }
-    }
-
-    #endregion
-
-    #region Save Account Storage
-    [RelayCommand]
-    private async Task SaveAccountStorage()
-    {
-        if (CharacterData == null) return;
-
-        if (!SqlCredentialValidator.ValidateCredentials())
-        {
-            return;
-        }
-
-        try
-        {
-            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
-            {
-                return;
-            }
-
-            if (RHMessageBoxHelper.ConfirmMessage($"Save account storage changes?"))
-            {
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-
-                await _databaseService.SaveInventoryItem(characterInfo, AccountStorageItemDatabaseList, DeletedAccountStorageItemDatabaseList, "tbl_Account_Storage");
-                RHMessageBoxHelper.ShowOKMessage("Account Storage saved successfully!", "Success");
-                await ReadCharacterData(CharacterData.CharacterName!);
-            }
-
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error saving storage changes: {ex.Message}", "Error");
-        }
-    }
-
-    #endregion
-
-    #region Remove Storage Item
-
-    [RelayCommand]
-    private void RemoveStorageItem(string parameter)
-    {
-        if (int.TryParse(parameter, out int slotIndex))
-        {
-            if (StorageItemDatabaseList != null)
-            {
-                // Find the existing item in ItemDatabaseList
-                var removedItem = StorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == slotIndex);
-                var removedItemIndex = StorageItemDatabaseList.FindIndex(item => item.SlotIndex == slotIndex);
-
-                if (removedItem != null)
-                {
-                    // Remove the item with the specified SlotIndex from ItemDatabaseList
-                    StorageItemDatabaseList?.Remove(removedItem);
-
-                    if (!removedItem.IsNewItem)
-                    {
-                        DeletedStorageItemDatabaseList ??= [];
-                        DeletedStorageItemDatabaseList.Add(removedItem);
-                    }
-
-                    RemoveFrameViewModel(removedItem);
-                }
-
-            }
-        }
-    }
-
-    private void RemoveFrameViewModel(ItemData removedItem)
-    {
-        StorageFrameViewModels ??= [];
-
-        var removedStorageItemIndex = StorageFrameViewModels.FindIndex(f => f.SlotIndex == removedItem.SlotIndex);
-        StorageFrameViewModels.RemoveAt(removedStorageItemIndex);
-        OnPropertyChanged(nameof(StorageFrameViewModels));
-    }
-    #endregion
-
-    #region Remove Account Storage Item
-
-    [RelayCommand]
-    private void RemoveAccountStorageItem(string parameter)
-    {
-        if (int.TryParse(parameter, out int slotIndex) )
-        {
-            if (AccountStorageItemDatabaseList != null)
-            {
-                // Find the existing item in ItemDatabaseList
-                var removedItem = AccountStorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == slotIndex);
-                var removedItemIndex = AccountStorageItemDatabaseList.FindIndex(item => item.SlotIndex == slotIndex);
-
-                if (removedItem != null)
-                {
-                    // Remove the item with the specified SlotIndex from ItemDatabaseList
-                    AccountStorageItemDatabaseList?.Remove(removedItem);
-
-                    if (!removedItem.IsNewItem)
-                    {
-                        DeletedAccountStorageItemDatabaseList ??= [];
-                        DeletedAccountStorageItemDatabaseList.Add(removedItem);
-                    }
-
-                    RemoveAccountFrameViewModel(removedItem);
-                }
-
-            }
-        }
-    }
-
-    private void RemoveAccountFrameViewModel(ItemData removedItem)
-    {
-        AccountStorageFrameViewModels ??= [];
-
-        var removedAccountStorageItemIndex = AccountStorageFrameViewModels.FindIndex(f => f.SlotIndex == removedItem.SlotIndex);
-        AccountStorageFrameViewModels.RemoveAt(removedAccountStorageItemIndex);
-        OnPropertyChanged(nameof(AccountStorageFrameViewModels));
-    }
-    #endregion
-
-    #region Storage Page
-    [RelayCommand(CanExecute = nameof(CanExecuteNextStoragePageCommand))]
-    private void NextStoragePage()
-    {
-        if (CurrentStoragePage < 5)
-        {
-            CurrentStoragePage++;
-        }
-    }
-
-    [RelayCommand(CanExecute = nameof(CanExecutePreviousStoragePageCommand))]
-    private void PreviousStoragePage()
-    {
-        if (CurrentStoragePage > 1)
-        {
-            CurrentStoragePage--;
-        }
-    }
-
-    private bool CanExecutePreviousStoragePageCommand()
-    {
-        return CurrentStoragePage > 1;
-    }
-
-    private bool CanExecuteNextStoragePageCommand()
-    {
-        return CurrentStoragePage < 5;
-    }
-    #endregion
-
-    #region Account Page
-    [RelayCommand(CanExecute = nameof(CanExecuteNextAccountStoragePageCommand))]
-    private void NextAccountStoragePage()
-    {
-        if (CurrentAccountStoragePage < 5)
-        {
-            CurrentAccountStoragePage++;
-        }
-    }
-
-    [RelayCommand(CanExecute = nameof(CanExecutePreviousAccountStoragePageCommand))]
-    private void PreviousAccountStoragePage()
-    {
-        if (CurrentAccountStoragePage > 1)
-        {
-            CurrentAccountStoragePage--;
-        }
-    }
-
-    private bool CanExecutePreviousAccountStoragePageCommand()
-    {
-        return CurrentAccountStoragePage > 1;
-    }
-
-    private bool CanExecuteNextAccountStoragePageCommand()
-    {
-        return CurrentAccountStoragePage < 5;
-    }
-    #endregion
-
-    #endregion
-
     #region Messenger
 
     #region Load CharacterData
@@ -319,12 +101,19 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     {
         if (CharacterData == null) return;
 
-        if (int.TryParse(parameter, out int slotIndex))
+        try
         {
-            ItemData? itemData = StorageItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
+            if (int.TryParse(parameter, out int slotIndex))
+            {
+                ItemData? itemData = StorageItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
+                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
 
-            _windowsService.OpenItemWindow(characterInfo.CharacterID, "StorageItem", itemData, characterInfo);
+                _windowsService.OpenItemWindow(characterInfo.CharacterID, "StorageItem", itemData, characterInfo);
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error adding storage item: {ex.Message}", "Error");
         }
     }
 
@@ -333,14 +122,22 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     {
         if (CharacterData == null) return;
 
-        if (int.TryParse(parameter, out int slotIndex))
+        try
         {
-            ItemData? itemData = AccountStorageItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
+            if (int.TryParse(parameter, out int slotIndex))
+            {
+                ItemData? itemData = AccountStorageItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
+                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
 
-            _windowsService.OpenItemWindow(characterInfo.CharacterID, "AccountStorageItem", itemData, characterInfo);
+                _windowsService.OpenItemWindow(characterInfo.CharacterID, "AccountStorageItem", itemData, characterInfo);
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error adding account storage item: {ex.Message}", "Error");
         }
     }
+
 
     #endregion
 
@@ -354,7 +151,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
             StorageItemDatabaseList ??= [];
 
             // Find the existing item in ItemDatabaseList
-            var existingItem = StorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == newItemData.SlotIndex && item.PageIndex == newItemData.PageIndex);
+            var existingItem = StorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == newItemData.SlotIndex);
 
             if (existingItem != null)
             {
@@ -379,7 +176,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
             AccountStorageItemDatabaseList ??= [];
 
             // Find the existing item in ItemDatabaseList
-            var existingItem = AccountStorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == newItemData.SlotIndex && item.PageIndex == newItemData.PageIndex);
+            var existingItem = AccountStorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == newItemData.SlotIndex);
 
             if (existingItem != null)
             {
@@ -403,75 +200,210 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
 
     #endregion
 
-    #region Item Methods
+    #region Storage
 
-    private void CreateStorageItem(ItemData newItemData)
+    #region Save Storage
+    [RelayCommand]
+    private async Task SaveStorage()
     {
         if (CharacterData == null) return;
 
-        var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 21);
-
-        StorageItemDatabaseList ??= [];
-        StorageItemDatabaseList.Add(newItem);
-
-        var frameViewModel = _itemHelper.GetItemData(newItem);
-
-        SetStorageFrameViewModel(frameViewModel);
-    }
-
-    private void UpdateStorageItem(ItemData existingItem, ItemData newItemData)
-    {
-        if (CharacterData == null) return;
-
-        StorageItemDatabaseList ??= [];
-
-        // Check if the IDs are different
-        if (existingItem.ItemId != newItemData.ItemId)
+        if (!SqlCredentialValidator.ValidateCredentials())
         {
-            RHMessageBoxHelper.ShowOKMessage($"The slot '{newItemData.SlotIndex}' is already in use.", "Info");
             return;
         }
-        else
+
+        try
         {
-            StorageItemDatabaseList.Remove(existingItem);
-            RemoveFrameViewModel(existingItem);
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            {
+                return;
+            }
 
-            // Update existingItem
-            existingItem.IsEditedItem = true;
-            existingItem.UpdateTime = DateTime.Now;
-            existingItem.Durability = newItemData.Durability;
-            existingItem.DurabilityMax = newItemData.DurabilityMax;
-            existingItem.EnhanceLevel = newItemData.EnhanceLevel;
-            existingItem.AugmentStone = newItemData.AugmentStone;
-            existingItem.Rank = newItemData.Rank;
-            existingItem.Weight = newItemData.Weight;
-            existingItem.Reconstruction = newItemData.Reconstruction;
-            existingItem.ReconstructionMax = newItemData.ReconstructionMax;
-            existingItem.ItemAmount = newItemData.ItemAmount;
-            existingItem.Option1Code = newItemData.Option1Code;
-            existingItem.Option2Code = newItemData.Option2Code;
-            existingItem.Option3Code = newItemData.Option3Code;
-            existingItem.Option1Value = newItemData.Option1Value;
-            existingItem.Option2Value = newItemData.Option2Value;
-            existingItem.Option3Value = newItemData.Option3Value;
-            existingItem.SocketCount = newItemData.SocketCount;
-            existingItem.Socket1Color = newItemData.Socket1Color;
-            existingItem.Socket2Color = newItemData.Socket2Color;
-            existingItem.Socket3Color = newItemData.Socket3Color;
-            existingItem.Socket1Code = newItemData.Socket1Code;
-            existingItem.Socket2Code = newItemData.Socket2Code;
-            existingItem.Socket3Code = newItemData.Socket3Code;
-            existingItem.Socket1Value = newItemData.Socket1Value;
-            existingItem.Socket2Value = newItemData.Socket2Value;
-            existingItem.Socket3Value = newItemData.Socket3Value;
+            if (RHMessageBoxHelper.ConfirmMessage($"Save storage changes?"))
+            {
+                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
 
-            StorageItemDatabaseList.Add(existingItem);
+                await _databaseService.SaveInventoryItem(characterInfo, StorageItemDatabaseList, DeletedStorageItemDatabaseList, "N_InventoryItem");
+                RHMessageBoxHelper.ShowOKMessage("Storage saved successfully!", "Success");
+                await ReadCharacterData(CharacterData.CharacterName!);
+            }
 
-            var frameViewModel = _itemHelper.GetItemData(existingItem);
-
-            SetStorageFrameViewModel(frameViewModel);
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error saving storage changes: {ex.Message}", "Error");
         }
     }
+
+    #endregion
+
+    #region Remove Storage Item
+
+    [RelayCommand]
+    private void RemoveStorageItem(string parameter)
+    {
+        if (int.TryParse(parameter, out int slotIndex))
+        {
+            if (StorageItemDatabaseList != null)
+            {
+                // Find the existing item in ItemDatabaseList
+                var removedItem = StorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == slotIndex);
+
+                if (removedItem != null)
+                {
+                    if (!removedItem.IsNewItem)
+                    {
+                        DeletedStorageItemDatabaseList ??= [];
+                        DeletedStorageItemDatabaseList.Add(removedItem);
+                    }
+
+                    StorageItemDatabaseList.Remove(removedItem);
+                    RemoveStorageFrameViewModel(removedItem);
+                }
+
+            }
+        }
+    }
+
+    #endregion
+
+    #region Storage Page
+    [RelayCommand(CanExecute = nameof(CanExecuteNextStoragePageCommand))]
+    private void NextStoragePage()
+    {
+        if (CurrentStoragePage < 5)
+        {
+            CurrentStoragePage++;
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecutePreviousStoragePageCommand))]
+    private void PreviousStoragePage()
+    {
+        if (CurrentStoragePage > 1)
+        {
+            CurrentStoragePage--;
+        }
+    }
+
+    private bool CanExecutePreviousStoragePageCommand()
+    {
+        return CurrentStoragePage > 1;
+    }
+
+    private bool CanExecuteNextStoragePageCommand()
+    {
+        return CurrentStoragePage < 5;
+    }
+    #endregion
+
+    #endregion
+
+    #region Account Storage
+
+    #region Save Account Storage
+    [RelayCommand]
+    private async Task SaveAccountStorage()
+    {
+        if (CharacterData == null) return;
+
+        if (!SqlCredentialValidator.ValidateCredentials())
+        {
+            return;
+        }
+
+        try
+        {
+            if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
+            {
+                return;
+            }
+
+            if (RHMessageBoxHelper.ConfirmMessage($"Save account storage changes?"))
+            {
+                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
+
+                await _databaseService.SaveInventoryItem(characterInfo, AccountStorageItemDatabaseList, DeletedAccountStorageItemDatabaseList, "tbl_Account_Storage");
+                RHMessageBoxHelper.ShowOKMessage("Account Storage saved successfully!", "Success");
+                await ReadCharacterData(CharacterData.CharacterName!);
+            }
+
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error saving storage changes: {ex.Message}", "Error");
+        }
+    }
+
+    #endregion
+
+    #region Remove Account Storage Item
+
+    [RelayCommand]
+    private void RemoveAccountStorageItem(string parameter)
+    {
+        if (int.TryParse(parameter, out int slotIndex))
+        {
+            if (AccountStorageItemDatabaseList != null)
+            {
+                // Find the existing item in ItemDatabaseList
+                var removedItem = AccountStorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == slotIndex);
+                var removedItemIndex = AccountStorageItemDatabaseList.FindIndex(item => item.SlotIndex == slotIndex);
+                
+                if (removedItem != null)
+                {
+                    if (!removedItem.IsNewItem)
+                    {
+                        DeletedAccountStorageItemDatabaseList ??= [];
+                        DeletedAccountStorageItemDatabaseList.Add(removedItem);
+                    }
+
+                    AccountStorageItemDatabaseList.RemoveAt(removedItemIndex);
+                    RemoveAccountStorageFrameViewModel(removedItem);
+                }
+
+            }
+        }
+    }
+
+    #endregion
+
+    #region Account Storage Page
+    [RelayCommand(CanExecute = nameof(CanExecuteNextAccountStoragePageCommand))]
+    private void NextAccountStoragePage()
+    {
+        if (CurrentAccountStoragePage < 5)
+        {
+            CurrentAccountStoragePage++;
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecutePreviousAccountStoragePageCommand))]
+    private void PreviousAccountStoragePage()
+    {
+        if (CurrentAccountStoragePage > 1)
+        {
+            CurrentAccountStoragePage--;
+        }
+    }
+
+    private bool CanExecutePreviousAccountStoragePageCommand()
+    {
+        return CurrentAccountStoragePage > 1;
+    }
+
+    private bool CanExecuteNextAccountStoragePageCommand()
+    {
+        return CurrentAccountStoragePage < 5;
+    }
+    #endregion
+
+    #endregion
+
+    #region Item Methods
+
+    #region Storage
 
     private void LoadStorageItems(List<ItemData> storageItems)
     {
@@ -485,6 +417,75 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         }
     }
 
+    private void CreateStorageItem(ItemData newItemData)
+    {
+        if (CharacterData == null) return;
+
+        var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 3);
+        StorageItemDatabaseList ??= [];
+        StorageItemDatabaseList.Add(newItem);
+        var frameViewModel = _itemHelper.GetItemData(newItem);
+
+        SetStorageFrameViewModel(frameViewModel);
+    }
+
+    private void UpdateStorageItem(ItemData existingItem, ItemData newItem)
+    {
+        if (CharacterData == null) return;
+
+        StorageItemDatabaseList ??= [];
+
+        // Check if the IDs are different
+        if (existingItem.ItemId != newItem.ItemId && !existingItem.IsNewItem)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"The slot '{newItem.SlotIndex}' is already in use.", "Info");
+            return;
+        }
+
+        if (existingItem.IsNewItem)
+        {
+            RemoveStorageItem(existingItem.SlotIndex.ToString());
+            CreateStorageItem(newItem);
+        }
+        else
+        {
+            // Update existingItem
+
+            existingItem.IsEditedItem = !existingItem.IsNewItem;
+            existingItem.UpdateTime = DateTime.Now;
+            existingItem.Durability = newItem.Durability;
+            existingItem.DurabilityMax = newItem.DurabilityMax;
+            existingItem.EnhanceLevel = newItem.EnhanceLevel;
+            existingItem.AugmentStone = newItem.AugmentStone;
+            existingItem.Rank = newItem.Rank;
+            existingItem.Weight = newItem.Weight;
+            existingItem.Reconstruction = newItem.Reconstruction;
+            existingItem.ReconstructionMax = newItem.ReconstructionMax;
+            existingItem.ItemAmount = newItem.ItemAmount;
+            existingItem.Option1Code = newItem.Option1Code;
+            existingItem.Option2Code = newItem.Option2Code;
+            existingItem.Option3Code = newItem.Option3Code;
+            existingItem.Option1Value = newItem.Option1Value;
+            existingItem.Option2Value = newItem.Option2Value;
+            existingItem.Option3Value = newItem.Option3Value;
+            existingItem.SocketCount = newItem.SocketCount;
+            existingItem.Socket1Color = newItem.Socket1Color;
+            existingItem.Socket2Color = newItem.Socket2Color;
+            existingItem.Socket3Color = newItem.Socket3Color;
+            existingItem.Socket1Code = newItem.Socket1Code;
+            existingItem.Socket2Code = newItem.Socket2Code;
+            existingItem.Socket3Code = newItem.Socket3Code;
+            existingItem.Socket1Value = newItem.Socket1Value;
+            existingItem.Socket2Value = newItem.Socket2Value;
+            existingItem.Socket3Value = newItem.Socket3Value;
+
+            RemoveStorageItem(existingItem.SlotIndex.ToString());
+            var frameViewModel = _itemHelper.GetItemData(existingItem);
+            StorageItemDatabaseList.Add(existingItem);
+            SetStorageFrameViewModel(frameViewModel);
+        }
+    }
+
     private void SetStorageFrameViewModel(FrameViewModel frameViewModel)
     {
         StorageFrameViewModels ??= [];
@@ -493,73 +494,21 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         OnPropertyChanged(nameof(StorageFrameViewModels));
     }
 
-    private void CreateAccountStorageItem(ItemData newItemData)
+    private void RemoveStorageFrameViewModel(ItemData removedItem)
     {
-        if (CharacterData == null) return;
+        StorageFrameViewModels ??= [];
 
-        var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 3);
-
-        AccountStorageItemDatabaseList ??= [];
-        AccountStorageItemDatabaseList.Add(newItem);
-
-        var frameViewModel = _itemHelper.GetItemData(newItem);
-
-        SetAccountStorageFrameViewModel(frameViewModel);
-    }
-
-    private void UpdateAccountStorageItem(ItemData existingItem, ItemData newItemData)
-    {
-        if (CharacterData == null) return;
-
-        AccountStorageItemDatabaseList ??= [];
-
-        // Check if the IDs are different
-        if (existingItem.ItemId != newItemData.ItemId)
+        var removedStorageItemIndex = StorageFrameViewModels.FindIndex(f => f.SlotIndex == removedItem.SlotIndex);
+        if (removedStorageItemIndex != -1)
         {
-            RHMessageBoxHelper.ShowOKMessage($"The slot '{newItemData.SlotIndex}' is already in use.", "Info");
-            return;
+            StorageFrameViewModels.RemoveAt(removedStorageItemIndex);
+            OnPropertyChanged(nameof(StorageFrameViewModels));
         }
-        else
-        {
-            AccountStorageItemDatabaseList.Remove(existingItem);
-            RemoveFrameViewModel(existingItem);
 
-            // Update existingItem
-            existingItem.IsEditedItem = true;
-            existingItem.UpdateTime = DateTime.Now;
-            existingItem.Durability = newItemData.Durability;
-            existingItem.DurabilityMax = newItemData.DurabilityMax;
-            existingItem.EnhanceLevel = newItemData.EnhanceLevel;
-            existingItem.AugmentStone = newItemData.AugmentStone;
-            existingItem.Rank = newItemData.Rank;
-            existingItem.Weight = newItemData.Weight;
-            existingItem.Reconstruction = newItemData.Reconstruction;
-            existingItem.ReconstructionMax = newItemData.ReconstructionMax;
-            existingItem.ItemAmount = newItemData.ItemAmount;
-            existingItem.Option1Code = newItemData.Option1Code;
-            existingItem.Option2Code = newItemData.Option2Code;
-            existingItem.Option3Code = newItemData.Option3Code;
-            existingItem.Option1Value = newItemData.Option1Value;
-            existingItem.Option2Value = newItemData.Option2Value;
-            existingItem.Option3Value = newItemData.Option3Value;
-            existingItem.SocketCount = newItemData.SocketCount;
-            existingItem.Socket1Color = newItemData.Socket1Color;
-            existingItem.Socket2Color = newItemData.Socket2Color;
-            existingItem.Socket3Color = newItemData.Socket3Color;
-            existingItem.Socket1Code = newItemData.Socket1Code;
-            existingItem.Socket2Code = newItemData.Socket2Code;
-            existingItem.Socket3Code = newItemData.Socket3Code;
-            existingItem.Socket1Value = newItemData.Socket1Value;
-            existingItem.Socket2Value = newItemData.Socket2Value;
-            existingItem.Socket3Value = newItemData.Socket3Value;
-
-            AccountStorageItemDatabaseList.Add(existingItem);
-
-            var frameViewModel = _itemHelper.GetItemData(existingItem);
-
-            SetAccountStorageFrameViewModel(frameViewModel);
-        }
     }
+    #endregion
+
+    #region Account Storage
 
     private void LoadAccountStorageItems(List<ItemData> accountStorageItems)
     {
@@ -573,6 +522,75 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         }
     }
 
+    private void CreateAccountStorageItem(ItemData newItemData)
+    {
+        if (CharacterData == null) return;
+
+        var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 3);
+        AccountStorageItemDatabaseList ??= [];
+        AccountStorageItemDatabaseList.Add(newItem);
+        var frameViewModel = _itemHelper.GetItemData(newItem);
+
+        SetAccountStorageFrameViewModel(frameViewModel);
+    }
+
+    private void UpdateAccountStorageItem(ItemData existingItem, ItemData newItem)
+    {
+        if (CharacterData == null) return;
+
+        AccountStorageItemDatabaseList ??= [];
+
+        // Check if the IDs are different
+        if (existingItem.ItemId != newItem.ItemId && !existingItem.IsNewItem)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"The slot '{newItem.SlotIndex}' is already in use.", "Info");
+            return;
+        }
+
+        if (existingItem.IsNewItem)
+        {
+            RemoveAccountStorageItem(existingItem.SlotIndex.ToString());
+            CreateAccountStorageItem(newItem);
+        }
+        else
+        {
+            // Update existingItem
+
+            existingItem.IsEditedItem = !existingItem.IsNewItem;
+            existingItem.UpdateTime = DateTime.Now;
+            existingItem.Durability = newItem.Durability;
+            existingItem.DurabilityMax = newItem.DurabilityMax;
+            existingItem.EnhanceLevel = newItem.EnhanceLevel;
+            existingItem.AugmentStone = newItem.AugmentStone;
+            existingItem.Rank = newItem.Rank;
+            existingItem.Weight = newItem.Weight;
+            existingItem.Reconstruction = newItem.Reconstruction;
+            existingItem.ReconstructionMax = newItem.ReconstructionMax;
+            existingItem.ItemAmount = newItem.ItemAmount;
+            existingItem.Option1Code = newItem.Option1Code;
+            existingItem.Option2Code = newItem.Option2Code;
+            existingItem.Option3Code = newItem.Option3Code;
+            existingItem.Option1Value = newItem.Option1Value;
+            existingItem.Option2Value = newItem.Option2Value;
+            existingItem.Option3Value = newItem.Option3Value;
+            existingItem.SocketCount = newItem.SocketCount;
+            existingItem.Socket1Color = newItem.Socket1Color;
+            existingItem.Socket2Color = newItem.Socket2Color;
+            existingItem.Socket3Color = newItem.Socket3Color;
+            existingItem.Socket1Code = newItem.Socket1Code;
+            existingItem.Socket2Code = newItem.Socket2Code;
+            existingItem.Socket3Code = newItem.Socket3Code;
+            existingItem.Socket1Value = newItem.Socket1Value;
+            existingItem.Socket2Value = newItem.Socket2Value;
+            existingItem.Socket3Value = newItem.Socket3Value;
+
+            RemoveAccountStorageItem(existingItem.SlotIndex.ToString());
+            var frameViewModel = _itemHelper.GetItemData(existingItem);
+            AccountStorageItemDatabaseList.Add(existingItem);
+            SetAccountStorageFrameViewModel(frameViewModel);
+        }
+    }
+
     private void SetAccountStorageFrameViewModel(FrameViewModel frameViewModel)
     {
         AccountStorageFrameViewModels ??= [];
@@ -580,6 +598,20 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         AccountStorageFrameViewModels.Add(frameViewModel);
         OnPropertyChanged(nameof(AccountStorageFrameViewModels));
     }
+
+    private void RemoveAccountStorageFrameViewModel(ItemData removedItem)
+    {
+        AccountStorageFrameViewModels ??= [];
+
+        var removedAccountStorageItemIndex = AccountStorageFrameViewModels.FindIndex(f => f.SlotIndex == removedItem.SlotIndex);
+        if (removedAccountStorageItemIndex != -1)
+        {
+            AccountStorageFrameViewModels.RemoveAt(removedAccountStorageItemIndex);
+            OnPropertyChanged(nameof(AccountStorageFrameViewModels));
+        }
+
+    }
+    #endregion
 
     #endregion
 
@@ -614,7 +646,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     private bool _isButtonEnabled = true;
 
     [ObservableProperty]
-    private string _title = "Character Inventory";
+    private string _title = "Warehouse";
 
     #endregion
 
@@ -658,8 +690,8 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     private int _currentAccountStoragePage;
     partial void OnCurrentAccountStoragePageChanged(int value)
     {
-        NextStoragePageCommand.NotifyCanExecuteChanged();
-        PreviousStoragePageCommand.NotifyCanExecuteChanged();
+        NextAccountStoragePageCommand.NotifyCanExecuteChanged();
+        PreviousAccountStoragePageCommand.NotifyCanExecuteChanged();
     }
 
     public string AccountStoragePageText => $"{CurrentAccountStoragePage}/5";

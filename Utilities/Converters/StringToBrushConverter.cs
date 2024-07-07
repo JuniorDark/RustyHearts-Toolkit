@@ -1,8 +1,4 @@
-﻿using System.Globalization;
-using System.Windows.Data;
-using System.Windows.Media;
-
-namespace RHToolkit.Utilities
+﻿namespace RHToolkit.Utilities
 {
     public class StringToBrushConverter : IValueConverter
     {
