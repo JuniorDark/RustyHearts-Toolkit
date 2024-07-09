@@ -83,7 +83,7 @@ namespace RHToolkit.ViewModels.Pages
                 if (RHMessageBoxHelper.ConfirmMessage($"Delete the character '{CharacterData.CharacterName}'?"))
                 {
                     await _databaseService.DeleteCharacterAsync(CharacterData.AuthID, CharacterData.CharacterID);
-                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Delete Character", $"<font color=blue>Delete Character</font>]<br><font color=red>Character: {CharacterData.CharacterID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                    await _databaseService.GMAuditAsync(CharacterData, "Delete Character", $"<font color=blue>Delete Character</font>]<br><font color=red>Character: {CharacterData.CharacterID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
                     RHMessageBoxHelper.ShowOKMessage($"Character '{CharacterData.CharacterName}' deleted.", "Success");
 
@@ -151,14 +151,13 @@ namespace RHToolkit.ViewModels.Pages
         #endregion
 
         #region Windows Buttons
-        private void OpenWindow(Action<CharacterInfo> openWindowAction, string errorMessage)
+        private void OpenWindow(Action<CharacterData> openWindowAction, string errorMessage)
         {
             if (CharacterData == null) return;
 
             try
             {
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-                openWindowAction(characterInfo);
+                openWindowAction(CharacterData);
             }
             catch (Exception ex)
             {

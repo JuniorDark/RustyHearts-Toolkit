@@ -67,48 +67,73 @@
                 VerticalAlignment="Top"
                 Orientation="Vertical">
                 <Button
+                    x:Name="btnInventory"
+                    Width="150"
+                    Margin="5,5"
+                    Background="Transparent"
+                    Command="{Binding OpenInventoryWindowCommand}"
+                    Content="Inventory"
+                    Cursor="Hand"
+                    Foreground="White"
+                    Style="{StaticResource lb_def_button02}" />
+                <Button
                     x:Name="btnEquip"
                     Width="150"
-                    Margin="0,5"
+                    Margin="5,5"
                     Background="Transparent"
                     Command="{Binding OpenEquipmentWindowCommand}"
                     Content="Equipment"
                     Cursor="Hand"
                     Foreground="White"
-                    Style="{StaticResource lb_def_button02}"
-                    ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                    Style="{StaticResource lb_def_button02}" />
+                <Button
+                    x:Name="btnStorage"
+                    Width="150"
+                    Margin="5,5"
+                    Background="Transparent"
+                    Command="{Binding OpenStorageWindowCommand}"
+                    Content="Storage"
+                    Cursor="Hand"
+                    Foreground="White"
+                    Style="{StaticResource lb_def_button02}" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Orientation="Vertical">
                 <Button
                     x:Name="btnFortune"
                     Width="150"
-                    Margin="0,5"
+                    Margin="5,5"
                     Background="Transparent"
                     Command="{Binding OpenFortuneWindowCommand}"
                     Content="Fortune"
                     Cursor="Hand"
                     Foreground="White"
-                    Style="{StaticResource lb_def_button02}"
-                    ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                    Style="{StaticResource lb_def_button02}" />
                 <Button
                     x:Name="btnTitle"
                     Width="150"
-                    Margin="0,5"
+                    Margin="5,5"
                     Background="Transparent"
                     Command="{Binding OpenTitleWindowCommand}"
                     Content="Title"
                     Cursor="Hand"
                     Foreground="White"
-                    Style="{StaticResource lb_def_button02}"
-                    ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                    Style="{StaticResource lb_def_button02}" />
                 <Button
                     x:Name="btnSanction"
                     Width="150"
+                    Margin="5,5"
                     Background="Transparent"
                     Command="{Binding OpenSanctionWindowCommand}"
                     Content="Sanctions"
                     Cursor="Hand"
                     Foreground="White"
-                    Style="{StaticResource lb_def_button02}"
-                    ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                    Style="{StaticResource lb_def_button02}" />
             </StackPanel>
 
             <!--  Character Info  -->
@@ -570,7 +595,6 @@
                 Margin="0,8,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top">
-
                 <TabItem
                     Width="192"
                     Foreground="White"
@@ -815,16 +839,6 @@
                     </Grid>
                 </TabItem>
             </TabControl>
-            <Image
-                Grid.Row="1"
-                Grid.Column="1"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Cursor="Help"
-                Source="/Assets/icon/icon_help_tip.png"
-                Stretch="None"
-                ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
-
         </Grid>
     </ContentControl>
 </Window>

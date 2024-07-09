@@ -6,22 +6,21 @@ namespace RHToolkit.Services
 {
     public interface IDatabaseService
     {
-        Task AddCharacterTitleAsync(CharacterInfo characterInfo, int titleId, int remainTime, int expireTime);
+        Task AddCharacterTitleAsync(CharacterData characterData, int titleId, int remainTime, int expireTime);
         Task AddCouponAsync(string couponCode, DateTime validDate, ItemData itemData);
         Task<bool> CharacterHasSanctionAsync(Guid characterId);
         Task<bool> CharacterHasTitle(Guid characterId, int titleID);
-        Task CharacterSanctionAsync(CharacterInfo characterInfo, EnumService.SanctionOperationType operationType, Guid sanctionUid, int sanctionKind, string reasonDetails, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount);
+        Task CharacterSanctionAsync(CharacterData characterData, EnumService.SanctionOperationType operationType, Guid sanctionUid, int sanctionKind, string reasonDetails, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount);
         Task<bool> CouponExists(string couponCode);
         Task DeleteCharacterAsync(Guid authId, Guid characterId);
-        Task DeleteCharacterTitleAsync(CharacterInfo characterInfo, Guid titleUid);
+        Task DeleteCharacterTitleAsync(CharacterData characterData, Guid titleUid);
         Task DeleteCouponAsync(int couponNumber);
         Task DeleteInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, string tableName);
-        Task EquipCharacterTitleAsync(CharacterInfo characterInfo, Guid titleId);
+        Task EquipCharacterTitleAsync(CharacterData characterData, Guid titleId);
         Task<long> GetAccountCashAsync(string accountName);
         Task<int> GetAccountCashMileageAsync(string accountName);
         Task<AccountData?> GetAccountDataAsync(string accountIdentifier);
         Task<DataTable?> GetAccountInfoAsync(string accountName);
-        Task<DataRow?> GetUniAccountInfoAsync(Guid authId);
         Task<string[]> GetAllCharacterNamesAsync(string isConnect = "");
         Task<CharacterData?> GetCharacterDataAsync(string characterIdentifier);
         Task<List<CharacterData>> GetCharacterDataListAsync(string characterIdentifier, string isConnect = "", bool isDeletedCharacter = false);
@@ -30,7 +29,9 @@ namespace RHToolkit.Services
         Task<string?> GetGuildNameAsync(Guid guildId);
         Task<List<ItemData>> GetItemList(Guid characterId, string tableName);
         Task<(DateTime startTime, DateTime endTime)> GetSanctionTimesAsync(Guid sanctionUid);
-        Task GMAuditAsync(string accountName, Guid? characterId, string characterName, string action, string auditMessage);
+        Task<DataRow?> GetUniAccountInfoAsync(Guid authId);
+        Task GMAuditAsync(CharacterData characterData, string action, string auditMessage);
+        Task GMAuditMailAsync(string accountName, Guid? characterId, string characterName, string action, string auditMessage);
         Task InsertInventoryDeleteItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData);
         Task InsertInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, string tableName);
         Task InsertMailAsync(SqlConnection connection, SqlTransaction transaction, Guid? senderAuthId, Guid? senderCharacterId, string mailSender, string recipient, string content, int gold, int returnDay, int reqGold, Guid mailId, int createType);
@@ -42,17 +43,17 @@ namespace RHToolkit.Services
         Task<DataTable> ReadCharacterSanctionListAsync(Guid characterId);
         Task<DataTable?> ReadCharacterTitleListAsync(Guid characterId);
         Task<DataTable?> ReadCouponListAsync();
-        Task RemoveFortuneAsync(CharacterInfo characterInfo, int fortuneState, int fortuneID1, int fortuneID2, int fortuneID3);
+        Task RemoveFortuneAsync(CharacterData characterData, int fortuneState, int fortuneID1, int fortuneID2, int fortuneID3);
         Task RestoreCharacterAsync(Guid characterId);
-        Task SanctionLogAsync(CharacterInfo characterInfo, Guid sanctionUid, DateTime startTime, DateTime endTime, string reason);
-        Task SaveInventoryItem(CharacterInfo characterInfo, List<ItemData>? itemDataList, List<ItemData>? deletedItemDataList, string tableName);
+        Task SanctionLogAsync(CharacterData characterData, Guid sanctionUid, DateTime startTime, DateTime endTime, string reason);
+        Task SaveInventoryItem(CharacterData characterData, List<ItemData>? itemDataList, List<ItemData>? deletedItemDataList, string tableName);
         Task<(List<string> successfulRecipients, List<string> failedRecipients)> SendMailAsync(string sender, string? message, int gold, int itemCharge, int returnDays, string[] recipients, List<ItemData> itemDataList);
-        Task UnequipCharacterTitleAsync(CharacterInfo characterInfo, Guid titleId);
-        Task UpdateCharacterClassAsync(Guid characterId, string accountName, string characterName, int currentCharacterClass, int newCharacterClass);
-        Task UpdateCharacterDataAsync(NewCharacterData characterData, string action, string auditMessage);
-        Task UpdateCharacterJobAsync(Guid characterId, string accountName, string characterName, int currentCharacterJob, int newCharacterJob);
+        Task UnequipCharacterTitleAsync(CharacterData characterData, Guid titleId);
+        Task UpdateCharacterClassAsync(CharacterData characterData, int newCharacterClass);
+        Task UpdateCharacterDataAsync(NewCharacterData characterData);
+        Task UpdateCharacterJobAsync(CharacterData characterData, int newCharacterJob);
         Task<int> UpdateCharacterNameAsync(Guid characterId, string characterName);
-        Task UpdateFortuneAsync(CharacterInfo characterInfo, int fortune, int selectedFortuneID1, int selectedFortuneID2, int selectedFortuneID3);
+        Task UpdateFortuneAsync(CharacterData characterData, int fortune, int selectedFortuneID1, int selectedFortuneID2, int selectedFortuneID3);
         Task UpdateInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, string tableName);
         Task UpdatePetInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData);
         Task UpdateSanctionLogAsync(Guid sanctionUid, string releaser, string comment, int isRelease);

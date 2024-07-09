@@ -50,7 +50,7 @@ namespace RHToolkit.ViewModels.Pages
                 if (RHMessageBoxHelper.ConfirmMessage($"Restore the character '{CharacterData.CharacterName}'?"))
                 {
                     await _databaseService.RestoreCharacterAsync(CharacterData.CharacterID);
-                    await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, CharacterData.CharacterName!, "Restore Character", $"<font color=blue>Restore Character</font>]<br><font color=red>Character: {CharacterData.CharacterID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
+                    await _databaseService.GMAuditAsync(CharacterData, "Restore Character", $"<font color=blue>Restore Character</font>]<br><font color=red>Character: {CharacterData.CharacterID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
                     RHMessageBoxHelper.ShowOKMessage($"Character '{CharacterData.CharacterName}' restored.", "Success");
 

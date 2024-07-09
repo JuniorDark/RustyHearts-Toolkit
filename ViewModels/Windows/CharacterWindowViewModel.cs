@@ -5,11 +5,12 @@ using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
+using System.Windows.Media.TextFormatting;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class CharacterWindowViewModel : ObservableObject, IRecipient<CharacterInfoMessage>
+public partial class CharacterWindowViewModel : ObservableObject, IRecipient<CharacterDataMessage>
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
@@ -37,7 +38,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
     #region Load Character
 
-    public async void Receive(CharacterInfoMessage message)
+    public async void Receive(CharacterDataMessage message)
     {
         if (Token == Guid.Empty)
         {
@@ -46,9 +47,9 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
         if (message.Recipient == "CharacterWindow" && message.Token == Token)
         {
-            var characterInfo = message.Value;
+            var characterData = message.Value;
 
-            await ReadCharacterData(characterInfo.CharacterName!);
+            await ReadCharacterData(characterData.CharacterName!);
         }
 
     }
@@ -153,8 +154,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
             {
                 string auditMessage = CharacterHelper.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
 
-                await _databaseService.UpdateCharacterDataAsync(newCharacterData, "Character Information Change", auditMessage);
-
+                await _databaseService.UpdateCharacterDataAsync(newCharacterData);
+                await _databaseService.GMAuditAsync(CharacterData, "Character Information Change", auditMessage);
                 RHMessageBoxHelper.ShowOKMessage("Character changes saved.", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
@@ -170,6 +171,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         return new NewCharacterData
         {
             AccountName = Account,
+            CharacterID = CharacterData!.CharacterID,
             Level = Level,
             Experience = CharacterExp,
             SP = SkillPoints,
@@ -199,6 +201,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         SaveCharacterClassCommand.NotifyCanExecuteChanged();
         SaveCharacterJobCommand.NotifyCanExecuteChanged();
         OpenEquipmentWindowCommand.NotifyCanExecuteChanged();
+        OpenInventoryWindowCommand.NotifyCanExecuteChanged();
+        OpenStorageWindowCommand.NotifyCanExecuteChanged();
         OpenTitleWindowCommand.NotifyCanExecuteChanged();
         OpenSanctionWindowCommand.NotifyCanExecuteChanged();
         OpenFortuneWindowCommand.NotifyCanExecuteChanged();
@@ -250,7 +254,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
                     return;
                 }
 
-                await _databaseService.GMAuditAsync(CharacterData.AccountName!, CharacterData.CharacterID, newCharacterName, "Character Name Change", $"Old Name:{CharacterData.CharacterName}, New Name: {newCharacterName}");
+                await _databaseService.GMAuditAsync(CharacterData, "Character Name Change", $"Old Name:{CharacterData.CharacterName}, New Name: {newCharacterName}");
 
                 RHMessageBoxHelper.ShowOKMessage("Character name updated successfully!", "Success");
                 CharacterData.CharacterName = newCharacterName;
@@ -299,8 +303,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
             if (RHMessageBoxHelper.ConfirmMessage($"EXPERIMENTAL\n\nThis will reset all character skills and unequip the character weapon/costumes and send via mail.\n\nAre you sure you want to change character '{CharacterData.CharacterName}' class to '{GetEnumDescription((CharClass)Class)}'?"))
             {
-                await _databaseService.UpdateCharacterClassAsync(CharacterData.CharacterID, CharacterData.AccountName!, CharacterData.CharacterName!, CharacterData.Class, Class);
-
+                await _databaseService.UpdateCharacterClassAsync(CharacterData, Class);
+                await _databaseService.GMAuditAsync(CharacterData, "Character Class Change", $"Old Class: {CharacterData.Class} => New Class: {Class}");
                 RHMessageBoxHelper.ShowOKMessage("Character class changed successfully!", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
@@ -335,8 +339,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
             if (RHMessageBoxHelper.ConfirmMessage($"This will reset all character skills.\nAre you sure you want to change character '{CharacterData.CharacterName}' focus?"))
             {
-                await _databaseService.UpdateCharacterClassAsync(CharacterData.CharacterID, CharacterData.AccountName!, CharacterData.CharacterName!, CharacterData.Class, Class);
-
+                await _databaseService.UpdateCharacterJobAsync(CharacterData, Job);
+                await _databaseService.GMAuditAsync(CharacterData, "Character Job Change", $"Old Job: {CharacterData.Job} => New Job: {Job}");
                 RHMessageBoxHelper.ShowOKMessage("Character focus changed successfully!", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
@@ -354,14 +358,13 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     #endregion
 
     #region Windows Buttons
-    private void OpenWindow(Action<CharacterInfo> openWindowAction, string errorMessage)
+    private void OpenWindow(Action<CharacterData> openWindowAction, string errorMessage)
     {
         if (CharacterData == null) return;
 
         try
         {
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-            openWindowAction(characterInfo);
+            openWindowAction(CharacterData);
         }
         catch (Exception ex)
         {
@@ -375,6 +378,26 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     private void OpenEquipmentWindow()
     {
         OpenWindow(_windowsService.OpenEquipmentWindow, "EquipItem");
+    }
+
+    #endregion
+
+    #region Inventory
+
+    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+    private void OpenInventoryWindow()
+    {
+        OpenWindow(_windowsService.OpenInventoryWindow, "Inventory");
+    }
+
+    #endregion
+
+    #region Storage
+
+    [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
+    private void OpenStorageWindow()
+    {
+        OpenWindow(_windowsService.OpenStorageWindow, "Storage");
     }
 
     #endregion

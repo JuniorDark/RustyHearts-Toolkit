@@ -3,8 +3,10 @@ using RHToolkit.Models;
 
 namespace RHToolkit.Messages
 {
-    public class CharacterDataMessage(CharacterData value, string? Recipient) : ValueChangedMessage<CharacterData>(value)
+    public class CharacterDataMessage(CharacterData characterData, string? recipient, Guid? token = null) : ValueChangedMessage<CharacterData>(characterData)
     {
-        public string? Recipient { get; } = Recipient;
+        public string? Recipient { get; } = recipient;
+        public Guid? Token { get; } = token;
     }
+
 }

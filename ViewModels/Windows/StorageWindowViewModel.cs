@@ -8,7 +8,7 @@ using System.Data;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class StorageWindowViewModel : ObservableObject, IRecipient<CharacterInfoMessage>, IRecipient<ItemDataMessage>
+public partial class StorageWindowViewModel : ObservableObject, IRecipient<CharacterDataMessage>, IRecipient<ItemDataMessage>
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
@@ -24,14 +24,14 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         CurrentAccountStoragePage = 1;
 
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
-        WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
+        WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
     }
 
     #region Messenger
 
     #region Load CharacterData
 
-    public async void Receive(CharacterInfoMessage message)
+    public async void Receive(CharacterDataMessage message)
     {
         if (Token == Guid.Empty)
         {
@@ -40,12 +40,12 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
 
         if (message.Recipient == "StorageWindow" && message.Token == Token)
         {
-            var characterInfo = message.Value;
+            var characterData = message.Value;
 
-            await ReadCharacterData(characterInfo.CharacterName!);
+            await ReadCharacterData(characterData.CharacterName!);
         }
 
-        WeakReferenceMessenger.Default.Unregister<CharacterInfoMessage>(this);
+        WeakReferenceMessenger.Default.Unregister<CharacterDataMessage>(this);
     }
 
     private async Task ReadCharacterData(string characterName)
@@ -106,9 +106,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
             if (int.TryParse(parameter, out int slotIndex))
             {
                 ItemData? itemData = StorageItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-
-                _windowsService.OpenItemWindow(characterInfo.CharacterID, "StorageItem", itemData, characterInfo);
+                _windowsService.OpenItemWindow(CharacterData.CharacterID, "StorageItem", itemData, CharacterData);
             }
         }
         catch (Exception ex)
@@ -127,9 +125,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
             if (int.TryParse(parameter, out int slotIndex))
             {
                 ItemData? itemData = AccountStorageItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-
-                _windowsService.OpenItemWindow(characterInfo.CharacterID, "AccountStorageItem", itemData, characterInfo);
+                _windowsService.OpenItemWindow(CharacterData.CharacterID, "AccountStorageItem", itemData, CharacterData);
             }
         }
         catch (Exception ex)
@@ -222,9 +218,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
 
             if (RHMessageBoxHelper.ConfirmMessage($"Save storage changes?"))
             {
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-
-                await _databaseService.SaveInventoryItem(characterInfo, StorageItemDatabaseList, DeletedStorageItemDatabaseList, "N_InventoryItem");
+                await _databaseService.SaveInventoryItem(CharacterData, StorageItemDatabaseList, DeletedStorageItemDatabaseList, "N_InventoryItem");
                 RHMessageBoxHelper.ShowOKMessage("Storage saved successfully!", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
@@ -322,9 +316,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
 
             if (RHMessageBoxHelper.ConfirmMessage($"Save account storage changes?"))
             {
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-
-                await _databaseService.SaveInventoryItem(characterInfo, AccountStorageItemDatabaseList, DeletedAccountStorageItemDatabaseList, "tbl_Account_Storage");
+                await _databaseService.SaveInventoryItem(CharacterData, AccountStorageItemDatabaseList, DeletedAccountStorageItemDatabaseList, "tbl_Account_Storage");
                 RHMessageBoxHelper.ShowOKMessage("Account Storage saved successfully!", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
             }

@@ -9,7 +9,7 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<CharacterInfoMessage>, IRecipient<ItemDataMessage>
+public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<CharacterDataMessage>, IRecipient<ItemDataMessage>
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
@@ -23,7 +23,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
         FrameViewModels ??= [];
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
-        WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
+        WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
     }
 
     #region Commands
@@ -48,13 +48,12 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
             if (RHMessageBoxHelper.ConfirmMessage($"Save equipment changes?"))
             {
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
                 
-                await _databaseService.SaveInventoryItem(characterInfo, ItemDatabaseList, DeletedItemDatabaseList, "N_EquipItem");
+                await _databaseService.SaveInventoryItem(CharacterData, ItemDatabaseList, DeletedItemDatabaseList, "N_EquipItem");
                 RHMessageBoxHelper.ShowOKMessage("Equipment saved successfully!", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
 
-                WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "CharacterWindow", characterInfo.CharacterID));
+                WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "CharacterWindow", CharacterData.CharacterID));
             }
 
         }
@@ -110,7 +109,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
     #region Load CharacterData
 
-    public async void Receive(CharacterInfoMessage message)
+    public async void Receive(CharacterDataMessage message)
     {
         if (Token == Guid.Empty)
         {
@@ -119,12 +118,12 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 
         if (message.Recipient == "EquipmentWindow" && message.Token == Token)
         {
-            var characterInfo = message.Value;
+            var characterData = message.Value;
 
-            await ReadCharacterData(characterInfo.CharacterName!);
+            await ReadCharacterData(characterData.CharacterName!);
         }
 
-        WeakReferenceMessenger.Default.Unregister<CharacterInfoMessage>(this);
+        WeakReferenceMessenger.Default.Unregister<CharacterDataMessage>(this);
     }
 
     private async Task ReadCharacterData(string characterName)
@@ -183,9 +182,8 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         if (int.TryParse(parameter, out int slotIndex))
         {
             ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
 
-            _windowsService.OpenItemWindow(characterInfo.CharacterID, "EquipItem", itemData, characterInfo);
+            _windowsService.OpenItemWindow(CharacterData.CharacterID, "EquipItem", itemData, CharacterData);
         }
     }
 
@@ -241,82 +239,66 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         SetFrameViewModel(frameViewModel);
     }
 
-    private void UpdateItem(ItemData existingItem, ItemData newItemData)
+    private void UpdateItem(ItemData existingItem, ItemData newItem)
     {
         if (CharacterData == null) return;
 
         ItemDatabaseList ??= [];
 
-        var existingItemIndex = ItemDatabaseList.FindIndex(item => item.SlotIndex == existingItem.SlotIndex);
-
         // Check if the IDs are different
-        if (existingItem.ItemId != newItemData.ItemId)
+        if (existingItem.ItemId != newItem.ItemId && !existingItem.IsNewItem)
         {
-            if (RHMessageBoxHelper.ConfirmMessage($"The '{(EquipCategory)newItemData.SlotIndex}' slot is already in use. Do you want to overwrite the current item?"))
+            if (RHMessageBoxHelper.ConfirmMessage($"The '{(EquipCategory)newItem.SlotIndex}' slot is already in use. Do you want to overwrite the current item?"))
             {
                 // Create a new item if the IDs are different
-                var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 0);
-
-                // Remove the existing item from ItemDatabaseList
-                ItemDatabaseList.Remove(existingItem);
-                ItemDatabaseList.Add(newItem);
-
-                if (!existingItem.IsNewItem)
-                {
-                    DeletedItemDatabaseList ??= [];
-                    DeletedItemDatabaseList.Add(existingItem);
-                }
-
-                RemoveFrameViewModel(existingItemIndex);
-
-                var frameViewModel = _itemHelper.GetItemData(newItem);
-
-                SetFrameViewModel(frameViewModel);
+                RemoveItem(existingItem.SlotIndex.ToString());
+                CreateItem(newItem);
             }
             else
             {
                 return;
             }
-            
+        }
+
+        if (existingItem.IsNewItem)
+        {
+            RemoveItem(existingItem.SlotIndex.ToString());
+            CreateItem(newItem);
         }
         else
         {
-            ItemDatabaseList.Remove(existingItem);
-            RemoveFrameViewModel(existingItemIndex);
-
             // Update existingItem
-            existingItem.IsEditedItem = true;
+            existingItem.IsEditedItem = !existingItem.IsNewItem;
             existingItem.UpdateTime = DateTime.Now;
-            existingItem.Durability = newItemData.Durability;
-            existingItem.DurabilityMax = newItemData.DurabilityMax;
-            existingItem.EnhanceLevel = newItemData.EnhanceLevel;
-            existingItem.AugmentStone = newItemData.AugmentStone;
-            existingItem.Rank = newItemData.Rank;
-            existingItem.Weight = newItemData.Weight;
-            existingItem.Reconstruction = newItemData.Reconstruction;
-            existingItem.ReconstructionMax = newItemData.ReconstructionMax;
-            existingItem.ItemAmount = newItemData.ItemAmount;
-            existingItem.Option1Code = newItemData.Option1Code;
-            existingItem.Option2Code = newItemData.Option2Code;
-            existingItem.Option3Code = newItemData.Option3Code;
-            existingItem.Option1Value = newItemData.Option1Value;
-            existingItem.Option2Value = newItemData.Option2Value;
-            existingItem.Option3Value = newItemData.Option3Value;
-            existingItem.SocketCount = newItemData.SocketCount;
-            existingItem.Socket1Color = newItemData.Socket1Color;
-            existingItem.Socket2Color = newItemData.Socket2Color;
-            existingItem.Socket3Color = newItemData.Socket3Color;
-            existingItem.Socket1Code = newItemData.Socket1Code;
-            existingItem.Socket2Code = newItemData.Socket2Code;
-            existingItem.Socket3Code = newItemData.Socket3Code;
-            existingItem.Socket1Value = newItemData.Socket1Value;
-            existingItem.Socket2Value = newItemData.Socket2Value;
-            existingItem.Socket3Value = newItemData.Socket3Value;
+            existingItem.Durability = newItem.Durability;
+            existingItem.DurabilityMax = newItem.DurabilityMax;
+            existingItem.EnhanceLevel = newItem.EnhanceLevel;
+            existingItem.AugmentStone = newItem.AugmentStone;
+            existingItem.Rank = newItem.Rank;
+            existingItem.Weight = newItem.Weight;
+            existingItem.Reconstruction = newItem.Reconstruction;
+            existingItem.ReconstructionMax = newItem.ReconstructionMax;
+            existingItem.ItemAmount = newItem.ItemAmount;
+            existingItem.Option1Code = newItem.Option1Code;
+            existingItem.Option2Code = newItem.Option2Code;
+            existingItem.Option3Code = newItem.Option3Code;
+            existingItem.Option1Value = newItem.Option1Value;
+            existingItem.Option2Value = newItem.Option2Value;
+            existingItem.Option3Value = newItem.Option3Value;
+            existingItem.SocketCount = newItem.SocketCount;
+            existingItem.Socket1Color = newItem.Socket1Color;
+            existingItem.Socket2Color = newItem.Socket2Color;
+            existingItem.Socket3Color = newItem.Socket3Color;
+            existingItem.Socket1Code = newItem.Socket1Code;
+            existingItem.Socket2Code = newItem.Socket2Code;
+            existingItem.Socket3Code = newItem.Socket3Code;
+            existingItem.Socket1Value = newItem.Socket1Value;
+            existingItem.Socket2Value = newItem.Socket2Value;
+            existingItem.Socket3Value = newItem.Socket3Value;
 
-            ItemDatabaseList.Add(existingItem);
-
+            RemoveItem(existingItem.SlotIndex.ToString());
             var frameViewModel = _itemHelper.GetItemData(existingItem);
-
+            ItemDatabaseList.Add(existingItem);
             SetFrameViewModel(frameViewModel);
         }
     }

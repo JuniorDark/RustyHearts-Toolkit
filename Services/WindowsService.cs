@@ -14,7 +14,7 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
 
     private readonly Dictionary<Guid, Window> _itemWindows = [];
 
-    public void OpenItemWindow(Guid token, string messageType, ItemData itemData, CharacterInfo? characterInfo = null)
+    public void OpenItemWindow(Guid token, string messageType, ItemData itemData, CharacterData? characterData = null)
     {
         if (_itemWindows.TryGetValue(token, out Window? existingWindow))
         {
@@ -40,9 +40,9 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
             }
         }
 
-        if (characterInfo != null)
+        if (characterData != null)
         {
-            WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, "ItemWindow", token));
+            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(characterData, "ItemWindow", token));
         }
 
         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindow", messageType, token));
@@ -59,7 +59,7 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
 
     public static int OpenWindowsCount { get => _openWindowsCount; set => _openWindowsCount = value; }
 
-    private static void OpenWindow<TWindow>(CharacterInfo characterInfo, Func<Window?> windowCreator, Dictionary<Guid, Window> windowsDictionary, string errorMessage)
+    private static void OpenWindow<TWindow>(CharacterData characterData, Func<Window?> windowCreator, Dictionary<Guid, Window> windowsDictionary, string errorMessage)
     {
         if (!SqlCredentialValidator.ValidateCredentials())
         {
@@ -68,7 +68,7 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
 
         try
         {
-            if (windowsDictionary.TryGetValue(characterInfo.CharacterID, out Window? existingWindow))
+            if (windowsDictionary.TryGetValue(characterData.CharacterID, out Window? existingWindow))
             {
                 if (existingWindow.WindowState == WindowState.Minimized)
                 {
@@ -82,17 +82,17 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
                 var window = windowCreator.Invoke();
                 if (window != null)
                 {
-                    windowsDictionary.Add(characterInfo.CharacterID, window);
+                    windowsDictionary.Add(characterData.CharacterID, window);
                     _openWindowsCount++;
                     window.Closed += (sender, args) =>
                     {
-                        windowsDictionary.Remove(characterInfo.CharacterID);
+                        windowsDictionary.Remove(characterData.CharacterID);
                         _openWindowsCount--;
                     };
                 }
             }
 
-            WeakReferenceMessenger.Default.Send(new CharacterInfoMessage(characterInfo, typeof(TWindow).Name, characterInfo.CharacterID));
+            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(characterData, typeof(TWindow).Name, characterData.CharacterID));
         }
         catch (Exception ex)
         {
@@ -100,39 +100,39 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
         }
     }
 
-    public void OpenCharacterWindow(CharacterInfo characterInfo)
+    public void OpenCharacterWindow(CharacterData characterData)
     {
-        OpenWindow<CharacterWindow>(characterInfo, () => _windowsProviderService.ShowInstance<CharacterWindow>(true), _characterWindows, "CharacterWindow");
+        OpenWindow<CharacterWindow>(characterData, () => _windowsProviderService.ShowInstance<CharacterWindow>(true), _characterWindows, "CharacterWindow");
     }
 
-    public void OpenEquipmentWindow(CharacterInfo characterInfo)
+    public void OpenEquipmentWindow(CharacterData characterData)
     {
-        OpenWindow<EquipmentWindow>(characterInfo, () => _windowsProviderService.ShowInstance<EquipmentWindow>(true), _equipmentWindows, "EquipmentWindow");
+        OpenWindow<EquipmentWindow>(characterData, () => _windowsProviderService.ShowInstance<EquipmentWindow>(true), _equipmentWindows, "EquipmentWindow");
     }
 
-    public void OpenInventoryWindow(CharacterInfo characterInfo)
+    public void OpenInventoryWindow(CharacterData characterData)
     {
-        OpenWindow<InventoryWindow>(characterInfo, () => _windowsProviderService.ShowInstance<InventoryWindow>(true), _inventoryWindows, "InventoryWindow");
+        OpenWindow<InventoryWindow>(characterData, () => _windowsProviderService.ShowInstance<InventoryWindow>(true), _inventoryWindows, "InventoryWindow");
     }
 
-    public void OpenStorageWindow(CharacterInfo characterInfo)
+    public void OpenStorageWindow(CharacterData characterData)
     {
-        OpenWindow<StorageWindow>(characterInfo, () => _windowsProviderService.ShowInstance<StorageWindow>(true), _storageWindows, "StorageWindow");
+        OpenWindow<StorageWindow>(characterData, () => _windowsProviderService.ShowInstance<StorageWindow>(true), _storageWindows, "StorageWindow");
     }
 
-    public void OpenTitleWindow(CharacterInfo characterInfo)
+    public void OpenTitleWindow(CharacterData characterData)
     {
-        OpenWindow<TitleWindow>(characterInfo, () => _windowsProviderService.ShowInstance<TitleWindow>(true), _titleWindows, "TitleWindow");
+        OpenWindow<TitleWindow>(characterData, () => _windowsProviderService.ShowInstance<TitleWindow>(true), _titleWindows, "TitleWindow");
     }
 
-    public void OpenSanctionWindow(CharacterInfo characterInfo)
+    public void OpenSanctionWindow(CharacterData characterData)
     {
-        OpenWindow<SanctionWindow>(characterInfo, () => _windowsProviderService.ShowInstance<SanctionWindow>(true), _sanctionWindows, "SanctionWindow");
+        OpenWindow<SanctionWindow>(characterData, () => _windowsProviderService.ShowInstance<SanctionWindow>(true), _sanctionWindows, "SanctionWindow");
     }
 
-    public void OpenFortuneWindow(CharacterInfo characterInfo)
+    public void OpenFortuneWindow(CharacterData characterData)
     {
-        OpenWindow<FortuneWindow>(characterInfo, () => _windowsProviderService.ShowInstance<FortuneWindow>(true), _fortuneWindows, "FortuneWindow");
+        OpenWindow<FortuneWindow>(characterData, () => _windowsProviderService.ShowInstance<FortuneWindow>(true), _fortuneWindows, "FortuneWindow");
     }
 
     #endregion

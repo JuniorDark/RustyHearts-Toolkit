@@ -18,7 +18,7 @@ namespace RHToolkit.Services
         #region Character
 
         #region Write
-        public async Task UpdateCharacterDataAsync(NewCharacterData characterData, string action, string auditMessage)
+        public async Task UpdateCharacterDataAsync(NewCharacterData characterData)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -47,13 +47,11 @@ namespace RHToolkit.Services
                 );
 
                 transaction.Commit();
-
-                await GMAuditAsync(characterData.AccountName!, characterData.CharacterID, characterData.CharacterName!, action, auditMessage);
             }
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error Updating Character Data: {ex.Message}", ex);
+                throw new Exception($"Error updating character data: {ex.Message}", ex);
             }
         }
 
@@ -130,13 +128,12 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task UpdateCharacterClassAsync(Guid characterId, string accountName, string characterName, int currentCharacterClass, int newCharacterClass)
+        public async Task UpdateCharacterClassAsync(CharacterData characterData, int newCharacterClass)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
 
             try
             {
-                // Start an transaction for the character update and skill reset
                 using (var skillTransaction = connection.BeginTransaction())
                 {
                     // Update character class
@@ -144,7 +141,7 @@ namespace RHToolkit.Services
                         "UPDATE CharacterTable SET Class = @class WHERE character_id = @character_id",
                         connection,
                         skillTransaction,
-                        ("@character_id", characterId),
+                        ("@character_id", characterData.CharacterID),
                         ("@class", newCharacterClass)
                     );
 
@@ -153,7 +150,7 @@ namespace RHToolkit.Services
                         "up_skill_reset",
                         connection,
                         skillTransaction,
-                        ("@character_id", characterId)
+                        ("@character_id", characterData.CharacterID)
                     );
 
                     // Remove skills from quickslot
@@ -166,7 +163,7 @@ namespace RHToolkit.Services
                             $"UPDATE QuickSlotExTable SET {typeColumn} = 0, {itemIdColumn} = @emptyGuid WHERE character_id = @character_id",
                             connection,
                             skillTransaction,
-                            ("@character_id", characterId),
+                            ("@character_id", characterData.CharacterID),
                             ("@emptyGuid", Guid.Empty)
                         );
                     }
@@ -177,7 +174,7 @@ namespace RHToolkit.Services
                 // mail message
 
                 // Fetch equipped items
-                List<ItemData> equipItems = await GetItemList(characterId, "N_EquipItem");
+                List<ItemData> equipItems = await GetItemList(characterData.CharacterID, "N_EquipItem");
 
                 // Filter items with SlotIndex 0 (weapon) and 10 to 19 (costumes)
                 List<ItemData> filteredItems = equipItems
@@ -185,9 +182,6 @@ namespace RHToolkit.Services
                     .ToList();
 
                 Guid senderId = Guid.Empty; // GM Guid
-
-                // Fetch recipient information
-                (Guid? recipientCharacterId, Guid? recipientAuthId, string? recipientAccountName) = await GetCharacterInfoAsync(characterName);
                 string message = $"Due to class change, skills were reset; weapon/costumes unequipped.<br><br><right>{DateTime.Now:yyyy-MM-dd HH:mm}";
 
                 // Check if there are items to process
@@ -197,7 +191,7 @@ namespace RHToolkit.Services
                     try
                     {
                         Guid mailId = Guid.NewGuid();
-                        await InsertMailAsync(connection, mailTransaction, senderId, senderId, "GM", characterName, message, 0, 7, 0, mailId, 0);
+                        await InsertMailAsync(connection, mailTransaction, senderId, senderId, "GM", characterData.CharacterName!, message, 0, 7, 0, mailId, 0);
                         mailTransaction.Commit();
                     }
                     catch (Exception ex)
@@ -216,12 +210,12 @@ namespace RHToolkit.Services
                         try
                         {
                             Guid mailId = Guid.NewGuid();
-                            await InsertMailAsync(connection, itemTransaction, senderId, senderId, "GM", characterName, message, 0, 7, 0, mailId, 0);
+                            await InsertMailAsync(connection, itemTransaction, senderId, senderId, "GM", characterData.CharacterName!, message, 0, 7, 0, mailId, 0);
 
                             for (int j = 0; j < 3 && i + j < filteredItems.Count; j++)
                             {
                                 ItemData item = filteredItems[i + j];
-                                await InsertMailItemAsync(connection, itemTransaction, item, recipientAuthId, recipientCharacterId, mailId, j);
+                                await InsertMailItemAsync(connection, itemTransaction, item, characterData.AuthID, characterData.CharacterID, mailId, j);
 
                                 await _sqlDatabaseService.ExecuteNonQueryAsync(
                                     "DELETE FROM N_EquipItem WHERE item_uid = @item_uid",
@@ -240,8 +234,6 @@ namespace RHToolkit.Services
                         }
                     }
                 }
-
-                await GMAuditAsync(accountName, characterId, characterName, "Character Class Change", $"Old Class: {currentCharacterClass} => New Class: {newCharacterClass}");
             }
             catch (Exception ex)
             {
@@ -249,7 +241,7 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task UpdateCharacterJobAsync(Guid characterId, string accountName, string characterName, int currentCharacterJob, int newCharacterJob)
+        public async Task UpdateCharacterJobAsync(CharacterData characterData, int newCharacterJob)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -261,7 +253,7 @@ namespace RHToolkit.Services
                     "UPDATE CharacterTable SET Job = @job WHERE character_id = @character_id",
                     connection,
                     transaction,
-                    ("@character_id", characterId),
+                    ("@character_id", characterData.CharacterID),
                     ("@job", newCharacterJob)
                 );
 
@@ -270,7 +262,7 @@ namespace RHToolkit.Services
                     "up_skill_reset",
                     connection,
                     transaction,
-                    ("@character_id", characterId)
+                    ("@character_id", characterData.CharacterID)
                 );
 
                 // Remove skills from quickslot
@@ -283,26 +275,24 @@ namespace RHToolkit.Services
                         $"UPDATE QuickSlotExTable SET {typeColumn} = 0, {itemIdColumn} = @emptyGuid WHERE character_id = @character_id",
                         connection,
                         transaction,
-                        ("@character_id", characterId),
+                        ("@character_id", characterData.CharacterID),
                         ("@emptyGuid", Guid.Empty)
                     );
                 }
 
                 // Prepare mail message
-                Guid senderId = Guid.Empty; // GM Guid
+                Guid senderId = Guid.Empty;
 
                 string message = $"Due to focus change your skills have been reset.<br><br><right>{DateTime.Now:yyyy-MM-dd HH:mm}";
 
-                await InsertMailAsync(connection, transaction, senderId, senderId, "GM", characterName, message, 0, 7, 0, Guid.NewGuid(), 0);
+                await InsertMailAsync(connection, transaction, senderId, senderId, "GM", characterData.CharacterName!, message, 0, 7, 0, Guid.NewGuid(), 0);
 
                 transaction.Commit();
-
-                await GMAuditAsync(accountName, characterId, characterName!, "Character Focus Change", $"Old Focus: {currentCharacterJob} => New Focus: {newCharacterJob}");
             }
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error updating character focus: {ex.Message}", ex);
+                throw new Exception($"Error updating character job: {ex.Message}", ex);
             }
         }
 
@@ -619,7 +609,7 @@ namespace RHToolkit.Services
             return itemList;
         }
 
-        public async Task SaveInventoryItem(CharacterInfo characterInfo, List<ItemData>? itemDataList, List<ItemData>? deletedItemDataList, string tableName)
+        public async Task SaveInventoryItem(CharacterData characterData, List<ItemData>? itemDataList, List<ItemData>? deletedItemDataList, string tableName)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -631,7 +621,7 @@ namespace RHToolkit.Services
                     foreach (var deletedItem in deletedItemDataList)
                     {
                         await DeleteInventoryItemAsync(connection, transaction, deletedItem, tableName);
-                        await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Delete Item", $"<font color=blue>Delete Item</font>]<br><font color=red>Item GUID:{{{deletedItem.ItemUid}}}<br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
+                        await GMAuditAsync(characterData, "Delete Item", $"<font color=blue>Delete Item</font>]<br><font color=red>Item GUID:{{{deletedItem.ItemUid}}}<br>{characterData.CharacterName}, GUID:{{{characterData.CharacterID}}}<br></font>");
                     }
                 }
 
@@ -642,12 +632,12 @@ namespace RHToolkit.Services
                         if (item.IsNewItem)
                         {
                             await InsertInventoryItemAsync(connection, transaction, item, tableName);
-                            await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Add Item", $"<font color=blue>Add Item</font>]<br><font color=red>Item GUID:{{{item.ItemUid}}} <br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
+                            await GMAuditAsync(characterData, "Add Item", $"<font color=blue>Add Item</font>]<br><font color=red>Item GUID:{{{item.ItemUid}}} <br>{characterData.CharacterName}, GUID:{{{characterData.CharacterID}}}<br></font>");
                         }
                         else if (item.IsEditedItem)
                         {
                             await UpdateInventoryItemAsync(connection, transaction, item, tableName);
-                            await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Update Item", $"<font color=blue>Update Item</font>]<br><font color=red>Item GUID:{{{item.ItemUid}}}<br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
+                            await GMAuditAsync(characterData, "Update Item", $"<font color=blue>Update Item</font>]<br><font color=red>Item GUID:{{{item.ItemUid}}}<br>{characterData.CharacterName}, GUID:{{{characterData.CharacterID}}}<br></font>");
                         }
                     }
                 }
@@ -671,8 +661,8 @@ namespace RHToolkit.Services
 
                 if (tableName != "tbl_Account_Storage")
                 {
-                    columns += "character_id, link_id, deferment_time ";
-                    values += "character_id, link_id, deferment_time ";
+                    columns += "character_id, link_id, deferment_time, ";
+                    values += "@character_id, @link_id, @deferment_time, ";
                 }
 
                 columns += "auth_id, page_index, slot_index, code, use_cnt, remain_time, create_time, update_time, gcode, durability, " +
@@ -720,12 +710,10 @@ namespace RHToolkit.Services
                     ("@expire_time", itemData.ExpireTime),
                     ("@lock_pwd", itemData.LockPassword ?? string.Empty),
                     ("@activity_value", itemData.AugmentStone),
-                    ("@link_id", itemData.LinkId),
                     ("@is_seizure", itemData.IsSeizure),
                     ("@socket_1_color", itemData.Socket1Color),
                     ("@socket_2_color", itemData.Socket2Color),
                     ("@socket_3_color", itemData.Socket3Color),
-                    ("@deferment_time", itemData.DefermentTime),
                     ("@rank", itemData.Rank),
                     ("@acquireroute", itemData.AcquireRoute),
                     ("@physical", itemData.Physical),
@@ -1119,16 +1107,6 @@ namespace RHToolkit.Services
             }
         }
 
-        private static string GetItemTableName(int pageIndex)
-        {
-            return pageIndex switch
-            {
-                0 => "N_EquipItem",
-                1 or 2 or 3 or 4 or 5 or 6 or 11 or 21 => "N_InventoryItem",
-                _ => throw new ArgumentException($"Invalid PageIndex value '{pageIndex}'")
-            };
-        }
-
         #endregion
 
         #region Character Title
@@ -1200,7 +1178,7 @@ namespace RHToolkit.Services
             return titleCount > 0;
         }
 
-        public async Task AddCharacterTitleAsync(CharacterInfo characterInfo, int titleId, int remainTime, int expireTime)
+        public async Task AddCharacterTitleAsync(CharacterData characterData, int titleId, int remainTime, int expireTime)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -1211,7 +1189,7 @@ namespace RHToolkit.Services
                      "up_add_character_title",
                      connection,
                      transaction,
-                     ("@character_id", characterInfo.CharacterID),
+                     ("@character_id", characterData.CharacterID),
                      ("@new_id", Guid.NewGuid()),
                      ("@title_code", titleId),
                      ("@remain_time", remainTime),
@@ -1219,8 +1197,6 @@ namespace RHToolkit.Services
                  );
 
                 transaction.Commit();
-
-                await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Add Title", $"<font color=blue>Add Title</font>]<br><font color=red>Title: {titleId}<br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
             }
             catch (Exception ex)
             {
@@ -1229,7 +1205,7 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task EquipCharacterTitleAsync(CharacterInfo characterInfo, Guid titleId)
+        public async Task EquipCharacterTitleAsync(CharacterData characterData, Guid titleId)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -1240,13 +1216,11 @@ namespace RHToolkit.Services
                      "up_equip_character_title",
                      connection,
                      transaction,
-                     ("@character_id", characterInfo.CharacterID),
+                     ("@character_id", characterData.CharacterID),
                      ("@title_id", titleId)
                  );
 
                 transaction.Commit();
-
-                await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {titleId}<br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
             }
             catch (Exception ex)
             {
@@ -1255,7 +1229,7 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task UnequipCharacterTitleAsync(CharacterInfo characterInfo, Guid titleId)
+        public async Task UnequipCharacterTitleAsync(CharacterData characterData, Guid titleId)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -1270,8 +1244,6 @@ namespace RHToolkit.Services
                  );
 
                 transaction.Commit();
-
-                await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Change Equip Title", $"<font color=blue>Change Equip Title</font>]<br><font color=red>Title: {titleId}<br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
             }
             catch (Exception ex)
             {
@@ -1280,7 +1252,7 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task DeleteCharacterTitleAsync(CharacterInfo characterInfo, Guid titleUid)
+        public async Task DeleteCharacterTitleAsync(CharacterData characterData, Guid titleUid)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -1291,13 +1263,11 @@ namespace RHToolkit.Services
                      "up_delete_character_title",
                      connection,
                      transaction,
-                     ("@character_id", characterInfo.CharacterID),
+                     ("@character_id", characterData.CharacterID),
                      ("@del_title_id", titleUid)
                  );
 
                 transaction.Commit();
-
-                await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Character Title Deletion", $"<font color=blue>Character Title Deletion</font>]<br><font color=red>Deleted: {titleUid}<br>{characterInfo.CharacterName}, GUID:{{{characterInfo.CharacterID}}}<br></font>");
             }
             catch (Exception ex)
             {
@@ -1319,7 +1289,7 @@ namespace RHToolkit.Services
             return dataTable.Rows.Count > 0 ? dataTable.Rows[0] : null;
         }
 
-        public async Task UpdateFortuneAsync(CharacterInfo characterInfo, int fortune, int selectedFortuneID1, int selectedFortuneID2, int selectedFortuneID3)
+        public async Task UpdateFortuneAsync(CharacterData characterData, int fortune, int selectedFortuneID1, int selectedFortuneID2, int selectedFortuneID3)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -1330,7 +1300,7 @@ namespace RHToolkit.Services
                      "up_update_fortune",
                      connection,
                      transaction,
-                     ("@character_id", characterInfo.CharacterID),
+                     ("@character_id", characterData.CharacterID),
                      ("@fortune", fortune),
                      ("@type_1", selectedFortuneID1),
                      ("@type_2", selectedFortuneID2),
@@ -1339,8 +1309,6 @@ namespace RHToolkit.Services
                  );
 
                 transaction.Commit();
-
-                await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Character Fortune Change", $"{selectedFortuneID1}, {selectedFortuneID2}, {selectedFortuneID3}");
             }
             catch (Exception ex)
             {
@@ -1349,7 +1317,7 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task RemoveFortuneAsync(CharacterInfo characterInfo, int fortuneState, int fortuneID1, int fortuneID2, int fortuneID3)
+        public async Task RemoveFortuneAsync(CharacterData characterData, int fortuneState, int fortuneID1, int fortuneID2, int fortuneID3)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -1360,20 +1328,18 @@ namespace RHToolkit.Services
                 "DELETE FROM FortuneTable WHERE character_id = @character_id",
                 connection,
                 transaction,
-                ("@character_id", characterInfo.CharacterID)
+                ("@character_id", characterData.CharacterID)
                 );
 
                 await _sqlDatabaseService.ExecuteProcedureAsync(
                      "up_update_character_fortune",
                      connection,
                      transaction,
-                     ("@character_id", characterInfo.CharacterID),
+                     ("@character_id", characterData.CharacterID),
                      ("@fortune", fortuneState)
                  );
 
                 transaction.Commit();
-
-                await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Character Fortune Remove", $"{fortuneID1}, {fortuneID2}, {fortuneID3}");
             }
             catch (Exception ex)
             {
@@ -1385,7 +1351,7 @@ namespace RHToolkit.Services
 
         #region Sanction
 
-        public async Task CharacterSanctionAsync(CharacterInfo characterInfo, SanctionOperationType operationType, Guid sanctionUid, int sanctionKind, string reasonDetails, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount)
+        public async Task CharacterSanctionAsync(CharacterData characterData, SanctionOperationType operationType, Guid sanctionUid, int sanctionKind, string reasonDetails, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -1401,7 +1367,7 @@ namespace RHToolkit.Services
                 ("@personnel", "RHToolkit"),
                 ("@releaser", releaser),
                 ("@comment", comment),
-                ("@character_id", characterInfo.CharacterID),
+                ("@character_id", characterData.CharacterID),
                 ("@sanction_type", sanctionType),
                 ("@sanction_count", sanctionCount),
                 ("@sanction_period_type", sanctionPeriod)
@@ -1412,13 +1378,13 @@ namespace RHToolkit.Services
                 if (operationType == SanctionOperationType.Add)
                 {
                     (DateTime startTime, DateTime endTime) = await GetSanctionTimesAsync((Guid)result);
-                    await SanctionLogAsync(characterInfo, (Guid)result, startTime, endTime, reasonDetails);
-                    await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Character Sanction", reasonDetails);
+                    await SanctionLogAsync(characterData, (Guid)result, startTime, endTime, reasonDetails);
+                    await GMAuditAsync(characterData, "Character Sanction", reasonDetails);
                 }
                 else
                 {
                     await UpdateSanctionLogAsync((Guid)result, releaser, comment, 1);
-                    await GMAuditAsync(characterInfo.AccountName!, characterInfo.CharacterID, characterInfo.CharacterName!, "Character Sanction Release", reasonDetails);
+                    await GMAuditAsync(characterData, "Character Sanction Release", reasonDetails);
                 }
 
             }
@@ -1620,7 +1586,7 @@ namespace RHToolkit.Services
                         }
                     }
 
-                    await GMAuditAsync(recipientAccountName!, recipientCharacterId, currentRecipient, Resources.SendMail, $"<font color=blue>{Resources.SendMail}</font>]<br><font color=red>{Resources.Sender}: RHToolkit: {senderCharacterId}, {Resources.Recipient}: {currentRecipient}, GUID:{{{recipientCharacterId}}}<br></font>" + auditMessage);
+                    await GMAuditMailAsync(recipientAccountName!, recipientCharacterId, currentRecipient, Resources.SendMail, $"<font color=blue>{Resources.SendMail}</font>]<br><font color=red>{Resources.Sender}: RHToolkit: {senderCharacterId}, {Resources.Recipient}: {currentRecipient}, GUID:{{{recipientCharacterId}}}<br></font>" + auditMessage);
 
                     successfulRecipients.Add(currentRecipient);
                 }
@@ -1847,8 +1813,41 @@ namespace RHToolkit.Services
 
         #endregion
 
-        #region RustyHearts_Log
-        public async Task GMAuditAsync(string accountName, Guid? characterId, string characterName, string action, string auditMessage)
+        #region GMRustyHearts
+        public async Task GMAuditAsync(CharacterData characterData, string action, string auditMessage)
+        {
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("GMRustyHearts");
+            using var transaction = connection.BeginTransaction();
+
+            try
+            {
+                string changes = $"<font color=blue>{action}</font>]<br><font color=red>{auditMessage}<br>{characterData.CharacterName}, GUID:{{{characterData.CharacterID.ToString().ToUpper()}}}<br></font>";
+
+                await _sqlDatabaseService.ExecuteNonQueryAsync("INSERT INTO GMAudit(audit_id, AdminID, world_index, bcust_id, character_id, char_name, Type, Modify, Memo, date) " +
+                       "VALUES (@audit_id, @AdminID, @world_index, @bcust_id, @character_id, @char_name, @Type, @Modify, @Memo, @date)",
+                       connection,
+                       transaction,
+                       ("@audit_id", Guid.NewGuid()),
+                       ("@AdminID", "RHToolkit"),
+                       ("@world_index", 1),
+                       ("@bcust_id", characterData.AccountName!),
+                       ("@character_id", characterData.CharacterID),
+                       ("@char_name", characterData.CharacterName!),
+                       ("@Type", action),
+                       ("@Modify", changes),
+                       ("@Memo", ""),
+                       ("@date", DateTime.Now)
+                  );
+                transaction.Commit();
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw new Exception($"Error: {ex.Message}", ex);
+            }
+        }
+
+        public async Task GMAuditMailAsync(string accountName, Guid? characterId, string characterName, string action, string auditMessage)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("GMRustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -1864,9 +1863,9 @@ namespace RHToolkit.Services
                        ("@audit_id", Guid.NewGuid()),
                        ("@AdminID", "RHToolkit"),
                        ("@world_index", 1),
-                       ("@bcust_id", accountName),
+                       ("@bcust_id", accountName!),
                        ("@character_id", characterId ?? Guid.Empty),
-                       ("@char_name", characterName),
+                       ("@char_name", characterName!),
                        ("@Type", action),
                        ("@Modify", changes),
                        ("@Memo", ""),
@@ -1881,7 +1880,10 @@ namespace RHToolkit.Services
             }
         }
 
-        public async Task SanctionLogAsync(CharacterInfo characterInfo, Guid sanctionUid, DateTime startTime, DateTime endTime, string reason)
+        #endregion
+
+        #region RustyHearts_Log
+        public async Task SanctionLogAsync(CharacterData characterData, Guid sanctionUid, DateTime startTime, DateTime endTime, string reason)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts_Log");
             using var transaction = connection.BeginTransaction();
@@ -1896,10 +1898,10 @@ namespace RHToolkit.Services
                       ("@log_type", 1),
                       ("@sanction_uid", sanctionUid),
                       ("@world_id", 1),
-                      ("@bcust_id", characterInfo.AccountName!),
+                      ("@bcust_id", characterData.AccountName!),
                       ("@item_uid", "00000000-0000-0000-0000-000000000000"),
-                      ("@character_id", characterInfo.CharacterID),
-                      ("@char_name", characterInfo.CharacterName!),
+                      ("@character_id", characterData.CharacterID),
+                      ("@char_name", characterData.CharacterName!),
                       ("@item_name", ""),
                       ("@start_time", startTime),
                       ("@end_time", endTime),

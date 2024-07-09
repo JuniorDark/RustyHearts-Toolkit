@@ -7,7 +7,7 @@ using RHToolkit.ViewModels.Controls;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class InventoryWindowViewModel : ObservableObject, IRecipient<CharacterInfoMessage>, IRecipient<ItemDataMessage>
+public partial class InventoryWindowViewModel : ObservableObject, IRecipient<CharacterDataMessage>, IRecipient<ItemDataMessage>
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
@@ -22,7 +22,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         CurrentPage = 1;
 
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
-        WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
+        WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
     }
 
     #region Commands
@@ -47,9 +47,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
 
             if (RHMessageBoxHelper.ConfirmMessage($"Save inventory changes?"))
             {
-                var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-
-                await _databaseService.SaveInventoryItem(characterInfo, ItemDatabaseList, DeletedItemDatabaseList, "N_InventoryItem");
+                await _databaseService.SaveInventoryItem(CharacterData, ItemDatabaseList, DeletedItemDatabaseList, "N_InventoryItem");
                 RHMessageBoxHelper.ShowOKMessage("Inventory saved successfully!", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
@@ -78,19 +76,16 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
             {
                 // Find the existing item in ItemDatabaseList
                 var removedItem = ItemDatabaseList.FirstOrDefault(item => item.SlotIndex == slotIndex && item.PageIndex == pageIndex);
-                var removedItemIndex = ItemDatabaseList.FindIndex(item => item.SlotIndex == slotIndex && item.PageIndex == pageIndex);
 
                 if (removedItem != null)
                 {
-                    // Remove the item with the specified SlotIndex from ItemDatabaseList
-                    ItemDatabaseList?.Remove(removedItem);
-
                     if (!removedItem.IsNewItem)
                     {
                         DeletedItemDatabaseList ??= [];
                         DeletedItemDatabaseList.Add(removedItem);
                     }
 
+                    ItemDatabaseList?.Remove(removedItem);
                     RemoveFrameViewModel(removedItem);
                 }
 
@@ -180,7 +175,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
 
     #region Load CharacterData
 
-    public async void Receive(CharacterInfoMessage message)
+    public async void Receive(CharacterDataMessage message)
     {
         if (Token == Guid.Empty)
         {
@@ -189,12 +184,12 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
 
         if (message.Recipient == "InventoryWindow" && message.Token == Token)
         {
-            var characterInfo = message.Value;
+            var characterData = message.Value;
 
-            await ReadCharacterData(characterInfo.CharacterName!);
+            await ReadCharacterData(characterData.CharacterName!);
         }
 
-        WeakReferenceMessenger.Default.Unregister<CharacterInfoMessage>(this);
+        WeakReferenceMessenger.Default.Unregister<CharacterDataMessage>(this);
     }
 
     private async Task ReadCharacterData(string characterName)
@@ -264,9 +259,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         if (int.TryParse(parameters[0], out int slotIndex) && int.TryParse(parameters[1], out int pageIndex))
         {
             ItemData? itemData = ItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex && i.PageIndex == pageIndex) ?? new ItemData { SlotIndex = slotIndex, PageIndex = pageIndex };
-            var characterInfo = new CharacterInfo(CharacterData.CharacterID, CharacterData.AuthID, CharacterData.CharacterName!, CharacterData.AccountName!, CharacterData.Class, CharacterData.Job);
-
-            _windowsService.OpenItemWindow(characterInfo.CharacterID, "InventoryItem", itemData, characterInfo);
+            _windowsService.OpenItemWindow(CharacterData.CharacterID, "InventoryItem", itemData, CharacterData);
         }
     }
 
@@ -322,56 +315,59 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         SetFrameViewModel(frameViewModel);
     }
 
-    private void UpdateItem(ItemData existingItem, ItemData newItemData)
+    private void UpdateItem(ItemData existingItem, ItemData newItem)
     {
         if (CharacterData == null) return;
 
         ItemDatabaseList ??= [];
 
         // Check if the IDs are different
-        if (existingItem.ItemId != newItemData.ItemId)
+        if (existingItem.ItemId != newItem.ItemId && !existingItem.IsNewItem)
         {
-            RHMessageBoxHelper.ShowOKMessage($"The slot '{newItemData.SlotIndex}' is already in use.", "Info");
+            RHMessageBoxHelper.ShowOKMessage($"The slot '{newItem.SlotIndex}' is already in use.", "Info");
             return;
+        }
+
+        if (existingItem.IsNewItem)
+        {
+            RemoveItem($"{existingItem.SlotIndex}" + "," + $"{existingItem.PageIndex}");
+            CreateItem(newItem);
         }
         else
         {
-            ItemDatabaseList.Remove(existingItem);
-            RemoveFrameViewModel(existingItem);
-
             // Update existingItem
-            existingItem.IsEditedItem = true;
+
+            existingItem.IsEditedItem = !existingItem.IsNewItem;
             existingItem.UpdateTime = DateTime.Now;
-            existingItem.Durability = newItemData.Durability;
-            existingItem.DurabilityMax = newItemData.DurabilityMax;
-            existingItem.EnhanceLevel = newItemData.EnhanceLevel;
-            existingItem.AugmentStone = newItemData.AugmentStone;
-            existingItem.Rank = newItemData.Rank;
-            existingItem.Weight = newItemData.Weight;
-            existingItem.Reconstruction = newItemData.Reconstruction;
-            existingItem.ReconstructionMax = newItemData.ReconstructionMax;
-            existingItem.ItemAmount = newItemData.ItemAmount;
-            existingItem.Option1Code = newItemData.Option1Code;
-            existingItem.Option2Code = newItemData.Option2Code;
-            existingItem.Option3Code = newItemData.Option3Code;
-            existingItem.Option1Value = newItemData.Option1Value;
-            existingItem.Option2Value = newItemData.Option2Value;
-            existingItem.Option3Value = newItemData.Option3Value;
-            existingItem.SocketCount = newItemData.SocketCount;
-            existingItem.Socket1Color = newItemData.Socket1Color;
-            existingItem.Socket2Color = newItemData.Socket2Color;
-            existingItem.Socket3Color = newItemData.Socket3Color;
-            existingItem.Socket1Code = newItemData.Socket1Code;
-            existingItem.Socket2Code = newItemData.Socket2Code;
-            existingItem.Socket3Code = newItemData.Socket3Code;
-            existingItem.Socket1Value = newItemData.Socket1Value;
-            existingItem.Socket2Value = newItemData.Socket2Value;
-            existingItem.Socket3Value = newItemData.Socket3Value;
+            existingItem.Durability = newItem.Durability;
+            existingItem.DurabilityMax = newItem.DurabilityMax;
+            existingItem.EnhanceLevel = newItem.EnhanceLevel;
+            existingItem.AugmentStone = newItem.AugmentStone;
+            existingItem.Rank = newItem.Rank;
+            existingItem.Weight = newItem.Weight;
+            existingItem.Reconstruction = newItem.Reconstruction;
+            existingItem.ReconstructionMax = newItem.ReconstructionMax;
+            existingItem.ItemAmount = newItem.ItemAmount;
+            existingItem.Option1Code = newItem.Option1Code;
+            existingItem.Option2Code = newItem.Option2Code;
+            existingItem.Option3Code = newItem.Option3Code;
+            existingItem.Option1Value = newItem.Option1Value;
+            existingItem.Option2Value = newItem.Option2Value;
+            existingItem.Option3Value = newItem.Option3Value;
+            existingItem.SocketCount = newItem.SocketCount;
+            existingItem.Socket1Color = newItem.Socket1Color;
+            existingItem.Socket2Color = newItem.Socket2Color;
+            existingItem.Socket3Color = newItem.Socket3Color;
+            existingItem.Socket1Code = newItem.Socket1Code;
+            existingItem.Socket2Code = newItem.Socket2Code;
+            existingItem.Socket3Code = newItem.Socket3Code;
+            existingItem.Socket1Value = newItem.Socket1Value;
+            existingItem.Socket2Value = newItem.Socket2Value;
+            existingItem.Socket3Value = newItem.Socket3Value;
 
-            ItemDatabaseList.Add(existingItem);
-
+            RemoveItem(existingItem.SlotIndex.ToString());
             var frameViewModel = _itemHelper.GetItemData(existingItem);
-
+            ItemDatabaseList.Add(existingItem);
             SetFrameViewModel(frameViewModel);
         }
     }

@@ -4,13 +4,13 @@ namespace RHToolkit.Services
 {
     public interface IWindowsService
     {
-        void OpenCharacterWindow(CharacterInfo characterInfo);
-        void OpenEquipmentWindow(CharacterInfo characterInfo);
-        void OpenInventoryWindow(CharacterInfo characterInfo);
-        void OpenStorageWindow(CharacterInfo characterInfo);
-        void OpenFortuneWindow(CharacterInfo characterInfo);
-        void OpenItemWindow(Guid token, string messageType, ItemData itemData, CharacterInfo? characterInfo = null);
-        void OpenSanctionWindow(CharacterInfo characterInfo);
-        void OpenTitleWindow(CharacterInfo characterInfo);
+        void OpenCharacterWindow(CharacterData characterData);
+        void OpenEquipmentWindow(CharacterData characterData);
+        void OpenInventoryWindow(CharacterData characterData);
+        void OpenStorageWindow(CharacterData characterData);
+        void OpenFortuneWindow(CharacterData characterData);
+        void OpenItemWindow(Guid token, string messageType, ItemData itemData, CharacterData? characterData = null);
+        void OpenSanctionWindow(CharacterData characterData);
+        void OpenTitleWindow(CharacterData characterData);
     }
 }

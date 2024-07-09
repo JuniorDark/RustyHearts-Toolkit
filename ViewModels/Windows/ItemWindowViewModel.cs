@@ -11,7 +11,7 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<CharacterInfoMessage>
+public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<CharacterDataMessage>
 {
     private readonly IGMDatabaseService _gmDatabaseService;
     private readonly CachedDataManager _cachedDataManager;
@@ -45,30 +45,30 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         _optionView.Filter = FilterOption;
         ItemTradeFilter = 2;
 
-        WeakReferenceMessenger.Default.Register<CharacterInfoMessage>(this);
+        WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
     }
 
     #region Messenger
 
-    #region Receive CharacterInfo
+    #region Receive CharacterData
     [ObservableProperty]
-    private CharacterInfo? _characterInfo;
+    private CharacterData? _characterData;
 
     [ObservableProperty]
     private Guid? _token = Guid.Empty;
 
-    public void Receive(CharacterInfoMessage message)
+    public void Receive(CharacterDataMessage message)
     {
         if (Token == Guid.Empty)
         {
             Token = message.Token;
 
-            CharacterInfo = null;
-            CharacterInfo = message.Value;
+            CharacterData = null;
+            CharacterData = message.Value;
         }
 
-        WeakReferenceMessenger.Default.Unregister<CharacterInfoMessage>(this);
+        WeakReferenceMessenger.Default.Unregister<CharacterDataMessage>(this);
     }
 
     #endregion
@@ -198,10 +198,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         return messageType switch
         {
             "Coupon" => $"Add Coupon Item",
-            "EquipItem" => $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterInfo?.CharacterName}] ",
-            "InventoryItem" => $"Add Inventory Item ({(InventoryType)itemData.PageIndex}) [{CharacterInfo?.CharacterName}] ",
-            "StorageItem" => $"Add Storage Item [{CharacterInfo?.CharacterName}] ",
-            "AccountStorageItem" => $"Add Account Storage Item [{CharacterInfo?.AccountName}] ",
+            "EquipItem" => $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterData?.CharacterName}] ",
+            "InventoryItem" => $"Add Inventory Item ({(InventoryType)itemData.PageIndex}) [{CharacterData?.CharacterName}] ",
+            "StorageItem" => $"Add Storage Item [{CharacterData?.CharacterName}] ",
+            "AccountStorageItem" => $"Add Account Storage Item [{CharacterData?.AccountName}] ",
             "Mail" => $"Add Mail Item",
             _ => "Add Item",
         };
@@ -215,7 +215,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     private void SlotFilter(int slotIndex)
     {
-        if (CharacterInfo != null)
+        if (CharacterData != null)
         {
             switch (slotIndex)
             {
@@ -223,7 +223,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 case 0: // Weapon
                     ItemTypeFilter = 4;
                     ItemSubCategoryFilter = 1;
-                    ItemClassFilter = ItemHelper.GetRealClass(CharacterInfo.Class);
+                    ItemClassFilter = ItemHelper.GetRealClass(CharacterData.Class);
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
@@ -305,7 +305,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 case 10: //Hair
                     ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 11;
-                    ItemClassFilter = CharacterInfo.Class;
+                    ItemClassFilter = CharacterData.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
@@ -321,7 +321,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 case 12: //Neck
                     ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 13;
-                    ItemClassFilter = CharacterInfo.Class;
+                    ItemClassFilter = CharacterData.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
@@ -329,7 +329,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 case 13: //Outerwear
                     ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 14;
-                    ItemClassFilter = CharacterInfo.Class;
+                    ItemClassFilter = CharacterData.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
@@ -337,7 +337,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 case 14: //Top
                     ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 15;
-                    ItemClassFilter = CharacterInfo.Class;
+                    ItemClassFilter = CharacterData.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
@@ -345,7 +345,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 case 15: //Bottom
                     ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 16;
-                    ItemClassFilter = CharacterInfo.Class;
+                    ItemClassFilter = CharacterData.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
@@ -353,7 +353,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 case 16: //Gloves
                     ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 17;
-                    ItemClassFilter = CharacterInfo.Class;
+                    ItemClassFilter = CharacterData.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
@@ -361,7 +361,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 case 17: //Shoes
                     ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 18;
-                    ItemClassFilter = CharacterInfo.Class;
+                    ItemClassFilter = CharacterData.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
@@ -369,7 +369,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                 case 18: //Accessory 1
                     ItemTypeFilter = 2;
                     ItemSubCategoryFilter = 19;
-                    ItemClassFilter = CharacterInfo.Class;
+                    ItemClassFilter = CharacterData.Class;
                     ItemTypeEnabled = false;
                     ItemSubCategoryEnabled = false;
                     ItemClassEnabled = false;
@@ -660,7 +660,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     partial void OnItemTypeFilterChanged(int value)
     {
         PopulateCategoryItemsFilter((ItemType)value);
-        ItemDataView.Refresh();
+        if (ItemDataView != null)
+        {
+            ItemDataView.Refresh();
+        }
     }
 
     [ObservableProperty]
@@ -670,7 +673,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private int _itemCategoryFilter;
     partial void OnItemCategoryFilterChanged(int value)
     {
-        ItemDataView.Refresh();
+        if (ItemDataView != null)
+        {
+            ItemDataView.Refresh();
+        }
     }
 
     [ObservableProperty]
@@ -680,7 +686,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private int _itemSubCategoryFilter;
     partial void OnItemSubCategoryFilterChanged(int value)
     {
-        ItemDataView.Refresh();
+        if (ItemDataView != null)
+        {
+            ItemDataView.Refresh();
+        }
+        
     }
 
     [ObservableProperty]
@@ -690,7 +700,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private int _itemTradeFilter;
     partial void OnItemTradeFilterChanged(int value)
     {
-        ItemDataView.Refresh();
+        if (ItemDataView != null)
+        {
+            ItemDataView.Refresh();
+        }
     }
 
     [ObservableProperty]
@@ -698,7 +711,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     partial void OnItemClassFilterChanged(int value)
     {
-        ItemDataView.Refresh();
+        if (ItemDataView != null)
+        {
+            ItemDataView.Refresh();
+        }
     }
 
     [ObservableProperty]
@@ -709,7 +725,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     partial void OnItemBranchFilterChanged(int value)
     {
-        ItemDataView.Refresh();
+        if (ItemDataView != null)
+        {
+            ItemDataView.Refresh();
+        }
     }
 
     [ObservableProperty]
@@ -776,14 +795,20 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private int _inventoryTypeFilter;
     partial void OnInventoryTypeFilterChanged(int value)
     {
-        ItemDataView.Refresh();
+        if (ItemDataView != null)
+        {
+            ItemDataView.Refresh();
+        }
     }
 
     [ObservableProperty]
     private int _accountStorageFilter;
     partial void OnAccountStorageFilterChanged(int value)
     {
-        ItemDataView.Refresh();
+        if (ItemDataView != null)
+        {
+            ItemDataView.Refresh();
+        }
     }
 
     [ObservableProperty]

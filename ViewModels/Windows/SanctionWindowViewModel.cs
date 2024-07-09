@@ -8,7 +8,7 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class SanctionWindowViewModel : ObservableObject, IRecipient<CharacterInfoMessage>
+public partial class SanctionWindowViewModel : ObservableObject, IRecipient<CharacterDataMessage>
 {
     private readonly IDatabaseService _databaseService;
 
@@ -25,7 +25,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
     #region Read Sanction
 
-    public async void Receive(CharacterInfoMessage message)
+    public async void Receive(CharacterDataMessage message)
     {
         if (Token == Guid.Empty)
         {
@@ -34,11 +34,11 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
         if (message.Recipient == "SanctionWindow" && message.Token == Token)
         {
-            var characterInfo = message.Value;
-            CharacterInfo = null;
-            CharacterInfo = characterInfo;
+            var characterData = message.Value;
+            CharacterData = null;
+            CharacterData = characterData;
 
-            Title = $"Character Sanction ({characterInfo.CharacterName})";
+            Title = $"Character Sanction ({characterData.CharacterName})";
 
             await ReadSanction();
         }
@@ -46,12 +46,12 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
     private async Task ReadSanction()
     {
-        if (CharacterInfo == null) return;
+        if (CharacterData == null) return;
 
         try
         {
             SanctionData = null;
-            SanctionData = await _databaseService.ReadCharacterSanctionListAsync(CharacterInfo.CharacterID);
+            SanctionData = await _databaseService.ReadCharacterSanctionListAsync(CharacterData.CharacterID);
         }
         catch (Exception ex)
         {
@@ -91,14 +91,14 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
     private async Task ProcessSanction(SanctionOperationType operationType)
     {
-        if (CharacterInfo == null) return;
+        if (CharacterData == null) return;
 
-        if (await _databaseService.IsCharacterOnlineAsync(CharacterInfo.CharacterName!))
+        if (await _databaseService.IsCharacterOnlineAsync(CharacterData.CharacterName!))
         {
             return;
         }
 
-        bool isSanctioned = await _databaseService.CharacterHasSanctionAsync(CharacterInfo.CharacterID);
+        bool isSanctioned = await _databaseService.CharacterHasSanctionAsync(CharacterData.CharacterID);
 
         if ((operationType == SanctionOperationType.Add && isSanctioned) || (operationType == SanctionOperationType.Remove && !isSanctioned))
         {
@@ -128,7 +128,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
     private async Task ProcessSanctionData(SanctionOperationType operationType, string releaser, string comment)
     {
-        if (CharacterInfo == null) return;
+        if (CharacterData == null) return;
 
         Guid selectedSanctionUid = operationType == SanctionOperationType.Remove ? SelectedSanctionUid : Guid.Empty;
         int isApplyValue = operationType == SanctionOperationType.Remove ? SelectedIsApplySanction : 0;
@@ -146,7 +146,7 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
         if (RHMessageBoxHelper.ConfirmMessage((operationType == SanctionOperationType.Add ? "Sanction this character for: " : "Remove the sanction from this character for: ") + reasonDetails + "?"))
         {
-            await _databaseService.CharacterSanctionAsync(CharacterInfo, operationType, operationType == SanctionOperationType.Add ? Guid.NewGuid() : selectedSanctionUid, (int)operationType, reasonDetails, releaser, comment, sanctionType, sanctionPeriod, sanctionCount);
+            await _databaseService.CharacterSanctionAsync(CharacterData, operationType, operationType == SanctionOperationType.Add ? Guid.NewGuid() : selectedSanctionUid, (int)operationType, reasonDetails, releaser, comment, sanctionType, sanctionPeriod, sanctionCount);
 
             RHMessageBoxHelper.ShowOKMessage(operationType == SanctionOperationType.Add ? "Sanction added successfully!" : "Sanction released successfully!", "Success");
         }
@@ -174,12 +174,12 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
 
     private bool CanExecuteAddSanctionCommand()
     {
-        return CharacterInfo != null;
+        return CharacterData != null;
     }
 
     private bool CanExecuteReleaseSanctionCommand()
     {
-        return CharacterInfo != null && SelectedSanction != null;
+        return CharacterData != null && SelectedSanction != null;
     }
 
     #endregion
@@ -256,8 +256,8 @@ public partial class SanctionWindowViewModel : ObservableObject, IRecipient<Char
     private string _title = "Character Sanction";
 
     [ObservableProperty]
-    private CharacterInfo? _characterInfo;
-    partial void OnCharacterInfoChanged(CharacterInfo? value)
+    private CharacterData? _characterData;
+    partial void OnCharacterDataChanged(CharacterData? value)
     {
         AddSanctionCommand.NotifyCanExecuteChanged();
         ReleaseSanctionCommand.NotifyCanExecuteChanged();
