@@ -5,7 +5,6 @@ using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
-using System.Windows.Media.TextFormatting;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
