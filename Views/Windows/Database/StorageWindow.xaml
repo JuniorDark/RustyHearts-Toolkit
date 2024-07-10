@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:bh="clr-namespace:RHToolkit.Behaviors"
-    xmlns:control="clr-namespace:RHToolkit.Controls"
+    xmlns:control="clr-namespace:RHToolkit.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dt="clr-namespace:RHToolkit.Models.DataTemplates"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"

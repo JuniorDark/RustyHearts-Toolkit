@@ -651,28 +651,28 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="Views\Windows\StorageWindow.xaml.cs">
+    <Compile Update="Views\Windows\Database\StorageWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Windows\InventoryWindow.xaml.cs">
+    <Compile Update="Views\Windows\Database\InventoryWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Windows\EquipmentWindow.xaml.cs">
+    <Compile Update="Views\Windows\Database\EquipmentWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Windows\CharacterWindow.xaml.cs">
+    <Compile Update="Views\Windows\Database\CharacterWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Windows\FortuneWindow.xaml.cs">
+    <Compile Update="Views\Windows\Database\FortuneWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Windows\RHEditorWindow.xaml.cs">
+    <Compile Update="Views\Windows\Tools\RHEditorWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Windows\SanctionWindow.xaml.cs">
+    <Compile Update="Views\Windows\Database\SanctionWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Windows\SearchDialog.xaml.cs">
+    <Compile Update="Views\Windows\Dialog\SearchDialog.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -688,10 +688,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Update="Views\Pages\CouponPage.xaml">
+    <Page Update="Views\Pages\Database\CouponPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Windows\EquipmentWindow.xaml">
+    <Page Update="Views\Windows\Database\EquipmentWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
