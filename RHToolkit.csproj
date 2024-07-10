@@ -696,4 +696,8 @@
     </Page>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Windows\SQLite\" />
+  </ItemGroup>
+
 </Project>
