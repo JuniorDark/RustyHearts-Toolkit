@@ -98,8 +98,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     case "AccountStorageItem":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "StorageWindow", MessageType, Token));
                         break;
-                    case "Coupon":
+                    case "CouponItem":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponWindow", MessageType, Token));
+                        break;
+                    case "CashShopItem":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CashShopEditorWindow", MessageType, Token));
                         break;
                     default:
                         break;
@@ -169,6 +172,12 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                         SlotIndexMax = 179;
                         AccountStorageFilter = 1;
                         break;
+                    case "CashShopItem":
+                    case "CouponItem":
+                        IsNewItem = itemData.IsNewItem;
+                        IsSlotVisible = Visibility.Hidden;
+                        IsOptionsVisible = Visibility.Hidden;
+                        break;
                     default:
                         SlotIndexMin = itemData.SlotIndex;
                         SlotIndexMax = itemData.SlotIndex;
@@ -197,7 +206,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         return messageType switch
         {
-            "Coupon" => $"Add Coupon Item",
+            "CashShopItem" => $"Add Cash Shop Item",
+            "CouponItem" => $"Add Coupon Item",
             "EquipItem" => $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterData?.CharacterName}] ",
             "InventoryItem" => $"Add Inventory Item ({(InventoryType)itemData.PageIndex}) [{CharacterData?.CharacterName}] ",
             "StorageItem" => $"Add Storage Item [{CharacterData?.CharacterName}] ",
@@ -425,6 +435,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         if (FrameViewModel != null)
         {
+            FrameViewModel.IsNewItem = IsNewItem;
             FrameViewModel.ItemId = itemData.ItemId;
             FrameViewModel.ItemName = itemData.ItemName;
             FrameViewModel.Description = itemData.Description;
@@ -562,7 +573,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         if (obj is ItemData item)
         {
-            //combobox filter
+            //combobox filter 
             if (ItemTypeFilter != 0 && item.Type != ItemTypeFilter)
                 return false;
 
@@ -884,6 +895,15 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     [ObservableProperty]
     private int _slotIndexMax;
+
+    [ObservableProperty]
+    private bool _isNewItem = false;
+
+    [ObservableProperty]
+    private Visibility _isSlotVisible = Visibility.Visible;
+
+    [ObservableProperty]
+    private Visibility _isOptionsVisible = Visibility.Visible;
 
     #endregion
 

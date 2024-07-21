@@ -14,6 +14,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     {
         if (itemData != null)
         {
+            IsNewItem = itemData.IsNewItem;
             ItemId = itemData.ItemId;
             ItemName = itemData.ItemName;
             Description = itemData.Description;
@@ -80,6 +81,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
         {
             SlotIndex = SlotIndex,
             PageIndex = PageIndex,
+            IsNewItem = IsNewItem,
             ItemId = ItemId,
             ItemAmount = ItemAmount,
             ReconstructionMax = (byte)ReconstructionMax,
@@ -117,7 +119,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     #region Properties
 
     [ObservableProperty]
-    private int _inventorySize;
+    private bool _isNewItem;
 
     [ObservableProperty]
     private ItemData? _itemData;

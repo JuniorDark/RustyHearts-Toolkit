@@ -36,5 +36,19 @@
         {
             return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(epochTime);
         }
+
+        public static DateTime ConvertIntToDate(int dateInt)
+        {
+            int year = dateInt / 10000;
+            int month = (dateInt % 10000) / 100;
+            int day = dateInt % 100;
+
+            return new DateTime(year, month, day);
+        }
+
+        public static int ConvertDateToInt(DateTime date)
+        {
+            return date.Year * 10000 + date.Month * 100 + date.Day;
+        }
     }
 }

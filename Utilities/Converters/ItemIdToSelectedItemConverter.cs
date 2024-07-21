@@ -1,7 +1,7 @@
 ﻿using RHToolkit.Models;
 using System.Windows.Controls;
 
-namespace RHToolkit.Utilities
+namespace RHToolkit.Utilities.Converters
 {
     public class ItemIdToSelectedItemConverter : IValueConverter
     {

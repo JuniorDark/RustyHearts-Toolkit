@@ -1,6 +1,6 @@
 using Wpf.Ui.Appearance;
 
-namespace RHToolkit.Utilities;
+namespace RHToolkit.Utilities.Converters;
 
 internal sealed class ThemeToIndexConverter : IValueConverter
 {

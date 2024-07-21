@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media.Imaging;
 
-namespace RHToolkit.Utilities
+namespace RHToolkit.Utilities.Converters
 {
     public class IconNameToImageSourceConverter : IValueConverter
     {
@@ -37,7 +37,7 @@ namespace RHToolkit.Utilities
 
             if (files.Length > 0)
             {
-                return files[0]; 
+                return files[0];
             }
             else
             {

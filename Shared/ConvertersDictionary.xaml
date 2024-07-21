@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:RHToolkit.Utilities">
+    xmlns:local="clr-namespace:RHToolkit.Utilities.Converters">
     <local:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     <local:BranchToImageSourceConverter x:Key="BranchToImageSourceConverter" />
     <local:CharacterClassConverter x:Key="CharacterClassConverter" />
@@ -14,10 +14,12 @@
     <local:GreaterOrEqualToVisibilityConverter x:Key="GreaterOrEqualToVisibilityConverter" />
     <local:IconNameToImageSourceConverter x:Key="IconNameToImageSourceConverter" />
     <local:IconNameToImageSourceMultiConverter x:Key="IconNameToImageSourceMultiConverter" />
+    <local:ItemStateToImageSourceConverter x:Key="ItemStateToImageSourceConverter" />
     <local:IncrementConverter x:Key="IncrementConverter" />
     <local:IsConnectConverter x:Key="IsConnectConverter" />
     <local:ItemIdToSelectedItemConverter x:Key="ItemIdToSelectedItemConverter" />
     <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+    <local:ShopItemAmountConverter x:Key="ShopItemAmountConverter" />
     <local:SlotIconConverter x:Key="SlotIconConverter" />
     <local:StringNullOrEmptyToVisibilityConverter x:Key="StringNullOrEmptyToVisibilityConverter" />
     <local:StringFormatConverter x:Key="StringFormatConverter" />

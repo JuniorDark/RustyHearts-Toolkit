@@ -255,14 +255,7 @@ namespace RHToolkit.ViewModels.Windows
                 searchDialog.Focus();
             }
 
-            if (parameter == "Find")
-            {
-                searchDialog.SearchTabControl.SelectedIndex = 0;
-            }
-            else if (parameter == "Replace")
-            {
-                searchDialog.SearchTabControl.SelectedIndex = 1;
-            }
+            searchDialog.SearchTabControl.SelectedIndex = parameter == "Find" ? 0 : 1;
         }
 
         private Point? lastFoundCell = null;

@@ -1,8 +1,6 @@
-﻿using System.Windows.Media.Imaging;
+﻿namespace RHToolkit.Utilities.Converters;
 
-namespace RHToolkit.Utilities.Converters;
-
-public class BranchToImageSourceConverter : IValueConverter
+public class ItemStateToImageSourceConverter : IValueConverter
 {
     public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
@@ -27,20 +25,22 @@ public class BranchToImageSourceConverter : IValueConverter
 
         string iconName = GetIconName(branch);
 
-        string imagePath = $"pack://application:,,,/Assets/images/{iconName.ToLower()}.png";
+        string imagePath = $"/Assets/images/cashshop/{iconName}.png";
 
-        return new BitmapImage(new Uri(imagePath));
+        return imagePath;
     }
 
-    private static string GetIconName(int branch)
+    private static string GetIconName(int state)
     {
-        return branch switch
+        return state switch
         {
-            2 => "lb_icon_slot_02rare",
-            4 => "lb_icon_slot_03unique",
-            5 => "lb_icon_slot_01magic",
-            6 => "lb_icon_slot_04epic",
-            _ => "lb_icon_slot_00normal",
+            0 => "lb_cashshop_none_01",
+            1 => "lb_cashshop_good_01",
+            2 => "lb_cashshop_new_01",
+            3 => "lb_cashshop_event_01",
+            4 => "lb_cashshop_topseller_01",
+            5 => "lb_cashshop_sale_01",
+            _ => "lb_cashshop_none_01",
         };
     }
 
@@ -48,5 +48,4 @@ public class BranchToImageSourceConverter : IValueConverter
     {
         throw new NotImplementedException();
     }
-
 }

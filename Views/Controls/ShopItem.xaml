@@ -1,0 +1,216 @@
+﻿<UserControl
+    x:Class="RHToolkit.Views.Controls.ShopItem"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:control="clr-namespace:RHToolkit.Views.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <!--  DataTemplates for different tooltip content based on ItemType  -->
+        <DataTemplate x:Key="ItemFrameTemplate">
+            <control:ItemFrame DataContext="{Binding}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="CostumeFrameTemplate">
+            <control:CostumeFrame DataContext="{Binding}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="GearFrameTemplate">
+            <control:GearFrame DataContext="{Binding}" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid Width="320" Height="104">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="65" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Button
+            x:Name="buttonItem"
+            Grid.Row="1"
+            Grid.RowSpan="3"
+            Width="46"
+            Height="46"
+            Margin="13,13,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Background="Transparent"
+            BorderBrush="Transparent"
+            Cursor="Hand"
+            Tag="{Binding FrameViewModel, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            <Button.ToolTip>
+                <ToolTip
+                    MaxWidth="325"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Visibility="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource NullToVisibilityConverter}}">
+                    <!--  Content control with dynamic template  -->
+                    <ContentControl Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ToolTip}}">
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Setter Property="ContentTemplate" Value="{StaticResource GearFrameTemplate}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.Type, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="1">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource ItemFrameTemplate}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.Type, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="2">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource CostumeFrameTemplate}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.Type, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="3">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource GearFrameTemplate}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PlacementTarget.Tag.Type, RelativeSource={RelativeSource AncestorType=ToolTip}}" Value="4">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource GearFrameTemplate}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                </ToolTip>
+            </Button.ToolTip>
+            <Button.InputBindings>
+                <!--  Left-click command  -->
+                <MouseBinding Command="{Binding AddItemCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" Gesture="LeftClick" />
+            </Button.InputBindings>
+        </Button>
+        <Image
+            x:Name="imgItemSlot"
+            Grid.RowSpan="4"
+            Grid.ColumnSpan="2"
+            Width="320"
+            Height="104"
+            VerticalAlignment="Top"
+            IsHitTestVisible="False"
+            Source="/Assets/images/cashshop/lb_cashshop_itemslot.png"
+            Stretch="Fill" />
+        <Image
+            x:Name="imgItemEmpty"
+            Grid.Row="1"
+            Grid.RowSpan="3"
+            Width="46"
+            Height="46"
+            Margin="13,13,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            IsHitTestVisible="False"
+            Source="/Assets/images/empty_slot.png"
+            Stretch="Fill" />
+        <Image
+            x:Name="imgItemIcon"
+            Grid.Row="1"
+            Grid.RowSpan="3"
+            Width="46"
+            Height="46"
+            Margin="13,13,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            IsHitTestVisible="False"
+            Source="{Binding IconName, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource IconNameToImageSourceConverter}}"
+            Stretch="Fill" />
+
+        <TextBlock
+            x:Name="tbItemName"
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+            Width="Auto"
+            Margin="5,5,15,0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            d:Text="ItemName"
+            FontSize="11"
+            FontWeight="Bold"
+            Foreground="White"
+            IsHitTestVisible="False"
+            Text="{Binding FrameViewModel.ItemName, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+        <Image
+            x:Name="imgItemState"
+            Grid.Row="0"
+            Grid.Column="0"
+            Width="44"
+            Height="32"
+            Margin="0,0,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            d:Source="/Assets/images/cashshop/lb_cashshop_none_01.png"
+            IsHitTestVisible="False"
+            Source="{Binding ItemState, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource ItemStateToImageSourceConverter}}"
+            Stretch="Fill" />
+        <TextBlock
+            x:Name="tbItemPrice"
+            Grid.Row="1"
+            Grid.Column="1"
+            Width="Auto"
+            Margin="0,5,15,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            d:Text="0 Zen"
+            FontSize="12"
+            FontWeight="Bold"
+            Foreground="Gold"
+            IsHitTestVisible="False">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Text" Value="{Binding CashPrice, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=' {0} Zen'}" />
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding PaymentType}" Value="0">
+                            <Setter Property="Text" Value="{Binding CashPrice, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=' {0} Zen'}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding PaymentType}" Value="1">
+                            <Setter Property="Text" Value="{Binding CashPrice, RelativeSource={RelativeSource AncestorType=UserControl}, StringFormat=' {0} Bonus'}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <TextBlock
+            x:Name="tbItemAmount"
+            Grid.Row="2"
+            Grid.Column="1"
+            Width="Auto"
+            Margin="0,5,15,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            d:Text="1 Item(s)"
+            FontSize="12"
+            FontWeight="Bold"
+            Foreground="White"
+            IsHitTestVisible="False">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Setter Property="Text">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource ShopItemAmountConverter}">
+                                <Binding Path="ItemAmount" RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                                <Binding Path="ShopCategory" RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+
+        <TextBlock
+            x:Name="tbItemDescription"
+            Grid.Row="3"
+            Grid.Column="1"
+            Width="Auto"
+            Margin="0,0,15,0"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            d:Text="10% of the price goes to Bonus"
+            FontSize="12"
+            FontWeight="Bold"
+            Foreground="White"
+            IsHitTestVisible="False"
+            Text="{Binding ShopDescription, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+    </Grid>
+</UserControl>

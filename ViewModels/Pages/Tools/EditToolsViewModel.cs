@@ -12,6 +12,7 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
     private WindowCard[] _windowCards =
     [
         new("RH Table Editor", "Edit .rh table files", SymbolRegular.DocumentEdit24, "rheditor"),
+        new("Cash Shop Editor", "Edit cash shop .rh table file", SymbolRegular.DocumentEdit24, "cashshopeditor"),
 ];
 
     [RelayCommand]
@@ -28,6 +29,9 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
             {
                 case "rheditor":
                     windowsProviderService.Show<RHEditorWindow>(true);
+                    break;
+                case "cashshopeditor":
+                    windowsProviderService.Show<CashShopEditorWindow>(true);
                     break;
             }
         }

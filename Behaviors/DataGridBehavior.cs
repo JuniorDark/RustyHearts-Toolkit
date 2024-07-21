@@ -199,6 +199,46 @@ namespace RHToolkit.Behaviors
         }
         #endregion
 
+        #region SelectedRow
+
+        public static readonly DependencyProperty SelectedRowProperty =
+            DependencyProperty.RegisterAttached(
+                "SelectedRow",
+                typeof(int),
+                typeof(DataGridBehavior),
+                new FrameworkPropertyMetadata(-1, OnSelectedRowChanged));
+
+        public static int GetSelectedRow(DependencyObject obj)
+        {
+            return (int)obj.GetValue(SelectedRowProperty);
+        }
+
+        public static void SetSelectedRow(DependencyObject obj, int value)
+        {
+            obj.SetValue(SelectedRowProperty, value);
+        }
+
+        private static void OnSelectedRowChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is DataGrid dataGrid)
+            {
+                int rowIndex = (int)e.NewValue;
+                if (rowIndex >= 0 && dataGrid.ItemsSource != null)
+                {
+                    if (dataGrid.Items.Count > rowIndex)
+                    {
+                        // Select the row
+                        dataGrid.SelectedItem = dataGrid.Items[rowIndex];
+
+                        // Scroll to the selected row
+                        dataGrid.ScrollIntoView(dataGrid.Items[rowIndex]);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         #region ScrollIntoView
         public static readonly DependencyProperty EnableScrollIntoViewProperty =
             DependencyProperty.RegisterAttached("EnableScrollIntoView", typeof(bool), typeof(DataGridBehavior), new PropertyMetadata(false, OnEnableScrollIntoViewChanged));

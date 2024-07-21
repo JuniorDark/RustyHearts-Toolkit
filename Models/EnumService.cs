@@ -336,5 +336,120 @@ namespace RHToolkit.Models
             Storage = 21,
         }
 
+        public enum CashShopCategory
+        {
+            [LocalizedDescription("Package")]
+            Package,
+            [LocalizedDescription("Costume")]
+            Costume,
+            [LocalizedDescription("Item")]
+            Item,
+            [LocalizedDescription("Pet")]
+            Pet,
+            [LocalizedDescription("Bonus")]
+            Bonus
+        }
+
+        public enum CashShopPackageCategory
+        {
+            [LocalizedDescription("Package")]
+            Package = 0
+        }
+
+        public enum CashShopCostumeCategory
+        {
+            [LocalizedDescription("Hair")]
+            Hair = 0,
+            [LocalizedDescription("Accessory")]
+            Accessory = 1,
+            [LocalizedDescription("Neck")]
+            Neck = 2,
+            [LocalizedDescription("Outerwear")]
+            Outerwear = 3,
+            [LocalizedDescription("Tops")]
+            Tops = 4,
+            [LocalizedDescription("Bottoms")]
+            Bottoms = 5,
+            [LocalizedDescription("Gloves")]
+            Gloves = 6,
+            [LocalizedDescription("Shoes")]
+            Shoes = 7,
+            [LocalizedDescription("Face")]
+            Face = 8,
+            [LocalizedDescription("CostumePack")]
+            CostumePack = 9
+        }
+
+        public enum CashShopItemCategory
+        {
+            [LocalizedDescription("Consume")]
+            Consume,
+            [LocalizedDescription("Upgrade")]
+            Upgrade,
+            [LocalizedDescription("Special")]
+            Special,
+            [LocalizedDescription("Guild")]
+            Guild
+        }
+
+        public enum CashShopPetCategory
+        {
+            [LocalizedDescription("Obtain")]
+            Consume,
+            [LocalizedDescription("Upgrade")]
+            Upgrade,
+            [LocalizedDescription("Costume")]
+            Costume
+        }
+
+        public enum CashShopBonusCategory
+        {
+            [LocalizedDescription("Item")]
+            Item,
+            [LocalizedDescription("Package")]
+            Package,
+            [LocalizedDescription("CostumePack")]
+            CostumePack,
+            [LocalizedDescription("Costume")]
+            Costume
+        }
+
+        public enum CashShopItemState
+        {
+            [LocalizedDescription("None")]
+            None,
+            [LocalizedDescription("ItemStateGood")]
+            Consume,
+            [LocalizedDescription("ItemStateNew")]
+            New,
+            [LocalizedDescription("ItemStateEvent")]
+            Event,
+            [LocalizedDescription("ItemStateBest")]
+            Best,
+            [LocalizedDescription("ItemStateSale")]
+            Sale,
+        }
+
+        public enum CashShopCategoryFilter
+        {
+            [LocalizedDescription("All")]
+            All = -1,
+            [LocalizedDescription("Package")]
+            Package = 0,
+            [LocalizedDescription("Costume")]
+            Costume = 1,
+            [LocalizedDescription("Item")]
+            Item = 2,
+            [LocalizedDescription("Pet")]
+            Pet = 3,
+            [LocalizedDescription("Bonus")]
+            Bonus = 4
+        }
+
+        public enum CashShopAllCategory
+        {
+            [LocalizedDescription("All")]
+            All = 0
+        }
     }
 }

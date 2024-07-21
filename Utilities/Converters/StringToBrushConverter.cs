@@ -1,4 +1,4 @@
-﻿namespace RHToolkit.Utilities
+﻿namespace RHToolkit.Utilities.Converters
 {
     public class StringToBrushConverter : IValueConverter
     {

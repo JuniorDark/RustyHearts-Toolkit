@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace RHToolkit.Utilities;
+namespace RHToolkit.Utilities.Converters;
 
 public class TabToVisibilityConverter : IValueConverter
 {

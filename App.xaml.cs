@@ -77,14 +77,16 @@ public partial class App : Application
                 _ = services.AddTransient<SanctionWindowViewModel>();
                 _ = services.AddTransient<FortuneWindow>();
                 _ = services.AddTransient<FortuneWindowViewModel>();
-                _ = services.AddTransient<RHEditorWindow>();
-                _ = services.AddTransient<RHEditorViewModel>();
                 _ = services.AddTransient<EquipmentWindow>();
                 _ = services.AddTransient<EquipmentWindowViewModel>();
                 _ = services.AddTransient<InventoryWindow>();
                 _ = services.AddTransient<InventoryWindowViewModel>();
                 _ = services.AddTransient<StorageWindow>();
                 _ = services.AddTransient<StorageWindowViewModel>();
+                _ = services.AddTransient<RHEditorWindow>();
+                _ = services.AddTransient<RHEditorViewModel>();
+                _ = services.AddTransient<CashShopEditorWindow>();
+                _ = services.AddTransient<CashShopEditorViewModel>();
 
             }
         )

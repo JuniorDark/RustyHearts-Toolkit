@@ -4,23 +4,22 @@ using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
-using RHToolkit.Views.Windows;
 using System.Data;
 
 namespace RHToolkit.ViewModels.Pages
 {
     public partial class CouponViewModel : ObservableValidator, IRecipient<ItemDataMessage>
     {
-        private readonly WindowsProviderService _windowsProviderService;
+        private readonly IWindowsService _windowsService;
         private readonly IDatabaseService _databaseService;
         private readonly ISqLiteDatabaseService _sqLiteDatabaseService;
         private readonly ItemHelper _itemHelper;
         private readonly Guid _token;
 
-        public CouponViewModel(WindowsProviderService windowsProviderService, IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService, ItemHelper itemHelper)
+        public CouponViewModel(IWindowsService windowsService, IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService, ItemHelper itemHelper)
         {
             _token = Guid.NewGuid();
-            _windowsProviderService = windowsProviderService;
+            _windowsService = windowsService;
             _databaseService = databaseService;
             _sqLiteDatabaseService = sqLiteDatabaseService;
             _itemHelper = itemHelper;
@@ -192,47 +191,23 @@ namespace RHToolkit.ViewModels.Pages
 
         #region Add Item
 
-        private readonly Dictionary<Guid, ItemWindow> _itemWindows = [];
-
         [RelayCommand]
-        private void AddItem(string parameter)
+        private void AddItem()
         {
-            if (int.TryParse(parameter, out int slotIndex))
+            try
             {
-                if (!_sqLiteDatabaseService.ValidateDatabase())
+                var itemData = new ItemData
                 {
-                    return;
-                }
-
-                ItemData? itemData = ItemData;
-
-                itemData ??= new ItemData
-                {
-                    SlotIndex = slotIndex
+                    IsNewItem = true
                 };
 
                 var token = _token;
 
-                if (_itemWindows.TryGetValue(token, out ItemWindow? existingWindow))
-                {
-                    if (existingWindow.WindowState == WindowState.Minimized)
-                    {
-                        existingWindow.WindowState = WindowState.Normal;
-                    }
-
-                    existingWindow.Focus();
-                }
-                else
-                {
-                    var itemWindow = _windowsProviderService.ShowInstance<ItemWindow>(true);
-                    if (itemWindow != null)
-                    {
-                        itemWindow.Closed += (s, e) => _itemWindows.Remove(token);
-                        _itemWindows[token] = itemWindow;
-                    }
-                }
-
-                WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindow", "Coupon", token));
+                _windowsService.OpenItemWindow(token, "CouponItem", itemData);
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error adding item: {ex.Message}", "Error");
             }
         }
 

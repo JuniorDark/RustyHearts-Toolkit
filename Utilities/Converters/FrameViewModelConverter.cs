@@ -1,6 +1,6 @@
 ﻿using RHToolkit.ViewModels.Controls;
 
-namespace RHToolkit.Utilities;
+namespace RHToolkit.Utilities.Converters;
 
 public class FrameViewModelConverter : IValueConverter
 {

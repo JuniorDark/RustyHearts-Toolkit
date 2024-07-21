@@ -66,7 +66,8 @@
                 Grid.Column="2"
                 Margin="80,10,0,0"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Top">
+                VerticalAlignment="Top"
+                Visibility="{Binding IsOptionsVisible}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="140" />
                     <ColumnDefinition Width="140" />
@@ -192,7 +193,8 @@
                 Grid.Column="2"
                 Margin="80,10,0,0"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+                VerticalAlignment="Center"
+                Visibility="{Binding IsOptionsVisible}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
@@ -352,7 +354,8 @@
                 Grid.Column="2"
                 Margin="0,0,20,0"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center">
+                VerticalAlignment="Center"
+                Visibility="{Binding IsOptionsVisible}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
@@ -646,7 +649,8 @@
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
                         Content="{x:Static rs:Resources.Slot}"
-                        Style="{StaticResource ArialMSWhite}" />
+                        Style="{StaticResource ArialMSWhite}"
+                        Visibility="{Binding IsSlotVisible}" />
                     <control:IntegerUpDown
                         x:Name="intItemSlot"
                         Canvas.Left="200"
@@ -658,6 +662,7 @@
                         Increment="1"
                         Maximum="{Binding SlotIndexMax}"
                         Minimum="{Binding SlotIndexMin}"
+                        Visibility="{Binding IsSlotVisible}"
                         Value="{Binding FrameViewModel.SlotIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Canvas>
             </Grid>

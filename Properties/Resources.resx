@@ -120,6 +120,9 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="Accessory" xml:space="preserve">
+    <value>Accessory</value>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
   </data>
@@ -183,6 +186,12 @@
   <data name="Basic" xml:space="preserve">
     <value>Basic</value>
   </data>
+  <data name="Bonus" xml:space="preserve">
+    <value>Bonus</value>
+  </data>
+  <data name="Bottoms" xml:space="preserve">
+    <value>Bottoms</value>
+  </data>
   <data name="BoundItem" xml:space="preserve">
     <value>Bound item (Binds when acquired)</value>
   </data>
@@ -218,6 +227,9 @@
   </data>
   <data name="Costume" xml:space="preserve">
     <value>Costume</value>
+  </data>
+  <data name="CostumePack" xml:space="preserve">
+    <value>Costume Pack</value>
   </data>
   <data name="CurrentAttribute" xml:space="preserve">
     <value>Current Attribute</value>
@@ -330,6 +342,9 @@
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="Face" xml:space="preserve">
+    <value>Face</value>
+  </data>
   <data name="FailedRecipientsMessage" xml:space="preserve">
     <value>{0} recipients failed to receive the mail: {1}</value>
   </data>
@@ -354,6 +369,9 @@
   <data name="Glaive" xml:space="preserve">
     <value>Glaive</value>
   </data>
+  <data name="Gloves" xml:space="preserve">
+    <value>Gloves</value>
+  </data>
   <data name="GMAuditAttachGold" xml:space="preserve">
     <value>Attach Gold</value>
   </data>
@@ -362,6 +380,12 @@
   </data>
   <data name="Gold" xml:space="preserve">
     <value>Gold</value>
+  </data>
+  <data name="Guild" xml:space="preserve">
+    <value>Guild</value>
+  </data>
+  <data name="Hair" xml:space="preserve">
+    <value>Hair</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
@@ -404,6 +428,21 @@
   </data>
   <data name="ItemQuality" xml:space="preserve">
     <value>Item Quality</value>
+  </data>
+  <data name="ItemStateBest" xml:space="preserve">
+    <value>Best</value>
+  </data>
+  <data name="ItemStateEvent" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="ItemStateGood" xml:space="preserve">
+    <value>Good</value>
+  </data>
+  <data name="ItemStateNew" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="ItemStateSale" xml:space="preserve">
+    <value>Sale</value>
   </data>
   <data name="ItemTrade" xml:space="preserve">
     <value>Item Trade</value>
@@ -489,6 +528,9 @@
   <data name="Natasha" xml:space="preserve">
     <value>Natasha</value>
   </data>
+  <data name="Neck" xml:space="preserve">
+    <value>Neck</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
   </data>
@@ -506,6 +548,9 @@
   </data>
   <data name="Normal" xml:space="preserve">
     <value>Normal</value>
+  </data>
+  <data name="Obtain" xml:space="preserve">
+    <value>Obtain</value>
   </data>
   <data name="Offline" xml:space="preserve">
     <value>Offline</value>
@@ -545,6 +590,15 @@
   </data>
   <data name="Other" xml:space="preserve">
     <value>Other</value>
+  </data>
+  <data name="Outerwear" xml:space="preserve">
+    <value>Outerwear</value>
+  </data>
+  <data name="Package" xml:space="preserve">
+    <value>Package</value>
+  </data>
+  <data name="Pet" xml:space="preserve">
+    <value>Pet</value>
   </data>
   <data name="PetFoodDescNo" xml:space="preserve">
     <value>This item cannot be used as Pet Food</value>
@@ -753,6 +807,9 @@
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
   </data>
+  <data name="Shoes" xml:space="preserve">
+    <value>Shoes</value>
+  </data>
   <data name="Slot" xml:space="preserve">
     <value>Slot</value>
   </data>
@@ -809,6 +866,9 @@
   </data>
   <data name="SocketOption" xml:space="preserve">
     <value>Socket Option</value>
+  </data>
+  <data name="Special" xml:space="preserve">
+    <value>Special</value>
   </data>
   <data name="SQLAddress" xml:space="preserve">
     <value>SQL Address</value>
@@ -867,6 +927,9 @@
   <data name="Tools" xml:space="preserve">
     <value>Tools</value>
   </data>
+  <data name="Tops" xml:space="preserve">
+    <value>Tops</value>
+  </data>
   <data name="Tradeable" xml:space="preserve">
     <value>Tradeable</value>
   </data>
@@ -887,6 +950,9 @@
   </data>
   <data name="Untradeable" xml:space="preserve">
     <value>Untradeable</value>
+  </data>
+  <data name="Upgrade" xml:space="preserve">
+    <value>Upgrade</value>
   </data>
   <data name="Value" xml:space="preserve">
     <value>Value</value>

@@ -70,6 +70,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accessory.
+        /// </summary>
+        public static string Accessory {
+            get {
+                return ResourceManager.GetString("Accessory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Add {
@@ -259,6 +268,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bonus.
+        /// </summary>
+        public static string Bonus {
+            get {
+                return ResourceManager.GetString("Bonus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bottoms.
+        /// </summary>
+        public static string Bottoms {
+            get {
+                return ResourceManager.GetString("Bottoms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bound item (Binds when acquired).
         /// </summary>
         public static string BoundItem {
@@ -363,6 +390,15 @@ namespace RHToolkit.Properties {
         public static string Costume {
             get {
                 return ResourceManager.GetString("Costume", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Costume Pack.
+        /// </summary>
+        public static string CostumePack {
+            get {
+                return ResourceManager.GetString("CostumePack", resourceCulture);
             }
         }
         
@@ -700,6 +736,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Face.
+        /// </summary>
+        public static string Face {
+            get {
+                return ResourceManager.GetString("Face", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} recipients failed to receive the mail: {1}.
         /// </summary>
         public static string FailedRecipientsMessage {
@@ -772,6 +817,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gloves.
+        /// </summary>
+        public static string Gloves {
+            get {
+                return ResourceManager.GetString("Gloves", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attach Gold.
         /// </summary>
         public static string GMAuditAttachGold {
@@ -795,6 +849,24 @@ namespace RHToolkit.Properties {
         public static string Gold {
             get {
                 return ResourceManager.GetString("Gold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guild.
+        /// </summary>
+        public static string Guild {
+            get {
+                return ResourceManager.GetString("Guild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hair.
+        /// </summary>
+        public static string Hair {
+            get {
+                return ResourceManager.GetString("Hair", resourceCulture);
             }
         }
         
@@ -921,6 +993,51 @@ namespace RHToolkit.Properties {
         public static string ItemQuality {
             get {
                 return ResourceManager.GetString("ItemQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Best.
+        /// </summary>
+        public static string ItemStateBest {
+            get {
+                return ResourceManager.GetString("ItemStateBest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Event.
+        /// </summary>
+        public static string ItemStateEvent {
+            get {
+                return ResourceManager.GetString("ItemStateEvent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        public static string ItemStateGood {
+            get {
+                return ResourceManager.GetString("ItemStateGood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New.
+        /// </summary>
+        public static string ItemStateNew {
+            get {
+                return ResourceManager.GetString("ItemStateNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sale.
+        /// </summary>
+        public static string ItemStateSale {
+            get {
+                return ResourceManager.GetString("ItemStateSale", resourceCulture);
             }
         }
         
@@ -1177,6 +1294,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Neck.
+        /// </summary>
+        public static string Neck {
+            get {
+                return ResourceManager.GetString("Neck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
@@ -1227,6 +1353,15 @@ namespace RHToolkit.Properties {
         public static string Normal {
             get {
                 return ResourceManager.GetString("Normal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Obtain.
+        /// </summary>
+        public static string Obtain {
+            get {
+                return ResourceManager.GetString("Obtain", resourceCulture);
             }
         }
         
@@ -1344,6 +1479,33 @@ namespace RHToolkit.Properties {
         public static string Other {
             get {
                 return ResourceManager.GetString("Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Outerwear.
+        /// </summary>
+        public static string Outerwear {
+            get {
+                return ResourceManager.GetString("Outerwear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package.
+        /// </summary>
+        public static string Package {
+            get {
+                return ResourceManager.GetString("Package", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pet.
+        /// </summary>
+        public static string Pet {
+            get {
+                return ResourceManager.GetString("Pet", resourceCulture);
             }
         }
         
@@ -1969,6 +2131,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shoes.
+        /// </summary>
+        public static string Shoes {
+            get {
+                return ResourceManager.GetString("Shoes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Slot.
         /// </summary>
         public static string Slot {
@@ -2136,6 +2307,15 @@ namespace RHToolkit.Properties {
         public static string SocketOption {
             get {
                 return ResourceManager.GetString("SocketOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special.
+        /// </summary>
+        public static string Special {
+            get {
+                return ResourceManager.GetString("Special", resourceCulture);
             }
         }
         
@@ -2311,6 +2491,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tops.
+        /// </summary>
+        public static string Tops {
+            get {
+                return ResourceManager.GetString("Tops", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tradeable.
         /// </summary>
         public static string Tradeable {
@@ -2370,6 +2559,15 @@ namespace RHToolkit.Properties {
         public static string Untradeable {
             get {
                 return ResourceManager.GetString("Untradeable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upgrade.
+        /// </summary>
+        public static string Upgrade {
+            get {
+                return ResourceManager.GetString("Upgrade", resourceCulture);
             }
         }
         
