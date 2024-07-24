@@ -9,21 +9,21 @@ public class ItemStateToImageSourceConverter : IValueConverter
             return null;
         }
 
-        int branch;
+        int state;
         if (value is int intValue)
         {
-            branch = intValue;
+            state = intValue;
         }
         else if (value is string stringValue && int.TryParse(stringValue, out int parsedValue))
         {
-            branch = parsedValue;
+            state = parsedValue;
         }
         else
         {
             return null;
         }
 
-        string iconName = GetIconName(branch);
+        string iconName = GetIconName(state);
 
         string imagePath = $"/Assets/images/cashshop/{iconName}.png";
 
@@ -35,11 +35,10 @@ public class ItemStateToImageSourceConverter : IValueConverter
         return state switch
         {
             0 => "lb_cashshop_none_01",
-            1 => "lb_cashshop_good_01",
+            1 => "lb_cashshop_sale_01",
             2 => "lb_cashshop_new_01",
             3 => "lb_cashshop_event_01",
             4 => "lb_cashshop_topseller_01",
-            5 => "lb_cashshop_sale_01",
             _ => "lb_cashshop_none_01",
         };
     }

@@ -25,9 +25,9 @@
     mc:Ignorable="d">
     <Window.InputBindings>
         <KeyBinding Command="{Binding LoadFileCommand}" Gesture="Ctrl+O" />
-        <KeyBinding Command="{Binding SaveFileCommand}" Gesture="Ctrl+S" />
-        <KeyBinding Command="{Binding SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
-        <KeyBinding Command="{Binding SaveFileAsMIPCommand}" Gesture="Ctrl+Shift+S" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileCommand}" Gesture="Ctrl+S" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileAsMIPCommand}" Gesture="Ctrl+Shift+S" />
         <KeyBinding Command="{Binding CloseFileCommand}" Gesture="Ctrl+W" />
         <KeyBinding
             Command="{Binding OpenSearchDialogCommand}"
@@ -75,15 +75,15 @@
                         Header="Open RH File... (Ctrl + O)"
                         Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
-                        Command="{Binding SaveFileCommand}"
+                        Command="{Binding DataTableManager.SaveFileCommand}"
                         Header="Save (Ctrl + S)"
                         Icon="{ui:SymbolIcon Save24}" />
                     <MenuItem
-                        Command="{Binding SaveFileAsCommand}"
+                        Command="{Binding DataTableManager.SaveFileAsCommand}"
                         Header="Save As... (Ctrl + Alt + S)"
                         Icon="{ui:SymbolIcon DocumentSave24}" />
                     <MenuItem
-                        Command="{Binding SaveFileAsMIPCommand}"
+                        Command="{Binding DataTableManager.SaveFileAsMIPCommand}"
                         Header="Export as MIP (Ctrl + Shift + S)"
                         Icon="{ui:SymbolIcon DocumentSave24}" />
                     <MenuItem
@@ -100,11 +100,11 @@
                 <Separator />
                 <ui:MenuItem Header="Edit" Icon="{ui:SymbolIcon DocumentEdit20}">
                     <MenuItem
-                        Command="{Binding UndoChangesCommand}"
+                        Command="{Binding DataTableManager.UndoChangesCommand}"
                         Header="Undo (Ctrl + Z)"
                         Icon="{ui:SymbolIcon ArrowUndo20}" />
                     <MenuItem
-                        Command="{Binding RedoChangesCommand}"
+                        Command="{Binding DataTableManager.RedoChangesCommand}"
                         Header="Redo (Ctrl + Shift + Z)"
                         Icon="{ui:SymbolIcon ArrowRedo20}" />
                     <Separator />
@@ -113,16 +113,17 @@
                         Header="Add Item (Ctrl + I)"
                         Icon="{ui:SymbolIcon AddCircle24}" />
                     <MenuItem
-                        Command="{Binding DuplicateSelectedRowCommand}"
+                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
                         Header="Duplicate Selected Item (Ctrl + D)"
                         Icon="{ui:SymbolIcon Copy24}" />
                     <MenuItem
-                        Command="{Binding DeleteSelectedRowCommand}"
+                        Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
                         Header="Delete Selected Item (Delete)"
                         Icon="{ui:SymbolIcon Delete24}" />
                     <Separator />
                     <MenuItem
                         Command="{Binding OpenSearchDialogCommand}"
+                        CommandParameter="Find"
                         Header="Find... (Ctrl + F)"
                         Icon="{ui:SymbolIcon DocumentTableSearch24}" />
                     <MenuItem
@@ -143,12 +144,12 @@
                                          Filled=True}"
                     ToolTip="Open File" />
                 <MenuItem
-                    Command="{Binding SaveFileCommand}"
+                    Command="{Binding DataTableManager.SaveFileCommand}"
                     Icon="{ui:SymbolIcon Save24,
                                          Filled=True}"
                     ToolTip="Save" />
                 <MenuItem
-                    Command="{Binding SaveFileAsCommand}"
+                    Command="{Binding DataTableManager.SaveFileAsCommand}"
                     Icon="{ui:SymbolIcon DocumentSave24,
                                          Filled=True}"
                     ToolTip="Save As" />
@@ -159,12 +160,12 @@
                     ToolTip="Close" />
                 <Separator />
                 <MenuItem
-                    Command="{Binding UndoChangesCommand}"
+                    Command="{Binding DataTableManager.UndoChangesCommand}"
                     Icon="{ui:SymbolIcon ArrowUndo24,
                                          Filled=True}"
                     ToolTip="Undo" />
                 <MenuItem
-                    Command="{Binding RedoChangesCommand}"
+                    Command="{Binding DataTableManager.RedoChangesCommand}"
                     Icon="{ui:SymbolIcon ArrowRedo24,
                                          Filled=True}"
                     ToolTip="Redo" />
@@ -175,12 +176,12 @@
                                          Filled=False}"
                     ToolTip="Add Item" />
                 <MenuItem
-                    Command="{Binding DuplicateSelectedRowCommand}"
+                    Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
                     Icon="{ui:SymbolIcon Copy24,
                                          Filled=True}"
                     ToolTip="Duplicate Selected Item" />
                 <MenuItem
-                    Command="{Binding DeleteSelectedRowCommand}"
+                    Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
                     Icon="{ui:SymbolIcon Delete24}"
                     ToolTip="Delete Selected Item" />
                 <Separator />
@@ -259,20 +260,20 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
                         <StackPanel
                             Grid.Row="0"
                             Grid.Column="0"
-                            Margin="5,0,0,0"
-                            HorizontalAlignment="Left"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Right"
                             VerticalAlignment="Top"
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Shop ID" />
                             <control:IntegerUpDown
                                 Width="120"
-                                Margin="0,0,0,0"
+                                Margin="0,0,30,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
                                 Increment="1"
@@ -281,7 +282,7 @@
                                 Value="{Binding ShopID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="1"
+                            Grid.Row="0"
                             Grid.Column="0"
                             Margin="5,0,0,0"
                             HorizontalAlignment="Left"
@@ -300,6 +301,7 @@
                         </StackPanel>
                         <StackPanel
                             Grid.Row="2"
+                            Grid.RowSpan="2"
                             Grid.Column="0"
                             Margin="5,0,0,0"
                             HorizontalAlignment="Left"
@@ -314,6 +316,20 @@
                                 FontSize="12"
                                 Template="{StaticResource lb_textbox11}"
                                 Text="{Binding IconName, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="10,15,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <CheckBox
+                                Margin="0,0"
+                                Content="Use Shop Icon"
+                                Foreground="White"
+                                IsChecked="{Binding UseShopIcon}"
+                                Template="{StaticResource lb_checkbox}" />
                         </StackPanel>
                         <StackPanel
                             Grid.Row="3"
@@ -334,7 +350,7 @@
                         </StackPanel>
                         <StackPanel
                             Grid.Row="0"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Margin="0,0,0,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
@@ -352,6 +368,24 @@
                                 IsChecked="{Binding NoGift}"
                                 Template="{StaticResource lb_checkbox}" />
                         </StackPanel>
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="0,0,0,20"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock Foreground="White" Text="Item Amount/Value" />
+                            <control:IntegerUpDown
+                                Width="120"
+                                Margin="0,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Increment="1"
+                                Maximum="{Binding ItemAmountMax}"
+                                Minimum="0"
+                                Value="{Binding ItemAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </StackPanel>
 
                     </Grid>
                 </TabItem>
@@ -363,8 +397,8 @@
                     Style="{StaticResource lb_tab}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -383,7 +417,7 @@
                             Orientation="Vertical">
                             <Label Content="Payment Type" Style="{StaticResource ArialMSWhite}" />
                             <ComboBox
-                                Width="130"
+                                Width="120"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
@@ -413,9 +447,9 @@
                                 Value="{Binding CashCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            Margin="0,0,0,0"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="10,0,0,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Orientation="Vertical">
@@ -449,9 +483,9 @@
                                 Value="{Binding CashMileage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="4"
-                            Grid.Column="0"
-                            Margin="0,0,0,0"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="20,0,0,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Orientation="Vertical">
@@ -466,100 +500,6 @@
                                 Minimum="0"
                                 Value="{Binding BonusRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
-                        <StackPanel
-                            Grid.Row="5"
-                            Grid.Column="0"
-                            Margin="0,0,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Vertical">
-                            <TextBlock Foreground="White" Text="Item Amount/Value" />
-                            <control:IntegerUpDown
-                                Width="120"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Top"
-                                Increment="1"
-                                Maximum="{Binding ItemAmountMax}"
-                                Minimum="0"
-                                Value="{Binding ItemAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Margin="20,20,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                            <ui:CalendarDatePicker
-                                x:Name="startSellingDateDatePicker"
-                                Width="200"
-                                Content="Start Selling Date"
-                                Date="{Binding StartSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                IsTodayHighlighted="True" />
-                            <ui:TextBlock
-                                Margin="8,0,0,0"
-                                VerticalAlignment="Center"
-                                Foreground="White"
-                                Text="{Binding StartSellingDateValue}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Margin="20,20,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                            <ui:CalendarDatePicker
-                                x:Name="endSellingDateDatePicker"
-                                Width="200"
-                                Content="End Selling Date"
-                                Date="{Binding EndSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                IsTodayHighlighted="True" />
-                            <ui:TextBlock
-                                Margin="8,0,0,0"
-                                VerticalAlignment="Center"
-                                Foreground="White"
-                                Text="{Binding EndSellingDateValue}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            Margin="20,20,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                            <ui:CalendarDatePicker
-                                x:Name="saleStartSellingDateDatePicker"
-                                Width="200"
-                                Content="Sale Start Selling Date"
-                                Date="{Binding SaleStartSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                IsTodayHighlighted="True" />
-                            <ui:TextBlock
-                                Margin="8,0,0,0"
-                                VerticalAlignment="Center"
-                                Foreground="White"
-                                Text="{Binding SaleStartSellingDateValue}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="3"
-                            Grid.Column="2"
-                            Margin="20,20,0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                            <ui:CalendarDatePicker
-                                x:Name="saleEndSellingDateDatePicker"
-                                Width="200"
-                                Content="Sale End Selling Date"
-                                Date="{Binding SaleEndSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                IsTodayHighlighted="True" />
-                            <ui:TextBlock
-                                Margin="8,0,0,0"
-                                VerticalAlignment="Center"
-                                Foreground="White"
-                                Text="{Binding SaleEndSellingDateValue}" />
-                        </StackPanel>
 
                     </Grid>
                 </TabItem>
@@ -567,11 +507,120 @@
                     x:Name="tab3"
                     Width="150"
                     Foreground="White"
+                    Header="Selling Date"
+                    Style="{StaticResource lb_tab}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <ui:CalendarDatePicker
+                            x:Name="startSellingDateDatePicker"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Width="200"
+                            Content="Start Selling Date"
+                            Date="{Binding StartSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            IsTodayHighlighted="True" />
+                        <ui:TextBlock
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            d:Text="No Date"
+                            Foreground="White"
+                            Text="{Binding StartSellingDateValue}" />
+                        <ui:CalendarDatePicker
+                            x:Name="endSellingDateDatePicker"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Width="200"
+                            Content="End Selling Date"
+                            Date="{Binding EndSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            IsTodayHighlighted="True" />
+                        <ui:TextBlock
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            d:Text="No Date"
+                            Foreground="White"
+                            Text="{Binding EndSellingDateValue}" />
+                        <ui:CalendarDatePicker
+                            x:Name="saleStartSellingDateDatePicker"
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Width="200"
+                            Content="Start Selling Date"
+                            Date="{Binding SaleStartSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            IsTodayHighlighted="True" />
+                        <ui:TextBlock
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            d:Text="No Date"
+                            Foreground="White"
+                            Text="{Binding SaleStartSellingDateValue}" />
+                        <ui:CalendarDatePicker
+                            x:Name="saleEndSellingDateDatePicker"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Width="200"
+                            Content="End Selling Date"
+                            Date="{Binding SaleEndSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            IsTodayHighlighted="True" />
+                        <ui:TextBlock
+                            Grid.Row="3"
+                            Grid.Column="1"
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            d:Text="No Date"
+                            Foreground="White"
+                            Text="{Binding SaleEndSellingDateValue}" />
+                        <Button
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Width="150"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Command="{Binding ResetSellingDateCommand}"
+                            Content=" Reset Selling Date"
+                            Cursor="Hand"
+                            Foreground="White"
+                            Style="{StaticResource lb_def_button02}" />
+                        <Button
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            Width="150"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Command="{Binding ResetSaleDateCommand}"
+                            Content=" Reset Sale Date"
+                            Cursor="Hand"
+                            Foreground="White"
+                            Style="{StaticResource lb_def_button02}" />
+                    </Grid>
+                </TabItem>
+                <TabItem
+                    x:Name="tab4"
+                    Width="150"
+                    Foreground="White"
                     Header="Shop Category"
                     Style="{StaticResource lb_tab}"
                     Tag="Page">
                     <Grid>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
@@ -605,8 +654,8 @@
                                 Template="{StaticResource lb_combobox}" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="1"
-                            Grid.Column="0"
+                            Grid.Row="0"
+                            Grid.Column="1"
                             Margin="0,0,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
@@ -625,8 +674,8 @@
                                 Template="{StaticResource lb_combobox}" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="2"
-                            Grid.Column="0"
+                            Grid.Row="0"
+                            Grid.Column="2"
                             Margin="0,0,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
@@ -645,8 +694,8 @@
                                 Template="{StaticResource lb_combobox}" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="3"
-                            Grid.Column="0"
+                            Grid.Row="0"
+                            Grid.Column="4"
                             Margin="0,0,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
@@ -679,7 +728,7 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 bh:DataGridBehavior.EnableScrollIntoView="True"
-                bh:DataGridBehavior.SelectedRow="{Binding SelectedRow}"
+                bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
                 AutoGenerateColumns="False"
                 Background="Transparent"
                 BorderBrush="#FF0F0D0A"
@@ -691,7 +740,7 @@
                 HeadersVisibility="Column"
                 HorizontalGridLinesBrush="White"
                 HorizontalScrollBarVisibility="Auto"
-                ItemsSource="{Binding FileData}"
+                ItemsSource="{Binding DataTableManager.DataTable}"
                 SelectedItem="{Binding SelectedItem}"
                 SelectionMode="Single"
                 SelectionUnit="FullRow"
@@ -699,31 +748,32 @@
                 VerticalGridLinesBrush="White">
                 <DataGrid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Command="{Binding DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                        <MenuItem Command="{Binding DeleteSelectedRowCommand}" Header="Delete Item" />
+                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
+                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <DataGrid.InputBindings>
                     <KeyBinding
                         Key="I"
-                        Command="{Binding AddNewRowCommand}"
+                        Command="{Binding DataTableManager.AddNewRowCommand}"
                         Modifiers="Ctrl" />
                     <KeyBinding
                         Key="D"
-                        Command="{Binding DuplicateSelectedRowCommand}"
+                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
                         Modifiers="Control" />
-                    <KeyBinding Key="Delete" Command="{Binding DeleteSelectedRowCommand}" />
+                    <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
                     <KeyBinding
                         Key="Z"
-                        Command="{Binding UndoChangesCommand}"
+                        Command="{Binding DataTableManager.UndoChangesCommand}"
                         Modifiers="Ctrl" />
                     <KeyBinding
                         Key="Z"
-                        Command="{Binding RedoChangesCommand}"
+                        Command="{Binding DataTableManager.RedoChangesCommand}"
                         Modifiers="Ctrl+Shift" />
                     <KeyBinding
                         Key="F"
                         Command="{Binding OpenSearchDialogCommand}"
+                        CommandParameter="Find"
                         Modifiers="Ctrl" />
                 </DataGrid.InputBindings>
                 <DataGrid.Columns>
@@ -762,151 +812,167 @@
                         IsReadOnly="True" />
                 </DataGrid.Columns>
             </DataGrid>
-            <TextBlock
-                x:Name="lbTotalItem"
-                Grid.Row="4"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                d:Text="Showing {0}/{1} Items"
-                Foreground="Gold"
-                Style="{StaticResource ArialMS}">
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
-                        <Binding ElementName="dataGridView" Path="Items.Count" />
-                        <Binding Path="FileData.Rows.Count" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
 
-            <StackPanel
-                Grid.Row="5"
-                Grid.Column="0"
-                Margin="0,15,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Orientation="Vertical">
-                <Label
-                    x:Name="lbSearch"
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    x:Name="lbTotalItem"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,10,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Content="{x:Static rs:Resources.Search}"
-                    Style="{StaticResource ArialMSWhite}" />
-                <TextBox
-                    x:Name="tbSearch"
-                    Width="250"
-                    Height="34"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    CaretBrush="White"
+                    d:Text="Showing {0}/{1} Items"
                     Foreground="Gold"
-                    Tag="{x:Static rs:Resources.SearchNameID}"
-                    Template="{StaticResource lb_textbox}"
-                    Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-            <!--  Left Column  -->
-            <StackPanel
-                Grid.Row="5"
-                Grid.Column="0"
-                Margin="0,50,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Orientation="Vertical">
-                <Label
-                    x:Name="lbCategory"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center"
-                    Content="{x:Static rs:Resources.Category}"
-                    Style="{StaticResource ArialMSWhite}" />
-                <ComboBox
-                    x:Name="cmbItemCategory"
-                    Width="145"
-                    Height="24"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Left"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Center"
-                    IsReadOnly="True"
-                    ItemsSource="{Binding ShopCategoryItemsFilter}"
-                    SelectedValue="{Binding ShopCategoryFilter, Mode=TwoWay}"
-                    SelectedValuePath="ID"
-                    Style="{StaticResource ComboBoxStyle}"
-                    Template="{StaticResource lb_combobox}" />
-                <Label
-                    x:Name="lbSubCategory"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center"
-                    Content="{x:Static rs:Resources.SubCategory}"
-                    Style="{StaticResource ArialMSWhite}" />
-                <ComboBox
-                    x:Name="cmbSubCategory"
-                    Width="145"
-                    Height="24"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Center"
-                    IsReadOnly="True"
-                    ItemsSource="{Binding CostumeCategoryItemsFilter}"
-                    SelectedValue="{Binding CostumeCategoryFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedValuePath="ID"
-                    Style="{StaticResource ComboBoxStyle}"
-                    Template="{StaticResource lb_combobox}" />
-            </StackPanel>
-            <!--  Right Column  -->
-            <StackPanel
-                Grid.Row="5"
-                Grid.Column="0"
-                Margin="0,50,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Orientation="Vertical">
-                <Label
-                    x:Name="lbClass"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center"
-                    Content="{x:Static rs:Resources.Class}"
-                    Style="{StaticResource ArialMSWhite}" />
-                <ComboBox
-                    x:Name="cmbJobClass"
-                    Width="145"
-                    Height="24"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Left"
-                    VerticalContentAlignment="Center"
-                    IsReadOnly="True"
-                    ItemsSource="{Binding ClassItemsFilter}"
-                    SelectedValue="{Binding ClassFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedValuePath="ID"
-                    Style="{StaticResource ComboBoxStyle}"
-                    Template="{StaticResource lb_combobox}" />
+                    Style="{StaticResource ArialMS}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                            <Binding ElementName="dataGridView" Path="Items.Count" />
+                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
 
-                <Label
-                    x:Name="lbItemState"
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center"
-                    Content="Item State"
-                    Style="{StaticResource ArialMSWhite}" />
-                <ComboBox
-                    x:Name="cmbItemTrade"
-                    Width="145"
-                    Height="24"
+                    Orientation="Vertical">
+                    <Label
+                        x:Name="lbSearch"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Content="{x:Static rs:Resources.Search}"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <TextBox
+                        x:Name="tbSearch"
+                        Width="250"
+                        Height="34"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        CaretBrush="White"
+                        Foreground="Gold"
+                        Tag="{x:Static rs:Resources.SearchNameID}"
+                        Template="{StaticResource lb_textbox}"
+                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <!--  Left Column  -->
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="0"
                     Margin="0,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    IsReadOnly="True"
-                    ItemsSource="{Binding ItemStateItemsFilter}"
-                    SelectedValue="{Binding ItemStateFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    SelectedValuePath="ID"
-                    Style="{StaticResource ComboBoxStyle}"
-                    Template="{StaticResource lb_combobox}" />
-            </StackPanel>
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+                    <Label
+                        x:Name="lbCategory"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="{x:Static rs:Resources.Category}"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <ComboBox
+                        x:Name="cmbItemCategory"
+                        Width="145"
+                        Height="24"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding ShopCategoryItemsFilter}"
+                        SelectedValue="{Binding ShopCategoryFilter, Mode=TwoWay}"
+                        SelectedValuePath="ID"
+                        Style="{StaticResource ComboBoxStyle}"
+                        Template="{StaticResource lb_combobox}" />
+                    <Label
+                        x:Name="lbSubCategory"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="{x:Static rs:Resources.SubCategory}"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <ComboBox
+                        x:Name="cmbSubCategory"
+                        Width="145"
+                        Height="24"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding CostumeCategoryItemsFilter}"
+                        SelectedValue="{Binding CostumeCategoryFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValuePath="ID"
+                        Style="{StaticResource ComboBoxStyle}"
+                        Template="{StaticResource lb_combobox}" />
+                </StackPanel>
+                <!--  Right Column  -->
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+                    <Label
+                        x:Name="lbClass"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="{x:Static rs:Resources.Class}"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <ComboBox
+                        x:Name="cmbJobClass"
+                        Width="145"
+                        Height="24"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding ClassItemsFilter}"
+                        SelectedValue="{Binding ClassFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValuePath="ID"
+                        Style="{StaticResource ComboBoxStyle}"
+                        Template="{StaticResource lb_combobox}" />
+
+                    <Label
+                        x:Name="lbItemState"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Item State"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <ComboBox
+                        x:Name="cmbItemTrade"
+                        Width="145"
+                        Height="24"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding ItemStateItemsFilter}"
+                        SelectedValue="{Binding ItemStateFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValuePath="ID"
+                        Style="{StaticResource ComboBoxStyle}"
+                        Template="{StaticResource lb_combobox}" />
+                </StackPanel>
+            </Grid>
+
 
         </Grid>
     </ContentControl>

@@ -418,16 +418,14 @@ namespace RHToolkit.Models
         {
             [LocalizedDescription("None")]
             None,
-            [LocalizedDescription("ItemStateGood")]
-            Consume,
+            [LocalizedDescription("ItemStateSale")]
+            Sale,
             [LocalizedDescription("ItemStateNew")]
             New,
             [LocalizedDescription("ItemStateEvent")]
             Event,
             [LocalizedDescription("ItemStateBest")]
-            Best,
-            [LocalizedDescription("ItemStateSale")]
-            Sale,
+            Best
         }
 
         public enum CashShopCategoryFilter
