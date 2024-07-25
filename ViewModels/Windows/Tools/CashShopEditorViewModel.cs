@@ -53,7 +53,7 @@ namespace RHToolkit.ViewModels.Windows
             WeakReferenceMessenger.Default.Register(this);
         }
 
-        #region Commands
+        #region Commands 
         [RelayCommand]
         private async Task CloseWindow(Window window)
         {
@@ -123,9 +123,10 @@ namespace RHToolkit.ViewModels.Windows
                         }
 
                         Title = $"Cash Shop Editor ({CurrentFileName})";
-
+                        OpenMessage = "";
                         ApplyFileDataFilter();
                         OnCanExecuteFileCommandChanged();
+                        IsVisible = Visibility.Visible;
                     }
                 }
 
@@ -179,6 +180,8 @@ namespace RHToolkit.ViewModels.Windows
             FrameViewModel = null;
             SelectedItem = null;
             Title = $"Cash Shop Editor";
+            OpenMessage = "Open a file";
+            IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }
 
@@ -567,7 +570,13 @@ namespace RHToolkit.ViewModels.Windows
         private string _title = $"Cash Shop Editor";
 
         [ObservableProperty]
+        private string? _openMessage = "Open a file";
+
+        [ObservableProperty]
         private Visibility _isSelectedItemVisible = Visibility.Hidden;
+
+        [ObservableProperty]
+        private Visibility _isVisible = Visibility.Hidden;
 
         [ObservableProperty]
         private DataTableManager? _dataTableManager;
@@ -595,17 +604,26 @@ namespace RHToolkit.ViewModels.Windows
         {
             _isUpdatingSelectedItem = true;
 
-            if (value != null && DataTableManager != null)
+            if (DataTableManager != null)
             {
                 DataTableManager.SelectedItem = value;
+            }
 
+            if (value != null)
+            {
                 ItemData itemData = new()
                 {
                     ItemId = (int)value["nItemID"]
                 };
 
                 FrameViewModel = _itemHelper.GetItemData(itemData);
+                ItemAmountMax = (int)value["nCategory"] switch
+                {
+                    0 => 525600,
+                    1 => 0,
+                    _ => FrameViewModel.OverlapCnt
 
+                };
                 IsSelectedItemVisible = Visibility.Visible;
 
                 ShopID = (int)value["nID"];
@@ -788,7 +806,6 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(CashMileage))]
         private int _bonusRate = 10;
         partial void OnBonusRateChanged(int oldValue, int newValue)
         {
@@ -805,7 +822,6 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
-        [NotifyPropertyChangedFor(nameof(CashMileage))]
         private int _cashCost;
         partial void OnCashCostChanged(int oldValue, int newValue)
         {
@@ -885,17 +901,6 @@ namespace RHToolkit.ViewModels.Windows
         partial void OnShopCategoryChanged(int value)
         {
             PopulateCostumeCategoryItems(value);
-
-            if (FrameViewModel != null)
-            {
-                ItemAmountMax = value switch
-                {
-                    0 => 525600,
-                    1 => 0,
-                    _ => FrameViewModel.OverlapCnt
-
-                };
-            }
 
             if (!_isUpdatingSelectedItem && SelectedItem != null)
             {

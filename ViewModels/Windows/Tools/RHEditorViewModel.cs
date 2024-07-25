@@ -3,8 +3,7 @@ using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Views.Windows;
-using System.Data;
-using static RHToolkit.Models.MIP.MIPCoder;
+using System.Windows.Controls;
 
 namespace RHToolkit.ViewModels.Windows
 {
@@ -14,18 +13,26 @@ namespace RHToolkit.ViewModels.Windows
         private readonly Stack<EditHistory> _undoStack = new();
         private readonly Stack<EditHistory> _redoStack = new();
 
-        #region Commands
+        public RHEditorViewModel()
+        {
+            DataTableManager = new DataTableManager();
+        }
+
+        #region Commands 
         [RelayCommand]
         private async Task CloseWindow(Window window)
         {
-            bool shouldContinue = await CloseFile();
-
-            if (!shouldContinue)
+            try
             {
-                return;
-            }
+                await CloseFile();
 
-            window?.Close();
+                window?.Close();
+
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            }
         }
 
         #region File
@@ -33,690 +40,105 @@ namespace RHToolkit.ViewModels.Windows
         [RelayCommand]
         private async Task LoadFile()
         {
-            bool shouldContinue = await CloseFile();
-
-            if (!shouldContinue)
-            {
-                return;
-            }
-
-            OpenFileDialog openFileDialog = new()
-            {
-                Filter = "Rusty Hearts Table Files (*.rh)|*.rh|All Files (*.*)|*.*",
-                FilterIndex = 1
-            };
-
-            if (openFileDialog.ShowDialog() == true)
-            {
-                try
-                {
-                    ClearFile();
-
-                    CurrentFile = openFileDialog.FileName;
-                    CurrentFileName = Path.GetFileName(CurrentFile);
-                    FileData = await _fileManager.FileToDataTableAsync(CurrentFile);
-                    Title = $"RH Table Editor ({CurrentFileName})";
-
-                    if (FileData != null)
-                    {
-                        FileData.TableNewRow += DataTableChanged;
-                        FileData.RowChanged += DataTableChanged;
-                        FileData.RowDeleted += DataTableChanged;
-                        FileData.ColumnChanged += DataTableChanged;
-                    }
-
-                    HasChanges = false;
-                    SaveFileCommand.NotifyCanExecuteChanged();
-                }
-                catch (Exception ex)
-                {
-                    RHMessageBoxHelper.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
-                }
-            }
-        }
-
-        private int _changesCounter = 0;
-        private const int ChangesBeforeSave = 10;
-
-        private async void DataTableChanged(object sender, EventArgs e)
-        {
-            HasChanges = true;
-            Title = $"RH Table Editor ({CurrentFileName})*";
-            SaveFileCommand.NotifyCanExecuteChanged();
-
-            _changesCounter++;
-            if (_changesCounter >= ChangesBeforeSave)
-            {
-                try
-                {
-                    _changesCounter = 0;
-                    await _fileManager.SaveTempFile(CurrentFileName!, FileData!);
-                }
-                catch (Exception ex)
-                {
-                    RHMessageBoxHelper.ShowOKMessage($"Error saving backup file: {ex.Message}", "Save File Error");
-                }
-            }
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExecuteSaveCommand))]
-        private async Task SaveFile()
-        {
-            if (FileData == null) return;
-            if (CurrentFile == null) return;
             try
             {
-                await _fileManager.DataTableToFileAsync(CurrentFile, FileData);
-                FileManager.ClearTempFile(CurrentFileName!);
+                await CloseFile();
 
-                HasChanges = false;
-                Title = $"RH Table Editor ({CurrentFileName})";
-                SaveFileCommand.NotifyCanExecuteChanged();
+                OpenFileDialog openFileDialog = new()
+                {
+                    Filter = "Rusty Hearts Table Files (*.rh)|*.rh|All Files (*.*)|*.*",
+                    FilterIndex = 1
+                };
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    var cashShopTable = await _fileManager.FileToDataTableAsync(openFileDialog.FileName);
+
+                    if (cashShopTable != null)
+                    {
+
+                        ClearFile();
+
+                        CurrentFile = openFileDialog.FileName;
+                        CurrentFileName = Path.GetFileName(CurrentFile);
+                        if (DataTableManager != null)
+                        {
+                            DataTableManager.LoadFile(cashShopTable);
+                            DataTableManager.CurrentFile = openFileDialog.FileName;
+                            DataTableManager.CurrentFileName = Path.GetFileName(CurrentFile);
+                        }
+
+                        Title = $"RH Table Editor ({CurrentFileName})";
+                        OpenMessage = "";
+                        OnCanExecuteFileCommandChanged();
+                        IsVisible = Visibility.Visible;
+                    }
+                }
+
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
             }
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private async Task SaveFileAs()
+        private void OpenSearchDialog(string? parameter)
         {
-            if (FileData == null || CurrentFileName == null) return;
-
-            SaveFileDialog saveFileDialog = new()
+            try
             {
-                Filter = "Rusty Hearts Table Files (*.rh)|*.rh|All Files (*.*)|*.*",
-                FilterIndex = 1,
-                FileName = CurrentFileName
-            };
+                if (DataTableManager != null)
+                {
+                    Window? rhEditorWindow = Application.Current.Windows.OfType<RHEditorWindow>().FirstOrDefault();
+                    Window owner = rhEditorWindow ?? Application.Current.MainWindow;
+                    DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.CellOrRowHeader);
+                }
 
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                try
-                {
-                    string file = saveFileDialog.FileName;
-                    await _fileManager.DataTableToFileAsync(file, FileData);
-                    FileManager.ClearTempFile(CurrentFileName);
-                    HasChanges = false;
-                    CurrentFile = file;
-                    CurrentFileName = Path.GetFileName(file);
-                    Title = $"RH Table Editor ({CurrentFileName})";
-                    SaveFileCommand.NotifyCanExecuteChanged();
-                }
-                catch (Exception ex)
-                {
-                    RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
-                }
             }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            }
+
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
         public async Task<bool> CloseFile()
         {
-            if (FileData == null) return true;
+            if (DataTableManager == null) return true;
 
-            if (HasChanges)
-            {
-                var result = RHMessageBoxHelper.ConfirmMessageYesNoCancel($"Save file '{CurrentFileName}' ?");
-                if (result == MessageBoxResult.Yes)
-                {
-                    await SaveFile();
-                    ClearFile();
-                    return true;
-                }
-                else if (result == MessageBoxResult.No)
-                {
-                    ClearFile();
-                    return true;
-                }
-                else if (result == MessageBoxResult.Cancel)
-                {
-                    return false;
-                }
-            }
-            else
+            var close = await DataTableManager.CloseFile();
+
+            if (close)
             {
                 ClearFile();
                 return true;
             }
 
-            return true;
+            return false;
         }
 
         private void ClearFile()
         {
-            if (FileData != null)
-            {
-                FileData.TableNewRow -= DataTableChanged;
-                FileData.RowChanged -= DataTableChanged;
-                FileData.RowDeleted -= DataTableChanged;
-                FileData.ColumnChanged -= DataTableChanged;
-            }
-
-            FileManager.ClearTempFile(CurrentFileName);
-            FileData = null;
             CurrentFile = null;
             CurrentFileName = null;
             Title = $"RH Table Editor";
-            _undoStack.Clear();
-            _redoStack.Clear();
-            HasChanges = false;
-            SaveFileCommand.NotifyCanExecuteChanged();
-            OnCanExecuteChangesChanged();
-        }
-
-        private bool CanExecuteSaveCommand()
-        {
-            return HasChanges;
+            OpenMessage = "Open a file";
+            IsVisible = Visibility.Hidden;
+            OnCanExecuteFileCommandChanged();
         }
 
         private bool CanExecuteFileCommand()
         {
-            return FileData != null;
+            return DataTableManager != null && DataTableManager.DataTable != null;
         }
 
         private void OnCanExecuteFileCommandChanged()
         {
-            SaveFileCommand.NotifyCanExecuteChanged();
-            SaveFileAsCommand.NotifyCanExecuteChanged();
-            SaveFileAsMIPCommand.NotifyCanExecuteChanged();
             CloseFileCommand.NotifyCanExecuteChanged();
             OpenSearchDialogCommand.NotifyCanExecuteChanged();
-            AddNewRowCommand.NotifyCanExecuteChanged();
         }
 
-        private SearchDialog? searchDialog;
-
-        [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private void OpenSearchDialog(string? parameter)
-        {
-            if (searchDialog == null || !searchDialog.IsVisible)
-            {
-                searchDialog = new SearchDialog();
-                Window? rhEditorWindow = Application.Current.Windows.OfType<RHEditorWindow>().FirstOrDefault();
-                if (rhEditorWindow != null)
-                {
-                    searchDialog.Owner = rhEditorWindow;
-                }
-                else
-                {
-                    searchDialog.Owner = Application.Current.MainWindow;
-                }
-                searchDialog.FindNext += Search;
-                searchDialog.ReplaceFindNext += Search;
-                searchDialog.Replace += Replace;
-                searchDialog.ReplaceAll += ReplaceAll;
-                searchDialog.CountMatches += CountMatches;
-                searchDialog.Show();
-            }
-            else
-            {
-                searchDialog.Focus();
-            }
-
-            searchDialog.SearchTabControl.SelectedIndex = parameter == "Find" ? 0 : 1;
-        }
-
-        private Point? lastFoundCell = null;
-
-        private void Search(string searchText, bool matchCase)
-        {
-            if (string.IsNullOrWhiteSpace(searchText) || FileData == null)
-                return;
-
-            StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
-
-            bool found = false;
-
-            int startRowIndex = 0;
-            int startColIndex = 0;
-
-            if (lastFoundCell != null)
-            {
-                // Start the search from the next cell after the last found cell
-                startRowIndex = (int)lastFoundCell.Value.X;
-                startColIndex = (int)lastFoundCell.Value.Y + 1;
-
-                if (startColIndex >= FileData.Columns.Count)
-                {
-                    // If we've reached the end of the columns, wrap around to the next row
-                    startRowIndex++;
-                    startColIndex = 0;
-
-                    if (startRowIndex >= FileData.Rows.Count)
-                    {
-                        // If we've reached the end of the rows, wrap around to the beginning
-                        startRowIndex = 0;
-                    }
-                }
-            }
-
-            // Iterate through rows starting from the startRowIndex
-            for (int rowIndex = startRowIndex; rowIndex < FileData.Rows.Count; rowIndex++)
-            {
-                int colStartIndex = (rowIndex == startRowIndex) ? startColIndex : 0; // Start from startColIndex if it's the starting row, otherwise start from the first column
-
-                // Iterate through columns starting from the colStartIndex
-                for (int colIndex = colStartIndex; colIndex < FileData.Columns.Count; colIndex++)
-                {
-                    var cellValue = FileData.Rows[rowIndex][colIndex];
-                    if (cellValue?.ToString()?.Contains(searchText, comparison) == true)
-                    {
-                        // Found the value
-                        found = true;
-
-                        SelectedCell = new Point(rowIndex, colIndex);
-                        lastFoundCell = SelectedCell; // Update last found cell
-
-                        break;
-                    }
-                }
-
-                if (found)
-                    break;
-            }
-
-            if (!found)
-            {
-                searchDialog?.ShowMessage($"Search text '{searchText}' not found.", Brushes.Red);
-                lastFoundCell = null;
-            }
-        }
-
-        private void CountMatches(string searchText, bool matchCase)
-        {
-            if (string.IsNullOrEmpty(searchText) || FileData == null)
-                return;
-
-            StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
-
-            int count = 0;
-            foreach (DataRow row in FileData.Rows)
-            {
-                foreach (var item in row.ItemArray)
-                {
-                    if (item != null && item.ToString()?.Contains(searchText, comparison) == true)
-                    {
-                        count++;
-                    }
-                }
-            }
-
-            searchDialog?.ShowMessage($"Count: {count} matches in entire table", Brushes.LightBlue);
-        }
-
-
-        private void Replace(string searchText, string replaceText, bool matchCase)
-        {
-            if (string.IsNullOrEmpty(searchText) || FileData == null)
-                return;
-
-            StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
-
-            if (lastFoundCell != null)
-            {
-                int rowIndex = (int)lastFoundCell.Value.X;
-                int colIndex = (int)lastFoundCell.Value.Y;
-
-                object cellValue = FileData.Rows[rowIndex][colIndex];
-                string oldValue = cellValue?.ToString() ?? string.Empty;
-                string newValue = oldValue.Replace(searchText, replaceText, comparison);
-
-                if (!string.IsNullOrEmpty(oldValue) && oldValue.Contains(searchText, comparison))
-                {
-                    FileData.Rows[rowIndex][colIndex] = newValue;
-                    _undoStack.Push(new EditHistory
-                    {
-                        Row = rowIndex,
-                        Column = colIndex,
-                        OldValue = oldValue,
-                        NewValue = newValue,
-                        Action = EditAction.CellEdit
-                    });
-                    _redoStack.Clear();
-                    OnCanExecuteChangesChanged();
-
-                    searchDialog?.ShowMessage($"Replaced text in row {rowIndex + 1}, column {colIndex + 1}.", Brushes.Green);
-                    lastFoundCell = null;
-                    return;
-                }
-            }
-
-            Search(searchText, matchCase);
-        }
-
-        private void ReplaceAll(string searchText, string replaceText, bool matchCase)
-        {
-            if (string.IsNullOrEmpty(searchText) || FileData == null)
-                return;
-
-            StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
-
-            int replaceCount = 0;
-            List<EditHistory> groupedEdits = [];
-
-            for (int rowIndex = 0; rowIndex < FileData.Rows.Count; rowIndex++)
-            {
-                for (int colIndex = 0; colIndex < FileData.Columns.Count; colIndex++)
-                {
-                    string? oldValue = FileData.Rows[rowIndex][colIndex].ToString();
-                    if (!string.IsNullOrEmpty(oldValue) && oldValue.Contains(searchText, comparison))
-                    {
-                        string newValue = oldValue.Replace(searchText, replaceText, comparison);
-                        FileData.Rows[rowIndex][colIndex] = newValue;
-                        replaceCount++;
-
-                        groupedEdits.Add(new EditHistory
-                        {
-                            Row = rowIndex,
-                            Column = colIndex,
-                            OldValue = oldValue,
-                            NewValue = newValue,
-                            Action = EditAction.CellEdit
-                        });
-                    }
-                }
-            }
-
-            if (replaceCount > 0)
-            {
-                _undoStack.Push(new EditHistory
-                {
-                    Action = EditAction.CellEdit,
-                    GroupedEdits = groupedEdits
-                });
-                _redoStack.Clear();
-                OnCanExecuteChangesChanged();
-            }
-
-            searchDialog?.ShowMessage($"Replaced {replaceCount} occurrences.", Brushes.Green);
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private void AddNewRow()
-        {
-            if (FileData != null)
-            {
-                DataRow newRow = FileData.NewRow();
-
-                // Initialize the new row with default values
-                foreach (DataColumn column in FileData.Columns)
-                {
-                    newRow[column] = GetDefaultValue(column.DataType);
-                }
-
-                FileData.Rows.Add(newRow);
-
-                int rowIndex = FileData.Rows.IndexOf(newRow);
-
-                _undoStack.Push(new EditHistory
-                {
-                    Row = rowIndex,
-                    AffectedRow = newRow,
-                    Action = EditAction.RowInsert,
-                    NewValue = newRow.ItemArray
-                });
-                _redoStack.Clear();
-                OnCanExecuteChangesChanged();
-                SelectedItem = FileData.DefaultView[rowIndex];
-            }
-        }
-
-        private static object GetDefaultValue(Type type)
-        {
-            if (type == typeof(int))
-                return 0;
-            if (type == typeof(float))
-                return 0;
-            if (type == typeof(string))
-                return string.Empty;
-            if (type == typeof(long))
-                return 0;
-            else return 0;
-        }
-
-
-        [RelayCommand(CanExecute = nameof(CanExecuteSelectedRowCommand))]
-        private void DuplicateSelectedRow()
-        {
-            if (SelectedItem != null && FileData != null)
-            {
-                DataRow originalRow = SelectedItem.Row;
-                DataRow duplicate = FileData.NewRow();
-
-                for (int i = 0; i < FileData.Columns.Count; i++)
-                {
-                    duplicate[i] = originalRow[i];
-                }
-
-                int selectedIndex = FileData.Rows.IndexOf(originalRow);
-                FileData.Rows.InsertAt(duplicate, selectedIndex + 1);
-
-                _undoStack.Push(new EditHistory
-                {
-                    Row = selectedIndex + 1,
-                    AffectedRow = duplicate,
-                    Action = EditAction.RowInsert,
-                    NewValue = duplicate.ItemArray
-                });
-                _redoStack.Clear();
-                OnCanExecuteChangesChanged();
-            }
-        }
-
-
-        [RelayCommand(CanExecute = nameof(CanExecuteSelectedRowCommand))]
-        private void DeleteSelectedRow()
-        {
-            if (SelectedItem != null && FileData != null)
-            {
-                DataRow deletedRow = SelectedItem.Row;
-                int rowIndex = FileData.Rows.IndexOf(deletedRow);
-
-                object?[] deletedRowValues = deletedRow.ItemArray;
-
-                FileData.Rows.Remove(deletedRow);
-
-                _undoStack.Push(new EditHistory
-                {
-                    Row = rowIndex,
-                    AffectedRow = deletedRow,
-                    Action = EditAction.RowDelete,
-                    OldValue = deletedRowValues
-                });
-                _redoStack.Clear();
-
-                if (rowIndex > 0)
-                {
-                    SelectedItem = FileData.DefaultView[rowIndex - 1];
-                }
-                else if (FileData.Rows.Count > 0)
-                {
-                    SelectedItem = FileData.DefaultView[rowIndex];
-                }
-
-                OnCanExecuteChangesChanged();
-            }
-        }
-
-        private bool CanExecuteSelectedRowCommand()
-        {
-            return SelectedItem != null;
-        }
-
-        private void OnCanExecuteSelectedRowCommandChanged()
-        {
-            DuplicateSelectedRowCommand.NotifyCanExecuteChanged();
-            DeleteSelectedRowCommand.NotifyCanExecuteChanged();
-        }
-
-        #endregion
-
-        #region Edit History
-
-        [RelayCommand(CanExecute = nameof(CanUndo))]
-        private void UndoChanges()
-        {
-            if (_undoStack.Count > 0)
-            {
-                var edit = _undoStack.Pop();
-                _redoStack.Push(edit);
-
-                if (edit.GroupedEdits != null)
-                {
-                    foreach (var groupedEdit in edit.GroupedEdits)
-                    {
-                        FileData!.Rows[groupedEdit.Row][groupedEdit.Column] = groupedEdit.OldValue;
-                    }
-                }
-                else
-                {
-                    switch (edit.Action)
-                    {
-                        case EditAction.CellEdit:
-                            if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
-                            {
-                                FileData.Rows[edit.Row][edit.Column] = edit.OldValue;
-                            }
-                            break;
-                        case EditAction.RowInsert:
-                            if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
-                            {
-                                FileData.Rows.RemoveAt(edit.Row);
-                            }
-                            break;
-                        case EditAction.RowDelete:
-                            if (edit.Row >= 0)
-                            {
-                                DataRow newRow = FileData!.NewRow();
-                                newRow.ItemArray = (object?[])edit.OldValue!;
-                                FileData.Rows.InsertAt(newRow, edit.Row);
-                            }
-                            break;
-                    }
-                }
-
-                OnCanExecuteChangesChanged();
-            }
-        }
-
-        [RelayCommand(CanExecute = nameof(CanRedo))]
-        private void RedoChanges()
-        {
-            if (_redoStack.Count > 0)
-            {
-                var edit = _redoStack.Pop();
-                _undoStack.Push(edit);
-
-                if (edit.GroupedEdits != null)
-                {
-                    foreach (var groupedEdit in edit.GroupedEdits)
-                    {
-                        FileData!.Rows[groupedEdit.Row][groupedEdit.Column] = groupedEdit.NewValue;
-                    }
-                }
-                else
-                {
-                    switch (edit.Action)
-                    {
-                        case EditAction.CellEdit:
-                            if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
-                            {
-                                FileData.Rows[edit.Row][edit.Column] = edit.NewValue;
-                            }
-                            break;
-                        case EditAction.RowInsert:
-                            if (edit.Row >= 0)
-                            {
-                                DataRow insertRow = FileData!.NewRow();
-                                insertRow.ItemArray = (object?[])edit.NewValue!;
-                                if (edit.Row < FileData.Rows.Count)
-                                {
-                                    FileData.Rows.InsertAt(insertRow, edit.Row);
-                                }
-                                else
-                                {
-                                    FileData.Rows.Add(insertRow);
-                                }
-                            }
-                            break;
-                        case EditAction.RowDelete:
-                            if (edit.Row >= 0 && edit.Row < FileData!.Rows.Count)
-                            {
-                                FileData.Rows.RemoveAt(edit.Row);
-                            }
-                            break;
-                    }
-                }
-
-                OnCanExecuteChangesChanged();
-            }
-        }
-
-        public void RecordEdit(int row, int column, object? oldValue, object? newValue)
-        {
-            _undoStack.Push(new EditHistory
-            {
-                Row = row,
-                Column = column,
-                OldValue = oldValue,
-                NewValue = newValue,
-                Action = EditAction.CellEdit
-            });
-            _redoStack.Clear();
-            OnCanExecuteChangesChanged();
-        }
-
-        public void RecordRowAddition(int rowIndex, object?[] newRowValues)
-        {
-            _undoStack.Push(new EditHistory
-            {
-                Row = rowIndex,
-                Action = EditAction.RowInsert,
-                NewValue = newRowValues
-            });
-            _redoStack.Clear();
-            OnCanExecuteChangesChanged();
-        }
-
-        private bool CanUndo() => _undoStack.Count > 0;
-        private bool CanRedo() => _redoStack.Count > 0;
-
-        private void OnCanExecuteChangesChanged()
-        {
-            UndoChangesCommand.NotifyCanExecuteChanged();
-            RedoChangesCommand.NotifyCanExecuteChanged();
-        }
-        #endregion
-
-        #region MIP
-        [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private async Task SaveFileAsMIP()
-        {
-            if (FileData == null || CurrentFileName == null) return;
-
-            SaveFileDialog saveFileDialog = new()
-            {
-                Filter = "Rusty Hearts Patch Files (*.mip)|*.mip|All Files (*.*)|*.*",
-                FilterIndex = 1,
-                FileName = CurrentFileName
-            };
-
-            if (saveFileDialog.ShowDialog() == true)
-            {
-                try
-                {
-                    string file = saveFileDialog.FileName;
-                    await _fileManager.CompressToMipAsync(FileData, file, MIPCompressionMode.Compress);
-                    SaveFileCommand.NotifyCanExecuteChanged();
-                }
-                catch (Exception ex)
-                {
-                    RHMessageBoxHelper.ShowOKMessage($"Error saving MIP file: {ex.Message}", "Save File Error");
-                }
-            }
-        }
         #endregion
 
         #endregion
@@ -729,22 +151,7 @@ namespace RHToolkit.ViewModels.Windows
         private string? _openMessage = "Open a file";
 
         [ObservableProperty]
-        private DataTable? _fileData;
-        partial void OnFileDataChanged(DataTable? value)
-        {
-            OpenMessage = value == null ? "Open a file" : "";
-            OnCanExecuteFileCommandChanged();
-        }
-
-        [ObservableProperty]
-        private DataRowView? _selectedItem;
-        partial void OnSelectedItemChanged(DataRowView? value)
-        {
-            OnCanExecuteSelectedRowCommandChanged();
-        }
-
-        [ObservableProperty]
-        private Point _selectedCell;
+        private Visibility _isVisible = Visibility.Hidden;
 
         [ObservableProperty]
         private string? _currentFile;
@@ -753,10 +160,11 @@ namespace RHToolkit.ViewModels.Windows
         private string? _currentFileName;
 
         [ObservableProperty]
-        private string? _searchText;
-
-        [ObservableProperty]
-        private bool _hasChanges = false;
+        private DataTableManager? _dataTableManager;
+        partial void OnDataTableManagerChanged(DataTableManager? value)
+        {
+            OnCanExecuteFileCommandChanged();
+        }
 
         #endregion
     }

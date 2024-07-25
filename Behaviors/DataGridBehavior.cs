@@ -59,7 +59,7 @@ namespace RHToolkit.Behaviors
 
         #endregion // DisplayRowNumber
 
-        #region Get Visuals
+        #region GetVisuals
 
         private static List<T> GetVisualChildCollection<T>(object parent) where T : Visual
         {
@@ -284,8 +284,6 @@ namespace RHToolkit.Behaviors
                 }
             }
         }
-
-
         #endregion
 
         #region DisableHorizontalScrollOnEditOrSelection
@@ -323,24 +321,27 @@ namespace RHToolkit.Behaviors
 
         private static void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            // Prevent horizontal scrolling on cell selection
             if (sender is DataGrid dataGrid && e.AddedCells.Count > 0)
             {
                 var firstAddedCell = e.AddedCells[0];
                 if (firstAddedCell.Column != null)
                 {
-                    dataGrid.ScrollIntoView(firstAddedCell.Item, firstAddedCell.Column);
+                    dataGrid.Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        dataGrid.ScrollIntoView(firstAddedCell.Item, firstAddedCell.Column);
+                    }), DispatcherPriority.Background);
                 }
             }
         }
 
-
         private static void DataGrid_PreparingCellForEdit(object? sender, DataGridPreparingCellForEditEventArgs e)
         {
-            // Prevent horizontal scrolling on cell edit
             if (sender is DataGrid dataGrid)
             {
-                dataGrid.ScrollIntoView(e.Row.Item, dataGrid.Columns[e.Column.DisplayIndex]);
+                dataGrid.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    dataGrid.ScrollIntoView(e.Row.Item, dataGrid.Columns[e.Column.DisplayIndex]);
+                }), DispatcherPriority.Background);
             }
         }
 

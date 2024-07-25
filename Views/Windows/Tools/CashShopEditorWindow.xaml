@@ -72,24 +72,29 @@
                 <ui:MenuItem Header="File" Icon="{ui:SymbolIcon DocumentSplitHint20}">
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
-                        Header="Open RH File... (Ctrl + O)"
-                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        Header="Open RH File..."
+                        Icon="{ui:SymbolIcon DocumentAdd24}"
+                        InputGestureText="Ctrl+O" />
                     <MenuItem
                         Command="{Binding DataTableManager.SaveFileCommand}"
-                        Header="Save (Ctrl + S)"
-                        Icon="{ui:SymbolIcon Save24}" />
+                        Header="Save"
+                        Icon="{ui:SymbolIcon Save24}"
+                        InputGestureText="Ctrl+S" />
                     <MenuItem
                         Command="{Binding DataTableManager.SaveFileAsCommand}"
-                        Header="Save As... (Ctrl + Alt + S)"
-                        Icon="{ui:SymbolIcon DocumentSave24}" />
+                        Header="Save As..."
+                        Icon="{ui:SymbolIcon DocumentSave24}"
+                        InputGestureText="Ctrl+Alt+S" />
                     <MenuItem
                         Command="{Binding DataTableManager.SaveFileAsMIPCommand}"
-                        Header="Export as MIP (Ctrl + Shift + S)"
-                        Icon="{ui:SymbolIcon DocumentSave24}" />
+                        Header="Export as MIP"
+                        Icon="{ui:SymbolIcon DocumentSave24}"
+                        InputGestureText="Ctrl+Shift+S" />
                     <MenuItem
                         Command="{Binding CloseFileCommand}"
-                        Header="Close (Ctrl + W)"
-                        Icon="{ui:SymbolIcon DocumentDismiss24}" />
+                        Header="Close"
+                        Icon="{ui:SymbolIcon DocumentDismiss24}"
+                        InputGestureText="Ctrl+W" />
                     <Separator />
                     <MenuItem
                         Command="{Binding CloseWindowCommand}"
@@ -101,36 +106,43 @@
                 <ui:MenuItem Header="Edit" Icon="{ui:SymbolIcon DocumentEdit20}">
                     <MenuItem
                         Command="{Binding DataTableManager.UndoChangesCommand}"
-                        Header="Undo (Ctrl + Z)"
-                        Icon="{ui:SymbolIcon ArrowUndo20}" />
+                        Header="Undo"
+                        Icon="{ui:SymbolIcon ArrowUndo20}"
+                        InputGestureText="Ctrl+Z" />
                     <MenuItem
                         Command="{Binding DataTableManager.RedoChangesCommand}"
-                        Header="Redo (Ctrl + Shift + Z)"
-                        Icon="{ui:SymbolIcon ArrowRedo20}" />
+                        Header="Redo"
+                        Icon="{ui:SymbolIcon ArrowRedo20}"
+                        InputGestureText="Ctrl+Shift+Z" />
                     <Separator />
                     <MenuItem
                         Command="{Binding AddItemCommand}"
-                        Header="Add Item (Ctrl + I)"
-                        Icon="{ui:SymbolIcon AddCircle24}" />
+                        Header="Add Item"
+                        Icon="{ui:SymbolIcon AddCircle24}"
+                        InputGestureText="Ctrl+I" />
                     <MenuItem
                         Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                        Header="Duplicate Selected Item (Ctrl + D)"
-                        Icon="{ui:SymbolIcon Copy24}" />
+                        Header="Duplicate Selected Item"
+                        Icon="{ui:SymbolIcon Copy24}"
+                        InputGestureText="Ctrl+D" />
                     <MenuItem
                         Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
-                        Header="Delete Selected Item (Delete)"
-                        Icon="{ui:SymbolIcon Delete24}" />
+                        Header="Delete Selected Item"
+                        Icon="{ui:SymbolIcon Delete24}"
+                        InputGestureText="Delete" />
                     <Separator />
                     <MenuItem
                         Command="{Binding OpenSearchDialogCommand}"
                         CommandParameter="Find"
-                        Header="Find... (Ctrl + F)"
-                        Icon="{ui:SymbolIcon DocumentTableSearch24}" />
+                        Header="Find..."
+                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
+                        InputGestureText="Ctrl+F" />
                     <MenuItem
                         Command="{Binding OpenSearchDialogCommand}"
                         CommandParameter="Replace"
-                        Header="Replace (Ctrl + H)"
-                        Icon="{ui:SymbolIcon DocumentTableSearch24}" />
+                        Header="Replace"
+                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
+                        InputGestureText="Ctrl+H" />
                 </ui:MenuItem>
             </Menu>
             <Menu
@@ -172,13 +184,11 @@
                 <Separator />
                 <MenuItem
                     Command="{Binding AddItemCommand}"
-                    Icon="{ui:SymbolIcon AddCircle24,
-                                         Filled=False}"
+                    Icon="{ui:SymbolIcon AddCircle24}"
                     ToolTip="Add Item" />
                 <MenuItem
                     Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                    Icon="{ui:SymbolIcon Copy24,
-                                         Filled=True}"
+                    Icon="{ui:SymbolIcon Copy24}"
                     ToolTip="Duplicate Selected Item" />
                 <MenuItem
                     Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
@@ -397,8 +407,8 @@
                     Style="{StaticResource lb_tab}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -449,7 +459,7 @@
                         <StackPanel
                             Grid.Row="1"
                             Grid.Column="1"
-                            Margin="10,0,0,0"
+                            Margin="20,0,0,0"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Orientation="Vertical">
@@ -465,7 +475,7 @@
                                 Value="{Binding SaleCashCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="3"
+                            Grid.Row="2"
                             Grid.Column="0"
                             Margin="0,0,0,0"
                             HorizontalAlignment="Center"
@@ -483,7 +493,7 @@
                                 Value="{Binding CashMileage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="0"
+                            Grid.Row="2"
                             Grid.Column="1"
                             Margin="20,0,0,0"
                             HorizontalAlignment="Center"
@@ -520,21 +530,20 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <ui:CalendarDatePicker
                             x:Name="startSellingDateDatePicker"
                             Grid.Row="0"
                             Grid.Column="0"
                             Width="200"
+                            Margin="0,0,0,10"
                             Content="Start Selling Date"
                             Date="{Binding StartSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             IsTodayHighlighted="True" />
                         <ui:TextBlock
                             Grid.Row="0"
                             Grid.Column="1"
-                            Margin="8,0,0,0"
+                            Margin="8,0,0,10"
                             VerticalAlignment="Center"
                             d:Text="No Date"
                             Foreground="White"
@@ -544,13 +553,14 @@
                             Grid.Row="1"
                             Grid.Column="0"
                             Width="200"
+                            Margin="0,0,0,10"
                             Content="End Selling Date"
                             Date="{Binding EndSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             IsTodayHighlighted="True" />
                         <ui:TextBlock
                             Grid.Row="1"
                             Grid.Column="1"
-                            Margin="8,0,0,0"
+                            Margin="8,0,0,10"
                             VerticalAlignment="Center"
                             d:Text="No Date"
                             Foreground="White"
@@ -560,13 +570,14 @@
                             Grid.Row="2"
                             Grid.Column="0"
                             Width="200"
+                            Margin="0,0,0,10"
                             Content="Start Selling Date"
                             Date="{Binding SaleStartSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             IsTodayHighlighted="True" />
                         <ui:TextBlock
                             Grid.Row="2"
                             Grid.Column="1"
-                            Margin="8,0,0,0"
+                            Margin="8,0,0,10"
                             VerticalAlignment="Center"
                             d:Text="No Date"
                             Foreground="White"
@@ -576,13 +587,14 @@
                             Grid.Row="3"
                             Grid.Column="0"
                             Width="200"
+                            Margin="0,0,0,10"
                             Content="End Selling Date"
                             Date="{Binding SaleEndSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             IsTodayHighlighted="True" />
                         <ui:TextBlock
                             Grid.Row="3"
                             Grid.Column="1"
-                            Margin="8,0,0,0"
+                            Margin="8,0,0,10"
                             VerticalAlignment="Center"
                             d:Text="No Date"
                             Foreground="White"
@@ -745,7 +757,8 @@
                 SelectionMode="Single"
                 SelectionUnit="FullRow"
                 Template="{StaticResource lb_datagrid}"
-                VerticalGridLinesBrush="White">
+                VerticalGridLinesBrush="White"
+                Visibility="{Binding IsVisible}">
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
@@ -813,7 +826,7 @@
                 </DataGrid.Columns>
             </DataGrid>
 
-            <Grid Grid.Row="4">
+            <Grid Grid.Row="4" Visibility="{Binding IsVisible}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -972,6 +985,15 @@
                         Template="{StaticResource lb_combobox}" />
                 </StackPanel>
             </Grid>
+            <TextBlock
+                Grid.Row="3"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                d:Text="Open a file"
+                FontSize="15"
+                Foreground="White"
+                Text="{Binding OpenMessage}" />
 
 
         </Grid>

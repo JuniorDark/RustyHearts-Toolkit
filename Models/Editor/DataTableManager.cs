@@ -271,7 +271,6 @@ public partial class DataTableManager : ObservableObject
             _redoStack.Clear();
             OnCanExecuteChangesChanged();
 
-
             SelectedItem = DataTable.DefaultView[rowIndex];
             OnPropertyChanged(nameof(DataTable));
         }
@@ -689,6 +688,7 @@ public partial class DataTableManager : ObservableObject
         SaveFileCommand.NotifyCanExecuteChanged();
         SaveFileAsCommand.NotifyCanExecuteChanged();
         SaveFileAsMIPCommand.NotifyCanExecuteChanged();
+        AddNewRowCommand.NotifyCanExecuteChanged();
         UndoChangesCommand.NotifyCanExecuteChanged();
         RedoChangesCommand.NotifyCanExecuteChanged();
         CloseFileCommand.NotifyCanExecuteChanged();

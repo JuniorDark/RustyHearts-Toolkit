@@ -17,14 +17,14 @@ namespace RHToolkit.Views.Windows
 
         private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            if (DataContext is RHEditorViewModel viewModel && e.EditAction == DataGridEditAction.Commit)
+            if (DataContext is RHEditorViewModel viewModel && viewModel.DataTableManager != null && e.EditAction == DataGridEditAction.Commit)
             {
                 var columnIndex = e.Column.DisplayIndex;
                 var rowIndex = e.Row.GetIndex();
                 var oldValue = ((DataRowView)e.Row.Item).Row[columnIndex];
                 var newValue = ((TextBox)e.EditingElement).Text;
 
-                viewModel.RecordEdit(rowIndex, columnIndex, oldValue, newValue);
+                viewModel.DataTableManager.RecordEdit(rowIndex, columnIndex, oldValue, newValue);
             }
         }
 
