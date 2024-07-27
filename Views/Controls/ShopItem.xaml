@@ -88,6 +88,7 @@
             Width="320"
             Height="104"
             VerticalAlignment="Top"
+            d:Source="/Assets/images/cashshop/lb_cashshop_itemslot.png"
             IsHitTestVisible="False"
             Source="/Assets/images/cashshop/lb_cashshop_itemslot.png"
             Stretch="Fill" />

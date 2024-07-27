@@ -484,6 +484,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click on the icon slot to edit a item..
+        /// </summary>
+        public static string EditItemHelp {
+            get {
+                return ResourceManager.GetString("EditItemHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Empty Recipient.
         /// </summary>
         public static string EmptyRecipient {

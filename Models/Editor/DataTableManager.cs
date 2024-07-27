@@ -10,39 +10,37 @@ namespace RHToolkit.Models.Editor;
 
 public partial class DataTableManager : ObservableObject
 {
-    private SearchDialog? searchDialog;
+    private SearchDialog? _searchDialog;
     private readonly Stack<EditHistory> _undoStack = new();
     private readonly Stack<EditHistory> _redoStack = new();
+    private readonly FileManager _fileManager = new();
 
-    private int? lastFoundRow = null;
     private DataGridSelectionUnit? _selectionUnit = null;
     private Point? lastFoundCell = null;
-
-    private readonly FileManager _fileManager = new();
 
     #region Search
 
     public void OpenSearchDialog(Window owner, string? parameter, DataGridSelectionUnit selectionUnit)
     {
-        if (searchDialog == null || !searchDialog.IsVisible)
+        if (_searchDialog == null || !_searchDialog.IsVisible)
         {
-            searchDialog = new SearchDialog
+            _searchDialog = new SearchDialog
             {
                 Owner = owner
             };
-            searchDialog.FindNext += Search;
-            searchDialog.ReplaceFindNext += Search;
-            searchDialog.Replace += Replace;
-            searchDialog.ReplaceAll += ReplaceAll;
-            searchDialog.CountMatches += CountMatches;
-            searchDialog.Show();
+            _searchDialog.FindNext += Search;
+            _searchDialog.ReplaceFindNext += Search;
+            _searchDialog.Replace += Replace;
+            _searchDialog.ReplaceAll += ReplaceAll;
+            _searchDialog.CountMatches += CountMatches;
+            _searchDialog.Show();
         }
         else
         {
-            searchDialog.Focus();
+            _searchDialog.Focus();
         }
         _selectionUnit = selectionUnit;
-        searchDialog.SearchTabControl.SelectedIndex = parameter == "Find" ? 0 : 1;
+        _searchDialog.SearchTabControl.SelectedIndex = parameter == "Find" ? 0 : 1;
     }
 
     private void Search(string searchText, bool matchCase)
@@ -56,7 +54,7 @@ public partial class DataTableManager : ObservableObject
         bool wrappedAround = false;
 
         // Clear any existing message at the start of a new search
-        searchDialog?.ShowMessage(string.Empty, Brushes.Transparent);
+        _searchDialog?.ShowMessage(string.Empty, Brushes.Transparent);
 
         int startRowIndex = 0;
         int startColIndex = 0;
@@ -111,7 +109,7 @@ public partial class DataTableManager : ObservableObject
                     // Show message if wrapped around
                     if (wrappedAround)
                     {
-                        searchDialog?.ShowMessage($"Found the 1st occurrence from the top. The end of the table has been reached.", Brushes.Green);
+                        _searchDialog?.ShowMessage($"Found the 1st occurrence from the top. The end of the table has been reached.", Brushes.Green);
                     }
 
                     break;
@@ -132,11 +130,11 @@ public partial class DataTableManager : ObservableObject
         {
             if (wrappedAround)
             {
-                searchDialog?.ShowMessage($"End of data reached. Search text '{searchText}' not found.", Brushes.Red);
+                _searchDialog?.ShowMessage($"End of data reached. Search text '{searchText}' not found.", Brushes.Red);
             }
             else
             {
-                searchDialog?.ShowMessage($"Search text '{searchText}' not found.", Brushes.Red);
+                _searchDialog?.ShowMessage($"Search text '{searchText}' not found.", Brushes.Red);
             }
             lastFoundCell = null;
         }
@@ -172,7 +170,7 @@ public partial class DataTableManager : ObservableObject
                 _redoStack.Clear();
                 OnCanExecuteChangesChanged();
 
-                searchDialog?.ShowMessage($"Replaced text in row {rowIndex + 1}, column {colIndex + 1}.", Brushes.Green);
+                _searchDialog?.ShowMessage($"Replaced text in row {rowIndex + 1}, column {colIndex + 1}.", Brushes.Green);
                 lastFoundCell = null;
                 return;
             }
@@ -225,7 +223,7 @@ public partial class DataTableManager : ObservableObject
             OnCanExecuteChangesChanged();
         }
 
-        searchDialog?.ShowMessage($"Replaced {replaceCount} occurrences.", Brushes.Green);
+        _searchDialog?.ShowMessage($"Replaced {replaceCount} occurrences.", Brushes.Green);
     }
 
     public void CountMatches(string searchText, bool matchCase)
@@ -237,7 +235,7 @@ public partial class DataTableManager : ObservableObject
 
         int count = DataTable.Rows.Cast<DataRow>().Sum(row => row.ItemArray.Count(item => item != null && item.ToString()?.Contains(searchText, comparison) == true));
 
-        searchDialog?.ShowMessage($"Count: {count} matches in entire table", Brushes.LightBlue);
+        _searchDialog?.ShowMessage($"Count: {count} matches in entire table", Brushes.LightBlue);
     }
 
     #endregion
@@ -620,7 +618,61 @@ public partial class DataTableManager : ObservableObject
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving MIP file: {ex.Message}", "Save File Error");
+                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+            }
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+    public async Task SaveFileAsXML()
+    {
+        if (DataTable == null || CurrentFileName == null) return;
+
+        SaveFileDialog saveFileDialog = new()
+        {
+            Filter = "eXtensible Markup Language file (*.xml)|*.xml|All Files (*.*)|*.*",
+            FilterIndex = 1,
+            FileName = CurrentFileName
+        };
+
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            try
+            {
+                string file = saveFileDialog.FileName;
+
+                await FileManager.ExportToXMLAsync(DataTable, file);
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+            }
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+    public async Task SaveFileAsXLSX()
+    {
+        if (DataTable == null || CurrentFileName == null) return;
+
+        SaveFileDialog saveFileDialog = new()
+        {
+            Filter = "Microsoft Excel Open XML Spreadsheet file (*.xlsx)|*.xlsx|All Files (*.*)|*.*",
+            FilterIndex = 1,
+            FileName = CurrentFileName
+        };
+
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            try
+            {
+                string file = saveFileDialog.FileName;
+
+                await FileManager.ExportToXLSXAsync(DataTable, file);
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
             }
         }
     }
@@ -688,6 +740,8 @@ public partial class DataTableManager : ObservableObject
         SaveFileCommand.NotifyCanExecuteChanged();
         SaveFileAsCommand.NotifyCanExecuteChanged();
         SaveFileAsMIPCommand.NotifyCanExecuteChanged();
+        SaveFileAsXMLCommand.NotifyCanExecuteChanged();
+        SaveFileAsXLSXCommand.NotifyCanExecuteChanged();
         AddNewRowCommand.NotifyCanExecuteChanged();
         UndoChangesCommand.NotifyCanExecuteChanged();
         RedoChangesCommand.NotifyCanExecuteChanged();

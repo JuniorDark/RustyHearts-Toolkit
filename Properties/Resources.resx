@@ -258,6 +258,9 @@
   <data name="Edgar" xml:space="preserve">
     <value>Edgar</value>
   </data>
+  <data name="EditItemHelp" xml:space="preserve">
+    <value>Click on the icon slot to edit a item.</value>
+  </data>
   <data name="EmptyRecipient" xml:space="preserve">
     <value>Empty Recipient</value>
   </data>

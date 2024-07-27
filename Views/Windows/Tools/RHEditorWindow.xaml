@@ -84,11 +84,23 @@
                         Header="Save As..."
                         Icon="{ui:SymbolIcon DocumentSave24}"
                         InputGestureText="Ctrl+Alt+S" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.SaveFileAsMIPCommand}"
-                        Header="Export as MIP"
-                        Icon="{ui:SymbolIcon DocumentSave24}"
-                        InputGestureText="Ctrl+Shift+S" />
+                    <MenuItem Header="Export as..." Icon="{ui:SymbolIcon DocumentSave24}">
+                        <MenuItem
+                            Command="{Binding DataTableManager.SaveFileAsMIPCommand}"
+                            Header="Export as MIP"
+                            Icon="{ui:SymbolIcon DocumentSave24}"
+                            InputGestureText="Ctrl+Shift+S" />
+                        <MenuItem
+                            Command="{Binding DataTableManager.SaveFileAsXMLCommand}"
+                            Header="Export as XML"
+                            Icon="{ui:SymbolIcon DocumentSave24}"
+                            InputGestureText="Ctrl+Shift+X" />
+                        <MenuItem
+                            Command="{Binding DataTableManager.SaveFileAsXLSXCommand}"
+                            Header="Export as XLSX"
+                            Icon="{ui:SymbolIcon DocumentSave24}"
+                            InputGestureText="Ctrl+Shift+E" />
+                    </MenuItem>
                     <MenuItem
                         Command="{Binding CloseFileCommand}"
                         Header="Close"

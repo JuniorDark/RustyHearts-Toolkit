@@ -1,5 +1,4 @@
-﻿using RHToolkit.Models.MIP;
-using RHToolkit.Models.RH;
+﻿using RHToolkit.Models.RH;
 using System.Data;
 using static RHToolkit.Models.MIP.MIPCoder;
 
@@ -105,10 +104,24 @@ namespace RHToolkit.Models.Editor
             {
                 byte[] encryptedData = _dataTableCryptor.DataTableToRh(fileData);
                 // Compress file
-                byte[] compressedData = MIPCoder.CompressFileZlibAsync(encryptedData);
+                byte[] compressedData = CompressFileZlibAsync(encryptedData);
 
                 await File.WriteAllBytesAsync(file, compressedData);
             }
+        }
+
+        public static async Task ExportToXMLAsync(DataTable fileData, string file)
+        {
+            byte[] xmlData = DataTableCryptor.DataTableToXML(fileData);
+
+            await File.WriteAllBytesAsync(file, xmlData);
+        }
+
+        public static async Task ExportToXLSXAsync(DataTable fileData, string file)
+        {
+            byte[] xlsxData = DataTableCryptor.DataTableToXLSX(fileData);
+
+            await File.WriteAllBytesAsync(file, xlsxData);
         }
     }
 }

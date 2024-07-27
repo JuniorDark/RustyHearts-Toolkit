@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using OfficeOpenXml;
+using System.Data;
 
 namespace RHToolkit.Models.RH
 {
@@ -27,12 +28,25 @@ namespace RHToolkit.Models.RH
 
                 List<string> listTitles = new(numCol);
                 List<Type> listTypes = new(numCol);
+                Dictionary<string, int> columnCounter = [];
 
                 // Get the title
                 for (int i = 0; i < numCol; i++)
                 {
                     int numStrLen = reader.ReadInt16();
                     string value = Encoding.Unicode.GetString(reader.ReadBytes(numStrLen * 2));
+
+                    // Ensure unique column name
+                    if (columnCounter.ContainsKey(value))
+                    {
+                        columnCounter[value]++;
+                        value = $"{value}-{columnCounter[value]}";
+                    }
+                    else
+                    {
+                        columnCounter[value] = 1;
+                    }
+
                     listTitles.Add(value);
                 }
 
@@ -41,7 +55,7 @@ namespace RHToolkit.Models.RH
                 for (int i = 0; i < numCol; i++)
                 {
                     int t = reader.ReadInt32();
-                    Type columnType = GetColumnType(t);
+                    Type columnType = DataType.GetColumnDataType(t);
                     intTypes[i] = t;
                     dataTable.Columns.Add(listTitles[i], columnType);
                     // Store columntype as extended property
@@ -54,7 +68,7 @@ namespace RHToolkit.Models.RH
                     DataRow row = dataTable.NewRow();
                     for (int j = 0; j < numCol; j++)
                     {
-                        row[j] = GetValueByType(intTypes[j], reader);
+                        row[j] = DataType.GetValueByType(intTypes[j], reader);
                     }
                     dataTable.Rows.Add(row);
                 }
@@ -83,7 +97,13 @@ namespace RHToolkit.Models.RH
                 // Write column names
                 foreach (DataColumn column in dataTable.Columns)
                 {
-                    byte[] strByte = Encoding.Unicode.GetBytes(column.ColumnName);
+                    string columnName = column.ColumnName;
+                    if (columnName.Contains('-'))
+                    {
+                        string[] parts = columnName.Split('-');
+                        columnName = parts[0]; // Use the original attribute name
+                    }
+                    byte[] strByte = Encoding.Unicode.GetBytes(columnName);
                     short numStrLen = (short)(strByte.Length / 2);
                     writer.Write(numStrLen);
                     writer.Write(strByte);
@@ -114,7 +134,7 @@ namespace RHToolkit.Models.RH
                         int? columnType = (int?)column.ExtendedProperties?["ColumnType"];
                         if (columnType.HasValue)
                         {
-                            WriteValueByType(writer, row[j], columnType.Value);
+                            DataType.WriteValueByType(writer, row[j], columnType.Value);
                         }
                         else
                         {
@@ -135,66 +155,175 @@ namespace RHToolkit.Models.RH
             }
         }
 
-        private static void WriteValueByType(BinaryWriter writer, object value, int type)
+        public static byte[] DataTableToXML(DataTable dataTable)
         {
-            switch (type)
+            try
             {
-                case 0:
-                    writer.Write(Convert.ToInt32(value));
-                    break;
-                case 1:
-                    writer.Write(Convert.ToSingle(value));
-                    break;
-                case 2:
-                case 3:
+                StringBuilder xmlBuilder = new();
+                xmlBuilder.Append("<?xml version=\"1.0\" encoding=\"utf-8\" ?>\n");
+
+                xmlBuilder.Append("<Root>\n");
+                xmlBuilder.Append("<Attributes>\n");
+
+                List<string> listTitles = new(dataTable.Columns.Count);
+                List<string> listTypes = new(dataTable.Columns.Count);
+                Dictionary<string, int> attributeCounter = [];
+
+                // Get the title and type
+                foreach (DataColumn column in dataTable.Columns)
+                {
+                    string title = column.ColumnName;
+                    listTitles.Add(title);
+
+                    int typeValue;
+                    if (column.ExtendedProperties.ContainsKey("ColumnType") && column.ExtendedProperties["ColumnType"] is int value)
                     {
-                        string strValue = Convert.ToString(value) ?? string.Empty;
-                        byte[] strBytes = Encoding.Unicode.GetBytes(strValue);
-                        short numStrLen = (short)(strBytes.Length / 2);
-                        writer.Write(numStrLen);
-                        writer.Write(strBytes);
-                        break;
+                        typeValue = value;
                     }
-                case 4:
-                    writer.Write(Convert.ToInt64(value));
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), $"Unexpected type: {type}");
+                    else
+                    {
+                        throw new Exception($"Column '{title}' does not have a valid 'ColumnType' property.");
+                    }
+
+                    string type = DataType.GetColumnType(typeValue);
+                    listTypes.Add(type);
+                }
+
+                // Write the Attributes
+                for (int i = 0; i < dataTable.Columns.Count; i++)
+                {
+                    string title = listTitles[i];
+                    string type = listTypes[i];
+
+                    if (attributeCounter.ContainsKey(title))
+                    {
+                        attributeCounter[title]++;
+                        title = $"{title}-{attributeCounter[title]}";
+                    }
+                    else
+                    {
+                        attributeCounter[title] = 1;
+                    }
+
+                    xmlBuilder.AppendFormat("<Attribute name=\"{0}\" type=\"{1}\" />\n", DataType.XMLEncodeAttribute(title), type);
+                }
+
+                xmlBuilder.Append("</Attributes>\n");
+                xmlBuilder.Append("<Data>\n");
+
+                // Get all rows
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    xmlBuilder.Append("<Row ");
+
+                    // Reset the counter for each row
+                    Dictionary<string, int> attributeCounterForRow = [];
+
+                    for (int j = 0; j < dataTable.Columns.Count; j++)
+                    {
+                        string title = listTitles[j];
+                        string value = row[j]?.ToString() ?? string.Empty;
+
+                        if (attributeCounterForRow.ContainsKey(title))
+                        {
+                            attributeCounterForRow[title]++;
+                            title = $"{title}-{attributeCounterForRow[title]}";
+                        }
+                        else
+                        {
+                            attributeCounterForRow[title] = 1;
+                        }
+
+                        // Use XMLEncodeCommon for the values in rows
+                        xmlBuilder.AppendFormat("{0}=\"{1}\" ", DataType.XMLEncodeAttribute(title), DataType.XMLEncode(value));
+                    }
+                    xmlBuilder.Append("/>\n");
+                }
+
+                xmlBuilder.Append("</Data>\n");
+                xmlBuilder.Append("</Root>");
+                return Encoding.UTF8.GetBytes(xmlBuilder.ToString());
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to convert DataTable to XML: {ex.Message}", ex);
             }
         }
 
-        private static Type GetColumnType(int value)
+        public static byte[] DataTableToXLSX(DataTable dataTable)
         {
-            return value switch
+            try
             {
-                0 => typeof(int),
-                1 => typeof(float),
-                2 => typeof(string),
-                3 => typeof(string),
-                4 => typeof(long),
-                _ => throw new ArgumentOutOfRangeException(nameof(value), $"Unexpected type: {value}"),
-            };
-        }
+                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
-        private static object GetValueByType(int type, BinaryReader reader)
-        {
-            switch (type)
-            {
-                case 0:
-                    return reader.ReadInt32();
-                case 1:
-                    return reader.ReadSingle();
-                case 2:
-                case 3:
+                using ExcelPackage package = new();
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("sheet");
+
+                int numRow = dataTable.Rows.Count;
+                int numCol = dataTable.Columns.Count;
+
+                if (numCol <= 0)
+                {
+                    throw new Exception("The DataTable has no columns");
+                }
+
+                List<string> listTitles = new(numCol);
+                List<string> listTypes = new(numCol);
+
+                // Get the titles and types
+                foreach (DataColumn column in dataTable.Columns)
+                {
+                    string title = column.ColumnName;
+                    listTitles.Add(title);
+
+                    int typeValue;
+                    if (column.ExtendedProperties.ContainsKey("ColumnType") && column.ExtendedProperties["ColumnType"] is int value)
                     {
-                        int numStrLen = reader.ReadInt16();
-                        return Encoding.Unicode.GetString(reader.ReadBytes(numStrLen * 2));
+                        typeValue = value;
                     }
-                case 4:
-                    return reader.ReadInt64();
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), $"Unexpected type: {type}");
+                    else
+                    {
+                        throw new Exception($"Column '{title}' does not have a valid 'ColumnType' property.");
+                    }
+                    string type = DataType.GetColumnType(typeValue);
+                    listTypes.Add(type);
+                }
+
+                // Write titles to the worksheet
+                if (worksheet.Cells["A1"].LoadFromArrays(new List<string[]> { listTitles.ToArray() }) is ExcelRange rowTitle)
+                {
+                    rowTitle.Style.Font.Bold = true;
+                }
+
+                // Write types to the worksheet
+                ExcelRange? rowType = worksheet.Cells["A2"].LoadFromArrays(new List<string[]> { listTypes.ToArray() }) as ExcelRange;
+
+                // Freeze the first two rows
+                worksheet.View.FreezePanes(2, 1);
+
+                // Write rows to the worksheet
+                for (int i = 0; i < numRow; i++)
+                {
+                    List<object> rowValues = new(numCol);
+                    for (int j = 0; j < numCol; j++)
+                    {
+                        rowValues.Add(dataTable.Rows[i][j]);
+                    }
+                    ExcelRange? row = worksheet.Cells[i + 3, 1].LoadFromArrays([[.. rowValues]]) as ExcelRange;
+                }
+
+                // Automatically adjust the column widths
+                worksheet.Cells.AutoFitColumns();
+
+                using MemoryStream streamBook = new();
+                package.SaveAs(streamBook);
+                return streamBook.ToArray();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed to convert DataTable to XLSX: {ex.Message}", ex);
             }
         }
+
     }
 }
