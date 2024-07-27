@@ -1,11 +1,17 @@
-﻿using System.Windows.Controls;
+﻿using RHToolkit.ViewModels.Pages;
+using Wpf.Ui.Controls;
 
 namespace RHToolkit.Views.Pages;
 
-public partial class HomePage : Page
+public partial class HomePage : INavigableView<HomePageViewModel>
 {
-    public HomePage()
+    public HomePageViewModel ViewModel { get; }
+
+    public HomePage(HomePageViewModel viewModel)
     {
+        ViewModel = viewModel;
+        DataContext = this;
+
         InitializeComponent();
     }
 }

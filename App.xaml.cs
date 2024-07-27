@@ -36,6 +36,7 @@ public partial class App : Application
 
                 // Top-level pages
                 _ = services.AddSingleton<HomePage>();
+                _ = services.AddSingleton<HomePageViewModel>();
                 _ = services.AddSingleton<DatabaseToolsPage>();
                 _ = services.AddSingleton<DatabaseToolsViewModel>();
                 _ = services.AddSingleton<DatabasePage>();
