@@ -17,10 +17,10 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
     private readonly MailHelper _mailHelper;
-    private readonly ItemHelper _itemHelper;
+    private readonly ItemDataManager _itemHelper;
     private readonly Guid _token;
 
-    public MailWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, MailHelper mailHelper, ItemHelper itemHelper)
+    public MailWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, MailHelper mailHelper, ItemDataManager itemHelper)
     {
         _token = Guid.NewGuid();
         _windowsService = windowsService;
@@ -35,19 +35,27 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
     [RelayCommand]
     private void AddItem(string parameter)
     {
-        if (int.TryParse(parameter, out int slotIndex))
+        try
         {
-            var token = _token;
-
-            ItemData? itemData = ItemDataList?.FirstOrDefault(m => m.SlotIndex == slotIndex);
-
-            itemData ??= new ItemData
+            if (int.TryParse(parameter, out int slotIndex))
             {
-                SlotIndex = slotIndex
-            };
+                var token = _token;
 
-            _windowsService.OpenItemWindow(token, "Mail", itemData);
+                ItemData? itemData = ItemDataList?.FirstOrDefault(m => m.SlotIndex == slotIndex);
+
+                itemData ??= new ItemData
+                {
+                    SlotIndex = slotIndex
+                };
+
+                _windowsService.OpenItemWindow(token, "Mail", itemData);
+            }
         }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+        }
+        
     }
 
     public void Receive(ItemDataMessage message)

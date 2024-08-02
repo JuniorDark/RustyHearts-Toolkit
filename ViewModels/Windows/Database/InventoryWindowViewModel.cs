@@ -11,9 +11,9 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
-    private readonly ItemHelper _itemHelper;
+    private readonly ItemDataManager _itemHelper;
 
-    public InventoryWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemHelper itemHelper)
+    public InventoryWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemDataManager itemHelper)
     {
         _windowsService = windowsService;
         _databaseService = databaseService;
@@ -305,7 +305,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
     {
         if (CharacterData == null) return;
 
-        var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, newItemData.PageIndex);
+        var newItem = ItemDataManager.CreateNewItem(CharacterData, newItemData, newItemData.PageIndex);
 
         ItemDatabaseList ??= [];
         ItemDatabaseList.Add(newItem);

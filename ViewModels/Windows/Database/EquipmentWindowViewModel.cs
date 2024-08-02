@@ -13,9 +13,9 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
-    private readonly ItemHelper _itemHelper;
+    private readonly ItemDataManager _itemHelper;
 
-    public EquipmentWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemHelper itemHelper)
+    public EquipmentWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemDataManager itemHelper)
     {
         _windowsService = windowsService;
         _databaseService = databaseService;
@@ -229,7 +229,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
     {
         if (CharacterData == null) return;
 
-        var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 0);
+        var newItem = ItemDataManager.CreateNewItem(CharacterData, newItemData, 0);
 
         ItemDatabaseList ??= [];
         ItemDatabaseList.Add(newItem);

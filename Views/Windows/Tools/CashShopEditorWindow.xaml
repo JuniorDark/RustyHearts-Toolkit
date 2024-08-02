@@ -63,7 +63,13 @@
                 ButtonsForeground="White"
                 FontSize="15"
                 Foreground="White" />
-
+            <Image
+                Grid.Row="1"
+                Grid.RowSpan="4"
+                Grid.ColumnSpan="2"
+                Panel.ZIndex="-1"
+                Source="/Assets/images/cashshop/lb_cashshop_bg.png"
+                Stretch="UniformToFill" />
             <Menu
                 Grid.Row="1"
                 VerticalAlignment="Top"
@@ -157,7 +163,6 @@
                         InputGestureText="Ctrl+H" />
                 </ui:MenuItem>
             </Menu>
-
             <Menu
                 Grid.Row="2"
                 VerticalAlignment="Top"
@@ -578,7 +583,7 @@
                             Grid.Column="0"
                             Width="200"
                             Margin="0,0,0,10"
-                            Content="Start Selling Date"
+                            Content="Start Sale Selling Date"
                             Date="{Binding SaleStartSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             IsTodayHighlighted="True" />
                         <ui:TextBlock
@@ -595,7 +600,7 @@
                             Grid.Column="0"
                             Width="200"
                             Margin="0,0,0,10"
-                            Content="End Selling Date"
+                            Content="End Sale Selling Date"
                             Date="{Binding SaleEndSellingDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             IsTodayHighlighted="True" />
                         <ui:TextBlock
@@ -966,7 +971,7 @@
                         VerticalContentAlignment="Center"
                         IsReadOnly="True"
                         ItemsSource="{Binding ClassItemsFilter}"
-                        SelectedValue="{Binding ClassFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedValue="{Binding ItemDataManager.ClassItemsFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -1001,7 +1006,6 @@
                 FontSize="15"
                 Foreground="White"
                 Text="{Binding OpenMessage}" />
-
 
         </Grid>
     </ContentControl>

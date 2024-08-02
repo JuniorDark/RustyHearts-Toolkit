@@ -22,8 +22,13 @@
     </UserControl.Resources>
 
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
         <Button
             x:Name="buttonItem"
+            Grid.Column="0"
             Width="44"
             Height="44"
             Background="Transparent"
@@ -75,6 +80,7 @@
         </Button>
         <Image
             x:Name="imgItemEmpty"
+            Grid.Column="0"
             Width="44"
             Height="44"
             VerticalAlignment="Top"
@@ -84,6 +90,7 @@
             Stretch="Fill" />
         <Image
             x:Name="imgItemIcon"
+            Grid.Column="0"
             Width="36"
             Height="36"
             Margin="0,4,1,0"
@@ -99,6 +106,7 @@
 
         <Image
             x:Name="imgItemIconBranch"
+            Grid.Column="0"
             Width="42"
             Height="42"
             Margin="0,0,0,0"
@@ -120,5 +128,16 @@
             IsHitTestVisible="False"
             Text="{Binding FrameViewModel.ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}}"
             Visibility="{Binding FrameViewModel.ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
+        <TextBlock
+            Grid.Column="1"
+            Margin="10,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            d:Foreground="White"
+            d:Text="Item Name"
+            FontSize="12"
+            Foreground="{Binding FrameViewModel.ItemNameColor, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToBrushConverter}, FallbackValue=White}"
+            Text="{Binding FrameViewModel.ItemName, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Visibility="{Binding ItemNameVisibility, RelativeSource={RelativeSource AncestorType=UserControl}}" />
     </Grid>
 </UserControl>

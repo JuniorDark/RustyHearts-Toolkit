@@ -67,7 +67,7 @@ namespace RHToolkit.Services
             string optionName = _gmDatabaseService.GetOptionName(option);
             (int secTime, float value) = _gmDatabaseService.GetOptionValues(option);
 
-            string formattedOption = FormatNameID(option, optionName, $"{optionValue}", $"{secTime}", $"{value}", isFixedOption);
+            string formattedOption = FormatNameID(option, optionName, $"{optionValue}", $"{secTime}", $"{value}");
 
             return option != 0 ? formattedOption : Resources.NoBuff;
         }
@@ -124,7 +124,8 @@ namespace RHToolkit.Services
             string setEffect05 = GetOptionName(nSetOption04, nSetOptionvlue04);
 
             string setEffect = $"{Resources.SetEffect}\n";
-            setEffect += $"{Resources.Set2}: {setEffect01}\n";
+            if (nSetOption00 != 0)
+                setEffect += $"{Resources.Set2}: {setEffect01}\n";
             if (nSetOption01 != 0)
                 setEffect += $"{Resources.Set3}: {setEffect02}\n";
             if (nSetOption02 != 0)
@@ -187,7 +188,7 @@ namespace RHToolkit.Services
         private const string ColorTagClose = "</COLOR>";
         private const string LineBreakTag = "<br>";
 
-        public static string FormatNameID(int optionID, string optionName, string replacement01, string replacement02, string replacement03, bool isFixedOption = false)
+        public static string FormatNameID(int optionID, string optionName, string replacement01, string replacement02, string replacement03)
         {
             optionName = RemoveColorTags(optionName);
 
@@ -205,27 +206,27 @@ namespace RHToolkit.Services
 
             if (hasValuePlaceholder01 && !hasValuePlaceholder02 && !hasValuePlaceholder03)
             {
-                optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01, isFixedOption);
+                optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
             }
             else if (!hasValuePlaceholder01 && hasValuePlaceholder02 && !hasValuePlaceholder03)
             {
-                optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01, isFixedOption);
+                optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01);
             }
             else if (hasValuePlaceholder01 && hasValuePlaceholder02 && !hasValuePlaceholder03)
             {
                 if (optionName.Contains(Resources.OptionChanceToCast))
                 {
-                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01, isFixedOption);
-                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement03, isFixedOption);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement03);
                 }
                 else if (optionName.Contains(Resources.OptionDamageConverted))
                 {
                     optionName = optionName.Replace(valuePlaceholder01, Resources.PhysicalMagic);
-                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01, isFixedOption);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01, true);
                 }
                 else if (optionName.Contains(Resources.OptionRecoverPlus))
                 {
-                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01, isFixedOption);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
                     if (int.TryParse(replacement02, out int seconds))
                     {
                         int minutes = seconds / 60;
@@ -236,49 +237,49 @@ namespace RHToolkit.Services
                 }
                 else if (optionName.Contains(Resources.OptionChanceOf) || optionName.Contains(Resources.OptionChanceTo))
                 {
-                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01, isFixedOption);
-                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement03, isFixedOption);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement03);
                 }
                 else if (optionName.Contains("Skill Damage +") || optionName.Contains("Skill Cooldown -"))
                 {
                     string skillName = GetSkillName(optionID);
 
                     optionName = optionName.Replace(valuePlaceholder01, skillName);
-                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01, isFixedOption);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01);
                 }
                 else
                 {
-                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement02, isFixedOption);
-                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01, isFixedOption);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement02);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01);
                 }
             }
             else if (hasValuePlaceholder01 && hasValuePlaceholder02 && hasValuePlaceholder03)
             {
                 if (optionName.Contains(Resources.OptionChanceOf) || optionName.Contains(Resources.OptionChanceTo))
                 {
-                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01, isFixedOption);
-                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement02, isFixedOption);
-                    optionName = FormatPercentage(optionName, valuePlaceholder03, replacement03, isFixedOption);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement02);
+                    optionName = FormatPercentage(optionName, valuePlaceholder03, replacement03);
                 }
                 else
                 {
-                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01, isFixedOption);
-                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement02, isFixedOption);
-                    optionName = FormatPercentage(optionName, valuePlaceholder03, replacement03, isFixedOption);
+                    optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement02);
+                    optionName = FormatPercentage(optionName, valuePlaceholder03, replacement03);
                 }
             }
             else if (!hasValuePlaceholder01 && hasValuePlaceholder02 && hasValuePlaceholder03)
             {
                 if (optionName.Contains(Resources.OptionWhenHit))
                 {
-                    optionName = FormatPercentage(optionName, "#@value02@#%", replacement03, isFixedOption);
-                    optionName = FormatPercentage(optionName, "#@value03@#%", replacement01, isFixedOption);
+                    optionName = FormatPercentage(optionName, "#@value02@#%", replacement03);
+                    optionName = FormatPercentage(optionName, "#@value03@#%", replacement01);
                     optionName = optionName.Replace("#@value02@#", replacement02);
                 }
                 else
                 {
-                    optionName = FormatPercentage(optionName, valuePlaceholder03, replacement03, isFixedOption);
-                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement02, isFixedOption);
+                    optionName = FormatPercentage(optionName, valuePlaceholder03, replacement03);
+                    optionName = FormatPercentage(optionName, valuePlaceholder02, replacement02);
                 }
 
             }

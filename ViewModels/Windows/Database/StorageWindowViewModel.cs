@@ -12,9 +12,9 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
-    private readonly ItemHelper _itemHelper;
+    private readonly ItemDataManager _itemHelper;
 
-    public StorageWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemHelper itemHelper)
+    public StorageWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemDataManager itemHelper)
     {
         _windowsService = windowsService;
         _databaseService = databaseService;
@@ -413,7 +413,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     {
         if (CharacterData == null) return;
 
-        var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 3);
+        var newItem = ItemDataManager.CreateNewItem(CharacterData, newItemData, 3);
         StorageItemDatabaseList ??= [];
         StorageItemDatabaseList.Add(newItem);
         var frameViewModel = _itemHelper.GetItemData(newItem);
@@ -518,7 +518,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     {
         if (CharacterData == null) return;
 
-        var newItem = ItemHelper.CreateNewItem(CharacterData, newItemData, 3);
+        var newItem = ItemDataManager.CreateNewItem(CharacterData, newItemData, 3);
         AccountStorageItemDatabaseList ??= [];
         AccountStorageItemDatabaseList.Add(newItem);
         var frameViewModel = _itemHelper.GetItemData(newItem);

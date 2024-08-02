@@ -26,6 +26,9 @@ namespace RHToolkit.Views.Controls
         public static readonly DependencyProperty InventorySizeProperty = DependencyProperty.Register(
             "InventorySize", typeof(string), typeof(ItemSlot), new PropertyMetadata(null, OnInventorySizeChanged));
 
+        public static readonly DependencyProperty ItemNameVisibilityProperty = DependencyProperty.Register(
+            "ItemNameVisibility", typeof(Visibility), typeof(ItemSlot), new PropertyMetadata(Visibility.Collapsed));
+
         public FrameViewModel FrameViewModel
         {
             get => (FrameViewModel)GetValue(FrameViewModelProperty);
@@ -66,6 +69,12 @@ namespace RHToolkit.Views.Controls
         {
             get => (string)GetValue(SlotIconProperty);
             set => SetValue(SlotIconProperty, value);
+        }
+
+        public Visibility ItemNameVisibility
+        {
+            get => (Visibility)GetValue(ItemNameVisibilityProperty);
+            set => SetValue(ItemNameVisibilityProperty, value);
         }
 
         public ItemSlot()

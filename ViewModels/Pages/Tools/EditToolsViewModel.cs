@@ -13,6 +13,7 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
     [
         new("RH Table Editor", "Edit .rh table files", SymbolRegular.DocumentEdit24, "rheditor"),
         new("Cash Shop Editor", "Edit cash shop .rh table file", SymbolRegular.DocumentEdit24, "cashshopeditor"),
+        new("Set Item Editor", "Edit setitem .rh table file", SymbolRegular.DocumentEdit24, "setitemeditor"),
 ];
 
     [RelayCommand]
@@ -32,6 +33,9 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
                     break;
                 case "cashshopeditor":
                     windowsProviderService.Show<CashShopEditorWindow>(true);
+                    break;
+                case "setitemeditor":
+                    windowsProviderService.Show<SetItemEditorWindow>(true);
                     break;
             }
         }

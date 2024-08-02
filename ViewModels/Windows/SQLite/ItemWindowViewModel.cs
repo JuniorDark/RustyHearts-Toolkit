@@ -1,12 +1,9 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
-using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.SQLite;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
-using System.ComponentModel;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
@@ -15,35 +12,12 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 {
     private readonly IGMDatabaseService _gmDatabaseService;
     private readonly CachedDataManager _cachedDataManager;
-    private readonly ItemHelper _itemHelper;
-    private readonly System.Timers.Timer _searchTimer;
 
-    public ItemWindowViewModel(IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager, ItemHelper itemHelper)
+    public ItemWindowViewModel(IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager, ItemDataManager itemHelper)
     {
         _gmDatabaseService = gmDatabaseService;
         _cachedDataManager = cachedDataManager;
-        _itemHelper = itemHelper;
-        _searchTimer = new()
-        {
-            Interval = 1000,
-            AutoReset = false
-        };
-        _searchTimer.Elapsed += SearchTimerElapsed;
-
-        PopulateItemDataItems();
-        PopulateOptionItems();
-        PopulateSocketColorItems();
-        PopulateItemTypeItemsFilter();
-        PopulateCategoryItemsFilter(ItemType.Item);
-        PopulateClassItemsFilter();
-        PopulateBranchItemsFilter();
-        PopulateItemTradeItemsFilter();
-
-        _itemDataView = new CollectionViewSource { Source = ItemDataItems }.View;
-        _itemDataView.Filter = FilterItems;
-        _optionView = CollectionViewSource.GetDefaultView(OptionItems);
-        _optionView.Filter = FilterOption;
-        ItemTradeFilter = 2;
+        _itemDataManager = itemHelper;
 
         WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
@@ -104,6 +78,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     case "CashShopItem":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CashShopEditorWindow", MessageType, Token));
                         break;
+                    case "SetItem":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "SetItemEditorWindow", MessageType, Token));
+                        break;
                     default:
                         break;
                 }
@@ -143,11 +120,15 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     case "Mail":
                         SlotIndexMin = 0;
                         SlotIndexMax = 2;
+                        IsSlotVisible = Visibility.Visible;
+                        IsOptionsVisible = Visibility.Visible;
                         break;
                     case "EquipItem":
                         SlotIndexMin = itemData.SlotIndex;
                         SlotIndexMax = itemData.SlotIndex;
                         SlotFilter(itemData.SlotIndex);
+                        IsSlotVisible = Visibility.Visible;
+                        IsOptionsVisible = Visibility.Visible;
                         break;
                     case "InventoryItem":
                         switch (itemData.PageIndex)
@@ -161,16 +142,22 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                                 SlotIndexMax = 23;
                                 break;
                         }
-                        InventoryTypeFilter = itemData.PageIndex;
+                        ItemDataManager.InventoryTypeFilter = itemData.PageIndex;
+                        IsSlotVisible = Visibility.Visible;
+                        IsOptionsVisible = Visibility.Visible;
                         break;
                     case "StorageItem":
                         SlotIndexMin = 0;
                         SlotIndexMax = 179;
+                        IsSlotVisible = Visibility.Visible;
+                        IsOptionsVisible = Visibility.Visible;
                         break;
                     case "AccountStorageItem":
                         SlotIndexMin = 0;
                         SlotIndexMax = 179;
-                        AccountStorageFilter = 1;
+                        ItemDataManager.AccountStorageFilter = 1;
+                        IsSlotVisible = Visibility.Visible;
+                        IsOptionsVisible = Visibility.Visible;
                         break;
                     case "CashShopItem":
                     case "CouponItem":
@@ -178,15 +165,23 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                         IsSlotVisible = Visibility.Hidden;
                         IsOptionsVisible = Visibility.Hidden;
                         break;
+                    case "SetItem":
+                        SlotIndexMin = 1;
+                        SlotIndexMax = 6;
+                        IsSlotVisible = Visibility.Visible;
+                        IsOptionsVisible = Visibility.Hidden;
+                        break;
                     default:
                         SlotIndexMin = itemData.SlotIndex;
                         SlotIndexMax = itemData.SlotIndex;
+                        IsSlotVisible = Visibility.Visible;
+                        IsOptionsVisible = Visibility.Visible;
                         break;
                 }
 
                 if (itemData.ItemId != 0)
                 {
-                    SelectedItem = ItemDataItems?.FirstOrDefault(item => item.ItemId == itemData.ItemId);
+                    SelectedItem = ItemDataManager.ItemDataItems?.FirstOrDefault(item => item.ItemId == itemData.ItemId);
                     LoadItemData(itemData);
                 }
                 else
@@ -213,6 +208,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             "StorageItem" => $"Add Storage Item [{CharacterData?.CharacterName}] ",
             "AccountStorageItem" => $"Add Account Storage Item [{CharacterData?.AccountName}] ",
             "Mail" => $"Add Mail Item",
+            "SetItem" => $"Add Set Item",
             _ => "Add Item",
         };
     }
@@ -231,166 +227,166 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             {
                 //Equipment
                 case 0: // Weapon
-                    ItemTypeFilter = 4;
-                    ItemSubCategoryFilter = 1;
-                    ItemClassFilter = ItemHelper.GetRealClass(CharacterData.Class);
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = false;
+                    ItemDataManager.ItemTypeFilter = 4;
+                    ItemDataManager.ItemSubCategoryFilter = 1;
+                    ItemDataManager.ItemClassFilter = ItemDataManager.GetRealClass(CharacterData.Class);
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = false;
                     break;
                 case 1: //Chest
-                    ItemTypeFilter = 3;
-                    ItemSubCategoryFilter = 2;
-                    ItemClassFilter = 0;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = true;
+                    ItemDataManager.ItemTypeFilter = 3;
+                    ItemDataManager.ItemSubCategoryFilter = 2;
+                    ItemDataManager.ItemClassFilter = 0;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = true;
                     break;
                 case 2: //Head
-                    ItemTypeFilter = 3;
-                    ItemSubCategoryFilter = 3;
-                    ItemClassFilter = 0;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = true;
+                    ItemDataManager.ItemTypeFilter = 3;
+                    ItemDataManager.ItemSubCategoryFilter = 3;
+                    ItemDataManager.ItemClassFilter = 0;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = true;
                     break;
                 case 3: //Legs
-                    ItemTypeFilter = 3;
-                    ItemSubCategoryFilter = 4;
-                    ItemClassFilter = 0;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = true;
+                    ItemDataManager.ItemTypeFilter = 3;
+                    ItemDataManager.ItemSubCategoryFilter = 4;
+                    ItemDataManager.ItemClassFilter = 0;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = true;
                     break;
                 case 4: //Feet
-                    ItemTypeFilter = 3;
-                    ItemSubCategoryFilter = 5;
-                    ItemClassFilter = 0;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = true;
+                    ItemDataManager.ItemTypeFilter = 3;
+                    ItemDataManager.ItemSubCategoryFilter = 5;
+                    ItemDataManager.ItemClassFilter = 0;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = true;
                     break;
                 case 5: //Waist
-                    ItemTypeFilter = 3;
-                    ItemSubCategoryFilter = 6;
-                    ItemClassFilter = 0;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = true;
+                    ItemDataManager.ItemTypeFilter = 3;
+                    ItemDataManager.ItemSubCategoryFilter = 6;
+                    ItemDataManager.ItemClassFilter = 0;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = true;
                     break;
                 case 6: //Necklace
-                    ItemTypeFilter = 3;
-                    ItemSubCategoryFilter = 7;
-                    ItemClassFilter = 0;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = true;
+                    ItemDataManager.ItemTypeFilter = 3;
+                    ItemDataManager.ItemSubCategoryFilter = 7;
+                    ItemDataManager.ItemClassFilter = 0;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = true;
                     break;
                 case 7: //Earrings
-                    ItemTypeFilter = 3;
-                    ItemSubCategoryFilter = 8;
-                    ItemClassFilter = 0;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = true;
+                    ItemDataManager.ItemTypeFilter = 3;
+                    ItemDataManager.ItemSubCategoryFilter = 8;
+                    ItemDataManager.ItemClassFilter = 0;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = true;
                     break;
                 case 8: //Ring
-                    ItemTypeFilter = 3;
-                    ItemSubCategoryFilter = 9;
-                    ItemClassFilter = 0;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = true;
+                    ItemDataManager.ItemTypeFilter = 3;
+                    ItemDataManager.ItemSubCategoryFilter = 9;
+                    ItemDataManager.ItemClassFilter = 0;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = true;
                     break;
                 case 9: //Hands
-                    ItemTypeFilter = 3;
-                    ItemCategoryFilter = 0;
-                    ItemSubCategoryFilter = 10;
-                    ItemClassFilter = 0;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = true;
+                    ItemDataManager.ItemTypeFilter = 3;
+                    ItemDataManager.ItemCategoryFilter = 0;
+                    ItemDataManager.ItemSubCategoryFilter = 10;
+                    ItemDataManager.ItemClassFilter = 0;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = true;
                     break;
                 //Costume
                 case 10: //Hair
-                    ItemTypeFilter = 2;
-                    ItemSubCategoryFilter = 11;
-                    ItemClassFilter = CharacterData.Class;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = false;
+                    ItemDataManager.ItemTypeFilter = 2;
+                    ItemDataManager.ItemSubCategoryFilter = 11;
+                    ItemDataManager.ItemClassFilter = CharacterData.Class;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = false;
                     break;
                 case 11: //Face
-                    ItemTypeFilter = 2;
-                    ItemSubCategoryFilter = 12;
-                    ItemClassFilter = 0;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = true;
+                    ItemDataManager.ItemTypeFilter = 2;
+                    ItemDataManager.ItemSubCategoryFilter = 12;
+                    ItemDataManager.ItemClassFilter = 0;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = true;
                     break;
                 case 12: //Neck
-                    ItemTypeFilter = 2;
-                    ItemSubCategoryFilter = 13;
-                    ItemClassFilter = CharacterData.Class;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = false;
+                    ItemDataManager.ItemTypeFilter = 2;
+                    ItemDataManager.ItemSubCategoryFilter = 13;
+                    ItemDataManager.ItemClassFilter = CharacterData.Class;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = false;
                     break;
                 case 13: //Outerwear
-                    ItemTypeFilter = 2;
-                    ItemSubCategoryFilter = 14;
-                    ItemClassFilter = CharacterData.Class;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = false;
+                    ItemDataManager.ItemTypeFilter = 2;
+                    ItemDataManager.ItemSubCategoryFilter = 14;
+                    ItemDataManager.ItemClassFilter = CharacterData.Class;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = false;
                     break;
                 case 14: //Top
-                    ItemTypeFilter = 2;
-                    ItemSubCategoryFilter = 15;
-                    ItemClassFilter = CharacterData.Class;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = false;
+                    ItemDataManager.ItemTypeFilter = 2;
+                    ItemDataManager.ItemSubCategoryFilter = 15;
+                    ItemDataManager.ItemClassFilter = CharacterData.Class;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = false;
                     break;
                 case 15: //Bottom
-                    ItemTypeFilter = 2;
-                    ItemSubCategoryFilter = 16;
-                    ItemClassFilter = CharacterData.Class;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = false;
+                    ItemDataManager.ItemTypeFilter = 2;
+                    ItemDataManager.ItemSubCategoryFilter = 16;
+                    ItemDataManager.ItemClassFilter = CharacterData.Class;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = false;
                     break;
                 case 16: //Gloves
-                    ItemTypeFilter = 2;
-                    ItemSubCategoryFilter = 17;
-                    ItemClassFilter = CharacterData.Class;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = false;
+                    ItemDataManager.ItemTypeFilter = 2;
+                    ItemDataManager.ItemSubCategoryFilter = 17;
+                    ItemDataManager.ItemClassFilter = CharacterData.Class;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = false;
                     break;
                 case 17: //Shoes
-                    ItemTypeFilter = 2;
-                    ItemSubCategoryFilter = 18;
-                    ItemClassFilter = CharacterData.Class;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = false;
+                    ItemDataManager.ItemTypeFilter = 2;
+                    ItemDataManager.ItemSubCategoryFilter = 18;
+                    ItemDataManager.ItemClassFilter = CharacterData.Class;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = false;
                     break;
                 case 18: //Accessory 1
-                    ItemTypeFilter = 2;
-                    ItemSubCategoryFilter = 19;
-                    ItemClassFilter = CharacterData.Class;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = false;
+                    ItemDataManager.ItemTypeFilter = 2;
+                    ItemDataManager.ItemSubCategoryFilter = 19;
+                    ItemDataManager.ItemClassFilter = CharacterData.Class;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = false;
                     break;
                 case 19: //Accessory 2
-                    ItemTypeFilter = 2;
-                    ItemSubCategoryFilter = 20;
-                    ItemClassFilter = 0;
-                    ItemTypeEnabled = false;
-                    ItemSubCategoryEnabled = false;
-                    ItemClassEnabled = true;
+                    ItemDataManager.ItemTypeFilter = 2;
+                    ItemDataManager.ItemSubCategoryFilter = 20;
+                    ItemDataManager.ItemClassFilter = 0;
+                    ItemDataManager.ItemTypeEnabled = false;
+                    ItemDataManager.ItemSubCategoryEnabled = false;
+                    ItemDataManager.ItemClassEnabled = true;
                     break;
             }
         }
@@ -398,7 +394,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     private void LoadItemData(ItemData itemData)
     {
-        var frameViewModel = _itemHelper.GetItemData(itemData);
+        var frameViewModel = ItemDataManager.GetItemData(itemData);
 
         FrameViewModel = frameViewModel;
 
@@ -470,7 +466,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
         else
         {
-            var frameViewModel = _itemHelper.GetItemData(itemData);
+            var frameViewModel = ItemDataManager.GetItemData(itemData);
             FrameViewModel = frameViewModel;
             ItemName = frameViewModel.ItemName;
         }
@@ -478,392 +474,19 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     }
     #endregion
 
-    #region Item Data List
-
-    [ObservableProperty]
-    private List<ItemData>? _itemDataItems;
-
-    private void PopulateItemDataItems()
-    {
-        try
-        {
-            ItemDataItems = _cachedDataManager.CachedItemDataList;
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-        }
-    }
-
-    [ObservableProperty]
-    private List<NameID>? _optionItems;
-
-    private void PopulateOptionItems()
-    {
-        try
-        {
-            OptionItems = _cachedDataManager.CachedOptionItems;
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-        }
-    }
-
-    [ObservableProperty]
-    private ICollectionView _optionView;
-
-    private readonly List<int> selectedOptions = [];
-    private bool FilterOption(object obj)
-    {
-        if (obj is NameID option)
-        {
-            if (option.ID == 0)
-                return true;
-
-            if (FrameViewModel != null)
-            {
-                selectedOptions.Add(FrameViewModel.RandomOption01);
-                selectedOptions.Add(FrameViewModel.RandomOption02);
-                selectedOptions.Add(FrameViewModel.RandomOption03);
-                selectedOptions.Add(FrameViewModel.SocketOption01);
-                selectedOptions.Add(FrameViewModel.SocketOption02);
-                selectedOptions.Add(FrameViewModel.SocketOption03);
-
-                if (selectedOptions.Contains(option.ID))
-                    return true;
-            }
-
-            // text search filter
-            if (!string.IsNullOrEmpty(OptionSearch))
-            {
-                string searchText = OptionSearch.ToLower();
-
-                // Check if either option ID or option Name contains the search text
-                if (!string.IsNullOrEmpty(option.ID.ToString()) && option.ID.ToString().Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
-                    return true;
-
-                if (!string.IsNullOrEmpty(option.Name) && option.Name.Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
-                    return true;
-
-                return false;
-            }
-
-            return true;
-        }
-        return false;
-    }
-
-    [ObservableProperty]
-    private string? _optionSearch;
-    partial void OnOptionSearchChanged(string? value)
-    {
-        _searchTimer.Stop();
-        _searchTimer.Start();
-    }
-
-    #endregion
-
-    #region CollectionView Filter
-
-    [ObservableProperty]
-    private ICollectionView _itemDataView;
-
-    private bool FilterItems(object obj)
-    {
-        if (obj is ItemData item)
-        {
-            //combobox filter 
-            if (ItemTypeFilter != 0 && item.Type != ItemTypeFilter)
-                return false;
-
-            if (ItemCategoryFilter != 0 && item.Category != ItemCategoryFilter)
-                return false;
-
-            if (ItemSubCategoryFilter != 0 && item.SubCategory != ItemSubCategoryFilter)
-                return false;
-
-            if (ItemClassFilter != 0 && item.JobClass != ItemClassFilter)
-                return false;
-
-            if (ItemBranchFilter != 0 && item.Branch != ItemBranchFilter)
-                return false;
-
-            if (ItemTradeFilter != 2 && item.ItemTrade != ItemTradeFilter)
-                return false;
-
-            if (InventoryTypeFilter != 0 && item.InventoryType != InventoryTypeFilter)
-                return false;
-
-            if (AccountStorageFilter != 0 && item.AccountStorage != AccountStorageFilter)
-                return false;
-
-            // text search filter
-            if (!string.IsNullOrEmpty(SearchText))
-            {
-                string searchText = SearchText.ToLower();
-
-                // Check if either item ID or item Name contains the search text
-                if (!string.IsNullOrEmpty(item.ItemId.ToString()) && item.ItemId.ToString().Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
-                    return true;
-
-                if (!string.IsNullOrEmpty(item.ItemName) && item.ItemName.Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
-                    return true;
-
-                return false;
-            }
-
-            return true;
-        }
-        return false;
-    }
-
-    [ObservableProperty]
-    private string? _searchText;
-    partial void OnSearchTextChanged(string? value)
-    {
-        _searchTimer.Stop();
-        _searchTimer.Start();
-    }
-
-    private void SearchTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
-    {
-        Application.Current.Dispatcher.Invoke(ItemDataView.Refresh);
-        Application.Current.Dispatcher.Invoke(OptionView.Refresh);
-    }
-
-    #endregion
-
-    #region Comboboxes Filter
-
-    [ObservableProperty]
-    private List<NameID>? _categoryFilterItems;
-
-    [ObservableProperty]
-    private List<NameID>? _subCategoryItemsFilter;
-
-    private void PopulateCategoryItemsFilter(ItemType itemType)
-    {
-        try
-        {
-            CategoryFilterItems = _gmDatabaseService.GetCategoryItems(itemType, false);
-            SubCategoryItemsFilter = _gmDatabaseService.GetCategoryItems(itemType, true);
-
-            if (CategoryFilterItems.Count > 0)
-            {
-                ItemCategoryFilter = CategoryFilterItems.First().ID;
-                OnPropertyChanged(nameof(ItemCategoryFilter));
-            }
-            if (SubCategoryItemsFilter.Count > 0)
-            {
-                ItemSubCategoryFilter = SubCategoryItemsFilter.First().ID;
-                OnPropertyChanged(nameof(ItemSubCategoryFilter));
-            }
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-        }
-    }
-
-    [ObservableProperty]
-    private int _itemTypeFilter;
-    partial void OnItemTypeFilterChanged(int value)
-    {
-        PopulateCategoryItemsFilter((ItemType)value);
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
-    }
-
-    [ObservableProperty]
-    private bool _itemTypeEnabled = true;
-
-    [ObservableProperty]
-    private int _itemCategoryFilter;
-    partial void OnItemCategoryFilterChanged(int value)
-    {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
-    }
-
-    [ObservableProperty]
-    private bool _itemCategoryEnabled = true;
-
-    [ObservableProperty]
-    private int _itemSubCategoryFilter;
-    partial void OnItemSubCategoryFilterChanged(int value)
-    {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
-        
-    }
-
-    [ObservableProperty]
-    private bool _itemSubCategoryEnabled = true;
-
-    [ObservableProperty]
-    private int _itemTradeFilter;
-    partial void OnItemTradeFilterChanged(int value)
-    {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
-    }
-
-    [ObservableProperty]
-    private int _itemClassFilter;
-
-    partial void OnItemClassFilterChanged(int value)
-    {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
-    }
-
-    [ObservableProperty]
-    private bool _itemClassEnabled = true;
-
-    [ObservableProperty]
-    private int _itemBranchFilter;
-
-    partial void OnItemBranchFilterChanged(int value)
-    {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
-    }
-
-    [ObservableProperty]
-    private List<NameID>? _itemTypeItemsFilter;
-
-    private void PopulateItemTypeItemsFilter()
-    {
-        try
-        {
-            ItemTypeItemsFilter = GetEnumItems<ItemType>();
-
-            if (ItemTypeItemsFilter.Count > 0)
-            {
-                ItemTypeFilter = 0;
-            }
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-        }
-    }
-
-    [ObservableProperty]
-    private List<NameID>? _classItemsFilter;
-
-    private void PopulateClassItemsFilter()
-    {
-        try
-        {
-            ClassItemsFilter = GetEnumItems<CharClass>(true);
-
-            if (ClassItemsFilter.Count > 0)
-            {
-                ItemClassFilter = 0;
-            }
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-        }
-    }
-
-    [ObservableProperty]
-    private List<NameID>? _branchItemsFilter;
-
-    private void PopulateBranchItemsFilter()
-    {
-        try
-        {
-            BranchItemsFilter = GetEnumItems<Branch>(true);
-
-            if (BranchItemsFilter.Count > 0)
-            {
-                ItemBranchFilter = 0;
-            }
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-        }
-    }
-
-    [ObservableProperty]
-    private int _inventoryTypeFilter;
-    partial void OnInventoryTypeFilterChanged(int value)
-    {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
-    }
-
-    [ObservableProperty]
-    private int _accountStorageFilter;
-    partial void OnAccountStorageFilterChanged(int value)
-    {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
-    }
-
-    [ObservableProperty]
-    private List<NameID>? _itemTradeFilterItems;
-
-    private void PopulateItemTradeItemsFilter()
-    {
-        try
-        {
-            ItemTradeFilterItems =
-            [
-                new NameID { ID = 2, Name = Resources.All },
-                new NameID { ID = 1, Name = Resources.Tradeable },
-                new NameID { ID = 0, Name = Resources.Untradeable }
-            ];
-
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-        }
-    }
-
-    [ObservableProperty]
-    private List<NameID>? _socketColorItems;
-
-    private void PopulateSocketColorItems()
-    {
-        try
-        {
-            SocketColorItems = GetSocketColorItems();
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-        }
-    }
-
-    #endregion
-
     #region Properties
 
     [ObservableProperty]
     private string _title = "Add Item";
+
+    [ObservableProperty]
+    private Visibility _isSlotVisible = Visibility.Hidden;
+
+    [ObservableProperty]
+    private Visibility _isOptionsVisible = Visibility.Hidden;
+
+    [ObservableProperty]
+    private ItemDataManager _itemDataManager;
 
     #region ItemData
 
@@ -898,12 +521,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     [ObservableProperty]
     private bool _isNewItem = false;
-
-    [ObservableProperty]
-    private Visibility _isSlotVisible = Visibility.Visible;
-
-    [ObservableProperty]
-    private Visibility _isOptionsVisible = Visibility.Visible;
 
     #endregion
 

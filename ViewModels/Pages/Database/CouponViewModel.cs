@@ -13,10 +13,10 @@ namespace RHToolkit.ViewModels.Pages
         private readonly IWindowsService _windowsService;
         private readonly IDatabaseService _databaseService;
         private readonly ISqLiteDatabaseService _sqLiteDatabaseService;
-        private readonly ItemHelper _itemHelper;
+        private readonly ItemDataManager _itemHelper;
         private readonly Guid _token;
 
-        public CouponViewModel(IWindowsService windowsService, IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService, ItemHelper itemHelper)
+        public CouponViewModel(IWindowsService windowsService, IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService, ItemDataManager itemHelper)
         {
             _token = Guid.NewGuid();
             _windowsService = windowsService;

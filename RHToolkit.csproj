@@ -55,6 +55,9 @@
     <Compile Update="Views\Windows\Database\FortuneWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Windows\Tools\SetItemEditorWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Windows\Tools\CashShopEditorWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

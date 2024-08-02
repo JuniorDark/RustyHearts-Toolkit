@@ -14,9 +14,9 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
-    private readonly ItemHelper _itemHelper;
+    private readonly ItemDataManager _itemHelper;
 
-    public CharacterWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, ItemHelper itemHelper)
+    public CharacterWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, ItemDataManager itemHelper)
     {
         _windowsService = windowsService;
         _databaseService = databaseService;

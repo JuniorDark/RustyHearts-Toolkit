@@ -221,7 +221,7 @@
                         Foreground="Gold"
                         Tag="{x:Static rs:Resources.OptionNameID}"
                         Template="{StaticResource lb_textbox}"
-                        Text="{Binding OptionSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding ItemDataManager.OptionSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <!--  left Column  -->
                 <StackPanel
@@ -246,7 +246,7 @@
                         IsEnabled="{Binding FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionView}"
+                        ItemsSource="{Binding ItemDataManager.OptionView}"
                         SelectedValue="{Binding FrameViewModel.RandomOption01, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -269,7 +269,7 @@
                         IsEnabled="{Binding FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionView}"
+                        ItemsSource="{Binding ItemDataManager.OptionView}"
                         SelectedValue="{Binding FrameViewModel.RandomOption02, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -292,7 +292,7 @@
                         IsEnabled="{Binding FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionView}"
+                        ItemsSource="{Binding ItemDataManager.OptionView}"
                         SelectedValue="{Binding FrameViewModel.RandomOption03, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -407,7 +407,7 @@
                         IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding SocketColorItems}"
+                        ItemsSource="{Binding ItemDataManager.SocketColorItems}"
                         RenderTransformOrigin="0.417,1.091"
                         SelectedValue="{Binding FrameViewModel.Socket01Color, Mode=TwoWay}"
                         SelectedValuePath="ID"
@@ -430,7 +430,7 @@
                         IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding SocketColorItems}"
+                        ItemsSource="{Binding ItemDataManager.SocketColorItems}"
                         SelectedValue="{Binding FrameViewModel.Socket02Color, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -452,7 +452,7 @@
                         IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding SocketColorItems}"
+                        ItemsSource="{Binding ItemDataManager.SocketColorItems}"
                         SelectedValue="{Binding FrameViewModel.Socket03Color, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -483,7 +483,7 @@
                         IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionView}"
+                        ItemsSource="{Binding ItemDataManager.OptionView}"
                         SelectedValue="{Binding FrameViewModel.SocketOption01, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -507,7 +507,7 @@
                         IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionView}"
+                        ItemsSource="{Binding ItemDataManager.OptionView}"
                         SelectedValue="{Binding FrameViewModel.SocketOption02, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -531,7 +531,7 @@
                         IsEnabled="{Binding FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
-                        ItemsSource="{Binding OptionView}"
+                        ItemsSource="{Binding ItemDataManager.OptionView}"
                         SelectedValue="{Binding FrameViewModel.SocketOption03, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -617,18 +617,10 @@
                         Maximum="{Binding FrameViewModel.OverlapCnt}"
                         Minimum="1"
                         Value="{Binding FrameViewModel.ItemAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <TextBlock
-                        x:Name="lbSelectedItem"
-                        Canvas.Left="63"
-                        Canvas.Top="18"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        d:Foreground="White"
-                        d:Text="Item Name"
-                        FontSize="12"
-                        Foreground="{Binding FrameViewModel.ItemNameColor, Converter={StaticResource StringToBrushConverter}, FallbackValue=White}"
-                        Text="{Binding FrameViewModel.ItemName}" />
-                    <control:ItemSlot FrameViewModel="{Binding FrameViewModel}" SlotIcon="/Assets/images/lb_ac_icon.png" />
+                    <control:ItemSlot
+                        FrameViewModel="{Binding FrameViewModel}"
+                        ItemNameVisibility="Visible"
+                        SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <Button
                         x:Name="btnSelectItem"
                         Canvas.Left="105"
@@ -725,7 +717,7 @@
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
                             <Binding ElementName="dataGridView" Path="Items.Count" />
-                            <Binding Path="ItemDataItems.Count" />
+                            <Binding Path="ItemDataManager.ItemDataItems.Count" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
@@ -746,7 +738,7 @@
                     HeadersVisibility="Column"
                     HorizontalGridLinesBrush="White"
                     HorizontalScrollBarVisibility="Disabled"
-                    ItemsSource="{Binding ItemDataView}"
+                    ItemsSource="{Binding ItemDataManager.ItemDataView}"
                     Loaded="DataGridView_Loaded"
                     SelectedItem="{Binding SelectedItem}"
                     SelectionMode="Single"
@@ -857,7 +849,7 @@
                         Foreground="Gold"
                         Tag="{x:Static rs:Resources.SearchNameID}"
                         Template="{StaticResource lb_textbox}"
-                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding ItemDataManager.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <!--  Left Column  -->
                 <StackPanel
@@ -879,10 +871,10 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
-                        IsEnabled="{Binding ItemTypeEnabled}"
+                        IsEnabled="{Binding ItemDataManager.ItemTypeEnabled}"
                         IsReadOnly="True"
-                        ItemsSource="{Binding ItemTypeItemsFilter}"
-                        SelectedValue="{Binding ItemTypeFilter, Mode=TwoWay}"
+                        ItemsSource="{Binding ItemDataManager.ItemTypeItemsFilter}"
+                        SelectedValue="{Binding ItemDataManager.ItemTypeFilter, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -902,10 +894,10 @@
                         HorizontalAlignment="Left"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
-                        IsEnabled="{Binding ItemCategoryEnabled}"
+                        IsEnabled="{Binding ItemDataManager.ItemCategoryEnabled}"
                         IsReadOnly="True"
-                        ItemsSource="{Binding CategoryFilterItems}"
-                        SelectedValue="{Binding ItemCategoryFilter, Mode=TwoWay}"
+                        ItemsSource="{Binding ItemDataManager.CategoryFilterItems}"
+                        SelectedValue="{Binding ItemDataManager.ItemCategoryFilter, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -925,10 +917,10 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
-                        IsEnabled="{Binding ItemSubCategoryEnabled}"
+                        IsEnabled="{Binding ItemDataManager.ItemSubCategoryEnabled}"
                         IsReadOnly="True"
-                        ItemsSource="{Binding SubCategoryItemsFilter}"
-                        SelectedValue="{Binding ItemSubCategoryFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding ItemDataManager.SubCategoryItemsFilter}"
+                        SelectedValue="{Binding ItemDataManager.ItemSubCategoryFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -955,8 +947,8 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         IsReadOnly="True"
-                        ItemsSource="{Binding BranchItemsFilter}"
-                        SelectedValue="{Binding ItemBranchFilter, Mode=TwoWay}"
+                        ItemsSource="{Binding ItemDataManager.BranchItemsFilter}"
+                        SelectedValue="{Binding ItemDataManager.ItemBranchFilter, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -976,10 +968,10 @@
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
-                        IsEnabled="{Binding ItemClassEnabled}"
+                        IsEnabled="{Binding ItemDataManager.ItemClassEnabled}"
                         IsReadOnly="True"
-                        ItemsSource="{Binding ClassItemsFilter}"
-                        SelectedValue="{Binding ItemClassFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding ItemDataManager.ClassItemsFilter}"
+                        SelectedValue="{Binding ItemDataManager.ItemClassFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -999,8 +991,8 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         IsReadOnly="True"
-                        ItemsSource="{Binding ItemTradeFilterItems}"
-                        SelectedValue="{Binding ItemTradeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding ItemDataManager.ItemTradeFilterItems}"
+                        SelectedValue="{Binding ItemDataManager.ItemTradeFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />

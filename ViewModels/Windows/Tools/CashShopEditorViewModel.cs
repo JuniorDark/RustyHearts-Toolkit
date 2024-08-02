@@ -17,20 +17,16 @@ namespace RHToolkit.ViewModels.Windows
 {
     public partial class CashShopEditorViewModel : ObservableObject, IRecipient<ItemDataMessage>
     {
-        private readonly IWindowsService _windowsService;
-        private readonly ISqLiteDatabaseService _sqLiteDatabaseService;
-        private readonly ItemHelper _itemHelper;
-        private readonly System.Timers.Timer _searchTimer;
         private readonly Guid _token;
-
+        private readonly IWindowsService _windowsService;
+        private readonly System.Timers.Timer _searchTimer;
         private readonly FileManager _fileManager = new();
 
-        public CashShopEditorViewModel(IWindowsService windowsService, ISqLiteDatabaseService sqLiteDatabaseService, ItemHelper itemHelper)
+        public CashShopEditorViewModel(IWindowsService windowsService, ItemDataManager itemDataManager)
         {
             _token = Guid.NewGuid();
             _windowsService = windowsService;
-            _sqLiteDatabaseService = sqLiteDatabaseService;
-            _itemHelper = itemHelper;
+            _itemDataManager = itemDataManager;
             DataTableManager = new DataTableManager();
             _searchTimer = new()
             {
@@ -120,6 +116,11 @@ namespace RHToolkit.ViewModels.Windows
                             DataTableManager.LoadFile(cashShopTable);
                             DataTableManager.CurrentFile = openFileDialog.FileName;
                             DataTableManager.CurrentFileName = Path.GetFileName(CurrentFile);
+
+                            if (DataTableManager.DataTable != null && DataTableManager.DataTable.Rows.Count > 0)
+                            {
+                                SelectedItem = DataTableManager.DataTable.DefaultView[0];
+                            }
                         }
 
                         Title = $"Cash Shop Editor ({CurrentFileName})";
@@ -282,7 +283,7 @@ namespace RHToolkit.ViewModels.Windows
                 DataTableManager.AddNewRow();
                 SelectedItem = DataTableManager.SelectedItem;
 
-                var frameViewModel = _itemHelper.GetItemData(itemData);
+                var frameViewModel = ItemDataManager.GetItemData(itemData);
                 FrameViewModel = frameViewModel;
 
                 if (DataTableManager.DataTable != null && DataTableManager.DataTable.Rows.Count > 0)
@@ -312,7 +313,7 @@ namespace RHToolkit.ViewModels.Windows
 
         private void UpdateItem(ItemData itemData)
         {
-            var frameViewModel = _itemHelper.GetItemData(itemData);
+            var frameViewModel = ItemDataManager.GetItemData(itemData);
             FrameViewModel = frameViewModel;
 
             if (DataTableManager != null && SelectedItem != null)
@@ -579,6 +580,9 @@ namespace RHToolkit.ViewModels.Windows
         private Visibility _isVisible = Visibility.Hidden;
 
         [ObservableProperty]
+        private ItemDataManager _itemDataManager;
+
+        [ObservableProperty]
         private DataTableManager? _dataTableManager;
         partial void OnDataTableManagerChanged(DataTableManager? value)
         {
@@ -616,7 +620,7 @@ namespace RHToolkit.ViewModels.Windows
                     ItemId = (int)value["nItemID"]
                 };
 
-                FrameViewModel = _itemHelper.GetItemData(itemData);
+                FrameViewModel = ItemDataManager.GetItemData(itemData);
                 ItemAmountMax = (int)value["nCategory"] switch
                 {
                     0 => 525600,
@@ -742,7 +746,7 @@ namespace RHToolkit.ViewModels.Windows
                     ItemId = newValue
                 };
 
-                FrameViewModel = _itemHelper.GetItemData(itemData);
+                FrameViewModel = ItemDataManager.GetItemData(itemData);
 
                 ItemName = FrameViewModel.ItemName;
                 IconName = FrameViewModel.IconName;

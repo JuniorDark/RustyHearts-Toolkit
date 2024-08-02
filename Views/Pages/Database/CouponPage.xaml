@@ -213,18 +213,9 @@
                     AddItemCommand="{Binding ViewModel.AddItemCommand}"
                     CommandParameter="0"
                     FrameViewModel="{Binding ViewModel.FrameViewModel}"
+                    ItemNameVisibility="Visible"
                     RemoveItemCommand="{Binding ViewModel.RemoveItemCommand}"
                     SlotIcon="/Assets/images/lb_ac_icon.png" />
-                <TextBlock
-                    x:Name="lbSelectedItem"
-                    Margin="10,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    d:Foreground="White"
-                    d:Text="Item Name"
-                    FontSize="12"
-                    Foreground="{Binding ViewModel.FrameViewModel.ItemNameColor, Converter={StaticResource StringToBrushConverter}, FallbackValue=White}"
-                    Text="{Binding ViewModel.ItemName}" />
             </StackPanel>
             <Button
                 Grid.Row="5"

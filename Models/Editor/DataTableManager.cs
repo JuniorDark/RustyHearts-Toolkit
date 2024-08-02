@@ -18,6 +18,272 @@ public partial class DataTableManager : ObservableObject
     private DataGridSelectionUnit? _selectionUnit = null;
     private Point? lastFoundCell = null;
 
+    #region Commands
+
+    #region File
+
+    public void LoadFile(DataTable dataTable)
+    {
+        try
+        {
+            if (dataTable != null)
+            {
+                DataTable = dataTable;
+
+                DataTable.TableNewRow += DataTableChanged;
+                DataTable.RowChanged += DataTableChanged;
+                DataTable.RowDeleted += DataTableChanged;
+            }
+
+            HasChanges = false;
+            OnCanExecuteFileCommandChanged();
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
+        }
+    }
+
+    public void LoadFileString(DataTable dataTable)
+    {
+        try
+        {
+            if (dataTable != null)
+            {
+                DataTableString = dataTable;
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
+        }
+    }
+
+    private int _changesCounter = 0;
+    private const int ChangesBeforeSave = 10;
+
+    private async void DataTableChanged(object sender, EventArgs e)
+    {
+        HasChanges = true;
+
+        _changesCounter++;
+        if (_changesCounter >= ChangesBeforeSave)
+        {
+            try
+            {
+                _changesCounter = 0;
+                await _fileManager.SaveTempFile(CurrentFileName!, DataTable!);
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error saving backup file: {ex.Message}", "Save File Error");
+            }
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(HasChanges))]
+    public async Task SaveFile()
+    {
+        if (DataTable == null) return;
+        if (CurrentFile == null) return;
+        try
+        {
+            await _fileManager.DataTableToFileAsync(CurrentFile, DataTable);
+            FileManager.ClearTempFile(CurrentFileName!);
+
+            HasChanges = false;
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+    public async Task SaveFileAs()
+    {
+        if (DataTable == null || CurrentFileName == null) return;
+
+        SaveFileDialog saveFileDialog = new()
+        {
+            Filter = "Rusty Hearts Table File (*.rh)|*.rh|All Files (*.*)|*.*",
+            FilterIndex = 1,
+            FileName = CurrentFileName
+        };
+
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            try
+            {
+                string file = saveFileDialog.FileName;
+                await _fileManager.DataTableToFileAsync(file, DataTable);
+                FileManager.ClearTempFile(CurrentFileName);
+                HasChanges = false;
+                CurrentFile = file;
+                CurrentFileName = Path.GetFileName(file);
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+            }
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+    public async Task SaveFileAsMIP()
+    {
+        if (DataTable == null || CurrentFileName == null) return;
+
+        SaveFileDialog saveFileDialog = new()
+        {
+            Filter = "Rusty Hearts Patch File (*.mip)|*.mip|All Files (*.*)|*.*",
+            FilterIndex = 1,
+            FileName = CurrentFileName
+        };
+
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            try
+            {
+                string file = saveFileDialog.FileName;
+                await _fileManager.CompressToMipAsync(DataTable, file, MIPCompressionMode.Compress);
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+            }
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+    public async Task SaveFileAsXML()
+    {
+        if (DataTable == null || CurrentFileName == null) return;
+
+        SaveFileDialog saveFileDialog = new()
+        {
+            Filter = "eXtensible Markup Language file (*.xml)|*.xml|All Files (*.*)|*.*",
+            FilterIndex = 1,
+            FileName = CurrentFileName
+        };
+
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            try
+            {
+                string file = saveFileDialog.FileName;
+
+                await FileManager.ExportToXMLAsync(DataTable, file);
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+            }
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+    public async Task SaveFileAsXLSX()
+    {
+        if (DataTable == null || CurrentFileName == null) return;
+
+        SaveFileDialog saveFileDialog = new()
+        {
+            Filter = "Microsoft Excel Open XML Spreadsheet file (*.xlsx)|*.xlsx|All Files (*.*)|*.*",
+            FilterIndex = 1,
+            FileName = CurrentFileName
+        };
+
+        if (saveFileDialog.ShowDialog() == true)
+        {
+            try
+            {
+                string file = saveFileDialog.FileName;
+
+                await FileManager.ExportToXLSXAsync(DataTable, file);
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+            }
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+    public async Task<bool> CloseFile()
+    {
+        if (DataTable == null) return true;
+
+        if (HasChanges)
+        {
+            var result = RHMessageBoxHelper.ConfirmMessageYesNoCancel($"Save changes to file '{CurrentFileName}' ?");
+            if (result == MessageBoxResult.Yes)
+            {
+                await SaveFile();
+                ClearFile();
+                return true;
+            }
+            else if (result == MessageBoxResult.No)
+            {
+                ClearFile();
+                return true;
+            }
+            else if (result == MessageBoxResult.Cancel)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            ClearFile();
+            return true;
+        }
+
+        return true;
+    }
+
+    public void ClearFile()
+    {
+        if (DataTable != null)
+        {
+            DataTable.TableNewRow -= DataTableChanged;
+            DataTable.RowChanged -= DataTableChanged;
+            DataTable.RowDeleted -= DataTableChanged;
+        }
+
+        FileManager.ClearTempFile(CurrentFileName);
+        DataTable = null;
+        CurrentFile = null;
+        CurrentFileName = null;
+        SelectedItem = null;
+        HasChanges = false;
+        _undoStack.Clear();
+        _redoStack.Clear();
+        OnCanExecuteFileCommandChanged();
+    }
+
+    private bool CanExecuteFileCommand()
+    {
+        return DataTable != null;
+    }
+
+    private void OnCanExecuteFileCommandChanged()
+    {
+        SaveFileCommand.NotifyCanExecuteChanged();
+        SaveFileAsCommand.NotifyCanExecuteChanged();
+        SaveFileAsMIPCommand.NotifyCanExecuteChanged();
+        SaveFileAsXMLCommand.NotifyCanExecuteChanged();
+        SaveFileAsXLSXCommand.NotifyCanExecuteChanged();
+        AddNewRowCommand.NotifyCanExecuteChanged();
+        UndoChangesCommand.NotifyCanExecuteChanged();
+        RedoChangesCommand.NotifyCanExecuteChanged();
+        CloseFileCommand.NotifyCanExecuteChanged();
+    }
+
+    #endregion
+
+    #endregion
+
     #region Search
 
     public void OpenSearchDialog(Window owner, string? parameter, DataGridSelectionUnit selectionUnit)
@@ -501,257 +767,6 @@ public partial class DataTableManager : ObservableObject
     }
     #endregion
 
-    #region Commands
-
-    #region Save File
-
-    public void LoadFile(DataTable dataTable)
-    {
-        try
-        {
-            if (dataTable != null)
-            {
-                DataTable = dataTable;
-
-                DataTable.TableNewRow += DataTableChanged;
-                DataTable.RowChanged += DataTableChanged;
-                DataTable.RowDeleted += DataTableChanged;
-            }
-
-            HasChanges = false;
-            OnCanExecuteFileCommandChanged();
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
-        }
-    }
-
-    private int _changesCounter = 0;
-    private const int ChangesBeforeSave = 10;
-
-    private async void DataTableChanged(object sender, EventArgs e)
-    {
-        HasChanges = true;
-
-        _changesCounter++;
-        if (_changesCounter >= ChangesBeforeSave)
-        {
-            try
-            {
-                _changesCounter = 0;
-                await _fileManager.SaveTempFile(CurrentFileName!, DataTable!);
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving backup file: {ex.Message}", "Save File Error");
-            }
-        }
-    }
-
-    [RelayCommand(CanExecute = nameof(HasChanges))]
-    public async Task SaveFile()
-    {
-        if (DataTable == null) return;
-        if (CurrentFile == null) return;
-        try
-        {
-            await _fileManager.DataTableToFileAsync(CurrentFile, DataTable);
-            FileManager.ClearTempFile(CurrentFileName!);
-
-            HasChanges = false;
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
-        }
-    }
-
-    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-    public async Task SaveFileAs()
-    {
-        if (DataTable == null || CurrentFileName == null) return;
-
-        SaveFileDialog saveFileDialog = new()
-        {
-            Filter = "Rusty Hearts Table File (*.rh)|*.rh|All Files (*.*)|*.*",
-            FilterIndex = 1,
-            FileName = CurrentFileName
-        };
-
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            try
-            {
-                string file = saveFileDialog.FileName;
-                await _fileManager.DataTableToFileAsync(file, DataTable);
-                FileManager.ClearTempFile(CurrentFileName);
-                HasChanges = false;
-                CurrentFile = file;
-                CurrentFileName = Path.GetFileName(file);
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
-            }
-        }
-    }
-
-    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-    public async Task SaveFileAsMIP()
-    {
-        if (DataTable == null || CurrentFileName == null) return;
-
-        SaveFileDialog saveFileDialog = new()
-        {
-            Filter = "Rusty Hearts Patch File (*.mip)|*.mip|All Files (*.*)|*.*",
-            FilterIndex = 1,
-            FileName = CurrentFileName
-        };
-
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            try
-            {
-                string file = saveFileDialog.FileName;
-                await _fileManager.CompressToMipAsync(DataTable, file, MIPCompressionMode.Compress);
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
-            }
-        }
-    }
-
-    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-    public async Task SaveFileAsXML()
-    {
-        if (DataTable == null || CurrentFileName == null) return;
-
-        SaveFileDialog saveFileDialog = new()
-        {
-            Filter = "eXtensible Markup Language file (*.xml)|*.xml|All Files (*.*)|*.*",
-            FilterIndex = 1,
-            FileName = CurrentFileName
-        };
-
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            try
-            {
-                string file = saveFileDialog.FileName;
-
-                await FileManager.ExportToXMLAsync(DataTable, file);
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
-            }
-        }
-    }
-
-    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-    public async Task SaveFileAsXLSX()
-    {
-        if (DataTable == null || CurrentFileName == null) return;
-
-        SaveFileDialog saveFileDialog = new()
-        {
-            Filter = "Microsoft Excel Open XML Spreadsheet file (*.xlsx)|*.xlsx|All Files (*.*)|*.*",
-            FilterIndex = 1,
-            FileName = CurrentFileName
-        };
-
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            try
-            {
-                string file = saveFileDialog.FileName;
-
-                await FileManager.ExportToXLSXAsync(DataTable, file);
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
-            }
-        }
-    }
-
-    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-    public async Task<bool> CloseFile()
-    {
-        if (DataTable == null) return true;
-
-        if (HasChanges)
-        {
-            var result = RHMessageBoxHelper.ConfirmMessageYesNoCancel($"Save changes to file '{CurrentFileName}' ?");
-            if (result == MessageBoxResult.Yes)
-            {
-                await SaveFile();
-                ClearFile();
-                return true;
-            }
-            else if (result == MessageBoxResult.No)
-            {
-                ClearFile();
-                return true;
-            }
-            else if (result == MessageBoxResult.Cancel)
-            {
-                return false;
-            }
-        }
-        else
-        {
-            ClearFile();
-            return true;
-        }
-
-        return true;
-    }
-
-    public void ClearFile()
-    {
-        if (DataTable != null)
-        {
-            DataTable.TableNewRow -= DataTableChanged;
-            DataTable.RowChanged -= DataTableChanged;
-            DataTable.RowDeleted -= DataTableChanged;
-        }
-
-        FileManager.ClearTempFile(CurrentFileName);
-        DataTable = null;
-        CurrentFile = null;
-        CurrentFileName = null;
-        SelectedItem = null;
-        HasChanges = false;
-        _undoStack.Clear();
-        _redoStack.Clear();
-        OnCanExecuteFileCommandChanged();
-    }
-
-    private bool CanExecuteFileCommand()
-    {
-        return DataTable != null;
-    }
-
-    private void OnCanExecuteFileCommandChanged()
-    {
-        SaveFileCommand.NotifyCanExecuteChanged();
-        SaveFileAsCommand.NotifyCanExecuteChanged();
-        SaveFileAsMIPCommand.NotifyCanExecuteChanged();
-        SaveFileAsXMLCommand.NotifyCanExecuteChanged();
-        SaveFileAsXLSXCommand.NotifyCanExecuteChanged();
-        AddNewRowCommand.NotifyCanExecuteChanged();
-        UndoChangesCommand.NotifyCanExecuteChanged();
-        RedoChangesCommand.NotifyCanExecuteChanged();
-        CloseFileCommand.NotifyCanExecuteChanged();
-    }
-
-    #endregion
-
-    #endregion
-
     #region Properties
 
     [ObservableProperty]
@@ -770,6 +785,9 @@ public partial class DataTableManager : ObservableObject
     {
         OnCanExecuteFileCommandChanged();
     }
+
+    [ObservableProperty]
+    private DataTable? _dataTableString;
 
     [ObservableProperty]
     private int _selectedRow;

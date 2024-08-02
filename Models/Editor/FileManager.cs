@@ -46,7 +46,7 @@ namespace RHToolkit.Models.Editor
 
                 string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
                 string fileExtension = Path.GetExtension(fileName);
-                string newBackupFileName = $"{fileNameWithoutExtension}@{DateTime.Now:yyyy-MM-dd_HHmmss}{fileExtension}";
+                string newBackupFileName = $"{fileNameWithoutExtension}@{DateTime.Now:yyyy-MM-dd_HHmm}{fileExtension}";
                 string newBackupFilePath = Path.Combine(_backupDirectory, newBackupFileName);
 
                 string? existingBackupFile = Directory.GetFiles(_backupDirectory, $"{fileNameWithoutExtension}@*{fileExtension}")
