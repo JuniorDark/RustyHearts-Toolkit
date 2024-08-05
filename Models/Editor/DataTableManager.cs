@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using RHToolkit.Messages;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Views.Windows;
@@ -14,7 +15,6 @@ public partial class DataTableManager : ObservableObject
     private readonly Stack<EditHistory> _undoStack = new();
     private readonly Stack<EditHistory> _redoStack = new();
     private readonly FileManager _fileManager = new();
-
     private DataGridSelectionUnit? _selectionUnit = null;
     private Point? lastFoundCell = null;
 
@@ -22,41 +22,103 @@ public partial class DataTableManager : ObservableObject
 
     #region File
 
-    public void LoadFile(DataTable dataTable)
+    public async Task<bool> LoadFile(string filter, string? stringTableName = null, string? tableColumnName = null, string? fileType = null)
     {
         try
         {
-            if (dataTable != null)
+            OpenFileDialog openFileDialog = new()
             {
-                DataTable = dataTable;
+                Filter = filter,
+                FilterIndex = 1
+            };
 
-                DataTable.TableNewRow += DataTableChanged;
-                DataTable.RowChanged += DataTableChanged;
-                DataTable.RowDeleted += DataTableChanged;
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string file = openFileDialog.FileName;
+                string fileName = Path.GetFileName(file);
+                var table = await _fileManager.FileToDataTableAsync(file);
+
+                string? stringFilePath = null;
+                DataTable? stringTable = null;
+
+                if (table != null && tableColumnName != null && !table.Columns.Contains(tableColumnName))
+                {
+                    RHMessageBoxHelper.ShowOKMessage($"The file '{fileName}' is not a valid {fileType} file.", Resources.Error);
+                    return false;
+                }
+
+                if (stringTableName != null)
+                {
+                    // Determine the path of the _string.rh file
+                    string? directory = Path.GetDirectoryName(file);
+
+                    if (directory != null)
+                    {
+                        stringFilePath = Path.Combine(directory, stringTableName);
+
+                        // Check if _string.rh exists
+                        if (!File.Exists(stringFilePath))
+                        {
+                            RHMessageBoxHelper.ShowOKMessage($"The file '{stringTableName}' does not exist in the same directory as {fileName}.", Resources.Error);
+                            return false;
+                        }
+
+                        stringTable = await _fileManager.FileToDataTableAsync(stringFilePath);
+                    }
+                }
+
+                if (table != null)
+                {
+                    LoadTable(table, stringTable);
+                    CurrentFile = file;
+                    CurrentFileName = fileName;
+                    if (stringTable != null)
+                    {
+                        CurrentStringFile = stringFilePath;
+                        CurrentStringFileName = Path.GetFileName(stringFilePath);
+                    }
+
+                    OnCanExecuteFileCommandChanged();
+                    return true;
+                }
             }
 
-            HasChanges = false;
-            OnCanExecuteFileCommandChanged();
+            return false;
         }
         catch (Exception ex)
         {
             RHMessageBoxHelper.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
+            return false;
         }
     }
 
-    public void LoadFileString(DataTable dataTable)
+    private void LoadTable(DataTable dataTable, DataTable? stringDataTable = null)
     {
-        try
+        if (dataTable != null)
         {
-            if (dataTable != null)
-            {
-                DataTableString = dataTable;
-            }
+            DataTable = dataTable;
+
+            DataTable.TableNewRow += DataTableChanged;
+            DataTable.RowChanged += DataTableChanged;
+            DataTable.RowDeleted += DataTableChanged;
         }
-        catch (Exception ex)
+
+        if (stringDataTable != null)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
+            DataTableString = stringDataTable;
+
+            DataTableString.TableNewRow += DataTableChanged;
+            DataTableString.RowChanged += DataTableChanged;
+            DataTableString.RowDeleted += DataTableChanged;
         }
+
+        if (DataTable != null && DataTable.Rows.Count > 0)
+        {
+            SelectedItem = DataTable.DefaultView[0];
+        }
+
+        HasChanges = false;
+        OnCanExecuteFileCommandChanged();
     }
 
     private int _changesCounter = 0;
@@ -65,7 +127,6 @@ public partial class DataTableManager : ObservableObject
     private async void DataTableChanged(object sender, EventArgs e)
     {
         HasChanges = true;
-
         _changesCounter++;
         if (_changesCounter >= ChangesBeforeSave)
         {
@@ -73,6 +134,11 @@ public partial class DataTableManager : ObservableObject
             {
                 _changesCounter = 0;
                 await _fileManager.SaveTempFile(CurrentFileName!, DataTable!);
+
+                if (DataTableString != null && CurrentStringFileName != null)
+                {
+                    await _fileManager.SaveTempFile(CurrentStringFileName, DataTableString);
+                }
             }
             catch (Exception ex)
             {
@@ -84,12 +150,18 @@ public partial class DataTableManager : ObservableObject
     [RelayCommand(CanExecute = nameof(HasChanges))]
     public async Task SaveFile()
     {
-        if (DataTable == null) return;
-        if (CurrentFile == null) return;
         try
         {
-            await _fileManager.DataTableToFileAsync(CurrentFile, DataTable);
-            FileManager.ClearTempFile(CurrentFileName!);
+            if (DataTable != null && CurrentFile != null)
+            {
+                await _fileManager.DataTableToFileAsync(CurrentFile, DataTable);
+                FileManager.ClearTempFile(CurrentFileName!);
+            }
+            
+            if (DataTableString != null && CurrentStringFile != null)
+            {
+                await _fileManager.DataTableToFileAsync(CurrentStringFile, DataTableString);
+            }
 
             HasChanges = false;
         }
@@ -116,11 +188,18 @@ public partial class DataTableManager : ObservableObject
             try
             {
                 string file = saveFileDialog.FileName;
+                string? directory = Path.GetDirectoryName(file);
                 await _fileManager.DataTableToFileAsync(file, DataTable);
                 FileManager.ClearTempFile(CurrentFileName);
                 HasChanges = false;
                 CurrentFile = file;
                 CurrentFileName = Path.GetFileName(file);
+
+                if (DataTableString != null && CurrentStringFileName != null && directory != null)
+                {
+                    string stringFilePath = Path.Combine(directory, CurrentStringFileName);
+                    await _fileManager.DataTableToFileAsync(file, DataTableString);
+                }
             }
             catch (Exception ex)
             {
@@ -146,7 +225,15 @@ public partial class DataTableManager : ObservableObject
             try
             {
                 string file = saveFileDialog.FileName;
+                string? directory = Path.GetDirectoryName(file);
                 await _fileManager.CompressToMipAsync(DataTable, file, MIPCompressionMode.Compress);
+
+                if (DataTableString != null && CurrentStringFileName != null && directory != null)
+                {
+                    string stringFileName = CurrentStringFileName + ".mip";
+                    string stringFilePath = Path.Combine(directory, stringFileName);
+                    await _fileManager.CompressToMipAsync(DataTableString, stringFilePath, MIPCompressionMode.Compress);
+                }
             }
             catch (Exception ex)
             {
@@ -172,8 +259,15 @@ public partial class DataTableManager : ObservableObject
             try
             {
                 string file = saveFileDialog.FileName;
-
+                string? directory = Path.GetDirectoryName(file);
                 await FileManager.ExportToXMLAsync(DataTable, file);
+
+                if (DataTableString != null && CurrentStringFileName != null && directory != null)
+                {
+                    string stringFileName = CurrentStringFileName + ".xml";
+                    string stringFilePath = Path.Combine(directory, stringFileName);
+                    await FileManager.ExportToXMLAsync(DataTableString, stringFilePath);
+                }
             }
             catch (Exception ex)
             {
@@ -199,8 +293,15 @@ public partial class DataTableManager : ObservableObject
             try
             {
                 string file = saveFileDialog.FileName;
-
+                string? directory = Path.GetDirectoryName(file);
                 await FileManager.ExportToXLSXAsync(DataTable, file);
+
+                if (DataTableString != null && CurrentStringFileName != null && directory != null)
+                {
+                    string stringFileName = CurrentStringFileName + ".xlsx";
+                    string stringFilePath = Path.Combine(directory, stringFileName);
+                    await FileManager.ExportToXLSXAsync(DataTableString, stringFilePath);
+                }
             }
             catch (Exception ex)
             {
@@ -216,7 +317,12 @@ public partial class DataTableManager : ObservableObject
 
         if (HasChanges)
         {
-            var result = RHMessageBoxHelper.ConfirmMessageYesNoCancel($"Save changes to file '{CurrentFileName}' ?");
+            string message = CurrentStringFileName != null
+            ? $"Save changes to files '{CurrentFileName}' | '{CurrentStringFileName}' ?"
+            : $"Save changes to file '{CurrentFileName}' ?";
+
+            var result = RHMessageBoxHelper.ConfirmMessageYesNoCancel(message);
+
             if (result == MessageBoxResult.Yes)
             {
                 await SaveFile();
@@ -250,12 +356,23 @@ public partial class DataTableManager : ObservableObject
             DataTable.RowChanged -= DataTableChanged;
             DataTable.RowDeleted -= DataTableChanged;
         }
+        if (DataTableString != null)
+        {
+            DataTableString.TableNewRow -= DataTableChanged;
+            DataTableString.RowChanged -= DataTableChanged;
+            DataTableString.RowDeleted -= DataTableChanged;
+        }
 
         FileManager.ClearTempFile(CurrentFileName);
+        FileManager.ClearTempFile(CurrentStringFileName);
         DataTable = null;
+        DataTableString = null;
         CurrentFile = null;
         CurrentFileName = null;
+        CurrentStringFile = null;
+        CurrentStringFileName = null;
         SelectedItem = null;
+        SelectedItemString = null;
         HasChanges = false;
         _undoStack.Clear();
         _redoStack.Clear();
@@ -511,96 +628,43 @@ public partial class DataTableManager : ObservableObject
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public void AddNewRow()
     {
-        if (DataTable != null)
+        try
         {
-            DataRow newRow = DataTable.NewRow();
-
-            // Initialize the new row with default values
-            foreach (DataColumn column in DataTable.Columns)
-            {
-                newRow[column] = GetDefaultValue(column.DataType);
-            }
-
-            DataTable.Rows.Add(newRow);
-
-            int rowIndex = DataTable.Rows.IndexOf(newRow);
-
-            _undoStack.Push(new EditHistory
-            {
-                Row = rowIndex,
-                AffectedRow = newRow,
-                Action = EditAction.RowInsert,
-                NewValue = newRow.ItemArray
-            });
-            _redoStack.Clear();
-            OnCanExecuteChangesChanged();
-
-            SelectedItem = DataTable.DefaultView[rowIndex];
-            OnPropertyChanged(nameof(DataTable));
+            AddRow(DataTable);
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
         }
     }
 
     [RelayCommand(CanExecute = nameof(CanExecuteSelectedRowCommand))]
     public void DuplicateSelectedRow()
     {
-        if (SelectedItem != null && DataTable != null)
+        try
         {
-            DataRow originalRow = SelectedItem.Row;
-            DataRow duplicate = DataTable.NewRow();
+            var newSelectedItem = DuplicateSelectedRow(DataTable, SelectedItem);
 
-            for (int i = 0; i < DataTable.Columns.Count; i++)
-            {
-                duplicate[i] = originalRow[i];
-            }
-
-            int selectedIndex = DataTable.Rows.IndexOf(originalRow);
-            DataTable.Rows.InsertAt(duplicate, selectedIndex + 1);
-
-            _undoStack.Push(new EditHistory
-            {
-                Row = selectedIndex + 1,
-                AffectedRow = duplicate,
-                Action = EditAction.RowInsert,
-                NewValue = duplicate.ItemArray
-            });
-            _redoStack.Clear();
-            OnCanExecuteChangesChanged();
-            OnPropertyChanged(nameof(DataTable));
+            SelectedItem = newSelectedItem;
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
         }
     }
 
     [RelayCommand(CanExecute = nameof(CanExecuteSelectedRowCommand))]
     public void DeleteSelectedRow()
     {
-        if (SelectedItem != null && DataTable != null)
+        try
         {
-            DataRow deletedRow = SelectedItem.Row;
-            int rowIndex = DataTable.Rows.IndexOf(deletedRow);
+            var newSelectedItem = DeleteSelectedRow(DataTable, SelectedItem);
 
-            object?[] deletedRowValues = deletedRow.ItemArray;
-
-            DataTable.Rows.Remove(deletedRow);
-
-            _undoStack.Push(new EditHistory
-            {
-                Row = rowIndex,
-                AffectedRow = deletedRow,
-                Action = EditAction.RowDelete,
-                OldValue = deletedRowValues
-            });
-            _redoStack.Clear();
-
-            if (rowIndex > 0)
-            {
-                SelectedItem = DataTable.DefaultView[rowIndex - 1];
-            }
-            else if (DataTable.Rows.Count > 0)
-            {
-                SelectedItem = DataTable.DefaultView[rowIndex];
-            }
-
-            OnCanExecuteChangesChanged();
-            OnPropertyChanged(nameof(DataTable));
+            SelectedItem = newSelectedItem;
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
         }
     }
 
@@ -613,6 +677,180 @@ public partial class DataTableManager : ObservableObject
     {
         DuplicateSelectedRowCommand.NotifyCanExecuteChanged();
         DeleteSelectedRowCommand.NotifyCanExecuteChanged();
+    }
+
+    #region Helpers
+    private void AddRow(DataTable? dataTable)
+    {
+        if (dataTable == null) return;
+
+        int newID = GetMaxId();
+        EditHistory editHistory = CreateEditHistory(EditAction.RowInsert);
+
+        // If DataTableString exists, add a corresponding row
+        if (DataTableString != null)
+        {
+            AddNewRow(DataTableString, newID, editHistory);
+            OnPropertyChanged(nameof(DataTableString));
+        }
+
+        // Add a row to the main DataTable
+        AddNewRow(dataTable, newID, editHistory);
+        SelectedItem = dataTable.DefaultView[dataTable.Rows.Count - 1];
+        OnPropertyChanged(nameof(dataTable));
+
+        _undoStack.Push(editHistory);
+        _redoStack.Clear();
+        OnCanExecuteChangesChanged();
+    }
+
+    private DataRowView? DuplicateSelectedRow(DataTable? dataTable, DataRowView? selectedItem)
+    {
+        if (dataTable == null || selectedItem == null) return null;
+
+        int newID = GetMaxId();
+        EditHistory editHistory = CreateEditHistory(EditAction.RowInsert);
+
+        // Duplicate row in DataTableString if it exists
+        if (DataTableString != null && DataTableString.Columns.Contains("nID"))
+        {
+            var selectedItemString = GetRowViewById(DataTableString, selectedItem);
+            if (selectedItemString != null)
+            {
+                var duplicateString = DuplicateRow(selectedItemString.Row, DataTableString);
+                UpdateAndAddRow(duplicateString, DataTableString, newID, editHistory);
+                OnPropertyChanged(nameof(DataTableString));
+            }
+        }
+
+        // Duplicate row in the main DataTable
+        var duplicate = DuplicateRow(selectedItem.Row, dataTable);
+        UpdateAndAddRow(duplicate, dataTable, newID, editHistory);
+        selectedItem = dataTable.DefaultView[dataTable.Rows.Count - 1];
+
+        OnPropertyChanged(nameof(dataTable));
+
+        _undoStack.Push(editHistory);
+        _redoStack.Clear();
+        OnCanExecuteChangesChanged();
+
+        return selectedItem;
+    }
+
+    private DataRowView? DeleteSelectedRow(DataTable? dataTable, DataRowView? selectedItem)
+    {
+        if (dataTable == null || selectedItem == null) return null;
+
+        EditHistory editHistory = CreateEditHistory(EditAction.RowDelete);
+
+        // Delete row from DataTableString if it exists
+        if (DataTableString != null && DataTableString.Columns.Contains("nID"))
+        {
+            var selectedItemString = GetRowViewById(DataTableString, selectedItem);
+            if (selectedItemString != null)
+            {
+                RemoveRow(DataTableString, selectedItemString.Row, editHistory);
+            }
+        }
+
+        // Delete row from the main DataTable
+        RemoveRow(dataTable, selectedItem.Row, editHistory);
+
+        // Set new selection
+        int rowIndex = dataTable.Rows.Count - 1;
+        selectedItem = rowIndex >= 0 ? dataTable.DefaultView[Math.Max(rowIndex, 0)] : null;
+
+        OnPropertyChanged(nameof(dataTable));
+
+        _undoStack.Push(editHistory);
+        _redoStack.Clear();
+        OnCanExecuteChangesChanged();
+
+        return selectedItem;
+    }
+
+    private static DataRow AddNewRow(DataTable dataTable, int newID, EditHistory editHistory)
+    {
+        DataRow newRow = dataTable.NewRow();
+
+        // Initialize the new row with default values
+        foreach (DataColumn column in dataTable.Columns)
+        {
+            newRow[column] = GetDefaultValue(column.DataType);
+        }
+
+        dataTable.Rows.Add(newRow);
+
+        if (dataTable.Columns.Contains("nID"))
+        {
+            newRow["nID"] = newID;
+        }
+
+        int rowIndex = dataTable.Rows.IndexOf(newRow);
+        editHistory.GroupedEdits.Add(new EditHistory
+        {
+            Row = rowIndex,
+            AffectedRow = newRow,
+            Action = EditAction.RowInsert,
+            NewValue = newRow.ItemArray
+        });
+
+        return newRow;
+    }
+
+    private static void RemoveRow(DataTable dataTable, DataRow row, EditHistory editHistory)
+    {
+        int rowIndex = dataTable.Rows.IndexOf(row);
+        object?[] rowValues = row.ItemArray;
+        dataTable.Rows.Remove(row);
+
+        editHistory.GroupedEdits.Add(new EditHistory
+        {
+            Row = rowIndex,
+            AffectedRow = row,
+            Action = EditAction.RowDelete,
+            OldValue = rowValues
+        });
+    }
+
+    private static DataRow DuplicateRow(DataRow originalRow, DataTable dataTable)
+    {
+        DataRow duplicate = dataTable.NewRow();
+        duplicate.ItemArray = originalRow.ItemArray;
+        return duplicate;
+    }
+
+    private static void UpdateAndAddRow(DataRow duplicateRow, DataTable dataTable, int newID, EditHistory editHistory)
+    {
+        dataTable.Rows.Add(duplicateRow);
+
+        if (dataTable.Columns.Contains("nID"))
+        {
+            duplicateRow["nID"] = newID;
+        }
+
+        editHistory.GroupedEdits.Add(new EditHistory
+        {
+            Row = dataTable.Rows.Count - 1,
+            AffectedRow = duplicateRow,
+            Action = EditAction.RowInsert,
+            NewValue = duplicateRow.ItemArray
+        });
+    }
+
+    private static DataRowView? GetRowViewById(DataTable dataTable, DataRowView selectedItem)
+    {
+        int nID = (int)selectedItem["nID"];
+        return dataTable.DefaultView.Cast<DataRowView>()
+                         .FirstOrDefault(rowView => (int)rowView["nID"] == nID);
+    }
+
+    private static EditHistory CreateEditHistory(EditAction action)
+    {
+        return new EditHistory
+        {
+            Action = action
+        };
     }
 
     private static object GetDefaultValue(Type type)
@@ -628,6 +866,28 @@ public partial class DataTableManager : ObservableObject
         else return 0;
     }
 
+    public int GetMaxId()
+    {
+        int newID = 1;
+
+        if (DataTable != null && DataTable.Rows.Count > 0 && DataTable.Columns.Contains("nID"))
+        {
+            var maxIdTable1 = DataTable.AsEnumerable()
+                                    .Max(row => row.Field<int>("nID"));
+            newID = maxIdTable1 + 1;
+        }
+
+        if (DataTableString != null && DataTableString.Rows.Count > 0 && DataTableString.Columns.Contains("nID"))
+        {
+            var maxIdTable2 = DataTableString.AsEnumerable()
+                                    .Max(row => row.Field<int>("nID"));
+            newID = Math.Max(newID, maxIdTable2 + 1);
+        }
+
+        return newID;
+    }
+    #endregion
+
     #endregion
 
     #region Edit History
@@ -635,99 +895,103 @@ public partial class DataTableManager : ObservableObject
     [RelayCommand(CanExecute = nameof(CanUndo))]
     public void UndoChanges()
     {
-        if (_undoStack.Count > 0)
+        try
         {
-            var edit = _undoStack.Pop();
-            _redoStack.Push(edit);
-
-            if (edit.GroupedEdits != null)
+            if (_undoStack.Count > 0)
             {
-                foreach (var groupedEdit in edit.GroupedEdits)
-                {
-                    DataTable!.Rows[groupedEdit.Row][groupedEdit.Column] = groupedEdit.OldValue;
-                }
-            }
-            else
-            {
-                switch (edit.Action)
-                {
-                    case EditAction.CellEdit:
-                        if (edit.Row >= 0 && edit.Row < DataTable!.Rows.Count)
-                        {
-                            DataTable.Rows[edit.Row][edit.Column] = edit.OldValue;
-                        }
-                        break;
-                    case EditAction.RowInsert:
-                        if (edit.Row >= 0 && edit.Row < DataTable!.Rows.Count)
-                        {
-                            DataTable.Rows.RemoveAt(edit.Row);
-                        }
-                        break;
-                    case EditAction.RowDelete:
-                        if (edit.Row >= 0)
-                        {
-                            DataRow newRow = DataTable!.NewRow();
-                            newRow.ItemArray = (object?[])edit.OldValue!;
-                            DataTable.Rows.InsertAt(newRow, edit.Row);
-                        }
-                        break;
-                }
-            }
+                var edit = _undoStack.Pop();
+                _redoStack.Push(edit);
 
-            OnCanExecuteChangesChanged();
+                foreach (var groupedEdit in edit.GroupedEdits!)
+                {
+                    var table = groupedEdit.AffectedRow!.Table;
+                    switch (groupedEdit.Action)
+                    {
+                        case EditAction.CellEdit:
+                            if (groupedEdit.Row >= 0 && groupedEdit.Row < table.Rows.Count)
+                            {
+                                table.Rows[groupedEdit.Row][groupedEdit.Column] = groupedEdit.OldValue;
+                            }
+                            break;
+                        case EditAction.RowInsert:
+                            if (groupedEdit.Row >= 0 && groupedEdit.Row < table.Rows.Count)
+                            {
+                                table.Rows.RemoveAt(groupedEdit.Row);
+                            }
+                            break;
+                        case EditAction.RowDelete:
+                            if (groupedEdit.Row >= 0)
+                            {
+                                DataRow newRow = table.NewRow();
+                                newRow.ItemArray = (object?[])groupedEdit.OldValue!;
+                                table.Rows.InsertAt(newRow, groupedEdit.Row);
+                            }
+                            break;
+                    }
+                }
+                OnPropertyChanged(nameof(DataTable));
+                OnPropertyChanged(nameof(DataTableString));
+                OnCanExecuteChangesChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
         }
     }
 
     [RelayCommand(CanExecute = nameof(CanRedo))]
     public void RedoChanges()
     {
-        if (_redoStack.Count > 0)
+        try
         {
-            var edit = _redoStack.Pop();
-            _undoStack.Push(edit);
-
-            if (edit.GroupedEdits != null)
+            if (_redoStack.Count > 0)
             {
-                foreach (var groupedEdit in edit.GroupedEdits)
-                {
-                    DataTable!.Rows[groupedEdit.Row][groupedEdit.Column] = groupedEdit.NewValue;
-                }
-            }
-            else
-            {
-                switch (edit.Action)
-                {
-                    case EditAction.CellEdit:
-                        if (edit.Row >= 0 && edit.Row < DataTable!.Rows.Count)
-                        {
-                            DataTable.Rows[edit.Row][edit.Column] = edit.NewValue;
-                        }
-                        break;
-                    case EditAction.RowInsert:
-                        if (edit.Row >= 0)
-                        {
-                            DataRow insertRow = DataTable!.NewRow();
-                            insertRow.ItemArray = (object?[])edit.NewValue!;
-                            if (edit.Row < DataTable.Rows.Count)
-                            {
-                                DataTable.Rows.InsertAt(insertRow, edit.Row);
-                            }
-                            else
-                            {
-                                DataTable.Rows.Add(insertRow);
-                            }
-                        }
-                        break;
-                    case EditAction.RowDelete:
-                        if (edit.Row >= 0 && edit.Row < DataTable!.Rows.Count)
-                        {
-                            DataTable.Rows.RemoveAt(edit.Row);
-                        }
-                        break;
-                }
-            }
+                var edit = _redoStack.Pop();
+                _undoStack.Push(edit);
 
-            OnCanExecuteChangesChanged();
+                foreach (var groupedEdit in edit.GroupedEdits!)
+                {
+                    var table = groupedEdit.AffectedRow!.Table;
+                    switch (groupedEdit.Action)
+                    {
+                        case EditAction.CellEdit:
+                            if (groupedEdit.Row >= 0 && groupedEdit.Row < table.Rows.Count)
+                            {
+                                table.Rows[groupedEdit.Row][groupedEdit.Column] = groupedEdit.NewValue;
+                            }
+                            break;
+                        case EditAction.RowInsert:
+                            if (groupedEdit.Row >= 0)
+                            {
+                                DataRow insertRow = table.NewRow();
+                                insertRow.ItemArray = (object?[])groupedEdit.NewValue!;
+                                if (groupedEdit.Row < table.Rows.Count)
+                                {
+                                    table.Rows.InsertAt(insertRow, groupedEdit.Row);
+                                }
+                                else
+                                {
+                                    table.Rows.Add(insertRow);
+                                }
+                            }
+                            break;
+                        case EditAction.RowDelete:
+                            if (groupedEdit.Row >= 0 && groupedEdit.Row < table.Rows.Count)
+                            {
+                                table.Rows.RemoveAt(groupedEdit.Row);
+                            }
+                            break;
+                    }
+                }
+                OnPropertyChanged(nameof(DataTable));
+                OnPropertyChanged(nameof(DataTableString));
+                OnCanExecuteChangesChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
         }
     }
 
@@ -740,18 +1004,6 @@ public partial class DataTableManager : ObservableObject
             OldValue = oldValue,
             NewValue = newValue,
             Action = EditAction.CellEdit
-        });
-        _redoStack.Clear();
-        OnCanExecuteChangesChanged();
-    }
-
-    public void RecordRowAddition(int rowIndex, object?[] newRowValues)
-    {
-        _undoStack.Push(new EditHistory
-        {
-            Row = rowIndex,
-            Action = EditAction.RowInsert,
-            NewValue = newRowValues
         });
         _redoStack.Clear();
         OnCanExecuteChangesChanged();
@@ -770,14 +1022,29 @@ public partial class DataTableManager : ObservableObject
     #region Properties
 
     [ObservableProperty]
+    private Guid? _token;
+
+    [ObservableProperty]
     private string? _currentFile;
 
     [ObservableProperty]
     private string? _currentFileName;
 
     [ObservableProperty]
+    private string? _currentStringFile;
+
+    [ObservableProperty]
+    private string? _currentStringFileName;
+
+    [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SaveFileCommand))]
     private bool _hasChanges = false;
+
+    [ObservableProperty]
+    private int _selectedRow;
+
+    [ObservableProperty]
+    private Point _selectedCell;
 
     [ObservableProperty]
     private DataTable? _dataTable;
@@ -787,20 +1054,29 @@ public partial class DataTableManager : ObservableObject
     }
 
     [ObservableProperty]
+    private DataRowView? _selectedItem;
+
+    partial void OnSelectedItemChanged(DataRowView? value)
+    {
+        if (value != null && DataTableString != null && DataTableString.Columns.Contains("nID"))
+        {
+            SelectedItemString = GetRowViewById(DataTableString, value);
+        }
+        else
+        {
+            SelectedItemString = null;
+        }
+
+        WeakReferenceMessenger.Default.Send(new DataRowViewMessage(value, Token));
+
+        OnCanExecuteSelectedRowCommandChanged();
+    }
+
+    [ObservableProperty]
     private DataTable? _dataTableString;
 
     [ObservableProperty]
-    private int _selectedRow;
-
-    [ObservableProperty]
-    private Point _selectedCell;
-
-    [ObservableProperty]
-    private DataRowView? _selectedItem;
-    partial void OnSelectedItemChanged(DataRowView? value)
-    {
-        OnCanExecuteSelectedRowCommandChanged();
-    }
+    private DataRowView? _selectedItemString;
 
     #endregion
 

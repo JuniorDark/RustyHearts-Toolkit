@@ -12,13 +12,13 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
-    private readonly ItemDataManager _itemHelper;
+    private readonly ItemDataManager _itemDataManager;
 
-    public StorageWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemDataManager itemHelper)
+    public StorageWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemDataManager itemDataManager)
     {
         _windowsService = windowsService;
         _databaseService = databaseService;
-        _itemHelper = itemHelper;
+        _itemDataManager = itemDataManager;
 
         CurrentStoragePage = 1;
         CurrentAccountStoragePage = 1;
@@ -403,7 +403,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         {
             foreach (var storageItem in storageItems)
             {
-                var frameViewModel = _itemHelper.GetItemData(storageItem);
+                var frameViewModel = _itemDataManager.GetItemData(storageItem);
                 SetStorageFrameViewModel(frameViewModel);
             }
         }
@@ -416,7 +416,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         var newItem = ItemDataManager.CreateNewItem(CharacterData, newItemData, 3);
         StorageItemDatabaseList ??= [];
         StorageItemDatabaseList.Add(newItem);
-        var frameViewModel = _itemHelper.GetItemData(newItem);
+        var frameViewModel = _itemDataManager.GetItemData(newItem);
 
         SetStorageFrameViewModel(frameViewModel);
     }
@@ -472,7 +472,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
             existingItem.Socket3Value = newItem.Socket3Value;
 
             RemoveStorageItem(existingItem.SlotIndex.ToString());
-            var frameViewModel = _itemHelper.GetItemData(existingItem);
+            var frameViewModel = _itemDataManager.GetItemData(existingItem);
             StorageItemDatabaseList.Add(existingItem);
             SetStorageFrameViewModel(frameViewModel);
         }
@@ -508,7 +508,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         {
             foreach (var accountStorageItem in accountStorageItems)
             {
-                var frameViewModel = _itemHelper.GetItemData(accountStorageItem);
+                var frameViewModel = _itemDataManager.GetItemData(accountStorageItem);
                 SetAccountStorageFrameViewModel(frameViewModel);
             }
         }
@@ -521,7 +521,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         var newItem = ItemDataManager.CreateNewItem(CharacterData, newItemData, 3);
         AccountStorageItemDatabaseList ??= [];
         AccountStorageItemDatabaseList.Add(newItem);
-        var frameViewModel = _itemHelper.GetItemData(newItem);
+        var frameViewModel = _itemDataManager.GetItemData(newItem);
 
         SetAccountStorageFrameViewModel(frameViewModel);
     }
@@ -577,7 +577,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
             existingItem.Socket3Value = newItem.Socket3Value;
 
             RemoveAccountStorageItem(existingItem.SlotIndex.ToString());
-            var frameViewModel = _itemHelper.GetItemData(existingItem);
+            var frameViewModel = _itemDataManager.GetItemData(existingItem);
             AccountStorageItemDatabaseList.Add(existingItem);
             SetAccountStorageFrameViewModel(frameViewModel);
         }

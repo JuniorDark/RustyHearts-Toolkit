@@ -13,11 +13,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private readonly IGMDatabaseService _gmDatabaseService;
     private readonly CachedDataManager _cachedDataManager;
 
-    public ItemWindowViewModel(IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager, ItemDataManager itemHelper)
+    public ItemWindowViewModel(IGMDatabaseService gmDatabaseService, CachedDataManager cachedDataManager, ItemDataManager itemDataManager)
     {
         _gmDatabaseService = gmDatabaseService;
         _cachedDataManager = cachedDataManager;
-        _itemDataManager = itemHelper;
+        _itemDataManager = itemDataManager;
 
         WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
@@ -49,7 +49,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     #region Send ItemData
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
-    private void SelectItem(object parameter)
+    private void SelectItem()
     {
         if (FrameViewModel != null)
         {

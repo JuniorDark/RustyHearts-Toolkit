@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using RHToolkit.Messages;
+﻿using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
@@ -13,12 +12,11 @@ using System.Windows.Controls;
 
 namespace RHToolkit.ViewModels.Windows
 {
-    public partial class SetItemEditorViewModel : ObservableObject, IRecipient<ItemDataMessage>
+    public partial class SetItemEditorViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<DataRowViewMessage>
     {
         private readonly Guid _token;
         private readonly IWindowsService _windowsService;
         private readonly IFrameService _frameService;
-        private readonly FileManager _fileManager;
         private readonly System.Timers.Timer _searchTimer;
 
         public SetItemEditorViewModel(IWindowsService windowsService, IFrameService frameService, ItemDataManager itemDataManager)
@@ -27,8 +25,10 @@ namespace RHToolkit.ViewModels.Windows
             _windowsService = windowsService;
             _frameService = frameService;
             _itemDataManager = itemDataManager;
-            DataTableManager = new();
-            _fileManager = new();
+            DataTableManager = new()
+            {
+                Token = _token
+            };
             _searchTimer = new()
             {
                 Interval = 500,
@@ -36,7 +36,8 @@ namespace RHToolkit.ViewModels.Windows
             };
             _searchTimer.Elapsed += SearchTimerElapsed;
 
-            WeakReferenceMessenger.Default.Register(this);
+            WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
+            WeakReferenceMessenger.Default.Register<DataRowViewMessage>(this);
         }
 
         #region Commands 
@@ -65,72 +66,16 @@ namespace RHToolkit.ViewModels.Windows
             {
                 await CloseFile();
 
-                OpenFileDialog openFileDialog = new()
+                string filter = "setitem.rh|setitem.rh|All Files (*.*)|*.*";
+                bool isLoaded = await DataTableManager.LoadFile(filter, "setitem_string.rh", "nSetItemID00", "Set Item");
+
+                if (isLoaded)
                 {
-                    Filter = "setitem.rh|setitem.rh|All Files (*.*)|*.*",
-                    FilterIndex = 1
-                };
-
-                if (openFileDialog.ShowDialog() == true)
-                {
-                    string? fileName = openFileDialog.FileName;
-                    if (fileName == null)
-                    {
-                        RHMessageBoxHelper.ShowOKMessage("No file selected.", Resources.Error);
-                        return;
-                    }
-
-                    var setItemTable = await _fileManager.FileToDataTableAsync(fileName);
-
-                    // Determine the path of the setitem_string.rh file
-                    string? directory = Path.GetDirectoryName(fileName);
-                    if (directory == null)
-                    {
-                        RHMessageBoxHelper.ShowOKMessage("Invalid file directory.", Resources.Error);
-                        return;
-                    }
-
-                    string setItemStringFilePath = Path.Combine(directory, "setitem_string.rh");
-
-                    // Check if setitem_string.rh exists
-                    if (!File.Exists(setItemStringFilePath))
-                    {
-                        RHMessageBoxHelper.ShowOKMessage("The file 'setitem_string.rh' does not exist in the same directory.", Resources.Error);
-                        return;
-                    }
-
-                    var setItemStringTable = await _fileManager.FileToDataTableAsync(setItemStringFilePath);
-
-                    if (setItemTable != null && setItemStringTable != null)
-                    {
-                        if (!setItemTable.Columns.Contains("nSetItemID00"))
-                        {
-                            RHMessageBoxHelper.ShowOKMessage($"The file '{Path.GetFileName(fileName)}' is not a valid setitem rh file.", Resources.Error);
-                            return;
-                        }
-
-                        ClearFile();
-
-                        CurrentFile = fileName;
-                        CurrentFileName = Path.GetFileName(CurrentFile);
-
-                        DataTableManager.LoadFile(setItemTable);
-                        DataTableManager.LoadFileString(setItemStringTable);
-                        DataTableManager.CurrentFile = fileName;
-                        DataTableManager.CurrentFileName = Path.GetFileName(CurrentFile);
-
-                        if (DataTableManager.DataTable != null && DataTableManager.DataTable.Rows.Count > 0)
-                        {
-                            SelectedItem = DataTableManager.DataTable.DefaultView[0];
-                        }
-
-                        Title = $"Set Item Editor ({CurrentFileName})";
-                        OpenMessage = "";
-                        OnCanExecuteFileCommandChanged();
-                        IsVisible = Visibility.Visible;
-                    }
+                    Title = $"Set Item Editor ({DataTableManager.CurrentFileName})";
+                    OpenMessage = "";
+                    IsVisible = Visibility.Visible;
+                    OnCanExecuteFileCommandChanged();
                 }
-
             }
             catch (Exception ex)
             {
@@ -143,7 +88,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? shopEditorWindow = Application.Current.Windows.OfType<CashShopEditorWindow>().FirstOrDefault();
+                Window? shopEditorWindow = Application.Current.Windows.OfType<SetItemEditorWindow>().FirstOrDefault();
                 Window owner = shopEditorWindow ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
 
@@ -158,8 +103,6 @@ namespace RHToolkit.ViewModels.Windows
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
         public async Task<bool> CloseFile()
         {
-            if (DataTableManager == null) return true;
-
             var close = await DataTableManager.CloseFile();
 
             if (close)
@@ -173,24 +116,21 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            CurrentFile = null;
-            CurrentFileName = null;
-            FrameViewModels = null;
-            SelectedItem = null;
             Title = $"Set Item Editor";
             OpenMessage = "Open a file";
+            SearchText = "";
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }
 
         private bool CanExecuteFileCommand()
         {
-            return DataTableManager != null && DataTableManager.DataTable != null;
+            return DataTableManager.DataTable != null;
         }
 
         private bool CanExecuteSelectedItemCommand()
         {
-            return SelectedItem != null;
+            return DataTableManager.SelectedItem != null;
         }
 
         private void OnCanExecuteSelectedItemCommandChanged()
@@ -217,13 +157,12 @@ namespace RHToolkit.ViewModels.Windows
             {
                 if (int.TryParse(parameter, out int slotIndex))
                 {
-
-                    if (SelectedItem != null)
+                    if (DataTableManager.SelectedItem != null)
                     {
                         var itemData = new ItemData
                         {
                             SlotIndex = slotIndex,
-                            ItemId = (int)SelectedItem[$"nSetItemID0{slotIndex - 1}"]
+                            ItemId = (int)DataTableManager.SelectedItem[$"nSetItemID0{slotIndex - 1}"]
                         };
 
                         var token = _token;
@@ -245,7 +184,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 var itemData = message.Value;
 
-                if (SelectedItem != null)
+                if (DataTableManager.SelectedItem != null)
                 {
                     switch (itemData.SlotIndex)
                     {
@@ -278,20 +217,12 @@ namespace RHToolkit.ViewModels.Windows
             if (DataTableManager.DataTable != null)
             {
                 DataTableManager.AddNewRow();
-                SelectedItem = DataTableManager.SelectedItem;
-
-                if (DataTableManager.DataTable.Rows.Count > 0)
-                {
-                    var maxId = DataTableManager.DataTable.AsEnumerable()
-                                         .Max(row => row.Field<int>("nID"));
-                    SetID = maxId + 1;
-                }
-                else
-                {
-                    SetID = 1;
-                }
-
                 SetName = "New Set";
+
+                if (DataTableManager.SelectedItemString != null)
+                {
+                    SetNameString = "New Set";
+                }
             }
         }
 
@@ -299,6 +230,8 @@ namespace RHToolkit.ViewModels.Windows
         {
             if (itemId != 0)
             {
+                RemoveFrameViewModel(slotIndex);
+
                 ItemData itemData = new()
                 {
                     ItemId = itemId,
@@ -306,17 +239,76 @@ namespace RHToolkit.ViewModels.Windows
                 };
 
                 var frameViewModel = ItemDataManager.GetItemData(itemData);
-                RemoveFrameViewModel(itemData.SlotIndex);
-                SetFrameViewModel(frameViewModel);
+                
+                FrameViewModels ??= [];
+                FrameViewModels.Add(frameViewModel);
+                OnPropertyChanged(nameof(FrameViewModels));
+            }
+            else
+            {
+                RemoveFrameViewModel(slotIndex);
             }
 
         }
 
-        private void SetFrameViewModel(FrameViewModel frameViewModel)
+        public void Receive(DataRowViewMessage message)
         {
-            FrameViewModels ??= [];
-            FrameViewModels.Add(frameViewModel);
-            OnPropertyChanged(nameof(FrameViewModels));
+            if (message.Token == _token)
+            {
+                var selectedItem = message.Value;
+
+                UpdateSelectedItem(selectedItem);
+            }
+        }
+
+        private void UpdateSelectedItem(DataRowView? selectedItem)
+        {
+            _isUpdatingSelectedItem = true;
+
+            if (selectedItem != null)
+            {
+                IsSelectedItemVisible = Visibility.Visible;
+                SetID = (int)selectedItem["nID"];
+                SetName = (string)selectedItem["wszName"];
+
+                SetItemID00 = (int)selectedItem["nSetItemID00"];
+                SetItemID01 = (int)selectedItem["nSetItemID01"];
+                SetItemID02 = (int)selectedItem["nSetItemID02"];
+                SetItemID03 = (int)selectedItem["nSetItemID03"];
+                SetItemID04 = (int)selectedItem["nSetItemID04"];
+                SetItemID05 = (int)selectedItem["nSetItemID05"];
+
+                SetOption00 = (int)selectedItem["nSetOption00"];
+                SetOption01 = (int)selectedItem["nSetOption01"];
+                SetOption02 = (int)selectedItem["nSetOption02"];
+                SetOption03 = (int)selectedItem["nSetOption03"];
+                SetOption04 = (int)selectedItem["nSetOption04"];
+
+                SetOptionValue00 = (int)selectedItem["nSetOptionvlue00"];
+                SetOptionValue01 = (int)selectedItem["nSetOptionvlue01"];
+                SetOptionValue02 = (int)selectedItem["nSetOptionvlue02"];
+                SetOptionValue03 = (int)selectedItem["nSetOptionvlue03"];
+                SetOptionValue04 = (int)selectedItem["nSetOptionvlue04"];
+
+                FormatSetEffect();
+
+                if (DataTableManager.DataTableString != null && DataTableManager.SelectedItemString != null)
+                {
+                    SetNameString = (string)DataTableManager.SelectedItemString["wszName"];
+                }
+                else
+                {
+                    SetNameString = "Missing Name String";
+                }
+            }
+            else
+            {
+                IsSelectedItemVisible = Visibility.Hidden;
+            }
+
+            _isUpdatingSelectedItem = false;
+
+            OnCanExecuteSelectedItemCommandChanged();
         }
         #endregion
 
@@ -360,7 +352,7 @@ namespace RHToolkit.ViewModels.Windows
                 var removedItemIndex = FrameViewModels.FindIndex(i => i.SlotIndex == slotIndex);
                 if (removedItemIndex != -1)
                 {
-                    FrameViewModels?.RemoveAt(removedItemIndex);
+                    FrameViewModels.RemoveAt(removedItemIndex);
                 }
                 OnPropertyChanged(nameof(FrameViewModels));
             }
@@ -368,29 +360,6 @@ namespace RHToolkit.ViewModels.Windows
         #endregion
 
         #endregion
-
-        private void FormatSetEffect()
-        {
-            string setEffect01 = _frameService.GetOptionName(SetOption00, SetOptionValue00);
-            string setEffect02 = _frameService.GetOptionName(SetOption01, SetOptionValue01);
-            string setEffect03 = _frameService.GetOptionName(SetOption02, SetOptionValue02);
-            string setEffect04 = _frameService.GetOptionName(SetOption03, SetOptionValue03);
-            string setEffect05 = _frameService.GetOptionName(SetOption04, SetOptionValue04);
-
-            string setEffect = $"{Resources.SetEffect}\n";
-            if (SetOption00 != 0)
-                setEffect += $"{Resources.Set2}: {setEffect01}\n";
-            if (SetOption01 != 0)
-                setEffect += $"{Resources.Set3}: {setEffect02}\n";
-            if (SetOption02 != 0)
-                setEffect += $"{Resources.Set4}: {setEffect03}\n";
-            if (SetOption03 != 0)
-                setEffect += $"{Resources.Set5}: {setEffect04}\n";
-            if (SetOption04 != 0)
-                setEffect += $"{Resources.Set6}: {setEffect05}\n";
-
-            SetEffectText = setEffect;
-        }
 
         #region Filter
 
@@ -412,7 +381,6 @@ namespace RHToolkit.ViewModels.Windows
                 DataTableManager.DataTable.DefaultView.RowFilter = filter;
             }
         }
-
 
         [ObservableProperty]
         private string? _searchText;
@@ -464,15 +432,6 @@ namespace RHToolkit.ViewModels.Windows
         private ItemDataManager _itemDataManager;
 
         [ObservableProperty]
-        private string? _currentFile;
-
-        [ObservableProperty]
-        private string? _currentFileName;
-
-        [ObservableProperty]
-        private DataTable? _setItemStringTable;
-
-        [ObservableProperty]
         private int _optionMinValue;
 
         [ObservableProperty]
@@ -486,300 +445,252 @@ namespace RHToolkit.ViewModels.Windows
         private bool _isUpdatingSelectedItem = false;
 
         [ObservableProperty]
-        private DataRowView? _selectedItem;
-        partial void OnSelectedItemChanged(DataRowView? value)
-        {
-            _isUpdatingSelectedItem = true;
-
-            if (DataTableManager != null)
-            {
-                DataTableManager.SelectedItem = value;
-            }
-
-            if (value != null)
-            {
-                IsSelectedItemVisible = Visibility.Visible;
-                FrameViewModels = null;
-                SetID = (int)value["nID"];
-                SetName = (string)value["wszName"];
-                SetItemID00 = (int)value["nSetItemID00"];
-                SetItemID01 = (int)value["nSetItemID01"];
-                SetItemID02 = (int)value["nSetItemID02"];
-                SetItemID03 = (int)value["nSetItemID03"];
-                SetItemID04 = (int)value["nSetItemID04"];
-                SetItemID05 = (int)value["nSetItemID05"];
-
-
-                SetOption00 = (int)value["nSetOption00"];
-                SetOption01 = (int)value["nSetOption01"];
-                SetOption02 = (int)value["nSetOption02"];
-                SetOption03 = (int)value["nSetOption03"];
-                SetOption04 = (int)value["nSetOption04"];
-
-                SetOptionValue00 = (int)value["nSetOptionvlue00"];
-                SetOptionValue01 = (int)value["nSetOptionvlue01"];
-                SetOptionValue02 = (int)value["nSetOptionvlue02"];
-                SetOptionValue03 = (int)value["nSetOptionvlue03"];
-                SetOptionValue04 = (int)value["nSetOptionvlue04"];
-
-            }
-            else
-            {
-                IsSelectedItemVisible = Visibility.Hidden;
-            }
-
-            _isUpdatingSelectedItem = false;
-
-            OnCanExecuteSelectedItemCommandChanged();
-        }
-
-        [ObservableProperty]
         private int _setID;
-        partial void OnSetIDChanged(int oldValue, int newValue)
+        partial void OnSetIDChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nID"] = newValue;
+                DataTableManager.SelectedItem["nID"] = value;
+
+                if (DataTableManager.SelectedItemString != null)
+                {
+                    DataTableManager.SelectedItemString["nID"] = value;
+                }
             }
         }
 
         [ObservableProperty]
         private string? _setName;
-        partial void OnSetNameChanged(string? oldValue, string? newValue)
+        partial void OnSetNameChanged(string? value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["wszName"] = newValue;
+                DataTableManager.SelectedItem["wszName"] = value;
+            }
+        }
+
+        [ObservableProperty]
+        private string? _setNameString;
+        partial void OnSetNameStringChanged(string? value)
+        {
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItemString != null)
+            {
+                DataTableManager.SelectedItemString["wszName"] = value;
             }
         }
 
         [ObservableProperty]
         private int _setItemID00;
-        partial void OnSetItemID00Changed(int oldValue, int newValue)
+        partial void OnSetItemID00Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetItemID00"] = newValue;
+                DataTableManager.SelectedItem["nSetItemID00"] = value;
             }
 
-            SetFrameViewModelData(newValue, 1);
+            SetFrameViewModelData(value, 1);
             UpdateSetOptions();
         }
 
         [ObservableProperty]
         private int _setItemID01;
-        partial void OnSetItemID01Changed(int oldValue, int newValue)
+        partial void OnSetItemID01Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetItemID01"] = newValue;
+                DataTableManager.SelectedItem["nSetItemID01"] = value;
             }
 
-            SetFrameViewModelData(newValue, 2);
+            SetFrameViewModelData(value, 2);
             UpdateSetOptions();
         }
 
         [ObservableProperty]
         private int _setItemID02;
-        partial void OnSetItemID02Changed(int oldValue, int newValue)
+        partial void OnSetItemID02Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetItemID02"] = newValue;
+                DataTableManager.SelectedItem["nSetItemID02"] = value;
             }
 
-            SetFrameViewModelData(newValue, 3);
+            SetFrameViewModelData(value, 3);
             UpdateSetOptions();
         }
 
         [ObservableProperty]
         private int _setItemID03;
-        partial void OnSetItemID03Changed(int oldValue, int newValue)
+        partial void OnSetItemID03Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetItemID03"] = newValue;
+                DataTableManager.SelectedItem["nSetItemID03"] = value;
             }
 
-            SetFrameViewModelData(newValue, 4);
+            SetFrameViewModelData(value, 4);
             UpdateSetOptions();
         }
 
         [ObservableProperty]
         private int _setItemID04;
-        partial void OnSetItemID04Changed(int oldValue, int newValue)
+        partial void OnSetItemID04Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetItemID04"] = newValue;
+                DataTableManager.SelectedItem["nSetItemID04"] = value;
             }
 
-            SetFrameViewModelData(newValue, 5);
+            SetFrameViewModelData(value, 5);
             UpdateSetOptions();
         }
 
         [ObservableProperty]
         private int _setItemID05;
-        partial void OnSetItemID05Changed(int oldValue, int newValue)
+        partial void OnSetItemID05Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetItemID05"] = newValue;
+                DataTableManager.SelectedItem["nSetItemID05"] = value;
             }
 
-            SetFrameViewModelData(newValue, 6);
+            SetFrameViewModelData(value, 6);
             UpdateSetOptions();
         }
 
-        private void UpdateSetOptions()
-        {
-            int nonZeroCount = 0;
-
-            if (SetItemID00 != 0) nonZeroCount++;
-            if (SetItemID01 != 0) nonZeroCount++;
-            if (SetItemID02 != 0) nonZeroCount++;
-            if (SetItemID03 != 0) nonZeroCount++;
-            if (SetItemID04 != 0) nonZeroCount++;
-            if (SetItemID05 != 0) nonZeroCount++;
-
-            IsSetOption00Enabled = nonZeroCount > 1;
-            IsSetOption01Enabled = nonZeroCount > 2;
-            IsSetOption02Enabled = nonZeroCount > 3;
-            IsSetOption03Enabled = nonZeroCount > 4;
-            IsSetOption04Enabled = nonZeroCount > 5;
-        }
-
-
         [ObservableProperty]
         private int _setOption00;
-        partial void OnSetOption00Changed(int oldValue, int newValue)
+        partial void OnSetOption00Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetOption00"] = newValue;
+                DataTableManager.SelectedItem["nSetOption00"] = value;
+
+                if (value == 0)
+                {
+                    SetOptionValue00 = 0;
+                }
+                FormatSetEffect();
             }
-            if (newValue == 0)
-            {
-                SetOptionValue00 = 0;
-            }
-            FormatSetEffect();
         }
 
         [ObservableProperty]
         private int _setOption01;
-        partial void OnSetOption01Changed(int oldValue, int newValue)
+        partial void OnSetOption01Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetOption01"] = newValue;
-            }
-            if (newValue == 0)
-            {
-                SetOptionValue01 = 0;
-            }
-            FormatSetEffect();
+                DataTableManager.SelectedItem["nSetOption01"] = value;
 
+                if (value == 0)
+                {
+                    SetOptionValue01 = 0;
+                }
+                FormatSetEffect();
+            }
         }
 
         [ObservableProperty]
         private int _setOption02;
-        partial void OnSetOption02Changed(int oldValue, int newValue)
+        partial void OnSetOption02Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetOption02"] = newValue;
-            }
-            if (newValue == 0)
-            {
-                SetOptionValue02 = 0;
-            }
-            FormatSetEffect();
+                DataTableManager.SelectedItem["nSetOption02"] = value;
 
+                if (value == 0)
+                {
+                    SetOptionValue02 = 0;
+                }
+                FormatSetEffect();
+            }
         }
 
         [ObservableProperty]
         private int _setOption03;
-        partial void OnSetOption03Changed(int oldValue, int newValue)
+        partial void OnSetOption03Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetOption03"] = newValue;
+                DataTableManager.SelectedItem["nSetOption03"] = value;
+
+                if (value == 0)
+                {
+                    SetOptionValue03 = 0;
+                }
+                FormatSetEffect();
             }
-            if (newValue == 0)
-            {
-                SetOptionValue03 = 0;
-            }
-            FormatSetEffect();
+            
         }
 
         [ObservableProperty]
         private int _setOption04;
-        partial void OnSetOption04Changed(int oldValue, int newValue)
+        partial void OnSetOption04Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetOption04"] = newValue;
+                DataTableManager.SelectedItem["nSetOption04"] = value;
+
+                if (value == 0)
+                {
+                    SetOptionValue04 = 0;
+                }
+                FormatSetEffect();
             }
-            if (newValue == 0)
-            {
-                SetOptionValue04 = 0;
-            }
-            FormatSetEffect();
         }
 
         [ObservableProperty]
         private int _setOptionValue00;
-        partial void OnSetOptionValue00Changed(int oldValue, int newValue)
+        partial void OnSetOptionValue00Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetOptionvlue00"] = newValue;
+                DataTableManager.SelectedItem["nSetOptionvlue00"] = value;
+                FormatSetEffect();
             }
-            FormatSetEffect();
         }
 
         [ObservableProperty]
         private int _setOptionValue01;
-        partial void OnSetOptionValue01Changed(int oldValue, int newValue)
+        partial void OnSetOptionValue01Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetOptionvlue01"] = newValue;
+                DataTableManager.SelectedItem["nSetOptionvlue01"] = value;
+                FormatSetEffect();
             }
-            FormatSetEffect();
         }
 
         [ObservableProperty]
         private int _setOptionValue02;
-        partial void OnSetOptionValue02Changed(int oldValue, int newValue)
+        partial void OnSetOptionValue02Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetOptionvlue02"] = newValue;
+                DataTableManager.SelectedItem["nSetOptionvlue02"] = value;
+                FormatSetEffect();
             }
-            FormatSetEffect();
         }
 
         [ObservableProperty]
         private int _setOptionValue03;
-        partial void OnSetOptionValue03Changed(int oldValue, int newValue)
+        partial void OnSetOptionValue03Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetOptionvlue03"] = newValue;
+                DataTableManager.SelectedItem["nSetOptionvlue03"] = value;
+                FormatSetEffect();
             }
-            FormatSetEffect();
         }
 
         [ObservableProperty]
         private int _setOptionValue04;
-        partial void OnSetOptionValue04Changed(int oldValue, int newValue)
+        partial void OnSetOptionValue04Changed(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSetOptionvlue04"] = newValue;
+                DataTableManager.SelectedItem["nSetOptionvlue04"] = value;
+                FormatSetEffect();
             }
-            FormatSetEffect();
         }
 
         [ObservableProperty]
@@ -801,6 +712,50 @@ namespace RHToolkit.ViewModels.Windows
         private bool _isSetOption04Enabled = false;
 
         #endregion
+
+        #endregion
+
+        #region Properties Helper
+        private void FormatSetEffect()
+        {
+            string setEffect01 = _frameService.GetOptionName(SetOption00, SetOptionValue00);
+            string setEffect02 = _frameService.GetOptionName(SetOption01, SetOptionValue01);
+            string setEffect03 = _frameService.GetOptionName(SetOption02, SetOptionValue02);
+            string setEffect04 = _frameService.GetOptionName(SetOption03, SetOptionValue03);
+            string setEffect05 = _frameService.GetOptionName(SetOption04, SetOptionValue04);
+
+            string setEffect = $"{Resources.SetEffect}\n";
+            if (SetOption00 != 0)
+                setEffect += $"{Resources.Set2}: {setEffect01}\n";
+            if (SetOption01 != 0)
+                setEffect += $"{Resources.Set3}: {setEffect02}\n";
+            if (SetOption02 != 0)
+                setEffect += $"{Resources.Set4}: {setEffect03}\n";
+            if (SetOption03 != 0)
+                setEffect += $"{Resources.Set5}: {setEffect04}\n";
+            if (SetOption04 != 0)
+                setEffect += $"{Resources.Set6}: {setEffect05}\n";
+
+            SetEffectText = setEffect;
+        }
+
+        private void UpdateSetOptions()
+        {
+            int nonZeroCount = 0;
+
+            if (SetItemID00 != 0) nonZeroCount++;
+            if (SetItemID01 != 0) nonZeroCount++;
+            if (SetItemID02 != 0) nonZeroCount++;
+            if (SetItemID03 != 0) nonZeroCount++;
+            if (SetItemID04 != 0) nonZeroCount++;
+            if (SetItemID05 != 0) nonZeroCount++;
+
+            IsSetOption00Enabled = nonZeroCount > 1;
+            IsSetOption01Enabled = nonZeroCount > 2;
+            IsSetOption02Enabled = nonZeroCount > 3;
+            IsSetOption03Enabled = nonZeroCount > 4;
+            IsSetOption04Enabled = nonZeroCount > 5;
+        }
 
         #endregion
     }

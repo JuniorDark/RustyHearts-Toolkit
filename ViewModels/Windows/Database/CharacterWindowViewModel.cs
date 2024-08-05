@@ -14,14 +14,14 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
     private readonly IGMDatabaseService _gmDatabaseService;
-    private readonly ItemDataManager _itemHelper;
+    private readonly ItemDataManager _itemDataManager;
 
-    public CharacterWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, ItemDataManager itemHelper)
+    public CharacterWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, ItemDataManager itemDataManager)
     {
         _windowsService = windowsService;
         _databaseService = databaseService;
         _gmDatabaseService = gmDatabaseService;
-        _itemHelper = itemHelper;
+        _itemDataManager = itemDataManager;
 
         FrameViewModels ??= [];
 
@@ -480,7 +480,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         {
             foreach (var equipmentItem in equipmentItems)
             {
-                var frameViewModel = _itemHelper.GetItemData(equipmentItem);
+                var frameViewModel = _itemDataManager.GetItemData(equipmentItem);
                 SetFrameViewModel(frameViewModel);
             }
         }

@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using RHToolkit.Messages;
+﻿using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
@@ -15,19 +14,21 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows
 {
-    public partial class CashShopEditorViewModel : ObservableObject, IRecipient<ItemDataMessage>
+    public partial class CashShopEditorViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<DataRowViewMessage>
     {
         private readonly Guid _token;
         private readonly IWindowsService _windowsService;
         private readonly System.Timers.Timer _searchTimer;
-        private readonly FileManager _fileManager = new();
 
         public CashShopEditorViewModel(IWindowsService windowsService, ItemDataManager itemDataManager)
         {
             _token = Guid.NewGuid();
             _windowsService = windowsService;
             _itemDataManager = itemDataManager;
-            DataTableManager = new DataTableManager();
+            DataTableManager = new()
+            {
+                Token = _token
+            };
             _searchTimer = new()
             {
                 Interval = 500,
@@ -46,7 +47,8 @@ namespace RHToolkit.ViewModels.Windows
             PopulateCostumeCategoryItemsFilter(-1);
             PopulateItemStateItemsFilter();
 
-            WeakReferenceMessenger.Default.Register(this);
+            WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
+            WeakReferenceMessenger.Default.Register<DataRowViewMessage>(this);
         }
 
         #region Commands 
@@ -89,54 +91,24 @@ namespace RHToolkit.ViewModels.Windows
             {
                 await CloseFile();
 
-                OpenFileDialog openFileDialog = new()
+                string filter = "cashshoplist.rh|cashshoplist.rh|All Files (*.*)|*.*";
+                bool isLoaded = await DataTableManager.LoadFile(filter, null, "nCashCost00", "Cash Shop");
+
+                if (isLoaded)
                 {
-                    Filter = "cashshoplist.rh|cashshoplist.rh|All Files (*.*)|*.*",
-                    FilterIndex = 1
-                };
-
-                if (openFileDialog.ShowDialog() == true)
-                {
-                    var cashShopTable = await _fileManager.FileToDataTableAsync(openFileDialog.FileName);
-
-                    if (cashShopTable != null)
-                    {
-                        if (!cashShopTable.Columns.Contains("nCashCost00"))
-                        {
-                            RHMessageBoxHelper.ShowOKMessage($"The file '{CurrentFileName}' is not a valid cashshoplist rh file.", Resources.Error);
-                            return;
-                        }
-
-                        ClearFile();
-
-                        CurrentFile = openFileDialog.FileName;
-                        CurrentFileName = Path.GetFileName(CurrentFile);
-                        if (DataTableManager != null)
-                        {
-                            DataTableManager.LoadFile(cashShopTable);
-                            DataTableManager.CurrentFile = openFileDialog.FileName;
-                            DataTableManager.CurrentFileName = Path.GetFileName(CurrentFile);
-
-                            if (DataTableManager.DataTable != null && DataTableManager.DataTable.Rows.Count > 0)
-                            {
-                                SelectedItem = DataTableManager.DataTable.DefaultView[0];
-                            }
-                        }
-
-                        Title = $"Cash Shop Editor ({CurrentFileName})";
-                        OpenMessage = "";
-                        ApplyFileDataFilter();
-                        OnCanExecuteFileCommandChanged();
-                        IsVisible = Visibility.Visible;
-                    }
+                    Title = $"Cash Shop Editor ({DataTableManager.CurrentFileName})";
+                    OpenMessage = "";
+                    ApplyFileDataFilter();
+                    OnCanExecuteFileCommandChanged();
+                    IsVisible = Visibility.Visible;
                 }
-
             }
             catch (Exception ex)
             {
                 RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
             }
         }
+
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
         private void OpenSearchDialog(string? parameter)
@@ -176,10 +148,7 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            CurrentFile = null;
-            CurrentFileName = null;
             FrameViewModel = null;
-            SelectedItem = null;
             Title = $"Cash Shop Editor";
             OpenMessage = "Open a file";
             IsVisible = Visibility.Hidden;
@@ -188,12 +157,12 @@ namespace RHToolkit.ViewModels.Windows
 
         private bool CanExecuteFileCommand()
         {
-            return DataTableManager != null && DataTableManager.DataTable != null;
+            return DataTableManager.DataTable != null;
         }
 
         private bool CanExecuteSelectedItemCommand()
         {
-            return SelectedItem != null;
+            return DataTableManager.SelectedItem != null;
         }
 
         private void OnCanExecuteSelectedItemCommandChanged()
@@ -238,11 +207,11 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                if (!_isUpdatingSelectedItem && SelectedItem != null)
+                if (DataTableManager.SelectedItem != null)
                 {
                     var itemData = new ItemData
                     {
-                        ItemId = (int)SelectedItem["nItemID"]
+                        ItemId = (int)DataTableManager.SelectedItem["nItemID"]
                     };
 
                     var token = _token;
@@ -278,37 +247,23 @@ namespace RHToolkit.ViewModels.Windows
 
         private void CreateItem(ItemData itemData)
         {
-            if (DataTableManager != null)
-            {
-                DataTableManager.AddNewRow();
-                SelectedItem = DataTableManager.SelectedItem;
+            DataTableManager.AddNewRow();
 
-                var frameViewModel = ItemDataManager.GetItemData(itemData);
-                FrameViewModel = frameViewModel;
+            var frameViewModel = ItemDataManager.GetItemData(itemData);
+            FrameViewModel = frameViewModel;
 
-                if (DataTableManager.DataTable != null && DataTableManager.DataTable.Rows.Count > 0)
-                {
-                    var maxId = DataTableManager.DataTable.AsEnumerable()
-                                         .Max(row => row.Field<int>("nID"));
-                    ShopID = maxId + 1;
-                }
-                else
-                {
-                    ShopID = 1;
-                }
-                ItemID = frameViewModel.ItemId;
-                ItemAmount = frameViewModel.ItemAmount;
-                ItemName = frameViewModel.ItemName;
-                IconName = $"{frameViewModel.IconName}";
-                ShopDescription = PaymentType == 0 ? $"{BonusRate}% of the price goes to Bonus" : "Purchased with Bonus";
-                ShopCategory = GetShopCategory(frameViewModel.SubCategory);
-                CostumeCategory = GetCostumeCategory(frameViewModel.SubCategory);
-                Class = frameViewModel.JobClass;
-                StartSellingDate = DateTime.Today;
-                EndSellingDate = DateTime.Today.AddYears(10);
-                SaleStartSellingDate = null;
-                SaleEndSellingDate = null;
-            }
+            ItemID = frameViewModel.ItemId;
+            ItemAmount = frameViewModel.ItemAmount;
+            ItemName = frameViewModel.ItemName;
+            IconName = $"{frameViewModel.IconName}";
+            ShopDescription = PaymentType == 0 ? $"{BonusRate}% of the price goes to Bonus" : "Purchased with Bonus";
+            ShopCategory = GetShopCategory(frameViewModel.SubCategory);
+            CostumeCategory = GetCostumeCategory(frameViewModel.SubCategory);
+            Class = frameViewModel.JobClass;
+            StartSellingDate = DateTime.Today;
+            EndSellingDate = DateTime.Today.AddYears(10);
+            SaleStartSellingDate = null;
+            SaleEndSellingDate = null;
         }
 
         private void UpdateItem(ItemData itemData)
@@ -316,7 +271,7 @@ namespace RHToolkit.ViewModels.Windows
             var frameViewModel = ItemDataManager.GetItemData(itemData);
             FrameViewModel = frameViewModel;
 
-            if (DataTableManager != null && SelectedItem != null)
+            if (DataTableManager.SelectedItem != null)
             {
                 ItemID = frameViewModel.ItemId;
                 ItemName = frameViewModel.ItemName;
@@ -363,11 +318,74 @@ namespace RHToolkit.ViewModels.Windows
 
         #endregion
 
+        #region DataRowView
+        public void Receive(DataRowViewMessage message)
+        {
+            if (message.Token == _token)
+            {
+                var selectedItem = message.Value;
+
+                UpdateSelectedItem(selectedItem);
+            }
+        }
+
+        private void UpdateSelectedItem(DataRowView? selectedItem)
+        {
+            _isUpdatingSelectedItem = true;
+
+            if (selectedItem != null)
+            {
+                ItemData itemData = new()
+                {
+                    ItemId = (int)selectedItem["nItemID"]
+                };
+
+                FrameViewModel = ItemDataManager.GetItemData(itemData);
+                ItemAmountMax = (int)selectedItem["nCategory"] switch
+                {
+                    0 => 525600,
+                    1 => 0,
+                    _ => FrameViewModel.OverlapCnt
+
+                };
+                IsSelectedItemVisible = Visibility.Visible;
+
+                ShopID = (int)selectedItem["nID"];
+                ItemID = (int)selectedItem["nItemID"];
+                Class = (int)selectedItem["nJob"];
+                PaymentType = (int)selectedItem["nPaymentType"];
+                CashCost = (int)selectedItem["nCashCost00"];
+                CashMileage = (int)selectedItem["nCashMileage"];
+                ItemName = (string)selectedItem["wszName"];
+                IconName = (string)selectedItem["szShopBigIcon"];
+                ShopDescription = (string)selectedItem["wszDesc"];
+                ShopCategory = (int)selectedItem["nCategory"];
+                CostumeCategory = (int)selectedItem["nCostumeCategory"];
+                ItemAmount = (int)selectedItem["nValue00"];
+                ItemState = (int)selectedItem["nItemState"];
+                IsHidden = (int)selectedItem["nHidden"] == 1;
+                NoGift = (int)selectedItem["nNoGift"] == 1;
+                StartSellingDate = (int)selectedItem["nStartSellingDate"] == 0 ? null : DateTimeFormatter.ConvertIntToDate((int)selectedItem["nStartSellingDate"]);
+                EndSellingDate = (int)selectedItem["nEndSellingDate"] == 0 ? null : DateTimeFormatter.ConvertIntToDate((int)selectedItem["nEndSellingDate"]);
+                SaleStartSellingDate = (int)selectedItem["nSaleStartSellingDate"] == 0 ? null : DateTimeFormatter.ConvertIntToDate((int)selectedItem["nSaleStartSellingDate"]);
+                SaleEndSellingDate = (int)selectedItem["nSaleEndSellingDate"] == 0 ? null : DateTimeFormatter.ConvertIntToDate((int)selectedItem["nSaleEndSellingDate"]);
+            }
+            else
+            {
+                IsSelectedItemVisible = Visibility.Hidden;
+            }
+
+            _isUpdatingSelectedItem = false;
+
+            OnCanExecuteSelectedItemCommandChanged();
+        }
+        #endregion
+
         #region Filter
 
         private void ApplyFileDataFilter()
         {
-            if (DataTableManager != null && DataTableManager.DataTable != null)
+            if (DataTableManager.DataTable != null)
             {
                 List<string> filterParts = [];
 
@@ -402,6 +420,15 @@ namespace RHToolkit.ViewModels.Windows
                 string filter = string.Join(" AND ", filterParts);
 
                 DataTableManager.DataTable.DefaultView.RowFilter = filter;
+
+                if (DataTableManager.DataTable.DefaultView.Count > 0)
+                {
+                    DataTableManager.SelectedItem = DataTableManager.DataTable.DefaultView[0];
+                }
+                else
+                {
+                    DataTableManager.SelectedItem = null;
+                }
             }
         }
 
@@ -416,7 +443,7 @@ namespace RHToolkit.ViewModels.Windows
 
         private void SearchTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            if (DataTableManager != null && DataTableManager.DataTable != null)
+            if (DataTableManager.DataTable != null)
             {
                 Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -583,17 +610,11 @@ namespace RHToolkit.ViewModels.Windows
         private ItemDataManager _itemDataManager;
 
         [ObservableProperty]
-        private DataTableManager? _dataTableManager;
-        partial void OnDataTableManagerChanged(DataTableManager? value)
+        private DataTableManager _dataTableManager;
+        partial void OnDataTableManagerChanged(DataTableManager value)
         {
             OnCanExecuteFileCommandChanged();
         }
-
-        [ObservableProperty]
-        private string? _currentFile;
-
-        [ObservableProperty]
-        private string? _currentFileName;
 
         #region SelectedItem
 
@@ -603,70 +624,12 @@ namespace RHToolkit.ViewModels.Windows
         private bool _isUpdatingSelectedItem = false;
 
         [ObservableProperty]
-        private DataRowView? _selectedItem;
-        partial void OnSelectedItemChanged(DataRowView? value)
-        {
-            _isUpdatingSelectedItem = true;
-
-            if (DataTableManager != null)
-            {
-                DataTableManager.SelectedItem = value;
-            }
-
-            if (value != null)
-            {
-                ItemData itemData = new()
-                {
-                    ItemId = (int)value["nItemID"]
-                };
-
-                FrameViewModel = ItemDataManager.GetItemData(itemData);
-                ItemAmountMax = (int)value["nCategory"] switch
-                {
-                    0 => 525600,
-                    1 => 0,
-                    _ => FrameViewModel.OverlapCnt
-
-                };
-                IsSelectedItemVisible = Visibility.Visible;
-
-                ShopID = (int)value["nID"];
-                ItemID = (int)value["nItemID"];
-                Class = (int)value["nJob"];
-                PaymentType = (int)value["nPaymentType"];
-                CashCost = (int)value["nCashCost00"];
-                CashMileage = (int)value["nCashMileage"];
-                ItemName = (string)value["wszName"];
-                IconName = (string)value["szShopBigIcon"];
-                ShopDescription = (string)value["wszDesc"];
-                ShopCategory = (int)value["nCategory"];
-                CostumeCategory = (int)value["nCostumeCategory"];
-                ItemAmount = (int)value["nValue00"];
-                ItemState = (int)value["nItemState"];
-                IsHidden = (int)value["nHidden"] == 1 ? true : false;
-                NoGift = (int)value["nNoGift"] == 1 ? true : false;
-                StartSellingDate = (int)value["nStartSellingDate"] == 0 ? (DateTime?)null : DateTimeFormatter.ConvertIntToDate((int)value["nStartSellingDate"]);
-                EndSellingDate = (int)value["nEndSellingDate"] == 0 ? (DateTime?)null : DateTimeFormatter.ConvertIntToDate((int)value["nEndSellingDate"]);
-                SaleStartSellingDate = (int)value["nSaleStartSellingDate"] == 0 ? (DateTime?)null : DateTimeFormatter.ConvertIntToDate((int)value["nSaleStartSellingDate"]);
-                SaleEndSellingDate = (int)value["nSaleEndSellingDate"] == 0 ? (DateTime?)null : DateTimeFormatter.ConvertIntToDate((int)value["nSaleEndSellingDate"]);
-            }
-            else
-            {
-                IsSelectedItemVisible = Visibility.Hidden;
-            }
-
-            _isUpdatingSelectedItem = false;
-
-            OnCanExecuteSelectedItemCommandChanged();
-        }
-
-        [ObservableProperty]
         private string? _itemName;
         partial void OnItemNameChanged(string? oldValue, string? newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
             {
-                SelectedItem["wszName"] = newValue;
+                DataTableManager.SelectedItem["wszName"] = newValue;
             }
         }
 
@@ -685,9 +648,9 @@ namespace RHToolkit.ViewModels.Windows
         private string? _shopDescription;
         partial void OnShopDescriptionChanged(string? oldValue, string? newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
             {
-                SelectedItem["wszDesc"] = newValue;
+                DataTableManager.SelectedItem["wszDesc"] = newValue;
             }
         }
 
@@ -717,7 +680,7 @@ namespace RHToolkit.ViewModels.Windows
 
         partial void OnIconNameChanged(string? oldValue, string? newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
             {
                 var iconName = newValue;
                 if (UseShopIcon == true && !newValue?.StartsWith("shop_") == true)
@@ -729,7 +692,7 @@ namespace RHToolkit.ViewModels.Windows
                     iconName = newValue.Substring(5);
                 }
                 IconName = iconName;
-                SelectedItem["szShopBigIcon"] = iconName;
+                DataTableManager.SelectedItem["szShopBigIcon"] = iconName;
             }
         }
 
@@ -737,9 +700,9 @@ namespace RHToolkit.ViewModels.Windows
         private int _itemID;
         partial void OnItemIDChanged(int oldValue, int newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
             {
-                SelectedItem["nItemID"] = newValue;
+                DataTableManager.SelectedItem["nItemID"] = newValue;
 
                 ItemData itemData = new()
                 {
@@ -762,9 +725,9 @@ namespace RHToolkit.ViewModels.Windows
         private int _shopID;
         partial void OnShopIDChanged(int oldValue, int newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
             {
-                SelectedItem["nID"] = newValue;
+                DataTableManager.SelectedItem["nID"] = newValue;
             }
         }
 
@@ -773,10 +736,10 @@ namespace RHToolkit.ViewModels.Windows
 
         partial void OnItemAmountChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
                 UpdateItemName();
-                SelectedItem["nValue00"] = value;
+                DataTableManager.SelectedItem["nValue00"] = value;
             }
         }
 
@@ -784,11 +747,11 @@ namespace RHToolkit.ViewModels.Windows
         private int _paymentType;
         partial void OnPaymentTypeChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
                 IsEnabled = value == 0 ? true : false;
                 NoGift = value == 0 ? false : true;
-                SelectedItem["nPaymentType"] = value;
+                DataTableManager.SelectedItem["nPaymentType"] = value;
                 if (BonusRate != 0)
                 {
                     CashMileage = value == 1 ? 0 : CashCost * BonusRate / 100;
@@ -802,10 +765,10 @@ namespace RHToolkit.ViewModels.Windows
         private int _class;
         partial void OnClassChanged(int oldValue, int newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
             {
-                SelectedItem["nJob"] = newValue;
-                SelectedItem["szJob"] = newValue;
+                DataTableManager.SelectedItem["nJob"] = newValue;
+                DataTableManager.SelectedItem["szJob"] = newValue;
             }
         }
 
@@ -829,7 +792,7 @@ namespace RHToolkit.ViewModels.Windows
         private int _cashCost;
         partial void OnCashCostChanged(int oldValue, int newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
                 if (BonusRate != 0 && PaymentType == 0)
                 {
@@ -840,7 +803,7 @@ namespace RHToolkit.ViewModels.Windows
                     CashMileage = 0;
                 }
 
-                SelectedItem["nCashCost00"] = newValue;
+                DataTableManager.SelectedItem["nCashCost00"] = newValue;
             }
         }
 
@@ -848,9 +811,9 @@ namespace RHToolkit.ViewModels.Windows
         private int _saleCashCost;
         partial void OnSaleCashCostChanged(int oldValue, int newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSaleCashCost00"] = newValue;
+                DataTableManager.SelectedItem["nSaleCashCost00"] = newValue;
             }
         }
 
@@ -858,9 +821,9 @@ namespace RHToolkit.ViewModels.Windows
         private int _cashMileage;
         partial void OnCashMileageChanged(int oldValue, int newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
             {
-                SelectedItem["nCashMileage"] = newValue;
+                DataTableManager.SelectedItem["nCashMileage"] = newValue;
             }
         }
 
@@ -868,9 +831,9 @@ namespace RHToolkit.ViewModels.Windows
         private int _itemState;
         partial void OnItemStateChanged(int oldValue, int newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
             {
-                SelectedItem["nItemState"] = newValue;
+                DataTableManager.SelectedItem["nItemState"] = newValue;
             }
         }
 
@@ -878,9 +841,9 @@ namespace RHToolkit.ViewModels.Windows
         private bool _isHidden;
         partial void OnIsHiddenChanged(bool oldValue, bool newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
             {
-                SelectedItem["nHidden"] = newValue == true ? 1 : 0;
+                DataTableManager.SelectedItem["nHidden"] = newValue == true ? 1 : 0;
             }
         }
 
@@ -888,9 +851,9 @@ namespace RHToolkit.ViewModels.Windows
         private bool _noGift;
         partial void OnNoGiftChanged(bool oldValue, bool newValue)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null && oldValue != newValue)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
             {
-                SelectedItem["nNoGift"] = newValue == true ? 1 : 0;
+                DataTableManager.SelectedItem["nNoGift"] = newValue == true ? 1 : 0;
             }
         }
 
@@ -906,9 +869,9 @@ namespace RHToolkit.ViewModels.Windows
         {
             PopulateCostumeCategoryItems(value);
 
-            if (!_isUpdatingSelectedItem && SelectedItem != null)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nCategory"] = value;
+                DataTableManager.SelectedItem["nCategory"] = value;
             }
         }
 
@@ -916,9 +879,9 @@ namespace RHToolkit.ViewModels.Windows
         private int _costumeCategory;
         partial void OnCostumeCategoryChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && SelectedItem != null)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nCostumeCategory"] = value;
+                DataTableManager.SelectedItem["nCostumeCategory"] = value;
             }
         }
 
@@ -931,9 +894,9 @@ namespace RHToolkit.ViewModels.Windows
         partial void OnStartSellingDateChanged(DateTime? value)
         {
             StartSellingDateValue = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : "No Selling Date";
-            if (!_isUpdatingSelectedItem && SelectedItem != null)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nStartSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
+                DataTableManager.SelectedItem["nStartSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
             }
         }
 
@@ -946,9 +909,9 @@ namespace RHToolkit.ViewModels.Windows
         {
             EndSellingDateValue = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : "No Selling Date";
 
-            if (!_isUpdatingSelectedItem && SelectedItem != null)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nEndSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
+                DataTableManager.SelectedItem["nEndSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
             }
         }
 
@@ -961,9 +924,9 @@ namespace RHToolkit.ViewModels.Windows
         {
             SaleStartSellingDateValue = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : "No Sale Date";
 
-            if (!_isUpdatingSelectedItem && SelectedItem != null)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSaleStartSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
+                DataTableManager.SelectedItem["nSaleStartSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
             }
         }
 
@@ -976,9 +939,9 @@ namespace RHToolkit.ViewModels.Windows
         {
             SaleEndSellingDateValue = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : "No Sale Date";
 
-            if (!_isUpdatingSelectedItem && SelectedItem != null)
+            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                SelectedItem["nSaleEndSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
+                DataTableManager.SelectedItem["nSaleEndSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
             }
         }
 
