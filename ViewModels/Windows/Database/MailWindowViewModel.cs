@@ -17,7 +17,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
     private readonly MailHelper _mailHelper;
-    private readonly ItemDataManager _itemHelper;
+    private readonly ItemDataManager _itemDataManager;
     private readonly Guid _token;
 
     public MailWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, MailHelper mailHelper, ItemDataManager itemHelper)
@@ -26,7 +26,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
         _windowsService = windowsService;
         _databaseService = databaseService;
         _mailHelper = mailHelper;
-        _itemHelper = itemHelper;
+        _itemDataManager = itemHelper;
         WeakReferenceMessenger.Default.Register(this);
     }
 
@@ -76,7 +76,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
             // Add the new ItemData to the Item list
             ItemDataList.Add(itemData);
 
-            var frameViewModel = _itemHelper.GetItemData(itemData);
+            var frameViewModel = _itemDataManager.GetItemData(itemData);
             SetFrameViewModel(frameViewModel);
         }
     }
@@ -232,7 +232,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                 {
                     foreach (int itemID in templateData.ItemIDs)
                     {
-                        if (_itemHelper.IsInvalidItemID(itemID))
+                        if (_itemDataManager.IsInvalidItemID(itemID))
                         {
                             invalidItemIDs.Add(itemID);
                         }
@@ -295,7 +295,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
                         ItemDataList ??= [];
                         ItemDataList.Add(itemData);
-                        var frameViewModel = _itemHelper.GetItemData(itemData);
+                        var frameViewModel = _itemDataManager.GetItemData(itemData);
                         SetFrameViewModel(frameViewModel);
                     }
                 }

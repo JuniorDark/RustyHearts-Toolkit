@@ -13,7 +13,7 @@ namespace RHToolkit.ViewModels.Pages
         private readonly IWindowsService _windowsService;
         private readonly IDatabaseService _databaseService;
         private readonly ISqLiteDatabaseService _sqLiteDatabaseService;
-        private readonly ItemDataManager _itemHelper;
+        private readonly ItemDataManager _itemDataManager;
         private readonly Guid _token;
 
         public CouponViewModel(IWindowsService windowsService, IDatabaseService databaseService, ISqLiteDatabaseService sqLiteDatabaseService, ItemDataManager itemHelper)
@@ -22,7 +22,7 @@ namespace RHToolkit.ViewModels.Pages
             _windowsService = windowsService;
             _databaseService = databaseService;
             _sqLiteDatabaseService = sqLiteDatabaseService;
-            _itemHelper = itemHelper;
+            _itemDataManager = itemHelper;
             WeakReferenceMessenger.Default.Register(this);
         }
 
@@ -217,7 +217,7 @@ namespace RHToolkit.ViewModels.Pages
             {
                 var itemData = message.Value;
                 ItemData = itemData;
-                var frameViewModel= _itemHelper.GetItemData(itemData);
+                var frameViewModel= _itemDataManager.GetItemData(itemData);
 
                 FrameViewModel = frameViewModel;
             }

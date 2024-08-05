@@ -11,13 +11,13 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
-    private readonly ItemDataManager _itemHelper;
+    private readonly ItemDataManager _itemDataManager;
 
     public InventoryWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemDataManager itemHelper)
     {
         _windowsService = windowsService;
         _databaseService = databaseService;
-        _itemHelper = itemHelper;
+        _itemDataManager = itemHelper;
 
         CurrentPage = 1;
 
@@ -310,7 +310,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         ItemDatabaseList ??= [];
         ItemDatabaseList.Add(newItem);
 
-        var frameViewModel = _itemHelper.GetItemData(newItem);
+        var frameViewModel = _itemDataManager.GetItemData(newItem);
 
         SetFrameViewModel(frameViewModel);
     }
@@ -366,7 +366,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
             existingItem.Socket3Value = newItem.Socket3Value;
 
             RemoveItem(existingItem.SlotIndex.ToString());
-            var frameViewModel = _itemHelper.GetItemData(existingItem);
+            var frameViewModel = _itemDataManager.GetItemData(existingItem);
             ItemDatabaseList.Add(existingItem);
             SetFrameViewModel(frameViewModel);
         }
@@ -378,7 +378,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         {
             foreach (var inventoryItem in inventoryItems)
             {
-                var frameViewModel = _itemHelper.GetItemData(inventoryItem);
+                var frameViewModel = _itemDataManager.GetItemData(inventoryItem);
                 SetFrameViewModel(frameViewModel);
             }
         }
