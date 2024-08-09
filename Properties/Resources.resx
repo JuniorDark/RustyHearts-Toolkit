@@ -201,6 +201,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Cash" xml:space="preserve">
+    <value>Cash</value>
+  </data>
   <data name="Category" xml:space="preserve">
     <value>Category</value>
   </data>

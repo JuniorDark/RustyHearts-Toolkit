@@ -266,6 +266,12 @@ namespace RHToolkit.Services
             }
         }
 
+        public string GetString(int stringID)
+        {
+            string query = "SELECT wszString FROM string WHERE nID = @stringID";
+            return GetStringValueFromQuery(query, ("@stringID", stringID));
+        }
+
         public string GetCategoryName(int categoryID)
         {
             string query = "SELECT wszName00 FROM itemcategory WHERE nID = @categoryID";

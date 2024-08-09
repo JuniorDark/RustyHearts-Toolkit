@@ -10,6 +10,7 @@
     <BitmapImage x:Key="lb_combobox_Center01" UriSource="/Assets/buttons/lb_combo/lb_combo01_02.png" />
     <BitmapImage x:Key="lb_combobox_Left02" UriSource="/Assets/buttons/lb_combo/lb_combo02_01.png" />
     <BitmapImage x:Key="lb_combobox_Right02" UriSource="/Assets/buttons/lb_combo/lb_combo02_03.png" />
+    <BitmapImage x:Key="lb_combobox_Right022" UriSource="/Assets/buttons/lb_combo/lb_combo02_032.png" />
     <BitmapImage x:Key="lb_combobox_Center02" UriSource="/Assets/buttons/lb_combo/lb_combo02_02.png" />
     <BitmapImage x:Key="lb_combobox_Arrow" UriSource="/Assets/buttons/lb_combo/lb_combo02_04.png" />
     <BitmapImage x:Key="lb_combobox_ArrowHover" UriSource="/Assets/buttons/lb_combo/lb_combo02_05.png" />

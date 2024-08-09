@@ -18,7 +18,7 @@ namespace RHToolkit.ViewModels.Windows
     {
         private readonly Guid _token;
         private readonly IWindowsService _windowsService;
-        private readonly System.Timers.Timer _searchTimer;
+        private readonly System.Timers.Timer _filterUpdateTimer;
 
         public CashShopEditorViewModel(IWindowsService windowsService, ItemDataManager itemDataManager)
         {
@@ -29,24 +29,20 @@ namespace RHToolkit.ViewModels.Windows
             {
                 Token = _token
             };
-            _searchTimer = new()
+            _filterUpdateTimer = new()
             {
-                Interval = 500,
+                Interval = 300,
                 AutoReset = false
             };
-            _searchTimer.Elapsed += SearchTimerElapsed;
+            _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
 
             PopulateClassItems();
             PopulatePaymentTypeItems();
             PopulateShopCategoryItems();
             PopulateCostumeCategoryItems(0);
-            PopulateItemStateItems();
-
-            PopulateClassItemsFilter();
-            PopulateShopCategoryItemsFilter();
             PopulateCostumeCategoryItemsFilter(-1);
-            PopulateItemStateItemsFilter();
-
+            PopulateItemStateItems();
+            
             WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
             WeakReferenceMessenger.Default.Register<DataRowViewMessage>(this);
         }
@@ -98,7 +94,7 @@ namespace RHToolkit.ViewModels.Windows
                 {
                     Title = $"Cash Shop Editor ({DataTableManager.CurrentFileName})";
                     OpenMessage = "";
-                    ApplyFileDataFilter();
+                    ApplyFilter();
                     OnCanExecuteFileCommandChanged();
                     IsVisible = Visibility.Visible;
                 }
@@ -383,7 +379,7 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Filter
 
-        private void ApplyFileDataFilter()
+        private void ApplyFilter()
         {
             if (DataTableManager.DataTable != null)
             {
@@ -419,54 +415,94 @@ namespace RHToolkit.ViewModels.Windows
 
                 string filter = string.Join(" AND ", filterParts);
 
-                DataTableManager.DataTable.DefaultView.RowFilter = filter;
-
-                if (DataTableManager.DataTable.DefaultView.Count > 0)
-                {
-                    DataTableManager.SelectedItem = DataTableManager.DataTable.DefaultView[0];
-                }
-                else
-                {
-                    DataTableManager.SelectedItem = null;
-                }
+                DataTableManager.FilterText = filter;
             }
         }
 
+        private void TriggerFilterUpdate()
+        {
+            _filterUpdateTimer.Stop();
+            _filterUpdateTimer.Start();
+        }
+
+        private void FilterUpdateTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _filterUpdateTimer.Stop();
+                ApplyFilter();
+            });
+        }
 
         [ObservableProperty]
         private string? _searchText;
         partial void OnSearchTextChanged(string? value)
         {
-            _searchTimer.Stop();
-            _searchTimer.Start();
+            TriggerFilterUpdate();
         }
-
-        private void SearchTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
-        {
-            if (DataTableManager.DataTable != null)
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    _searchTimer.Stop();
-                    ApplyFileDataFilter();
-                });
-            }
-
-        }
-
-        #region Comboboxes Filter
 
         [ObservableProperty]
-        private List<NameID>? _classItemsFilter;
+        private int _classFilter;
 
-        private void PopulateClassItemsFilter()
+        partial void OnClassFilterChanged(int value)
+        {
+            TriggerFilterUpdate();
+        }
+
+        [ObservableProperty]
+        private int _itemStateFilter;
+        partial void OnItemStateFilterChanged(int value)
+        {
+            TriggerFilterUpdate();
+        }
+
+        [ObservableProperty]
+        private int _shopCategoryFilter;
+        partial void OnShopCategoryFilterChanged(int value)
+        {
+            PopulateCostumeCategoryItemsFilter(value);
+            TriggerFilterUpdate();
+        }
+
+        [ObservableProperty]
+        private int _costumeCategoryFilter;
+        partial void OnCostumeCategoryFilterChanged(int value)
+        {
+            TriggerFilterUpdate();
+        }
+        #endregion
+
+        #region Comboboxes
+
+        [ObservableProperty]
+        private List<NameID>? _paymentTypeItems;
+
+        private void PopulatePaymentTypeItems()
         {
             try
             {
-                ClassItemsFilter = GetEnumItems<CharClass>(true);
+                PaymentTypeItems = GetEnumItems<CashShopPaymentType>(false);
 
-                if (ClassItemsFilter.Count > 0)
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            }
+        }
+
+        [ObservableProperty]
+        private List<NameID>? _classItems;
+
+        private void PopulateClassItems()
+        {
+            try
+            {
+                var classItems = GetEnumItems<CharClass>(true);
+                ClassItems = classItems;
+
+                if (classItems.Count > 0)
                 {
+                    Class = 0;
                     ClassFilter = 0;
                 }
             }
@@ -477,17 +513,55 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
+        private List<NameID>? _shopCategoryItems;
+        [ObservableProperty]
         private List<NameID>? _shopCategoryItemsFilter;
 
-        private void PopulateShopCategoryItemsFilter()
+        private void PopulateShopCategoryItems()
         {
             try
             {
+                ShopCategoryItems = GetEnumItems<CashShopCategory>(false);
+
+                if (ShopCategoryItems.Count > 0)
+                {
+                    ShopCategory = 0;
+                }
+
                 ShopCategoryItemsFilter = GetEnumItems<CashShopCategoryFilter>(false);
 
                 if (ShopCategoryItemsFilter.Count > 0)
                 {
                     ShopCategoryFilter = -1;
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            }
+        }
+
+        [ObservableProperty]
+        private List<NameID>? _costumeCategoryItems;
+
+        private void PopulateCostumeCategoryItems(int cashShopCategory)
+        {
+            try
+            {
+                CostumeCategoryItems = cashShopCategory switch
+                {
+                    0 => GetEnumItems<CashShopPackageCategory>(false),
+                    1 => GetEnumItems<CashShopCostumeCategory>(false),
+                    2 => GetEnumItems<CashShopItemCategory>(false),
+                    3 => GetEnumItems<CashShopPetCategory>(false),
+                    4 => GetEnumItems<CashShopBonusCategory>(false),
+                    _ => throw new ArgumentOutOfRangeException(nameof(cashShopCategory), $"Invalid category value '{cashShopCategory}'"),
+                };
+
+                if (CostumeCategoryItems.Count > 0)
+                {
+                    CostumeCategory = CostumeCategoryItems.First().ID;
+                    OnPropertyChanged(nameof(CostumeCategory));
                 }
             }
             catch (Exception ex)
@@ -527,16 +601,17 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
-        private List<NameID>? _itemStateItemsFilter;
+        private List<NameID>? _itemStateItems;
 
-        private void PopulateItemStateItemsFilter()
+        private void PopulateItemStateItems()
         {
             try
             {
-                ItemStateItemsFilter = GetEnumItems<CashShopItemState>(false);
+                ItemStateItems = GetEnumItems<CashShopItemState>(false);
 
-                if (ItemStateItemsFilter.Count > 0)
+                if (ItemStateItems.Count > 0)
                 {
+                    ItemState = 0;
                     ItemStateFilter = 0;
                 }
             }
@@ -545,52 +620,6 @@ namespace RHToolkit.ViewModels.Windows
                 RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
-
-        [ObservableProperty]
-        private int _classFilter;
-
-        partial void OnClassFilterChanged(int value)
-        {
-            if (DataTableManager != null && DataTableManager.DataTable != null)
-            {
-                ApplyFileDataFilter();
-            }
-        }
-
-        [ObservableProperty]
-        private int _itemStateFilter;
-        partial void OnItemStateFilterChanged(int value)
-        {
-            if (DataTableManager != null && DataTableManager.DataTable != null)
-            {
-                ApplyFileDataFilter();
-            }
-
-        }
-
-        [ObservableProperty]
-        private int _shopCategoryFilter;
-        partial void OnShopCategoryFilterChanged(int value)
-        {
-            if (DataTableManager != null && DataTableManager.DataTable != null)
-            {
-                PopulateCostumeCategoryItemsFilter(value);
-                ApplyFileDataFilter();
-            }
-        }
-
-        [ObservableProperty]
-        private int _costumeCategoryFilter;
-        partial void OnCostumeCategoryFilterChanged(int value)
-        {
-            if (DataTableManager != null && DataTableManager.DataTable != null)
-            {
-                ApplyFileDataFilter();
-            }
-
-        }
-        #endregion
-
         #endregion
 
         #region Properties
@@ -886,177 +915,50 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
+        private DateTime? _startSellingDate;
+        partial void OnStartSellingDateChanged(DateTime? value) => OnDateChanged(value, "StartSellingDate");
+
+        [ObservableProperty]
         private string _startSellingDateValue = "No Selling Date";
 
         [ObservableProperty]
-        private DateTime? _startSellingDate;
-
-        partial void OnStartSellingDateChanged(DateTime? value)
-        {
-            StartSellingDateValue = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : "No Selling Date";
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["nStartSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
-            }
-        }
+        private DateTime? _endSellingDate;
+        partial void OnEndSellingDateChanged(DateTime? value) => OnDateChanged(value, "EndSellingDate");
 
         [ObservableProperty]
         private string _endSellingDateValue = "No Selling Date";
 
         [ObservableProperty]
-        private DateTime? _endSellingDate;
-        partial void OnEndSellingDateChanged(DateTime? value)
-        {
-            EndSellingDateValue = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : "No Selling Date";
-
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["nEndSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
-            }
-        }
+        private DateTime? _saleStartSellingDate;
+        partial void OnSaleStartSellingDateChanged(DateTime? value) => OnDateChanged(value, "SaleStartSellingDate");
 
         [ObservableProperty]
         private string _saleStartSellingDateValue = "No Sale Date";
 
         [ObservableProperty]
-        private DateTime? _saleStartSellingDate;
-        partial void OnSaleStartSellingDateChanged(DateTime? value)
-        {
-            SaleStartSellingDateValue = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : "No Sale Date";
-
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["nSaleStartSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
-            }
-        }
+        private DateTime? _saleEndSellingDate;
+        partial void OnSaleEndSellingDateChanged(DateTime? value) => OnDateChanged(value, "SaleEndSellingDate");
 
         [ObservableProperty]
         private string _saleEndSellingDateValue = "No Sale Date";
 
-        [ObservableProperty]
-        private DateTime? _saleEndSellingDate;
-        partial void OnSaleEndSellingDateChanged(DateTime? value)
+        private void OnDateChanged(DateTime? value, string dateType)
         {
-            SaleEndSellingDateValue = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : "No Sale Date";
+            string dateValueProperty = $"{dateType}Value";
+            string dataTableKey = $"n{dateType}";
+
+            var formattedDate = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : "No Date Set";
+
+            GetType().GetProperty(dateValueProperty)?.SetValue(this, formattedDate);
 
             if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                DataTableManager.SelectedItem["nSaleEndSellingDate"] = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
+                int dateIntValue = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
+                DataTableManager.SelectedItem[dataTableKey] = dateIntValue;
             }
         }
 
-        #endregion
 
-        #region Comboboxes
-
-        [ObservableProperty]
-        private List<NameID>? _paymentTypeItems;
-
-        private void PopulatePaymentTypeItems()
-        {
-            try
-            {
-                PaymentTypeItems =
-                [
-                    new NameID { ID = 0, Name = "Cash" },
-                    new NameID { ID = 1, Name = "Bonus" }
-                ];
-
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-            }
-        }
-
-        [ObservableProperty]
-        private List<NameID>? _classItems;
-
-        private void PopulateClassItems()
-        {
-            try
-            {
-                ClassItems = GetEnumItems<CharClass>(true);
-
-                if (ClassItems.Count > 0)
-                {
-                    Class = 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-            }
-        }
-
-        [ObservableProperty]
-        private List<NameID>? _shopCategoryItems;
-
-        private void PopulateShopCategoryItems()
-        {
-            try
-            {
-                ShopCategoryItems = GetEnumItems<CashShopCategory>(false);
-
-                if (ShopCategoryItems.Count > 0)
-                {
-                    ShopCategory = 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-            }
-        }
-
-        [ObservableProperty]
-        private List<NameID>? _costumeCategoryItems;
-
-        private void PopulateCostumeCategoryItems(int cashShopCategory)
-        {
-            try
-            {
-                CostumeCategoryItems = cashShopCategory switch
-                {
-                    0 => GetEnumItems<CashShopPackageCategory>(false),
-                    1 => GetEnumItems<CashShopCostumeCategory>(false),
-                    2 => GetEnumItems<CashShopItemCategory>(false),
-                    3 => GetEnumItems<CashShopPetCategory>(false),
-                    4 => GetEnumItems<CashShopBonusCategory>(false),
-                    _ => throw new ArgumentOutOfRangeException(nameof(cashShopCategory), $"Invalid category value '{cashShopCategory}'"),
-                };
-
-                if (CostumeCategoryItems.Count > 0)
-                {
-                    CostumeCategory = CostumeCategoryItems.First().ID;
-                    OnPropertyChanged(nameof(CostumeCategory));
-                }
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-            }
-        }
-
-        [ObservableProperty]
-        private List<NameID>? _itemStateItems;
-
-        private void PopulateItemStateItems()
-        {
-            try
-            {
-                ItemStateItems = GetEnumItems<CashShopItemState>(false);
-
-                if (ItemStateItems.Count > 0)
-                {
-                    ItemState = 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-            }
-        }
         #endregion
 
         #endregion

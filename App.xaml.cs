@@ -90,6 +90,8 @@ public partial class App : Application
                 _ = services.AddTransient<CashShopEditorViewModel>();
                 _ = services.AddTransient<SetItemEditorWindow>();
                 _ = services.AddTransient<SetItemEditorViewModel>();
+                _ = services.AddTransient<PackageEditorWindow>();
+                _ = services.AddTransient<PackageEditorViewModel>();
 
             }
         )

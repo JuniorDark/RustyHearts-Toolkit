@@ -6,6 +6,7 @@ namespace RHToolkit.Services
     {
         string GetAddEffectName(int effectID);
         List<NameID> GetCategoryItems(EnumService.ItemType itemType, bool isSubCategory);
+        string GetString(int stringID);
         string GetCategoryName(int categoryID);
         long GetExperienceFromLevel(int level);
         string GetFortuneDesc(int fortuneID);

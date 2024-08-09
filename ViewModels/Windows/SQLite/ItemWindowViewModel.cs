@@ -81,6 +81,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     case "SetItem":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "SetItemEditorWindow", MessageType, Token));
                         break;
+                    case "Package":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "PackageEditorWindow", MessageType, Token));
+                        break;
                     default:
                         break;
                 }
@@ -165,6 +168,12 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                         IsSlotVisible = Visibility.Hidden;
                         IsOptionsVisible = Visibility.Hidden;
                         break;
+                    case "Package":
+                        SlotIndexMin = 1;
+                        SlotIndexMax = 12;
+                        IsSlotVisible = Visibility.Visible;
+                        IsOptionsVisible = Visibility.Hidden;
+                        break;
                     case "SetItem":
                         SlotIndexMin = 1;
                         SlotIndexMax = 6;
@@ -208,6 +217,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             "StorageItem" => $"Add Storage Item [{CharacterData?.CharacterName}] ",
             "AccountStorageItem" => $"Add Account Storage Item [{CharacterData?.AccountName}] ",
             "Mail" => $"Add Mail Item",
+            "Package" => $"Add Package Item",
             "SetItem" => $"Add Set Item",
             _ => "Add Item",
         };

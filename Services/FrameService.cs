@@ -34,7 +34,7 @@ namespace RHToolkit.Services
 
         public static string GetSocketText(int colorId)
         {
-            return ((SocketColor)colorId) switch
+            return (SocketColor)colorId switch
             {
                 SocketColor.None => Resources.SocketColorNoneDesc,
                 SocketColor.Red => Resources.SocketColorRedDesc,
@@ -49,7 +49,7 @@ namespace RHToolkit.Services
 
         public static string GetSocketColor(int colorId)
         {
-            return ((SocketColor)colorId) switch
+            return (SocketColor)colorId switch
             {
                 SocketColor.None => "White",
                 SocketColor.Red => "#cc3300",
@@ -60,6 +60,13 @@ namespace RHToolkit.Services
                 SocketColor.Gray => "Gray",
                 _ => "White",
             };
+        }
+
+        public string GetString(int stringId)
+        {
+            string stringName = _gmDatabaseService.GetString(stringId);
+
+            return stringName;
         }
 
         public string GetOptionName(int option, int optionValue, bool isFixedOption = false)

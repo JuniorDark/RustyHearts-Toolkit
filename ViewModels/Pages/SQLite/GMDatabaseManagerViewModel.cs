@@ -38,10 +38,10 @@ namespace RHToolkit.ViewModels.Pages
                     _cancellationTokenSource = new CancellationTokenSource();
 
                     CancelOperationCommand.NotifyCanExecuteChanged();
-
+                    IsVisible = Visibility.Visible;
                     await _gmDatabaseManager.CreateGMDatabase(SelectedFolder, ReportProgress, _cancellationTokenSource.Token);
 
-                    await Task.Delay(100);
+                    await Task.Delay(200);
 
                     _cachedDataManager.InitializeCachedLists();
 
@@ -59,6 +59,7 @@ namespace RHToolkit.ViewModels.Pages
             finally
             {
                 _cancellationTokenSource = null;
+                IsVisible = Visibility.Hidden;
                 CancelOperationCommand.NotifyCanExecuteChanged();
                 CreateDatabaseCommand.NotifyCanExecuteChanged();
             }
@@ -85,6 +86,9 @@ namespace RHToolkit.ViewModels.Pages
         #endregion
 
         #region Properties
+
+        [ObservableProperty]
+        private Visibility _isVisible = Visibility.Hidden;
 
         [ObservableProperty]
         private string? _selectedFolder;

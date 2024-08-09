@@ -38,7 +38,7 @@
             CommandParameter="Replace"
             Gesture="Ctrl+H" />
     </Window.InputBindings>
-    <ContentControl Template="{StaticResource box_red02}">
+    <ContentControl Template="{StaticResource box_violet02}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -397,7 +397,7 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Orientation="Vertical">
-                            <TextBlock Foreground="White" Text="Item Amount/Value" />
+                            <TextBlock Foreground="White" Text="Item Amount/Duration" />
                             <control:IntegerUpDown
                                 Width="120"
                                 Margin="0,0,0,0"
@@ -644,17 +644,12 @@
                     Tag="Page">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
                         <StackPanel
@@ -884,7 +879,7 @@
                     <TextBox
                         x:Name="tbSearch"
                         Width="250"
-                        Height="34"
+                        Height="40"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         CaretBrush="White"
@@ -970,7 +965,7 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         IsReadOnly="True"
-                        ItemsSource="{Binding ClassItemsFilter}"
+                        ItemsSource="{Binding ClassItems}"
                         SelectedValue="{Binding ClassFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
@@ -991,7 +986,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         IsReadOnly="True"
-                        ItemsSource="{Binding ItemStateItemsFilter}"
+                        ItemsSource="{Binding ItemStateItems}"
                         SelectedValue="{Binding ItemStateFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"

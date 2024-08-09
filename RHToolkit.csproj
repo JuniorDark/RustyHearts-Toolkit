@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>Assets\ico\gearbox.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\ico\rhicon.ico</ApplicationIcon>
     <Authors>JuniorDark</Authors>
     <Product>Rusty Hearts Toolkit</Product>
     <PackageId>Rusty Hearts Toolkit</PackageId>
@@ -37,6 +37,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Views\Controls\FloatUpDown.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Controls\ShopItem.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -53,6 +56,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Windows\Database\FortuneWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Windows\Tools\PackageEditorWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Windows\Tools\SetItemEditorWindow.xaml.cs">
@@ -83,6 +89,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Styles\violet02.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Controls\ShopItem.xaml">
       <SubType>Designer</SubType>
     </Page>

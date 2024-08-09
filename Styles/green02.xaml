@@ -1,0 +1,116 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--  green02  -->
+    <ControlTemplate x:Key="box_green02" TargetType="ContentControl">
+        <Grid>
+            <!--  Corners  -->
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/red02/green02_01.png"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/red02/green02_03.png"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/red02/CornerBottomLeft.png"
+                Stretch="None" />
+            <Image
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/red02/CornerBottomRight.png"
+                Stretch="None" />
+
+            <!--  Edges  -->
+            <Image
+                Height="80"
+                Margin="80,0,80,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Source="/Assets/images/window/red02/green02_02.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/red02/green02_02.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <Image
+                Height="80"
+                Margin="80,0,80,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom"
+                Source="/Assets/images/window/red02/EdgeBottom.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/red02/EdgeBottom.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,1,0.25"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <Image
+                x:Name="EdgeLeft"
+                Width="80"
+                Margin="0,80,0,80"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/red02/EdgeLeft.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/red02/EdgeLeft.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,0.25,1"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <Image
+                x:Name="EdgeRight"
+                Width="80"
+                Margin="0,80,0,80"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/red02/EdgeRight.png"
+                Stretch="Fill">
+                <Image.OpacityMask>
+                    <ImageBrush
+                        ImageSource="/Assets/images/window/red02/EdgeRight.png"
+                        Stretch="None"
+                        TileMode="Tile"
+                        Viewport="0,0,0.25,1"
+                        ViewportUnits="Absolute" />
+                </Image.OpacityMask>
+            </Image>
+
+            <!--  Center  -->
+            <Image
+                x:Name="Center"
+                Margin="80,80,80,80"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Source="/Assets/images/window/red02/Center.png"
+                Stretch="UniformToFill" />
+
+            <!--  Content  -->
+            <ContentPresenter
+                Margin="13,0,16,16"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Content="{TemplateBinding Content}" />
+        </Grid>
+    </ControlTemplate>
+</ResourceDictionary>

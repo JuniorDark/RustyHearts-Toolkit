@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:RHToolkit.Views.Windows"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:rs="clr-namespace:RHToolkit.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="{Binding ViewModel.ApplicationTitle, Mode=OneWay}"
     Width="1280"
     Height="720"
@@ -18,7 +18,7 @@
     d:DesignHeight="720"
     d:DesignWidth="1280"
     ExtendsContentIntoTitleBar="True"
-    Icon="/Assets/ico/gearbox.ico"
+    Icon="/Assets/ico/rhicon.ico"
     ResizeMode="CanResizeWithGrip"
     SizeChanged="MainWindow_OnSizeChanged"
     WindowBackdropType="Mica"
@@ -44,7 +44,7 @@
                     Width="20"
                     Height="20"
                     Margin="0,-1,0,-3"
-                    Source="/Assets/icon/gearbox.png" />
+                    Source="/Assets/icon/rhicon.png" />
             </ui:TitleBar.Icon>
         </ui:TitleBar>
         <ui:NavigationView

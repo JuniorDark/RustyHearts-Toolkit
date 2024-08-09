@@ -9,9 +9,9 @@
                         Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}"
                         Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
+                        VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
+                        VerticalContentAlignment="Top"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         BorderThickness="0"
@@ -65,7 +65,7 @@
 
     <ControlTemplate x:Key="lb_textbox11" TargetType="{x:Type TextBox}">
         <Grid Background="Transparent">
-            <!--  lb_def_box04 template for the textbox  -->
+            <!--  lb_def_box11 template for the textbox  -->
             <ContentControl Template="{StaticResource lb_def_box11}">
                 <Grid>
                     <TextBox
@@ -73,9 +73,9 @@
                         Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}"
                         Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
+                        VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
+                        VerticalContentAlignment="Top"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         BorderThickness="0"

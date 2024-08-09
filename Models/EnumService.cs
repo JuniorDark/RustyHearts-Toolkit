@@ -350,6 +350,14 @@ namespace RHToolkit.Models
             Bonus
         }
 
+        public enum CashShopPaymentType
+        {
+            [LocalizedDescription("Cash")]
+            Cash = 0,
+            [LocalizedDescription("Bonus")]
+            Bonus = 1
+        }
+
         public enum CashShopPackageCategory
         {
             [LocalizedDescription("Package")]

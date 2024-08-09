@@ -373,6 +373,7 @@ public partial class DataTableManager : ObservableObject
         CurrentStringFileName = null;
         SelectedItem = null;
         SelectedItemString = null;
+        FilterText = null;
         HasChanges = false;
         _undoStack.Clear();
         _redoStack.Clear();
@@ -1017,6 +1018,34 @@ public partial class DataTableManager : ObservableObject
         UndoChangesCommand.NotifyCanExecuteChanged();
         RedoChangesCommand.NotifyCanExecuteChanged();
     }
+    #endregion
+
+    #region Filter
+
+    public void ApplyFileDataFilter()
+    {
+        if (DataTable != null)
+        {
+            DataTable.DefaultView.RowFilter = FilterText;
+
+            if (DataTable.DefaultView.Count > 0)
+            {
+                SelectedItem = DataTable.DefaultView[0];
+            }
+            else
+            {
+                SelectedItem = null;
+            }
+        }
+    }
+
+    [ObservableProperty]
+    private string? _filterText;
+    partial void OnFilterTextChanged(string? value)
+    {
+        ApplyFileDataFilter();
+    }
+
     #endregion
 
     #region Properties

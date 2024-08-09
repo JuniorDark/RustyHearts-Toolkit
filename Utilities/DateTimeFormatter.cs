@@ -50,5 +50,27 @@
         {
             return date.Year * 10000 + date.Month * 100 + date.Day;
         }
+
+        public static string FormatMinutesToDate(double minutes)
+        {
+            const double minutesInDay = 1440;
+            const double minutesInHour = 60;
+
+            double days = Math.Floor(minutes / minutesInDay);
+            minutes %= minutesInDay;
+
+            double hours = Math.Floor(minutes / minutesInHour);
+            minutes %= minutesInHour;
+
+            string formattedTime = string.Empty;
+            if (days > 0)
+                formattedTime += $"{days:F1} Day(s) ";
+            if (hours > 0)
+                formattedTime += $"{hours:F1} Hour(s) ";
+            if (minutes > 0 || formattedTime == string.Empty)
+                formattedTime += $"{minutes:F1} Minute(s)";
+
+            return formattedTime.Trim();
+        }
     }
 }

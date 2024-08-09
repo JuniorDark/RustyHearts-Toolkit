@@ -37,6 +37,8 @@
                 <ResourceDictionary Source="Styles/ScrollBar.xaml" />
                 <ResourceDictionary Source="Styles/Tab.xaml" />
                 <ResourceDictionary Source="Styles/Textbox.xaml" />
+                <ResourceDictionary Source="Styles/violet02.xaml" />
+                <ResourceDictionary Source="Styles/green02.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
         </ResourceDictionary>
