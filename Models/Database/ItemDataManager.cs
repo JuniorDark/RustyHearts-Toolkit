@@ -216,6 +216,42 @@ public partial class ItemDataManager: ObservableObject
         };
     }
 
+    public static string GetShopIcon(string iconName)
+    {
+        if (string.IsNullOrEmpty(iconName))
+        {
+            return "question_icon";
+        }
+
+        string? shopIcon = FindShopImage(iconName);
+
+        if (!string.IsNullOrEmpty(shopIcon))
+        {
+            return shopIcon;
+        }
+        else
+        {
+            return iconName;
+        }
+    }
+
+    private static string? FindShopImage(string iconName)
+    {
+        string shopIcon = $"shop_{iconName}";
+        string resourcePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
+
+        string[] files = Directory.GetFiles(resourcePath, shopIcon.ToLower() + ".png", SearchOption.AllDirectories);
+
+        if (files.Length > 0)
+        {
+            return shopIcon;
+        }
+        else
+        {
+            return null;
+        }
+    }
+
     #endregion
 
     #region Item Data List

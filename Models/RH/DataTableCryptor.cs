@@ -7,6 +7,32 @@ namespace RHToolkit.Models.RH
     {
         private readonly RHCryptor _rhCryptor = new();
 
+        public static DataTable CreateDataTable(List<KeyValuePair<string, int>> columns)
+        {
+            if (columns == null)
+            {
+                throw new ArgumentNullException(nameof(columns), "The columns list cannot be null.");
+            }
+
+            DataTable dataTable = new();
+
+            for (int i = 0; i < columns.Count; i++)
+            {
+                var column = columns[i];
+                string columnName = column.Key;
+                int columnDataType = column.Value;
+                Type columnType = DataType.GetColumnDataType(columnDataType);
+
+                // Add the column to the DataTable
+                dataTable.Columns.Add(columnName, columnType);
+
+                // Store the ColumnType as an extended property
+                dataTable.Columns[i].ExtendedProperties["ColumnType"] = columnDataType;
+            }
+
+            return dataTable;
+        }
+
         public DataTable RhToDataTable(byte[] encryptedData)
         {
             try
@@ -37,10 +63,10 @@ namespace RHToolkit.Models.RH
                     string value = Encoding.Unicode.GetString(reader.ReadBytes(numStrLen * 2));
 
                     // Ensure unique column name
-                    if (columnCounter.ContainsKey(value))
+                    if (columnCounter.TryGetValue(value, out int counter))
                     {
-                        columnCounter[value]++;
-                        value = $"{value}-{columnCounter[value]}";
+                        columnCounter[value] = ++counter;
+                        value = $"{value}-{columnCounter}";
                     }
                     else
                     {
@@ -175,18 +201,15 @@ namespace RHToolkit.Models.RH
                     string title = column.ColumnName;
                     listTitles.Add(title);
 
-                    int typeValue;
-                    if (column.ExtendedProperties.ContainsKey("ColumnType") && column.ExtendedProperties["ColumnType"] is int value)
+                    if (column.ExtendedProperties.ContainsKey("ColumnType") && column.ExtendedProperties["ColumnType"] is int typeValue)
                     {
-                        typeValue = value;
+                        string type = DataType.GetColumnType(typeValue);
+                        listTypes.Add(type);
                     }
                     else
                     {
                         throw new Exception($"Column '{title}' does not have a valid 'ColumnType' property.");
                     }
-
-                    string type = DataType.GetColumnType(typeValue);
-                    listTypes.Add(type);
                 }
 
                 // Write the Attributes
@@ -195,10 +218,10 @@ namespace RHToolkit.Models.RH
                     string title = listTitles[i];
                     string type = listTypes[i];
 
-                    if (attributeCounter.ContainsKey(title))
+                    if (attributeCounter.TryGetValue(title, out int counter))
                     {
-                        attributeCounter[title]++;
-                        title = $"{title}-{attributeCounter[title]}";
+                        attributeCounter[title] = ++counter;
+                        title = $"{title}-{counter}";
                     }
                     else
                     {
@@ -224,17 +247,16 @@ namespace RHToolkit.Models.RH
                         string title = listTitles[j];
                         string value = row[j]?.ToString() ?? string.Empty;
 
-                        if (attributeCounterForRow.ContainsKey(title))
+                        if (attributeCounterForRow.TryGetValue(title, out int counter))
                         {
-                            attributeCounterForRow[title]++;
-                            title = $"{title}-{attributeCounterForRow[title]}";
+                            attributeCounterForRow[title] = ++counter;
+                            title = $"{title}-{counter}";
                         }
                         else
                         {
                             attributeCounterForRow[title] = 1;
                         }
 
-                        // Use XMLEncodeCommon for the values in rows
                         xmlBuilder.AppendFormat("{0}=\"{1}\" ", DataType.XMLEncodeAttribute(title), DataType.XMLEncode(value));
                     }
                     xmlBuilder.Append("/>\n");
@@ -249,6 +271,7 @@ namespace RHToolkit.Models.RH
                 throw new Exception($"Failed to convert DataTable to XML: {ex.Message}", ex);
             }
         }
+
 
         public static byte[] DataTableToXLSX(DataTable dataTable)
         {

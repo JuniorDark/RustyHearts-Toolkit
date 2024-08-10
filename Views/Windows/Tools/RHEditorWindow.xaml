@@ -17,7 +17,7 @@
     d:DataContext="{d:DesignInstance Type=windows:RHEditorViewModel}"
     AllowsTransparency="True"
     Background="Transparent"
-    Icon="/Assets/icon/gearbox.png"
+    Icon="/Assets/icon/rhicon.png"
     ResizeMode="CanResizeWithGrip"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"

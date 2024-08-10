@@ -73,7 +73,7 @@ public class GMDatabaseManager
                 string tableName = Path.GetFileNameWithoutExtension(file);
                 reportProgress($"Processing {tableName}...");
 
-                DataTable? dataTable = await _fileManager.FileToDataTableAsync(file);
+                DataTable? dataTable = await _fileManager.RHFileToDataTableAsync(file);
 
                 if (dataTable != null)
                 {

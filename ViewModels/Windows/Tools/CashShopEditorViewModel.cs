@@ -14,7 +14,7 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows
 {
-    public partial class CashShopEditorViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<DataRowViewMessage>
+    public partial class CashShopEditorViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<ItemDataListMessage>, IRecipient<DataRowViewMessage>
     {
         private readonly Guid _token;
         private readonly IWindowsService _windowsService;
@@ -42,8 +42,9 @@ namespace RHToolkit.ViewModels.Windows
             PopulateCostumeCategoryItems(0);
             PopulateCostumeCategoryItemsFilter(-1);
             PopulateItemStateItems();
-            
+
             WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
+            WeakReferenceMessenger.Default.Register<ItemDataListMessage>(this);
             WeakReferenceMessenger.Default.Register<DataRowViewMessage>(this);
         }
 
@@ -81,12 +82,72 @@ namespace RHToolkit.ViewModels.Windows
         #region File
 
         [RelayCommand]
-        private async Task LoadFile()
+        private async Task CreateFile()
         {
             try
             {
                 await CloseFile();
 
+                List<KeyValuePair<string, int>> columns =
+                [
+                    new KeyValuePair<string, int>("nID", 0),
+                    new KeyValuePair<string, int>("nItemID", 0),
+                    new KeyValuePair<string, int>("wszName", 3),
+                    new KeyValuePair<string, int>("szShopBigIcon", 2),
+                    new KeyValuePair<string, int>("nJob", 0),
+                    new KeyValuePair<string, int>("szJob", 2),
+                    new KeyValuePair<string, int>("nCategory", 0),
+                    new KeyValuePair<string, int>("nCostumeCategory", 0),
+                    new KeyValuePair<string, int>("szAddData", 2),
+                    new KeyValuePair<string, int>("wszNoteCos", 3),
+                    new KeyValuePair<string, int>("wszgame", 3),
+                    new KeyValuePair<string, int>("wszDesc", 3),
+                    new KeyValuePair<string, int>("nStartSellingDate", 0),
+                    new KeyValuePair<string, int>("nEndSellingDate", 0),
+                    new KeyValuePair<string, int>("nSaleStartSellingDate", 0),
+                    new KeyValuePair<string, int>("nSaleEndSellingDate", 0),
+                    new KeyValuePair<string, int>("nPaymentType", 0),
+                    new KeyValuePair<string, int>("nGracePeriod", 0),
+                    new KeyValuePair<string, int>("nHidden", 0),
+                    new KeyValuePair<string, int>("nNoGift", 0),
+                    new KeyValuePair<string, int>("nItemState", 0),
+                    new KeyValuePair<string, int>("nCostumeSetID", 0),
+                    new KeyValuePair<string, int>("nCostumeRank", 0),
+                    new KeyValuePair<string, int>("nDeleteType", 0),
+                    new KeyValuePair<string, int>("nCostumeOptionGroup", 0),
+                    new KeyValuePair<string, int>("nItemType", 0),
+                    new KeyValuePair<string, int>("nValue00", 0),
+                    new KeyValuePair<string, int>("nSaleCashCost00", 0),
+                    new KeyValuePair<string, int>("nCashCost00", 0),
+                    new KeyValuePair<string, int>("nCashMileage", 0),
+                    new KeyValuePair<string, int>("nMinLevel", 0),
+                    new KeyValuePair<string, int>("nMaxLevel", 0),
+                    new KeyValuePair<string, int>("nBannerItem", 0)
+                ];
+
+                bool isLoaded = DataTableManager.CreateTable("cashshoplist", columns);
+
+                if (isLoaded)
+                {
+                    Title = $"Cash Shop Editor ({DataTableManager.CurrentFileName})";
+                    OpenMessage = "";
+                    ApplyFilter();
+                    OnCanExecuteFileCommandChanged();
+                    IsVisible = Visibility.Visible;
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            }
+        }
+
+        [RelayCommand]
+        private async Task LoadFile()
+        {
+            try
+            {
+                await CloseFile();
                 string filter = "cashshoplist.rh|cashshoplist.rh|All Files (*.*)|*.*";
                 bool isLoaded = await DataTableManager.LoadFile(filter, null, "nCashCost00", "Cash Shop");
 
@@ -189,7 +250,7 @@ namespace RHToolkit.ViewModels.Windows
 
                 var token = _token;
 
-                _windowsService.OpenItemWindow(token, "CashShopItem", itemData);
+                _windowsService.OpenItemWindow(token, "CashShopItemAdd", itemData);
 
             }
             catch (Exception ex)
@@ -212,7 +273,7 @@ namespace RHToolkit.ViewModels.Windows
 
                     var token = _token;
 
-                    _windowsService.OpenItemWindow(token, "CashShopItem", itemData);
+                    _windowsService.OpenItemWindow(token, "CashShopItemUpdate", itemData);
                 }
 
             }
@@ -228,15 +289,22 @@ namespace RHToolkit.ViewModels.Windows
             {
                 var itemData = message.Value;
 
-                if (itemData.IsNewItem && itemData.ItemId != 0)
+                if (itemData.ItemId != 0)
                 {
-                    // Create new item
-                    CreateItem(itemData);
-                }
-                else
-                {
-                    // Update existing item
                     UpdateItem(itemData);
+                }
+            }
+        }
+
+        public void Receive(ItemDataListMessage message)
+        {
+            if (message.Recipient == "CashShopEditorWindow" && message.Token == _token)
+            {
+                var itemDataList = message.Value;
+
+                foreach (var itemData in itemDataList)
+                {
+                    CreateItem(itemData);
                 }
             }
         }
@@ -251,11 +319,12 @@ namespace RHToolkit.ViewModels.Windows
             ItemID = frameViewModel.ItemId;
             ItemAmount = frameViewModel.ItemAmount;
             ItemName = frameViewModel.ItemName;
-            IconName = $"{frameViewModel.IconName}";
+            IconName = ItemDataManager.GetShopIcon(frameViewModel.IconName!);
             ShopDescription = PaymentType == 0 ? $"{BonusRate}% of the price goes to Bonus" : "Purchased with Bonus";
             ShopCategory = GetShopCategory(frameViewModel.SubCategory);
             CostumeCategory = GetCostumeCategory(frameViewModel.SubCategory);
             Class = frameViewModel.JobClass;
+            ItemState = 2;
             StartSellingDate = DateTime.Today;
             EndSellingDate = DateTime.Today.AddYears(10);
             SaleStartSellingDate = null;
@@ -271,7 +340,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 ItemID = frameViewModel.ItemId;
                 ItemName = frameViewModel.ItemName;
-                IconName = frameViewModel.IconName;
+                IconName = ItemDataManager.GetShopIcon(frameViewModel.IconName!);
                 ItemAmount = frameViewModel.ItemAmount;
                 ShopCategory = GetShopCategory(frameViewModel.SubCategory);
                 CostumeCategory = GetCostumeCategory(frameViewModel.SubCategory);
@@ -297,7 +366,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 11 => 0,
                 12 => 8,
-                13 => 2,
+                13 or 54 => 2,
                 14 => 3,
                 15 => 4,
                 16 => 5,
@@ -305,7 +374,6 @@ namespace RHToolkit.ViewModels.Windows
                 18 => 7,
                 19 or 20 => 1,
                 38 or 53 => 0,
-                54 => 2,
                 _ => 0
             };
         }
@@ -356,6 +424,7 @@ namespace RHToolkit.ViewModels.Windows
                 IconName = (string)selectedItem["szShopBigIcon"];
                 ShopDescription = (string)selectedItem["wszDesc"];
                 ShopCategory = (int)selectedItem["nCategory"];
+                ItemAmountText = ShopCategory == 0 ? "Duration (Minutes)" : "Item Amount";
                 CostumeCategory = (int)selectedItem["nCostumeCategory"];
                 ItemAmount = (int)selectedItem["nValue00"];
                 ItemState = (int)selectedItem["nItemState"];
@@ -684,7 +753,7 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
-        private bool _useShopIcon = true;
+        private bool _useShopIcon = false;
 
         partial void OnUseShopIconChanged(bool value)
         {
@@ -711,17 +780,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
             {
-                var iconName = newValue;
-                if (UseShopIcon == true && !newValue?.StartsWith("shop_") == true)
-                {
-                    iconName = $"shop_{newValue}";
-                }
-                else if (UseShopIcon == false && newValue?.StartsWith("shop_") == true)
-                {
-                    iconName = newValue.Substring(5);
-                }
-                IconName = iconName;
-                DataTableManager.SelectedItem["szShopBigIcon"] = iconName;
+                DataTableManager.SelectedItem["szShopBigIcon"] = newValue;
             }
         }
 
@@ -739,14 +798,12 @@ namespace RHToolkit.ViewModels.Windows
                 };
 
                 FrameViewModel = ItemDataManager.GetItemData(itemData);
-
                 ItemName = FrameViewModel.ItemName;
-                IconName = FrameViewModel.IconName;
+                IconName = ItemDataManager.GetShopIcon(FrameViewModel.IconName!);
                 ShopCategory = GetShopCategory(FrameViewModel.SubCategory);
                 CostumeCategory = GetCostumeCategory(FrameViewModel.SubCategory);
                 Class = FrameViewModel.JobClass;
                 ItemAmountMax = FrameViewModel.OverlapCnt;
-
             }
         }
 
@@ -763,12 +820,18 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private int _itemAmount;
 
+        [ObservableProperty]
+        private int _itemAmountMax;
+
+        [ObservableProperty]
+        private string _itemAmountText = "Item Amount";
+
         partial void OnItemAmountChanged(int value)
         {
             if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                UpdateItemName();
                 DataTableManager.SelectedItem["nValue00"] = value;
+                UpdateItemName();
             }
         }
 
@@ -778,14 +841,13 @@ namespace RHToolkit.ViewModels.Windows
         {
             if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
             {
-                IsEnabled = value == 0 ? true : false;
-                NoGift = value == 0 ? false : true;
                 DataTableManager.SelectedItem["nPaymentType"] = value;
+                IsBonusEnabled = value == 0;
+                NoGift = value == 1;
                 if (BonusRate != 0)
                 {
                     CashMileage = value == 1 ? 0 : CashCost * BonusRate / 100;
                 }
-                
                 ShopDescription = value == 0 ? $"{BonusRate}% of the price goes to Bonus" : "Purchased with Bonus";
             }
         }
@@ -802,6 +864,9 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
+        private bool _isBonusEnabled = true;
+
+        [ObservableProperty]
         private int _bonusRate = 10;
         partial void OnBonusRateChanged(int oldValue, int newValue)
         {
@@ -809,6 +874,11 @@ namespace RHToolkit.ViewModels.Windows
             {
                 CashMileage = CashCost * newValue / 100;
                 ShopDescription = $"{BonusRate}% of the price goes to Bonus";
+            }
+            else if (newValue == 0 && PaymentType == 0)
+            {
+                CashMileage = 0;
+                ShopDescription = "";
             }
             else
             {
@@ -887,15 +957,10 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
-        private bool _isEnabled = true;
-
-        [ObservableProperty]
-        private int _itemAmountMax;
-
-        [ObservableProperty]
         private int _shopCategory;
         partial void OnShopCategoryChanged(int value)
         {
+            ItemAmountText = value == 0 ? "Duration (Minutes)" : "Item Amount";
             PopulateCostumeCategoryItems(value);
 
             if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
@@ -957,7 +1022,6 @@ namespace RHToolkit.ViewModels.Windows
                 DataTableManager.SelectedItem[dataTableKey] = dateIntValue;
             }
         }
-
 
         #endregion
 

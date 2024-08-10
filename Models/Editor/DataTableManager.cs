@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using RHToolkit.Messages;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.RH;
 using RHToolkit.Properties;
 using RHToolkit.Views.Windows;
 using System.Data;
@@ -15,12 +16,64 @@ public partial class DataTableManager : ObservableObject
     private readonly Stack<EditHistory> _undoStack = new();
     private readonly Stack<EditHistory> _redoStack = new();
     private readonly FileManager _fileManager = new();
+    private readonly DataTableCryptor _dataTableCryptor = new();
     private DataGridSelectionUnit? _selectionUnit = null;
     private Point? lastFoundCell = null;
 
     #region Commands
 
     #region File
+
+    public bool CreateTable(string tableName, List<KeyValuePair<string, int>> columns, string? stringTableName = null, List<KeyValuePair<string, int>>? stringColumns = null)
+    {
+        try
+        {
+            OpenFolderDialog openFolderDialog = new();
+
+            if (openFolderDialog.ShowDialog() == true)
+            {
+                string directory = openFolderDialog.FolderName;
+                string newFileName = tableName + "(new).rh";
+                string filePath = Path.Combine(directory, newFileName);
+                
+                string? stringFilePath = null;
+                DataTable? stringTable = null;
+                string? newStringFileName = null;
+
+                if (stringTableName != null && stringColumns != null)
+                {
+                    stringTable = DataTableCryptor.CreateDataTable(stringColumns);
+                    newStringFileName = stringTableName + "(new).rh";
+                    stringFilePath = Path.Combine(directory, newStringFileName);
+                }
+
+                var table = DataTableCryptor.CreateDataTable(columns);
+
+                if (table != null)
+                {
+                    LoadTable(table, stringTable);
+                    CurrentFile = filePath;
+                    CurrentFileName = newFileName;
+
+                    if (stringTable != null)
+                    {
+                        CurrentStringFile = stringFilePath;
+                        CurrentStringFileName = newStringFileName;
+                    }
+                }
+
+                OnCanExecuteFileCommandChanged();
+                return true;
+            }
+
+            return false;
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error creating table: {ex.Message}", Resources.Error);
+            return false;
+        }
+    }
 
     public async Task<bool> LoadFile(string filter, string? stringTableName = null, string? tableColumnName = null, string? fileType = null)
     {
@@ -36,7 +89,7 @@ public partial class DataTableManager : ObservableObject
             {
                 string file = openFileDialog.FileName;
                 string fileName = Path.GetFileName(file);
-                var table = await _fileManager.FileToDataTableAsync(file);
+                var table = await _fileManager.RHFileToDataTableAsync(file);
 
                 string? stringFilePath = null;
                 DataTable? stringTable = null;
@@ -63,7 +116,7 @@ public partial class DataTableManager : ObservableObject
                             return false;
                         }
 
-                        stringTable = await _fileManager.FileToDataTableAsync(stringFilePath);
+                        stringTable = await _fileManager.RHFileToDataTableAsync(stringFilePath);
                     }
                 }
 
@@ -154,13 +207,13 @@ public partial class DataTableManager : ObservableObject
         {
             if (DataTable != null && CurrentFile != null)
             {
-                await _fileManager.DataTableToFileAsync(CurrentFile, DataTable);
+                await _fileManager.DataTableToRHFileAsync(CurrentFile, DataTable);
                 FileManager.ClearTempFile(CurrentFileName!);
             }
             
             if (DataTableString != null && CurrentStringFile != null)
             {
-                await _fileManager.DataTableToFileAsync(CurrentStringFile, DataTableString);
+                await _fileManager.DataTableToRHFileAsync(CurrentStringFile, DataTableString);
             }
 
             HasChanges = false;
@@ -189,7 +242,7 @@ public partial class DataTableManager : ObservableObject
             {
                 string file = saveFileDialog.FileName;
                 string? directory = Path.GetDirectoryName(file);
-                await _fileManager.DataTableToFileAsync(file, DataTable);
+                await _fileManager.DataTableToRHFileAsync(file, DataTable);
                 FileManager.ClearTempFile(CurrentFileName);
                 HasChanges = false;
                 CurrentFile = file;
@@ -198,7 +251,7 @@ public partial class DataTableManager : ObservableObject
                 if (DataTableString != null && CurrentStringFileName != null && directory != null)
                 {
                     string stringFilePath = Path.Combine(directory, CurrentStringFileName);
-                    await _fileManager.DataTableToFileAsync(file, DataTableString);
+                    await _fileManager.DataTableToRHFileAsync(file, DataTableString);
                 }
             }
             catch (Exception ex)

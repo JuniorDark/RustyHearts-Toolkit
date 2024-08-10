@@ -10,7 +10,7 @@ namespace RHToolkit.Models.Editor
         private static readonly string _backupDirectory = Path.Combine(_appDataPath, "RHToolkit", "RHEditor", "backup");
         private readonly DataTableCryptor _dataTableCryptor = new();
 
-        public async Task<DataTable?> FileToDataTableAsync(string sourceFile)
+        public async Task<DataTable?> RHFileToDataTableAsync(string sourceFile)
         {
             using FileStream sourceFileStream = File.OpenRead(sourceFile);
             byte[] buffer = new byte[4096];
@@ -27,7 +27,7 @@ namespace RHToolkit.Models.Editor
             return _dataTableCryptor.RhToDataTable(sourceBytes);
         }
 
-        public async Task DataTableToFileAsync(string file, DataTable fileData)
+        public async Task DataTableToRHFileAsync(string file, DataTable fileData)
         {
             byte[] encryptedData = _dataTableCryptor.DataTableToRh(fileData);
             await File.WriteAllBytesAsync(file, encryptedData);
@@ -65,7 +65,7 @@ namespace RHToolkit.Models.Editor
                     }
                 }
 
-                await DataTableToFileAsync(newBackupFilePath, fileData);
+                await DataTableToRHFileAsync(newBackupFilePath, fileData);
             }
             catch (Exception ex)
             {

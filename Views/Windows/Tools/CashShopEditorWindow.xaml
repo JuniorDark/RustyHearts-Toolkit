@@ -24,6 +24,7 @@
     WindowStyle="None"
     mc:Ignorable="d">
     <Window.InputBindings>
+        <KeyBinding Command="{Binding CreateFileCommand}" Gesture="Ctrl+N" />
         <KeyBinding Command="{Binding LoadFileCommand}" Gesture="Ctrl+O" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileCommand}" Gesture="Ctrl+S" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
@@ -77,8 +78,13 @@
                 Foreground="White">
                 <ui:MenuItem Header="File" Icon="{ui:SymbolIcon DocumentSplitHint20}">
                     <MenuItem
+                        Command="{Binding CreateFileCommand}"
+                        Header="New"
+                        Icon="{ui:SymbolIcon DocumentAdd24}"
+                        InputGestureText="Ctrl+N" />
+                    <MenuItem
                         Command="{Binding LoadFileCommand}"
-                        Header="Open RH File..."
+                        Header="Open cashshop File..."
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+O" />
                     <MenuItem
@@ -397,7 +403,10 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Orientation="Vertical">
-                            <TextBlock Foreground="White" Text="Item Amount/Duration" />
+                            <TextBlock
+                                d:Text="Item Amount/Duration"
+                                Foreground="White"
+                                Text="{Binding ItemAmountText}" />
                             <control:IntegerUpDown
                                 Width="120"
                                 Margin="0,0,0,0"
@@ -500,7 +509,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
                                 Increment="1"
-                                IsEnabled="{Binding IsEnabled}"
+                                IsEnabled="{Binding IsBonusEnabled}"
                                 Minimum="0"
                                 Value="{Binding CashMileage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>

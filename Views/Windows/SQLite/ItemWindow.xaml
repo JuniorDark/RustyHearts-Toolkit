@@ -622,14 +622,15 @@
                         ItemNameVisibility="Visible"
                         SlotIcon="/Assets/images/lb_ac_icon.png" />
                     <Button
-                        x:Name="btnSelectItem"
+                        x:Name="btnAddItem"
                         Canvas.Left="105"
                         Canvas.Top="90"
-                        Width="120"
+                        Width="150"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Command="{Binding SelectItemCommand}"
-                        Content="{x:Static rs:Resources.Add}"
+                        d:Content="Add Selected Item"
+                        Command="{Binding AddItemCommand}"
+                        Content="{Binding AddItemText}"
                         Cursor="Hand"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}" />
@@ -741,7 +742,8 @@
                     ItemsSource="{Binding ItemDataManager.ItemDataView}"
                     Loaded="DataGridView_Loaded"
                     SelectedItem="{Binding SelectedItem}"
-                    SelectionMode="Single"
+                    SelectionChanged="DataGridView_SelectionChanged"
+                    SelectionMode="{Binding SelectionMode}"
                     Template="{StaticResource lb_datagrid}"
                     VerticalGridLinesBrush="White">
                     <DataGrid.Resources>

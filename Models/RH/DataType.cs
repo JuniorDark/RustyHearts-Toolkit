@@ -21,8 +21,7 @@ public class DataType
         {
             0 => typeof(int),
             1 => typeof(float),
-            2 => typeof(string),
-            3 => typeof(string),
+            2 or 3 => typeof(string),
             4 => typeof(long),
             _ => throw new ArgumentOutOfRangeException(nameof(type), $"Unexpected type: {type}"),
         };

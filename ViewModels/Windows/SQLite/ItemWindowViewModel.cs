@@ -4,11 +4,12 @@ using RHToolkit.Models.Database;
 using RHToolkit.Models.SQLite;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
+using System.Windows.Controls;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
 
-public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<CharacterDataMessage>
+public partial class ItemWindowViewModel : ObservableObject, IRecipient<CharacterDataMessage>, IRecipient<ItemDataMessage>
 {
     private readonly IGMDatabaseService _gmDatabaseService;
     private readonly CachedDataManager _cachedDataManager;
@@ -49,7 +50,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
 
     #region Send ItemData
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
-    private void SelectItem()
+    private void AddItem()
     {
         if (FrameViewModel != null)
         {
@@ -75,14 +76,20 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     case "CouponItem":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponWindow", MessageType, Token));
                         break;
-                    case "CashShopItem":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CashShopEditorWindow", MessageType, Token));
-                        break;
                     case "SetItem":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "SetItemEditorWindow", MessageType, Token));
                         break;
                     case "Package":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "PackageEditorWindow", MessageType, Token));
+                        break;
+                    case "CashShopItemAdd":
+                        if (ItemDataList != null)
+                        {
+                            WeakReferenceMessenger.Default.Send(new ItemDataListMessage(ItemDataList, "CashShopEditorWindow", MessageType, Token));
+                        }
+                        break;
+                    case "CashShopItemUpdate":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CashShopEditorWindow", MessageType, Token));
                         break;
                     default:
                         break;
@@ -90,6 +97,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             }
 
         }
+        
     }
 
     private bool CanExecuteCommand()
@@ -162,7 +170,17 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                         IsSlotVisible = Visibility.Visible;
                         IsOptionsVisible = Visibility.Visible;
                         break;
-                    case "CashShopItem":
+                    case "CashShopItemAdd":
+                        SelectionMode = DataGridSelectionMode.Extended;
+                        IsSlotVisible = Visibility.Hidden;
+                        IsOptionsVisible = Visibility.Hidden;
+                        AddItemText = "Add Selected Item(s)";
+                        break;
+                    case "CashShopItemUpdate":
+                        SelectionMode = DataGridSelectionMode.Single;
+                        IsSlotVisible = Visibility.Hidden;
+                        IsOptionsVisible = Visibility.Hidden;
+                        break;
                     case "CouponItem":
                         IsNewItem = itemData.IsNewItem;
                         IsSlotVisible = Visibility.Hidden;
@@ -202,7 +220,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
                     }
 
                 }
-            }), DispatcherPriority.ContextIdle);
+            }), DispatcherPriority.Background);
         }
     }
 
@@ -210,7 +228,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         return messageType switch
         {
-            "CashShopItem" => $"Add Cash Shop Item",
+            "CashShopItemAdd" => $"Add Cash Shop Item",
+            "CashShopItemUpdate" => $"Update Cash Shop Item",
             "CouponItem" => $"Add Coupon Item",
             "EquipItem" => $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterData?.CharacterName}] ",
             "InventoryItem" => $"Add Inventory Item ({(InventoryType)itemData.PageIndex}) [{CharacterData?.CharacterName}] ",
@@ -482,6 +501,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
         }
 
     }
+
     #endregion
 
     #region Properties
@@ -490,10 +510,16 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     private string _title = "Add Item";
 
     [ObservableProperty]
+    private string _addItemText = "Add Selected Item";
+
+    [ObservableProperty]
     private Visibility _isSlotVisible = Visibility.Hidden;
 
     [ObservableProperty]
     private Visibility _isOptionsVisible = Visibility.Hidden;
+
+    [ObservableProperty]
+    private DataGridSelectionMode _selectionMode = DataGridSelectionMode.Single;
 
     [ObservableProperty]
     private ItemDataManager _itemDataManager;
@@ -509,7 +535,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
             UpdateItemData(value);
         }
 
-        SelectItemCommand.NotifyCanExecuteChanged();
+        AddItemCommand.NotifyCanExecuteChanged();
     }
 
     [ObservableProperty]
@@ -519,6 +545,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<ItemData
     {
         ItemName = value != null ? value.ItemName : "Select a Item";
     }
+
+    [ObservableProperty]
+    private List<ItemData>? _itemDataList;
 
     [ObservableProperty]
     private string? _itemName;

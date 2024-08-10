@@ -1,4 +1,5 @@
-﻿using RHToolkit.ViewModels.Windows;
+﻿using RHToolkit.Models;
+using RHToolkit.ViewModels.Windows;
 using System.Windows.Controls;
 
 namespace RHToolkit.Views.Windows;
@@ -34,5 +35,24 @@ public partial class ItemWindow : Window
 
         }
     }
+
+    private void DataGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (DataContext is ItemWindowViewModel viewModel)
+        {
+            if (viewModel.MessageType == "CashShopItemAdd")
+            {
+                viewModel.ItemDataList ??= [];
+
+                // Get selected items from the DataGrid
+                var selectedItems = dataGridView.SelectedItems.Cast<ItemData>().ToList();
+
+                // Add selected items to ItemDataList
+                viewModel.ItemDataList.Clear();
+                viewModel.ItemDataList.AddRange(selectedItems);
+            }
+        }
+    }
+
 
 }
