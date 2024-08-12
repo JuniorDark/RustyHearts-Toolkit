@@ -182,23 +182,8 @@ namespace RHToolkit.Views.Controls
 
         private void UpdateButtonStates()
         {
-            if (Value >= Maximum)
-            {
-                PART_RepeatButtonUp.IsEnabled = false;
-            }
-            else
-            {
-                PART_RepeatButtonUp.IsEnabled = true;
-            }
-
-            if (Value <= Minimum)
-            {
-                PART_RepeatButtonDown.IsEnabled = false;
-            }
-            else
-            {
-                PART_RepeatButtonDown.IsEnabled = true;
-            }
+            PART_RepeatButtonUp.IsEnabled = Value < Maximum;
+            PART_RepeatButtonDown.IsEnabled = Value > Minimum;
         }
 
     }

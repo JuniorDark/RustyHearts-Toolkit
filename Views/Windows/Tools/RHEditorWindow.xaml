@@ -108,7 +108,7 @@
                         InputGestureText="Ctrl+W" />
                     <Separator />
                     <MenuItem
-                        Command="{Binding CloseWindowCommand}"
+                        Command="{Binding DataTableManager.CloseWindowCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                         Header="Exit"
                         Icon="{ui:SymbolIcon ArrowExit20}" />

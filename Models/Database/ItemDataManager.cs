@@ -117,7 +117,7 @@ public partial class ItemDataManager: ObservableObject
                 ItemId = cachedItem.ItemId,
                 ItemName = cachedItem.ItemName ?? "",
                 Description = cachedItem.Description ?? "",
-                IconName = cachedItem.IconName ?? "",
+                IconName = cachedItem.IconName ?? "icon_empty_sprite",
                 Type = cachedItem.Type,
                 WeaponID00 = cachedItem.WeaponID00,
                 Category = cachedItem.Category,
@@ -190,9 +190,11 @@ public partial class ItemDataManager: ObservableObject
         {
             itemData = new()
             {
+                SlotIndex = item.SlotIndex,
                 ItemId = item.ItemId,
-                ItemName = $"Unknown Item",
+                ItemName = $"Unknown Item ({item.ItemId})",
                 IconName = "icon_empty_def",
+                Type = 1
             };
         }
 

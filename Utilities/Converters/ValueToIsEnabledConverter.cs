@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using System.Windows.Data;
-
-namespace RHToolkit.Utilities.Converters
+﻿namespace RHToolkit.Utilities.Converters
 {
     public class ValueToIsEnabledConverter : IValueConverter
     {

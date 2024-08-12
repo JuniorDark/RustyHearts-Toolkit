@@ -121,7 +121,7 @@
                         InputGestureText="Ctrl+W" />
                     <Separator />
                     <MenuItem
-                        Command="{Binding CloseWindowCommand}"
+                        Command="{Binding DataTableManager.CloseWindowCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
                         Header="Exit"
                         Icon="{ui:SymbolIcon ArrowExit20}" />
@@ -875,10 +875,10 @@
                 <StackPanel
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
-                    Margin="0,0,0,0"
+                    Margin="0,10,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Orientation="Vertical">
+                    Orientation="Horizontal">
                     <Label
                         x:Name="lbSearch"
                         HorizontalAlignment="Center"
@@ -896,6 +896,15 @@
                         Tag="{x:Static rs:Resources.SearchNameID}"
                         Template="{StaticResource lb_textbox}"
                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox
+                        x:Name="MatchCaseCheckBox"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Top"
+                        Content="Match Case"
+                        IsChecked="{Binding MatchCase}"
+                        Template="{StaticResource lb_checkbox}" />
                 </StackPanel>
                 <!--  Left Column  -->
                 <StackPanel

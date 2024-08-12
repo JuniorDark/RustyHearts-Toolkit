@@ -58,6 +58,9 @@
     <Compile Update="Views\Windows\Database\FortuneWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Windows\Tools\RandomRuneEditorWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Windows\Tools\PackageEditorWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -99,6 +102,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Windows\Database\EquipmentWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Windows\Tools\RandomRuneEditorWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

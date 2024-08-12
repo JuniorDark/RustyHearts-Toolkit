@@ -82,6 +82,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                     case "Package":
                         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "PackageEditorWindow", MessageType, Token));
                         break;
+                    case "RandomRune":
+                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "RandomRuneEditorWindow", MessageType, Token));
+                        break;
                     case "CashShopItemAdd":
                         if (ItemDataList != null)
                         {
@@ -192,6 +195,12 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                         IsSlotVisible = Visibility.Visible;
                         IsOptionsVisible = Visibility.Hidden;
                         break;
+                    case "RandomRune":
+                        SlotIndexMin = 1;
+                        SlotIndexMax = 10;
+                        IsSlotVisible = Visibility.Visible;
+                        IsOptionsVisible = Visibility.Hidden;
+                        break;
                     case "SetItem":
                         SlotIndexMin = 1;
                         SlotIndexMax = 6;
@@ -208,7 +217,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
 
                 if (itemData.ItemId != 0)
                 {
-                    SelectedItem = ItemDataManager.ItemDataItems?.FirstOrDefault(item => item.ItemId == itemData.ItemId);
                     LoadItemData(itemData);
                 }
                 else
@@ -237,6 +245,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             "AccountStorageItem" => $"Add Account Storage Item [{CharacterData?.AccountName}] ",
             "Mail" => $"Add Mail Item",
             "Package" => $"Add Package Item",
+            "RandomRune" => $"Add Random Rune Item",
             "SetItem" => $"Add Set Item",
             _ => "Add Item",
         };
@@ -454,6 +463,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
         FrameViewModel.SocketOption02Value = itemData.Socket2Value;
         FrameViewModel.SocketOption03Value = itemData.Socket3Value;
 
+        SelectedItem = ItemDataManager.ItemDataItems?.FirstOrDefault(item => item.ItemId == itemData.ItemId);
+
     }
 
     private void UpdateItemData(ItemData itemData)
@@ -497,7 +508,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
         {
             var frameViewModel = ItemDataManager.GetItemData(itemData);
             FrameViewModel = frameViewModel;
-            ItemName = frameViewModel.ItemName;
         }
 
     }
@@ -539,18 +549,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     }
 
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(ItemName))]
     private FrameViewModel? _frameViewModel;
-    partial void OnFrameViewModelChanged(FrameViewModel? value)
-    {
-        ItemName = value != null ? value.ItemName : "Select a Item";
-    }
 
     [ObservableProperty]
     private List<ItemData>? _itemDataList;
-
-    [ObservableProperty]
-    private string? _itemName;
 
     [ObservableProperty]
     private int _slotIndexMin;

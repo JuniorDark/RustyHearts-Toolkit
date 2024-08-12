@@ -14,21 +14,6 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         #region Commands 
-        [RelayCommand]
-        private async Task CloseWindow(Window window)
-        {
-            try
-            {
-                await CloseFile();
-
-                window?.Close();
-
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
-            }
-        }
 
         #region File
 

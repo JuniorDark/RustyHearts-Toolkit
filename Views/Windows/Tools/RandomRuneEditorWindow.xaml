@@ -1,0 +1,983 @@
+﻿<Window
+    x:Class="RHToolkit.Views.Windows.RandomRuneEditorWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:bh="clr-namespace:RHToolkit.Behaviors"
+    xmlns:control="clr-namespace:RHToolkit.Views.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:RHToolkit.Utilities.Converters"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
+    Title="{Binding Title}"
+    MinWidth="1280"
+    MinHeight="720"
+    MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
+    bh:WindowBehaviors.EnableDragMove="True"
+    d:DataContext="{d:DesignInstance Type=windows:RandomRuneEditorViewModel}"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="/Assets/icon/icon_colorrunebox.png"
+    ResizeMode="CanResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding LoadFileCommand}" Gesture="Ctrl+O" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileCommand}" Gesture="Ctrl+S" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileAsMIPCommand}" Gesture="Ctrl+Shift+S" />
+        <KeyBinding Command="{Binding CloseFileCommand}" Gesture="Ctrl+W" />
+        <KeyBinding
+            Command="{Binding OpenSearchDialogCommand}"
+            CommandParameter="Find"
+            Gesture="Ctrl+F" />
+        <KeyBinding
+            Command="{Binding OpenSearchDialogCommand}"
+            CommandParameter="Replace"
+            Gesture="Ctrl+H" />
+    </Window.InputBindings>
+    <ContentControl Template="{StaticResource box_violet02}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ui:TitleBar
+                x:Name="TitleBar"
+                Title="{Binding Title}"
+                Grid.ColumnSpan="3"
+                Height="30"
+                Margin="30,0,0,0"
+                VerticalAlignment="Center"
+                d:Title="Rune Editor"
+                ButtonsForeground="White"
+                FontSize="15"
+                Foreground="White">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon
+                        Width="20"
+                        Height="20"
+                        Margin="0,-1,0,-3"
+                        Source="/Assets/icon/icon_colorrunebox.png" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+            <Menu
+                Grid.Row="1"
+                VerticalAlignment="Top"
+                FontSize="14"
+                Foreground="White">
+                <ui:MenuItem Header="File" Icon="{ui:SymbolIcon DocumentSplitHint20}">
+                    <MenuItem
+                        Command="{Binding LoadFileCommand}"
+                        Header="Open RH File..."
+                        Icon="{ui:SymbolIcon Save24}"
+                        InputGestureText="Ctrl+O" />
+                    <MenuItem
+                        Command="{Binding DataTableManager.SaveFileCommand}"
+                        Header="Save"
+                        Icon="{ui:SymbolIcon Save24}"
+                        InputGestureText="Ctrl+S" />
+                    <MenuItem
+                        Command="{Binding DataTableManager.SaveFileAsCommand}"
+                        Header="Save As..."
+                        Icon="{ui:SymbolIcon DocumentSave24}"
+                        InputGestureText="Ctrl+Alt+S" />
+                    <MenuItem Header="Export as..." Icon="{ui:SymbolIcon DocumentSave24}">
+                        <MenuItem
+                            Command="{Binding DataTableManager.SaveFileAsMIPCommand}"
+                            Header="Export as MIP"
+                            Icon="{ui:SymbolIcon DocumentSave24}"
+                            InputGestureText="Ctrl+Shift+S" />
+                        <MenuItem
+                            Command="{Binding DataTableManager.SaveFileAsXMLCommand}"
+                            Header="Export as XML"
+                            Icon="{ui:SymbolIcon DocumentSave24}"
+                            InputGestureText="Ctrl+Shift+X" />
+                        <MenuItem
+                            Command="{Binding DataTableManager.SaveFileAsXLSXCommand}"
+                            Header="Export as XLSX"
+                            Icon="{ui:SymbolIcon DocumentSave24}"
+                            InputGestureText="Ctrl+Shift+E" />
+                    </MenuItem>
+                    <MenuItem
+                        Command="{Binding CloseFileCommand}"
+                        Header="Close"
+                        Icon="{ui:SymbolIcon DocumentDismiss24}"
+                        InputGestureText="Ctrl+W" />
+                    <Separator />
+                    <MenuItem
+                        Command="{Binding DataTableManager.CloseWindowCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        Header="Exit"
+                        Icon="{ui:SymbolIcon ArrowExit20}" />
+                </ui:MenuItem>
+                <Separator />
+                <ui:MenuItem Header="Edit" Icon="{ui:SymbolIcon DocumentEdit20}">
+                    <MenuItem
+                        Command="{Binding DataTableManager.UndoChangesCommand}"
+                        Header="Undo"
+                        Icon="{ui:SymbolIcon ArrowUndo20}"
+                        InputGestureText="Ctrl+Z" />
+                    <MenuItem
+                        Command="{Binding DataTableManager.RedoChangesCommand}"
+                        Header="Redo"
+                        Icon="{ui:SymbolIcon ArrowRedo20}"
+                        InputGestureText="Ctrl+Shift+Z" />
+                    <Separator />
+                    <MenuItem
+                        Command="{Binding AddItemCommand}"
+                        Header="Add Item"
+                        Icon="{ui:SymbolIcon AddCircle24}"
+                        InputGestureText="Ctrl+I" />
+                    <MenuItem
+                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                        Header="Duplicate Selected Item"
+                        Icon="{ui:SymbolIcon Copy24}"
+                        InputGestureText="Ctrl+D" />
+                    <MenuItem
+                        Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
+                        Header="Delete Selected Item"
+                        Icon="{ui:SymbolIcon Delete24}"
+                        InputGestureText="Delete" />
+                    <Separator />
+                    <MenuItem
+                        Command="{Binding OpenSearchDialogCommand}"
+                        CommandParameter="Find"
+                        Header="Find..."
+                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
+                        InputGestureText="Ctrl+F" />
+                    <MenuItem
+                        Command="{Binding OpenSearchDialogCommand}"
+                        CommandParameter="Replace"
+                        Header="Replace"
+                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
+                        InputGestureText="Ctrl+H" />
+                </ui:MenuItem>
+            </Menu>
+            <Menu
+                Grid.Row="2"
+                VerticalAlignment="Top"
+                FontSize="14"
+                Foreground="White">
+                <MenuItem
+                    Command="{Binding LoadFileCommand}"
+                    CommandParameter="1"
+                    Icon="{ui:SymbolIcon DocumentAdd24,
+                                         Filled=True}"
+                    ToolTip="Open File" />
+                <MenuItem
+                    Command="{Binding DataTableManager.SaveFileCommand}"
+                    Icon="{ui:SymbolIcon Save24,
+                                         Filled=True}"
+                    ToolTip="Save" />
+                <MenuItem
+                    Command="{Binding DataTableManager.SaveFileAsCommand}"
+                    Icon="{ui:SymbolIcon DocumentSave24,
+                                         Filled=True}"
+                    ToolTip="Save As" />
+                <MenuItem
+                    Command="{Binding CloseFileCommand}"
+                    Icon="{ui:SymbolIcon DocumentDismiss24,
+                                         Filled=True}"
+                    ToolTip="Close" />
+                <Separator />
+                <MenuItem
+                    Command="{Binding DataTableManager.UndoChangesCommand}"
+                    Icon="{ui:SymbolIcon ArrowUndo24,
+                                         Filled=True}"
+                    ToolTip="Undo" />
+                <MenuItem
+                    Command="{Binding DataTableManager.RedoChangesCommand}"
+                    Icon="{ui:SymbolIcon ArrowRedo24,
+                                         Filled=True}"
+                    ToolTip="Redo" />
+                <Separator />
+                <MenuItem
+                    Command="{Binding CreateItemCommand}"
+                    Icon="{ui:SymbolIcon AddCircle24}"
+                    ToolTip="Add Item" />
+                <MenuItem
+                    Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                    Icon="{ui:SymbolIcon Copy24}"
+                    ToolTip="Duplicate Selected Item" />
+                <MenuItem
+                    Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
+                    Icon="{ui:SymbolIcon Delete24}"
+                    ToolTip="Delete Selected Item" />
+                <Separator />
+                <MenuItem
+                    Command="{Binding OpenSearchDialogCommand}"
+                    CommandParameter="Find"
+                    Icon="{ui:SymbolIcon DocumentTableSearch24}"
+                    ToolTip="Find" />
+                <MenuItem
+                    Command="{Binding OpenSearchDialogCommand}"
+                    CommandParameter="Replace"
+                    Icon="{ui:SymbolIcon DocumentTableSearch24}"
+                    ToolTip="Replace" />
+            </Menu>
+
+            <Grid
+                Grid.Row="1"
+                Grid.RowSpan="4"
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                Visibility="{Binding IsSelectedItemVisible}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="ID" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        Minimum="0"
+                        Value="{Binding RuneId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Group" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        Minimum="0"
+                        Value="{Binding RandomRuneGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Change Type" />
+                    <ComboBox
+                        Width="150"
+                        Height="24"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding ChangeTypeItems}"
+                        SelectedValue="{Binding ChangeType, Mode=TwoWay}"
+                        SelectedValuePath="ID"
+                        Style="{StaticResource ComboBoxStyle}"
+                        Template="{StaticResource lb_combobox}" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Rune Grade" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        Increment="1"
+                        Maximum="7"
+                        Minimum="0"
+                        Value="{Binding RuneGrade, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Group Probability" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="5,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        Minimum="0"
+                        Value="{Binding RandomGroupProbability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Description" />
+                    <TextBox
+                        Width="300"
+                        Height="30"
+                        Margin="0,0"
+                        d:Text="Name"
+                        FontSize="12"
+                        Template="{StaticResource lb_textbox11}"
+                        Text="{Binding RuneDesc, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Max Count" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        IsEnabled="False"
+                        Maximum="{Binding MaxCount}"
+                        Minimum="{Binding MaxCount}"
+                        Value="{Binding MaxCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="01" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding AddItemCommand}"
+                        CommandParameter="1"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding RemoveItemCommand}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="02" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding AddItemCommand}"
+                        CommandParameter="2"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding RemoveItemCommand}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="6"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="03" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding AddItemCommand}"
+                        CommandParameter="3"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding RemoveItemCommand}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="7"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="04" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding AddItemCommand}"
+                        CommandParameter="4"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding RemoveItemCommand}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="8"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="05" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding AddItemCommand}"
+                        CommandParameter="5"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding RemoveItemCommand}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="9"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="06" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding AddItemCommand}"
+                        CommandParameter="6"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding RemoveItemCommand}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="10"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="07" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding AddItemCommand}"
+                        CommandParameter="7"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=7}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding RemoveItemCommand}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="11"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="08" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding AddItemCommand}"
+                        CommandParameter="8"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=8}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding RemoveItemCommand}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="12"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="09" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding AddItemCommand}"
+                        CommandParameter="9"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=9}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding RemoveItemCommand}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="13"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,20,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="10" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding AddItemCommand}"
+                        CommandParameter="10"
+                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=10}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding RemoveItemCommand}" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="4"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Count 01" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        IsEnabled="{Binding RuneItemCode00, Converter={StaticResource ZeroToIsEnabledConverter}, ConverterParameter=0}"
+                        Minimum="0"
+                        Value="{Binding RuneItemCount00, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="5"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Count 02" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        IsEnabled="{Binding RuneItemCode01, Converter={StaticResource ZeroToIsEnabledConverter}, ConverterParameter=0}"
+                        Minimum="0"
+                        Value="{Binding RuneItemCount01, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="6"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Count 03" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        IsEnabled="{Binding RuneItemCode02, Converter={StaticResource ZeroToIsEnabledConverter}, ConverterParameter=0}"
+                        Minimum="0"
+                        Value="{Binding RuneItemCount02, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="7"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Count 04" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        IsEnabled="{Binding RuneItemCode03, Converter={StaticResource ZeroToIsEnabledConverter}, ConverterParameter=0}"
+                        Minimum="0"
+                        Value="{Binding RuneItemCount03, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="8"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Count 05" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        IsEnabled="{Binding RuneItemCode04, Converter={StaticResource ZeroToIsEnabledConverter}, ConverterParameter=0}"
+                        Minimum="0"
+                        Value="{Binding RuneItemCount04, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="9"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Count 06" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        IsEnabled="{Binding RuneItemCode05, Converter={StaticResource ZeroToIsEnabledConverter}, ConverterParameter=0}"
+                        Minimum="0"
+                        Value="{Binding RuneItemCount05, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="10"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Count 07" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        IsEnabled="{Binding RuneItemCode06, Converter={StaticResource ZeroToIsEnabledConverter}, ConverterParameter=0}"
+                        Minimum="0"
+                        Value="{Binding RuneItemCount06, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="11"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Count 08" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        IsEnabled="{Binding RuneItemCode07, Converter={StaticResource ZeroToIsEnabledConverter}, ConverterParameter=0}"
+                        Minimum="0"
+                        Value="{Binding RuneItemCount07, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="12"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Count 09" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        IsEnabled="{Binding RuneItemCode08, Converter={StaticResource ZeroToIsEnabledConverter}, ConverterParameter=0}"
+                        Minimum="0"
+                        Value="{Binding RuneItemCount08, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="13"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Count 10" />
+                    <control:IntegerUpDown
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Increment="1"
+                        IsEnabled="{Binding RuneItemCode09, Converter={StaticResource ZeroToIsEnabledConverter}, ConverterParameter=0}"
+                        Minimum="0"
+                        Value="{Binding RuneItemCount09, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+
+            </Grid>
+
+            <DataGrid
+                x:Name="dataGridView"
+                Grid.Row="3"
+                Grid.Column="0"
+                Height="400"
+                MinWidth="550"
+                Margin="5,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                bh:DataGridBehavior.EnableScrollIntoView="True"
+                bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
+                AutoGenerateColumns="False"
+                Background="Transparent"
+                BorderBrush="#FF0F0D0A"
+                CanUserAddRows="False"
+                ColumnWidth="*"
+                EnableRowVirtualization="True"
+                FontFamily="{StaticResource ArialUnicodeMS}"
+                FontSize="12"
+                HeadersVisibility="Column"
+                HorizontalGridLinesBrush="White"
+                HorizontalScrollBarVisibility="Auto"
+                ItemsSource="{Binding DataTableManager.DataTable}"
+                SelectedItem="{Binding DataTableManager.SelectedItem}"
+                SelectionMode="Single"
+                SelectionUnit="FullRow"
+                Template="{StaticResource lb_datagrid}"
+                VerticalGridLinesBrush="White"
+                Visibility="{Binding IsVisible}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
+                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.InputBindings>
+                    <KeyBinding
+                        Key="I"
+                        Command="{Binding DataTableManager.AddNewRowCommand}"
+                        Modifiers="Ctrl" />
+                    <KeyBinding
+                        Key="D"
+                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                        Modifiers="Control" />
+                    <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
+                    <KeyBinding
+                        Key="Z"
+                        Command="{Binding DataTableManager.UndoChangesCommand}"
+                        Modifiers="Ctrl" />
+                    <KeyBinding
+                        Key="Z"
+                        Command="{Binding DataTableManager.RedoChangesCommand}"
+                        Modifiers="Ctrl+Shift" />
+                    <KeyBinding
+                        Key="F"
+                        Command="{Binding OpenSearchDialogCommand}"
+                        CommandParameter="Find"
+                        Modifiers="Ctrl" />
+                </DataGrid.InputBindings>
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="Auto"
+                        Binding="{Binding nid}"
+                        Header="ID"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding wszDisc}"
+                        Header="{x:Static rs:Resources.Name}"
+                        IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid
+                Grid.Row="4"
+                Grid.Column="0"
+                Visibility="{Binding IsVisible}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    x:Name="lbTotalItem"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    d:Text="Showing {0}/{1} Items"
+                    Foreground="Gold"
+                    Style="{StaticResource ArialMS}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                            <Binding ElementName="dataGridView" Path="Items.Count" />
+                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <Label
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="Change Type"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <ComboBox
+                        x:Name="cmbItemCategory"
+                        Width="200"
+                        Height="24"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding ChangeTypeItemsFilter}"
+                        SelectedValue="{Binding ChangeTypeFilter, Mode=TwoWay}"
+                        SelectedValuePath="ID"
+                        Style="{StaticResource ComboBoxStyle}"
+                        Template="{StaticResource lb_combobox}" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+                    <Label
+                        x:Name="lbSearch"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Content="{x:Static rs:Resources.Search}"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <TextBox
+                        x:Name="tbSearch"
+                        Width="250"
+                        Height="34"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        CaretBrush="White"
+                        Foreground="Gold"
+                        Tag="{x:Static rs:Resources.SearchNameID}"
+                        Template="{StaticResource lb_textbox}"
+                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox
+                        x:Name="MatchCaseCheckBox"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Top"
+                        Content="Match Case"
+                        IsChecked="{Binding MatchCase}"
+                        Template="{StaticResource lb_checkbox}" />
+                </StackPanel>
+            </Grid>
+            <TextBlock
+                Grid.Row="3"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="15"
+                Foreground="White"
+                Text="{Binding OpenMessage}" />
+
+        </Grid>
+    </ContentControl>
+</Window>

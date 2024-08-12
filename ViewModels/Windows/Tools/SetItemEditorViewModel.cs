@@ -32,7 +32,7 @@ namespace RHToolkit.ViewModels.Windows
 
             _filterUpdateTimer = new()
             {
-                Interval = 300,
+                Interval = 400,
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
@@ -41,21 +41,6 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         #region Commands 
-        [RelayCommand]
-        private async Task CloseWindow(Window window)
-        {
-            try
-            {
-                await CloseFile();
-
-                window?.Close();
-
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
-            }
-        }
 
         #region File
 
@@ -228,10 +213,10 @@ namespace RHToolkit.ViewModels.Windows
 
         private void SetFrameViewModelData(int itemId, int slotIndex)
         {
+            RemoveFrameViewModel(slotIndex);
+
             if (itemId != 0)
             {
-                RemoveFrameViewModel(slotIndex);
-
                 ItemData itemData = new()
                 {
                     ItemId = itemId,
@@ -244,11 +229,6 @@ namespace RHToolkit.ViewModels.Windows
                 FrameViewModels.Add(frameViewModel);
                 OnPropertyChanged(nameof(FrameViewModels));
             }
-            else
-            {
-                RemoveFrameViewModel(slotIndex);
-            }
-
         }
 
         public void Receive(DataRowViewMessage message)
@@ -264,6 +244,7 @@ namespace RHToolkit.ViewModels.Windows
         private void UpdateSelectedItem(DataRowView? selectedItem)
         {
             _isUpdatingSelectedItem = true;
+            FrameViewModels?.Clear();
 
             if (selectedItem != null)
             {
@@ -365,21 +346,26 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ApplyFilter()
         {
-            if (DataTableManager.DataTable != null)
-            {
-                List<string> filterParts = [];
+            List<string> filterParts = [];
 
-                // Text search filter
-                if (!string.IsNullOrEmpty(SearchText))
-                {
-                    string searchText = SearchText.ToLower();
-                    filterParts.Add($"(CONVERT(nID, 'System.String') LIKE '%{searchText}%' OR wszName LIKE '%{searchText}%' OR CONVERT(nSetItemID00, 'System.String') LIKE '%{searchText}%' OR CONVERT(nSetItemID01, 'System.String') LIKE '%{searchText}%' OR CONVERT(nSetItemID02, 'System.String') LIKE '%{searchText}%' OR CONVERT(nSetItemID03, 'System.String') LIKE '%{searchText}%' OR CONVERT(nSetItemID04, 'System.String') LIKE '%{searchText}%' OR CONVERT(nSetItemID05, 'System.String') LIKE '%{searchText}%' OR CONVERT(nSetOption00, 'System.String') LIKE '%{searchText}%' OR CONVERT(nSetOption01, 'System.String') LIKE '%{searchText}%' OR CONVERT(nSetOption02, 'System.String') LIKE '%{searchText}%' OR CONVERT(nSetOption03, 'System.String') LIKE '%{searchText}%' OR CONVERT(nSetOption04, 'System.String') LIKE '%{searchText}%')");
-                }
+            string[] columns =
+                    [
+                        "CONVERT(nID, 'System.String')",
+                        "wszName",
+                        "CONVERT(nSetItemID00, 'System.String')",
+                        "CONVERT(nSetItemID01, 'System.String')",
+                        "CONVERT(nSetItemID02, 'System.String')",
+                        "CONVERT(nSetItemID03, 'System.String')",
+                        "CONVERT(nSetItemID04, 'System.String')",
+                        "CONVERT(nSetItemID05, 'System.String')",
+                        "CONVERT(nSetOption00, 'System.String')",
+                        "CONVERT(nSetOption01, 'System.String')",
+                        "CONVERT(nSetOption02, 'System.String')",
+                        "CONVERT(nSetOption03, 'System.String')",
+                        "CONVERT(nSetOption04, 'System.String')"
+                    ];
 
-                string filter = string.Join(" AND ", filterParts);
-
-                DataTableManager.FilterText = filter;
-            }
+            DataTableManager.ApplyFileDataFilter(filterParts, columns, SearchText, MatchCase);
         }
 
         private void TriggerFilterUpdate()
@@ -404,6 +390,12 @@ namespace RHToolkit.ViewModels.Windows
             TriggerFilterUpdate();
         }
 
+        [ObservableProperty]
+        private bool _matchCase = false;
+        partial void OnMatchCaseChanged(bool value)
+        {
+            ApplyFilter();
+        }
         #endregion
 
         #region Properties

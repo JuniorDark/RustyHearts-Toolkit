@@ -617,10 +617,7 @@
                         Maximum="{Binding FrameViewModel.OverlapCnt}"
                         Minimum="1"
                         Value="{Binding FrameViewModel.ItemAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <control:ItemSlot
-                        FrameViewModel="{Binding FrameViewModel}"
-                        ItemNameVisibility="Visible"
-                        SlotIcon="/Assets/images/lb_ac_icon.png" />
+                    <control:ItemSlot FrameViewModel="{Binding FrameViewModel}" ItemNameVisibility="Visible" />
                     <Button
                         x:Name="btnAddItem"
                         Canvas.Left="105"

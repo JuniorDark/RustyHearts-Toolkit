@@ -1,6 +1,5 @@
 ﻿using RHToolkit.ViewModels.Windows;
 using System.ComponentModel;
-using System.Windows.Controls;
 
 namespace RHToolkit.Views.Windows
 {
@@ -10,11 +9,6 @@ namespace RHToolkit.Views.Windows
         {
             InitializeComponent();
             DataContext = viewModel;
-        }
-
-        private void DataGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            dataGridView.Focus();
         }
 
         protected override async void OnClosing(CancelEventArgs e)

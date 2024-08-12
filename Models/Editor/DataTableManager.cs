@@ -401,6 +401,19 @@ public partial class DataTableManager : ObservableObject
         return true;
     }
 
+    [RelayCommand]
+    public static void CloseWindow(Window window)
+    {
+        try
+        {
+            window?.Close();
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+        }
+    }
+
     public void ClearFile()
     {
         if (DataTable != null)
@@ -426,7 +439,6 @@ public partial class DataTableManager : ObservableObject
         CurrentStringFileName = null;
         SelectedItem = null;
         SelectedItemString = null;
-        FilterText = null;
         HasChanges = false;
         _undoStack.Clear();
         _redoStack.Clear();
@@ -1075,28 +1087,48 @@ public partial class DataTableManager : ObservableObject
 
     #region Filter
 
-    public void ApplyFileDataFilter()
+    public void ApplyFileDataFilter(List<string> filterParts, string[] columns, string? searchText, bool matchCase)
     {
-        if (DataTable != null)
+        try
         {
-            DataTable.DefaultView.RowFilter = FilterText;
+            if (DataTable != null)
+            {
+                // Text search filter
+                if (!string.IsNullOrEmpty(searchText))
+                {
+                    searchText = matchCase ? searchText : searchText.ToLower();
 
-            if (DataTable.DefaultView.Count > 0)
-            {
-                SelectedItem = DataTable.DefaultView[0];
-            }
-            else
-            {
-                SelectedItem = null;
+                    // Escape special characters for SQL LIKE pattern
+                    searchText = searchText.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
+
+                    string operatorPattern = matchCase ? "{0} LIKE '{1}'" : "{0} LIKE '%{1}%'";
+                    List<string> columnFilters = columns
+                        .Select(column => string.Format(operatorPattern, column, searchText))
+                        .ToList();
+
+                    string filterText = string.Join(" OR ", columnFilters);
+                    filterParts.Add($"({filterText})");
+                }
+
+                string filter = string.Join(" AND ", filterParts);
+
+                DataTable.DefaultView.RowFilter = filter;
+
+                if (DataTable.DefaultView.Count > 0)
+                {
+                    SelectedItem = DataTable.DefaultView[0];
+                }
+                else
+                {
+                    SelectedItem = null;
+                }
             }
         }
-    }
-
-    [ObservableProperty]
-    private string? _filterText;
-    partial void OnFilterTextChanged(string? value)
-    {
-        ApplyFileDataFilter();
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+        }
+        
     }
 
     #endregion

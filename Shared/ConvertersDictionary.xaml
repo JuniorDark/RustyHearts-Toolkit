@@ -30,5 +30,6 @@
     <local:ValueToIsEnabledConverter x:Key="ValueToIsEnabledConverter" />
     <local:ValueToVisibilityConverter x:Key="ValueToVisibilityConverter" />
     <local:VisibilityToHeightConverter x:Key="VisibilityToHeightConverter" />
+    <local:ZeroToIsEnabledConverter x:Key="ZeroToIsEnabledConverter" />
     <local:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter" />
 </ResourceDictionary>

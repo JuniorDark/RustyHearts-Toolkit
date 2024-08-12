@@ -3,9 +3,9 @@ using System.ComponentModel;
 
 namespace RHToolkit.Views.Windows
 {
-    public partial class PackageEditorWindow : Window
+    public partial class RandomRuneEditorWindow : Window
     {
-        public PackageEditorWindow(PackageEditorViewModel viewModel)
+        public RandomRuneEditorWindow(RandomRuneEditorViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
@@ -15,7 +15,7 @@ namespace RHToolkit.Views.Windows
         {
             base.OnClosing(e);
 
-            if (DataContext is PackageEditorViewModel viewModel)
+            if (DataContext is RandomRuneEditorViewModel viewModel)
             {
                 bool canClose = await viewModel.CloseFile();
 

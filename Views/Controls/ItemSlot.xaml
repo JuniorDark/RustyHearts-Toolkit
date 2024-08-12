@@ -36,11 +36,7 @@
             Cursor="Hand"
             Tag="{Binding FrameViewModel, RelativeSource={RelativeSource AncestorType=UserControl}}">
             <Button.ToolTip>
-                <ToolTip
-                    MaxWidth="325"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    Visibility="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource NullToVisibilityConverter}}">
+                <ToolTip Style="{StaticResource FrameToolTipStyle}" Visibility="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource NullToVisibilityConverter}}">
                     <!--  Content control with dynamic template  -->
                     <ContentControl Content="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource AncestorType=ToolTip}}">
                         <ContentControl.Style>

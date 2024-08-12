@@ -22,8 +22,9 @@
 ### File Editing Tools
 - **Table Editor:** Edit `.rh` table files and export them to various formats, including XML, XLSX, and MIP.
 - **Specialized Table Editors:**
-  - **Cash Shop Editor:** Modify in-game cash shop items and packages.
+  - **Cash Shop Editor:** Manage in-game cash shop items and packages.
   - **Package Editor:** Manage and edit item packages and effects.
+  - **Random Rune Editor:** Manage and edit 'gacha' items.
   - **Set Editor:** Edit item sets and their effects.
 
 ### Database Tools

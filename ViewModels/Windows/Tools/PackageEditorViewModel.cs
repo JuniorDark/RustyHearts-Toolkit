@@ -32,7 +32,7 @@ namespace RHToolkit.ViewModels.Windows
             };
             _filterUpdateTimer = new()
             {
-                Interval = 300,
+                Interval = 400,
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
@@ -45,21 +45,6 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         #region Commands 
-        [RelayCommand]
-        private async Task CloseWindow(Window window)
-        {
-            try
-            {
-                await CloseFile();
-
-                window?.Close();
-
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
-            }
-        }
 
         #region File
 
@@ -93,7 +78,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? shopEditorWindow = Application.Current.Windows.OfType<SetItemEditorWindow>().FirstOrDefault();
+                Window? shopEditorWindow = Application.Current.Windows.OfType<PackageEditorWindow>().FirstOrDefault();
                 Window owner = shopEditorWindow ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
 
@@ -214,8 +199,8 @@ namespace RHToolkit.ViewModels.Windows
                             PackageItemCode04 = itemData.ItemId;
                             break;
                         case 6:
-                            PackageItemCode05 = itemData.ItemId;
                             PackageItemCount05 = itemData.ItemAmount;
+                            PackageItemCode05 = itemData.ItemId;
                             break;
                         case 7:
                             PackageItemCount06 = itemData.ItemAmount;
@@ -230,7 +215,7 @@ namespace RHToolkit.ViewModels.Windows
                             PackageItemCode08 = itemData.ItemId;
                             break;
                         case 10:
-                            PackageItemCount05 = itemData.ItemAmount;
+                            PackageItemCount09 = itemData.ItemAmount;
                             PackageItemCode09 = itemData.ItemId;
                             break;
                         case 11:
@@ -265,10 +250,10 @@ namespace RHToolkit.ViewModels.Windows
 
         private void SetFrameViewModelData(int itemId, int itemAmount, int slotIndex)
         {
+            RemoveFrameViewModel(slotIndex);
+
             if (itemId != 0)
             {
-                RemoveFrameViewModel(slotIndex);
-
                 ItemData itemData = new()
                 {
                     ItemId = itemId,
@@ -282,11 +267,6 @@ namespace RHToolkit.ViewModels.Windows
                 FrameViewModels.Add(frameViewModel);
                 OnPropertyChanged(nameof(FrameViewModels));
             }
-            else
-            {
-                RemoveFrameViewModel(slotIndex);
-            }
-
         }
         #endregion
 
@@ -367,6 +347,8 @@ namespace RHToolkit.ViewModels.Windows
         }
         #endregion
 
+        #endregion
+
         #region DataRowViewMessage
         public void Receive(DataRowViewMessage message)
         {
@@ -381,6 +363,7 @@ namespace RHToolkit.ViewModels.Windows
         private void UpdateSelectedItem(DataRowView? selectedItem)
         {
             _isUpdatingSelectedItem = true;
+            FrameViewModels?.Clear();
 
             if (selectedItem != null)
             {
@@ -466,34 +449,37 @@ namespace RHToolkit.ViewModels.Windows
 
         #endregion
 
-        #endregion
-
         #region Filter
 
         private void ApplyFilter()
         {
-            if (DataTableManager.DataTable != null)
+            List<string> filterParts = [];
+
+            // filters
+            if (PackageTypeFilter != -1)
             {
-                List<string> filterParts = [];
-
-                // Category filters
-                if (PackageTypeFilter != -1)
-                {
-                    filterParts.Add($"nPackageType = {PackageTypeFilter}");
-                }
-
-                // Text search filter
-                if (!string.IsNullOrEmpty(SearchText))
-                {
-                    string searchText = SearchText.ToLower();
-                    filterParts.Add($"(CONVERT(nID, 'System.String') LIKE '%{searchText}%' OR wszName LIKE '%{searchText}%' OR CONVERT(nItemCode00, 'System.String') LIKE '%{searchText}%' OR CONVERT(nItemCode01, 'System.String') LIKE '%{searchText}%' OR CONVERT(nItemCode02, 'System.String') LIKE '%{searchText}%' OR CONVERT(nItemCode03, 'System.String') LIKE '%{searchText}%' OR CONVERT(nItemCode04, 'System.String') LIKE '%{searchText}%' OR CONVERT(nItemCode05, 'System.String') LIKE '%{searchText}%' OR CONVERT(nItemCode06, 'System.String') LIKE '%{searchText}%' OR CONVERT(nItemCode07, 'System.String') LIKE '%{searchText}%' OR CONVERT(nItemCode08, 'System.String') LIKE '%{searchText}%' OR CONVERT(nItemCode09, 'System.String') LIKE '%{searchText}%' OR CONVERT(nItemCode10, 'System.String') LIKE '%{searchText}%' OR CONVERT(nItemCode11, 'System.String') LIKE '%{searchText}%')");
-                }
-
-                string filter = string.Join(" AND ", filterParts);
-
-                DataTableManager.FilterText = filter;
-
+                filterParts.Add($"nPackageType = {PackageTypeFilter}");
             }
+
+            string[] columns =
+                    [
+                        "CONVERT(nID, 'System.String')",
+                        "wszName",
+                        "CONVERT(nItemCode00, 'System.String')",
+                        "CONVERT(nItemCode01, 'System.String')",
+                        "CONVERT(nItemCode02, 'System.String')",
+                        "CONVERT(nItemCode03, 'System.String')",
+                        "CONVERT(nItemCode04, 'System.String')",
+                        "CONVERT(nItemCode05, 'System.String')",
+                        "CONVERT(nItemCode06, 'System.String')",
+                        "CONVERT(nItemCode07, 'System.String')",
+                        "CONVERT(nItemCode08, 'System.String')",
+                        "CONVERT(nItemCode09, 'System.String')",
+                        "CONVERT(nItemCode10, 'System.String')",
+                        "CONVERT(nItemCode11, 'System.String')"
+                    ];
+
+            DataTableManager.ApplyFileDataFilter(filterParts, columns, SearchText, MatchCase);
         }
 
         private void TriggerFilterUpdate()
@@ -516,6 +502,13 @@ namespace RHToolkit.ViewModels.Windows
         partial void OnSearchTextChanged(string? value)
         {
             TriggerFilterUpdate();
+        }
+
+        [ObservableProperty]
+        private bool _matchCase = false;
+        partial void OnMatchCaseChanged(bool value)
+        {
+            ApplyFilter();
         }
         #endregion
 

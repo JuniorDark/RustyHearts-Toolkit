@@ -27,11 +27,6 @@ namespace RHToolkit.Views.Windows
             }
         }
 
-        private void DataGridView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            dataGridView.Focus();
-        }
-
         protected override async void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);

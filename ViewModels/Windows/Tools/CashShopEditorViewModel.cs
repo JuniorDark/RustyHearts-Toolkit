@@ -31,7 +31,7 @@ namespace RHToolkit.ViewModels.Windows
             };
             _filterUpdateTimer = new()
             {
-                Interval = 300,
+                Interval = 400,
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
@@ -49,21 +49,6 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         #region Commands 
-        [RelayCommand]
-        private async Task CloseWindow(Window window)
-        {
-            try
-            {
-                await CloseFile();
-
-                window?.Close();
-
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
-            }
-        }
 
         [RelayCommand]
         private void ResetSellingDate()
@@ -450,42 +435,36 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ApplyFilter()
         {
-            if (DataTableManager.DataTable != null)
+            List<string> filterParts = [];
+
+            // Category filters
+            if (ClassFilter != 0)
             {
-                List<string> filterParts = [];
-
-                // Category filters
-                if (ClassFilter != 0)
-                {
-                    filterParts.Add($"nJob = {ClassFilter}");
-                }
-
-                if (ShopCategoryFilter != -1)
-                {
-                    filterParts.Add($"nCategory = {ShopCategoryFilter}");
-                }
-
-                if (CostumeCategoryFilter != 0)
-                {
-                    filterParts.Add($"nCostumeCategory = {CostumeCategoryFilter}");
-                }
-
-                if (ItemStateFilter != 0)
-                {
-                    filterParts.Add($"nItemState = {ItemStateFilter}");
-                }
-
-                // Text search filter
-                if (!string.IsNullOrEmpty(SearchText))
-                {
-                    string searchText = SearchText.ToLower();
-                    filterParts.Add($"(CONVERT(nItemID, 'System.String') LIKE '%{searchText}%' OR wszName LIKE '%{searchText}%')");
-                }
-
-                string filter = string.Join(" AND ", filterParts);
-
-                DataTableManager.FilterText = filter;
+                filterParts.Add($"nJob = {ClassFilter}");
             }
+
+            if (ShopCategoryFilter != -1)
+            {
+                filterParts.Add($"nCategory = {ShopCategoryFilter}");
+            }
+
+            if (CostumeCategoryFilter != 0)
+            {
+                filterParts.Add($"nCostumeCategory = {CostumeCategoryFilter}");
+            }
+
+            if (ItemStateFilter != 0)
+            {
+                filterParts.Add($"nItemState = {ItemStateFilter}");
+            }
+
+            string[] columns =
+                [
+                    "CONVERT(nItemID, 'System.String')",
+                        "wszName"
+                ];
+
+            DataTableManager.ApplyFileDataFilter(filterParts, columns, SearchText, MatchCase);
         }
 
         private void TriggerFilterUpdate()
@@ -508,6 +487,13 @@ namespace RHToolkit.ViewModels.Windows
         partial void OnSearchTextChanged(string? value)
         {
             TriggerFilterUpdate();
+        }
+
+        [ObservableProperty]
+        private bool _matchCase = false;
+        partial void OnMatchCaseChanged(bool value)
+        {
+            ApplyFilter();
         }
 
         [ObservableProperty]
