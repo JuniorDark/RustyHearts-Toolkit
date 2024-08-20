@@ -94,6 +94,8 @@ public partial class App : Application
                 _ = services.AddTransient<PackageEditorViewModel>();
                 _ = services.AddTransient<RandomRuneEditorWindow>();
                 _ = services.AddTransient<RandomRuneEditorViewModel>();
+                _ = services.AddTransient<DropGroupEditorWindow>();
+                _ = services.AddTransient<DropGroupEditorViewModel>();
 
             }
         )

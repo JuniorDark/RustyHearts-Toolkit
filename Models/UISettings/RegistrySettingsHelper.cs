@@ -15,6 +15,7 @@ namespace RHToolkit.Models.UISettings
         private const string DefaultLanguage = "English";
         private const string DefaultSQLServer = "localhost";
         private const string DefaultSQLUser = "sa";
+        private const string TableFolderValueName = "TableFolder";
 
         private static string Encrypt(string plainText)
         {
@@ -131,12 +132,27 @@ namespace RHToolkit.Models.UISettings
             }
         }
 
-
         public static void SetSQLPassword(string password)
         {
             using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
 
             key.SetValue(SQLPwdValueName, password != null ? Encrypt(password) : string.Empty);
+        }
+
+        public static string GetTableFolder()
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
+            {
+                return key.GetValue(TableFolderValueName)?.ToString() ?? string.Empty;
+            }
+            return string.Empty;
+        }
+
+        public static void SetTableFolder(string folderPath)
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(TableFolderValueName, folderPath);
         }
     }
 }

@@ -48,7 +48,18 @@ namespace RHToolkit.Views.Controls
         private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (FloatUpDown)d;
-            control.PART_TextBox.Text = ((double)e.NewValue).ToString("F");
+            double newValue = (double)e.NewValue;
+
+            if (control.PART_TextBox != null)
+            {
+                string textValue = newValue.ToString("F4");
+                if (control.PART_TextBox.Text != textValue)
+                {
+                    control.PART_TextBox.Text = textValue;
+                }
+            }
+
+            control.UpdateButtonStates();
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -114,26 +125,26 @@ namespace RHToolkit.Views.Controls
             {
                 if (!double.TryParse(textBox.Text, out double value))
                 {
-                    textBox.Text = Value.ToString("F");
+                    textBox.Text = Value.ToString("F4");
                     return;
                 }
 
                 Value = Math.Min(Math.Max(Minimum, value), Maximum);
+
+                BindingExpression binding = textBox.GetBindingExpression(TextBox.TextProperty);
+                binding?.UpdateSource();
             }
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (sender is TextBox textBox)
+            if (sender is TextBox textBox && double.TryParse(textBox.Text, out double value))
             {
-                if (!double.TryParse(textBox.Text, out double value))
+                if (Value != value)
                 {
-                    textBox.Text = Value.ToString("F");
-                    return;
+                    Value = Math.Min(Math.Max(Minimum, value), Maximum);
+                    UpdateButtonStates();
                 }
-
-                Value = Math.Min(Math.Max(Minimum, value), Maximum);
-                UpdateButtonStates();
             }
         }
 
@@ -182,8 +193,11 @@ namespace RHToolkit.Views.Controls
 
         private void UpdateButtonStates()
         {
-            PART_RepeatButtonUp.IsEnabled = Value < Maximum;
-            PART_RepeatButtonDown.IsEnabled = Value > Minimum;
+            if (PART_RepeatButtonUp != null && PART_RepeatButtonDown != null)
+            {
+                PART_RepeatButtonUp.IsEnabled = Value < Maximum;
+                PART_RepeatButtonDown.IsEnabled = Value > Minimum;
+            }
         }
 
     }

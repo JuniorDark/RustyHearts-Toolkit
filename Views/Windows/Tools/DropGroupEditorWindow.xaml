@@ -1,0 +1,1238 @@
+﻿<Window
+    x:Class="RHToolkit.Views.Windows.DropGroupEditorWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:bh="clr-namespace:RHToolkit.Behaviors"
+    xmlns:control="clr-namespace:RHToolkit.Views.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dt="clr-namespace:RHToolkit.Models.DataTemplates"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:RHToolkit.Utilities.Converters"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
+    Title="{Binding Title}"
+    MinWidth="1280"
+    MinHeight="720"
+    MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
+    bh:WindowBehaviors.EnableDragMove="True"
+    d:DataContext="{d:DesignInstance Type=windows:DropGroupEditorViewModel}"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="/Assets/icon/icon_032.png"
+    ResizeMode="CanResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding DataTableManager.SaveFileCommand}" Gesture="Ctrl+S" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileAsMIPCommand}" Gesture="Ctrl+Shift+S" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileAsXMLCommand}" Gesture="Ctrl+Shift+X" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileAsXLSXCommand}" Gesture="Ctrl+Shift+E" />
+        <KeyBinding Command="{Binding CloseFileCommand}" Gesture="Ctrl+W" />
+        <KeyBinding
+            Command="{Binding OpenSearchDialogCommand}"
+            CommandParameter="Find"
+            Gesture="Ctrl+F" />
+        <KeyBinding
+            Command="{Binding OpenSearchDialogCommand}"
+            CommandParameter="Replace"
+            Gesture="Ctrl+H" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="1"
+            Gesture="Ctrl+Shift+1" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="2"
+            Gesture="Ctrl+Shift+2" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="3"
+            Gesture="Ctrl+Shift+3" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="4"
+            Gesture="Ctrl+Shift+4" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="5"
+            Gesture="Ctrl+Shift+5" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="6"
+            Gesture="Ctrl+Shift+6" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="7"
+            Gesture="Ctrl+Shift+7" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="8"
+            Gesture="Ctrl+Shift+8" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="9"
+            Gesture="Ctrl+Shift+9" />
+    </Window.InputBindings>
+
+    <Window.Resources>
+        <!--  Template for ItemDropGroupList  -->
+        <DataTemplate x:Key="ItemDropGroupList">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="ID" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Max Range" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.MaxRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Seed" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.Seed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F3}%'}" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.DropItemCountTotalValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Template for ItemDropGroupListF  -->
+        <DataTemplate x:Key="ItemDropGroupListF">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="ID" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Max Range" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.MaxRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Max Count" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="40"
+                        Minimum="0"
+                        Value="{Binding DataContext.MaxCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        LargeChange="0.01"
+                        Minimum="0"
+                        SmallChange="0.001"
+                        Value="{Binding DataContext.DropItemCountTotalValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Template for ChampionItemItemDropGroupList  -->
+        <DataTemplate x:Key="ChampionItemItemDropGroupList">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="ID" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Note" />
+                    <TextBox
+                        Width="300"
+                        Height="30"
+                        Margin="0,0"
+                        d:Text="Note"
+                        FontSize="12"
+                        Template="{StaticResource lb_textbox11}"
+                        Text="{Binding DataContext.Note, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        LargeChange="0.01"
+                        Minimum="0"
+                        SmallChange="0.001"
+                        Value="{Binding DataContext.DropItemCountTotalValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Template for EventWorldItemDropGroupList/WorldItemDropGroupList/WorldItemDropGroupListF  -->
+        <DataTemplate x:Key="WorldItemDropGroupList">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="ID" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Max Range" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.MaxRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Group" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F3}%'}" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="100000"
+                        Minimum="0"
+                        Value="{Binding DataContext.DropItemCountTotalValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Template for InstanceItemDropGroupList/WorldInstanceItemDropGroupList  -->
+        <DataTemplate x:Key="InstanceItemDropGroupList">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="ID" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        LargeChange="0.01"
+                        Minimum="0"
+                        SmallChange="0.001"
+                        Value="{Binding DataContext.DropItemCountTotalValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Template for QuestItemDropGroupList  -->
+        <DataTemplate x:Key="QuestItemDropGroupList">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="ID" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Minimum="0"
+                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Name" />
+                    <TextBox
+                        Width="300"
+                        Height="30"
+                        Margin="0,0"
+                        d:Text="Name"
+                        FontSize="12"
+                        Template="{StaticResource lb_textbox11}"
+                        Text="{Binding DataContext.Name, RelativeSource={RelativeSource AncestorType=ContentControl}, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        LargeChange="0.01"
+                        Minimum="0"
+                        SmallChange="0.001"
+                        Value="{Binding DataContext.DropItemCountTotalValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <!--  Item Template for ItemDropGroupList  -->
+        <DataTemplate x:Key="ItemDropGroupListItems">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}}" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                        FrameViewModel="{Binding FrameViewModel}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="Gold" Text="{Binding NDropItemCount, Converter={StaticResource DropItemCountConverter}, StringFormat=' Item Drop Rate: {0:F2}%'}" />
+                    <ui:NumberBox
+                        Width="120"
+                        ClearButtonEnabled="False"
+                        IsEnabled="{Binding DropItemCode, Converter={StaticResource ZeroToIsEnabledConverter}}"
+                        LargeChange="100"
+                        Maximum="100000"
+                        Minimum="0"
+                        SmallChange="10"
+                        Value="{Binding NDropItemCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <CheckBox
+                    Grid.Column="2"
+                    Margin="10,10,-60,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="Link"
+                    IsChecked="{Binding Link, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}" />
+            </Grid>
+        </DataTemplate>
+        <!--  Item Template for ItemDropGroupListF  -->
+        <DataTemplate x:Key="ItemDropGroupListFItems">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}}" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                        FrameViewModel="{Binding FrameViewModel}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    Orientation="Vertical">
+                    <TextBlock
+                        FontSize="12"
+                        Foreground="Gold"
+                        Text="{Binding FDropItemCount, Converter={StaticResource DropItemCountConverter}, StringFormat=' Item Drop Rate: {0:F2}%'}" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        IsEnabled="{Binding DropItemCode, Converter={StaticResource ZeroToIsEnabledConverter}}"
+                        LargeChange="0.01"
+                        MaxDecimalPlaces="4"
+                        Maximum="1"
+                        Minimum="0"
+                        SmallChange="0.001"
+                        Value="{Binding FDropItemCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <CheckBox
+                    Grid.Column="2"
+                    Margin="10,10,-60,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Content="Link"
+                    IsChecked="{Binding Link, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}" />
+            </Grid>
+        </DataTemplate>
+        <!--  Item Template for ChampionItemItemDropGroupList/InstanceItemDropGroupList/QuestItemDropGroupList/WorldInstanceItemDropGroupList  -->
+        <DataTemplate x:Key="InstanceItemDropGroupListItems">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}}" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                        FrameViewModel="{Binding FrameViewModel}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="0,0,10,0"
+                    Orientation="Vertical">
+                    <TextBlock
+                        FontSize="12"
+                        Foreground="Gold"
+                        Text="{Binding FDropItemCount, Converter={StaticResource DropItemCountConverter}, StringFormat=' Item Drop Rate: {0:F2}%'}" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        ClearButtonEnabled="False"
+                        IsEnabled="{Binding DropItemCode, Converter={StaticResource ZeroToIsEnabledConverter}}"
+                        LargeChange="0.01"
+                        MaxDecimalPlaces="4"
+                        Maximum="1"
+                        Minimum="0"
+                        SmallChange="0.001"
+                        Value="{Binding FDropItemCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Item Template for EventWorldItemDropGroupList/WorldItemDropGroupList/WorldItemDropGroupListF  -->
+        <DataTemplate x:Key="WorldItemDropGroupListItems">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}}" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                        FrameViewModel="{Binding FrameViewModel}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Vertical">
+                    <TextBlock
+                        FontSize="12"
+                        Foreground="Gold"
+                        Text="{Binding FDropItemCount, Converter={StaticResource DropItemCountConverter}, StringFormat=' Item Drop Rate: {0:F2}%'}" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        IsEnabled="{Binding DropItemCode, Converter={StaticResource ZeroToIsEnabledConverter}}"
+                        LargeChange="0.01"
+                        MaxDecimalPlaces="4"
+                        Maximum="1"
+                        Minimum="0"
+                        SmallChange="0.001"
+                        Value="{Binding FDropItemCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="2"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Start" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="{Binding DataContext.MaxRange, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        Minimum="0"
+                        Value="{Binding Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="3"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="End" />
+                    <ui:NumberBox
+                        Width="120"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="{Binding DataContext.MaxRange, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        Minimum="0"
+                        Value="{Binding End, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+
+        <dt:DropItemGroupTemplateSelector
+            x:Key="DropItemGroupTemplateSelector"
+            ChampionItemItemDropGroupList="{StaticResource ChampionItemItemDropGroupList}"
+            InstanceItemDropGroupList="{StaticResource InstanceItemDropGroupList}"
+            ItemDropGroupList="{StaticResource ItemDropGroupList}"
+            ItemDropGroupListF="{StaticResource ItemDropGroupListF}"
+            QuestItemDropGroupList="{StaticResource QuestItemDropGroupList}"
+            WorldItemDropGroupList="{StaticResource WorldItemDropGroupList}" />
+
+        <dt:DropItemGroupItemsTemplateSelector
+            x:Key="DropItemGroupItemsTemplateSelector"
+            InstanceItemDropGroupListItems="{StaticResource InstanceItemDropGroupListItems}"
+            ItemDropGroupListFItems="{StaticResource ItemDropGroupListFItems}"
+            ItemDropGroupListItems="{StaticResource ItemDropGroupListItems}"
+            WorldItemDropGroupListItems="{StaticResource WorldItemDropGroupListItems}" />
+
+    </Window.Resources>
+
+    <ContentControl Template="{StaticResource box_green02}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ui:TitleBar
+                x:Name="TitleBar"
+                Title="{Binding Title}"
+                Grid.ColumnSpan="3"
+                Height="30"
+                Margin="30,0,0,0"
+                VerticalAlignment="Center"
+                d:Title="Drop Group Editor"
+                ButtonsForeground="White"
+                FontSize="15"
+                Foreground="White">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon
+                        Width="20"
+                        Height="20"
+                        Margin="0,-1,0,-3"
+                        Source="/Assets/icon/icon_032.png" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+            <Menu
+                Grid.Row="1"
+                VerticalAlignment="Top"
+                FontSize="14"
+                Foreground="White">
+                <ui:MenuItem Header="File" Icon="{ui:SymbolIcon DocumentSplitHint20}">
+                    <MenuItem Header="Open Drop Group File..." Icon="{ui:SymbolIcon DocumentAdd24}">
+                        <MenuItem
+                            Command="{Binding LoadFileCommand}"
+                            CommandParameter="1"
+                            Header="Open itemdropgrouplist_f.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}"
+                            InputGestureText="Ctrl+Shift+1" />
+                        <MenuItem
+                            Command="{Binding LoadFileCommand}"
+                            CommandParameter="2"
+                            Header="Open itemdropgrouplist.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}"
+                            InputGestureText="Ctrl+Shift+2" />
+                        <MenuItem
+                            Command="{Binding LoadFileCommand}"
+                            CommandParameter="3"
+                            Header="Open championitemdropgrouplist.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}"
+                            InputGestureText="Ctrl+Shift+3" />
+                        <MenuItem
+                            Command="{Binding LoadFileCommand}"
+                            CommandParameter="4"
+                            Header="Open eventworlditemdropgrouplist.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}"
+                            InputGestureText="Ctrl+Shift+4" />
+                        <MenuItem
+                            Command="{Binding LoadFileCommand}"
+                            CommandParameter="5"
+                            Header="Open instanceitemdropgrouplist.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}"
+                            InputGestureText="Ctrl+Shift+5" />
+                        <MenuItem
+                            Command="{Binding LoadFileCommand}"
+                            CommandParameter="6"
+                            Header="Open questitemdropgrouplist.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}"
+                            InputGestureText="Ctrl+Shift+6" />
+                        <MenuItem
+                            Command="{Binding LoadFileCommand}"
+                            CommandParameter="7"
+                            Header="Open worldinstanceitemdropgrouplist.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}"
+                            InputGestureText="Ctrl+Shift+7" />
+                        <MenuItem
+                            Command="{Binding LoadFileCommand}"
+                            CommandParameter="8"
+                            Header="Open worlditemdropgrouplist.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}"
+                            InputGestureText="Ctrl+Shift+8" />
+                        <MenuItem
+                            Command="{Binding LoadFileCommand}"
+                            CommandParameter="9"
+                            Header="Open worlditemdropgrouplist_fatigue.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}"
+                            InputGestureText="Ctrl+Shift+9" />
+                    </MenuItem>
+                    <MenuItem
+                        Command="{Binding DataTableManager.SaveFileCommand}"
+                        Header="Save"
+                        Icon="{ui:SymbolIcon Save24}"
+                        InputGestureText="Ctrl+S" />
+                    <MenuItem
+                        Command="{Binding DataTableManager.SaveFileAsCommand}"
+                        Header="Save As..."
+                        Icon="{ui:SymbolIcon DocumentSave24}"
+                        InputGestureText="Ctrl+Alt+S" />
+                    <MenuItem Header="Export as..." Icon="{ui:SymbolIcon DocumentSave24}">
+                        <MenuItem
+                            Command="{Binding DataTableManager.SaveFileAsMIPCommand}"
+                            Header="Export as MIP"
+                            Icon="{ui:SymbolIcon DocumentSave24}"
+                            InputGestureText="Ctrl+Shift+S" />
+                        <MenuItem
+                            Command="{Binding DataTableManager.SaveFileAsXMLCommand}"
+                            Header="Export as XML"
+                            Icon="{ui:SymbolIcon DocumentSave24}"
+                            InputGestureText="Ctrl+Shift+X" />
+                        <MenuItem
+                            Command="{Binding DataTableManager.SaveFileAsXLSXCommand}"
+                            Header="Export as XLSX"
+                            Icon="{ui:SymbolIcon DocumentSave24}"
+                            InputGestureText="Ctrl+Shift+E" />
+                    </MenuItem>
+                    <MenuItem
+                        Command="{Binding CloseFileCommand}"
+                        Header="Close"
+                        Icon="{ui:SymbolIcon DocumentDismiss24}"
+                        InputGestureText="Ctrl+W" />
+                    <Separator />
+                    <MenuItem
+                        Command="{Binding DataTableManager.CloseWindowCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                        Header="Exit"
+                        Icon="{ui:SymbolIcon ArrowExit20}" />
+                </ui:MenuItem>
+                <Separator />
+                <ui:MenuItem Header="Edit" Icon="{ui:SymbolIcon DocumentEdit20}">
+                    <MenuItem
+                        Command="{Binding DataTableManager.UndoChangesCommand}"
+                        Header="Undo"
+                        Icon="{ui:SymbolIcon ArrowUndo20}"
+                        InputGestureText="Ctrl+Z" />
+                    <MenuItem
+                        Command="{Binding DataTableManager.RedoChangesCommand}"
+                        Header="Redo"
+                        Icon="{ui:SymbolIcon ArrowRedo20}"
+                        InputGestureText="Ctrl+Shift+Z" />
+                    <Separator />
+                    <MenuItem
+                        Command="{Binding AddItemCommand}"
+                        Header="Add Item"
+                        Icon="{ui:SymbolIcon AddCircle24}"
+                        InputGestureText="Ctrl+I" />
+                    <MenuItem
+                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                        Header="Duplicate Selected Item"
+                        Icon="{ui:SymbolIcon Copy24}"
+                        InputGestureText="Ctrl+D" />
+                    <MenuItem
+                        Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
+                        Header="Delete Selected Item"
+                        Icon="{ui:SymbolIcon Delete24}"
+                        InputGestureText="Delete" />
+                    <Separator />
+                    <MenuItem
+                        Command="{Binding OpenSearchDialogCommand}"
+                        CommandParameter="Find"
+                        Header="Find..."
+                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
+                        InputGestureText="Ctrl+F" />
+                    <MenuItem
+                        Command="{Binding OpenSearchDialogCommand}"
+                        CommandParameter="Replace"
+                        Header="Replace"
+                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
+                        InputGestureText="Ctrl+H" />
+                </ui:MenuItem>
+                <Separator />
+                <ui:MenuItem Header="Settings" Icon="{ui:SymbolIcon TableSettings20}">
+                    <MenuItem
+                        Command="{Binding DataTableManager.SetTableFolderCommand}"
+                        Header="Set Table Folder"
+                        Icon="{ui:SymbolIcon FolderOpen20}" />
+                </ui:MenuItem>
+            </Menu>
+            <Menu
+                Grid.Row="2"
+                VerticalAlignment="Top"
+                FontSize="14"
+                Foreground="White">
+                <MenuItem
+                    Command="{Binding LoadFileAsCommand}"
+                    Icon="{ui:SymbolIcon DocumentAdd24,
+                                         Filled=True}"
+                    ToolTip="Open File" />
+                <MenuItem
+                    Command="{Binding DataTableManager.SaveFileCommand}"
+                    Icon="{ui:SymbolIcon Save24,
+                                         Filled=True}"
+                    ToolTip="Save" />
+                <MenuItem
+                    Command="{Binding DataTableManager.SaveFileAsCommand}"
+                    Icon="{ui:SymbolIcon DocumentSave24,
+                                         Filled=True}"
+                    ToolTip="Save As" />
+                <MenuItem
+                    Command="{Binding CloseFileCommand}"
+                    Icon="{ui:SymbolIcon DocumentDismiss24,
+                                         Filled=True}"
+                    ToolTip="Close" />
+                <Separator />
+                <MenuItem
+                    Command="{Binding DataTableManager.UndoChangesCommand}"
+                    Icon="{ui:SymbolIcon ArrowUndo24,
+                                         Filled=True}"
+                    ToolTip="Undo" />
+                <MenuItem
+                    Command="{Binding DataTableManager.RedoChangesCommand}"
+                    Icon="{ui:SymbolIcon ArrowRedo24,
+                                         Filled=True}"
+                    ToolTip="Redo" />
+                <Separator />
+                <MenuItem
+                    Command="{Binding CreateItemCommand}"
+                    Icon="{ui:SymbolIcon AddCircle24}"
+                    ToolTip="Add Item" />
+                <MenuItem
+                    Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                    Icon="{ui:SymbolIcon Copy24}"
+                    ToolTip="Duplicate Selected Item" />
+                <MenuItem
+                    Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
+                    Icon="{ui:SymbolIcon Delete24}"
+                    ToolTip="Delete Selected Item" />
+                <Separator />
+                <MenuItem
+                    Command="{Binding OpenSearchDialogCommand}"
+                    CommandParameter="Find"
+                    Icon="{ui:SymbolIcon DocumentTableSearch24}"
+                    ToolTip="Find" />
+                <MenuItem
+                    Command="{Binding OpenSearchDialogCommand}"
+                    CommandParameter="Replace"
+                    Icon="{ui:SymbolIcon DocumentTableSearch24}"
+                    ToolTip="Replace" />
+            </Menu>
+
+            <Grid
+                Grid.Row="1"
+                Grid.RowSpan="4"
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                Visibility="{Binding IsSelectedItemVisible}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <ContentControl
+                        Grid.Row="0"
+                        Grid.ColumnSpan="3"
+                        Content="{Binding DropGroupType}"
+                        ContentTemplateSelector="{StaticResource DropItemGroupTemplateSelector}" />
+
+                    <ScrollViewer
+                        Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        Margin="0,0,0,0"
+                        HorizontalScrollBarVisibility="Auto"
+                        Style="{StaticResource lb_scrollviewer}"
+                        VerticalScrollBarVisibility="Auto"
+                        Visibility="{Binding IsSelectedItemVisible}">
+                        <ItemsControl AlternationCount="{Binding DropGroupItems.Count}" ItemsSource="{Binding DropGroupItems}">
+                            <ItemsControl.ItemTemplateSelector>
+                                <StaticResource ResourceKey="DropItemGroupItemsTemplateSelector" />
+                            </ItemsControl.ItemTemplateSelector>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+
+            </Grid>
+
+            <DataGrid
+                x:Name="dataGridView"
+                Grid.Row="3"
+                Grid.Column="0"
+                Height="400"
+                MinWidth="550"
+                Margin="5,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                bh:DataGridBehavior.EnableScrollIntoView="True"
+                bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
+                AutoGenerateColumns="False"
+                Background="Transparent"
+                BorderBrush="#FF0F0D0A"
+                CanUserAddRows="False"
+                ColumnWidth="*"
+                EnableRowVirtualization="True"
+                FontFamily="{StaticResource ArialUnicodeMS}"
+                FontSize="12"
+                HeadersVisibility="Column"
+                HorizontalGridLinesBrush="White"
+                HorizontalScrollBarVisibility="Auto"
+                ItemsSource="{Binding DataTableManager.DataTable}"
+                SelectedItem="{Binding DataTableManager.SelectedItem}"
+                SelectionMode="Single"
+                SelectionUnit="FullRow"
+                Template="{StaticResource lb_datagrid}"
+                VerticalGridLinesBrush="White"
+                Visibility="{Binding IsVisible}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding nID}"
+                        Header="ID"
+                        IsReadOnly="True" />
+                </DataGrid.Columns>
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
+                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.InputBindings>
+                    <KeyBinding
+                        Key="I"
+                        Command="{Binding DataTableManager.AddNewRowCommand}"
+                        Modifiers="Ctrl" />
+                    <KeyBinding
+                        Key="D"
+                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                        Modifiers="Control" />
+                    <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
+                    <KeyBinding
+                        Key="Z"
+                        Command="{Binding DataTableManager.UndoChangesCommand}"
+                        Modifiers="Ctrl" />
+                    <KeyBinding
+                        Key="Z"
+                        Command="{Binding DataTableManager.RedoChangesCommand}"
+                        Modifiers="Ctrl+Shift" />
+                    <KeyBinding
+                        Key="F"
+                        Command="{Binding OpenSearchDialogCommand}"
+                        CommandParameter="Find"
+                        Modifiers="Ctrl" />
+                </DataGrid.InputBindings>
+            </DataGrid>
+
+            <Grid
+                Grid.Row="4"
+                Grid.Column="0"
+                Visibility="{Binding IsVisible}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    x:Name="lbTotalItem"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    d:Text="Showing {0}/{1} Items"
+                    Foreground="Gold"
+                    Style="{StaticResource ArialMS}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                            <Binding ElementName="dataGridView" Path="Items.Count" />
+                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+                    <Label
+                        x:Name="lbSearch"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Content="{x:Static rs:Resources.Search}"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <TextBox
+                        x:Name="tbSearch"
+                        Width="250"
+                        Height="34"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        CaretBrush="White"
+                        Foreground="Gold"
+                        Tag="{x:Static rs:Resources.SearchNameID}"
+                        Template="{StaticResource lb_textbox}"
+                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Top"
+                        Content="Match Case"
+                        IsChecked="{Binding MatchCase}"
+                        Template="{StaticResource lb_checkbox}" />
+                </StackPanel>
+            </Grid>
+            <TextBlock
+                Grid.Row="3"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="15"
+                Foreground="White"
+                Text="{Binding OpenMessage}" />
+
+        </Grid>
+    </ContentControl>
+</Window>

@@ -196,7 +196,7 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Click on the slot to add/edit a item, Right click to remove. Note: Coupon Items do not support custom stats..
+        ///   Looks up a localized string similar to Click on the slot to add/edit a item, Right click to remove..
         /// </summary>
         public static string AttachItemCouponHelp {
             get {

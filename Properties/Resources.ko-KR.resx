@@ -120,6 +120,9 @@
   <data name="About" xml:space="preserve">
     <value>대해서</value>
   </data>
+  <data name="Accessory" xml:space="preserve">
+    <value>종범</value>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>추가</value>
   </data>
@@ -159,6 +162,9 @@
   <data name="AttachItem" xml:space="preserve">
     <value>아이템 첨부</value>
   </data>
+  <data name="AttachItemCouponHelp" xml:space="preserve">
+    <value>슬롯을 클릭하면 항목을 추가/편집할 수 있고, 마우스 오른쪽 버튼을 클릭하면 제거됩니다.</value>
+  </data>
   <data name="AttachItemError" xml:space="preserve">
     <value>아이템 첨부 실패</value>
   </data>
@@ -180,6 +186,12 @@
   <data name="Basic" xml:space="preserve">
     <value>기본</value>
   </data>
+  <data name="Bonus" xml:space="preserve">
+    <value>보너스</value>
+  </data>
+  <data name="Bottoms" xml:space="preserve">
+    <value>바닥</value>
+  </data>
   <data name="BoundItem" xml:space="preserve">
     <value>바인드 아이템 (획득 시 귀속)</value>
   </data>
@@ -188,6 +200,9 @@
   </data>
   <data name="Cancel" xml:space="preserve">
     <value>취소</value>
+  </data>
+  <data name="Cash" xml:space="preserve">
+    <value>현금</value>
   </data>
   <data name="Category" xml:space="preserve">
     <value>카테고리</value>
@@ -210,8 +225,14 @@
   <data name="ConnectionSuccess" xml:space="preserve">
     <value>연결 성공</value>
   </data>
+  <data name="Consume" xml:space="preserve">
+    <value>소비하다</value>
+  </data>
   <data name="Costume" xml:space="preserve">
     <value>의상</value>
+  </data>
+  <data name="CostumePack" xml:space="preserve">
+    <value>의상팩</value>
   </data>
   <data name="CurrentAttribute" xml:space="preserve">
     <value>현재 속성</value>
@@ -240,6 +261,9 @@
   <data name="Edgar" xml:space="preserve">
     <value>에드거</value>
   </data>
+  <data name="EditItemHelp" xml:space="preserve">
+    <value>아이템을 편집하려면 아이콘 슬롯을 클릭하세요.</value>
+  </data>
   <data name="EmptyRecipient" xml:space="preserve">
     <value>받는 사람이 비어 있습니다.</value>
   </data>
@@ -258,8 +282,77 @@
   <data name="Epic" xml:space="preserve">
     <value>에픽</value>
   </data>
+  <data name="EquipCategory0" xml:space="preserve">
+    <value>무기</value>
+  </data>
+  <data name="EquipCategory1" xml:space="preserve">
+    <value>가슴</value>
+  </data>
+  <data name="EquipCategory10" xml:space="preserve">
+    <value>머리카락</value>
+  </data>
+  <data name="EquipCategory11" xml:space="preserve">
+    <value>얼굴</value>
+  </data>
+  <data name="EquipCategory12" xml:space="preserve">
+    <value>목</value>
+  </data>
+  <data name="EquipCategory13" xml:space="preserve">
+    <value>겉옷</value>
+  </data>
+  <data name="EquipCategory14" xml:space="preserve">
+    <value>맨 위</value>
+  </data>
+  <data name="EquipCategory15" xml:space="preserve">
+    <value>맨 아래</value>
+  </data>
+  <data name="EquipCategory16" xml:space="preserve">
+    <value>장갑</value>
+  </data>
+  <data name="EquipCategory17" xml:space="preserve">
+    <value>신발</value>
+  </data>
+  <data name="EquipCategory18" xml:space="preserve">
+    <value>액세서리 1</value>
+  </data>
+  <data name="EquipCategory19" xml:space="preserve">
+    <value>액세서리 2</value>
+  </data>
+  <data name="EquipCategory2" xml:space="preserve">
+    <value>머리</value>
+  </data>
+  <data name="EquipCategory3" xml:space="preserve">
+    <value>다리</value>
+  </data>
+  <data name="EquipCategory4" xml:space="preserve">
+    <value>피트</value>
+  </data>
+  <data name="EquipCategory5" xml:space="preserve">
+    <value>허리</value>
+  </data>
+  <data name="EquipCategory6" xml:space="preserve">
+    <value>목걸이</value>
+  </data>
+  <data name="EquipCategory7" xml:space="preserve">
+    <value>귀걸이</value>
+  </data>
+  <data name="EquipCategory8" xml:space="preserve">
+    <value>반지</value>
+  </data>
+  <data name="EquipCategory9" xml:space="preserve">
+    <value>소유</value>
+  </data>
+  <data name="Equipment" xml:space="preserve">
+    <value>장비</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>오류</value>
+  </data>
+  <data name="Face" xml:space="preserve">
+    <value>얼굴</value>
+  </data>
+  <data name="FailedRecipientsMessage" xml:space="preserve">
+    <value>{0} 수신자가 메일을 수신하지 못했습니다: {1}</value>
   </data>
   <data name="FailedSendMail" xml:space="preserve">
     <value>메일 전송 실패</value>
@@ -282,6 +375,9 @@
   <data name="Glaive" xml:space="preserve">
     <value>글레이브</value>
   </data>
+  <data name="Gloves" xml:space="preserve">
+    <value>장갑</value>
+  </data>
   <data name="GMAuditAttachGold" xml:space="preserve">
     <value>골드 첨부</value>
   </data>
@@ -290,6 +386,12 @@
   </data>
   <data name="Gold" xml:space="preserve">
     <value>골드</value>
+  </data>
+  <data name="Guild" xml:space="preserve">
+    <value>동업 조합</value>
+  </data>
+  <data name="Hair" xml:space="preserve">
+    <value>머리카락</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>홈페이지</value>
@@ -329,6 +431,24 @@
   </data>
   <data name="ItemDatabaseDesc" xml:space="preserve">
     <value>아이템 데이터베이스 열기</value>
+  </data>
+  <data name="ItemQuality" xml:space="preserve">
+    <value>품목 품질</value>
+  </data>
+  <data name="ItemStateBest" xml:space="preserve">
+    <value>최상의</value>
+  </data>
+  <data name="ItemStateEvent" xml:space="preserve">
+    <value>이벤트</value>
+  </data>
+  <data name="ItemStateGood" xml:space="preserve">
+    <value>좋은</value>
+  </data>
+  <data name="ItemStateNew" xml:space="preserve">
+    <value>새로운</value>
+  </data>
+  <data name="ItemStateSale" xml:space="preserve">
+    <value>판매</value>
   </data>
   <data name="ItemTrade" xml:space="preserve">
     <value>아이템 거래</value>
@@ -414,6 +534,9 @@
   <data name="Natasha" xml:space="preserve">
     <value>나타샤</value>
   </data>
+  <data name="Neck" xml:space="preserve">
+    <value>목</value>
+  </data>
   <data name="No" xml:space="preserve">
     <value>아니요</value>
   </data>
@@ -432,8 +555,17 @@
   <data name="Normal" xml:space="preserve">
     <value>일반</value>
   </data>
+  <data name="Obtain" xml:space="preserve">
+    <value>얻다</value>
+  </data>
+  <data name="Offline" xml:space="preserve">
+    <value>오프라인</value>
+  </data>
   <data name="OK" xml:space="preserve">
     <value>확인</value>
+  </data>
+  <data name="Online" xml:space="preserve">
+    <value>온라인</value>
   </data>
   <data name="OptionAllElementalDamage" xml:space="preserve">
     <value>모든 속성 피해</value>
@@ -462,6 +594,18 @@
   <data name="OptionWhenHit" xml:space="preserve">
     <value>피격 시</value>
   </data>
+  <data name="Other" xml:space="preserve">
+    <value>다른</value>
+  </data>
+  <data name="Outerwear" xml:space="preserve">
+    <value>겉옷</value>
+  </data>
+  <data name="Package" xml:space="preserve">
+    <value>패키지</value>
+  </data>
+  <data name="Pet" xml:space="preserve">
+    <value>애완 동물</value>
+  </data>
   <data name="PetFoodDescNo" xml:space="preserve">
     <value>이 아이템은 애완동물 음식으로 사용할 수 없습니다</value>
   </data>
@@ -482,6 +626,12 @@
   </data>
   <data name="Quality" xml:space="preserve">
     <value>품질</value>
+  </data>
+  <data name="Quest" xml:space="preserve">
+    <value>탐구</value>
+  </data>
+  <data name="QuickSlot" xml:space="preserve">
+    <value>퀵슬롯</value>
   </data>
   <data name="RandomBuff" xml:space="preserve">
     <value>랜덤 버프</value>
@@ -622,16 +772,22 @@
     <value>이 메일을 다음 수신자에게 보내시겠습니까?</value>
   </data>
   <data name="SendMailMessageAll" xml:space="preserve">
-    <value>이 메일을 모든 캐릭터에게 보내시겠습니까?</value>
+    <value>이 메일을 모든 '{0}'자로 보내시겠습니까?</value>
+  </data>
+  <data name="SendMailMessageAllOnline" xml:space="preserve">
+    <value>이 메일을 모든 '{0}' {1}자로 보내시겠습니까?</value>
+  </data>
+  <data name="SendMailMessageAllOnlineSuccess" xml:space="preserve">
+    <value>메일이 모든 '{0}' {1}자로 성공적으로 전송되었습니다.</value>
   </data>
   <data name="SendMailMessageAllSuccess" xml:space="preserve">
-    <value>메일이 모든 캐릭터에게 성공적으로 전송되었습니다. 메일을 확인하려면 캐릭터를 다시 로그인하거나 게임 서버를 변경하세요.</value>
+    <value>메일이 모든 '{0}' 문자로 성공적으로 전송되었습니다.</value>
   </data>
   <data name="SendMailMessageSuccess" xml:space="preserve">
-    <value>메일이 성공적으로 전송되었습니다. 메일을 확인하려면 캐릭터를 다시 로그인하거나 게임 서버를 변경하세요.</value>
+    <value>메일이 '{0}'자로 성공적으로 전송되었습니다.</value>
   </data>
   <data name="SendMailSameName" xml:space="preserve">
-    <value>보내는 사람과 받는 사람은 동일할 수 없습니다.</value>
+    <value>발신자와 수신자 '{0}'은 같을 수 없습니다.</value>
   </data>
   <data name="SendToAllCharacters" xml:space="preserve">
     <value>모든 캐릭터에게 보내기</value>
@@ -656,6 +812,9 @@
   </data>
   <data name="Settings" xml:space="preserve">
     <value>설정</value>
+  </data>
+  <data name="Shoes" xml:space="preserve">
+    <value>신발</value>
   </data>
   <data name="Slot" xml:space="preserve">
     <value>슬롯</value>
@@ -714,6 +873,9 @@
   <data name="SocketOption" xml:space="preserve">
     <value>소켓 옵션</value>
   </data>
+  <data name="Special" xml:space="preserve">
+    <value>특별한</value>
+  </data>
   <data name="SQLAddress" xml:space="preserve">
     <value>SQL 주소</value>
   </data>
@@ -740,6 +902,9 @@
   </data>
   <data name="SQLUser" xml:space="preserve">
     <value>SQL 사용자</value>
+  </data>
+  <data name="Storage" xml:space="preserve">
+    <value>저장</value>
   </data>
   <data name="SubCategory" xml:space="preserve">
     <value>하위 카테고리</value>
@@ -768,11 +933,17 @@
   <data name="Tools" xml:space="preserve">
     <value>툴</value>
   </data>
+  <data name="Tops" xml:space="preserve">
+    <value>상의</value>
+  </data>
   <data name="Tradeable" xml:space="preserve">
     <value>거래 가능</value>
   </data>
   <data name="TradeUnavailable" xml:space="preserve">
     <value>거래 불가능</value>
+  </data>
+  <data name="TriggerItem" xml:space="preserve">
+    <value>방아쇠</value>
   </data>
   <data name="Tude" xml:space="preserve">
     <value>튜드</value>
@@ -785,6 +956,9 @@
   </data>
   <data name="Untradeable" xml:space="preserve">
     <value>거래 불가능</value>
+  </data>
+  <data name="Upgrade" xml:space="preserve">
+    <value>치받이</value>
   </data>
   <data name="Value" xml:space="preserve">
     <value>값</value>

@@ -2,6 +2,7 @@
 using RHToolkit.Messages;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.RH;
+using RHToolkit.Models.UISettings;
 using RHToolkit.Properties;
 using RHToolkit.Views.Windows;
 using System.Data;
@@ -77,63 +78,65 @@ public partial class DataTableManager : ObservableObject
 
     public async Task<bool> LoadFile(string filter, string? stringTableName = null, string? tableColumnName = null, string? fileType = null)
     {
+        OpenFileDialog openFileDialog = new()
+        {
+            Filter = filter,
+            FilterIndex = 1
+        };
+
+        if (openFileDialog.ShowDialog() == true)
+        {
+            return await LoadFileAs(openFileDialog.FileName, stringTableName, tableColumnName, fileType);
+        }
+
+        return false;
+    }
+
+    public async Task<bool> LoadFileFromPath(string fileName, string? stringTableName = null, string? tableColumnName = null, string? fileType = null)
+    {
+        string tableFolder = GetTableFolderPath();
+
+        if (string.IsNullOrEmpty(tableFolder))
+        {
+            return false;
+        }
+
+        string? filePath = FindFileInSubdirectories(tableFolder, fileName);
+
+        if (string.IsNullOrEmpty(filePath))
+        {
+            RHMessageBoxHelper.ShowOKMessage($"The file '{fileName}' does not exist in the folder '{tableFolder}' or its subdirectories.", Resources.Error);
+            return false;
+        }
+
+        return await LoadFileAs(filePath, stringTableName, tableColumnName, fileType, tableFolder);
+    }
+
+    public async Task<bool> LoadFileAs(string file, string? stringTableName = null, string? tableColumnName = null, string? fileType = null, string? baseFolder = null)
+    {
         try
         {
-            OpenFileDialog openFileDialog = new()
+            string fileName = Path.GetFileName(file);
+            var table = await _fileManager.RHFileToDataTableAsync(file);
+
+            if (!IsValidTable(table, tableColumnName, fileName, fileType))
             {
-                Filter = filter,
-                FilterIndex = 1
-            };
+                return false;
+            }
 
-            if (openFileDialog.ShowDialog() == true)
+            string? stringFilePath = GetStringFilePath(file, stringTableName, baseFolder);
+            DataTable? stringTable = null;
+
+            if (stringFilePath != null)
             {
-                string file = openFileDialog.FileName;
-                string fileName = Path.GetFileName(file);
-                var table = await _fileManager.RHFileToDataTableAsync(file);
+                stringTable = await _fileManager.RHFileToDataTableAsync(stringFilePath);
+            }
 
-                string? stringFilePath = null;
-                DataTable? stringTable = null;
-
-                if (table != null && tableColumnName != null && !table.Columns.Contains(tableColumnName))
-                {
-                    RHMessageBoxHelper.ShowOKMessage($"The file '{fileName}' is not a valid {fileType} file.", Resources.Error);
-                    return false;
-                }
-
-                if (stringTableName != null)
-                {
-                    // Determine the path of the _string.rh file
-                    string? directory = Path.GetDirectoryName(file);
-
-                    if (directory != null)
-                    {
-                        stringFilePath = Path.Combine(directory, stringTableName);
-
-                        // Check if _string.rh exists
-                        if (!File.Exists(stringFilePath))
-                        {
-                            RHMessageBoxHelper.ShowOKMessage($"The file '{stringTableName}' does not exist in the same directory as {fileName}.", Resources.Error);
-                            return false;
-                        }
-
-                        stringTable = await _fileManager.RHFileToDataTableAsync(stringFilePath);
-                    }
-                }
-
-                if (table != null)
-                {
-                    LoadTable(table, stringTable);
-                    CurrentFile = file;
-                    CurrentFileName = fileName;
-                    if (stringTable != null)
-                    {
-                        CurrentStringFile = stringFilePath;
-                        CurrentStringFileName = Path.GetFileName(stringFilePath);
-                    }
-
-                    OnCanExecuteFileCommandChanged();
-                    return true;
-                }
+            if (table != null)
+            {
+                LoadTable(table, stringTable);
+                SetCurrentFile(file, fileName, stringFilePath);
+                return true;
             }
 
             return false;
@@ -143,6 +146,115 @@ public partial class DataTableManager : ObservableObject
             RHMessageBoxHelper.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
             return false;
         }
+    }
+
+    private static string GetTableFolderPath()
+    {
+        string tableFolder = RegistrySettingsHelper.GetTableFolder();
+
+        if (string.IsNullOrEmpty(tableFolder) || !Directory.Exists(tableFolder))
+        {
+            var openFolderDialog = new OpenFolderDialog();
+
+            if (openFolderDialog.ShowDialog() == true)
+            {
+                tableFolder = openFolderDialog.FolderName;
+                RegistrySettingsHelper.SetTableFolder(tableFolder);
+            }
+            else
+            {
+                RHMessageBoxHelper.ShowOKMessage("No folder selected. Operation cancelled.", Resources.Error);
+                return string.Empty;
+            }
+        }
+
+        return tableFolder;
+    }
+
+    private static bool IsValidTable(DataTable? table, string? tableColumnName, string fileName, string? fileType)
+    {
+        if (table != null && tableColumnName != null && !table.Columns.Contains(tableColumnName))
+        {
+            RHMessageBoxHelper.ShowOKMessage($"The file '{fileName}' is not a valid {fileType} file.", Resources.Error);
+            return false;
+        }
+        return true;
+    }
+
+    private static string? GetStringFilePath(string file, string? stringTableName, string? baseFolder)
+    {
+        if (stringTableName == null)
+        {
+            return null;
+        }
+
+        string? directory = baseFolder ?? Path.GetDirectoryName(file);
+
+        if (directory != null)
+        {
+            string stringFilePath = Path.Combine(directory, stringTableName);
+
+            if (!File.Exists(stringFilePath))
+            {
+                RHMessageBoxHelper.ShowOKMessage($"The file '{stringTableName}' does not exist in the same directory as {Path.GetFileName(file)}.", Resources.Error);
+                return null;
+            }
+
+            return stringFilePath;
+        }
+
+        return null;
+    }
+
+    private void SetCurrentFile(string file, string fileName, string? stringFilePath)
+    {
+        CurrentFile = file;
+        CurrentFileName = fileName;
+
+        if (stringFilePath != null)
+        {
+            CurrentStringFile = stringFilePath;
+            CurrentStringFileName = Path.GetFileName(stringFilePath);
+        }
+
+        OnCanExecuteFileCommandChanged();
+    }
+
+
+    private static string? FindFileInSubdirectories(string directory, string fileName)
+    {
+        foreach (var file in Directory.EnumerateFiles(directory, fileName, SearchOption.AllDirectories))
+        {
+            return file;
+        }
+
+        return null;
+    }
+
+    [RelayCommand(CanExecute = nameof(CanExecuteSetTableFolderCommand))]
+    public void SetTableFolder()
+    {
+        try
+        {
+            var openFolderDialog = new OpenFolderDialog();
+
+            if (openFolderDialog.ShowDialog() == true)
+            {
+                string newFolderPath = openFolderDialog.FolderName;
+                RegistrySettingsHelper.SetTableFolder(newFolderPath);
+
+                RHMessageBoxHelper.ShowOKMessage($"Table folder has been set to '{newFolderPath}'.", Resources.Success);
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+        }
+    }
+
+    private bool CanExecuteSetTableFolderCommand()
+    {
+        return DataTable == null;
     }
 
     private void LoadTable(DataTable dataTable, DataTable? stringDataTable = null)
@@ -199,6 +311,98 @@ public partial class DataTableManager : ObservableObject
             }
         }
     }
+
+    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+    public async Task<bool> CloseFile()
+    {
+        if (DataTable == null) return true;
+
+        if (HasChanges)
+        {
+            string message = CurrentStringFileName != null
+            ? $"Save changes to files '{CurrentFileName}' | '{CurrentStringFileName}' ?"
+            : $"Save changes to file '{CurrentFileName}' ?";
+
+            var result = RHMessageBoxHelper.ConfirmMessageYesNoCancel(message);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                await SaveFile();
+                ClearFile();
+                return true;
+            }
+            else if (result == MessageBoxResult.No)
+            {
+                ClearFile();
+                return true;
+            }
+            else if (result == MessageBoxResult.Cancel)
+            {
+                return false;
+            }
+        }
+        else
+        {
+            ClearFile();
+            return true;
+        }
+
+        return true;
+    }
+
+    public void ClearFile()
+    {
+        if (DataTable != null)
+        {
+            DataTable.TableNewRow -= DataTableChanged;
+            DataTable.RowChanged -= DataTableChanged;
+            DataTable.RowDeleted -= DataTableChanged;
+        }
+        if (DataTableString != null)
+        {
+            DataTableString.TableNewRow -= DataTableChanged;
+            DataTableString.RowChanged -= DataTableChanged;
+            DataTableString.RowDeleted -= DataTableChanged;
+        }
+
+        FileManager.ClearTempFile(CurrentFileName);
+        FileManager.ClearTempFile(CurrentStringFileName);
+        DataTable = null;
+        DataTableString = null;
+        CurrentFile = null;
+        CurrentFileName = null;
+        CurrentStringFile = null;
+        CurrentStringFileName = null;
+        SelectedItem = null;
+        SelectedItemString = null;
+        HasChanges = false;
+        _undoStack.Clear();
+        _redoStack.Clear();
+        OnCanExecuteFileCommandChanged();
+    }
+
+    private bool CanExecuteFileCommand()
+    {
+        return DataTable != null;
+    }
+
+    private void OnCanExecuteFileCommandChanged()
+    {
+        SaveFileCommand.NotifyCanExecuteChanged();
+        SaveFileAsCommand.NotifyCanExecuteChanged();
+        SaveFileAsMIPCommand.NotifyCanExecuteChanged();
+        SaveFileAsXMLCommand.NotifyCanExecuteChanged();
+        SaveFileAsXLSXCommand.NotifyCanExecuteChanged();
+        AddNewRowCommand.NotifyCanExecuteChanged();
+        UndoChangesCommand.NotifyCanExecuteChanged();
+        RedoChangesCommand.NotifyCanExecuteChanged();
+        CloseFileCommand.NotifyCanExecuteChanged();
+        SetTableFolderCommand.NotifyCanExecuteChanged();
+    }
+
+    #endregion
+
+    #region Save
 
     [RelayCommand(CanExecute = nameof(HasChanges))]
     public async Task SaveFile()
@@ -363,43 +567,7 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
-    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-    public async Task<bool> CloseFile()
-    {
-        if (DataTable == null) return true;
-
-        if (HasChanges)
-        {
-            string message = CurrentStringFileName != null
-            ? $"Save changes to files '{CurrentFileName}' | '{CurrentStringFileName}' ?"
-            : $"Save changes to file '{CurrentFileName}' ?";
-
-            var result = RHMessageBoxHelper.ConfirmMessageYesNoCancel(message);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                await SaveFile();
-                ClearFile();
-                return true;
-            }
-            else if (result == MessageBoxResult.No)
-            {
-                ClearFile();
-                return true;
-            }
-            else if (result == MessageBoxResult.Cancel)
-            {
-                return false;
-            }
-        }
-        else
-        {
-            ClearFile();
-            return true;
-        }
-
-        return true;
-    }
+    #endregion
 
     [RelayCommand]
     public static void CloseWindow(Window window)
@@ -413,58 +581,6 @@ public partial class DataTableManager : ObservableObject
             RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
         }
     }
-
-    public void ClearFile()
-    {
-        if (DataTable != null)
-        {
-            DataTable.TableNewRow -= DataTableChanged;
-            DataTable.RowChanged -= DataTableChanged;
-            DataTable.RowDeleted -= DataTableChanged;
-        }
-        if (DataTableString != null)
-        {
-            DataTableString.TableNewRow -= DataTableChanged;
-            DataTableString.RowChanged -= DataTableChanged;
-            DataTableString.RowDeleted -= DataTableChanged;
-        }
-
-        FileManager.ClearTempFile(CurrentFileName);
-        FileManager.ClearTempFile(CurrentStringFileName);
-        DataTable = null;
-        DataTableString = null;
-        CurrentFile = null;
-        CurrentFileName = null;
-        CurrentStringFile = null;
-        CurrentStringFileName = null;
-        SelectedItem = null;
-        SelectedItemString = null;
-        HasChanges = false;
-        _undoStack.Clear();
-        _redoStack.Clear();
-        OnCanExecuteFileCommandChanged();
-    }
-
-    private bool CanExecuteFileCommand()
-    {
-        return DataTable != null;
-    }
-
-    private void OnCanExecuteFileCommandChanged()
-    {
-        SaveFileCommand.NotifyCanExecuteChanged();
-        SaveFileAsCommand.NotifyCanExecuteChanged();
-        SaveFileAsMIPCommand.NotifyCanExecuteChanged();
-        SaveFileAsXMLCommand.NotifyCanExecuteChanged();
-        SaveFileAsXLSXCommand.NotifyCanExecuteChanged();
-        AddNewRowCommand.NotifyCanExecuteChanged();
-        UndoChangesCommand.NotifyCanExecuteChanged();
-        RedoChangesCommand.NotifyCanExecuteChanged();
-        CloseFileCommand.NotifyCanExecuteChanged();
-    }
-
-    #endregion
-
     #endregion
 
     #region Search
@@ -655,6 +771,7 @@ public partial class DataTableManager : ObservableObject
                         Column = colIndex,
                         OldValue = oldValue,
                         NewValue = newValue,
+                        AffectedRow = DataTable.Rows[rowIndex],
                         Action = EditAction.CellEdit
                     });
                 }
@@ -669,11 +786,17 @@ public partial class DataTableManager : ObservableObject
                 GroupedEdits = groupedEdits
             });
             _redoStack.Clear();
+
+            if (SelectedItem != null)
+            {
+                SelectedItem = DataTable.DefaultView[0];
+            }
             OnCanExecuteChangesChanged();
         }
 
         _searchDialog?.ShowMessage($"Replaced {replaceCount} occurrences.", Brushes.Green);
     }
+
 
     public void CountMatches(string searchText, bool matchCase)
     {
@@ -968,33 +1091,18 @@ public partial class DataTableManager : ObservableObject
                 var edit = _undoStack.Pop();
                 _redoStack.Push(edit);
 
-                foreach (var groupedEdit in edit.GroupedEdits!)
+                if (edit.GroupedEdits != null && edit.GroupedEdits.Count > 0)
                 {
-                    var table = groupedEdit.AffectedRow!.Table;
-                    switch (groupedEdit.Action)
+                    foreach (var groupedEdit in edit.GroupedEdits)
                     {
-                        case EditAction.CellEdit:
-                            if (groupedEdit.Row >= 0 && groupedEdit.Row < table.Rows.Count)
-                            {
-                                table.Rows[groupedEdit.Row][groupedEdit.Column] = groupedEdit.OldValue;
-                            }
-                            break;
-                        case EditAction.RowInsert:
-                            if (groupedEdit.Row >= 0 && groupedEdit.Row < table.Rows.Count)
-                            {
-                                table.Rows.RemoveAt(groupedEdit.Row);
-                            }
-                            break;
-                        case EditAction.RowDelete:
-                            if (groupedEdit.Row >= 0)
-                            {
-                                DataRow newRow = table.NewRow();
-                                newRow.ItemArray = (object?[])groupedEdit.OldValue!;
-                                table.Rows.InsertAt(newRow, groupedEdit.Row);
-                            }
-                            break;
+                        ApplyEdit(groupedEdit, undo: true);
                     }
                 }
+                else
+                {
+                    ApplyEdit(edit, undo: true);
+                }
+
                 OnPropertyChanged(nameof(DataTable));
                 OnPropertyChanged(nameof(DataTableString));
                 OnCanExecuteChangesChanged();
@@ -1016,40 +1124,21 @@ public partial class DataTableManager : ObservableObject
                 var edit = _redoStack.Pop();
                 _undoStack.Push(edit);
 
-                foreach (var groupedEdit in edit.GroupedEdits!)
+                if (edit.GroupedEdits != null && edit.GroupedEdits.Count > 0)
                 {
-                    var table = groupedEdit.AffectedRow!.Table;
-                    switch (groupedEdit.Action)
+                    foreach (var groupedEdit in edit.GroupedEdits)
                     {
-                        case EditAction.CellEdit:
-                            if (groupedEdit.Row >= 0 && groupedEdit.Row < table.Rows.Count)
-                            {
-                                table.Rows[groupedEdit.Row][groupedEdit.Column] = groupedEdit.NewValue;
-                            }
-                            break;
-                        case EditAction.RowInsert:
-                            if (groupedEdit.Row >= 0)
-                            {
-                                DataRow insertRow = table.NewRow();
-                                insertRow.ItemArray = (object?[])groupedEdit.NewValue!;
-                                if (groupedEdit.Row < table.Rows.Count)
-                                {
-                                    table.Rows.InsertAt(insertRow, groupedEdit.Row);
-                                }
-                                else
-                                {
-                                    table.Rows.Add(insertRow);
-                                }
-                            }
-                            break;
-                        case EditAction.RowDelete:
-                            if (groupedEdit.Row >= 0 && groupedEdit.Row < table.Rows.Count)
-                            {
-                                table.Rows.RemoveAt(groupedEdit.Row);
-                            }
-                            break;
+                        if (groupedEdit.AffectedRow != null)
+                        {
+                            ApplyEdit(groupedEdit, undo: false);
+                        }
                     }
                 }
+                else
+                {
+                    ApplyEdit(edit, undo: false);
+                }
+
                 OnPropertyChanged(nameof(DataTable));
                 OnPropertyChanged(nameof(DataTableString));
                 OnCanExecuteChangesChanged();
@@ -1058,6 +1147,95 @@ public partial class DataTableManager : ObservableObject
         catch (Exception ex)
         {
             RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+        }
+    }
+
+    private void ApplyEdit(EditHistory edit, bool undo)
+    {
+        if (edit.AffectedRow != null)
+        {
+            var table = edit.AffectedRow.Table;
+
+            switch (edit.Action)
+            {
+                case EditAction.CellEdit:
+                    if (edit.Row >= 0 && edit.Row < table.Rows.Count)
+                    {
+                        table.Rows[edit.Row][edit.Column] = undo ? edit.OldValue : edit.NewValue;
+                    }
+                    break;
+                case EditAction.RowInsert:
+                    if (edit.Row >= 0 && edit.Row < table.Rows.Count)
+                    {
+                        if (undo)
+                        {
+                            table.Rows.RemoveAt(edit.Row);
+                        }
+                        else
+                        {
+                            var newRow = table.NewRow();
+                            newRow.ItemArray = (object?[])edit.OldValue!;
+                            table.Rows.InsertAt(newRow, edit.Row);
+                        }
+                    }
+                    break;
+                case EditAction.RowDelete:
+                    if (edit.Row >= 0)
+                    {
+                        if (undo)
+                        {
+                            var newRow = table.NewRow();
+                            newRow.ItemArray = (object?[])edit.OldValue!;
+                            table.Rows.InsertAt(newRow, edit.Row);
+                        }
+                        else
+                        {
+                            table.Rows.RemoveAt(edit.Row);
+                        }
+                    }
+                    break;
+            }
+
+            if (edit.Row >= 0 && edit.Row < table.Rows.Count)
+            {
+                SelectedItem = null;
+                SelectedItem = table.DefaultView[edit.Row];
+            }
+        }
+    }
+
+    public void RecordSelectedItemEdit(string columnName, object? oldValue, object? newValue)
+    {
+        if (SelectedItem != null)
+        {
+            var editHistory = new EditHistory
+            {
+                Row = SelectedItem.Row.Table.Rows.IndexOf(SelectedItem.Row),
+                Column = SelectedItem.Row.Table.Columns.IndexOf(columnName),
+                OldValue = oldValue,
+                NewValue = newValue,
+                AffectedRow = SelectedItem.Row,
+                Action = EditAction.CellEdit
+            };
+
+            _undoStack.Push(editHistory);
+            _redoStack.Clear();
+            OnCanExecuteChangesChanged();
+        }
+    }
+
+    public void AddGroupedEdits(List<EditHistory> groupedEdits)
+    {
+        if (groupedEdits.Count > 0)
+        {
+            var groupedEditHistory = new EditHistory
+            {
+                Action = EditAction.CellEdit,
+                GroupedEdits = new List<EditHistory>(groupedEdits)
+            };
+            _undoStack.Push(groupedEditHistory);
+            _redoStack.Clear();
+            OnCanExecuteChangesChanged();
         }
     }
 
@@ -1074,6 +1252,72 @@ public partial class DataTableManager : ObservableObject
         _redoStack.Clear();
         OnCanExecuteChangesChanged();
     }
+
+    #region SelectedItem
+
+    private bool _isGroupingEdits;
+    private readonly List<EditHistory> _currentGroupedEdits = [];
+
+    public void StartGroupingEdits()
+    {
+        if (!_isGroupingEdits)
+        {
+            _isGroupingEdits = true;
+            _currentGroupedEdits.Clear();
+        }
+    }
+
+    public void EndGroupingEdits()
+    {
+        if (_isGroupingEdits)
+        {
+            if (_currentGroupedEdits.Count > 0)
+            {
+                AddGroupedEdits(_currentGroupedEdits);
+            }
+            _isGroupingEdits = false;
+        }
+    }
+
+    public void UpdateSelectedItemValue(object? newValue, string column)
+    {
+        if (SelectedItem != null && SelectedItem.Row.Table.Columns.Contains(column))
+        {
+            var currentValue = SelectedItem[column];
+
+            bool isDifferent = !Equals(currentValue, newValue);
+
+            if (isDifferent)
+            {
+                if (newValue is double doubleValue)
+                {
+                    newValue = Math.Round(doubleValue, 4);
+                }
+
+                if (_isGroupingEdits)
+                {
+                    SelectedItem[column] = newValue;
+
+                    _currentGroupedEdits.Add(new EditHistory
+                    {
+                        Row = SelectedItem.Row.Table.Rows.IndexOf(SelectedItem.Row),
+                        Column = SelectedItem.Row.Table.Columns.IndexOf(column),
+                        OldValue = currentValue,
+                        NewValue = newValue,
+                        AffectedRow = SelectedItem.Row,
+                        Action = EditAction.CellEdit
+                    });
+
+                }
+                else
+                {
+                    SelectedItem[column] = newValue;
+                    RecordSelectedItemEdit(column, currentValue, newValue);
+                }
+            }
+        }
+    }
+    #endregion
 
     private bool CanUndo() => _undoStack.Count > 0;
     private bool CanRedo() => _redoStack.Count > 0;
@@ -1114,14 +1358,7 @@ public partial class DataTableManager : ObservableObject
 
                 DataTable.DefaultView.RowFilter = filter;
 
-                if (DataTable.DefaultView.Count > 0)
-                {
-                    SelectedItem = DataTable.DefaultView[0];
-                }
-                else
-                {
-                    SelectedItem = null;
-                }
+                SelectedItem = DataTable.DefaultView.Count > 0 ? DataTable.DefaultView[0] : null;
             }
         }
         catch (Exception ex)

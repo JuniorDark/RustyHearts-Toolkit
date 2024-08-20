@@ -56,51 +56,33 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
         {
             var itemData = FrameViewModel.GetItemData();
 
-            if (itemData != null)
+            if (itemData != null && !string.IsNullOrEmpty(MessageType))
             {
-                switch (MessageType)
+                var windowMapping = new Dictionary<string, string>
                 {
-                    case "Mail":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "MailWindow", MessageType, Token));
-                        break;
-                    case "EquipItem":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "EquipWindow", MessageType, Token));
-                        break;
-                    case "InventoryItem":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "InventoryWindow", MessageType, Token));
-                        break;
-                    case "StorageItem":
-                    case "AccountStorageItem":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "StorageWindow", MessageType, Token));
-                        break;
-                    case "CouponItem":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CouponWindow", MessageType, Token));
-                        break;
-                    case "SetItem":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "SetItemEditorWindow", MessageType, Token));
-                        break;
-                    case "Package":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "PackageEditorWindow", MessageType, Token));
-                        break;
-                    case "RandomRune":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "RandomRuneEditorWindow", MessageType, Token));
-                        break;
-                    case "CashShopItemAdd":
-                        if (ItemDataList != null)
-                        {
-                            WeakReferenceMessenger.Default.Send(new ItemDataListMessage(ItemDataList, "CashShopEditorWindow", MessageType, Token));
-                        }
-                        break;
-                    case "CashShopItemUpdate":
-                        WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "CashShopEditorWindow", MessageType, Token));
-                        break;
-                    default:
-                        break;
+                    { "Mail", "MailWindow" },
+                    { "EquipItem", "EquipWindow" },
+                    { "InventoryItem", "InventoryWindow" },
+                    { "StorageItem", "StorageWindow" },
+                    { "AccountStorageItem", "StorageWindow" },
+                    { "CouponItem", "CouponWindow" },
+                    { "SetItem", "SetItemEditorWindow" },
+                    { "Package", "PackageEditorWindow" },
+                    { "RandomRune", "RandomRuneEditorWindow" },
+                    { "DropGroup", "DropGroupEditorWindow" },
+                    { "CashShopItemUpdate", "CashShopEditorWindow" }
+                };
+
+                if (windowMapping.TryGetValue(MessageType, out var windowName))
+                {
+                    WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, windowName, MessageType, Token));
+                }
+                else if (MessageType == "CashShopItemAdd" && ItemDataList != null)
+                {
+                    WeakReferenceMessenger.Default.Send(new ItemDataListMessage(ItemDataList, "CashShopEditorWindow", MessageType, Token));
                 }
             }
-
         }
-        
     }
 
     private bool CanExecuteCommand()
@@ -129,90 +111,129 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             {
                 Title = GetTitle(MessageType, itemData);
 
-                switch (message.MessageType)
+                var actions = new Dictionary<string, Action>
                 {
-                    case "Mail":
-                        SlotIndexMin = 0;
-                        SlotIndexMax = 2;
-                        IsSlotVisible = Visibility.Visible;
-                        IsOptionsVisible = Visibility.Visible;
-                        break;
-                    case "EquipItem":
-                        SlotIndexMin = itemData.SlotIndex;
-                        SlotIndexMax = itemData.SlotIndex;
-                        SlotFilter(itemData.SlotIndex);
-                        IsSlotVisible = Visibility.Visible;
-                        IsOptionsVisible = Visibility.Visible;
-                        break;
-                    case "InventoryItem":
-                        switch (itemData.PageIndex)
+                    {
+                        "Mail", () =>
                         {
-                            case 5:
-                                SlotIndexMin = 0;
-                                SlotIndexMax = 119;
-                                break;
-                            default:
-                                SlotIndexMin = 0;
-                                SlotIndexMax = 23;
-                                break;
+                            SlotIndexMin = 0;
+                            SlotIndexMax = 2;
+                            IsSlotVisible = Visibility.Visible;
+                            IsOptionsVisible = Visibility.Visible;
                         }
-                        ItemDataManager.InventoryTypeFilter = itemData.PageIndex;
-                        IsSlotVisible = Visibility.Visible;
-                        IsOptionsVisible = Visibility.Visible;
-                        break;
-                    case "StorageItem":
-                        SlotIndexMin = 0;
-                        SlotIndexMax = 179;
-                        IsSlotVisible = Visibility.Visible;
-                        IsOptionsVisible = Visibility.Visible;
-                        break;
-                    case "AccountStorageItem":
-                        SlotIndexMin = 0;
-                        SlotIndexMax = 179;
-                        ItemDataManager.AccountStorageFilter = 1;
-                        IsSlotVisible = Visibility.Visible;
-                        IsOptionsVisible = Visibility.Visible;
-                        break;
-                    case "CashShopItemAdd":
-                        SelectionMode = DataGridSelectionMode.Extended;
-                        IsSlotVisible = Visibility.Hidden;
-                        IsOptionsVisible = Visibility.Hidden;
-                        AddItemText = "Add Selected Item(s)";
-                        break;
-                    case "CashShopItemUpdate":
-                        SelectionMode = DataGridSelectionMode.Single;
-                        IsSlotVisible = Visibility.Hidden;
-                        IsOptionsVisible = Visibility.Hidden;
-                        break;
-                    case "CouponItem":
-                        IsNewItem = itemData.IsNewItem;
-                        IsSlotVisible = Visibility.Hidden;
-                        IsOptionsVisible = Visibility.Hidden;
-                        break;
-                    case "Package":
-                        SlotIndexMin = 1;
-                        SlotIndexMax = 12;
-                        IsSlotVisible = Visibility.Visible;
-                        IsOptionsVisible = Visibility.Hidden;
-                        break;
-                    case "RandomRune":
-                        SlotIndexMin = 1;
-                        SlotIndexMax = 10;
-                        IsSlotVisible = Visibility.Visible;
-                        IsOptionsVisible = Visibility.Hidden;
-                        break;
-                    case "SetItem":
-                        SlotIndexMin = 1;
-                        SlotIndexMax = 6;
-                        IsSlotVisible = Visibility.Visible;
-                        IsOptionsVisible = Visibility.Hidden;
-                        break;
-                    default:
-                        SlotIndexMin = itemData.SlotIndex;
-                        SlotIndexMax = itemData.SlotIndex;
-                        IsSlotVisible = Visibility.Visible;
-                        IsOptionsVisible = Visibility.Visible;
-                        break;
+                    },
+                    {
+                        "EquipItem", () =>
+                        {
+                            SlotIndexMin = itemData.SlotIndex;
+                            SlotIndexMax = itemData.SlotIndex;
+                            SlotFilter(itemData.SlotIndex);
+                            IsSlotVisible = Visibility.Visible;
+                            IsOptionsVisible = Visibility.Visible;
+                        }
+                    },
+                    {
+                        "InventoryItem", () =>
+                        {
+                            SlotIndexMin = 0;
+                            SlotIndexMax = itemData.PageIndex == 5 ? 119 : 23;
+                            ItemDataManager.InventoryTypeFilter = itemData.PageIndex;
+                            IsSlotVisible = Visibility.Visible;
+                            IsOptionsVisible = Visibility.Visible;
+                        }
+                    },
+                    {
+                        "StorageItem", () =>
+                        {
+                            SlotIndexMin = 0;
+                            SlotIndexMax = 179;
+                            IsSlotVisible = Visibility.Visible;
+                            IsOptionsVisible = Visibility.Visible;
+                        }
+                    },
+                    {
+                        "AccountStorageItem", () =>
+                        {
+                            SlotIndexMin = 0;
+                            SlotIndexMax = 179;
+                            ItemDataManager.AccountStorageFilter = 1;
+                            IsSlotVisible = Visibility.Visible;
+                            IsOptionsVisible = Visibility.Visible;
+                        }
+                    },
+                    {
+                        "CashShopItemAdd", () =>
+                        {
+                            SelectionMode = DataGridSelectionMode.Extended;
+                            IsSlotVisible = Visibility.Hidden;
+                            IsOptionsVisible = Visibility.Hidden;
+                            AddItemText = "Add Selected Item(s)";
+                        }
+                    },
+                    {
+                        "CashShopItemUpdate", () =>
+                        {
+                            SelectionMode = DataGridSelectionMode.Single;
+                            IsSlotVisible = Visibility.Hidden;
+                            IsOptionsVisible = Visibility.Hidden;
+                        }
+                    },
+                    {
+                        "CouponItem", () =>
+                        {
+                            IsNewItem = itemData.IsNewItem;
+                            IsSlotVisible = Visibility.Hidden;
+                            IsOptionsVisible = Visibility.Hidden;
+                        }
+                    },
+                    {
+                        "Package", () =>
+                        {
+                            SlotIndexMin = 1;
+                            SlotIndexMax = 12;
+                            IsSlotVisible = Visibility.Visible;
+                            IsOptionsVisible = Visibility.Hidden;
+                        }
+                    },
+                    {
+                        "RandomRune", () =>
+                        {
+                            SlotIndexMin = 1;
+                            SlotIndexMax = 10;
+                            IsSlotVisible = Visibility.Visible;
+                            IsOptionsVisible = Visibility.Hidden;
+                        }
+                    },
+                    {
+                        "DropGroup", () =>
+                        {
+                            SlotIndexMin = 0;
+                            SlotIndexMax = itemData.OverlapCnt - 1;
+                            IsSlotVisible = Visibility.Visible;
+                            IsOptionsVisible = Visibility.Hidden;
+                        }
+                    },
+                    {
+                        "SetItem", () =>
+                        {
+                            SlotIndexMin = 1;
+                            SlotIndexMax = 6;
+                            IsSlotVisible = Visibility.Visible;
+                            IsOptionsVisible = Visibility.Hidden;
+                        }
+                    }
+                };
+
+                if (!string.IsNullOrEmpty(message.MessageType) && actions.TryGetValue(message.MessageType, out var action))
+                {
+                    action();
+                }
+                else
+                {
+                    SlotIndexMin = itemData.SlotIndex;
+                    SlotIndexMax = itemData.SlotIndex;
+                    IsSlotVisible = Visibility.Visible;
+                    IsOptionsVisible = Visibility.Visible;
                 }
 
                 if (itemData.ItemId != 0)
@@ -226,7 +247,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                         FrameViewModel.PageIndex = itemData.PageIndex;
                         FrameViewModel.SlotIndex = itemData.SlotIndex;
                     }
-
                 }
             }), DispatcherPriority.Background);
         }
@@ -234,19 +254,20 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
 
     private string GetTitle(string? messageType, ItemData itemData)
     {
-        return messageType switch
+        return (messageType ?? string.Empty) switch
         {
-            "CashShopItemAdd" => $"Add Cash Shop Item",
-            "CashShopItemUpdate" => $"Update Cash Shop Item",
-            "CouponItem" => $"Add Coupon Item",
-            "EquipItem" => $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterData?.CharacterName}] ",
-            "InventoryItem" => $"Add Inventory Item ({(InventoryType)itemData.PageIndex}) [{CharacterData?.CharacterName}] ",
-            "StorageItem" => $"Add Storage Item [{CharacterData?.CharacterName}] ",
-            "AccountStorageItem" => $"Add Account Storage Item [{CharacterData?.AccountName}] ",
-            "Mail" => $"Add Mail Item",
-            "Package" => $"Add Package Item",
-            "RandomRune" => $"Add Random Rune Item",
-            "SetItem" => $"Add Set Item",
+            "CashShopItemAdd" => "Add Cash Shop Item",
+            "CashShopItemUpdate" => "Update Cash Shop Item",
+            "CouponItem" => "Add Coupon Item",
+            "EquipItem" => $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterData?.CharacterName}]",
+            "InventoryItem" => $"Add Inventory Item ({(InventoryType)itemData.PageIndex}) [{CharacterData?.CharacterName}]",
+            "StorageItem" => $"Add Storage Item [{CharacterData?.CharacterName}]",
+            "AccountStorageItem" => $"Add Account Storage Item [{CharacterData?.AccountName}]",
+            "Mail" => "Add Mail Item",
+            "Package" => "Add Package Item",
+            "RandomRune" => "Add Random Rune Item",
+            "DropGroup" => "Add Drop Group Item",
+            "SetItem" => "Add Set Item",
             _ => "Add Item",
         };
     }

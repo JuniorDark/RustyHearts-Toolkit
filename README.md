@@ -11,28 +11,26 @@
 ## Preview
 <!-- Include screenshots later here to provide a visual overview of the toolkit. -->
 
+## Getting Started
+
+To start using the Rusty Hearts Toolkit, download the latest release from the [GitHub repository](https://github.com/JuniorDark/RustyHearts-Toolkit/releases/latest).
+
 ## Features
 
 ### Database Editing Tools
 - **Character Edit Tools:** Modify character such as equipment, inventory, storage, fortune, sanctions, and titles.
-- **Coupon Generator:** Create in-game coupons.
+- **Coupon Generator:** Create redeem in-game coupons code.
 - **Send Mail:** Send in-game mail with customizable item attachments.
 - **Mail Templates:** Save and reuse mail templates in JSON format.
 
-### File Editing Tools
-- **Table Editor:** Edit `.rh` table files and export them to various formats, including XML, XLSX, and MIP.
-- **Specialized Table Editors:**
-  - **Cash Shop Editor:** Manage in-game cash shop items and packages.
-  - **Package Editor:** Manage and edit item packages and effects.
-  - **Random Rune Editor:** Manage and edit 'gacha' items.
-  - **Set Editor:** Edit item sets and their effects.
-
-### Database Tools
-- **Item Database:** View detailed item information in an in-game-like tooltip. Sort items with various filters and search by name or ID.
-
-## Getting Started
-
-To start using the Rusty Hearts Toolkit, download the latest release from the [GitHub repository](https://github.com/JuniorDark/RustyHearts-Toolkit/releases/latest).
+### Table Editor Tools
+- *Table Editor:* Edit `.rh` table files and export them to various formats, including XML, XLSX, and MIP.
+- *Specialized Table Editors:*
+- **Cash Shop Editor:** Manage in-game cash shop items and packages.
+- **Item Drop Group Editor** Item drops.
+- **Package Editor:** Manage and edit item packages and effects.
+- **Random Rune Editor:** Manage and edit 'gacha' items.
+- **Set Editor:** Edit item sets and their effects.
 
 ### Language Settings
 
@@ -61,7 +59,7 @@ If you wish to build locally or contribute to its development, ensure that you h
 - **.NET Core 8 SDK (8.0.107 or later)** - [Download here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
 ### System Requirements
-- **OS:** Windows 10 (build 19045) or later / Windows 11
+- **OS:** Windows 10 / Windows 11
 - **Architecture:** x64/AMD64
 
 ## License
@@ -79,9 +77,32 @@ A: Submit an issue on GitHub with a description of the feature and its potential
 **Q: How do I contribute?**  
 A: Fork the repository, make your changes, and submit a pull request.
 
+## Road Map
+
+### SQLite Databases
+- **Portable Databases:** Enemy/Item/Skills.
+
+### Database Tools
+- **Character Skills**
+- **Character Quests**
+- **Character Pets**
+
+### Specialized Table Editors
+- **Add Effect Editor**
+- **Craft Editor**
+- **Enemy Editor**
+- **Item Editor**
+- **NPC Editor**
+- **NPC Shop Editor**
+- **Pet Editor**
+- **Quest Editor**
+- **Skill Editor**
+- **Title Editor**
+- **World/Map Editor**
+
 ## Credits
 
-This project utilizes the following NuGet packages:
+This project is possible due to the following NuGet packages:
 
 - [CommunityToolkit.Mvvm](https://www.nuget.org/packages/CommunityToolkit.Mvvm)
 - [EPPlus](https://www.nuget.org/packages/EPPlus)

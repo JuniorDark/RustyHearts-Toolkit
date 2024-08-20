@@ -163,7 +163,7 @@
     <value>Attach Item</value>
   </data>
   <data name="AttachItemCouponHelp" xml:space="preserve">
-    <value>Click on the slot to add/edit a item, Right click to remove. Note: Coupon Items do not support custom stats.</value>
+    <value>Click on the slot to add/edit a item, Right click to remove.</value>
   </data>
   <data name="AttachItemError" xml:space="preserve">
     <value>Failed to Attach item</value>

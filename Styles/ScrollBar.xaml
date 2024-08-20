@@ -222,7 +222,7 @@
                         <Rectangle
                             Grid.Column="1"
                             Width="15"
-                            Margin="0,0"
+                            Margin="0,-1"
                             RenderTransformOrigin="0.5,0.5">
                             <Rectangle.Style>
                                 <Style TargetType="Rectangle">
@@ -400,7 +400,7 @@
                             Maximum="{TemplateBinding ScrollableWidth}"
                             Minimum="0"
                             Orientation="Horizontal"
-                            Style="{StaticResource lb_scroll}"
+                            Style="{StaticResource lb_scroll_h}"
                             ViewportSize="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type ScrollViewer}}}"
                             Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}"
                             Value="{TemplateBinding HorizontalOffset}" />

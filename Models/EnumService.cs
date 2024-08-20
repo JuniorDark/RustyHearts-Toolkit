@@ -457,5 +457,19 @@ namespace RHToolkit.Models
             [LocalizedDescription("All")]
             All = 0
         }
+
+        public enum ItemDropGroupType
+        {
+            None = 0,
+            ItemDropGroupListF = 1,
+            ItemDropGroupList = 2,
+            ChampionItemItemDropGroupList = 3,
+            EventWorldItemDropGroupList = 4,
+            InstanceItemDropGroupList = 5,
+            QuestItemDropGroupList = 6,
+            WorldInstanceItemDropGroupList = 7,
+            WorldItemDropGroupList = 8,
+            WorldItemDropGroupListF = 9,
+        }
     }
 }

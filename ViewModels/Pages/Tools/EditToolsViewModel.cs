@@ -16,6 +16,7 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
         new("Package Editor", "Edit unionpackage .rh table file", SymbolRegular.DocumentEdit24, "packageeditor"),
         new("Set Item Editor", "Edit setitem .rh table file", SymbolRegular.DocumentEdit24, "setitemeditor"),
         new("Random Rune Editor", "Edit randomrune .rh table file", SymbolRegular.DocumentEdit24, "randomruneeditor"),
+        new("Drop Group Editor", "Edit dropgroup .rh table file", SymbolRegular.DocumentEdit24, "dropgroupeditor"),
 
 ];
 
@@ -45,6 +46,9 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
                     break;
                 case "setitemeditor":
                     windowsProviderService.Show<SetItemEditorWindow>(true);
+                    break;
+                case "dropgroupeditor":
+                    windowsProviderService.Show<DropGroupEditorWindow>(true);
                     break;
             }
         }

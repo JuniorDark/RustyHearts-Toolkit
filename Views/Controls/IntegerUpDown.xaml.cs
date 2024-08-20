@@ -48,7 +48,18 @@ namespace RHToolkit.Views.Controls
         private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (IntegerUpDown)d;
-            control.PART_TextBox.Text = e.NewValue.ToString();
+            int newValue = (int)e.NewValue;
+
+            if (control.PART_TextBox != null)
+            {
+                string textValue = newValue.ToString();
+                if (control.PART_TextBox.Text != textValue)
+                {
+                    control.PART_TextBox.Text = textValue;
+                }
+            }
+
+            control.UpdateButtonStates();
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -119,21 +130,21 @@ namespace RHToolkit.Views.Controls
                 }
 
                 Value = Math.Min(Math.Max(Minimum, value), Maximum);
+
+                BindingExpression binding = textBox.GetBindingExpression(TextBox.TextProperty);
+                binding?.UpdateSource();
             }
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (sender is TextBox textBox)
+            if (sender is TextBox textBox && int.TryParse(textBox.Text, out int value))
             {
-                if (!int.TryParse(textBox.Text, out int value))
+                if (Value != value)
                 {
-                    textBox.Text = Value.ToString();
-                    return;
+                    Value = Math.Min(Math.Max(Minimum, value), Maximum);
+                    UpdateButtonStates();
                 }
-
-                Value = Math.Min(Math.Max(Minimum, value), Maximum);
-                UpdateButtonStates();
             }
         }
 
