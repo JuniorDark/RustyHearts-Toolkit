@@ -190,9 +190,10 @@ public partial class DataTableManager : ObservableObject
 
         string? directory = baseFolder ?? Path.GetDirectoryName(file);
 
+        
         if (directory != null)
         {
-            string stringFilePath = Path.Combine(directory, stringTableName);
+            string? stringFilePath = FindFileInSubdirectories(directory, stringTableName);
 
             if (!File.Exists(stringFilePath))
             {
@@ -847,9 +848,36 @@ public partial class DataTableManager : ObservableObject
     {
         try
         {
-            var newSelectedItem = DeleteSelectedRow(DataTable, SelectedItem);
+            if (SelectedItem == null || DataTable == null) return;
 
-            SelectedItem = newSelectedItem;
+            // Find the index of the current selected item
+            int index = DataTable.Rows.IndexOf(SelectedItem.Row);
+
+            // Delete the row and update the DataTable
+            DeleteSelectedRow(DataTable, SelectedItem);
+
+            // Determine the new selected item
+            if (DataTable.Rows.Count > 0)
+            {
+                // If the index is out of bounds (e.g., deleting the last row), adjust the index to the new last row
+                if (index >= DataTable.Rows.Count)
+                {
+                    index = DataTable.Rows.Count - 1;
+                }
+
+                // Set the selected item to the last row if the deleted row was the last row
+                if (index < DataTable.Rows.Count)
+                {
+                    SelectedItem = DataTable.DefaultView[index];
+                }
+            }
+            else
+            {
+                // No rows left in the DataTable
+                SelectedItem = null;
+            }
+
+            OnPropertyChanged(nameof(SelectedItem));
         }
         catch (Exception ex)
         {
@@ -1084,143 +1112,114 @@ public partial class DataTableManager : ObservableObject
     [RelayCommand(CanExecute = nameof(CanUndo))]
     public void UndoChanges()
     {
-        try
-        {
-            if (_undoStack.Count > 0)
-            {
-                var edit = _undoStack.Pop();
-                _redoStack.Push(edit);
-
-                if (edit.GroupedEdits != null && edit.GroupedEdits.Count > 0)
-                {
-                    foreach (var groupedEdit in edit.GroupedEdits)
-                    {
-                        ApplyEdit(groupedEdit, undo: true);
-                    }
-                }
-                else
-                {
-                    ApplyEdit(edit, undo: true);
-                }
-
-                OnPropertyChanged(nameof(DataTable));
-                OnPropertyChanged(nameof(DataTableString));
-                OnCanExecuteChangesChanged();
-            }
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
-        }
+        ApplyChanges(isUndo: true);
     }
 
     [RelayCommand(CanExecute = nameof(CanRedo))]
     public void RedoChanges()
     {
+        ApplyChanges(isUndo: false);
+    }
+
+    public void ApplyChanges(bool isUndo)
+    {
         try
         {
-            if (_redoStack.Count > 0)
-            {
-                var edit = _redoStack.Pop();
-                _undoStack.Push(edit);
+            var sourceStack = isUndo ? _undoStack : _redoStack;
+            var targetStack = isUndo ? _redoStack : _undoStack;
 
-                if (edit.GroupedEdits != null && edit.GroupedEdits.Count > 0)
+            if (sourceStack.Count > 0)
+            {
+                var edit = sourceStack.Pop();
+                targetStack.Push(edit);
+
+                DataRowView? lastAffectedItem = null;
+
+                foreach (var groupedEdit in edit.GroupedEdits)
                 {
-                    foreach (var groupedEdit in edit.GroupedEdits)
+                    if (groupedEdit.AffectedRow != null)
                     {
-                        if (groupedEdit.AffectedRow != null)
+                        var table = groupedEdit.AffectedRow.Table;
+                        switch (groupedEdit.Action)
                         {
-                            ApplyEdit(groupedEdit, undo: false);
+                            case EditAction.CellEdit:
+                                if (groupedEdit.Row >= 0 && groupedEdit.Row < table.Rows.Count)
+                                {
+                                    table.Rows[groupedEdit.Row][groupedEdit.Column] = isUndo ? groupedEdit.OldValue : groupedEdit.NewValue;
+                                    lastAffectedItem = table.DefaultView[groupedEdit.Row];
+                                }
+                                break;
+                            case EditAction.RowInsert:
+                                if (isUndo)
+                                {
+                                    if (groupedEdit.Row >= 0 && groupedEdit.Row < table.Rows.Count)
+                                    {
+                                        table.Rows.RemoveAt(groupedEdit.Row);
+                                    }
+                                }
+                                else
+                                {
+                                    if (groupedEdit.Row >= 0)
+                                    {
+                                        DataRow insertRow = table.NewRow();
+                                        insertRow.ItemArray = (object?[])groupedEdit.NewValue!;
+                                        if (groupedEdit.Row < table.Rows.Count)
+                                        {
+                                            table.Rows.InsertAt(insertRow, groupedEdit.Row);
+                                        }
+                                        else
+                                        {
+                                            table.Rows.Add(insertRow);
+                                        }
+                                        lastAffectedItem = table.DefaultView[groupedEdit.Row];
+                                    }
+                                }
+                                break;
+                            case EditAction.RowDelete:
+                                if (isUndo)
+                                {
+                                    if (groupedEdit.Row >= 0)
+                                    {
+                                        DataRow newRow = table.NewRow();
+                                        newRow.ItemArray = (object?[])groupedEdit.OldValue!;
+                                        table.Rows.InsertAt(newRow, groupedEdit.Row);
+                                        lastAffectedItem = table.DefaultView[groupedEdit.Row];
+                                    }
+                                }
+                                else
+                                {
+                                    if (groupedEdit.Row >= 0 && groupedEdit.Row < table.Rows.Count)
+                                    {
+                                        table.Rows.RemoveAt(groupedEdit.Row);
+                                    }
+                                }
+                                break;
                         }
                     }
-                }
-                else
-                {
-                    ApplyEdit(edit, undo: false);
                 }
 
                 OnPropertyChanged(nameof(DataTable));
                 OnPropertyChanged(nameof(DataTableString));
                 OnCanExecuteChangesChanged();
+
+                if (lastAffectedItem != null)
+                {
+                    if (lastAffectedItem.Row.Table == SelectedItem?.Row.Table)
+                    {
+                        SelectedItem = null;
+                        SelectedItem = lastAffectedItem;
+                    }
+                    else if (lastAffectedItem.Row.Table == SelectedItemString?.Row.Table && DataTable != null)
+                    {
+                        SelectedItem = null;
+                        SelectedItem = GetRowViewById(DataTable, lastAffectedItem);
+                    }
+                }
             }
         }
         catch (Exception ex)
         {
             RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
-        }
-    }
-
-    private void ApplyEdit(EditHistory edit, bool undo)
-    {
-        if (edit.AffectedRow != null)
-        {
-            var table = edit.AffectedRow.Table;
-
-            switch (edit.Action)
-            {
-                case EditAction.CellEdit:
-                    if (edit.Row >= 0 && edit.Row < table.Rows.Count)
-                    {
-                        table.Rows[edit.Row][edit.Column] = undo ? edit.OldValue : edit.NewValue;
-                    }
-                    break;
-                case EditAction.RowInsert:
-                    if (edit.Row >= 0 && edit.Row < table.Rows.Count)
-                    {
-                        if (undo)
-                        {
-                            table.Rows.RemoveAt(edit.Row);
-                        }
-                        else
-                        {
-                            var newRow = table.NewRow();
-                            newRow.ItemArray = (object?[])edit.OldValue!;
-                            table.Rows.InsertAt(newRow, edit.Row);
-                        }
-                    }
-                    break;
-                case EditAction.RowDelete:
-                    if (edit.Row >= 0)
-                    {
-                        if (undo)
-                        {
-                            var newRow = table.NewRow();
-                            newRow.ItemArray = (object?[])edit.OldValue!;
-                            table.Rows.InsertAt(newRow, edit.Row);
-                        }
-                        else
-                        {
-                            table.Rows.RemoveAt(edit.Row);
-                        }
-                    }
-                    break;
-            }
-
-            if (edit.Row >= 0 && edit.Row < table.Rows.Count)
-            {
-                SelectedItem = null;
-                SelectedItem = table.DefaultView[edit.Row];
-            }
-        }
-    }
-
-    public void RecordSelectedItemEdit(string columnName, object? oldValue, object? newValue)
-    {
-        if (SelectedItem != null)
-        {
-            var editHistory = new EditHistory
-            {
-                Row = SelectedItem.Row.Table.Rows.IndexOf(SelectedItem.Row),
-                Column = SelectedItem.Row.Table.Columns.IndexOf(columnName),
-                OldValue = oldValue,
-                NewValue = newValue,
-                AffectedRow = SelectedItem.Row,
-                Action = EditAction.CellEdit
-            };
-
-            _undoStack.Push(editHistory);
-            _redoStack.Clear();
-            OnCanExecuteChangesChanged();
         }
     }
 
@@ -1279,12 +1278,11 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
-    public void UpdateSelectedItemValue(object? newValue, string column)
+    private void UpdateItemValue(DataRowView? item, object? newValue, string column)
     {
-        if (SelectedItem != null && SelectedItem.Row.Table.Columns.Contains(column))
+        if (item != null && item.Row.Table.Columns.Contains(column))
         {
-            var currentValue = SelectedItem[column];
-
+            var currentValue = item[column];
             bool isDifferent = !Equals(currentValue, newValue);
 
             if (isDifferent)
@@ -1294,29 +1292,40 @@ public partial class DataTableManager : ObservableObject
                     newValue = Math.Round(doubleValue, 4);
                 }
 
+                item[column] = newValue;
+
+                var editHistory = new EditHistory
+                {
+                    Row = item.Row.Table.Rows.IndexOf(item.Row),
+                    Column = item.Row.Table.Columns.IndexOf(column),
+                    OldValue = currentValue,
+                    NewValue = newValue,
+                    AffectedRow = item.Row,
+                    Action = EditAction.CellEdit
+                };
+
                 if (_isGroupingEdits)
                 {
-                    SelectedItem[column] = newValue;
-
-                    _currentGroupedEdits.Add(new EditHistory
-                    {
-                        Row = SelectedItem.Row.Table.Rows.IndexOf(SelectedItem.Row),
-                        Column = SelectedItem.Row.Table.Columns.IndexOf(column),
-                        OldValue = currentValue,
-                        NewValue = newValue,
-                        AffectedRow = SelectedItem.Row,
-                        Action = EditAction.CellEdit
-                    });
-
+                    _currentGroupedEdits.Add(editHistory);
                 }
                 else
                 {
-                    SelectedItem[column] = newValue;
-                    RecordSelectedItemEdit(column, currentValue, newValue);
+                    AddGroupedEdits([editHistory]);
                 }
             }
         }
     }
+
+    public void UpdateSelectedItemValue(object? newValue, string column)
+    {
+        UpdateItemValue(SelectedItem, newValue, column);
+    }
+
+    public void UpdateSelectedItemStringValue(object? newValue, string column)
+    {
+        UpdateItemValue(SelectedItemString, newValue, column);
+    }
+
     #endregion
 
     private bool CanUndo() => _undoStack.Count > 0;

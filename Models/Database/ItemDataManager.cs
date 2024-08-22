@@ -206,6 +206,22 @@ public partial class ItemDataManager: ObservableObject
         return frameViewModel;
     }
 
+    public FrameViewModel? GetFrameViewModel(int itemId, int slotIndex)
+    {
+        if (itemId != 0)
+        {
+            ItemData itemData = new()
+            {
+                ItemId = itemId,
+                SlotIndex = slotIndex
+            };
+
+            var frameViewModel = GetItemData(itemData);
+            return frameViewModel;
+        }
+        return null;
+    }
+
     public static int GetRealClass(int charClass)
     {
         return charClass switch

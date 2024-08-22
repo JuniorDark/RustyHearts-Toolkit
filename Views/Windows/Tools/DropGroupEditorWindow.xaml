@@ -77,7 +77,6 @@
             CommandParameter="9"
             Gesture="Ctrl+Shift+9" />
     </Window.InputBindings>
-
     <Window.Resources>
         <!--  Template for ItemDropGroupList  -->
         <DataTemplate x:Key="ItemDropGroupList">

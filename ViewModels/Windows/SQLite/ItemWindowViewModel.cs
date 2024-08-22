@@ -216,8 +216,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                     {
                         "SetItem", () =>
                         {
-                            SlotIndexMin = 1;
-                            SlotIndexMax = 6;
+                            SlotIndexMin = 0;
+                            SlotIndexMax = 5;
                             IsSlotVisible = Visibility.Visible;
                             IsOptionsVisible = Visibility.Hidden;
                         }

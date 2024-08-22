@@ -26,6 +26,7 @@
     mc:Ignorable="d">
     <Window.InputBindings>
         <KeyBinding Command="{Binding LoadFileCommand}" Gesture="Ctrl+O" />
+        <KeyBinding Command="{Binding LoadFileAsCommand}" Gesture="Ctrl+Shift+O" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileCommand}" Gesture="Ctrl+S" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileAsMIPCommand}" Gesture="Ctrl+Shift+S" />
@@ -39,7 +40,7 @@
             CommandParameter="Replace"
             Gesture="Ctrl+H" />
     </Window.InputBindings>
-    <ContentControl Template="{StaticResource box_red02}">
+    <ContentControl Template="{StaticResource box_violet02}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -63,7 +64,15 @@
                 d:Title="Set Item Editor"
                 ButtonsForeground="White"
                 FontSize="15"
-                Foreground="White" />
+                Foreground="White">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon
+                        Width="20"
+                        Height="20"
+                        Margin="0,-1,0,-3"
+                        Source="/Assets/icon/icon_cash_enchant_reset01.png" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
             <Menu
                 Grid.Row="1"
                 VerticalAlignment="Top"
@@ -72,9 +81,14 @@
                 <ui:MenuItem Header="File" Icon="{ui:SymbolIcon DocumentSplitHint20}">
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
-                        Header="Open RH File..."
+                        Header="Open setitem.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+O" />
+                    <MenuItem
+                        Command="{Binding LoadFileAsCommand}"
+                        Header="Open ..."
+                        Icon="{ui:SymbolIcon DocumentAdd24}"
+                        InputGestureText="Ctrl+Shift+O" />
                     <MenuItem
                         Command="{Binding DataTableManager.SaveFileCommand}"
                         Header="Save"
@@ -156,6 +170,13 @@
                         Icon="{ui:SymbolIcon DocumentTableSearch24}"
                         InputGestureText="Ctrl+H" />
                 </ui:MenuItem>
+                <Separator />
+                <ui:MenuItem Header="Settings" Icon="{ui:SymbolIcon TableSettings20}">
+                    <MenuItem
+                        Command="{Binding DataTableManager.SetTableFolderCommand}"
+                        Header="Set Table Folder"
+                        Icon="{ui:SymbolIcon FolderOpen20}" />
+                </ui:MenuItem>
             </Menu>
             <Menu
                 Grid.Row="2"
@@ -163,7 +184,7 @@
                 FontSize="14"
                 Foreground="White">
                 <MenuItem
-                    Command="{Binding LoadFileCommand}"
+                    Command="{Binding LoadFileAsCommand}"
                     Icon="{ui:SymbolIcon DocumentAdd24,
                                          Filled=True}"
                     ToolTip="Open File" />
@@ -231,7 +252,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-
                 <ui:TabView
                     x:Name="tabView"
                     Grid.Row="0"
@@ -251,23 +271,21 @@
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="299*" />
+                                <ColumnDefinition Width="49*" />
+                                <ColumnDefinition Width="250*" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <StackPanel
-                                Grid.Row="0"
                                 Grid.Column="0"
                                 Margin="5,0,0,0"
                                 HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
+                                VerticalAlignment="Center"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Set ID" />
                                 <control:IntegerUpDown
@@ -283,10 +301,9 @@
                             <StackPanel
                                 Grid.Row="1"
                                 Grid.Column="0"
-                                Grid.ColumnSpan="2"
-                                Margin="0,0,0,0"
+                                Grid.ColumnSpan="3"
                                 HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
+                                VerticalAlignment="Center"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Set Name" />
                                 <TextBox
@@ -301,10 +318,9 @@
                             <StackPanel
                                 Grid.Row="2"
                                 Grid.Column="0"
-                                Grid.ColumnSpan="2"
-                                Margin="0,0,0,0"
+                                Grid.ColumnSpan="3"
                                 HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
+                                VerticalAlignment="Center"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Name (Internal)" />
                                 <TextBox
@@ -319,143 +335,39 @@
 
                             <StackPanel
                                 Grid.Row="3"
-                                Grid.Column="0"
-                                Margin="0,50,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,10,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="1" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="1"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}"
-                                    SlotIcon="/Assets/images/lb_ac_icon.png" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="4"
-                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
                                 Margin="0,10,0,0"
                                 HorizontalAlignment="Left"
                                 Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,10,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="2" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="2"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}"
-                                    SlotIcon="/Assets/images/lb_ac_icon.png" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="5"
-                                Grid.Column="0"
-                                Margin="0,10,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,10,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="3" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="3"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}"
-                                    SlotIcon="/Assets/images/lb_ac_icon.png" />
+                                <ItemsControl AlternationCount="{Binding SetItems.Count}" ItemsSource="{Binding SetItems}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Grid.Column="0"
+                                                Margin="0,5,0,0"
+                                                HorizontalAlignment="Left"
+                                                Orientation="Horizontal">
+                                                <TextBlock
+                                                    Margin="0,0,10,0"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Background="Transparent"
+                                                    FontSize="12"
+                                                    Foreground="Gold"
+                                                    Style="{StaticResource ArialMS}"
+                                                    Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}}" />
+                                                <control:ItemSlot
+                                                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                    CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                                                    FrameViewModel="{Binding FrameViewModel}"
+                                                    ItemNameVisibility="Visible"
+                                                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
 
-                            <StackPanel
-                                Grid.Row="3"
-                                Grid.Column="1"
-                                Margin="0,50,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,10,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="4" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="4"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}"
-                                    SlotIcon="/Assets/images/lb_ac_icon.png" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="4"
-                                Grid.Column="1"
-                                Margin="0,10,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,10,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="5" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="5"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}"
-                                    SlotIcon="/Assets/images/lb_ac_icon.png" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="5"
-                                Grid.Column="1"
-                                Margin="0,10,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,10,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="6" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="6"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}"
-                                    SlotIcon="/Assets/images/lb_ac_icon.png" />
-                            </StackPanel>
                         </Grid>
                     </TabItem>
                     <TabItem
@@ -466,240 +378,119 @@
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <TextBlock
-                                Grid.Row="4"
+                                Grid.Row="1"
                                 Grid.ColumnSpan="2"
                                 Margin="0,20,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
                                 d:Text="Effect"
                                 Background="Transparent"
-                                FontSize="12"
+                                FontSize="14"
                                 Foreground="Gold"
                                 Style="{StaticResource ArialMS}"
                                 Text="{Binding SetEffectText}" />
                             <!--  left Column  -->
-                            <StackPanel
-                                Grid.Row="5"
-                                Grid.ColumnSpan="2"
-                                Margin="0,20,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Vertical">
-                                <Label
-                                    x:Name="lbOption1"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Center"
-                                    Content="2 Pieces Effect"
-                                    Style="{StaticResource ArialMSWhite}" />
-                                <ComboBox
-                                    x:Name="cbOptionCode1"
-                                    Width="500"
-                                    Height="24"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Left"
-                                    VerticalContentAlignment="Center"
-                                    DisplayMemberPath="Name"
-                                    IsEnabled="{Binding IsSetOption00Enabled}"
-                                    IsEnabledChanged="ComboBox_IsEnabledChanged"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding ItemDataManager.OptionItems}"
-                                    SelectedValue="{Binding SetOption00}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}" />
-                                <Label
-                                    x:Name="lbOption2"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Center"
-                                    Content="3 Pieces Effect"
-                                    Style="{StaticResource ArialMSWhite}" />
-                                <ComboBox
-                                    x:Name="cbOptionCode2"
-                                    Width="500"
-                                    Height="24"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Left"
-                                    VerticalContentAlignment="Center"
-                                    DisplayMemberPath="Name"
-                                    IsEnabled="{Binding IsSetOption01Enabled}"
-                                    IsEnabledChanged="ComboBox_IsEnabledChanged"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding ItemDataManager.OptionItems}"
-                                    SelectedValue="{Binding SetOption01}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}" />
-                                <Label
-                                    x:Name="lbOption3"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Center"
-                                    Content="4 Pieces Effect"
-                                    Style="{StaticResource ArialMSWhite}" />
-                                <ComboBox
-                                    x:Name="cbOptionCode3"
-                                    Width="500"
-                                    Height="24"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Left"
-                                    VerticalContentAlignment="Center"
-                                    DisplayMemberPath="Name"
-                                    IsEnabled="{Binding IsSetOption02Enabled}"
-                                    IsEnabledChanged="ComboBox_IsEnabledChanged"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding ItemDataManager.OptionItems}"
-                                    SelectedValue="{Binding SetOption02}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}" />
-                                <Label
-                                    x:Name="lbOption4"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Center"
-                                    Content="5 Pieces Effect"
-                                    Style="{StaticResource ArialMSWhite}" />
-                                <ComboBox
-                                    x:Name="cbOptionCode4"
-                                    Width="500"
-                                    Height="24"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Left"
-                                    VerticalContentAlignment="Center"
-                                    DisplayMemberPath="Name"
-                                    IsEnabled="{Binding IsSetOption03Enabled}"
-                                    IsEnabledChanged="ComboBox_IsEnabledChanged"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding ItemDataManager.OptionItems}"
-                                    SelectedValue="{Binding SetOption03}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}" />
-                                <Label
-                                    x:Name="lbOption5"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Center"
-                                    Content="6 Pieces Effect"
-                                    Style="{StaticResource ArialMSWhite}" />
-                                <ComboBox
-                                    x:Name="cbOptionCode5"
-                                    Width="500"
-                                    Height="24"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Left"
-                                    VerticalContentAlignment="Center"
-                                    DisplayMemberPath="Name"
-                                    IsEnabled="{Binding IsSetOption04Enabled}"
-                                    IsEnabledChanged="ComboBox_IsEnabledChanged"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding ItemDataManager.OptionItems}"
-                                    SelectedValue="{Binding SetOption04}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}" />
-                            </StackPanel>
+                            <ItemsControl
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                AlternationCount="{Binding SetOptions.Count}"
+                                ItemsSource="{Binding SetOptions}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel
+                                            Margin="0,10,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Vertical">
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Top"
+                                                Foreground="Gold">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}" Value="0">
+                                                                <Setter Property="Text" Value="2 Pieces Effect" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}" Value="1">
+                                                                <Setter Property="Text" Value="3 Pieces Effect" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}" Value="2">
+                                                                <Setter Property="Text" Value="4 Pieces Effect" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}" Value="3">
+                                                                <Setter Property="Text" Value="5 Pieces Effect" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}" Value="4">
+                                                                <Setter Property="Text" Value="6 Pieces Effect" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+
+                                            <ComboBox
+                                                x:Name="cbOptionCode"
+                                                Width="480"
+                                                Height="24"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                HorizontalContentAlignment="Left"
+                                                VerticalContentAlignment="Center"
+                                                DisplayMemberPath="Name"
+                                                IsEnabled="{Binding IsSetOptionEnabled}"
+                                                IsReadOnly="True"
+                                                ItemsSource="{Binding DataContext.ItemDataManager.OptionItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                SelectedValue="{Binding SetOption}"
+                                                SelectedValuePath="ID"
+                                                Style="{StaticResource ComboBoxStyle}"
+                                                Template="{StaticResource lb_combobox}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                             <!--  Right Column  -->
-                            <StackPanel
-                                Grid.Row="5"
+                            <ItemsControl
+                                Grid.Row="0"
                                 Grid.Column="1"
-                                Margin="0,20,0,0"
-                                HorizontalAlignment="Right"
-                                Orientation="Vertical">
-                                <Label
-                                    x:Name="lbOptionValue1"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Center"
-                                    Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=2}"
-                                    Style="{StaticResource ArialMSWhite}" />
-                                <control:IntegerUpDown
-                                    x:Name="intOptionValue1"
-                                    Width="100"
-                                    Increment="1"
-                                    IsEnabled="{Binding IsSetOption00Enabled}"
-                                    Maximum="{Binding OptionMaxValue}"
-                                    Minimum="{Binding OptionMinValue}"
-                                    Value="{Binding SetOptionValue00, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <Label
-                                    x:Name="lbOptionValue2"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Center"
-                                    Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=3}"
-                                    Style="{StaticResource ArialMSWhite}" />
-                                <control:IntegerUpDown
-                                    x:Name="intOptionValue2"
-                                    Width="100"
-                                    Increment="1"
-                                    IsEnabled="{Binding IsSetOption01Enabled}"
-                                    Maximum="{Binding OptionMaxValue}"
-                                    Minimum="{Binding OptionMinValue}"
-                                    Value="{Binding SetOptionValue01, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <Label
-                                    x:Name="lbOptionValue3"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Center"
-                                    Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=4}"
-                                    FontSize="10"
-                                    Style="{StaticResource ArialMSWhite}" />
-                                <control:IntegerUpDown
-                                    x:Name="intOptionValue3"
-                                    Width="100"
-                                    Increment="1"
-                                    IsEnabled="{Binding IsSetOption02Enabled}"
-                                    Maximum="{Binding OptionMaxValue}"
-                                    Minimum="{Binding OptionMinValue}"
-                                    Value="{Binding SetOptionValue02, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <Label
-                                    x:Name="lbOptionValue4"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Center"
-                                    Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=5}"
-                                    FontSize="10"
-                                    Style="{StaticResource ArialMSWhite}" />
-                                <control:IntegerUpDown
-                                    x:Name="intOptionValue4"
-                                    Width="100"
-                                    Increment="1"
-                                    IsEnabled="{Binding IsSetOption03Enabled}"
-                                    Maximum="{Binding OptionMaxValue}"
-                                    Minimum="{Binding OptionMinValue}"
-                                    Value="{Binding SetOptionValue03, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                <Label
-                                    x:Name="lbOptionValue5"
-                                    VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Center"
-                                    Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=6}"
-                                    FontSize="10"
-                                    Style="{StaticResource ArialMSWhite}" />
-                                <control:IntegerUpDown
-                                    x:Name="intOptionValue5"
-                                    Width="100"
-                                    Increment="1"
-                                    IsEnabled="{Binding IsSetOption04Enabled}"
-                                    Maximum="{Binding OptionMaxValue}"
-                                    Minimum="{Binding OptionMinValue}"
-                                    Value="{Binding SetOptionValue04, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
+                                AlternationCount="{Binding SetOptions.Count}"
+                                ItemsSource="{Binding SetOptions}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Margin="0,10,0,0" Orientation="Vertical">
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Top"
+                                                Foreground="Gold"
+                                                Style="{StaticResource ArialMS}"
+                                                Text="Value" />
+                                            <ui:NumberBox
+                                                x:Name="intOptionValue"
+                                                Width="120"
+                                                ClearButtonEnabled="False"
+                                                IsEnabled="{Binding IsSetOptionEnabled}"
+                                                LargeChange="10"
+                                                Maximum="{Binding DataContext.OptionMaxValue, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                Minimum="{Binding DataContext.OptionMinValue, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                SmallChange="1"
+                                                Value="{Binding SetOptionValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
 
                         </Grid>
                     </TabItem>
 
                 </ui:TabView>
-
             </Grid>
 
             <DataGrid
