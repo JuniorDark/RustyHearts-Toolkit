@@ -3558,12 +3558,15 @@
 
                         <StackPanel
                             Grid.Row="0"
-                            Margin="0,10"
+                            Margin="0,5"
                             Orientation="Horizontal">
-                            <TextBlock Foreground="White" Text="Slots Used" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Text="Slots Used" />
                             <TextBox
                                 Width="150"
-                                Height="20"
+                                Height="30"
                                 Margin="10,0"
                                 d:Text="180"
                                 IsReadOnly="True"
@@ -3613,12 +3616,15 @@
                         <StackPanel
                             Grid.Row="3"
                             Grid.Column="1"
-                            Margin="0,10"
+                            Margin="0,5"
                             Orientation="Horizontal">
-                            <TextBlock Foreground="White" Text="Gold Stored" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Text="Gold Stored" />
                             <TextBox
                                 Width="150"
-                                Height="20"
+                                Height="30"
                                 Margin="10,0"
                                 d:Text="100"
                                 IsReadOnly="True"
@@ -3662,12 +3668,15 @@
 
                         <StackPanel
                             Grid.Row="0"
-                            Margin="0,10"
+                            Margin="0,5"
                             Orientation="Horizontal">
-                            <TextBlock Foreground="White" Text="Account Slots Used" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Text="Account Slots Used" />
                             <TextBox
                                 Width="150"
-                                Height="20"
+                                Height="30"
                                 Margin="10,0"
                                 d:Text="180"
                                 IsReadOnly="True"
@@ -3717,12 +3726,15 @@
                         <StackPanel
                             Grid.Row="3"
                             Grid.Column="1"
-                            Margin="0,10"
+                            Margin="0,5"
                             Orientation="Horizontal">
-                            <TextBlock Foreground="White" Text="Account Gold Stored" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Text="Account Gold Stored" />
                             <TextBox
                                 Width="150"
-                                Height="20"
+                                Height="30"
                                 Margin="10,0"
                                 d:Text="100"
                                 IsReadOnly="True"

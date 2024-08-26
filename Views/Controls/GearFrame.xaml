@@ -21,7 +21,7 @@
             <RowDefinition Height="22" />
             <RowDefinition Height="22" />
             <RowDefinition Height="22" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="22" />
             <RowDefinition Height="30" />
             <RowDefinition Height="35" />

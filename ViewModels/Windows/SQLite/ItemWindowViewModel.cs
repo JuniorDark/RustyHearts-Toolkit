@@ -3,7 +3,6 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.SQLite;
 using RHToolkit.Services;
-using RHToolkit.ViewModels.Controls;
 using System.Windows.Controls;
 using static RHToolkit.Models.EnumService;
 
@@ -19,7 +18,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
         _gmDatabaseService = gmDatabaseService;
         _cachedDataManager = cachedDataManager;
         _itemDataManager = itemDataManager;
-
+        IsSlotVisible = Visibility.Visible;
+        IsOptionsVisible = Visibility.Visible;
         WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
     }
@@ -52,9 +52,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void AddItem()
     {
-        if (FrameViewModel != null)
+        if (ItemDataManager.FrameViewModel != null)
         {
-            var itemData = FrameViewModel.GetItemData();
+            var itemData = ItemDataManager.FrameViewModel.GetItemData();
 
             if (itemData != null && !string.IsNullOrEmpty(MessageType))
             {
@@ -242,10 +242,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                 }
                 else
                 {
-                    if (FrameViewModel != null)
+                    if (ItemDataManager.FrameViewModel != null)
                     {
-                        FrameViewModel.PageIndex = itemData.PageIndex;
-                        FrameViewModel.SlotIndex = itemData.SlotIndex;
+                        ItemDataManager.FrameViewModel.PageIndex = itemData.PageIndex;
+                        ItemDataManager.FrameViewModel.SlotIndex = itemData.SlotIndex;
                     }
                 }
             }), DispatcherPriority.Background);
@@ -455,34 +455,34 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     {
         var frameViewModel = ItemDataManager.GetItemData(itemData);
 
-        FrameViewModel = frameViewModel;
+        ItemDataManager.FrameViewModel = frameViewModel;
 
-        FrameViewModel.SlotIndex = itemData.SlotIndex;
-        FrameViewModel.ItemId = itemData.ItemId;
-        FrameViewModel.ItemAmount = itemData.ItemAmount;
-        FrameViewModel.MaxDurability = itemData.DurabilityMax;
-        FrameViewModel.EnhanceLevel = itemData.EnhanceLevel;
-        FrameViewModel.AugmentValue = itemData.AugmentStone;
-        FrameViewModel.Rank = itemData.Rank;
-        FrameViewModel.Weight = itemData.Weight;
-        FrameViewModel.ReconstructionMax = itemData.ReconstructionMax;
-        FrameViewModel.Reconstruction = itemData.Reconstruction;
-        FrameViewModel.RandomOption01 = itemData.Option1Code;
-        FrameViewModel.RandomOption02 = itemData.Option2Code;
-        FrameViewModel.RandomOption03 = itemData.Option3Code;
-        FrameViewModel.RandomOption01Value = itemData.Option1Value;
-        FrameViewModel.RandomOption02Value = itemData.Option2Value;
-        FrameViewModel.RandomOption03Value = itemData.Option3Value;
-        FrameViewModel.SocketCount = itemData.SocketCount;
-        FrameViewModel.Socket01Color = itemData.Socket1Color;
-        FrameViewModel.Socket02Color = itemData.Socket2Color;
-        FrameViewModel.Socket03Color = itemData.Socket3Color;
-        FrameViewModel.SocketOption01 = itemData.Socket1Code;
-        FrameViewModel.SocketOption02 = itemData.Socket2Code;
-        FrameViewModel.SocketOption03 = itemData.Socket3Code;
-        FrameViewModel.SocketOption01Value = itemData.Socket1Value;
-        FrameViewModel.SocketOption02Value = itemData.Socket2Value;
-        FrameViewModel.SocketOption03Value = itemData.Socket3Value;
+        ItemDataManager.FrameViewModel.SlotIndex = itemData.SlotIndex;
+        ItemDataManager.FrameViewModel.ItemId = itemData.ItemId;
+        ItemDataManager.FrameViewModel.ItemAmount = itemData.ItemAmount;
+        ItemDataManager.FrameViewModel.MaxDurability = itemData.DurabilityMax;
+        ItemDataManager.FrameViewModel.EnhanceLevel = itemData.EnhanceLevel;
+        ItemDataManager.FrameViewModel.AugmentValue = itemData.AugmentStone;
+        ItemDataManager.FrameViewModel.Rank = itemData.Rank;
+        ItemDataManager.FrameViewModel.Weight = itemData.Weight;
+        ItemDataManager.FrameViewModel.ReconstructionMax = itemData.ReconstructionMax;
+        ItemDataManager.FrameViewModel.Reconstruction = itemData.Reconstruction;
+        ItemDataManager.FrameViewModel.RandomOption01 = itemData.Option1Code;
+        ItemDataManager.FrameViewModel.RandomOption02 = itemData.Option2Code;
+        ItemDataManager.FrameViewModel.RandomOption03 = itemData.Option3Code;
+        ItemDataManager.FrameViewModel.RandomOption01Value = itemData.Option1Value;
+        ItemDataManager.FrameViewModel.RandomOption02Value = itemData.Option2Value;
+        ItemDataManager.FrameViewModel.RandomOption03Value = itemData.Option3Value;
+        ItemDataManager.FrameViewModel.SocketCount = itemData.SocketCount;
+        ItemDataManager.FrameViewModel.Socket01Color = itemData.Socket1Color;
+        ItemDataManager.FrameViewModel.Socket02Color = itemData.Socket2Color;
+        ItemDataManager.FrameViewModel.Socket03Color = itemData.Socket3Color;
+        ItemDataManager.FrameViewModel.SocketOption01 = itemData.Socket1Code;
+        ItemDataManager.FrameViewModel.SocketOption02 = itemData.Socket2Code;
+        ItemDataManager.FrameViewModel.SocketOption03 = itemData.Socket3Code;
+        ItemDataManager.FrameViewModel.SocketOption01Value = itemData.Socket1Value;
+        ItemDataManager.FrameViewModel.SocketOption02Value = itemData.Socket2Value;
+        ItemDataManager.FrameViewModel.SocketOption03Value = itemData.Socket3Value;
 
         SelectedItem = ItemDataManager.ItemDataItems?.FirstOrDefault(item => item.ItemId == itemData.ItemId);
 
@@ -490,45 +490,45 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
 
     private void UpdateItemData(ItemData itemData)
     {
-        if (FrameViewModel != null)
+        if (ItemDataManager.FrameViewModel != null)
         {
-            FrameViewModel.IsNewItem = IsNewItem;
-            FrameViewModel.ItemId = itemData.ItemId;
-            FrameViewModel.ItemName = itemData.ItemName;
-            FrameViewModel.Description = itemData.Description;
-            FrameViewModel.ItemBranch = itemData.Branch;
-            FrameViewModel.IconName = itemData.IconName;
-            FrameViewModel.ItemTrade = itemData.ItemTrade;
-            FrameViewModel.MaxDurability = itemData.Durability;
-            FrameViewModel.Weight = itemData.Weight;
-            FrameViewModel.ReconstructionMax = itemData.ReconstructionMax;
-            FrameViewModel.Reconstruction = itemData.ReconstructionMax;
-            FrameViewModel.OverlapCnt = itemData.OverlapCnt;
-            FrameViewModel.ItemAmount = itemData.ItemAmount;
-            FrameViewModel.Rank = itemData.Rank;
-            FrameViewModel.Type = itemData.Type;
-            FrameViewModel.Category = itemData.Category;
-            FrameViewModel.SubCategory = itemData.SubCategory;
-            FrameViewModel.JobClass = itemData.JobClass;
-            FrameViewModel.Defense = itemData.Defense;
-            FrameViewModel.MagicDefense = itemData.MagicDefense;
-            FrameViewModel.WeaponID00 = itemData.WeaponID00;
-            FrameViewModel.SellPrice = itemData.SellPrice;
-            FrameViewModel.RequiredLevel = itemData.LevelLimit;
-            FrameViewModel.SetId = itemData.SetId;
-            FrameViewModel.PetFood = itemData.PetFood;
-            FrameViewModel.FixedOption01 = itemData.FixOption1Code;
-            FrameViewModel.FixedOption01Value = itemData.FixOption1Value;
-            FrameViewModel.FixedOption02 = itemData.FixOption2Code;
-            FrameViewModel.FixedOption02Value = itemData.FixOption2Value;
-            FrameViewModel.OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
-            FrameViewModel.SocketCountMax = itemData.SocketCountMax;
-            FrameViewModel.SocketCount = itemData.SocketCountMax;
+            ItemDataManager.FrameViewModel.IsNewItem = IsNewItem;
+            ItemDataManager.FrameViewModel.ItemId = itemData.ItemId;
+            ItemDataManager.FrameViewModel.ItemName = itemData.ItemName;
+            ItemDataManager.FrameViewModel.Description = itemData.Description;
+            ItemDataManager.FrameViewModel.ItemBranch = itemData.Branch;
+            ItemDataManager.FrameViewModel.IconName = itemData.IconName;
+            ItemDataManager.FrameViewModel.ItemTrade = itemData.ItemTrade;
+            ItemDataManager.FrameViewModel.MaxDurability = itemData.Durability;
+            ItemDataManager.FrameViewModel.Weight = itemData.Weight;
+            ItemDataManager.FrameViewModel.ReconstructionMax = itemData.ReconstructionMax;
+            ItemDataManager.FrameViewModel.Reconstruction = itemData.ReconstructionMax;
+            ItemDataManager.FrameViewModel.OverlapCnt = itemData.OverlapCnt;
+            ItemDataManager.FrameViewModel.ItemAmount = itemData.ItemAmount;
+            ItemDataManager.FrameViewModel.Rank = itemData.Rank;
+            ItemDataManager.FrameViewModel.Type = itemData.Type;
+            ItemDataManager.FrameViewModel.Category = itemData.Category;
+            ItemDataManager.FrameViewModel.SubCategory = itemData.SubCategory;
+            ItemDataManager.FrameViewModel.JobClass = itemData.JobClass;
+            ItemDataManager.FrameViewModel.Defense = itemData.Defense;
+            ItemDataManager.FrameViewModel.MagicDefense = itemData.MagicDefense;
+            ItemDataManager.FrameViewModel.WeaponID00 = itemData.WeaponID00;
+            ItemDataManager.FrameViewModel.SellPrice = itemData.SellPrice;
+            ItemDataManager.FrameViewModel.RequiredLevel = itemData.LevelLimit;
+            ItemDataManager.FrameViewModel.SetId = itemData.SetId;
+            ItemDataManager.FrameViewModel.PetFood = itemData.PetFood;
+            ItemDataManager.FrameViewModel.FixedOption01 = itemData.FixOption1Code;
+            ItemDataManager.FrameViewModel.FixedOption01Value = itemData.FixOption1Value;
+            ItemDataManager.FrameViewModel.FixedOption02 = itemData.FixOption2Code;
+            ItemDataManager.FrameViewModel.FixedOption02Value = itemData.FixOption2Value;
+            ItemDataManager.FrameViewModel.OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
+            ItemDataManager.FrameViewModel.SocketCountMax = itemData.SocketCountMax;
+            ItemDataManager.FrameViewModel.SocketCount = itemData.SocketCountMax;
         }
         else
         {
             var frameViewModel = ItemDataManager.GetItemData(itemData);
-            FrameViewModel = frameViewModel;
+            ItemDataManager.FrameViewModel = frameViewModel;
         }
 
     }
@@ -568,9 +568,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
 
         AddItemCommand.NotifyCanExecuteChanged();
     }
-
-    [ObservableProperty]
-    private FrameViewModel? _frameViewModel;
 
     [ObservableProperty]
     private List<ItemData>? _itemDataList;

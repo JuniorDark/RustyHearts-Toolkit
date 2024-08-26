@@ -45,6 +45,9 @@ public partial class ItemDataManager: ObservableObject
 
     }
 
+    [ObservableProperty]
+    private FrameViewModel? _frameViewModel;
+
     #region ItemData
     public bool IsInvalidItemID(int itemID)
     {
@@ -206,14 +209,15 @@ public partial class ItemDataManager: ObservableObject
         return frameViewModel;
     }
 
-    public FrameViewModel? GetFrameViewModel(int itemId, int slotIndex)
+    public FrameViewModel? GetFrameViewModel(int itemId, int slotIndex, int itemAmount)
     {
         if (itemId != 0)
         {
             ItemData itemData = new()
             {
                 ItemId = itemId,
-                SlotIndex = slotIndex
+                SlotIndex = slotIndex,
+                ItemAmount = itemAmount
             };
 
             var frameViewModel = GetItemData(itemData);
@@ -315,18 +319,18 @@ public partial class ItemDataManager: ObservableObject
             if (option.ID == 0)
                 return true;
 
-            //if (FrameViewModel != null)
-            //{
-            //    selectedOptions.Add(FrameViewModel.RandomOption01);
-            //    selectedOptions.Add(FrameViewModel.RandomOption02);
-            //    selectedOptions.Add(FrameViewModel.RandomOption03);
-            //    selectedOptions.Add(FrameViewModel.SocketOption01);
-            //    selectedOptions.Add(FrameViewModel.SocketOption02);
-            //    selectedOptions.Add(FrameViewModel.SocketOption03);
+            if (FrameViewModel != null)
+            {
+                selectedOptions.Add(FrameViewModel.RandomOption01);
+                selectedOptions.Add(FrameViewModel.RandomOption02);
+                selectedOptions.Add(FrameViewModel.RandomOption03);
+                selectedOptions.Add(FrameViewModel.SocketOption01);
+                selectedOptions.Add(FrameViewModel.SocketOption02);
+                selectedOptions.Add(FrameViewModel.SocketOption03);
 
-            //    if (selectedOptions.Contains(option.ID))
-            //        return true;
-            //}
+                if (selectedOptions.Contains(option.ID))
+                    return true;
+            }
 
             // text search filter
             if (!string.IsNullOrEmpty(OptionSearch))

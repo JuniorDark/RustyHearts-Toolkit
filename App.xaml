@@ -23,7 +23,6 @@
                 <ResourceDictionary Source="Styles/CloseButton.xaml" />
                 <ResourceDictionary Source="Styles/Combobox.xaml" />
                 <ResourceDictionary Source="Styles/Datagrid.xaml" />
-                <ResourceDictionary Source="Styles/IntegerUpDown.xaml" />
                 <ResourceDictionary Source="Styles/Label.xaml" />
                 <ResourceDictionary Source="Styles/lb_arrow.xaml" />
                 <ResourceDictionary Source="Styles/lb_context.xaml" />

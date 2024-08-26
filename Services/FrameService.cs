@@ -99,19 +99,35 @@ namespace RHToolkit.Services
             return "#ffffff";
         }
 
-        public string FormatMainStat(int itemType, int physicalStat, int magicStat, int jobClass, int weaponId)
+        public string FormatMainStat(int itemType, int physicalStat, int magicStat, int jobClass, int weaponId, int enhanceLevel)
         {
             string mainStat = "";
+            var enhanceValue = _gmDatabaseService.GetEnhanceValue(enhanceLevel);
 
             if ((ItemType)itemType == ItemType.Armor && physicalStat > 0 && magicStat > 0)
             {
-                mainStat = $"{Resources.PhysicalDefense} +{physicalStat}\n{Resources.MagicDefense} +{magicStat}";
-            }
+                if (enhanceLevel > 0)
+                {
+                    mainStat = $"{Resources.PhysicalDefense} +{physicalStat}\nAdd {Resources.PhysicalDefense} +{physicalStat * enhanceValue}\n{Resources.MagicDefense} +{magicStat}\nAdd {Resources.MagicDefense} +{magicStat * enhanceValue}";
+                }
+                else
+                {
+                    mainStat = $"{Resources.PhysicalDefense} +{physicalStat}\n{Resources.MagicDefense} +{magicStat}";
+                }
 
+            }
             else if ((ItemType)itemType == ItemType.Weapon)
             {
                 (int physicalAttackMin, int physicalAttackMax, int magicAttackMin, int magicAttackMax) = _gmDatabaseService.GetWeaponStats(jobClass, weaponId);
-                mainStat = $"{Resources.PhysicalDamage} +{physicalAttackMin}~{physicalAttackMax}\n{Resources.MagicDamage} +{magicAttackMin}~{magicAttackMax}";
+
+                if (enhanceLevel > 0)
+                {
+                    mainStat = $"{Resources.PhysicalDamage} +{physicalAttackMin}~{physicalAttackMax}\nAdd {Resources.PhysicalDamage} +{Math.Round(physicalAttackMax * enhanceValue)}\n{Resources.MagicDamage} +{magicAttackMin}~{magicAttackMax}\nAdd {Resources.MagicDamage} +{Math.Round(magicAttackMax * enhanceValue)}";
+                }
+                else
+                {
+                    mainStat = $"{Resources.PhysicalDamage} +{physicalAttackMin}~{physicalAttackMax}\n{Resources.MagicDamage} +{magicAttackMin}~{magicAttackMax}";
+                }
             }
 
             return mainStat;

@@ -236,7 +236,7 @@ namespace RHToolkit.ViewModels.Windows
             CloseFileCommand.NotifyCanExecuteChanged();
             OpenSearchDialogCommand.NotifyCanExecuteChanged();
             AddItemCommand.NotifyCanExecuteChanged();
-            CreateItemCommand.NotifyCanExecuteChanged();
+            AddRowCommand.NotifyCanExecuteChanged();
         }
 
         #endregion
@@ -250,19 +250,16 @@ namespace RHToolkit.ViewModels.Windows
             {
                 if (int.TryParse(parameter, out int slotIndex))
                 {
-                    if (DataTableManager.SelectedItem != null)
+                    var itemData = new ItemData
                     {
-                        var itemData = new ItemData
-                        {
-                            SlotIndex = slotIndex,
-                            OverlapCnt = DropItemCount,
-                            ItemId = DropGroupItems[slotIndex].DropItemCode
-                        };
+                        SlotIndex = slotIndex,
+                        OverlapCnt = DropItemCount,
+                        ItemId = DropGroupItems[slotIndex].DropItemCode
+                    };
 
-                        var token = _token;
+                    var token = _token;
 
-                        _windowsService.OpenItemWindow(token, "DropGroup", itemData);
-                    }
+                    _windowsService.OpenItemWindow(token, "DropGroup", itemData);
                 }
 
             }
@@ -280,28 +277,32 @@ namespace RHToolkit.ViewModels.Windows
 
                 if (DataTableManager.SelectedItem != null && itemData.SlotIndex >= 0 && itemData.SlotIndex <= DropGroupItems.Count)
                 {
-                    UpdateDropGroupItem(itemData.ItemId, itemData.SlotIndex);
+                    UpdateDropGroupItem(itemData);
                 }
             }
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private void CreateItem()
+        private void AddRow()
         {
-            if (DataTableManager.DataTable != null)
+            try
             {
                 DataTableManager.AddNewRow();
             }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
         }
 
-        private void UpdateDropGroupItem(int itemId, int slotIndex)
+        private void UpdateDropGroupItem(ItemData itemData)
         {
-            if (itemId != 0)
+            if (itemData.ItemId != 0)
             {
                 DataTableManager.StartGroupingEdits();
-                var frameViewModel = ItemDataManager.GetFrameViewModel(itemId, slotIndex);
-                DropGroupItems[slotIndex].DropItemCode = itemId;
-                DropGroupItems[slotIndex].FrameViewModel = frameViewModel;
+                var frameViewModel = ItemDataManager.GetFrameViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+                DropGroupItems[itemData.SlotIndex].DropItemCode = itemData.ItemId;
+                DropGroupItems[itemData.SlotIndex].FrameViewModel = frameViewModel;
                 OnPropertyChanged(nameof(DropGroupItems));
                 DataTableManager.EndGroupingEdits();
             }
@@ -314,10 +315,18 @@ namespace RHToolkit.ViewModels.Windows
         [RelayCommand]
         private void RemoveItem(string parameter)
         {
-            if (int.TryParse(parameter, out int slotIndex))
+            try
             {
-                RemoveDropGroupItem(slotIndex);
+                if (int.TryParse(parameter, out int slotIndex))
+                {
+                    RemoveDropGroupItem(slotIndex);
+                }
             }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+            
         }
 
         private void RemoveDropGroupItem(int slotIndex)
@@ -444,7 +453,7 @@ namespace RHToolkit.ViewModels.Windows
                         End = selectedItem.Row.Table.Columns.Contains($"nEnd{i + 1:00}")
                         ? (int)selectedItem[$"nEnd{i + 1:00}"]
                         : 0,
-                        FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nDropItemCode{i + 1:00}"], i + 1)
+                        FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nDropItemCode{i + 1:00}"], i + 1, 1)
                     };
 
                     DropGroupItems.Add(item);
@@ -578,48 +587,53 @@ namespace RHToolkit.ViewModels.Windows
 
             _isUpdatingDropItemCountTotal = true;
 
-            if (DataTableManager.SelectedItem != null)
+            try
             {
-                DataTableManager.StartGroupingEdits();
+                if (DataTableManager.SelectedItem != null)
+                {
+                    DataTableManager.StartGroupingEdits();
 
-                if (DropGroupType == ItemDropGroupType.ItemDropGroupList)
-                {
-                    // Update NDropItemCount values proportionally
-                    int currentTotal = DropGroupItems.Sum(item => item.NDropItemCount);
-                    if (currentTotal > 0)
+                    if (DropGroupType == ItemDropGroupType.ItemDropGroupList)
                     {
-                        double scale = value / currentTotal;
-                        foreach (var item in DropGroupItems)
+                        // Update NDropItemCount values proportionally
+                        int currentTotal = DropGroupItems.Sum(item => item.NDropItemCount);
+                        if (currentTotal > 0)
                         {
-                            if (item.DropItemCode > 0)
+                            int scale = (int)value / currentTotal;
+                            foreach (var item in DropGroupItems)
                             {
-                                item.NDropItemCount = (int)Math.Round(item.NDropItemCount * scale);
+                                if (item.DropItemCode > 0)
+                                {
+                                    item.NDropItemCount *= scale;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Update FDropItemCount values proportionally
+                        double currentTotal = DropGroupItems.Sum(item => item.FDropItemCount);
+                        if (currentTotal > 0)
+                        {
+                            double scale = value / currentTotal;
+                            foreach (var item in DropGroupItems)
+                            {
+                                if (item.DropItemCode > 0)
+                                {
+                                    item.FDropItemCount *= scale;
+                                }
                             }
                         }
                     }
                 }
-                else
-                {
-                    // Update FDropItemCount values proportionally
-                    double currentTotal = DropGroupItems.Sum(item => item.FDropItemCount);
-                    if (currentTotal > 0)
-                    {
-                        double scale = value / currentTotal;
-                        foreach (var item in DropGroupItems)
-                        {
-                            if (item.DropItemCode > 0)
-                            {
-                                item.FDropItemCount = (double)(item.FDropItemCount * scale);
-                            }
-                        }
-                    }
-                }
+                OnPropertyChanged(nameof(DropGroupItems));
+                DataTableManager.EndGroupingEdits();
+                CalculateDropItemCountTotal();
             }
-            OnPropertyChanged(nameof(DropGroupItems));
-            DataTableManager.EndGroupingEdits();
-            CalculateDropItemCountTotal();
-
-            _isUpdatingDropItemCountTotal = false;
+            finally
+            {
+                _isUpdatingDropItemCountTotal = false;
+            }
         }
 
         #endregion
@@ -645,20 +659,25 @@ namespace RHToolkit.ViewModels.Windows
             {
                 _isUpdatingDropItemCountTotal = true;
 
-                if (DropGroupType == ItemDropGroupType.ItemDropGroupList)
+                try
                 {
-                    // Handle NDropItemCount
-                    int totalNDropItemCount = DropGroupItems.Sum(item => item.NDropItemCount);
-                    DropItemCountTotalValue = totalNDropItemCount;
+                    if (DropGroupType == ItemDropGroupType.ItemDropGroupList)
+                    {
+                        // Handle NDropItemCount
+                        int totalNDropItemCount = DropGroupItems.Sum(item => item.NDropItemCount);
+                        DropItemCountTotalValue = totalNDropItemCount;
+                    }
+                    else
+                    {
+                        // Handle FDropItemCount
+                        double totalFDropItemCount = DropGroupItems.Sum(item => item.FDropItemCount);
+                        DropItemCountTotalValue = totalFDropItemCount;
+                    }
                 }
-                else
+                finally
                 {
-                    // Handle FDropItemCount
-                    double totalFDropItemCount = DropGroupItems.Sum(item => item.FDropItemCount);
-                    DropItemCountTotalValue = totalFDropItemCount;
+                    _isUpdatingDropItemCountTotal = false;
                 }
-
-                _isUpdatingDropItemCountTotal = false;
 
                 if (DropGroupType == ItemDropGroupType.ItemDropGroupList)
                 {

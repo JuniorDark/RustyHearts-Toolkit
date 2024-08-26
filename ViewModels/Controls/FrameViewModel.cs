@@ -227,10 +227,11 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     public string RankText => FrameService.GetRankText(Rank);
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(MainStatText))]
     private int _enhanceLevel;
 
     [ObservableProperty]
-    private int _enhanceLevelMax = 20;
+    private int _enhanceLevelMax = 25;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CategoryText))]
@@ -249,7 +250,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
         }
         else
         {
-            EnhanceLevelMax = 20;
+            EnhanceLevelMax = 25;
             AugmentValueMax = 100000;
             MaxDurabilityMax = 100000;
         }
@@ -275,7 +276,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     [NotifyPropertyChangedFor(nameof(MainStatText))]
     private int _weaponID00;
 
-    public string MainStatText => _frameService.FormatMainStat(Type, Defense, MagicDefense, JobClass, WeaponID00);
+    public string MainStatText => _frameService.FormatMainStat(Type, Defense, MagicDefense, JobClass, WeaponID00, EnhanceLevel);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SellValueText))]

@@ -168,7 +168,7 @@ namespace RHToolkit.ViewModels.Windows
             CloseFileCommand.NotifyCanExecuteChanged();
             OpenSearchDialogCommand.NotifyCanExecuteChanged();
             AddItemCommand.NotifyCanExecuteChanged();
-            CreateItemCommand.NotifyCanExecuteChanged();
+            AddRowCommand.NotifyCanExecuteChanged();
         }
 
         #endregion
@@ -182,18 +182,15 @@ namespace RHToolkit.ViewModels.Windows
             {
                 if (int.TryParse(parameter, out int slotIndex))
                 {
-                    if (DataTableManager.SelectedItem != null)
+                    var itemData = new ItemData
                     {
-                        var itemData = new ItemData
-                        {
-                            SlotIndex = slotIndex,
-                            ItemId = SetItems[slotIndex].SetItemID
-                        };
+                        SlotIndex = slotIndex,
+                        ItemId = SetItems[slotIndex].SetItemID
+                    };
 
-                        var token = _token;
+                    var token = _token;
 
-                        _windowsService.OpenItemWindow(token, "SetItem", itemData);
-                    }
+                    _windowsService.OpenItemWindow(token, "SetItem", itemData);
                 }
 
             }
@@ -209,38 +206,35 @@ namespace RHToolkit.ViewModels.Windows
             {
                 var itemData = message.Value;
 
-                if (DataTableManager.SelectedItem != null && itemData.SlotIndex >= 0 && itemData.SlotIndex <= 5)
+                if (DataTableManager.SelectedItem != null && itemData.SlotIndex >= 0 && itemData.SlotIndex < 6)
                 {
-                    UpdateDropGroupItem(itemData.ItemId, itemData.SlotIndex);
+                    UpdateDropGroupItem(itemData);
                 }
             }
         }
 
-        private void UpdateDropGroupItem(int itemId, int slotIndex)
+        private void UpdateDropGroupItem(ItemData itemData)
         {
-            if (itemId != 0)
+            if (itemData.ItemId != 0)
             {
-                var frameViewModel = ItemDataManager.GetFrameViewModel(itemId, slotIndex);
-                SetItems[slotIndex].SetItemID = itemId;
-                SetItems[slotIndex].FrameViewModel = frameViewModel;
+                var frameViewModel = ItemDataManager.GetFrameViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+                SetItems[itemData.SlotIndex].SetItemID = itemData.ItemId;
+                SetItems[itemData.SlotIndex].FrameViewModel = frameViewModel;
                 OnPropertyChanged(nameof(SetItems));
             }
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private void CreateItem()
+        private void AddRow()
         {
             try
             {
-                if (DataTableManager.DataTable != null)
-                {
-                    DataTableManager.AddNewRow();
-                    SetName = "New Set";
+                DataTableManager.AddNewRow();
+                SetName = "New Set";
 
-                    if (DataTableManager.SelectedItemString != null)
-                    {
-                        SetNameString = "New Set";
-                    }
+                if (DataTableManager.SelectedItemString != null)
+                {
+                    SetNameString = "New Set";
                 }
             }
             catch (Exception ex)
@@ -270,7 +264,7 @@ namespace RHToolkit.ViewModels.Windows
 
         private void RemoveSetItem(int slotIndex)
         {
-            if (slotIndex >= 0 && slotIndex <= 5 && SetItems[slotIndex].SetItemID != 0)
+            if (slotIndex >= 0 && slotIndex < 6 && SetItems[slotIndex].SetItemID != 0)
             {
                 DataTableManager.StartGroupingEdits();
                 SetItems[slotIndex].SetItemID = 0;
@@ -311,7 +305,7 @@ namespace RHToolkit.ViewModels.Windows
                     var item = new SetItem
                     {
                         SetItemID = (int)selectedItem[$"nSetItemID{i:00}"],
-                        FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nSetItemID{i:00}"], i)
+                        FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nSetItemID{i:00}"], i, 1)
                     };
 
                     SetItems.Add(item);
@@ -391,12 +385,12 @@ namespace RHToolkit.ViewModels.Windows
 
             columns.Insert(0, "CONVERT(nID, 'System.String')");
 
-            for (int i = 0; i <= 5; i++)
+            for (int i = 0; i < 6; i++)
             {
                 string columnName = $"nSetItemID{i:00}";
                 columns.Add($"CONVERT({columnName}, 'System.String')");
             }
-            for (int i = 0; i <= 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 string columnName = $"nSetOption{i:00}";
                 columns.Add($"CONVERT({columnName}, 'System.String')");
@@ -556,25 +550,18 @@ namespace RHToolkit.ViewModels.Windows
 
         private void FormatSetEffect()
         {
-            string setEffect01 = _frameService.GetOptionName(SetOptions[0].SetOption, SetOptions[0].SetOptionValue);
-            string setEffect02 = _frameService.GetOptionName(SetOptions[1].SetOption, SetOptions[1].SetOptionValue);
-            string setEffect03 = _frameService.GetOptionName(SetOptions[2].SetOption, SetOptions[2].SetOptionValue);
-            string setEffect04 = _frameService.GetOptionName(SetOptions[3].SetOption, SetOptions[3].SetOptionValue);
-            string setEffect05 = _frameService.GetOptionName(SetOptions[4].SetOption, SetOptions[4].SetOptionValue);
+            StringBuilder setEffect = new($"{Resources.SetEffect}\n");
 
-            string setEffect = $"{Resources.SetEffect}\n";
-            if (SetOptions[0].SetOption != 0)
-                setEffect += $"{Resources.Set2}: {setEffect01}\n";
-            if (SetOptions[1].SetOption != 0)
-                setEffect += $"{Resources.Set3}: {setEffect02}\n";
-            if (SetOptions[2].SetOption != 0)
-                setEffect += $"{Resources.Set4}: {setEffect03}\n";
-            if (SetOptions[3].SetOption != 0)
-                setEffect += $"{Resources.Set5}: {setEffect04}\n";
-            if (SetOptions[4].SetOption != 0)
-                setEffect += $"{Resources.Set6}: {setEffect05}\n";
+            for (int i = 0; i < SetOptions.Count; i++)
+            {
+                if (SetOptions[i].SetOption != 0)
+                {
+                    string effect = _frameService.GetOptionName(SetOptions[i].SetOption, SetOptions[i].SetOptionValue);
+                    setEffect.AppendLine($"{Resources.ResourceManager.GetString($"Set{i + 2}")}: {effect}");
+                }
+            }
 
-            SetEffectText = setEffect;
+            SetEffectText = setEffect.ToString();
         }
 
         private void UpdateSetOptions()

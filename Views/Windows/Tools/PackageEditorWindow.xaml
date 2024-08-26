@@ -24,9 +24,9 @@
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
-
     <Window.InputBindings>
         <KeyBinding Command="{Binding LoadFileCommand}" Gesture="Ctrl+O" />
+        <KeyBinding Command="{Binding LoadFileAsCommand}" Gesture="Ctrl+Shift+O" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileCommand}" Gesture="Ctrl+S" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileAsMIPCommand}" Gesture="Ctrl+Shift+S" />
@@ -53,7 +53,6 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-
             <ui:TitleBar
                 x:Name="TitleBar"
                 Title="{Binding Title}"
@@ -73,171 +72,8 @@
                         Source="/Assets/icon/icon_silverpack.png" />
                 </ui:TitleBar.Icon>
             </ui:TitleBar>
-            <Menu
-                Grid.Row="1"
-                VerticalAlignment="Top"
-                FontSize="14"
-                Foreground="White">
-                <ui:MenuItem Header="File" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                    <MenuItem Header="Open RH Package File..." Icon="{ui:SymbolIcon DocumentAdd24}">
-                        <MenuItem
-                            Command="{Binding LoadFileCommand}"
-                            CommandParameter="1"
-                            Header="Open unionpackage.rh"
-                            Icon="{ui:SymbolIcon DocumentAdd24}"
-                            InputGestureText="Ctrl+O" />
-                        <MenuItem
-                            Command="{Binding LoadFileCommand}"
-                            CommandParameter="2"
-                            Header="Open unionpackage_local.rh"
-                            Icon="{ui:SymbolIcon DocumentAdd24}"
-                            InputGestureText="Ctrl+Shift+O" />
-                    </MenuItem>
-                    <MenuItem
-                        Command="{Binding DataTableManager.SaveFileCommand}"
-                        Header="Save"
-                        Icon="{ui:SymbolIcon Save24}"
-                        InputGestureText="Ctrl+S" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.SaveFileAsCommand}"
-                        Header="Save As..."
-                        Icon="{ui:SymbolIcon DocumentSave24}"
-                        InputGestureText="Ctrl+Alt+S" />
-                    <MenuItem Header="Export as..." Icon="{ui:SymbolIcon DocumentSave24}">
-                        <MenuItem
-                            Command="{Binding DataTableManager.SaveFileAsMIPCommand}"
-                            Header="Export as MIP"
-                            Icon="{ui:SymbolIcon DocumentSave24}"
-                            InputGestureText="Ctrl+Shift+S" />
-                        <MenuItem
-                            Command="{Binding DataTableManager.SaveFileAsXMLCommand}"
-                            Header="Export as XML"
-                            Icon="{ui:SymbolIcon DocumentSave24}"
-                            InputGestureText="Ctrl+Shift+X" />
-                        <MenuItem
-                            Command="{Binding DataTableManager.SaveFileAsXLSXCommand}"
-                            Header="Export as XLSX"
-                            Icon="{ui:SymbolIcon DocumentSave24}"
-                            InputGestureText="Ctrl+Shift+E" />
-                    </MenuItem>
-                    <MenuItem
-                        Command="{Binding CloseFileCommand}"
-                        Header="Close"
-                        Icon="{ui:SymbolIcon DocumentDismiss24}"
-                        InputGestureText="Ctrl+W" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding DataTableManager.CloseWindowCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                        Header="Exit"
-                        Icon="{ui:SymbolIcon ArrowExit20}" />
-                </ui:MenuItem>
-                <Separator />
-                <ui:MenuItem Header="Edit" Icon="{ui:SymbolIcon DocumentEdit20}">
-                    <MenuItem
-                        Command="{Binding DataTableManager.UndoChangesCommand}"
-                        Header="Undo"
-                        Icon="{ui:SymbolIcon ArrowUndo20}"
-                        InputGestureText="Ctrl+Z" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.RedoChangesCommand}"
-                        Header="Redo"
-                        Icon="{ui:SymbolIcon ArrowRedo20}"
-                        InputGestureText="Ctrl+Shift+Z" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding AddItemCommand}"
-                        Header="Add Item"
-                        Icon="{ui:SymbolIcon AddCircle24}"
-                        InputGestureText="Ctrl+I" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                        Header="Duplicate Selected Item"
-                        Icon="{ui:SymbolIcon Copy24}"
-                        InputGestureText="Ctrl+D" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
-                        Header="Delete Selected Item"
-                        Icon="{ui:SymbolIcon Delete24}"
-                        InputGestureText="Delete" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Find"
-                        Header="Find..."
-                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                        InputGestureText="Ctrl+F" />
-                    <MenuItem
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Replace"
-                        Header="Replace"
-                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                        InputGestureText="Ctrl+H" />
-                </ui:MenuItem>
-            </Menu>
-            <Menu
-                Grid.Row="2"
-                VerticalAlignment="Top"
-                FontSize="14"
-                Foreground="White">
-                <MenuItem
-                    Command="{Binding LoadFileCommand}"
-                    CommandParameter="1"
-                    Icon="{ui:SymbolIcon DocumentAdd24,
-                                         Filled=True}"
-                    ToolTip="Open File" />
-                <MenuItem
-                    Command="{Binding DataTableManager.SaveFileCommand}"
-                    Icon="{ui:SymbolIcon Save24,
-                                         Filled=True}"
-                    ToolTip="Save" />
-                <MenuItem
-                    Command="{Binding DataTableManager.SaveFileAsCommand}"
-                    Icon="{ui:SymbolIcon DocumentSave24,
-                                         Filled=True}"
-                    ToolTip="Save As" />
-                <MenuItem
-                    Command="{Binding CloseFileCommand}"
-                    Icon="{ui:SymbolIcon DocumentDismiss24,
-                                         Filled=True}"
-                    ToolTip="Close" />
-                <Separator />
-                <MenuItem
-                    Command="{Binding DataTableManager.UndoChangesCommand}"
-                    Icon="{ui:SymbolIcon ArrowUndo24,
-                                         Filled=True}"
-                    ToolTip="Undo" />
-                <MenuItem
-                    Command="{Binding DataTableManager.RedoChangesCommand}"
-                    Icon="{ui:SymbolIcon ArrowRedo24,
-                                         Filled=True}"
-                    ToolTip="Redo" />
-                <Separator />
-                <MenuItem
-                    Command="{Binding CreateItemCommand}"
-                    Icon="{ui:SymbolIcon AddCircle24}"
-                    ToolTip="Add Item" />
-                <MenuItem
-                    Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                    Icon="{ui:SymbolIcon Copy24}"
-                    ToolTip="Duplicate Selected Item" />
-                <MenuItem
-                    Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
-                    Icon="{ui:SymbolIcon Delete24}"
-                    ToolTip="Delete Selected Item" />
-                <Separator />
-                <MenuItem
-                    Command="{Binding OpenSearchDialogCommand}"
-                    CommandParameter="Find"
-                    Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                    ToolTip="Find" />
-                <MenuItem
-                    Command="{Binding OpenSearchDialogCommand}"
-                    CommandParameter="Replace"
-                    Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                    ToolTip="Replace" />
-            </Menu>
-
+            <control:PackageEditorMenu Grid.Row="1" />
+            <control:EditorIconMenu Grid.Row="2" />
             <Grid
                 Grid.Row="1"
                 Grid.RowSpan="4"
@@ -307,13 +143,11 @@
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Package ID" />
-                                <control:IntegerUpDown
-                                    Width="120"
+                                <ui:NumberBox
+                                    Width="150"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    Increment="1"
-                                    Maximum="2100000000"
                                     Minimum="0"
                                     Value="{Binding PackageID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
@@ -347,12 +181,11 @@
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Rune Group 01" />
-                                <control:IntegerUpDown
-                                    Width="120"
+                                <ui:NumberBox
+                                    Width="150"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    Increment="1"
                                     Minimum="0"
                                     Value="{Binding RuneGroup00, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
@@ -364,10 +197,9 @@
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Rune Group 02" />
-                                <control:IntegerUpDown
-                                    Width="120"
+                                <ui:NumberBox
+                                    Width="150"
                                     Margin="0,0,0,0"
-                                    Increment="1"
                                     Minimum="0"
                                     Value="{Binding RuneGroup01, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
@@ -379,12 +211,11 @@
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Rune Group 03" />
-                                <control:IntegerUpDown
-                                    Width="120"
+                                <ui:NumberBox
+                                    Width="150"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    Increment="1"
                                     Minimum="0"
                                     Value="{Binding RuneGroup02, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
@@ -499,14 +330,9 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <TextBlock
-                                Grid.Row="0"
+                                Grid.Row="2"
                                 Grid.ColumnSpan="3"
                                 Margin="0,20,0,0"
                                 HorizontalAlignment="Center"
@@ -518,263 +344,76 @@
                                 Style="{StaticResource ArialMS}"
                                 Text="{Binding PackageEffectText}" />
                             <StackPanel
-                                Grid.Row="1"
+                                Grid.Row="0"
                                 Grid.ColumnSpan="2"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Package Duration (Minutes)" />
-                                <control:IntegerUpDown
+                                <ui:NumberBox
                                     Width="150"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    Increment="1"
                                     Maximum="525960"
                                     Minimum="0"
                                     Value="{Binding EffectRemainTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             </StackPanel>
 
                             <StackPanel
-                                Grid.Row="2"
+                                Grid.Row="1"
                                 Grid.Column="0"
-                                Margin="0,20,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Code 01" />
-                                <ComboBox
-                                    Width="250"
-                                    Height="24"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding PackageEffectItems}"
-                                    SelectedValue="{Binding EffectCode00, UpdateSourceTrigger=PropertyChanged}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Margin="0,20,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Value 01" />
-                                <control:FloatUpDown
-                                    Width="150"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Increment="{Binding EffectValue00Increment}"
-                                    Maximum="{Binding EffectValue00Max}"
-                                    Minimum="{Binding EffectValue00Min}"
-                                    Value="{Binding EffectValue00, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-
-
-                            <StackPanel
-                                Grid.Row="3"
-                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
                                 Margin="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Code 02" />
-                                <ComboBox
-                                    Width="250"
-                                    Height="24"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding PackageEffectItems}"
-                                    SelectedValue="{Binding EffectCode01, UpdateSourceTrigger=PropertyChanged}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}" />
+                                <ItemsControl AlternationCount="{Binding PackageEffects.Count}" ItemsSource="{Binding PackageEffects}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Margin="0,10,0,0" Orientation="Vertical">
+                                                <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Effect {0}'}" />
+                                                <ComboBox
+                                                    Width="400"
+                                                    Height="24"
+                                                    Margin="0,0,0,0"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding DataContext.PackageEffectItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                    SelectedValue="{Binding EffectCode, UpdateSourceTrigger=PropertyChanged}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}" />
+                                            </StackPanel>
+
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="3"
+                                Grid.Row="1"
                                 Grid.Column="1"
                                 Margin="0,0,0,0"
-                                HorizontalAlignment="Center"
+                                HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Value 02" />
-                                <control:FloatUpDown
-                                    Width="150"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Increment="{Binding EffectValue01Increment}"
-                                    Maximum="{Binding EffectValue01Max}"
-                                    Minimum="{Binding EffectValue01Min}"
-                                    Value="{Binding EffectValue01, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-
-                            <StackPanel
-                                Grid.Row="4"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Code 03" />
-                                <ComboBox
-                                    Width="250"
-                                    Height="24"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding PackageEffectItems}"
-                                    SelectedValue="{Binding EffectCode02, UpdateSourceTrigger=PropertyChanged}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="4"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Value 03" />
-                                <control:FloatUpDown
-                                    Width="150"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Increment="{Binding EffectValue02Increment}"
-                                    Maximum="{Binding EffectValue02Max}"
-                                    Minimum="{Binding EffectValue02Min}"
-                                    Value="{Binding EffectValue02, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-
-                            <StackPanel
-                                Grid.Row="5"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Code 04" />
-                                <ComboBox
-                                    Width="250"
-                                    Height="24"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding PackageEffectItems}"
-                                    SelectedValue="{Binding EffectCode03, UpdateSourceTrigger=PropertyChanged}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="5"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Value 04" />
-                                <control:FloatUpDown
-                                    Width="150"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Increment="{Binding EffectValue03Increment}"
-                                    Maximum="{Binding EffectValue03Max}"
-                                    Minimum="{Binding EffectValue03Min}"
-                                    Value="{Binding EffectValue03, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-
-                            <StackPanel
-                                Grid.Row="6"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Code 05" />
-                                <ComboBox
-                                    Width="250"
-                                    Height="24"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding PackageEffectItems}"
-                                    SelectedValue="{Binding EffectCode04, UpdateSourceTrigger=PropertyChanged}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="6"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Value 05" />
-                                <control:FloatUpDown
-                                    Width="150"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Increment="{Binding EffectValue04Increment}"
-                                    Maximum="{Binding EffectValue04Max}"
-                                    Minimum="{Binding EffectValue04Min}"
-                                    Value="{Binding EffectValue04, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                            </StackPanel>
-
-                            <StackPanel
-                                Grid.Row="7"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Code 06" />
-                                <ComboBox
-                                    Width="250"
-                                    Height="24"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding PackageEffectItems}"
-                                    SelectedValue="{Binding EffectCode05, UpdateSourceTrigger=PropertyChanged}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="7"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Effect Value 06" />
-                                <control:FloatUpDown
-                                    Width="150"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Increment="{Binding EffectValue05Increment}"
-                                    Maximum="{Binding EffectValue05Max}"
-                                    Minimum="{Binding EffectValue05Min}"
-                                    Value="{Binding EffectValue05, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                <ItemsControl AlternationCount="{Binding PackageEffects.Count}" ItemsSource="{Binding PackageEffects}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Margin="0,10,0,0" Orientation="Vertical">
+                                                <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Effect {0} Value'}" />
+                                                <ui:NumberBox
+                                                    Width="120"
+                                                    Margin="0,0,0,0"
+                                                    LargeChange="{Binding EffectValueLargeIncrement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    Maximum="{Binding EffectValueMax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    Minimum="{Binding EffectValueMin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    SmallChange="{Binding EffectValueSmallIncrement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    Value="{Binding EffectValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
 
                         </Grid>
@@ -792,276 +431,40 @@
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <StackPanel
                                 Grid.Row="0"
-                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="01" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="1"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="02" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="2"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="2"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="03" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="3"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="3"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="04" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="4"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="4"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="05" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="5"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="5"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="06" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="6"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
-                            </StackPanel>
-
-                            <StackPanel
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="07" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="7"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=7}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="08" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="8"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=8}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="2"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="09" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="9"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=9}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="3"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="10" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="10"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=10}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="4"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="11" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="11"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=11}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="5"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                Orientation="Horizontal">
-                                <TextBlock
-                                    Margin="0,0,20,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Background="Transparent"
-                                    FontSize="12"
-                                    Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="12" />
-                                <control:ItemSlot
-                                    AddItemCommand="{Binding AddItemCommand}"
-                                    CommandParameter="12"
-                                    FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=12}"
-                                    ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding RemoveItemCommand}" />
+                                <ItemsControl AlternationCount="{Binding PackageItems.Count}" ItemsSource="{Binding PackageItems}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Grid.Column="0"
+                                                Margin="0,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                Orientation="Horizontal">
+                                                <TextBlock
+                                                    Margin="0,0,10,0"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"
+                                                    Background="Transparent"
+                                                    FontSize="12"
+                                                    Foreground="Gold"
+                                                    Style="{StaticResource ArialMS}"
+                                                    Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}}" />
+                                                <control:ItemSlot
+                                                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                    CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                                                    FrameViewModel="{Binding FrameViewModel}"
+                                                    ItemNameVisibility="Visible"
+                                                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
                         </Grid>
                     </TabItem>
@@ -1069,7 +472,6 @@
                 </ui:TabView>
 
             </Grid>
-
             <DataGrid
                 x:Name="dataGridView"
                 Grid.Row="3"
@@ -1155,7 +557,6 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-
             <Grid
                 Grid.Row="4"
                 Grid.Column="0"
@@ -1260,7 +661,6 @@
                 FontSize="15"
                 Foreground="White"
                 Text="{Binding OpenMessage}" />
-
         </Grid>
     </ContentControl>
 </Window>

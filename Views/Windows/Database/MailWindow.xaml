@@ -331,14 +331,12 @@
                     x:Name="lbAttachWhite"
                     Content="{x:Static rs:Resources.AttachGoldAmount}"
                     Foreground="White" />
-                <control:IntegerUpDown
+                <ui:NumberBox
                     x:Name="intAttachWhite"
                     Width="120"
-                    Height="26"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
-                    Increment="100"
-                    Maximum="2100000000"
+                    LargeChange="100"
                     Minimum="0"
                     Value="{Binding AttachGold, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
@@ -349,13 +347,11 @@
                     HorizontalContentAlignment="Center"
                     Content="{x:Static rs:Resources.ReturnDate}"
                     Foreground="White" />
-                <control:IntegerUpDown
+                <ui:NumberBox
                     x:Name="intReturnDays"
                     Width="120"
-                    Height="26"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
-                    Increment="1"
                     Maximum="15"
                     Minimum="1"
                     Value="{Binding ReturnDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -366,14 +362,12 @@
                     HorizontalContentAlignment="Center"
                     Content="{x:Static rs:Resources.ItemCharge}"
                     Foreground="White" />
-                <control:IntegerUpDown
+                <ui:NumberBox
                     x:Name="intItemCharge"
                     Width="120"
-                    Height="26"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
-                    Increment="100"
-                    Maximum="2100000000"
+                    LargeChange="100"
                     Minimum="0"
                     Value="{Binding ItemCharge, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>

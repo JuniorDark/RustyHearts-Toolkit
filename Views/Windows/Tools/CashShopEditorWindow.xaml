@@ -26,6 +26,7 @@
     <Window.InputBindings>
         <KeyBinding Command="{Binding CreateFileCommand}" Gesture="Ctrl+N" />
         <KeyBinding Command="{Binding LoadFileCommand}" Gesture="Ctrl+O" />
+        <KeyBinding Command="{Binding LoadFileAsCommand}" Gesture="Ctrl+Shift+O" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileCommand}" Gesture="Ctrl+S" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileAsMIPCommand}" Gesture="Ctrl+Shift+S" />
@@ -71,165 +72,8 @@
                 Panel.ZIndex="-1"
                 Source="/Assets/images/cashshop/lb_cashshop_bg.png"
                 Stretch="UniformToFill" />
-            <Menu
-                Grid.Row="1"
-                VerticalAlignment="Top"
-                FontSize="14"
-                Foreground="White">
-                <ui:MenuItem Header="File" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                    <MenuItem
-                        Command="{Binding CreateFileCommand}"
-                        Header="New"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+N" />
-                    <MenuItem
-                        Command="{Binding LoadFileCommand}"
-                        Header="Open cashshop File..."
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+O" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.SaveFileCommand}"
-                        Header="Save"
-                        Icon="{ui:SymbolIcon Save24}"
-                        InputGestureText="Ctrl+S" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.SaveFileAsCommand}"
-                        Header="Save As..."
-                        Icon="{ui:SymbolIcon DocumentSave24}"
-                        InputGestureText="Ctrl+Alt+S" />
-                    <MenuItem Header="Export as..." Icon="{ui:SymbolIcon DocumentSave24}">
-                        <MenuItem
-                            Command="{Binding DataTableManager.SaveFileAsMIPCommand}"
-                            Header="Export as MIP"
-                            Icon="{ui:SymbolIcon DocumentSave24}"
-                            InputGestureText="Ctrl+Shift+S" />
-                        <MenuItem
-                            Command="{Binding DataTableManager.SaveFileAsXMLCommand}"
-                            Header="Export as XML"
-                            Icon="{ui:SymbolIcon DocumentSave24}"
-                            InputGestureText="Ctrl+Shift+X" />
-                        <MenuItem
-                            Command="{Binding DataTableManager.SaveFileAsXLSXCommand}"
-                            Header="Export as XLSX"
-                            Icon="{ui:SymbolIcon DocumentSave24}"
-                            InputGestureText="Ctrl+Shift+E" />
-                    </MenuItem>
-                    <MenuItem
-                        Command="{Binding CloseFileCommand}"
-                        Header="Close"
-                        Icon="{ui:SymbolIcon DocumentDismiss24}"
-                        InputGestureText="Ctrl+W" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding DataTableManager.CloseWindowCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                        Header="Exit"
-                        Icon="{ui:SymbolIcon ArrowExit20}" />
-                </ui:MenuItem>
-                <Separator />
-                <ui:MenuItem Header="Edit" Icon="{ui:SymbolIcon DocumentEdit20}">
-                    <MenuItem
-                        Command="{Binding DataTableManager.UndoChangesCommand}"
-                        Header="Undo"
-                        Icon="{ui:SymbolIcon ArrowUndo20}"
-                        InputGestureText="Ctrl+Z" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.RedoChangesCommand}"
-                        Header="Redo"
-                        Icon="{ui:SymbolIcon ArrowRedo20}"
-                        InputGestureText="Ctrl+Shift+Z" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding AddItemCommand}"
-                        Header="Add Item"
-                        Icon="{ui:SymbolIcon AddCircle24}"
-                        InputGestureText="Ctrl+I" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                        Header="Duplicate Selected Item"
-                        Icon="{ui:SymbolIcon Copy24}"
-                        InputGestureText="Ctrl+D" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
-                        Header="Delete Selected Item"
-                        Icon="{ui:SymbolIcon Delete24}"
-                        InputGestureText="Delete" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Find"
-                        Header="Find..."
-                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                        InputGestureText="Ctrl+F" />
-                    <MenuItem
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Replace"
-                        Header="Replace"
-                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                        InputGestureText="Ctrl+H" />
-                </ui:MenuItem>
-            </Menu>
-            <Menu
-                Grid.Row="2"
-                VerticalAlignment="Top"
-                FontSize="14"
-                Foreground="White">
-                <MenuItem
-                    Command="{Binding LoadFileCommand}"
-                    Icon="{ui:SymbolIcon DocumentAdd24,
-                                         Filled=True}"
-                    ToolTip="Open File" />
-                <MenuItem
-                    Command="{Binding DataTableManager.SaveFileCommand}"
-                    Icon="{ui:SymbolIcon Save24,
-                                         Filled=True}"
-                    ToolTip="Save" />
-                <MenuItem
-                    Command="{Binding DataTableManager.SaveFileAsCommand}"
-                    Icon="{ui:SymbolIcon DocumentSave24,
-                                         Filled=True}"
-                    ToolTip="Save As" />
-                <MenuItem
-                    Command="{Binding CloseFileCommand}"
-                    Icon="{ui:SymbolIcon DocumentDismiss24,
-                                         Filled=True}"
-                    ToolTip="Close" />
-                <Separator />
-                <MenuItem
-                    Command="{Binding DataTableManager.UndoChangesCommand}"
-                    Icon="{ui:SymbolIcon ArrowUndo24,
-                                         Filled=True}"
-                    ToolTip="Undo" />
-                <MenuItem
-                    Command="{Binding DataTableManager.RedoChangesCommand}"
-                    Icon="{ui:SymbolIcon ArrowRedo24,
-                                         Filled=True}"
-                    ToolTip="Redo" />
-                <Separator />
-                <MenuItem
-                    Command="{Binding AddItemCommand}"
-                    Icon="{ui:SymbolIcon AddCircle24}"
-                    ToolTip="Add Item" />
-                <MenuItem
-                    Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                    Icon="{ui:SymbolIcon Copy24}"
-                    ToolTip="Duplicate Selected Item" />
-                <MenuItem
-                    Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
-                    Icon="{ui:SymbolIcon Delete24}"
-                    ToolTip="Delete Selected Item" />
-                <Separator />
-                <MenuItem
-                    Command="{Binding OpenSearchDialogCommand}"
-                    CommandParameter="Find"
-                    Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                    ToolTip="Find" />
-                <MenuItem
-                    Command="{Binding OpenSearchDialogCommand}"
-                    CommandParameter="Replace"
-                    Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                    ToolTip="Replace" />
-            </Menu>
+            <control:EditorMenuNew Grid.Row="1" />
+            <control:EditorIconMenu Grid.Row="2" />
 
             <StackPanel
                 Grid.Row="3"
@@ -301,13 +145,11 @@
                             VerticalAlignment="Top"
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Item ID" />
-                            <control:IntegerUpDown
+                            <ui:NumberBox
                                 Width="120"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
-                                Increment="1"
-                                Maximum="2100000000"
                                 Minimum="0"
                                 Value="{Binding ItemID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
@@ -319,11 +161,9 @@
                             VerticalAlignment="Top"
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Shop ID" />
-                            <control:IntegerUpDown
+                            <ui:NumberBox
                                 Width="120"
                                 Margin="0,0,0,0"
-                                Increment="1"
-                                Maximum="2100000000"
                                 Minimum="0"
                                 Value="{Binding ShopID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
@@ -407,12 +247,11 @@
                                 d:Text="Item Amount/Duration"
                                 Foreground="White"
                                 Text="{Binding ItemAmountText}" />
-                            <control:IntegerUpDown
+                            <ui:NumberBox
                                 Width="120"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
-                                Increment="1"
                                 Maximum="{Binding ItemAmountMax}"
                                 Minimum="0"
                                 Value="{Binding ItemAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -467,13 +306,11 @@
                             VerticalAlignment="Center"
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Cash Cost" />
-                            <control:IntegerUpDown
+                            <ui:NumberBox
                                 Width="120"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
-                                Increment="1"
-                                Maximum="999999"
                                 Minimum="0"
                                 Value="{Binding CashCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
@@ -485,13 +322,11 @@
                             VerticalAlignment="Center"
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Sale Cash Cost" />
-                            <control:IntegerUpDown
+                            <ui:NumberBox
                                 Width="120"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
-                                Increment="1"
-                                Maximum="999999"
                                 Minimum="0"
                                 Value="{Binding SaleCashCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
@@ -503,12 +338,11 @@
                             VerticalAlignment="Center"
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Bonus Earned" />
-                            <control:IntegerUpDown
+                            <ui:NumberBox
                                 Width="120"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
-                                Increment="1"
                                 IsEnabled="{Binding IsBonusEnabled}"
                                 Minimum="0"
                                 Value="{Binding CashMileage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -521,12 +355,11 @@
                             VerticalAlignment="Center"
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Bonus % Rate" />
-                            <control:IntegerUpDown
+                            <ui:NumberBox
                                 Width="120"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
-                                Increment="1"
                                 Maximum="100"
                                 Minimum="0"
                                 Value="{Binding BonusRate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />

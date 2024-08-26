@@ -12,7 +12,7 @@ public class GMDatabaseManager
 
     public static readonly List<string> RequiredTables =
 [
-    "addeffect_string", "angelaweapon", "charactertitle", "charactertitle_string", "exp", "fortune", "frantzweapon", "itemcategory", "itemlist", "itemlist_string",
+    "addeffect_string", "angelaweapon", "charactertitle", "charactertitle_string", "enchantinfo", "exp", "fortune", "frantzweapon", "itemcategory", "itemlist", "itemlist_string",
     "itemlist_armor", "itemlist_armor_string", "itemlist_costume", "itemlist_costume_string",
     "itemlist_weapon", "itemlist_weapon_string", "itemoptionlist", "new_itemoptioncondition_string", "natashaweapon", "nick_filter", "startpoint_renewal", "serverlobbyid",
     "setitem", "setitem_string", "string", "tudeweapon"

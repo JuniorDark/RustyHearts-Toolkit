@@ -368,12 +368,11 @@
                         HorizontalContentAlignment="Center"
                         Content="Level"
                         Style="{StaticResource ArialMSWhite}" />
-                    <control:IntegerUpDown
+                    <ui:NumberBox
                         x:Name="intLevel"
                         Width="120"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Increment="1"
                         Maximum="100"
                         Minimum="1"
                         Value="{Binding Level, Mode=TwoWay}" />
@@ -383,10 +382,9 @@
                         HorizontalContentAlignment="Center"
                         Content="Ressurection Scrolls"
                         Style="{StaticResource ArialMSWhite}" />
-                    <control:IntegerUpDown
+                    <ui:NumberBox
                         x:Name="intRessurectionScrolls"
                         Width="120"
-                        Increment="1"
                         Maximum="500"
                         Minimum="0"
                         Value="{Binding RessurectionScrolls, Mode=TwoWay}" />
@@ -396,12 +394,11 @@
                         HorizontalContentAlignment="Center"
                         Content="Warehouse Slots"
                         Style="{StaticResource ArialMSWhite}" />
-                    <control:IntegerUpDown
+                    <ui:NumberBox
                         x:Name="intWarehouseSlots"
                         Width="120"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Increment="1"
                         Maximum="180"
                         Minimum="0"
                         Value="{Binding WarehouseSlots, Mode=TwoWay}" />
@@ -418,12 +415,11 @@
                         HorizontalContentAlignment="Center"
                         Content="EXP"
                         Style="{StaticResource ArialMSWhite}" />
-                    <control:IntegerUpDown
+                    <ui:NumberBox
                         x:Name="intExp"
                         Width="120"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Increment="1"
                         IsEnabled="False"
                         Maximum="420897460"
                         Minimum="0"
@@ -434,10 +430,9 @@
                         HorizontalContentAlignment="Center"
                         Content="Unused Skill Points"
                         Style="{StaticResource ArialMSWhite}" />
-                    <control:IntegerUpDown
+                    <ui:NumberBox
                         x:Name="intSkillPoints"
                         Width="120"
-                        Increment="1"
                         Maximum="{Binding TotalSkillPoints}"
                         Minimum="0"
                         Value="{Binding SkillPoints, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -447,13 +442,12 @@
                         HorizontalContentAlignment="Center"
                         Content="Warehouse Gold"
                         Style="{StaticResource ArialMSWhite}" />
-                    <control:IntegerUpDown
+                    <ui:NumberBox
                         x:Name="intWHGold"
                         Width="120"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Increment="1"
-                        Maximum="2100000000"
+                        
                         Minimum="0"
                         Value="{Binding WarehouseGold, Mode=TwoWay}" />
                 </StackPanel>
@@ -469,11 +463,10 @@
                         HorizontalContentAlignment="Center"
                         Content="Inventory Gold"
                         Style="{StaticResource ArialMSWhite}" />
-                    <control:IntegerUpDown
+                    <ui:NumberBox
                         x:Name="intInventoryGold"
                         Width="120"
-                        Increment="100"
-                        Maximum="2100000000"
+                        LargeChange="100"
                         Minimum="0"
                         Value="{Binding InventoryGold, Mode=TwoWay}" />
                     <Label
@@ -482,10 +475,9 @@
                         HorizontalContentAlignment="Center"
                         Content="Total Skill Points"
                         Style="{StaticResource ArialMSWhite}" />
-                    <control:IntegerUpDown
+                    <ui:NumberBox
                         x:Name="intTotalSkillPoints"
                         Width="120"
-                        Increment="1"
                         Maximum="99999"
                         Minimum="0"
                         Value="{Binding TotalSkillPoints, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -495,12 +487,11 @@
                         HorizontalContentAlignment="Center"
                         Content="Guild Exp"
                         Style="{StaticResource ArialMSWhite}" />
-                    <control:IntegerUpDown
+                    <ui:NumberBox
                         x:Name="intGuildExp"
                         Width="120"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Increment="1"
                         IsEnabled="{Binding HasGuild}"
                         Maximum="32767"
                         Minimum="0"

@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:bh="clr-namespace:RHToolkit.Behaviors"
+    xmlns:control="clr-namespace:RHToolkit.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -24,6 +25,7 @@
     mc:Ignorable="d">
     <Window.InputBindings>
         <KeyBinding Command="{Binding LoadFileCommand}" Gesture="Ctrl+O" />
+        <KeyBinding Command="{Binding LoadFileAsCommand}" Gesture="Ctrl+Shift+O" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileCommand}" Gesture="Ctrl+S" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
         <KeyBinding Command="{Binding DataTableManager.SaveFileAsMIPCommand}" Gesture="Ctrl+Shift+S" />
@@ -40,15 +42,12 @@
     <ContentControl Template="{StaticResource box_red02}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200*" />
-                <ColumnDefinition Width="150*" />
-                <ColumnDefinition Width="150*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
-                <RowDefinition Height="50" />
-                <RowDefinition Height="50" />
-                <RowDefinition Height="300*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
             <ui:TitleBar
@@ -63,159 +62,7 @@
                 FontSize="15"
                 Foreground="White" />
 
-            <Menu
-                Grid.Row="1"
-                VerticalAlignment="Top"
-                FontSize="14"
-                Foreground="White">
-                <ui:MenuItem Header="File" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                    <MenuItem
-                        Command="{Binding LoadFileCommand}"
-                        Header="Open RH File..."
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+O" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.SaveFileCommand}"
-                        Header="Save"
-                        Icon="{ui:SymbolIcon Save24}"
-                        InputGestureText="Ctrl+S" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.SaveFileAsCommand}"
-                        Header="Save As..."
-                        Icon="{ui:SymbolIcon DocumentSave24}"
-                        InputGestureText="Ctrl+Alt+S" />
-                    <MenuItem Header="Export as..." Icon="{ui:SymbolIcon DocumentSave24}">
-                        <MenuItem
-                            Command="{Binding DataTableManager.SaveFileAsMIPCommand}"
-                            Header="Export as MIP"
-                            Icon="{ui:SymbolIcon DocumentSave24}"
-                            InputGestureText="Ctrl+Shift+S" />
-                        <MenuItem
-                            Command="{Binding DataTableManager.SaveFileAsXMLCommand}"
-                            Header="Export as XML"
-                            Icon="{ui:SymbolIcon DocumentSave24}"
-                            InputGestureText="Ctrl+Shift+X" />
-                        <MenuItem
-                            Command="{Binding DataTableManager.SaveFileAsXLSXCommand}"
-                            Header="Export as XLSX"
-                            Icon="{ui:SymbolIcon DocumentSave24}"
-                            InputGestureText="Ctrl+Shift+E" />
-                    </MenuItem>
-                    <MenuItem
-                        Command="{Binding CloseFileCommand}"
-                        Header="Close"
-                        Icon="{ui:SymbolIcon DocumentDismiss24}"
-                        InputGestureText="Ctrl+W" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding DataTableManager.CloseWindowCommand}"
-                        CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
-                        Header="Exit"
-                        Icon="{ui:SymbolIcon ArrowExit20}" />
-                </ui:MenuItem>
-                <Separator />
-                <ui:MenuItem Header="Edit" Icon="{ui:SymbolIcon DocumentEdit20}">
-                    <MenuItem
-                        Command="{Binding DataTableManager.UndoChangesCommand}"
-                        Header="Undo"
-                        Icon="{ui:SymbolIcon ArrowUndo20}"
-                        InputGestureText="Ctrl+Z" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.RedoChangesCommand}"
-                        Header="Redo"
-                        Icon="{ui:SymbolIcon ArrowRedo20}"
-                        InputGestureText="Ctrl+Shift+Z" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding DataTableManager.AddNewRowCommand}"
-                        Header="Add Row"
-                        Icon="{ui:SymbolIcon AddCircle24}"
-                        InputGestureText="Ctrl+I" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                        Header="Duplicate Selected Row"
-                        Icon="{ui:SymbolIcon Copy24}"
-                        InputGestureText="Ctrl+D" />
-                    <MenuItem
-                        Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
-                        Header="Delete Selected Row"
-                        Icon="{ui:SymbolIcon Delete24}"
-                        InputGestureText="Delete" />
-                    <Separator />
-                    <MenuItem
-                        Command="{Binding OpenSearchDialogCommand}"
-                        Header="Find..."
-                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                        InputGestureText="Ctrl+F" />
-                    <MenuItem
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Replace"
-                        Header="Replace"
-                        Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                        InputGestureText="Ctrl+H" />
-                </ui:MenuItem>
-            </Menu>
-            <Menu
-                Grid.Row="2"
-                VerticalAlignment="Top"
-                FontSize="14"
-                Foreground="White">
-                <MenuItem
-                    Command="{Binding LoadFileCommand}"
-                    Icon="{ui:SymbolIcon DocumentAdd24,
-                                         Filled=True}"
-                    ToolTip="Open File" />
-                <MenuItem
-                    Command="{Binding DataTableManager.SaveFileCommand}"
-                    Icon="{ui:SymbolIcon Save24,
-                                         Filled=True}"
-                    ToolTip="Save" />
-                <MenuItem
-                    Command="{Binding DataTableManager.SaveFileAsCommand}"
-                    Icon="{ui:SymbolIcon DocumentSave24,
-                                         Filled=True}"
-                    ToolTip="Save As" />
-                <MenuItem
-                    Command="{Binding CloseFileCommand}"
-                    Icon="{ui:SymbolIcon DocumentDismiss24,
-                                         Filled=True}"
-                    ToolTip="Close" />
-                <Separator />
-                <MenuItem
-                    Command="{Binding DataTableManager.UndoChangesCommand}"
-                    Icon="{ui:SymbolIcon ArrowUndo24,
-                                         Filled=True}"
-                    ToolTip="Undo" />
-                <MenuItem
-                    Command="{Binding DataTableManager.RedoChangesCommand}"
-                    Icon="{ui:SymbolIcon ArrowRedo24,
-                                         Filled=True}"
-                    ToolTip="Redo" />
-                <Separator />
-                <MenuItem
-                    Command="{Binding DataTableManager.AddNewRowCommand}"
-                    Icon="{ui:SymbolIcon AddCircle24}"
-                    ToolTip="Add Row" />
-                <MenuItem
-                    Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                    Icon="{ui:SymbolIcon Copy24}"
-                    ToolTip="Duplicate Selected Row" />
-                <MenuItem
-                    Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
-                    Icon="{ui:SymbolIcon Delete24}"
-                    ToolTip="Delete Selected Row" />
-                <Separator />
-                <MenuItem
-                    Command="{Binding OpenSearchDialogCommand}"
-                    CommandParameter="Find"
-                    Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                    ToolTip="Find" />
-                <MenuItem
-                    Command="{Binding OpenSearchDialogCommand}"
-                    CommandParameter="Replace"
-                    Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                    ToolTip="Replace" />
-            </Menu>
+            <control:EditorMenu Grid.Row="1" />
 
             <DataGrid
                 x:Name="dataGridView"

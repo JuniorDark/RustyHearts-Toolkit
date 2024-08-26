@@ -499,5 +499,25 @@ namespace RHToolkit.Services
                 throw new Exception($"Error retrieving set values from the database", ex);
             }
         }
+
+        private double GetDoubleValueFromQuery(string query, params (string, object)[] parameters)
+        {
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, parameters);
+                return command.Read() ? command.GetDouble(0) : 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving double value from the database", ex);
+            }
+        }
+
+        public double GetEnhanceValue(int enhanceValue)
+        {
+            string query = "SELECT fWeaponValue FROM enchantinfo WHERE nID = @enhanceValue";
+            return GetDoubleValueFromQuery(query, ("@enhanceValue", enhanceValue));
+        }
     }
 }

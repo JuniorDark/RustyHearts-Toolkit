@@ -1,11 +1,12 @@
-﻿using RHToolkit.Messages;
+﻿using Microsoft.Win32;
+using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
-using RHToolkit.ViewModels.Controls;
+using RHToolkit.ViewModels.Windows.Tools.VM;
 using RHToolkit.Views.Windows;
 using System.Data;
 using System.Windows.Controls;
@@ -47,27 +48,66 @@ namespace RHToolkit.ViewModels.Windows
         #region File
 
         [RelayCommand]
-        private async Task LoadFile(string? parameter)
+        private async Task LoadFile()
         {
             try
             {
                 await CloseFile();
 
-                string filter = "randomrune.rh|randomrune.rh|All Files (*.*)|*.*";
-                bool isLoaded = await DataTableManager.LoadFile(filter, null, "nRuneGrade", "Rune");
+                bool isLoaded = await DataTableManager.LoadFileFromPath("randomrune.rh", null, "nRuneGrade", "Rune");
 
                 if (isLoaded)
                 {
-                    Title = $"Random Rune Editor ({DataTableManager.CurrentFileName})";
-                    OpenMessage = "";
-                    IsVisible = Visibility.Visible;
-                    OnCanExecuteFileCommandChanged();
+                    IsLoaded();
                 }
             }
             catch (Exception ex)
             {
                 RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
             }
+        }
+
+        [RelayCommand]
+        private async Task LoadFileAs()
+        {
+            try
+            {
+                await CloseFile();
+
+                string filter = "randomrune.rh|" +
+                                "randomrune.rh|" +
+                                "All Files (*.*)|*.*";
+
+                OpenFileDialog openFileDialog = new()
+                {
+                    Filter = filter,
+                    FilterIndex = 1
+                };
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    string fileName = Path.GetFileName(openFileDialog.FileName);
+
+                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, null, "nRuneGrade", "Rune");
+
+                    if (isLoaded)
+                    {
+                        IsLoaded();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            }
+        }
+
+        private void IsLoaded()
+        {
+            Title = $"Random Rune Editor ({DataTableManager.CurrentFileName})";
+            OpenMessage = "";
+            IsVisible = Visibility.Visible;
+            OnCanExecuteFileCommandChanged();
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
@@ -129,12 +169,12 @@ namespace RHToolkit.ViewModels.Windows
             CloseFileCommand.NotifyCanExecuteChanged();
             OpenSearchDialogCommand.NotifyCanExecuteChanged();
             AddItemCommand.NotifyCanExecuteChanged();
-            CreateItemCommand.NotifyCanExecuteChanged();
+            AddRowCommand.NotifyCanExecuteChanged();
         }
 
         #endregion
 
-        #region Add Item
+        #region Add RuneItem
 
         [RelayCommand(CanExecute = nameof(CanExecuteSelectedItemCommand))]
         private void AddItem(string parameter)
@@ -143,18 +183,16 @@ namespace RHToolkit.ViewModels.Windows
             {
                 if (int.TryParse(parameter, out int slotIndex))
                 {
-                    if (DataTableManager.SelectedItem != null)
+                    var itemData = new ItemData
                     {
-                        var itemData = new ItemData
-                        {
-                            SlotIndex = slotIndex,
-                            ItemId = (int)DataTableManager.SelectedItem[$"nItemCode0{slotIndex - 1}"]
-                        };
+                        SlotIndex = slotIndex,
+                        ItemId = RuneItems[slotIndex].ItemCode,
+                        ItemAmount = RuneItems[slotIndex].ItemCodeCount
+                    };
 
-                        var token = _token;
+                    var token = _token;
 
-                        _windowsService.OpenItemWindow(token, "RandomRune", itemData);
-                    }
+                    _windowsService.OpenItemWindow(token, "RandomRune", itemData);
                 }
 
             }
@@ -170,142 +208,69 @@ namespace RHToolkit.ViewModels.Windows
             {
                 var itemData = message.Value;
 
-                if (DataTableManager.SelectedItem != null)
+                if (DataTableManager.SelectedItem != null && itemData.SlotIndex >= 0 && itemData.SlotIndex < 10)
                 {
-                    switch (itemData.SlotIndex)
-                    {
-                        case 1:
-                            RuneItemCode00 = itemData.ItemId;
-                            break;
-                        case 2:
-                            RuneItemCode01 = itemData.ItemId;
-                            break;
-                        case 3:
-                            RuneItemCode02 = itemData.ItemId;
-                            break;
-                        case 4:
-                            RuneItemCode03 = itemData.ItemId;
-                            break;
-                        case 5:
-                            RuneItemCode04 = itemData.ItemId;
-                            break;
-                        case 6:
-                            RuneItemCode05 = itemData.ItemId;
-                            break;
-                        case 7:
-                            RuneItemCode06 = itemData.ItemId;
-                            break;
-                        case 8:
-                            RuneItemCode07 = itemData.ItemId;
-                            break;
-                        case 9: 
-                            RuneItemCode08 = itemData.ItemId;
-                            break;
-                        case 10:
-                            RuneItemCode09 = itemData.ItemId;
-                            break;
-                    }
+                    UpdateRuneItem(itemData);
                 }
+            }
+        }
+
+        private void UpdateRuneItem(ItemData itemData)
+        {
+            if (itemData.ItemId != 0)
+            {
+                var frameViewModel = ItemDataManager.GetFrameViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+                RuneItems[itemData.SlotIndex].ItemCode = itemData.ItemId;
+                RuneItems[itemData.SlotIndex].ItemCodeCount = itemData.ItemAmount;
+                RuneItems[itemData.SlotIndex].FrameViewModel = frameViewModel;
+                OnPropertyChanged(nameof(RuneItems));
             }
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private void CreateItem()
+        private void AddRow()
         {
-            if (DataTableManager.DataTable != null)
+            try
             {
                 DataTableManager.AddNewRow();
                 RuneDesc = "New";
             }
-        }
-
-        private void SetFrameViewModelData(int itemId, int slotIndex)
-        {
-            RemoveFrameViewModel(slotIndex);
-
-            if (itemId != 0)
+            catch (Exception ex)
             {
-                ItemData itemData = new()
-                {
-                    ItemId = itemId,
-                    SlotIndex = slotIndex
-                };
-
-                var frameViewModel = ItemDataManager.GetItemData(itemData);
-                
-                FrameViewModels ??= [];
-                FrameViewModels.Add(frameViewModel);
-                OnPropertyChanged(nameof(FrameViewModels));
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
             }
-
         }
         #endregion
 
-        #region Remove Item
+        #region Remove RuneItem
 
         [RelayCommand]
         private void RemoveItem(string parameter)
         {
-            if (int.TryParse(parameter, out int slotIndex))
+            try
             {
-                switch (slotIndex)
+                if (int.TryParse(parameter, out int slotIndex))
                 {
-                    case 1:
-                        RuneItemCount00 = 0;
-                        RuneItemCode00 = 0;
-                        break;
-                    case 2:
-                        RuneItemCount01 = 0;
-                        RuneItemCode01 = 0;
-                        break;
-                    case 3:
-                        RuneItemCount02 = 0;
-                        RuneItemCode02 = 0;
-                        break;
-                    case 4:
-                        RuneItemCount03 = 0;
-                        RuneItemCode03 = 0;
-                        break;
-                    case 5:
-                        RuneItemCount04 = 0;
-                        RuneItemCode04 = 0;
-                        break;
-                    case 6:
-                        RuneItemCount05 = 0;
-                        RuneItemCode05 = 0;
-                        break;
-                    case 7:
-                        RuneItemCount06 = 0;
-                        RuneItemCode06 = 0;
-                        break;
-                    case 8:
-                        RuneItemCount07 = 0;
-                        RuneItemCode07 = 0;
-                        break;
-                    case 9:
-                        RuneItemCount08 = 0;
-                        RuneItemCode08 = 0;
-                        break;
-                    case 10:
-                        RuneItemCount09 = 0;
-                        RuneItemCode09 = 0;
-                        break;
+                    RemoveRuneItem(slotIndex);
                 }
-
-                RemoveFrameViewModel(slotIndex);
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
             }
         }
 
-        private void RemoveFrameViewModel(int slotIndex)
+        private void RemoveRuneItem(int slotIndex)
         {
-            if (FrameViewModels != null)
+            if (slotIndex >= 0 && slotIndex < 10 && RuneItems[slotIndex].ItemCode != 0)
             {
-                var removedItemIndex = FrameViewModels.FindIndex(i => i.SlotIndex == slotIndex);
-                if (removedItemIndex != -1)
-                {
-                    FrameViewModels.RemoveAt(removedItemIndex);
-                }
-                OnPropertyChanged(nameof(FrameViewModels));
+                DataTableManager.StartGroupingEdits();
+                RuneItems[slotIndex].ItemCode = 0;
+                RuneItems[slotIndex].ItemCount = 0;
+                RuneItems[slotIndex].ItemCodeCount = 0;
+                RuneItems[slotIndex].FrameViewModel = null;
+                OnPropertyChanged(nameof(RuneItems));
+                DataTableManager.EndGroupingEdits();
             }
         }
         #endregion
@@ -326,40 +291,36 @@ namespace RHToolkit.ViewModels.Windows
         private void UpdateSelectedItem(DataRowView? selectedItem)
         {
             _isUpdatingSelectedItem = true;
-            FrameViewModels?.Clear();
+            RuneItems?.Clear();
 
             if (selectedItem != null)
             {
-                IsSelectedItemVisible = Visibility.Visible;
                 RuneId = (int)selectedItem["nid"];
                 RuneDesc = (string)selectedItem["wszDisc"];
-                ChangeType = (int)selectedItem["nChangeType"];
+                ChangeType = (int)selectedItem["nChangeType"] == 1;
                 RandomRuneGroup = (int)selectedItem["nRandomRuneGroup"];
                 RuneGrade = (int)selectedItem["nRuneGrade"];
                 RandomGroupProbability = (float)selectedItem["fRandomGroupProbability"];
                 MaxCount = (int)selectedItem["nMaxCount"];
 
-                RuneItemCode00 = (int)selectedItem["nItemCode00"];
-                RuneItemCode01 = (int)selectedItem["nItemCode01"];
-                RuneItemCode02 = (int)selectedItem["nItemCode02"];
-                RuneItemCode03 = (int)selectedItem["nItemCode03"];
-                RuneItemCode04 = (int)selectedItem["nItemCode04"];
-                RuneItemCode05 = (int)selectedItem["nItemCode05"];
-                RuneItemCode06 = (int)selectedItem["nItemCode06"];
-                RuneItemCode07 = (int)selectedItem["nItemCode07"];
-                RuneItemCode08 = (int)selectedItem["nItemCode08"];
-                RuneItemCode09 = (int)selectedItem["nItemCode09"];
+                RuneItems = [];
 
-                RuneItemCount00 = (int)selectedItem["nItemCount00"];
-                RuneItemCount01 = (int)selectedItem["nItemCount01"];
-                RuneItemCount02 = (int)selectedItem["nItemCount02"];
-                RuneItemCount03 = (int)selectedItem["nItemCount03"];
-                RuneItemCount04 = (int)selectedItem["nItemCount04"];
-                RuneItemCount05 = (int)selectedItem["nItemCount05"];
-                RuneItemCount06 = (int)selectedItem["nItemCount06"];
-                RuneItemCount07 = (int)selectedItem["nItemCount07"];
-                RuneItemCount08 = (int)selectedItem["nItemCount08"];
-                RuneItemCount09 = (int)selectedItem["nItemCount09"];
+                for (int i = 0; i < 10; i++)
+                {
+                    var item = new RuneItem
+                    {
+                        ItemCode = (int)selectedItem[$"nItemCode{i:00}"],
+                        ItemCodeCount = (int)selectedItem[$"nItemCodeCount{i:00}"],
+                        ItemCount = (int)selectedItem[$"nItemCount{i:00}"],
+                        FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nItemCode{i:00}"], i, (int)selectedItem[$"nItemCodeCount{i:00}"]),
+                        IsEnabled = (int)selectedItem[$"nItemCode{i:00}"] != 0
+                    };
+
+                    RuneItems.Add(item);
+
+                    SetItemPropertyChanged(item, i);
+                }
+                IsSelectedItemVisible = Visibility.Visible;
             }
             else
             {
@@ -367,8 +328,20 @@ namespace RHToolkit.ViewModels.Windows
             }
 
             _isUpdatingSelectedItem = false;
-
             OnCanExecuteSelectedItemCommandChanged();
+        }
+
+        private void SetItemPropertyChanged(RuneItem item, int index)
+        {
+            item.PropertyChanged += (s, e) =>
+            {
+                if (s is RuneItem runeItem)
+                {
+                    OnRuneItemCodeChanged(runeItem.ItemCode, $"nItemCode{index:00}", index);
+                    OnRuneItemCountChanged(runeItem.ItemCodeCount, $"nItemCodeCount{index:00}", index);
+                    UpdateSelectedItemValue(runeItem.ItemCount, $"nItemCount{index:00}");
+                }
+            };
         }
 
         #endregion
@@ -385,25 +358,22 @@ namespace RHToolkit.ViewModels.Windows
                 filterParts.Add($"nChangeType = {ChangeTypeFilter}");
             }
 
-            string[] columns =
-                    [
-                        "CONVERT(nid, 'System.String')",
-                        "wszDisc",
-                        "CONVERT(nRandomRuneGroup, 'System.String')",
-                        "CONVERT(nRuneGrade, 'System.String')",
-                        "CONVERT(nItemCode00, 'System.String')",
-                        "CONVERT(nItemCode01, 'System.String')",
-                        "CONVERT(nItemCode02, 'System.String')",
-                        "CONVERT(nItemCode03, 'System.String')",
-                        "CONVERT(nItemCode04, 'System.String')",
-                        "CONVERT(nItemCode05, 'System.String')",
-                        "CONVERT(nItemCode06, 'System.String')",
-                        "CONVERT(nItemCode07, 'System.String')",
-                        "CONVERT(nItemCode08, 'System.String')",
-                        "CONVERT(nItemCode09, 'System.String')"
-                    ];
+            List<string> columns = [];
 
-            DataTableManager.ApplyFileDataFilter(filterParts, columns, SearchText, MatchCase);
+            columns.Add("CONVERT(nid, 'System.String')");
+            columns.Add("wszDisc");
+            columns.Add("CONVERT(nRandomRuneGroup, 'System.String')");
+            columns.Add("CONVERT(nRuneGrade, 'System.String')");
+
+            for (int i = 0; i < 10; i++)
+            {
+                string columnName = $"nItemCode{i:00}";
+                columns.Add($"CONVERT({columnName}, 'System.String')");
+            }
+            if (columns.Count > 0)
+            {
+                DataTableManager.ApplyFileDataFilter(filterParts, [.. columns], SearchText, MatchCase);
+            }
         }
 
         private void TriggerFilterUpdate()
@@ -438,17 +408,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Comboboxes
         [ObservableProperty]
-        private List<NameID>? _changeTypeItems;
-        [ObservableProperty]
         private List<NameID>? _changeTypeItemsFilter;
 
         private void PopulateChangeTypeItems()
         {
-            ChangeTypeItems =
-                [
-                    new NameID { ID = 0, Name = "0" },
-                    new NameID { ID = 1, Name = "1" }
-                ];
             ChangeTypeItemsFilter =
                 [
                     new NameID { ID = -1, Name = "All" },
@@ -457,7 +420,6 @@ namespace RHToolkit.ViewModels.Windows
                 ];
 
             ChangeTypeFilter = -1;
-            ChangeType = 0;
         }
 
         [ObservableProperty]
@@ -496,177 +458,104 @@ namespace RHToolkit.ViewModels.Windows
         #region SelectedItem
 
         [ObservableProperty]
-        private List<FrameViewModel>? _frameViewModels;
-
-        private bool _isUpdatingSelectedItem = false;
+        private ObservableCollection<RuneItem> _runeItems = [];
 
         [ObservableProperty]
         private int _runeId;
         partial void OnRuneIdChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["nid"] = value;
-            }
+            UpdateSelectedItemValue(value, "nid");
         }
 
         [ObservableProperty]
         private string? _runeDesc;
         partial void OnRuneDescChanged(string? value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["wszDisc"] = value;
-            }
+            UpdateSelectedItemValue(value, "wszDisc");
         }
 
         [ObservableProperty]
-        private int _changeType;
-        partial void OnChangeTypeChanged(int value)
+        private bool _changeType;
+        partial void OnChangeTypeChanged(bool value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["nChangeType"] = value;
-            }
+            UpdateSelectedItemValue(value, "nChangeType");
         }
 
         [ObservableProperty]
         private int _randomRuneGroup;
         partial void OnRandomRuneGroupChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["nRandomRuneGroup"] = value;
-            }
+            UpdateSelectedItemValue(value, "nRandomRuneGroup");
         }
 
         [ObservableProperty]
         private int _runeGrade;
         partial void OnRuneGradeChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["nRuneGrade"] = value;
-            }
+            UpdateSelectedItemValue(value, "nRuneGrade");
         }
 
         [ObservableProperty]
         private double _randomGroupProbability;
         partial void OnRandomGroupProbabilityChanged(double value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["fRandomGroupProbability"] = value;
-            }
+            UpdateSelectedItemValue(value, "fRandomGroupProbability");
         }
 
         [ObservableProperty]
         private int _MaxCount;
+
         partial void OnMaxCountChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
+            if (_isUpdating) return;
+
+            _isUpdating = true;
+
+            try
             {
-                DataTableManager.SelectedItem["nMaxCount"] = value;
+                DataTableManager.StartGroupingEdits();
+                UpdateSelectedItemValue(value, "nMaxCount");
+                RecalculateItemCount(value);
+                DataTableManager.EndGroupingEdits();
+            }
+            finally
+            {
+                _isUpdating = false;
             }
         }
 
-        [ObservableProperty]
-        private int _runeItemCode00;
-        partial void OnRuneItemCode00Changed(int value) => OnRuneItemCodeChanged(0, value);
-
-        [ObservableProperty]
-        private int _runeItemCode01;
-        partial void OnRuneItemCode01Changed(int value) => OnRuneItemCodeChanged(1, value);
-
-        [ObservableProperty]
-        private int _runeItemCode02;
-        partial void OnRuneItemCode02Changed(int value) => OnRuneItemCodeChanged(2, value);
-
-        [ObservableProperty]
-        private int _runeItemCode03;
-        partial void OnRuneItemCode03Changed(int value) => OnRuneItemCodeChanged(3, value);
-
-        [ObservableProperty]
-        private int _runeItemCode04;
-        partial void OnRuneItemCode04Changed(int value) => OnRuneItemCodeChanged(4, value);
-
-        [ObservableProperty]
-        private int _runeItemCode05;
-        partial void OnRuneItemCode05Changed(int value) => OnRuneItemCodeChanged(5, value);
-
-        [ObservableProperty]
-        private int _runeItemCode06;
-        partial void OnRuneItemCode06Changed(int value) => OnRuneItemCodeChanged(6, value);
-
-        [ObservableProperty]
-        private int _runeItemCode07;
-        partial void OnRuneItemCode07Changed(int value) => OnRuneItemCodeChanged(7, value);
-
-        [ObservableProperty]
-        private int _runeItemCode08;
-        partial void OnRuneItemCode08Changed(int value) => OnRuneItemCodeChanged(8, value);
-
-        [ObservableProperty]
-        private int _runeItemCode09;
-        partial void OnRuneItemCode09Changed(int value) => OnRuneItemCodeChanged(9, value);
-
-        private void OnRuneItemCodeChanged(int index, int value)
+        private void OnRuneItemCodeChanged(int newValue, string column, int index)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem[$"nItemCode{index:00}"] = value;
-            }
+            if (_isUpdatingSelectedItem)
+                return;
 
-            SetFrameViewModelData(value, index + 1);
+            DataTableManager.UpdateSelectedItemValue(newValue, column);
+            IsEnabled(index);
         }
 
-        [ObservableProperty]
-        private int _runeItemCount00;
-        partial void OnRuneItemCount00Changed(int value) => OnRuneItemCountChanged(0, value);
+        private bool _isUpdating = false;
 
-        [ObservableProperty]
-        private int _runeItemCount01;
-        partial void OnRuneItemCount01Changed(int value) => OnRuneItemCountChanged(1, value);
-
-        [ObservableProperty]
-        private int _runeItemCount02;
-        partial void OnRuneItemCount02Changed(int value) => OnRuneItemCountChanged(2, value);
-
-        [ObservableProperty]
-        private int _runeItemCount03;
-        partial void OnRuneItemCount03Changed(int value) => OnRuneItemCountChanged(3, value);
-
-        [ObservableProperty]
-        private int _runeItemCount04;
-        partial void OnRuneItemCount04Changed(int value) => OnRuneItemCountChanged(4, value);
-
-        [ObservableProperty]
-        private int _runeItemCount05;
-        partial void OnRuneItemCount05Changed(int value) => OnRuneItemCountChanged(5, value);
-
-        [ObservableProperty]
-        private int _runeItemCount06;
-        partial void OnRuneItemCount06Changed(int value) => OnRuneItemCountChanged(6, value);
-
-        [ObservableProperty]
-        private int _runeItemCount07;
-        partial void OnRuneItemCount07Changed(int value) => OnRuneItemCountChanged(7, value);
-
-        [ObservableProperty]
-        private int _runeItemCount08;
-        partial void OnRuneItemCount08Changed(int value) => OnRuneItemCountChanged(8, value);
-
-        [ObservableProperty]
-        private int _runeItemCount09;
-        partial void OnRuneItemCount09Changed(int value) => OnRuneItemCountChanged(9, value);
-
-        private void OnRuneItemCountChanged(int index, int value)
+        private void OnRuneItemCountChanged(int newValue, string column, int index)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem[$"nItemCount{index:00}"] = value;
+            if (_isUpdating) return;
 
-                RecalculateMaxCount();
+            _isUpdating = true;
+
+            try
+            {
+                var frameViewModel = RuneItems[index].FrameViewModel;
+                if (frameViewModel != null)
+                {
+                    frameViewModel.ItemAmount = newValue;
+                    RuneItems[index].FrameViewModel = frameViewModel;
+                }
+                
+                UpdateSelectedItemValue(newValue, column);
+                CalculateMaxCount();
+            }
+            finally
+            {
+                _isUpdating = false;
             }
         }
 
@@ -676,12 +565,51 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties Helper
 
-        private void RecalculateMaxCount()
-        {
-            // Sum all RuneItemCount values
-            int totalRuneItemCount = RuneItemCount00 + RuneItemCount01 + RuneItemCount02 + RuneItemCount03 + RuneItemCount04 + RuneItemCount05 + RuneItemCount06 + RuneItemCount07 + RuneItemCount08 + RuneItemCount09;
+        private bool _isUpdatingSelectedItem = false;
 
-            MaxCount = totalRuneItemCount;
+        private void UpdateSelectedItemValue(object? newValue, string column)
+        {
+            if (_isUpdatingSelectedItem)
+                return;
+            DataTableManager.UpdateSelectedItemValue(newValue, column);
+        }
+
+        private void CalculateMaxCount()
+        {
+            // Sum all ItemCount values
+            int totalRuneItemCount = RuneItems.Sum(item => item.ItemCount);
+
+            if (MaxCount != totalRuneItemCount)
+            {
+                MaxCount = totalRuneItemCount;
+            }
+        }
+
+        private void RecalculateItemCount(int value)
+        {
+            if (DataTableManager.SelectedItem != null)
+            {
+                int currentTotal = RuneItems.Sum(item => item.ItemCount);
+                if (currentTotal > 0)
+                {
+                    int scale = value / currentTotal;
+                    foreach (var item in RuneItems)
+                    {
+                        if (item.ItemCode > 0)
+                        {
+                            item.ItemCount *= scale;
+                        }
+                    }
+                }
+            }
+
+            OnPropertyChanged(nameof(RuneItems));
+        }
+
+        private void IsEnabled(int index)
+        {
+            RuneItems[index].IsEnabled = RuneItems[index].ItemCode != 0;
+            OnPropertyChanged(nameof(RuneItems));
         }
 
         #endregion

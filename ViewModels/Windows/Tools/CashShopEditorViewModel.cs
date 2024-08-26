@@ -458,13 +458,15 @@ namespace RHToolkit.ViewModels.Windows
                 filterParts.Add($"nItemState = {ItemStateFilter}");
             }
 
-            string[] columns =
-                [
-                    "CONVERT(nItemID, 'System.String')",
-                        "wszName"
-                ];
+            List<string> columns = [];
 
-            DataTableManager.ApplyFileDataFilter(filterParts, columns, SearchText, MatchCase);
+            columns.Add("CONVERT(nItemID, 'System.String')");
+            columns.Add("wszName");
+
+            if (columns.Count > 0)
+            {
+                DataTableManager.ApplyFileDataFilter(filterParts, [.. columns], SearchText, MatchCase);
+            }
         }
 
         private void TriggerFilterUpdate()

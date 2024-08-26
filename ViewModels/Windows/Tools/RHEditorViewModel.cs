@@ -29,16 +29,42 @@ namespace RHToolkit.ViewModels.Windows
 
                 if (isLoaded)
                 {
-                    Title = $"RH Table Editor ({DataTableManager.CurrentFileName})";
-                    OpenMessage = "";
-                    OnCanExecuteFileCommandChanged();
-                    IsVisible = Visibility.Visible;
+                    IsLoaded();
                 }
             }
             catch (Exception ex)
             {
                 RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
             }
+        }
+
+        [RelayCommand]
+        private async Task LoadFileAs()
+        {
+            try
+            {
+                await CloseFile();
+
+                string filter = "Rusty Hearts Table Files (*.rh)|*.rh|All Files (*.*)|*.*";
+                bool isLoaded = await DataTableManager.LoadFile(filter);
+
+                if (isLoaded)
+                {
+                    IsLoaded();
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            }
+        }
+
+        private void IsLoaded()
+        {
+            Title = $"RH Table Editor ({DataTableManager.CurrentFileName})";
+            OpenMessage = "";
+            OnCanExecuteFileCommandChanged();
+            IsVisible = Visibility.Visible;
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
@@ -87,10 +113,27 @@ namespace RHToolkit.ViewModels.Windows
 
         private void OnCanExecuteFileCommandChanged()
         {
+            AddRowCommand.NotifyCanExecuteChanged();
             CloseFileCommand.NotifyCanExecuteChanged();
             OpenSearchDialogCommand.NotifyCanExecuteChanged();
         }
 
+        #endregion
+
+        #region Add Row
+
+        [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+        private void AddRow()
+        {
+            try
+            {
+                DataTableManager.AddNewRow();
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
         #endregion
 
         #endregion
