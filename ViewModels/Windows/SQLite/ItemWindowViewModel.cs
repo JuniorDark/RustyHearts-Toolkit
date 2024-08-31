@@ -18,8 +18,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
         _gmDatabaseService = gmDatabaseService;
         _cachedDataManager = cachedDataManager;
         _itemDataManager = itemDataManager;
-        IsSlotVisible = Visibility.Visible;
-        IsOptionsVisible = Visibility.Visible;
+
         WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
     }
@@ -69,6 +68,13 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                     { "SetItem", "SetItemEditorWindow" },
                     { "Package", "PackageEditorWindow" },
                     { "RandomRune", "RandomRuneEditorWindow" },
+                    { "NpcShopItems", "NpcShopEditorWindowItems" },
+                    { "NpcShopFilterItems", "NpcShopEditorWindowItems" },
+                    { "TradeShopItems", "NpcShopEditorWindowItems" },
+                    { "ItemMixItems", "NpcShopEditorWindowItems" },
+                    { "NpcShopItem", "NpcShopEditorWindowItem" },
+                    { "TradeShopItem", "NpcShopEditorWindowItem" },
+                    { "ItemMixItem", "NpcShopEditorWindowItem" },
                     { "DropGroup", "DropGroupEditorWindow" },
                     { "CashShopItemUpdate", "CashShopEditorWindow" }
                 };
@@ -95,161 +101,199 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     [ObservableProperty]
     private string? _messageType;
 
+    private bool _isProcessing = false;
+
     public void Receive(ItemDataMessage message)
     {
-        if (Token == Guid.Empty)
-        {
-            Token = message.Token;
-        }
+        if (_isProcessing) return;
 
-        if (message.Recipient == "ItemWindow" && message.Token == Token)
+        try
         {
-            var itemData = message.Value;
-            MessageType = message.MessageType;
+            _isProcessing = true;
 
-            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            if (Token == Guid.Empty)
             {
-                Title = GetTitle(MessageType, itemData);
+                Token = message.Token;
+            }
 
-                var actions = new Dictionary<string, Action>
+            if (message.Recipient == "ItemWindow" && message.Token == Token)
+            {
+                var itemData = message.Value;
+                MessageType = message.MessageType;
+
+                Dispatcher.CurrentDispatcher.Invoke(() =>
                 {
+                    Title = GetTitle(MessageType, itemData);
+
+                    var settings = GetVisibilitySettings(message.MessageType, itemData);
+
+                    ApplyVisibilitySettings(settings);
+
+                    if (itemData.ItemId != 0)
                     {
-                        "Mail", () =>
-                        {
-                            SlotIndexMin = 0;
-                            SlotIndexMax = 2;
-                            IsSlotVisible = Visibility.Visible;
-                            IsOptionsVisible = Visibility.Visible;
-                        }
-                    },
-                    {
-                        "EquipItem", () =>
-                        {
-                            SlotIndexMin = itemData.SlotIndex;
-                            SlotIndexMax = itemData.SlotIndex;
-                            SlotFilter(itemData.SlotIndex);
-                            IsSlotVisible = Visibility.Visible;
-                            IsOptionsVisible = Visibility.Visible;
-                        }
-                    },
-                    {
-                        "InventoryItem", () =>
-                        {
-                            SlotIndexMin = 0;
-                            SlotIndexMax = itemData.PageIndex == 5 ? 119 : 23;
-                            ItemDataManager.InventoryTypeFilter = itemData.PageIndex;
-                            IsSlotVisible = Visibility.Visible;
-                            IsOptionsVisible = Visibility.Visible;
-                        }
-                    },
-                    {
-                        "StorageItem", () =>
-                        {
-                            SlotIndexMin = 0;
-                            SlotIndexMax = 179;
-                            IsSlotVisible = Visibility.Visible;
-                            IsOptionsVisible = Visibility.Visible;
-                        }
-                    },
-                    {
-                        "AccountStorageItem", () =>
-                        {
-                            SlotIndexMin = 0;
-                            SlotIndexMax = 179;
-                            ItemDataManager.AccountStorageFilter = 1;
-                            IsSlotVisible = Visibility.Visible;
-                            IsOptionsVisible = Visibility.Visible;
-                        }
-                    },
-                    {
-                        "CashShopItemAdd", () =>
-                        {
-                            SelectionMode = DataGridSelectionMode.Extended;
-                            IsSlotVisible = Visibility.Hidden;
-                            IsOptionsVisible = Visibility.Hidden;
-                            AddItemText = "Add Selected Item(s)";
-                        }
-                    },
-                    {
-                        "CashShopItemUpdate", () =>
-                        {
-                            SelectionMode = DataGridSelectionMode.Single;
-                            IsSlotVisible = Visibility.Hidden;
-                            IsOptionsVisible = Visibility.Hidden;
-                        }
-                    },
-                    {
-                        "CouponItem", () =>
-                        {
-                            IsNewItem = itemData.IsNewItem;
-                            IsSlotVisible = Visibility.Hidden;
-                            IsOptionsVisible = Visibility.Hidden;
-                        }
-                    },
-                    {
-                        "Package", () =>
-                        {
-                            SlotIndexMin = 1;
-                            SlotIndexMax = 12;
-                            IsSlotVisible = Visibility.Visible;
-                            IsOptionsVisible = Visibility.Hidden;
-                        }
-                    },
-                    {
-                        "RandomRune", () =>
-                        {
-                            SlotIndexMin = 1;
-                            SlotIndexMax = 10;
-                            IsSlotVisible = Visibility.Visible;
-                            IsOptionsVisible = Visibility.Hidden;
-                        }
-                    },
-                    {
-                        "DropGroup", () =>
-                        {
-                            SlotIndexMin = 0;
-                            SlotIndexMax = itemData.OverlapCnt - 1;
-                            IsSlotVisible = Visibility.Visible;
-                            IsOptionsVisible = Visibility.Hidden;
-                        }
-                    },
-                    {
-                        "SetItem", () =>
-                        {
-                            SlotIndexMin = 0;
-                            SlotIndexMax = 5;
-                            IsSlotVisible = Visibility.Visible;
-                            IsOptionsVisible = Visibility.Hidden;
-                        }
+                        LoadItemData(itemData);
                     }
-                };
-
-                if (!string.IsNullOrEmpty(message.MessageType) && actions.TryGetValue(message.MessageType, out var action))
-                {
-                    action();
-                }
-                else
-                {
-                    SlotIndexMin = itemData.SlotIndex;
-                    SlotIndexMax = itemData.SlotIndex;
-                    IsSlotVisible = Visibility.Visible;
-                    IsOptionsVisible = Visibility.Visible;
-                }
-
-                if (itemData.ItemId != 0)
-                {
-                    LoadItemData(itemData);
-                }
-                else
-                {
-                    if (ItemDataManager.FrameViewModel != null)
+                    else
                     {
-                        ItemDataManager.FrameViewModel.PageIndex = itemData.PageIndex;
-                        ItemDataManager.FrameViewModel.SlotIndex = itemData.SlotIndex;
+                        UpdateFrameViewModel(itemData);
                     }
-                }
-            }), DispatcherPriority.Background);
+                }, DispatcherPriority.ContextIdle);
+            }
         }
+        finally
+        {
+            _isProcessing = false;
+        }
+    }
+
+    private VisibilitySettings GetVisibilitySettings(string? messageType, ItemData itemData)
+    {
+        var defaultSettings = new VisibilitySettings
+        {
+            IsSlotVisible = Visibility.Collapsed,
+            IsOptionsVisible = Visibility.Collapsed,
+            IsItemAmountVisible = Visibility.Collapsed,
+            SelectionMode = DataGridSelectionMode.Single,
+            SlotIndexMin = 0,
+            SlotIndexMax = 0
+        };
+
+        var visibilitySettings = new Dictionary<string, Action<VisibilitySettings>>
+        {
+            ["Mail"] = settings =>
+            {
+                settings.SlotIndexMax = 2;
+                settings.IsSlotVisible = Visibility.Visible;
+                settings.IsOptionsVisible = Visibility.Visible;
+            },
+            ["EquipItem"] = settings =>
+            {
+                settings.SlotIndexMin = itemData.SlotIndex;
+                settings.SlotIndexMax = itemData.SlotIndex;
+                SlotFilter(itemData.SlotIndex);
+                settings.IsSlotVisible = Visibility.Visible;
+                settings.IsOptionsVisible = Visibility.Visible;
+            },
+            ["InventoryItem"] = settings =>
+            {
+                settings.SlotIndexMax = itemData.PageIndex == 5 ? 119 : 23;
+                ItemDataManager.InventoryTypeFilter = itemData.PageIndex;
+                settings.IsSlotVisible = Visibility.Visible;
+                settings.IsOptionsVisible = Visibility.Visible;
+            },
+            ["StorageItem"] = settings =>
+            {
+                settings.SlotIndexMax = 179;
+                settings.IsSlotVisible = Visibility.Visible;
+                settings.IsOptionsVisible = Visibility.Visible;
+            },
+            ["AccountStorageItem"] = settings =>
+            {
+                settings.SlotIndexMax = 179;
+                ItemDataManager.AccountStorageFilter = 1;
+                settings.IsSlotVisible = Visibility.Visible;
+                settings.IsOptionsVisible = Visibility.Visible;
+            },
+            ["CashShopItemAdd"] = settings =>
+            {
+                settings.SelectionMode = DataGridSelectionMode.Extended;
+                settings.IsSlotVisible = Visibility.Hidden;
+                settings.IsOptionsVisible = Visibility.Hidden;
+                AddItemText = "Add Selected Item(s)";
+            },
+            ["CashShopItemUpdate"] = settings =>
+            {
+                settings.IsSlotVisible = Visibility.Hidden;
+                settings.IsOptionsVisible = Visibility.Hidden;
+            },
+            ["CouponItem"] = settings =>
+            {
+                IsNewItem = itemData.IsNewItem;
+                settings.IsSlotVisible = Visibility.Hidden;
+                settings.IsOptionsVisible = Visibility.Hidden;
+            },
+            ["Package"] = settings =>
+            {
+                settings.SlotIndexMax = 11;
+                settings.IsSlotVisible = Visibility.Visible;
+            },
+            ["RandomRune"] = settings =>
+            {
+                settings.SlotIndexMax = 11;
+                settings.IsSlotVisible = Visibility.Visible;
+            },
+            ["TradeShopItems"] = settings =>
+            {
+                settings.SlotIndexMax = 4;
+                settings.IsItemAmountVisible = Visibility.Visible;
+                settings.IsSlotVisible = Visibility.Visible;
+            },
+            ["ItemMixItems"] = settings =>
+            {
+                settings.SlotIndexMax = 4;
+                settings.IsSlotVisible = Visibility.Visible;
+            },
+            ["NpcShopItems"] = settings =>
+            {
+                settings.SlotIndexMax = 19;
+                settings.IsItemAmountVisible = Visibility.Collapsed;
+                settings.IsSlotVisible = Visibility.Visible;
+            },
+            ["NpcShopFilterItems"] = settings =>
+            {
+                settings.SlotIndexMax = 2;
+                settings.IsSlotVisible = Visibility.Visible;
+            },
+            ["NpcShopItem"] = settings => { },
+            ["TradeShopItem"] = settings => { },
+            ["ItemMixItem"] = settings => { },
+            ["DropGroup"] = settings =>
+            {
+                settings.SlotIndexMax = itemData.OverlapCnt - 1;
+                settings.IsSlotVisible = Visibility.Visible;
+            },
+            ["SetItem"] = settings =>
+            {
+                settings.SlotIndexMax = 5;
+                settings.IsSlotVisible = Visibility.Visible;
+            }
+        };
+
+        if (!string.IsNullOrEmpty(messageType) && visibilitySettings.TryGetValue(messageType, out var action))
+        {
+            action(defaultSettings);
+        }
+
+        return defaultSettings;
+    }
+
+    private void ApplyVisibilitySettings(VisibilitySettings settings)
+    {
+        SlotIndexMin = settings.SlotIndexMin;
+        SlotIndexMax = settings.SlotIndexMax;
+        IsSlotVisible = settings.IsSlotVisible;
+        IsOptionsVisible = settings.IsOptionsVisible;
+        IsItemAmountVisible = settings.IsItemAmountVisible;
+        SelectionMode = settings.SelectionMode;
+    }
+
+    private void UpdateFrameViewModel(ItemData itemData)
+    {
+        if (ItemDataManager.FrameViewModel != null)
+        {
+            ItemDataManager.FrameViewModel.PageIndex = itemData.PageIndex;
+            ItemDataManager.FrameViewModel.SlotIndex = itemData.SlotIndex;
+        }
+    }
+
+    private class VisibilitySettings
+    {
+        public Visibility IsSlotVisible { get; set; }
+        public Visibility IsOptionsVisible { get; set; }
+        public Visibility IsItemAmountVisible { get; set; }
+        public DataGridSelectionMode SelectionMode { get; set; }
+        public int SlotIndexMin { get; set; }
+        public int SlotIndexMax { get; set; }
     }
 
     private string GetTitle(string? messageType, ItemData itemData)
@@ -266,6 +310,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             "Mail" => "Add Mail Item",
             "Package" => "Add Package Item",
             "RandomRune" => "Add Random Rune Item",
+            "NpcShopItem" or "NpcShopItems" or "NpcShopFilterItems" => "Add Npc Shop Item",
+            "TradeShopItem" or "TradeShopItems" => "Add Trade Shop Item",
+            "ItemMixItem" or "ItemMixItems" => "Add Item Craft Item",
             "DropGroup" => "Add Drop Group Item",
             "SetItem" => "Add Set Item",
             _ => "Add Item",
@@ -454,83 +501,20 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     private void LoadItemData(ItemData itemData)
     {
         var frameViewModel = ItemDataManager.GetItemData(itemData);
-
         ItemDataManager.FrameViewModel = frameViewModel;
-
-        ItemDataManager.FrameViewModel.SlotIndex = itemData.SlotIndex;
-        ItemDataManager.FrameViewModel.ItemId = itemData.ItemId;
-        ItemDataManager.FrameViewModel.ItemAmount = itemData.ItemAmount;
-        ItemDataManager.FrameViewModel.MaxDurability = itemData.DurabilityMax;
-        ItemDataManager.FrameViewModel.EnhanceLevel = itemData.EnhanceLevel;
-        ItemDataManager.FrameViewModel.AugmentValue = itemData.AugmentStone;
-        ItemDataManager.FrameViewModel.Rank = itemData.Rank;
-        ItemDataManager.FrameViewModel.Weight = itemData.Weight;
-        ItemDataManager.FrameViewModel.ReconstructionMax = itemData.ReconstructionMax;
-        ItemDataManager.FrameViewModel.Reconstruction = itemData.Reconstruction;
-        ItemDataManager.FrameViewModel.RandomOption01 = itemData.Option1Code;
-        ItemDataManager.FrameViewModel.RandomOption02 = itemData.Option2Code;
-        ItemDataManager.FrameViewModel.RandomOption03 = itemData.Option3Code;
-        ItemDataManager.FrameViewModel.RandomOption01Value = itemData.Option1Value;
-        ItemDataManager.FrameViewModel.RandomOption02Value = itemData.Option2Value;
-        ItemDataManager.FrameViewModel.RandomOption03Value = itemData.Option3Value;
-        ItemDataManager.FrameViewModel.SocketCount = itemData.SocketCount;
-        ItemDataManager.FrameViewModel.Socket01Color = itemData.Socket1Color;
-        ItemDataManager.FrameViewModel.Socket02Color = itemData.Socket2Color;
-        ItemDataManager.FrameViewModel.Socket03Color = itemData.Socket3Color;
-        ItemDataManager.FrameViewModel.SocketOption01 = itemData.Socket1Code;
-        ItemDataManager.FrameViewModel.SocketOption02 = itemData.Socket2Code;
-        ItemDataManager.FrameViewModel.SocketOption03 = itemData.Socket3Code;
-        ItemDataManager.FrameViewModel.SocketOption01Value = itemData.Socket1Value;
-        ItemDataManager.FrameViewModel.SocketOption02Value = itemData.Socket2Value;
-        ItemDataManager.FrameViewModel.SocketOption03Value = itemData.Socket3Value;
-
         SelectedItem = ItemDataManager.ItemDataItems?.FirstOrDefault(item => item.ItemId == itemData.ItemId);
-
     }
 
     private void UpdateItemData(ItemData itemData)
     {
+        var frameViewModel = ItemDataManager.GetItemData(itemData);
         if (ItemDataManager.FrameViewModel != null)
         {
-            ItemDataManager.FrameViewModel.IsNewItem = IsNewItem;
-            ItemDataManager.FrameViewModel.ItemId = itemData.ItemId;
-            ItemDataManager.FrameViewModel.ItemName = itemData.ItemName;
-            ItemDataManager.FrameViewModel.Description = itemData.Description;
-            ItemDataManager.FrameViewModel.ItemBranch = itemData.Branch;
-            ItemDataManager.FrameViewModel.IconName = itemData.IconName;
-            ItemDataManager.FrameViewModel.ItemTrade = itemData.ItemTrade;
-            ItemDataManager.FrameViewModel.MaxDurability = itemData.Durability;
-            ItemDataManager.FrameViewModel.Weight = itemData.Weight;
-            ItemDataManager.FrameViewModel.ReconstructionMax = itemData.ReconstructionMax;
-            ItemDataManager.FrameViewModel.Reconstruction = itemData.ReconstructionMax;
-            ItemDataManager.FrameViewModel.OverlapCnt = itemData.OverlapCnt;
-            ItemDataManager.FrameViewModel.ItemAmount = itemData.ItemAmount;
-            ItemDataManager.FrameViewModel.Rank = itemData.Rank;
-            ItemDataManager.FrameViewModel.Type = itemData.Type;
-            ItemDataManager.FrameViewModel.Category = itemData.Category;
-            ItemDataManager.FrameViewModel.SubCategory = itemData.SubCategory;
-            ItemDataManager.FrameViewModel.JobClass = itemData.JobClass;
-            ItemDataManager.FrameViewModel.Defense = itemData.Defense;
-            ItemDataManager.FrameViewModel.MagicDefense = itemData.MagicDefense;
-            ItemDataManager.FrameViewModel.WeaponID00 = itemData.WeaponID00;
-            ItemDataManager.FrameViewModel.SellPrice = itemData.SellPrice;
-            ItemDataManager.FrameViewModel.RequiredLevel = itemData.LevelLimit;
-            ItemDataManager.FrameViewModel.SetId = itemData.SetId;
-            ItemDataManager.FrameViewModel.PetFood = itemData.PetFood;
-            ItemDataManager.FrameViewModel.FixedOption01 = itemData.FixOption1Code;
-            ItemDataManager.FrameViewModel.FixedOption01Value = itemData.FixOption1Value;
-            ItemDataManager.FrameViewModel.FixedOption02 = itemData.FixOption2Code;
-            ItemDataManager.FrameViewModel.FixedOption02Value = itemData.FixOption2Value;
-            ItemDataManager.FrameViewModel.OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
-            ItemDataManager.FrameViewModel.SocketCountMax = itemData.SocketCountMax;
-            ItemDataManager.FrameViewModel.SocketCount = itemData.SocketCountMax;
+            frameViewModel.SlotIndex = ItemDataManager.FrameViewModel.SlotIndex;
+            frameViewModel.ItemAmount = ItemDataManager.FrameViewModel.ItemAmount <= frameViewModel.OverlapCnt ? ItemDataManager.FrameViewModel.ItemAmount : 1;
         }
-        else
-        {
-            var frameViewModel = ItemDataManager.GetItemData(itemData);
-            ItemDataManager.FrameViewModel = frameViewModel;
-        }
-
+        
+        ItemDataManager.FrameViewModel = frameViewModel;
     }
 
     #endregion
@@ -544,10 +528,13 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     private string _addItemText = "Add Selected Item";
 
     [ObservableProperty]
-    private Visibility _isSlotVisible = Visibility.Hidden;
+    private Visibility _isSlotVisible = Visibility.Collapsed;
 
     [ObservableProperty]
-    private Visibility _isOptionsVisible = Visibility.Hidden;
+    private Visibility _isItemAmountVisible = Visibility.Collapsed;
+
+    [ObservableProperty]
+    private Visibility _isOptionsVisible = Visibility.Collapsed;
 
     [ObservableProperty]
     private DataGridSelectionMode _selectionMode = DataGridSelectionMode.Single;
@@ -563,6 +550,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     {
         if (value != null)
         {
+            if (_isProcessing) return;
             UpdateItemData(value);
         }
 

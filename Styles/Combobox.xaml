@@ -23,6 +23,13 @@
     </Style>
 
     <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="Foreground" Value="White" />
         <Setter Property="FontFamily" Value="{StaticResource ArialUnicodeMS}" />
         <Setter Property="FontSize" Value="10" />
@@ -133,8 +140,7 @@
                         <ScrollViewer
                             Margin="4,6,4,6"
                             CanContentScroll="True"
-                            SnapsToDevicePixels="True"
-                            Style="{StaticResource lb_scrollviewer}">
+                            SnapsToDevicePixels="True">
                             <ItemsPresenter />
                         </ScrollViewer>
                     </Border>

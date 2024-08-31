@@ -469,7 +469,17 @@ namespace RHToolkit.Models
             QuestItemDropGroupList = 6,
             WorldInstanceItemDropGroupList = 7,
             WorldItemDropGroupList = 8,
-            WorldItemDropGroupListF = 9,
+            WorldItemDropGroupListF = 9
+        }
+
+        public enum NpcShopType
+        {
+            None = 0,
+            NpcShop = 1,
+            TradeShop = 2,
+            ItemMix = 3,
+            ShopItemVisibleFilter = 4,
+            ItemPreview = 5
         }
     }
 }

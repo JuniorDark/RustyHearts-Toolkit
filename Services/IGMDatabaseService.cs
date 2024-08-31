@@ -6,6 +6,7 @@ namespace RHToolkit.Services
     {
         string GetAddEffectName(int effectID);
         List<NameID> GetCategoryItems(EnumService.ItemType itemType, bool isSubCategory);
+        List<NameID> GetSubCategoryItems();
         string GetCategoryName(int categoryID);
         double GetEnhanceValue(int enhanceValue);
         long GetExperienceFromLevel(int level);
@@ -17,6 +18,7 @@ namespace RHToolkit.Services
         List<NameID> GetLobbyItems();
         string GetOptionGroupName(int optionID);
         List<NameID> GetOptionItems();
+        List<NameID> GetQuestListItems();
         string GetOptionName(int optionID);
         (int secTime, float value) GetOptionValues(int optionID);
         (int nSetOption00, int nSetOptionvlue00, int nSetOption01, int nSetOptionvlue01, int nSetOption02, int nSetOptionvlue02, int nSetOption03, int nSetOptionvlue03, int nSetOption04, int nSetOptionvlue04) GetSetInfo(int setID);

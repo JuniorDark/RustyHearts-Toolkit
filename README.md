@@ -6,7 +6,7 @@
 
 ## Overview
 
-**Rusty Hearts Toolkit** is a set of tools designed for editing Rusty Hearts game files and database. Whether you're looking to customize characters, manage in-game items, or edit game files, this toolkit offers a variety of features to assist in the process.
+**Rusty Hearts Toolkit** is a set of GUI tools designed for editing Rusty Hearts game files and database.
 
 ## Preview
 <!-- Include screenshots later here to provide a visual overview of the toolkit. -->
@@ -24,13 +24,14 @@ To start using the Rusty Hearts Toolkit, download the latest release from the [G
 - **Mail Templates:** Save and reuse mail templates in JSON format.
 
 ### Table Editor Tools
-- *Table Editor:* Edit `.rh` table files and export them to various formats, including XML, XLSX, and MIP.
-- *Specialized Table Editors:*
-- **Cash Shop Editor:** Manage in-game cash shop items and packages.
-- **Item Drop Group Editor** Item drops.
-- **Package Editor:** Manage and edit item packages and effects.
-- **Random Rune Editor:** Manage and edit 'gacha' items.
-- **Set Editor:** Edit item sets and their effects.
+- **Table Editor:** Edit `.rh` table files on the go and export them to various formats, including XML, XLSX, and MIP.
+- **Specialized Table Editors:**
+- **Cash Shop Editor:** Manage in-game cash shop items and packages (cashshoplist.rh).
+- **Item Drop Group Editor** Item drops (itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh).
+- **NPC Shop Editor** Npc Shop (npcshop.rh), Trade Shop (tradeshop.rh), Item Craft (itemmix.rh), shop item visible filter (shopitemvisiblefilter.rh).
+- **Package Editor:** Item packages and effects (unionpackage.rh).
+- **Random Rune Editor:** Edit 'gacha' items (randomrune.rh).
+- **Set Editor:** Edit item sets and their effects (setitem.rh).
 
 ### Language Settings
 
@@ -42,25 +43,35 @@ The toolkit curently supports 2 languages. You can change the language in the `S
 
 ## Setup Guide
 
-To set up the toolkit and generate the necessary database:
+To set up the toolkit and generate the necessary SQLite database:
 
 1. Navigate to the `SQLite Database Manager` page.
 2. Select the folder containing the `.rh` table files.
 3. Click `Create Database` to generate the `gmdb_(Lang).db` database in the `Resources` folder.
 4. Place the required icons in the `Resources` folder. Icons are available in [`Resources.rar`](Resources.rar).
 
-## Building from Source
+## Building
 
-If you wish to build locally or contribute to its development, ensure that you have the following prerequisites:
+If you wish to build the project yourself, follow these steps:
 
 ### Prerequisites
-- **Visual Studio 2022 (17.9 or later)** - Any edition
-- **Windows 10 SDK** or **Windows 11 SDK** via Visual Studio Installer
-- **.NET Core 8 SDK (8.0.107 or later)** - [Download here](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+- **.NET Core 8 SDK (8.0.107 or later)** - [Download here](https://dotnet.microsoft.com/download/dotnet/8.0)
 
-### System Requirements
-- **OS:** Windows 10 / Windows 11
-- **Architecture:** x64/AMD64
+### Step 1
+
+Install the [.NET 8.0 (or higher) SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
+Make sure your SDK version is higher or equal to the required version specified. 
+
+### Step 2
+
+Either use `git clone https://github.com/JuniorDark/RustyHearts-Toolkit` on the command line to clone the repository or use Code --> Download zip button to get the files.
+
+### Step 3
+
+To build Rusty Hearts Toolkit, open a command prompt inside the project directory.
+You can quickly access it on Windows by holding shift in File Explorer, then right clicking and selecting `Open command window here`.
+Then type the following command: `dotnet build -c Release` or using `dotnet cake` a [Bash](https://www.gnu.org/software/bash) script 
+the built files will be found in the newly created build directory.
 
 ## License
 
@@ -89,11 +100,9 @@ A: Fork the repository, make your changes, and submit a pull request.
 
 ### Specialized Table Editors
 - **Add Effect Editor**
-- **Craft Editor**
 - **Enemy Editor**
 - **Item Editor**
 - **NPC Editor**
-- **NPC Shop Editor**
 - **Pet Editor**
 - **Quest Editor**
 - **Skill Editor**
@@ -105,6 +114,7 @@ A: Fork the repository, make your changes, and submit a pull request.
 This project is possible due to the following NuGet packages:
 
 - [CommunityToolkit.Mvvm](https://www.nuget.org/packages/CommunityToolkit.Mvvm)
+- [DotNetZip](https://www.nuget.org/packages/dotnetzip)
 - [EPPlus](https://www.nuget.org/packages/EPPlus)
 - [Microsoft.Data.SqlClient](https://www.nuget.org/packages/Microsoft.Data.SqlClient)
 - [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection)

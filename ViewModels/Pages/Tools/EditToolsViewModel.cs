@@ -17,6 +17,7 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
         new("Set Item Editor", "Edit setitem .rh table file", SymbolRegular.DocumentEdit24, "setitemeditor"),
         new("Random Rune Editor", "Edit randomrune .rh table file", SymbolRegular.DocumentEdit24, "randomruneeditor"),
         new("Drop Group Editor", "Edit dropgroup .rh table file", SymbolRegular.DocumentEdit24, "dropgroupeditor"),
+        new("NPC Shop Editor", "Edit npcshop .rh table file", SymbolRegular.DocumentEdit24, "npcshopeditor"),
 
 ];
 
@@ -49,6 +50,9 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
                     break;
                 case "dropgroupeditor":
                     windowsProviderService.Show<DropGroupEditorWindow>(true);
+                    break;
+                case "npcshopeditor":
+                    windowsProviderService.Show<NPCShopEditorWindow>(true);
                     break;
             }
         }

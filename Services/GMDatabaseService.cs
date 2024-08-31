@@ -211,7 +211,7 @@ namespace RHToolkit.Services
 
                 using var reader = _sqLiteDatabaseService.ExecuteReader(query, connection);
 
-                categoryItems.Add(new NameID { ID = 0, Name = Resources.All }); // Add an option to show all categories or subcategories
+                categoryItems.Add(new NameID { ID = 0, Name = Resources.None });
 
                 while (reader.Read())
                 {
@@ -224,6 +224,37 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 throw new Exception($"Error populating the {(isSubCategory ? "subcategory" : "category")} combobox for {itemType}", ex);
+            }
+
+            return categoryItems;
+        }
+
+        public List<NameID> GetSubCategoryItems()
+        {
+            List<NameID> categoryItems = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = "SELECT nID, wszName02 FROM itemcategory WHERE wszName02 <> ''";
+
+                using var command = connection.CreateCommand();
+                command.CommandText = query;
+
+                using var reader = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                categoryItems.Add(new NameID { ID = 0, Name = Resources.None });
+
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    string name = reader.GetString(1);
+
+                    categoryItems.Add(new NameID { ID = id, Name = name });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error:", ex);
             }
 
             return categoryItems;
@@ -249,6 +280,34 @@ namespace RHToolkit.Services
                 ItemType.Costume => [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 48, 101, 102, 104, 105, 106, 107, 108, 109],
                 _ => [],
             };
+        }
+
+        public List<NameID> GetQuestListItems()
+        {
+            List<NameID> questItems = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = "SELECT nID, wszTitle FROM queststring";
+                using var reader = _sqLiteDatabaseService.ExecuteReader(query, connection);
+                questItems.Add(new NameID { ID = 0, Name = Resources.None });
+
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    string name = reader.GetString(1);
+
+                    string formattedName = $"({id}) {name}";
+
+                    questItems.Add(new NameID { ID = id, Name = formattedName });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving quests from the database.", ex);
+            }
+
+            return questItems;
         }
 
         private string GetStringValueFromQuery(string query, params (string, object)[] parameters)
@@ -281,6 +340,12 @@ namespace RHToolkit.Services
         public string GetSubCategoryName(int categoryID)
         {
             string query = "SELECT wszName01 FROM itemcategory WHERE nID = @categoryID";
+            return GetStringValueFromQuery(query, ("@categoryID", categoryID));
+        }
+
+        public string GetSubCategory02Name(int categoryID)
+        {
+            string query = "SELECT wszName02 FROM itemcategory WHERE nID = @categoryID";
             return GetStringValueFromQuery(query, ("@categoryID", categoryID));
         }
 

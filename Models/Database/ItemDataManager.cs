@@ -33,9 +33,12 @@ public partial class ItemDataManager: ObservableObject
         PopulateSocketColorItems();
         PopulateItemTypeItemsFilter();
         PopulateCategoryItemsFilter(ItemType.Item);
+        PopulateSubCategoryItemsFilter();
         PopulateClassItemsFilter();
         PopulateBranchItemsFilter();
         PopulateItemTradeItemsFilter();
+        PopulateQuestConditionItems();
+        PopulateQuestListItems();
 
         _itemDataView = new CollectionViewSource { Source = ItemDataItems }.View;
         _itemDataView.Filter = FilterItems;
@@ -465,6 +468,21 @@ public partial class ItemDataManager: ObservableObject
     }
 
     [ObservableProperty]
+    private List<NameID>? _subCategory02ItemsFilter;
+
+    private void PopulateSubCategoryItemsFilter()
+    {
+        try
+        {
+            SubCategory02ItemsFilter = _gmDatabaseService.GetSubCategoryItems();
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+        }
+    }
+
+    [ObservableProperty]
     private int _itemTypeFilter;
     partial void OnItemTypeFilterChanged(int value)
     {
@@ -561,12 +579,16 @@ public partial class ItemDataManager: ObservableObject
     }
 
     [ObservableProperty]
+    private List<NameID>? _classItems;
+
+    [ObservableProperty]
     private List<NameID>? _classItemsFilter;
 
     private void PopulateClassItemsFilter()
     {
         try
         {
+            ClassItems = GetEnumItems<CharClass>(false);
             ClassItemsFilter = GetEnumItems<CharClass>(true);
 
             if (ClassItemsFilter.Count > 0)
@@ -656,5 +678,43 @@ public partial class ItemDataManager: ObservableObject
         }
     }
 
+    [ObservableProperty]
+    private List<NameID>? _questConditionItems;
+
+    private void PopulateQuestConditionItems()
+    {
+        try
+        {
+            QuestConditionItems =
+            [
+                new NameID { ID = 0, Name = Resources.None },
+                new NameID { ID = 1, Name = "In Progress" },
+                new NameID { ID = 2, Name = "Paused" },
+                new NameID { ID = 100, Name = "Finished" },
+                new NameID { ID = 255, Name = "Completed" }
+            ];
+
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+        }
+    }
+
+    [ObservableProperty]
+    private List<NameID>? _questListItems;
+
+    private void PopulateQuestListItems()
+    {
+        try
+        {
+            QuestListItems = _gmDatabaseService.GetQuestListItems();
+
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+        }
+    }
     #endregion
 }

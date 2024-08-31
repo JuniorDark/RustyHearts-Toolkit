@@ -100,7 +100,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -117,7 +117,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Max Range" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -134,7 +134,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Seed" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -151,7 +151,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F3}%'}" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -183,7 +183,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -200,7 +200,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Max Range" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -217,7 +217,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Max Count" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -235,7 +235,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -270,7 +270,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -305,7 +305,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -340,7 +340,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -357,7 +357,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Max Range" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -374,7 +374,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Group" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -392,7 +392,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F3}%'}" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -426,7 +426,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -443,7 +443,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -478,7 +478,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -513,7 +513,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -563,7 +563,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="Gold" Text="{Binding NDropItemCount, Converter={StaticResource DropItemCountConverter}, StringFormat=' Item Drop Rate: {0:F2}%'}" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         ClearButtonEnabled="False"
                         IsEnabled="{Binding DropItemCode, Converter={StaticResource ZeroToIsEnabledConverter}}"
                         LargeChange="100"
@@ -755,7 +755,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Start" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -772,7 +772,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="End" />
                     <ui:NumberBox
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
