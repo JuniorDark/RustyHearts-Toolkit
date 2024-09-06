@@ -98,7 +98,7 @@
                     VerticalAlignment="Center"
                     AddItemCommand="{Binding UpdateSelectedItemCommand}"
                     CashPrice="{Binding CashCost, UpdateSourceTrigger=PropertyChanged}"
-                    FrameViewModel="{Binding FrameViewModel, UpdateSourceTrigger=PropertyChanged}"
+                    ItemDataViewModel="{Binding ItemDataViewModel, UpdateSourceTrigger=PropertyChanged}"
                     IconName="{Binding IconName, UpdateSourceTrigger=PropertyChanged}"
                     ItemAmount="{Binding ItemAmount, UpdateSourceTrigger=PropertyChanged}"
                     ItemState="{Binding ItemState, UpdateSourceTrigger=PropertyChanged}"
@@ -146,7 +146,7 @@
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Item ID" />
                             <ui:NumberBox
-                                Width="120"
+                                Width="150"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
@@ -156,13 +156,13 @@
                         <StackPanel
                             Grid.Row="0"
                             Grid.Column="0"
-                            Margin="0,0,20,0"
+                            Margin="0,0,0,0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Shop ID" />
                             <ui:NumberBox
-                                Width="120"
+                                Width="150"
                                 Margin="0,0,0,0"
                                 Minimum="0"
                                 Value="{Binding ShopID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -248,7 +248,7 @@
                                 Foreground="White"
                                 Text="{Binding ItemAmountText}" />
                             <ui:NumberBox
-                                Width="120"
+                                Width="150"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
@@ -287,7 +287,7 @@
                             Orientation="Vertical">
                             <Label Content="Payment Type" Style="{StaticResource ArialMSWhite}" />
                             <ComboBox
-                                Width="120"
+                                Width="150"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
@@ -307,7 +307,7 @@
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Cash Cost" />
                             <ui:NumberBox
-                                Width="120"
+                                Width="150"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
@@ -323,7 +323,7 @@
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Sale Cash Cost" />
                             <ui:NumberBox
-                                Width="120"
+                                Width="150"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
@@ -339,7 +339,7 @@
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Bonus Earned" />
                             <ui:NumberBox
-                                Width="120"
+                                Width="150"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
@@ -356,7 +356,7 @@
                             Orientation="Vertical">
                             <TextBlock Foreground="White" Text="Bonus % Rate" />
                             <ui:NumberBox
-                                Width="120"
+                                Width="150"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"

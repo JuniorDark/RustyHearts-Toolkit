@@ -34,7 +34,7 @@
             Background="Transparent"
             BorderBrush="Transparent"
             Cursor="Hand"
-            Tag="{Binding FrameViewModel, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            Tag="{Binding ItemDataViewModel, RelativeSource={RelativeSource AncestorType=UserControl}}">
             <Button.ToolTip>
                 <ToolTip Style="{StaticResource FrameToolTipStyle}" Visibility="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource NullToVisibilityConverter}}">
                     <!--  Content control with dynamic template  -->
@@ -94,7 +94,7 @@
             IsHitTestVisible="False">
             <Image.Source>
                 <MultiBinding Converter="{StaticResource IconNameToImageSourceMultiConverter}">
-                    <Binding Path="FrameViewModel.IconName" RelativeSource="{RelativeSource AncestorType=UserControl}" />
+                    <Binding Path="ItemDataViewModel.IconName" RelativeSource="{RelativeSource AncestorType=UserControl}" />
                     <Binding ElementName="buttonItem" Path="IsEnabled" />
                 </MultiBinding>
             </Image.Source>
@@ -108,7 +108,7 @@
             Margin="0,0,0,0"
             VerticalAlignment="Top"
             IsHitTestVisible="False"
-            Source="{Binding FrameViewModel.ItemBranch, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BranchToImageSourceConverter}}"
+            Source="{Binding ItemDataViewModel.ItemBranch, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BranchToImageSourceConverter}}"
             Stretch="Fill" />
         <TextBlock
             x:Name="tbItemAmount"
@@ -122,8 +122,8 @@
             FontWeight="Bold"
             Foreground="White"
             IsHitTestVisible="False"
-            Text="{Binding FrameViewModel.ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}}"
-            Visibility="{Binding FrameViewModel.ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
+            Text="{Binding ItemDataViewModel.ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Visibility="{Binding ItemDataViewModel.ItemAmount, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
         <TextBlock
             Grid.Column="1"
             Margin="10,0"
@@ -132,8 +132,8 @@
             d:Foreground="White"
             d:Text="Item Name"
             FontSize="12"
-            Foreground="{Binding FrameViewModel.ItemNameColor, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToBrushConverter}, FallbackValue=White}"
-            Text="{Binding FrameViewModel.ItemName, RelativeSource={RelativeSource AncestorType=UserControl}}"
+            Foreground="{Binding ItemDataViewModel.ItemNameColor, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource StringToBrushConverter}, FallbackValue=White}"
+            Text="{Binding ItemDataViewModel.ItemName, RelativeSource={RelativeSource AncestorType=UserControl}}"
             Visibility="{Binding ItemNameVisibility, RelativeSource={RelativeSource AncestorType=UserControl}}" />
     </Grid>
 </UserControl>

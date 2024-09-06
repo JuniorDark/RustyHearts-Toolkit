@@ -29,14 +29,13 @@ public partial class DataTableManager : ObservableObject
     {
         try
         {
-            OpenFolderDialog openFolderDialog = new();
+            string? tableFolder = GetTableFolderPath();
 
-            if (openFolderDialog.ShowDialog() == true)
+            if (tableFolder != null)
             {
-                string directory = openFolderDialog.FolderName;
                 string newFileName = tableName + "(new).rh";
-                string filePath = Path.Combine(directory, newFileName);
-                
+                string filePath = Path.Combine(tableFolder, newFileName);
+
                 string? stringFilePath = null;
                 DataTable? stringTable = null;
                 string? newStringFileName = null;
@@ -45,7 +44,7 @@ public partial class DataTableManager : ObservableObject
                 {
                     stringTable = DataTableCryptor.CreateDataTable(stringColumns);
                     newStringFileName = stringTableName + "(new).rh";
-                    stringFilePath = Path.Combine(directory, newStringFileName);
+                    stringFilePath = Path.Combine(tableFolder, newStringFileName);
                 }
 
                 var table = DataTableCryptor.CreateDataTable(columns);
@@ -61,12 +60,12 @@ public partial class DataTableManager : ObservableObject
                         CurrentStringFile = stringFilePath;
                         CurrentStringFileName = newStringFileName;
                     }
+
+                    OnCanExecuteFileCommandChanged();
+                    return true;
                 }
-
-                OnCanExecuteFileCommandChanged();
-                return true;
             }
-
+            
             return false;
         }
         catch (Exception ex)

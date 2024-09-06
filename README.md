@@ -15,7 +15,7 @@
 
 To start using the Rusty Hearts Toolkit, download the latest release from the [GitHub repository](https://github.com/JuniorDark/RustyHearts-Toolkit/releases/latest).
 
-## Features
+## Current Features
 
 ### Database Editing Tools
 - **Character Edit Tools:** Modify character such as equipment, inventory, storage, fortune, sanctions, and titles.
@@ -50,6 +50,11 @@ To set up the toolkit and generate the necessary SQLite database:
 3. Click `Create Database` to generate the `gmdb_(Lang).db` database in the `Resources` folder.
 4. Place the required icons in the `Resources` folder. Icons are available in [`Resources.rar`](Resources.rar).
 
+## Prerequisites for Development
+* Visual Studio 2022 (Any Edition - 17.9 or later)
+* Windows 10 SDK or Windows 11 SDK via Visual Studio Installer
+*.NET Core 8 SDK (8.0.107 or later)
+
 ## Building
 
 If you wish to build the project yourself, follow these steps:
@@ -70,8 +75,9 @@ Either use `git clone https://github.com/JuniorDark/RustyHearts-Toolkit` on the 
 
 To build Rusty Hearts Toolkit, open a command prompt inside the project directory.
 You can quickly access it on Windows by holding shift in File Explorer, then right clicking and selecting `Open command window here`.
-Then type the following command: `dotnet build -c Release` or using `dotnet cake` a [Bash](https://www.gnu.org/software/bash) script 
-the built files will be found in the newly created build directory.
+Then type the following command: `dotnet build -c Release` or using `dotnet cake` script.
+ 
+The built files will be found in the newly created `bin` build directory.
 
 ## License
 

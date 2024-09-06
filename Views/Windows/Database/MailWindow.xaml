@@ -32,17 +32,16 @@
                 <ColumnDefinition Width="60*" />
                 <ColumnDefinition Width="100*" />
                 <ColumnDefinition Width="60*" />
-
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="35" />
-                <RowDefinition Height="45" />
-                <RowDefinition Height="45" />
-                <RowDefinition Height="260" />
-                <RowDefinition Height="60" />
-                <RowDefinition Height="45" />
-                <RowDefinition Height="45" />
-                <RowDefinition Height="45" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <!--  Close Button  -->
@@ -145,7 +144,6 @@
                     Content="{x:Static rs:Resources.Sender}"
                     Foreground="White" />
             </StackPanel>
-            <!--  Sender TextBox  -->
             <TextBox
                 x:Name="txtSender"
                 Grid.Row="2"
@@ -270,7 +268,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 Orientation="Horizontal">
-                <!--  Attach Item Label  -->
+                <!--  Attach Item  -->
                 <Label
                     VerticalAlignment="Center"
                     Content="{x:Static rs:Resources.AttachItem}"
@@ -284,109 +282,115 @@
                     Stretch="None"
                     ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
                 <!--  Item Slots  -->
-                <Grid Width="140" Height="50">
-                    <!--  Column definitions  -->
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <!--  Item 1  -->
-                    <control:ItemSlot
-                        Grid.Column="0"
-                        AddItemCommand="{Binding AddItemCommand}"
-                        CommandParameter="0"
-                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=0}"
-                        IsButtonEnabled="{Binding IsButtonEnabled}"
-                        RemoveItemCommand="{Binding RemoveItemCommand}"
-                        SlotIcon="/Assets/images/lb_ac_icon.png" />
-                    <!--  Item 2  -->
-                    <control:ItemSlot
-                        Grid.Column="1"
-                        AddItemCommand="{Binding AddItemCommand}"
-                        CommandParameter="1"
-                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
-                        IsButtonEnabled="{Binding IsButtonEnabled}"
-                        RemoveItemCommand="{Binding RemoveItemCommand}"
-                        SlotIcon="/Assets/images/lb_ac_icon.png" />
-                    <!--  Item 3  -->
-                    <control:ItemSlot
-                        Grid.Column="2"
-                        AddItemCommand="{Binding AddItemCommand}"
-                        CommandParameter="2"
-                        FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
-                        IsButtonEnabled="{Binding IsButtonEnabled}"
-                        RemoveItemCommand="{Binding RemoveItemCommand}"
-                        SlotIcon="/Assets/images/lb_ac_icon.png" />
-                </Grid>
-            </StackPanel>
-            <StackPanel
-                Grid.Row="5"
-                Grid.RowSpan="4"
-                Grid.Column="0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Orientation="Vertical">
-                <Label
-                    x:Name="lbAttachWhite"
-                    Content="{x:Static rs:Resources.AttachGoldAmount}"
-                    Foreground="White" />
-                <ui:NumberBox
-                    x:Name="intAttachWhite"
-                    Width="120"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center"
-                    LargeChange="100"
-                    Minimum="0"
-                    Value="{Binding AttachGold, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <ItemsControl ItemsSource="{Binding MailItemDataViewModels}">
 
-                <!--  Return Date Label  -->
-                <Label
-                    x:Name="lbReturnDays"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center"
-                    Content="{x:Static rs:Resources.ReturnDate}"
-                    Foreground="White" />
-                <ui:NumberBox
-                    x:Name="intReturnDays"
-                    Width="120"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center"
-                    Maximum="15"
-                    Minimum="1"
-                    Value="{Binding ReturnDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <!--  Item Charge Label  -->
-                <Label
-                    x:Name="lbItemCharge"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center"
-                    Content="{x:Static rs:Resources.ItemCharge}"
-                    Foreground="White" />
-                <ui:NumberBox
-                    x:Name="intItemCharge"
-                    Width="120"
-                    VerticalAlignment="Top"
-                    HorizontalContentAlignment="Center"
-                    LargeChange="100"
-                    Minimum="0"
-                    Value="{Binding ItemCharge, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="0" Rows="1" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <control:ItemSlot
+                                AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding SlotIndex}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
+                                RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </StackPanel>
-            <Image
+            <Grid
                 Grid.Row="5"
                 Grid.Column="0"
-                Margin="168,24,0,0"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                Source="/Assets/images/lb_ac_icon_gold.png"
-                Stretch="None" />
-            <Image
-                Grid.Row="7"
-                Grid.Column="0"
-                Margin="169,24,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Bottom"
-                Source="/Assets/images/lb_ac_icon_gold.png"
-                Stretch="None" />
+                VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Orientation="Vertical">
+                    <!--  Attach Gold  -->
+                    <Label
+                        x:Name="lbAttachGold"
+                        Content="{x:Static rs:Resources.AttachGoldAmount}"
+                        Foreground="White" />
+                    <ui:NumberBox
+                        x:Name="intAttachGold"
+                        Width="150"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        LargeChange="100"
+                        Minimum="0"
+                        Value="{Binding AttachGold, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Orientation="Vertical">
+                    <!--  Return Date  -->
+                    <Label
+                        x:Name="lbReturnDays"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="{x:Static rs:Resources.ReturnDate}"
+                        Foreground="White" />
+                    <ui:NumberBox
+                        x:Name="intReturnDays"
+                        Width="150"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Maximum="15"
+                        Minimum="1"
+                        Value="{Binding ReturnDays, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Orientation="Vertical">
+                    <!--  Item Charge  -->
+                    <Label
+                        x:Name="lbItemCharge"
+                        Margin="0,0,10,0"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Content="{x:Static rs:Resources.ItemCharge}"
+                        Foreground="White" />
+                    <ui:NumberBox
+                        x:Name="intItemCharge"
+                        Width="150"
+                        VerticalAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        LargeChange="100"
+                        Minimum="0"
+                        Value="{Binding ItemCharge, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <Image
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Source="/Assets/images/lb_ac_icon_gold.png"
+                    Stretch="None" />
+                <Image
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Source="/Assets/images/lb_ac_icon_gold.png"
+                    Stretch="None" />
+            </Grid>
 
             <!--  Send Button  -->
             <Button

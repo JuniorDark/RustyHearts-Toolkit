@@ -217,9 +217,9 @@ namespace RHToolkit.ViewModels.Windows
         {
             if (itemData.ItemId != 0)
             {
-                var frameViewModel = ItemDataManager.GetFrameViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
                 SetItems[itemData.SlotIndex].SetItemID = itemData.ItemId;
-                SetItems[itemData.SlotIndex].FrameViewModel = frameViewModel;
+                SetItems[itemData.SlotIndex].ItemDataViewModel = itemDataViewModel;
                 OnPropertyChanged(nameof(SetItems));
             }
         }
@@ -268,7 +268,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 DataTableManager.StartGroupingEdits();
                 SetItems[slotIndex].SetItemID = 0;
-                SetItems[slotIndex].FrameViewModel = null;
+                SetItems[slotIndex].ItemDataViewModel = null;
                 OnPropertyChanged(nameof(SetItems));
                 DataTableManager.EndGroupingEdits();
             }
@@ -305,7 +305,7 @@ namespace RHToolkit.ViewModels.Windows
                     var item = new SetItem
                     {
                         SetItemID = (int)selectedItem[$"nSetItemID{i:00}"],
-                        FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nSetItemID{i:00}"], i, 1)
+                        ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nSetItemID{i:00}"], i, 1)
                     };
 
                     SetItems.Add(item);

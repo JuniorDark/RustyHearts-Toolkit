@@ -250,7 +250,7 @@
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-                                        FrameViewModel="{Binding FrameViewModel}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
                                         ItemNameVisibility="Visible"
                                         RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
                                 </StackPanel>
@@ -285,7 +285,7 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
                                         IsEnabled="{Binding IsEnabled}"
-                                        Maximum="{Binding FrameViewModel.OverlapCnt}"
+                                        Maximum="{Binding ItemDataViewModel.OverlapCnt}"
                                         Minimum="0"
                                         Value="{Binding ItemCodeCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>

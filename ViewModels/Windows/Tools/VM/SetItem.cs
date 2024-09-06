@@ -14,7 +14,7 @@ public partial class SetItem : ObservableObject
     private int _setOptionValue;
 
     [ObservableProperty]
-    private FrameViewModel? _frameViewModel;
+    private ItemDataViewModel? _itemDataViewModel;
 
     [ObservableProperty]
     private bool _isSetOptionEnabled = false;

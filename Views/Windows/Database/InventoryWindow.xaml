@@ -33,212 +33,30 @@
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
                 </Grid.Background>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex0"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="0,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=0, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex1"
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="1,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex2"
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="2,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex3"
-                    Grid.Row="0"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="3,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex4"
-                    Grid.Row="0"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="4,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex5"
-                    Grid.Row="0"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="5,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex6"
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="6,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex7"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="7,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=7, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex8"
-                    Grid.Row="1"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="8,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=8, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex9"
-                    Grid.Row="1"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="9,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=9, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex10"
-                    Grid.Row="1"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="10,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=10, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex11"
-                    Grid.Row="1"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="11,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=11, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex12"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="12,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=12, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex13"
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="13,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=13, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex14"
-                    Grid.Row="2"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="14,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=14, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex15"
-                    Grid.Row="2"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="15,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=15, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex16"
-                    Grid.Row="2"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="16,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=16, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex17"
-                    Grid.Row="2"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="17,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=17, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex18"
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="18,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=18, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex19"
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="19,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=19, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex20"
-                    Grid.Row="3"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="20,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=20, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex21"
-                    Grid.Row="3"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="21,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=21, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex22"
-                    Grid.Row="3"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="22,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=22, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex23"
-                    Grid.Row="3"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="23,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=23, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                <ItemsControl AlternationCount="{Binding DataContext.CostumeItemDataViewModels.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.CostumeItemDataViewModels, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InventoryPageConverter}, ConverterParameter=1}">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="6" Rows="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <control:ItemSlot
+                                AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
+                                RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                                <control:ItemSlot.CommandParameter>
+                                    <MultiBinding StringFormat="{}{0},{1}">
+                                        <Binding Path="SlotIndex" />
+                                        <Binding Path="PageIndex" />
+                                    </MultiBinding>
+                                </control:ItemSlot.CommandParameter>
+                            </control:ItemSlot>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="CostumePage2">
@@ -246,212 +64,30 @@
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
                 </Grid.Background>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex24"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="24,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=24, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex25"
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="25,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=25, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex26"
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="26,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=26, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex27"
-                    Grid.Row="0"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="27,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=27, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex28"
-                    Grid.Row="0"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="28,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=28, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex29"
-                    Grid.Row="0"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="29,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=29, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex30"
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="30,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=30, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex31"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="31,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=31, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex32"
-                    Grid.Row="1"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="32,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=32, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex33"
-                    Grid.Row="1"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="33,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=33, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex34"
-                    Grid.Row="1"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="34,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=34, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex35"
-                    Grid.Row="1"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="35,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=35, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex36"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="36,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=36, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex37"
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="37,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=37, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex38"
-                    Grid.Row="2"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="38,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=38, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex39"
-                    Grid.Row="2"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="39,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=39, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex40"
-                    Grid.Row="2"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="40,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=40, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex41"
-                    Grid.Row="2"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="41,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=41, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex42"
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="42,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=42, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex43"
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="43,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=43, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex44"
-                    Grid.Row="3"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="44,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=44, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex45"
-                    Grid.Row="3"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="45,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=45, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex46"
-                    Grid.Row="3"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="46,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=46, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex47"
-                    Grid.Row="3"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="47,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=47, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                <ItemsControl AlternationCount="{Binding DataContext.CostumeItemDataViewModels.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.CostumeItemDataViewModels, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InventoryPageConverter}, ConverterParameter=2}">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="6" Rows="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <control:ItemSlot
+                                AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
+                                RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                                <control:ItemSlot.CommandParameter>
+                                    <MultiBinding StringFormat="{}{0},{1}">
+                                        <Binding Path="SlotIndex" />
+                                        <Binding Path="PageIndex" />
+                                    </MultiBinding>
+                                </control:ItemSlot.CommandParameter>
+                            </control:ItemSlot>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="CostumePage3">
@@ -459,212 +95,30 @@
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
                 </Grid.Background>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex48"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="48,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=48, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex49"
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="49,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=49, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex50"
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="50,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=50, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex51"
-                    Grid.Row="0"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="51,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=51, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex52"
-                    Grid.Row="0"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="52,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=52, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex53"
-                    Grid.Row="0"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="53,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=53, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex54"
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="54,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=54, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex55"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="55,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=55, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex56"
-                    Grid.Row="1"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="56,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=56, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex57"
-                    Grid.Row="1"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="57,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=57, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex58"
-                    Grid.Row="1"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="58,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=58, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex59"
-                    Grid.Row="1"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="59,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=59, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex60"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="60,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=60, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex61"
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="61,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=61, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex62"
-                    Grid.Row="2"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="62,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=62, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex63"
-                    Grid.Row="2"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="63,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=63, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex64"
-                    Grid.Row="2"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="64,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=64, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex65"
-                    Grid.Row="2"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="65,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=65, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex66"
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="66,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=66, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex67"
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="67,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=67, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex68"
-                    Grid.Row="3"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="68,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=68, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex69"
-                    Grid.Row="3"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="69,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=69, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex70"
-                    Grid.Row="3"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="70,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=70, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex71"
-                    Grid.Row="3"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="71,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=71, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                <ItemsControl AlternationCount="{Binding DataContext.CostumeItemDataViewModels.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.CostumeItemDataViewModels, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InventoryPageConverter}, ConverterParameter=3}">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="6" Rows="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <control:ItemSlot
+                                AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
+                                RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                                <control:ItemSlot.CommandParameter>
+                                    <MultiBinding StringFormat="{}{0},{1}">
+                                        <Binding Path="SlotIndex" />
+                                        <Binding Path="PageIndex" />
+                                    </MultiBinding>
+                                </control:ItemSlot.CommandParameter>
+                            </control:ItemSlot>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="CostumePage4">
@@ -672,212 +126,30 @@
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
                 </Grid.Background>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex72"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="72,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=72, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex73"
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="73,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=73, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex74"
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="74,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=74, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex75"
-                    Grid.Row="0"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="75,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=75, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex76"
-                    Grid.Row="0"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="76,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=76, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex77"
-                    Grid.Row="0"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="77,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=77, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex78"
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="78,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=78, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex79"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="79,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=79, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex80"
-                    Grid.Row="1"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="80,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=80, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex81"
-                    Grid.Row="1"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="81,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=81, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex82"
-                    Grid.Row="1"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="82,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=82, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex83"
-                    Grid.Row="1"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="83,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=83, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex84"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="84,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=84, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex85"
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="85,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=85, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex86"
-                    Grid.Row="2"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="86,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=86, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex87"
-                    Grid.Row="2"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="87,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=87, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex88"
-                    Grid.Row="2"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="88,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=88, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex89"
-                    Grid.Row="2"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="89,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=89, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex90"
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="90,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=90, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex91"
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="91,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=91, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex92"
-                    Grid.Row="3"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="92,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=92, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex93"
-                    Grid.Row="3"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="93,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=93, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex94"
-                    Grid.Row="3"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="94,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=94, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex95"
-                    Grid.Row="3"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="95,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=95, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                <ItemsControl AlternationCount="{Binding DataContext.CostumeItemDataViewModels.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.CostumeItemDataViewModels, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InventoryPageConverter}, ConverterParameter=4}">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="6" Rows="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <control:ItemSlot
+                                AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
+                                RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                                <control:ItemSlot.CommandParameter>
+                                    <MultiBinding StringFormat="{}{0},{1}">
+                                        <Binding Path="SlotIndex" />
+                                        <Binding Path="PageIndex" />
+                                    </MultiBinding>
+                                </control:ItemSlot.CommandParameter>
+                            </control:ItemSlot>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="CostumePage5">
@@ -885,212 +157,30 @@
                 <Grid.Background>
                     <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
                 </Grid.Background>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex96"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="96,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=96, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex97"
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="97,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=97, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex98"
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="98,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=98, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex99"
-                    Grid.Row="0"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="99,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=99, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex100"
-                    Grid.Row="0"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="100,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=100, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex101"
-                    Grid.Row="0"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="101,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=101, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex102"
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="102,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=102, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex103"
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="103,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=103, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex104"
-                    Grid.Row="1"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="104,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=104, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex105"
-                    Grid.Row="1"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="105,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=105, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex106"
-                    Grid.Row="1"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="106,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=106, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex107"
-                    Grid.Row="1"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="107,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=107, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex108"
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="108,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=108, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex109"
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="109,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=109, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex110"
-                    Grid.Row="2"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="110,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=110, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex111"
-                    Grid.Row="2"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="111,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=111, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex112"
-                    Grid.Row="2"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="112,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=112, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex113"
-                    Grid.Row="2"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="113,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=113, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex114"
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="114,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=114, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex115"
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="115,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=115, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex116"
-                    Grid.Row="3"
-                    Grid.Column="2"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="116,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=116, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex117"
-                    Grid.Row="3"
-                    Grid.Column="3"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="117,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=117, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex118"
-                    Grid.Row="3"
-                    Grid.Column="4"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="118,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=118, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                <control:ItemSlot
-                    x:Name="ItemCostumeSlotIndex119"
-                    Grid.Row="3"
-                    Grid.Column="5"
-                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    CommandParameter="119,5"
-                    FrameViewModel="{Binding DataContext.CostumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=119, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                <ItemsControl AlternationCount="{Binding DataContext.CostumeItemDataViewModels.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.CostumeItemDataViewModels, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InventoryPageConverter}, ConverterParameter=5}">
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="6" Rows="4" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <control:ItemSlot
+                                AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
+                                RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                                <control:ItemSlot.CommandParameter>
+                                    <MultiBinding StringFormat="{}{0},{1}">
+                                        <Binding Path="SlotIndex" />
+                                        <Binding Path="PageIndex" />
+                                    </MultiBinding>
+                                </control:ItemSlot.CommandParameter>
+                            </control:ItemSlot>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </Grid>
         </DataTemplate>
 
@@ -1138,214 +228,30 @@
                         <Grid.Background>
                             <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
                         </Grid.Background>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex0"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="0,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=0}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex1"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="1,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex2"
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="2,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex3"
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="3,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex4"
-                            Grid.Row="0"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="4,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex5"
-                            Grid.Row="0"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="5,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex6"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="6,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex7"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="7,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=7}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex8"
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="8,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=8}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex9"
-                            Grid.Row="1"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="9,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=9}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex10"
-                            Grid.Row="1"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="10,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=10}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex11"
-                            Grid.Row="1"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="11,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=11}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex12"
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="12,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=12}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex13"
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="13,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=13}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex14"
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="14,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=14}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex15"
-                            Grid.Row="2"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="15,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=15}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex16"
-                            Grid.Row="2"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="16,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=16}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex17"
-                            Grid.Row="2"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="17,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=17}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex18"
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="18,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=18}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex19"
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="19,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=19}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex20"
-                            Grid.Row="3"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="20,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=20}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex21"
-                            Grid.Row="3"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="21,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=21}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex22"
-                            Grid.Row="3"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="22,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=22}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemEquipmentSlotIndex23"
-                            Grid.Row="3"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="23,1"
-                            FrameViewModel="{Binding EquipmentFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=23}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <ItemsControl AlternationCount="{Binding EquipmentItemDataViewModels.Count}" ItemsSource="{Binding EquipmentItemDataViewModels}">
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="6" Rows="4" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <control:ItemSlot
+                                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
+                                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                        <control:ItemSlot.CommandParameter>
+                                            <MultiBinding StringFormat="{}{0},{1}">
+                                                <Binding Path="SlotIndex" />
+                                                <Binding Path="PageIndex" />
+                                            </MultiBinding>
+                                        </control:ItemSlot.CommandParameter>
+                                    </control:ItemSlot>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
                 </TabItem>
                 <TabItem
@@ -1353,217 +259,36 @@
                     Width="150"
                     Foreground="White"
                     Header="Consume"
+                    IsSelected="True"
                     Style="{StaticResource lb_tab13}">
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
                         <Grid.Background>
                             <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
                         </Grid.Background>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex0"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="0,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=0}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex1"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="1,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex2"
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="2,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex3"
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="3,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex4"
-                            Grid.Row="0"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="4,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex5"
-                            Grid.Row="0"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="5,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex6"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="6,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex7"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="7,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=7}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex8"
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="8,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=8}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex9"
-                            Grid.Row="1"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="9,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=9}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex10"
-                            Grid.Row="1"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="10,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=10}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex11"
-                            Grid.Row="1"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="11,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=11}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex12"
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="12,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=12}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex13"
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="13,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=13}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex14"
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="14,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=14}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex15"
-                            Grid.Row="2"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="15,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=15}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex16"
-                            Grid.Row="2"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="16,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=16}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex17"
-                            Grid.Row="2"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="17,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=17}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex18"
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="18,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=18}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex19"
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="19,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=19}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex20"
-                            Grid.Row="3"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="20,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=20}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex21"
-                            Grid.Row="3"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="21,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=21}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex22"
-                            Grid.Row="3"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="22,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=22}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemConsumeSlotIndex23"
-                            Grid.Row="3"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="23,2"
-                            FrameViewModel="{Binding ConsumeFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=23}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <ItemsControl AlternationCount="{Binding ConsumeItemDataViewModels.Count}" ItemsSource="{Binding ConsumeItemDataViewModels}">
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="6" Rows="4" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <control:ItemSlot
+                                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
+                                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                        <control:ItemSlot.CommandParameter>
+                                            <MultiBinding StringFormat="{}{0},{1}">
+                                                <Binding Path="SlotIndex" />
+                                                <Binding Path="PageIndex" />
+                                            </MultiBinding>
+                                        </control:ItemSlot.CommandParameter>
+                                    </control:ItemSlot>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
                 </TabItem>
                 <TabItem
@@ -1571,217 +296,36 @@
                     Width="150"
                     Foreground="White"
                     Header="Other"
+                    IsSelected="True"
                     Style="{StaticResource lb_tab13}">
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
                         <Grid.Background>
                             <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
                         </Grid.Background>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex0"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="0,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=0}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex1"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="1,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex2"
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="2,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex3"
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="3,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex4"
-                            Grid.Row="0"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="4,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex5"
-                            Grid.Row="0"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="5,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex6"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="6,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex7"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="7,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=7}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex8"
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="8,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=8}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex9"
-                            Grid.Row="1"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="9,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=9}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex10"
-                            Grid.Row="1"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="10,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=10}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex11"
-                            Grid.Row="1"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="11,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=11}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex12"
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="12,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=12}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex13"
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="13,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=13}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex14"
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="14,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=14}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex15"
-                            Grid.Row="2"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="15,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=15}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex16"
-                            Grid.Row="2"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="16,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=16}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex17"
-                            Grid.Row="2"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="17,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=17}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex18"
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="18,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=18}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex19"
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="19,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=19}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex20"
-                            Grid.Row="3"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="20,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=20}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex21"
-                            Grid.Row="3"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="21,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=21}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex22"
-                            Grid.Row="3"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="22,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=22}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemOtherSlotIndex23"
-                            Grid.Row="3"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="23,3"
-                            FrameViewModel="{Binding OtherFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=23}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <ItemsControl AlternationCount="{Binding OtherItemDataViewModels.Count}" ItemsSource="{Binding OtherItemDataViewModels}">
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="6" Rows="4" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <control:ItemSlot
+                                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
+                                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                        <control:ItemSlot.CommandParameter>
+                                            <MultiBinding StringFormat="{}{0},{1}">
+                                                <Binding Path="SlotIndex" />
+                                                <Binding Path="PageIndex" />
+                                            </MultiBinding>
+                                        </control:ItemSlot.CommandParameter>
+                                    </control:ItemSlot>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
                 </TabItem>
                 <TabItem
@@ -1789,217 +333,36 @@
                     Width="150"
                     Foreground="White"
                     Header="Quest"
+                    IsSelected="True"
                     Style="{StaticResource lb_tab13}">
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
                         <Grid.Background>
                             <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
                         </Grid.Background>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex0"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="0,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=0}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex1"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="1,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex2"
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="2,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex3"
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="3,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex4"
-                            Grid.Row="0"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="4,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex5"
-                            Grid.Row="0"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="5,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex6"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="6,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex7"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="7,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=7}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex8"
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="8,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=8}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex9"
-                            Grid.Row="1"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="9,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=9}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex10"
-                            Grid.Row="1"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="10,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=10}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex11"
-                            Grid.Row="1"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="11,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=11}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex12"
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="12,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=12}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex13"
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="13,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=13}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex14"
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="14,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=14}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex15"
-                            Grid.Row="2"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="15,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=15}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex16"
-                            Grid.Row="2"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="16,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=16}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex17"
-                            Grid.Row="2"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="17,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=17}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex18"
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="18,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=18}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex19"
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="19,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=19}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex20"
-                            Grid.Row="3"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="20,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=20}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex21"
-                            Grid.Row="3"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="21,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=21}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex22"
-                            Grid.Row="3"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="22,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=22}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemQuestSlotIndex23"
-                            Grid.Row="3"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="23,4"
-                            FrameViewModel="{Binding QuestFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=23}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <ItemsControl AlternationCount="{Binding QuestItemDataViewModels.Count}" ItemsSource="{Binding QuestItemDataViewModels}">
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="6" Rows="4" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <control:ItemSlot
+                                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
+                                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                        <control:ItemSlot.CommandParameter>
+                                            <MultiBinding StringFormat="{}{0},{1}">
+                                                <Binding Path="SlotIndex" />
+                                                <Binding Path="PageIndex" />
+                                            </MultiBinding>
+                                        </control:ItemSlot.CommandParameter>
+                                    </control:ItemSlot>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
                 </TabItem>
                 <TabItem
@@ -2016,217 +379,36 @@
                     Width="150"
                     Foreground="White"
                     Header="(Hidden) Trigger Items"
+                    IsSelected="True"
                     Style="{StaticResource lb_tab13}">
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
                         <Grid.Background>
                             <ImageBrush ImageSource="/Assets/images/window/lb_base/base06_icon_bg01.png" />
                         </Grid.Background>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex0"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="0,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=0}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex1"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="1,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex2"
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="2,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex3"
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="3,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex4"
-                            Grid.Row="0"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="4,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex5"
-                            Grid.Row="0"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="5,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex6"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="6,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex7"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="7,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=7}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex8"
-                            Grid.Row="1"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="8,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=8}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex9"
-                            Grid.Row="1"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="9,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=9}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex10"
-                            Grid.Row="1"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="10,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=10}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex11"
-                            Grid.Row="1"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="11,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=11}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex12"
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="12,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=12}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex13"
-                            Grid.Row="2"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="13,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=13}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex14"
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="14,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=14}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex15"
-                            Grid.Row="2"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="15,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=15}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex16"
-                            Grid.Row="2"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="16,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=16}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex17"
-                            Grid.Row="2"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="17,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=17}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex18"
-                            Grid.Row="3"
-                            Grid.Column="0"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="18,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=18}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex19"
-                            Grid.Row="3"
-                            Grid.Column="1"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="19,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=19}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex20"
-                            Grid.Row="3"
-                            Grid.Column="2"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="20,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=20}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex21"
-                            Grid.Row="3"
-                            Grid.Column="3"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="21,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=21}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex22"
-                            Grid.Row="3"
-                            Grid.Column="4"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="22,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=22}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
-                        <control:ItemSlot
-                            x:Name="ItemHiddenSlotIndex23"
-                            Grid.Row="3"
-                            Grid.Column="5"
-                            AddItemCommand="{Binding AddItemCommand}"
-                            CommandParameter="23,6"
-                            FrameViewModel="{Binding HiddenFrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=23}"
-                            RemoveItemCommand="{Binding RemoveItemCommand}" />
+                        <ItemsControl AlternationCount="{Binding HiddenItemDataViewModels.Count}" ItemsSource="{Binding HiddenItemDataViewModels}">
+
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <UniformGrid Columns="6" Rows="4" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <control:ItemSlot
+                                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
+                                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}">
+                                        <control:ItemSlot.CommandParameter>
+                                            <MultiBinding StringFormat="{}{0},{1}">
+                                                <Binding Path="SlotIndex" />
+                                                <Binding Path="PageIndex" />
+                                            </MultiBinding>
+                                        </control:ItemSlot.CommandParameter>
+                                    </control:ItemSlot>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </Grid>
                 </TabItem>
             </ui:TabView>
@@ -2292,23 +474,23 @@
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="0"
-                    Margin="5,0,0,5"
+                    Margin="5,5,0,0"
                     HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Center"
                     Foreground="White"
                     Text="Gold In Possession" />
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="0"
-                    Margin="5,0,0,5"
+                    Margin="5,10,0,0"
                     HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Center"
                     Foreground="White"
                     Text="Current Zen" />
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="0"
-                    Margin="5,0,0,5"
+                    Margin="5,10,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Foreground="White"
@@ -2316,9 +498,9 @@
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="0"
-                    Margin="5,0,0,5"
+                    Margin="5,10,0,0"
                     HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
+                    VerticalAlignment="Center"
                     Foreground="White"
                     Text="Ressurection Scroll" />
             </StackPanel>
@@ -2330,10 +512,11 @@
                     Grid.Row="3"
                     Grid.Column="1"
                     Width="194"
-                    Height="20"
+                    Height="30"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     d:Text="100"
+                    FontSize="12"
                     IsReadOnly="True"
                     Template="{StaticResource lb_textbox11}"
                     Text="{Binding CharacterData.Gold, StringFormat={}{0:N0}}" />
@@ -2341,10 +524,11 @@
                     Grid.Row="3"
                     Grid.Column="1"
                     Width="194"
-                    Height="20"
+                    Height="30"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     d:Text="0"
+                    FontSize="12"
                     IsReadOnly="True"
                     Template="{StaticResource lb_textbox11}"
                     Text="{Binding CashValue, StringFormat={}{0:N0}}" />
@@ -2352,10 +536,11 @@
                     Grid.Row="3"
                     Grid.Column="1"
                     Width="194"
-                    Height="20"
+                    Height="30"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     d:Text="0"
+                    FontSize="12"
                     IsReadOnly="True"
                     Template="{StaticResource lb_textbox11}"
                     Text="{Binding BonusCashValue, StringFormat={}{0:N0}}" />
@@ -2363,10 +548,11 @@
                     Grid.Row="3"
                     Grid.Column="1"
                     Width="194"
-                    Height="20"
+                    Height="30"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
                     d:Text="0"
+                    FontSize="12"
                     IsReadOnly="True"
                     Template="{StaticResource lb_textbox11}"
                     Text="{Binding CharacterData.Hearts}" />

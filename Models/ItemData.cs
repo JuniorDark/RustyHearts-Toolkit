@@ -73,6 +73,7 @@
         public int Magical { get; set; }
         public int DurabilityMax { get; set; }
         public int Weight { get; set; }
+        public int TitleList { get; set; }
 
     }
 

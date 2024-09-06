@@ -27,7 +27,7 @@ namespace RHToolkit.Services
         Task<(Guid? characterId, Guid? authid, string? accountName)> GetCharacterInfoAsync(string characterName);
         Task<bool> GetCharacterOnlineAsync(string characterName);
         Task<string?> GetGuildNameAsync(Guid guildId);
-        Task<List<ItemData>> GetItemList(Guid characterId, string tableName);
+        Task<ObservableCollection<ItemData>> GetItemList(Guid characterId, string tableName);
         Task<(DateTime startTime, DateTime endTime)> GetSanctionTimesAsync(Guid sanctionUid);
         Task<DataRow?> GetUniAccountInfoAsync(Guid authId);
         Task GMAuditAsync(CharacterData characterData, string action, string auditMessage);
@@ -46,7 +46,7 @@ namespace RHToolkit.Services
         Task RemoveFortuneAsync(CharacterData characterData, int fortuneState, int fortuneID1, int fortuneID2, int fortuneID3);
         Task RestoreCharacterAsync(Guid characterId);
         Task SanctionLogAsync(CharacterData characterData, Guid sanctionUid, DateTime startTime, DateTime endTime, string reason);
-        Task SaveInventoryItem(CharacterData characterData, List<ItemData>? itemDataList, List<ItemData>? deletedItemDataList, string tableName);
+        Task SaveInventoryItem(CharacterData characterData, ObservableCollection<ItemData>? itemDataList, ObservableCollection<ItemData>? deletedItemDataList, string tableName);
         Task<(List<string> successfulRecipients, List<string> failedRecipients)> SendMailAsync(string sender, string? message, int gold, int itemCharge, int returnDays, string[] recipients, List<ItemData> itemDataList);
         Task UnequipCharacterTitleAsync(CharacterData characterData, Guid titleId);
         Task UpdateCharacterClassAsync(CharacterData characterData, int newCharacterClass);

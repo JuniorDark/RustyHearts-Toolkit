@@ -358,10 +358,10 @@ namespace RHToolkit.ViewModels.Windows
             if (itemData.ItemId != 0 && itemData.SlotIndex <= NpcShopItem.Count)
             {
                 DataTableManager.StartGroupingEdits();
-                var frameViewModel = ItemDataManager.GetFrameViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
                 NpcShopItem[itemData.SlotIndex].ItemCode = itemData.ItemId;
                 NpcShopItem[itemData.SlotIndex].ItemCount = itemData.ItemAmount;
-                NpcShopItem[itemData.SlotIndex].FrameViewModel = frameViewModel;
+                NpcShopItem[itemData.SlotIndex].ItemDataViewModel = itemDataViewModel;
                 OnPropertyChanged(nameof(NpcShopItem));
                 DataTableManager.EndGroupingEdits();
             }
@@ -372,10 +372,10 @@ namespace RHToolkit.ViewModels.Windows
             if (itemData.ItemId != 0 && itemData.SlotIndex <= NpcShopItems.Count)
             {
                 DataTableManager.StartGroupingEdits();
-                var frameViewModel = ItemDataManager.GetFrameViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
                 NpcShopItems[itemData.SlotIndex].ItemCode = itemData.ItemId;
                 NpcShopItems[itemData.SlotIndex].ItemCount = itemData.ItemAmount;
-                NpcShopItems[itemData.SlotIndex].FrameViewModel = frameViewModel;
+                NpcShopItems[itemData.SlotIndex].ItemDataViewModel = itemDataViewModel;
                 OnPropertyChanged(nameof(NpcShopItems));
                 DataTableManager.EndGroupingEdits();
             }
@@ -437,7 +437,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 NpcShopItem[slotIndex].ItemCode = 0;
                 NpcShopItem[slotIndex].ItemCount = 0;
-                NpcShopItem[slotIndex].FrameViewModel = null;
+                NpcShopItem[slotIndex].ItemDataViewModel = null;
                 OnPropertyChanged(nameof(NpcShopItem));
             }
         }
@@ -466,7 +466,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 NpcShopItems[slotIndex].ItemCode = 0;
                 NpcShopItems[slotIndex].ItemCount = 0;
-                NpcShopItems[slotIndex].FrameViewModel = null;
+                NpcShopItems[slotIndex].ItemDataViewModel = null;
                 OnPropertyChanged(nameof(NpcShopItems));
             }
         }
@@ -539,7 +539,7 @@ namespace RHToolkit.ViewModels.Windows
                 var item = new NPCShopItem
                 {
                     ItemCode = (int)selectedItem[$"nItem{i:00}"],
-                    FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nItem{i:00}"], i, 1)
+                    ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItem{i:00}"], i, 1)
                 };
 
                 NpcShopItems.Add(item);
@@ -580,7 +580,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 ItemCode = (int)selectedItem[$"nItemID"],
                 ItemCount = (int)selectedItem["nItemCount"],
-                FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nItemID"], 0, (int)selectedItem[$"nItemCount"])
+                ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItemID"], 0, (int)selectedItem[$"nItemCount"])
             };
 
             NpcShopItem.Add(tradeItem);
@@ -592,7 +592,7 @@ namespace RHToolkit.ViewModels.Windows
                 {
                     ItemCode = (int)selectedItem[$"nTokenID{i:00}"],
                     ItemCount = (int)selectedItem[$"nTokenCount{i:00}"],
-                    FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nTokenID{i:00}"], i, (int)selectedItem[$"nTokenCount{i:00}"])
+                    ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nTokenID{i:00}"], i, (int)selectedItem[$"nTokenCount{i:00}"])
                 };
 
                 NpcShopItems.Add(tokenItem);
@@ -658,7 +658,7 @@ namespace RHToolkit.ViewModels.Windows
             var craftItem = new NPCShopItem
             {
                 ItemCode = (int)selectedItem[$"nID"],
-                FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nID"], 0, 1)
+                ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nID"], 0, 1)
             };
 
             NpcShopItem.Add(craftItem);
@@ -682,7 +682,7 @@ namespace RHToolkit.ViewModels.Windows
                 {
                     ItemCode = (int)selectedItem[$"nItemCode{i:00}"],
                     ItemCount = (int)selectedItem[$"nItemCount{i:00}"],
-                    FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nItemCode{i:00}"], i, (int)selectedItem[$"nItemCount{i:00}"])
+                    ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItemCode{i:00}"], i, (int)selectedItem[$"nItemCount{i:00}"])
                 };
 
                 NpcShopItems.Add(itemMaterial);
@@ -746,7 +746,7 @@ namespace RHToolkit.ViewModels.Windows
             var shopItem = new NPCShopItem
             {
                 ItemCode = (int)selectedItem[$"nID"],
-                FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nID"], 0, 1)
+                ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nID"], 0, 1)
             };
 
             NpcShopItem.Add(shopItem);
@@ -774,7 +774,7 @@ namespace RHToolkit.ViewModels.Windows
                 {
                     ItemCode = (int)selectedItem[$"nItemID{i:00}"],
                     ItemCount = (int)selectedItem[$"nItemCount{i:00}"],
-                    FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nItemID{i:00}"], i, (int)selectedItem[$"nItemCount{i:00}"])
+                    ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItemID{i:00}"], i, (int)selectedItem[$"nItemCount{i:00}"])
                 };
 
                 NpcShopItems.Add(item);
@@ -836,7 +836,7 @@ namespace RHToolkit.ViewModels.Windows
             var item = new NPCShopItem
             {
                 ItemCode = (int)selectedItem[$"nPreViewItemID"],
-                FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nPreViewItemID"], 0, 1)
+                ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nPreViewItemID"], 0, 1)
             };
 
             NpcShopItem.Add(item);
@@ -1060,14 +1060,14 @@ namespace RHToolkit.ViewModels.Windows
                 return;
 
             UpdateSelectedItemValue(value, "nID");
-            var frameViewModel = ItemDataManager.GetFrameViewModel(value, 0, 1);
+            var itemDataViewModel = ItemDataManager.GetItemDataViewModel(value, 0, 1);
             
             NpcShopItem[0].ItemCode = value;
-            NpcShopItem[0].FrameViewModel = frameViewModel;
+            NpcShopItem[0].ItemDataViewModel = itemDataViewModel;
 
-            if (frameViewModel != null)
+            if (itemDataViewModel != null)
             {
-                Desc = frameViewModel.ItemName;
+                Desc = itemDataViewModel.ItemName;
             }
             else
             {
@@ -1181,14 +1181,14 @@ namespace RHToolkit.ViewModels.Windows
                 return;
 
             UpdateSelectedItemValue(value, "nID");
-            var frameViewModel = ItemDataManager.GetFrameViewModel(value, 0, 1);
+            var itemDataViewModel = ItemDataManager.GetItemDataViewModel(value, 0, 1);
 
             NpcShopItem[0].ItemCode = value;
-            NpcShopItem[0].FrameViewModel = frameViewModel;
+            NpcShopItem[0].ItemDataViewModel = itemDataViewModel;
 
-            if (frameViewModel != null)
+            if (itemDataViewModel != null)
             {
-                ItemName = frameViewModel.ItemName;
+                ItemName = itemDataViewModel.ItemName;
             }
             else
             {
@@ -1249,14 +1249,14 @@ namespace RHToolkit.ViewModels.Windows
                 return;
 
             UpdateSelectedItemValue(value, "nPreViewItemID");
-            var frameViewModel = ItemDataManager.GetFrameViewModel(value, 0, 1);
+            var itemDataViewModel = ItemDataManager.GetItemDataViewModel(value, 0, 1);
 
             NpcShopItem[0].ItemCode = value;
-            NpcShopItem[0].FrameViewModel = frameViewModel;
+            NpcShopItem[0].ItemDataViewModel = itemDataViewModel;
 
-            if (frameViewModel != null)
+            if (itemDataViewModel != null)
             {
-                Note00 = frameViewModel.ItemName;
+                Note00 = itemDataViewModel.ItemName;
             }
             else
             {

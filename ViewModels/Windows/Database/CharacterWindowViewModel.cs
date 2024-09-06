@@ -2,9 +2,8 @@
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
-using RHToolkit.ViewModels.Controls;
+using RHToolkit.ViewModels.Windows.Database.VM;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Windows;
@@ -13,27 +12,17 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
-    private readonly IGMDatabaseService _gmDatabaseService;
-    private readonly ItemDataManager _itemDataManager;
 
-    public CharacterWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, IGMDatabaseService gmDatabaseService, ItemDataManager itemDataManager)
+    public CharacterWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, CharacterDataViewModel characterDataViewModel, EquipmentWindowViewModel equipmentWindowViewModel)
     {
         _windowsService = windowsService;
         _databaseService = databaseService;
-        _gmDatabaseService = gmDatabaseService;
-        _itemDataManager = itemDataManager;
-
-        FrameViewModels ??= [];
-
-        PopulateClassItems();
-        PopulateLobbyItems();
-
+        _characterDataViewModel = characterDataViewModel;
+        _equipmentWindowViewModel = equipmentWindowViewModel;
         WeakReferenceMessenger.Default.Register(this);
     }
 
     #region Messenger
-
-    #endregion
 
     #region Load Character
 
@@ -50,7 +39,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
             await ReadCharacterData(characterData.CharacterName!);
         }
-
     }
 
     private async Task ReadCharacterData(string characterName)
@@ -61,12 +49,11 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
             if (characterData != null)
             {
-                ClearData();
+                CharacterData = null;
+                Title = $"Character Editor ({characterData.CharacterName})";
                 CharacterData = characterData;
-                LoadCharacterData(characterData);
-                List<ItemData> equipItems = await _databaseService.GetItemList(characterData.CharacterID, "N_EquipItem");
-                LoadEquipmentItems(equipItems);
-                ItemDatabaseList = equipItems;
+                CharacterDataViewModel.LoadCharacterData(characterData);
+                await EquipmentWindowViewModel.LoadCharacterData(characterData.CharacterName!);
             }
             else
             {
@@ -80,42 +67,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         }
     }
 
-    private void LoadCharacterData(CharacterData characterData)
-    {
-        Title = $"Character Editor ({characterData.CharacterName})";
-        CharacterID = characterData.CharacterID;
-        CharacterName = characterData.CharacterName;
-        Account = characterData.AccountName;
-        Class = characterData.Class;
-        Job = characterData.Job;
-        Level = characterData.Level;
-        CharacterExp = characterData.Experience;
-        TotalSkillPoints = characterData.TotalSP;
-        SkillPoints = characterData.SP;
-        Lobby = characterData.LobbyID;
-        CreateTime = characterData.CreateTime;
-        LastLoginTime = characterData.LastLogin;
-        InventoryGold = characterData.Gold;
-        RessurectionScrolls = characterData.Hearts;
-        WarehouseGold = characterData.StorageGold;
-        WarehouseSlots = characterData.StorageCount;
-        GuildExp = characterData.GuildPoint;
-        GuildName = characterData.GuildName;
-        HasGuild = characterData.HasGuild;
-        RestrictCharacter = characterData.BlockYN == "Y";
-        IsConnect = characterData.IsConnect == "Y";
-        IsTradeEnable = characterData.IsTradeEnable == "Y";
-        IsMoveEnable = characterData.IsMoveEnable == "Y";
-        IsAdmin = characterData.Permission == 100;
-    }
-
-    private void ClearData()
-    {
-        CharacterData = null;
-        ItemDatabaseList = null;
-        FrameViewModels?.Clear();
-        OnPropertyChanged(nameof(FrameViewModels));
-    }
+    #endregion
 
     #endregion
 
@@ -139,20 +91,20 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
                 return;
             }
 
-            var newCharacterData = GetCharacterChanges();
+            var newCharacterData = CharacterDataViewModel.GetCharacterChanges();
 
-            if (!CharacterHelper.HasCharacterDataChanges(CharacterData, newCharacterData))
+            if (!CharacterDataManager.HasCharacterDataChanges(CharacterData, newCharacterData))
             {
                 RHMessageBoxHelper.ShowOKMessage("There are no changes to save.", "Info");
                 return;
             }
 
-            string changes = CharacterHelper.GenerateCharacterDataMessage(CharacterData, newCharacterData, "changes");
+            string changes = CharacterDataManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "changes");
 
             if (RHMessageBoxHelper.ConfirmMessage($"Save the following changes to the character {CharacterData.CharacterName}?\n\n{changes}"))
             {
-                string auditMessage = CharacterHelper.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
-
+                string auditMessage = CharacterDataManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
+                newCharacterData.CharacterID = CharacterData.CharacterID;
                 await _databaseService.UpdateCharacterDataAsync(newCharacterData);
                 await _databaseService.GMAuditAsync(CharacterData, "Character Information Change", auditMessage);
                 RHMessageBoxHelper.ShowOKMessage("Character changes saved.", "Success");
@@ -163,29 +115,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         {
             RHMessageBoxHelper.ShowOKMessage($"Error saving character changes: {ex.Message}", "Error");
         }
-    }
-
-    private NewCharacterData GetCharacterChanges()
-    {
-        return new NewCharacterData
-        {
-            AccountName = Account,
-            CharacterID = CharacterData!.CharacterID,
-            Level = Level,
-            Experience = CharacterExp,
-            SP = SkillPoints,
-            TotalSP = TotalSkillPoints,
-            LobbyID = Lobby,
-            Gold = InventoryGold,
-            Hearts = RessurectionScrolls,
-            StorageGold = WarehouseGold,
-            StorageCount = WarehouseSlots,
-            GuildPoint = GuildExp,
-            Permission = IsAdmin == true ? 100 : 0,
-            BlockYN = RestrictCharacter == true ? "Y" : "N",
-            IsTradeEnable = IsTradeEnable == true ? "Y" : "N",
-            IsMoveEnable = IsMoveEnable == true ? "Y" : "N",
-        };
     }
 
     private bool CanExecuteCommand()
@@ -209,12 +138,12 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     #endregion
 
     #region Character Name
-    [RelayCommand(CanExecute = nameof(CanExecuteSaveCharacterNameCommand))]
+    [RelayCommand]
     private async Task SaveCharacterName()
     {
-        string? newCharacterName = CharacterName;
+        string? newCharacterName = CharacterDataViewModel.CharacterName;
 
-        if (CharacterData == null || newCharacterName == null || CharacterData.CharacterName == newCharacterName)
+        if (CharacterData == null || newCharacterName == null || CharacterDataViewModel.CharacterName == newCharacterName)
         {
             return;
         }
@@ -224,9 +153,9 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
             return;
         }
 
-        if (IsNameNotAllowed(newCharacterName))
+        if (CharacterDataViewModel.IsNameNotAllowed(newCharacterName))
         {
-            RHMessageBoxHelper.ShowOKMessage("This character name is on the nick filter and its not allowed.", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"The character name '{newCharacterName}' is on the nick filter and its not allowed.", "Error");
             return;
         }
 
@@ -236,7 +165,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
             return;
         }
 
-        if (RHMessageBoxHelper.ConfirmMessage($"Change this character name to '{newCharacterName}'?"))
+        if (RHMessageBoxHelper.ConfirmMessage($"Change the character name from '{CharacterData.CharacterName}' to '{newCharacterName}'?"))
         {
             try
             {
@@ -266,27 +195,17 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
     }
 
-    private bool IsNameNotAllowed(string characterName)
-    {
-        return _gmDatabaseService.IsNameInNickFilter(characterName);
-    }
-
     private static bool ValidateCharacterName(string characterName)
     {
         return !string.IsNullOrWhiteSpace(characterName) && characterName.Length >= 3 && characterName.Length <= 16;
     }
-
-    private bool CanExecuteSaveCharacterNameCommand()
-    {
-        return CharacterData != null && !string.IsNullOrWhiteSpace(CharacterName) && CharacterData.CharacterName != CharacterName;
-    }
     #endregion
 
     #region Save Character Class / Job
-    [RelayCommand(CanExecute = nameof(CanExecuteCharacterClassCommand))]
+    [RelayCommand]
     private async Task SaveCharacterClass()
     {
-        if (CharacterData == null) return;
+        if (CharacterData == null || CharacterData.Class == CharacterDataViewModel.Class) return;
 
         if (!SqlCredentialValidator.ValidateCredentials())
         {
@@ -300,10 +219,10 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
                 return;
             }
 
-            if (RHMessageBoxHelper.ConfirmMessage($"EXPERIMENTAL\n\nThis will reset all character skills and unequip the character weapon/costumes and send via mail.\n\nAre you sure you want to change character '{CharacterData.CharacterName}' class to '{GetEnumDescription((CharClass)Class)}'?"))
+            if (RHMessageBoxHelper.ConfirmMessage($"EXPERIMENTAL FEATURE\n\nThis will reset all character skills and unequip the character weapon/costumes and send via mail.\n\nAre you sure you want to change character '{CharacterData.CharacterName}' class from '{GetEnumDescription((CharClass)CharacterData.Class)}' to '{GetEnumDescription((CharClass)CharacterDataViewModel.Class)}'?"))
             {
-                await _databaseService.UpdateCharacterClassAsync(CharacterData, Class);
-                await _databaseService.GMAuditAsync(CharacterData, "Character Class Change", $"Old Class: {CharacterData.Class} => New Class: {Class}");
+                await _databaseService.UpdateCharacterClassAsync(CharacterData, CharacterDataViewModel.Class);
+                await _databaseService.GMAuditAsync(CharacterData, "Character Class Change", $"Old Class: {CharacterData.Class} => New Class: {CharacterDataViewModel.Class}");
                 RHMessageBoxHelper.ShowOKMessage("Character class changed successfully!", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
@@ -314,15 +233,10 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         }
     }
 
-    private bool CanExecuteCharacterClassCommand()
-    {
-        return CharacterData != null && CharacterData.Class != Class;
-    }
-
-    [RelayCommand(CanExecute = nameof(CanExecuteCharacterJobCommand))]
+    [RelayCommand]
     private async Task SaveCharacterJob()
     {
-        if (CharacterData == null) return;
+        if (CharacterData == null || CharacterData.Job == CharacterDataViewModel.Job) return;
 
         if (!SqlCredentialValidator.ValidateCredentials())
         {
@@ -338,8 +252,8 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
             if (RHMessageBoxHelper.ConfirmMessage($"This will reset all character skills.\nAre you sure you want to change character '{CharacterData.CharacterName}' focus?"))
             {
-                await _databaseService.UpdateCharacterJobAsync(CharacterData, Job);
-                await _databaseService.GMAuditAsync(CharacterData, "Character Job Change", $"Old Job: {CharacterData.Job} => New Job: {Job}");
+                await _databaseService.UpdateCharacterJobAsync(CharacterData, CharacterDataViewModel.Job);
+                await _databaseService.GMAuditAsync(CharacterData, "Character Job Change", $"Old Job: {CharacterData.Job} => New Job: {CharacterDataViewModel.Job}");
                 RHMessageBoxHelper.ShowOKMessage("Character focus changed successfully!", "Success");
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
@@ -348,11 +262,6 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         {
             RHMessageBoxHelper.ShowOKMessage($"Error changing character focus: {ex.Message}", "Error");
         }
-    }
-
-    private bool CanExecuteCharacterJobCommand()
-    {
-        return CharacterData != null && CharacterData.Job != Job;
     }
     #endregion
 
@@ -435,67 +344,10 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
     #endregion
 
-    #region Comboboxes
-    private void PopulateClassItems()
-    {
-        try
-        {
-            ClassItems = GetEnumItems<CharClass>();
-
-            if (ClassItems.Count > 0)
-            {
-                Class = 1;
-            }
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-        }
-    }
-
-    private void PopulateLobbyItems()
-    {
-        try
-        {
-            LobbyItems = _gmDatabaseService.GetLobbyItems();
-
-            if (LobbyItems.Count > 0)
-            {
-                Lobby = 1;
-            }
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
-        }
-    }
-
-    #endregion
-
-    #region Load Item Data
-
-    private void LoadEquipmentItems(List<ItemData> equipmentItems)
-    {
-        if (equipmentItems != null)
-        {
-            foreach (var equipmentItem in equipmentItems)
-            {
-                var frameViewModel = _itemDataManager.GetItemData(equipmentItem);
-                SetFrameViewModel(frameViewModel);
-            }
-        }
-    }
-
-    private void SetFrameViewModel(FrameViewModel frameViewModel)
-    {
-        FrameViewModels ??= [];
-        FrameViewModels.Add(frameViewModel);
-        OnPropertyChanged(nameof(FrameViewModels));
-    }
-
-    #endregion
-
     #region Properties
+
+    [ObservableProperty]
+    private string _title = "Character Editor";
 
     [ObservableProperty]
     private Guid? _token = Guid.Empty;
@@ -509,158 +361,13 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     }
 
     [ObservableProperty]
-    private List<NameID>? _classItems;
+    private CharacterDataViewModel _characterDataViewModel;
 
     [ObservableProperty]
-    private List<NameID>? _jobItems;
-
-    [ObservableProperty]
-    private List<NameID>? _lobbyItems;
+    private EquipmentWindowViewModel _equipmentWindowViewModel;
 
     [ObservableProperty]
     private bool _isButtonEnabled = true;
-
-    [ObservableProperty]
-    private string _title = "Character Editor";
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CharacterClassText))]
-    private string? _className;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CharacterClassText))]
-    private string? _jobName = Resources.Basic;
-
-    public string? CharacterNameText => $"Lv.{Level} {CharacterName}";
-
-    public string? CharacterClassText => $"<{ClassName} - {JobName} Focus> ";
-
-    [ObservableProperty]
-    private string? _charSilhouetteImage;
-
-    [ObservableProperty]
-    private string? _account;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CharacterIDText))]
-    private Guid _characterID;
-
-    public string? CharacterIDText => $"{CharacterID.ToString().ToUpper()}";
-
-    [ObservableProperty]
-    private DateTime _createTime;
-
-    [ObservableProperty]
-    private DateTime _lastLoginTime;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CharacterNameText))]
-    private string? _characterName;
-    partial void OnCharacterNameChanged(string? value)
-    {
-        SaveCharacterNameCommand.NotifyCanExecuteChanged();
-    }
-
-    [ObservableProperty]
-    private bool _hasGuild;
-
-    [ObservableProperty]
-    private bool _isConnect;
-
-    [ObservableProperty]
-    private bool _restrictCharacter;
-
-    [ObservableProperty]
-    private bool _isMoveEnable;
-
-    [ObservableProperty]
-    private bool _isTradeEnable;
-
-    [ObservableProperty]
-    private bool _isAdmin;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(Job))]
-    [NotifyPropertyChangedFor(nameof(CharacterClassText))]
-    [NotifyPropertyChangedFor(nameof(CharSilhouetteImage))]
-    private int _class;
-    partial void OnClassChanged(int value)
-    {
-        ClassName = GetEnumDescription((CharClass)value);
-        CharSilhouetteImage = CharacterHelper.GetClassImage(value);
-        JobItems?.Clear();
-        JobItems = CharacterHelper.GetJobItems((CharClass)value);
-        if (CharacterData != null)
-        {
-            Job = 0;
-            Job = CharacterData.Job;
-        }
-        SaveCharacterClassCommand.NotifyCanExecuteChanged();
-    }
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(JobName))]
-    private int _job;
-    partial void OnJobChanged(int value)
-    {
-        Enum jobEnum = GetJobEnum((CharClass)Class, value);
-        JobName = GetEnumDescription(jobEnum);
-        SaveCharacterJobCommand.NotifyCanExecuteChanged();
-    }
-
-    [ObservableProperty]
-    private int _lobby;
-
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(CharacterNameText))]
-    private int _level;
-    partial void OnLevelChanged(int value)
-    {
-        long experience = _gmDatabaseService.GetExperienceFromLevel(value);
-        CharacterExp = experience;
-    }
-
-    [ObservableProperty]
-    private long _characterExp;
-
-    [ObservableProperty]
-    private int _skillPoints;
-
-    [ObservableProperty]
-    private int _totalSkillPoints;
-    partial void OnTotalSkillPointsChanged(int value)
-    {
-        if (SkillPoints > value)
-        {
-            SkillPoints = value;
-        }
-    }
-
-    [ObservableProperty]
-    private int _inventoryGold;
-
-    [ObservableProperty]
-    private int _ressurectionScrolls;
-
-    [ObservableProperty]
-    private int _warehouseSlots;
-
-    [ObservableProperty]
-    private int _warehouseGold;
-
-    [ObservableProperty]
-    private int _guildExp;
-
-    [ObservableProperty]
-    private string? _guildName;
-    #endregion
-
-    #region Equipament 
-    [ObservableProperty]
-    private List<ItemData>? _itemDatabaseList;
-
-    [ObservableProperty]
-    private List<FrameViewModel>? _frameViewModels;
 
     #endregion
 

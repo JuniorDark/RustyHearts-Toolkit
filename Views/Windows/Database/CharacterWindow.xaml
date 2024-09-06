@@ -136,98 +136,17 @@
                     Style="{StaticResource lb_def_button02}" />
             </StackPanel>
 
-            <!--  Character Info  -->
-            <Grid
-                Grid.Row="2"
-                Grid.Column="1"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Row="0" Orientation="Horizontal">
-                    <Label
-                        Margin="10,5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="Account:"
-                        Foreground="White" />
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        d:Text="account"
-                        Background="Transparent"
-                        Foreground="Gold"
-                        Style="{StaticResource ArialMS}"
-                        Text="{Binding Account}" />
-
-                </StackPanel>
-                <StackPanel Grid.Row="1" Orientation="Horizontal">
-                    <Label
-                        Margin="10,5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="Character ID:"
-                        Foreground="White" />
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        d:Text="Character ID"
-                        Background="Transparent"
-                        Foreground="Gold"
-                        Style="{StaticResource ArialMS}"
-                        Text="{Binding CharacterIDText}" />
-
-                </StackPanel>
-                <StackPanel Grid.Row="2" Orientation="Horizontal">
-                    <Label
-                        Margin="10,5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="Created:"
-                        Foreground="White" />
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        d:Text="Created Date"
-                        Background="Transparent"
-                        Foreground="Gold"
-                        Style="{StaticResource ArialMS}"
-                        Text="{Binding CreateTime}" />
-
-                </StackPanel>
-                <StackPanel Grid.Row="3" Orientation="Horizontal">
-                    <Label
-                        Margin="10,5"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="Last Login:"
-                        Foreground="White" />
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        d:Text="Last Login"
-                        Background="Transparent"
-                        Foreground="Gold"
-                        Style="{StaticResource ArialMS}"
-                        Text="{Binding LastLoginTime}" />
-
-                </StackPanel>
-
-            </Grid>
             <!--  Character  -->
             <Grid
                 Grid.Row="1"
                 Grid.RowSpan="2"
+                Margin="10,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="200*" />
-                    <ColumnDefinition Width="150*" />
-                    <ColumnDefinition Width="150*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -241,11 +160,10 @@
                 <StackPanel
                     Grid.Row="0"
                     Grid.ColumnSpan="3"
-                    Margin="10"
+                    Margin="0,10,0,0"
                     HorizontalAlignment="Left"
                     Orientation="Horizontal">
                     <Label
-                        HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Content="Character Name"
                         Foreground="White" />
@@ -253,19 +171,17 @@
                         x:Name="txtCharacterName"
                         Width="200"
                         Height="35"
-                        Margin="10"
+                        Margin="10,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Background="Black"
                         BorderThickness="0"
-                        Foreground="White"
                         Tag="Name"
                         Template="{StaticResource lb_textbox}"
-                        Text="{Binding CharacterName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding CharacterDataViewModel.CharacterName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Button
                         x:Name="btnSaveName"
                         Width="150"
-                        Margin="0,10"
+                        Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Background="Transparent"
@@ -274,14 +190,14 @@
                         Cursor="Hand"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}"
-                        ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                        ToolTip="Save" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
-                    Grid.ColumnSpan="3"
+                    Grid.Column="0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    Orientation="Horizontal">
+                    Orientation="Vertical">
                     <Label
                         x:Name="lbClass"
                         Margin="0,0,0,0"
@@ -292,21 +208,21 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbClass"
-                        Width="145"
+                        Width="160"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         IsReadOnly="True"
-                        ItemsSource="{Binding ClassItems}"
-                        SelectedValue="{Binding Class, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding CharacterDataViewModel.ClassItems}"
+                        SelectedValue="{Binding CharacterDataViewModel.Class, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
                     <Button
                         x:Name="btnSaveClass"
                         Width="150"
-                        Margin="5,0"
+                        Margin="0,10,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Background="Transparent"
@@ -315,16 +231,18 @@
                         Cursor="Hand"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}"
-                        ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                        ToolTip="Save Class" />
                 </StackPanel>
                 <StackPanel
-                    Grid.Row="2"
-                    Grid.ColumnSpan="3"
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    Orientation="Horizontal">
+                    Orientation="Vertical">
                     <Label
                         x:Name="lbJob"
+                        Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
@@ -332,21 +250,21 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbJob"
-                        Width="145"
+                        Width="160"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         IsReadOnly="True"
-                        ItemsSource="{Binding JobItems}"
-                        SelectedValue="{Binding Job, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding CharacterDataViewModel.JobItems}"
+                        SelectedValue="{Binding CharacterDataViewModel.Job, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
                     <Button
                         x:Name="btnSaveJob"
                         Width="150"
-                        Margin="5,0"
+                        Margin="0,10,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         Background="Transparent"
@@ -355,7 +273,7 @@
                         Cursor="Hand"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}"
-                        ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                        ToolTip="Save Focus" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="3"
@@ -370,12 +288,12 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intLevel"
-                        Width="120"
+                        Width="150"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         Maximum="100"
                         Minimum="1"
-                        Value="{Binding Level, Mode=TwoWay}" />
+                        Value="{Binding CharacterDataViewModel.Level, Mode=TwoWay}" />
                     <Label
                         x:Name="lbScrolls"
                         VerticalAlignment="Top"
@@ -384,10 +302,10 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intRessurectionScrolls"
-                        Width="120"
+                        Width="150"
                         Maximum="500"
                         Minimum="0"
-                        Value="{Binding RessurectionScrolls, Mode=TwoWay}" />
+                        Value="{Binding CharacterDataViewModel.RessurectionScrolls, Mode=TwoWay}" />
                     <Label
                         x:Name="lbWHSlot"
                         VerticalAlignment="Top"
@@ -396,12 +314,12 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intWarehouseSlots"
-                        Width="120"
+                        Width="150"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         Maximum="180"
                         Minimum="0"
-                        Value="{Binding WarehouseSlots, Mode=TwoWay}" />
+                        Value="{Binding CharacterDataViewModel.WarehouseSlots, Mode=TwoWay}" />
                 </StackPanel>
                 <!--  center Column  -->
                 <StackPanel
@@ -417,13 +335,13 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intExp"
-                        Width="120"
+                        Width="150"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         IsEnabled="False"
                         Maximum="420897460"
                         Minimum="0"
-                        Value="{Binding CharacterExp, Mode=TwoWay}" />
+                        Value="{Binding CharacterDataViewModel.CharacterExp, Mode=TwoWay}" />
                     <Label
                         x:Name="lbSkillPoints"
                         VerticalAlignment="Top"
@@ -432,10 +350,10 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intSkillPoints"
-                        Width="120"
-                        Maximum="{Binding TotalSkillPoints}"
+                        Width="150"
+                        Maximum="{Binding CharacterDataViewModel.TotalSkillPoints}"
                         Minimum="0"
-                        Value="{Binding SkillPoints, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding CharacterDataViewModel.SkillPoints, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
                         x:Name="lbWarehouseGold"
                         VerticalAlignment="Top"
@@ -444,12 +362,11 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intWHGold"
-                        Width="120"
+                        Width="150"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        
                         Minimum="0"
-                        Value="{Binding WarehouseGold, Mode=TwoWay}" />
+                        Value="{Binding CharacterDataViewModel.WarehouseGold, Mode=TwoWay}" />
                 </StackPanel>
                 <!--  Right Column  -->
                 <StackPanel
@@ -465,10 +382,10 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intInventoryGold"
-                        Width="120"
+                        Width="150"
                         LargeChange="100"
                         Minimum="0"
-                        Value="{Binding InventoryGold, Mode=TwoWay}" />
+                        Value="{Binding CharacterDataViewModel.InventoryGold, Mode=TwoWay}" />
                     <Label
                         x:Name="lbTotalSkillPoints"
                         VerticalAlignment="Top"
@@ -477,10 +394,10 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intTotalSkillPoints"
-                        Width="120"
+                        Width="150"
                         Maximum="99999"
                         Minimum="0"
-                        Value="{Binding TotalSkillPoints, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding CharacterDataViewModel.TotalSkillPoints, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
                         x:Name="lbGuildExp"
                         VerticalAlignment="Top"
@@ -489,13 +406,13 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intGuildExp"
-                        Width="120"
+                        Width="150"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        IsEnabled="{Binding HasGuild}"
+                        IsEnabled="{Binding CharacterDataViewModel.HasGuild}"
                         Maximum="32767"
                         Minimum="0"
-                        Value="{Binding GuildExp, Mode=TwoWay}" />
+                        Value="{Binding CharacterDataViewModel.GuildExp, Mode=TwoWay}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="4"
@@ -509,37 +426,37 @@
                         VerticalAlignment="Top"
                         Content="Restrict Character"
                         Foreground="White"
-                        IsChecked="{Binding RestrictCharacter}"
+                        IsChecked="{Binding CharacterDataViewModel.RestrictCharacter}"
                         Template="{StaticResource lb_checkbox}" />
                     <CheckBox
                         Margin="5,0"
                         VerticalAlignment="Top"
                         Content="Block Movement"
                         Foreground="White"
-                        IsChecked="{Binding IsMoveEnable}"
+                        IsChecked="{Binding CharacterDataViewModel.IsMoveEnable}"
                         Template="{StaticResource lb_checkbox}" />
                     <CheckBox
                         Margin="5,0"
                         VerticalAlignment="Top"
                         Content="Can Trade"
                         Foreground="White"
-                        IsChecked="{Binding IsTradeEnable}"
+                        IsChecked="{Binding CharacterDataViewModel.IsTradeEnable}"
                         Template="{StaticResource lb_checkbox}" />
                     <CheckBox
                         Margin="5,0"
                         VerticalAlignment="Top"
                         Content="Is Admin"
                         Foreground="White"
-                        IsChecked="{Binding IsAdmin}"
+                        IsChecked="{Binding CharacterDataViewModel.IsAdmin}"
                         Template="{StaticResource lb_checkbox}" />
                 </StackPanel>
                 <StackPanel
-                    Grid.Row="5"
-                    Grid.ColumnSpan="3"
-                    Margin="0,20"
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="0,0,0,0"
                     HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom"
-                    Orientation="Horizontal">
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
                     <Label
                         x:Name="lbLobby"
                         HorizontalAlignment="Center"
@@ -549,13 +466,13 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbLobby"
-                        Width="250"
+                        Width="200"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         IsReadOnly="True"
-                        ItemsSource="{Binding LobbyItems}"
-                        SelectedValue="{Binding Lobby, Mode=TwoWay}"
+                        ItemsSource="{Binding CharacterDataViewModel.LobbyItems}"
+                        SelectedValue="{Binding CharacterDataViewModel.Lobby, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -574,262 +491,18 @@
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"
-                    ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                    ToolTip="Save Character Changes" />
             </Grid>
 
             <!--  Profile  -->
-            <TabControl
+            <control:CharacterProfile
                 Grid.Row="1"
+                Grid.RowSpan="2"
                 Grid.Column="1"
-                Width="384"
-                Height="200"
                 Margin="0,8,0,0"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Top">
-                <TabItem
-                    Width="192"
-                    Foreground="White"
-                    Header="Equipment"
-                    IsSelected="True"
-                    Style="{StaticResource lb_tab}">
-                    <Grid
-                        Width="384"
-                        Height="156"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="47*" />
-                            <ColumnDefinition Width="47*" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="47*" />
-                            <ColumnDefinition Width="47*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="34*" />
-                            <RowDefinition Height="34*" />
-                            <RowDefinition Height="50*" />
-                        </Grid.RowDefinitions>
-                        <Image
-                            Grid.Row="0"
-                            Grid.RowSpan="3"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="5"
-                            Width="384"
-                            Height="156"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Top"
-                            d:Source="/Assets/images/char/ui_silhouette_roselle01.png"
-                            Source="{Binding CharSilhouetteImage}" />
-                        <TextBlock
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Top"
-                            d:Text="Lv.50 Roselle"
-                            Background="Transparent"
-                            Foreground="Gold"
-                            Style="{StaticResource ArialMS}"
-                            Text="{Binding CharacterNameText}"
-                            TextWrapping="Wrap" />
-                        <TextBlock
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            d:Text="Roselle - Sword Focus"
-                            Background="Transparent"
-                            Foreground="Gold"
-                            Style="{StaticResource ArialMS}"
-                            Text="{Binding CharacterClassText}"
-                            TextWrapping="Wrap" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex0"
-                            Grid.Row="1"
-                            Grid.Column="3"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=0}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_07.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex1"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=1}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_02.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex2"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=2}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_01.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex3"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=3}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_05.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex4"
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=4}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_03.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex5"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=5}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_04.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex6"
-                            Grid.Row="1"
-                            Grid.Column="4"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=6}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_09.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex7"
-                            Grid.Row="2"
-                            Grid.Column="4"
-                            Margin="0,0,1,0"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=7}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_10.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex8"
-                            Grid.Row="0"
-                            Grid.Column="4"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=8}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_08.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex9"
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=9}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_06.png" />
-                    </Grid>
-                </TabItem>
-                <TabItem
-                    Width="192"
-                    Foreground="White"
-                    Header="Costume"
-                    Style="{StaticResource lb_tab}">
-                    <Grid
-                        Width="384"
-                        Height="156"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="47*" />
-                            <ColumnDefinition Width="47*" />
-                            <ColumnDefinition Width="200" />
-                            <ColumnDefinition Width="47*" />
-                            <ColumnDefinition Width="47*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="34*" />
-                            <RowDefinition Height="34*" />
-                            <RowDefinition Height="50*" />
-                        </Grid.RowDefinitions>
-                        <Image
-                            Grid.Row="0"
-                            Grid.RowSpan="3"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="5"
-                            Width="384"
-                            Height="156"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Top"
-                            d:Source="/Assets/images/char/ui_silhouette_roselle01.png"
-                            Source="{Binding CharSilhouetteImage}" />
-                        <TextBlock
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Top"
-                            d:Text="Lv.50 Roselle"
-                            Background="Transparent"
-                            Foreground="Gold"
-                            Style="{StaticResource ArialMS}"
-                            Text="{Binding CharacterNameText}"
-                            TextWrapping="Wrap" />
-                        <TextBlock
-                            Grid.Row="2"
-                            Grid.Column="2"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            d:Text="Roselle - Sword Focus"
-                            Background="Transparent"
-                            Foreground="Gold"
-                            Style="{StaticResource ArialMS}"
-                            Text="{Binding CharacterClassText}"
-                            TextWrapping="Wrap" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex10"
-                            Grid.Row="0"
-                            Grid.Column="0"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=10}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_11.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex11"
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=11}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_16.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex12"
-                            Grid.Row="1"
-                            Grid.Column="4"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=12}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_18.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex13"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=13}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_12.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex14"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=14}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_14.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex15"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=15}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_15.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex16"
-                            Grid.Row="1"
-                            Grid.Column="3"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=16}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_17.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex17"
-                            Grid.Row="2"
-                            Grid.Column="0"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=17}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_13.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex18"
-                            Grid.Row="2"
-                            Grid.Column="3"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=18}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_19.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex19"
-                            Grid.Row="2"
-                            Grid.Column="4"
-                            Margin="0,0,1,0"
-                            FrameViewModel="{Binding FrameViewModels, Converter={StaticResource FrameViewModelConverter}, ConverterParameter=19}"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_20.png" />
-                        <control:ItemSlot
-                            x:Name="ItemSlotIndex21"
-                            Grid.Row="0"
-                            Grid.Column="4"
-                            IsButtonEnabled="False"
-                            SlotIcon="/Assets/images/equipment_slot/lb_equipment_slot_21.png" />
-                    </Grid>
-                </TabItem>
-            </TabControl>
+                VerticalAlignment="Top"
+                DataContext="{Binding EquipmentWindowViewModel}" />
         </Grid>
     </ContentControl>
 </Window>

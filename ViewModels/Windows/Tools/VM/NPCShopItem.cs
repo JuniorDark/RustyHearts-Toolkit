@@ -23,5 +23,5 @@ public partial class NPCShopItem : ObservableObject
     private double _itemMixCo;
 
     [ObservableProperty]
-    private FrameViewModel? _frameViewModel;
+    private ItemDataViewModel? _itemDataViewModel;
 }

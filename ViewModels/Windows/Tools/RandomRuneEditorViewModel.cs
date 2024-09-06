@@ -219,10 +219,10 @@ namespace RHToolkit.ViewModels.Windows
         {
             if (itemData.ItemId != 0)
             {
-                var frameViewModel = ItemDataManager.GetFrameViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
                 RuneItems[itemData.SlotIndex].ItemCode = itemData.ItemId;
                 RuneItems[itemData.SlotIndex].ItemCodeCount = itemData.ItemAmount;
-                RuneItems[itemData.SlotIndex].FrameViewModel = frameViewModel;
+                RuneItems[itemData.SlotIndex].ItemDataViewModel = itemDataViewModel;
                 OnPropertyChanged(nameof(RuneItems));
             }
         }
@@ -268,7 +268,7 @@ namespace RHToolkit.ViewModels.Windows
                 RuneItems[slotIndex].ItemCode = 0;
                 RuneItems[slotIndex].ItemCount = 0;
                 RuneItems[slotIndex].ItemCodeCount = 0;
-                RuneItems[slotIndex].FrameViewModel = null;
+                RuneItems[slotIndex].ItemDataViewModel = null;
                 OnPropertyChanged(nameof(RuneItems));
                 DataTableManager.EndGroupingEdits();
             }
@@ -312,7 +312,7 @@ namespace RHToolkit.ViewModels.Windows
                         ItemCode = (int)selectedItem[$"nItemCode{i:00}"],
                         ItemCodeCount = (int)selectedItem[$"nItemCodeCount{i:00}"],
                         ItemCount = (int)selectedItem[$"nItemCount{i:00}"],
-                        FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nItemCode{i:00}"], i, (int)selectedItem[$"nItemCodeCount{i:00}"]),
+                        ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItemCode{i:00}"], i, (int)selectedItem[$"nItemCodeCount{i:00}"]),
                         IsEnabled = (int)selectedItem[$"nItemCode{i:00}"] != 0
                     };
 
@@ -543,11 +543,11 @@ namespace RHToolkit.ViewModels.Windows
 
             try
             {
-                var frameViewModel = RuneItems[index].FrameViewModel;
-                if (frameViewModel != null)
+                var itemDataViewModel = RuneItems[index].ItemDataViewModel;
+                if (itemDataViewModel != null)
                 {
-                    frameViewModel.ItemAmount = newValue;
-                    RuneItems[index].FrameViewModel = frameViewModel;
+                    itemDataViewModel.ItemAmount = newValue;
+                    RuneItems[index].ItemDataViewModel = itemDataViewModel;
                 }
                 
                 UpdateSelectedItemValue(newValue, column);

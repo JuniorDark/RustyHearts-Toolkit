@@ -32,13 +32,13 @@ namespace RHToolkit.Views.Controls
         public static readonly DependencyProperty ItemStateProperty = DependencyProperty.Register(
             "ItemState", typeof(int), typeof(ShopItem), new PropertyMetadata(0));
 
-        public static readonly DependencyProperty FrameViewModelProperty = DependencyProperty.Register(
-            "FrameViewModel", typeof(FrameViewModel), typeof(ShopItem), new PropertyMetadata(null));
+        public static readonly DependencyProperty ItemDataViewModelProperty = DependencyProperty.Register(
+            "ItemDataViewModel", typeof(ItemDataViewModel), typeof(ShopItem), new PropertyMetadata(null));
 
-        public FrameViewModel FrameViewModel
+        public ItemDataViewModel ItemDataViewModel
         {
-            get => (FrameViewModel)GetValue(FrameViewModelProperty);
-            set => SetValue(FrameViewModelProperty, value);
+            get => (ItemDataViewModel)GetValue(ItemDataViewModelProperty);
+            set => SetValue(ItemDataViewModelProperty, value);
         }
 
         public bool IsButtonEnabled

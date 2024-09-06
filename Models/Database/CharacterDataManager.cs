@@ -3,7 +3,7 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Models.Database
 {
-    public class CharacterHelper(IDatabaseService databaseService)
+    public class CharacterDataManager(IDatabaseService databaseService)
     {
         private readonly IDatabaseService _databaseService = databaseService;
 

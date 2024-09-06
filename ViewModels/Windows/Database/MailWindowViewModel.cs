@@ -6,7 +6,7 @@ using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
-using RHToolkit.ViewModels.Controls;
+using RHToolkit.ViewModels.Windows.Database.VM;
 using System.Data;
 using System.Windows.Controls;
 
@@ -16,17 +16,20 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 {
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
-    private readonly MailHelper _mailHelper;
+    private readonly MailDataManager _mailDataManager;
     private readonly ItemDataManager _itemDataManager;
     private readonly Guid _token;
 
-    public MailWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, MailHelper mailHelper, ItemDataManager itemDataManager)
+    public MailWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, MailDataManager mailDataManager, ItemDataManager itemDataManager)
     {
         _token = Guid.NewGuid();
         _windowsService = windowsService;
         _databaseService = databaseService;
-        _mailHelper = mailHelper;
+        _mailDataManager = mailDataManager;
         _itemDataManager = itemDataManager;
+
+        InitializeMailItemDataViewModels();
+
         WeakReferenceMessenger.Default.Register(this);
     }
 
@@ -39,16 +42,9 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
         {
             if (int.TryParse(parameter, out int slotIndex))
             {
-                var token = _token;
+                ItemData? itemData = ItemDataList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex};
 
-                ItemData? itemData = ItemDataList?.FirstOrDefault(m => m.SlotIndex == slotIndex);
-
-                itemData ??= new ItemData
-                {
-                    SlotIndex = slotIndex
-                };
-
-                _windowsService.OpenItemWindow(token, "Mail", itemData);
+                _windowsService.OpenItemWindow(_token, "Mail", itemData);
             }
         }
         catch (Exception ex)
@@ -64,28 +60,56 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
         {
             var itemData = message.Value;
 
-            ItemDataList ??= [];
-
-            var existingItemIndex = ItemDataList.FindIndex(m => m.SlotIndex == itemData.SlotIndex);
-            if (existingItemIndex != -1)
-            {
-                // Remove the existing ItemData with the same SlotIndex
-                RemoveFrameViewModel(existingItemIndex);
-            }
-
-            // Add the new ItemData to the Item list
-            ItemDataList.Add(itemData);
-
-            var frameViewModel = _itemDataManager.GetItemData(itemData);
-            SetFrameViewModel(frameViewModel);
+            CreateItem(itemData);
         }
     }
 
-    private void SetFrameViewModel(FrameViewModel frameViewModel)
+    private void CreateItem(ItemData itemData)
     {
-        FrameViewModels ??= [];
-        FrameViewModels.Add(frameViewModel);
-        OnPropertyChanged(nameof(FrameViewModels));
+        ItemDataList ??= [];
+        RemoveItem(itemData.SlotIndex);
+        ItemDataList.Add(itemData);
+        SetItemDataViewModel(itemData);
+    }
+
+    private void RemoveItem(int slotIndex)
+    {
+        if (ItemDataList != null)
+        {
+            // Find the existing item in ItemDataList
+            var removedItem = ItemDataList.FirstOrDefault(item => item.SlotIndex == slotIndex);
+
+            if (removedItem != null)
+            {
+                ItemDataList?.Remove(removedItem);
+                OnPropertyChanged(nameof(ItemDataList));
+                RemoveItemDataViewModel(removedItem);
+            }
+        }
+    }
+
+    private void SetItemDataViewModel(ItemData itemData)
+    {
+        if (MailItemDataViewModels != null)
+        {
+            var itemDataViewModel = _itemDataManager.GetItemData(itemData);
+            MailItemDataViewModels[itemDataViewModel.SlotIndex].ItemDataViewModel = itemDataViewModel;
+            OnPropertyChanged(nameof(MailItemDataViewModels));
+        }
+    }
+
+    private void RemoveItemDataViewModel(ItemData removedItem)
+    {
+        if (MailItemDataViewModels != null)
+        {
+            MailItemDataViewModels[removedItem.SlotIndex].ItemDataViewModel = null;
+            OnPropertyChanged(nameof(MailItemDataViewModels));
+        }
+    }
+
+    private void InitializeMailItemDataViewModels()
+    {
+        MailItemDataViewModels = ItemDataManager.InitializeCollection(3, 61);
     }
 
     #endregion
@@ -97,22 +121,8 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
     {
         if (int.TryParse(parameter, out int slotIndex))
         {
-            if (ItemDataList != null)
-            {
-                var removedItemIndex = ItemDataList.FindIndex(i => i.SlotIndex == slotIndex);
-                if (removedItemIndex != -1)
-                {
-                    RemoveFrameViewModel(removedItemIndex);
-                }
-            }
+            RemoveItem(slotIndex);
         }
-    }
-
-    private void RemoveFrameViewModel(int itemIndex)
-    {
-        ItemDataList?.RemoveAt(itemIndex);
-        FrameViewModels?.RemoveAt(itemIndex);
-        OnPropertyChanged(nameof(FrameViewModels));
     }
     #endregion
 
@@ -293,10 +303,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
                             Weight = templateData.WeightValues?[i] ?? 0,
                         };
 
-                        ItemDataList ??= [];
-                        ItemDataList.Add(itemData);
-                        var frameViewModel = _itemDataManager.GetItemData(itemData);
-                        SetFrameViewModel(frameViewModel);
+                        CreateItem(itemData);
                     }
                 }
             }
@@ -325,8 +332,8 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
         ItemCharge = 0;
 
         ItemDataList?.Clear();
-        FrameViewModels?.Clear();
-        OnPropertyChanged(nameof(FrameViewModels));
+        MailItemDataViewModels?.Clear();
+        InitializeMailItemDataViewModels();
     }
     #endregion
 
@@ -359,13 +366,13 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
         try
         {
-            string[] recipients = await _mailHelper.GetRecipientsAsync(mailRecipient, sendToAllCharacters, sendToAllOnline, sendToAllOffline);
+            string[] recipients = await _mailDataManager.GetRecipientsAsync(mailRecipient, sendToAllCharacters, sendToAllOnline, sendToAllOffline);
             if (recipients == null || recipients.Length == 0)
             {
                 return;
             }
 
-            string confirmationMessage = MailHelper.GetConfirmationMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, recipients);
+            string confirmationMessage = MailDataManager.GetConfirmationMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, recipients);
 
             if (RHMessageBoxHelper.ConfirmMessage(confirmationMessage))
             {
@@ -373,7 +380,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
                 (List<string> successfulRecipients, List<string> failedRecipients) = await _databaseService.SendMailAsync(mailSender, message, gold, reqGold, returnDay, recipients, ItemDataList!);
 
-                string successMessage = MailHelper.GetSendMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, successfulRecipients, failedRecipients);
+                string successMessage = MailDataManager.GetSendMessage(sendToAllCharacters, sendToAllOnline, sendToAllOffline, successfulRecipients, failedRecipients);
                 RHMessageBoxHelper.ShowOKMessage(successMessage, Resources.SendMail);
             }
         }
@@ -402,7 +409,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
     private List<ItemData>? _itemDataList;
 
     [ObservableProperty]
-    private List<FrameViewModel>? _frameViewModels;
+    private ObservableCollection<InventoryItem>? _mailItemDataViewModels;
 
     [ObservableProperty]
     private bool _isButtonEnabled = true;

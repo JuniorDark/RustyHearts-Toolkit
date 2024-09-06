@@ -27,5 +27,5 @@ public partial class ItemDropGroup : ObservableObject
     private int _end;
 
     [ObservableProperty]
-    private FrameViewModel? _frameViewModel;
+    private ItemDataViewModel? _itemDataViewModel;
 }

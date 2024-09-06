@@ -260,10 +260,10 @@ namespace RHToolkit.ViewModels.Windows
             if (itemData.ItemId != 0)
             {
                 DataTableManager.StartGroupingEdits();
-                var frameViewModel = ItemDataManager.GetFrameViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
                 PackageItems[itemData.SlotIndex].ItemCode = itemData.ItemId;
                 PackageItems[itemData.SlotIndex].ItemCount = itemData.ItemAmount;
-                PackageItems[itemData.SlotIndex].FrameViewModel = frameViewModel;
+                PackageItems[itemData.SlotIndex].ItemDataViewModel = itemDataViewModel;
                 OnPropertyChanged(nameof(PackageItems));
                 DataTableManager.EndGroupingEdits();
             }
@@ -319,7 +319,7 @@ namespace RHToolkit.ViewModels.Windows
                 DataTableManager.StartGroupingEdits();
                 PackageItems[slotIndex].ItemCode = 0;
                 PackageItems[slotIndex].ItemCount = 0;
-                PackageItems[slotIndex].FrameViewModel = null;
+                PackageItems[slotIndex].ItemDataViewModel = null;
                 OnPropertyChanged(nameof(PackageItems));
                 DataTableManager.EndGroupingEdits();
             }
@@ -378,7 +378,7 @@ namespace RHToolkit.ViewModels.Windows
                     {
                         ItemCode = (int)selectedItem[$"nItemCode{i:00}"],
                         ItemCount = (int)selectedItem[$"nItemCount{i:00}"],
-                        FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nItemCode{i:00}"], i, (int)selectedItem[$"nItemCount{i:00}"])
+                        ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItemCode{i:00}"], i, (int)selectedItem[$"nItemCount{i:00}"])
                     };
 
                     PackageItems.Add(item);

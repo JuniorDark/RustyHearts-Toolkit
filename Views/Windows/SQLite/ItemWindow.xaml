@@ -35,9 +35,9 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
-                <RowDefinition Height="50*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="120*" />
-                <RowDefinition Height="100*" />
+                <RowDefinition Height="120*" />
             </Grid.RowDefinitions>
 
             <ui:TitleBar
@@ -91,10 +91,10 @@
                         Width="120"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.EnhanceLevelMax}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.EnhanceLevelMax}"
                         Minimum="0"
-                        Value="{Binding ItemDataManager.FrameViewModel.EnhanceLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding ItemDataManager.ItemDataViewModel.EnhanceLevel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
                         x:Name="lbRank"
                         VerticalAlignment="Top"
@@ -104,10 +104,10 @@
                     <ui:NumberBox
                         x:Name="intRank"
                         Width="120"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="5"
                         Minimum="1"
-                        Value="{Binding ItemDataManager.FrameViewModel.Rank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding ItemDataManager.ItemDataViewModel.Rank, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <!--  center Column  -->
                 <StackPanel
@@ -125,10 +125,10 @@
                         Width="120"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.AugmentValueMax}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.AugmentValueMax, Converter={StaticResource GreaterOrEqualToIsEnabledConverter}, ConverterParameter=1}"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.AugmentValueMax}"
                         Minimum="0"
-                        Value="{Binding ItemDataManager.FrameViewModel.AugmentValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding ItemDataManager.ItemDataViewModel.AugmentValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
                         x:Name="lbCurrentAttribute"
                         VerticalAlignment="Top"
@@ -138,10 +138,10 @@
                     <ui:NumberBox
                         x:Name="intReconstruction"
                         Width="120"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.ReconstructionMax}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.ReconstructionMax}"
                         Minimum="0"
-                        Value="{Binding ItemDataManager.FrameViewModel.Reconstruction, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding ItemDataManager.ItemDataViewModel.Reconstruction, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <!--  Right Column  -->
                 <StackPanel
@@ -157,11 +157,11 @@
                     <ui:NumberBox
                         x:Name="intMaxDurability"
                         Width="120"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
-                        LargeChange="{Binding ItemDataManager.FrameViewModel.MaxDurability, Converter={StaticResource IncrementConverter}}"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.MaxDurabilityMax}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
+                        LargeChange="{Binding ItemDataManager.ItemDataViewModel.MaxDurability, Converter={StaticResource IncrementConverter}}"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.MaxDurabilityMax}"
                         Minimum="0"
-                        Value="{Binding ItemDataManager.FrameViewModel.MaxDurability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding ItemDataManager.ItemDataViewModel.MaxDurability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     <Label
                         x:Name="lbWeight"
                         VerticalAlignment="Top"
@@ -171,27 +171,33 @@
                     <ui:NumberBox
                         x:Name="intWeight"
                         Width="120"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         LargeChange="100"
                         Maximum="200000"
                         Minimum="1"
-                        Value="{Binding ItemDataManager.FrameViewModel.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding ItemDataManager.ItemDataViewModel.Weight, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
             </Grid>
             <!--  Random Option  -->
             <Grid
                 Grid.Row="2"
                 Grid.Column="2"
-                Margin="80,10,0,0"
-                HorizontalAlignment="Center"
+                Margin="0,10,0,0"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Visibility="{Binding IsOptionsVisible}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <StackPanel
-                    Margin="60,-65,0,0"
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,10"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
@@ -216,8 +222,11 @@
                 </StackPanel>
                 <!--  left Column  -->
                 <StackPanel
+                    Grid.Row="1"
                     Grid.Column="0"
-                    HorizontalAlignment="Center"
+                    Margin="20,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
                     Orientation="Vertical">
                     <Label
                         x:Name="lbRandomOption1"
@@ -227,18 +236,18 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode1"
-                        Width="300"
+                        Width="380"
                         Height="24"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemDataManager.OptionView}"
-                        SelectedValue="{Binding ItemDataManager.FrameViewModel.RandomOption01, Mode=TwoWay}"
+                        SelectedValue="{Binding ItemDataManager.ItemDataViewModel.RandomOption01, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -250,18 +259,18 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode2"
-                        Width="300"
+                        Width="380"
                         Height="24"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemDataManager.OptionView}"
-                        SelectedValue="{Binding ItemDataManager.FrameViewModel.RandomOption02, Mode=TwoWay}"
+                        SelectedValue="{Binding ItemDataManager.ItemDataViewModel.RandomOption02, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -273,78 +282,79 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode3"
-                        Width="300"
+                        Width="380"
                         Height="24"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemDataManager.OptionView}"
-                        SelectedValue="{Binding ItemDataManager.FrameViewModel.RandomOption03, Mode=TwoWay}"
+                        SelectedValue="{Binding ItemDataManager.ItemDataViewModel.RandomOption03, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
                 </StackPanel>
                 <!--  Right Column  -->
                 <StackPanel
+                    Grid.Row="1"
                     Grid.Column="1"
-                    HorizontalAlignment="Center"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
                     Orientation="Vertical">
                     <Label
                         x:Name="lbRandomOptionValue1"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
                         Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=1}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intOptionValue1"
-                        Width="100"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
-                        LargeChange="{Binding ItemDataManager.FrameViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.OptionMaxValue}"
-                        Minimum="{Binding ItemDataManager.FrameViewModel.OptionMinValue}"
-                        Value="{Binding ItemDataManager.FrameViewModel.RandomOption01Value, Mode=TwoWay}" />
+                        Width="120"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                        LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue}"
+                        Minimum="{Binding ItemDataManager.ItemDataViewModel.OptionMinValue}"
+                        Value="{Binding ItemDataManager.ItemDataViewModel.RandomOption01Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbRandomOptionValue2"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
                         Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=2}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intOptionValue2"
-                        Width="100"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
-                        LargeChange="{Binding ItemDataManager.FrameViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.OptionMaxValue}"
-                        Minimum="{Binding ItemDataManager.FrameViewModel.OptionMinValue}"
-                        Value="{Binding ItemDataManager.FrameViewModel.RandomOption02Value, Mode=TwoWay}" />
+                        Width="120"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                        LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue}"
+                        Minimum="{Binding ItemDataManager.ItemDataViewModel.OptionMinValue}"
+                        Value="{Binding ItemDataManager.ItemDataViewModel.RandomOption02Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbRandomOptionValue3"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
                         Content="{Binding Source={x:Static rs:Resources.Value}, Converter={StaticResource StringFormatConverter}, ConverterParameter=3}"
-                        FontSize="10"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intOptionValue3"
-                        Width="100"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
-                        LargeChange="{Binding ItemDataManager.FrameViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.OptionMaxValue}"
-                        Minimum="{Binding ItemDataManager.FrameViewModel.OptionMinValue}"
-                        Value="{Binding ItemDataManager.FrameViewModel.RandomOption03Value, Mode=TwoWay}" />
+                        Width="120"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                        LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue}"
+                        Minimum="{Binding ItemDataManager.ItemDataViewModel.OptionMinValue}"
+                        Value="{Binding ItemDataManager.ItemDataViewModel.RandomOption03Value, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
             <!--  Socket Option  -->
             <Grid
                 Grid.Row="3"
                 Grid.Column="2"
-                Margin="0,0,20,0"
-                HorizontalAlignment="Center"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Visibility="{Binding IsOptionsVisible}">
                 <Grid.ColumnDefinitions>
@@ -352,38 +362,43 @@
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <!--  Socket count  -->
                 <StackPanel
+                    Grid.Row="0"
                     Grid.Column="1"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
                     <Label
                         x:Name="lbSocketCount"
-                        Margin="0,-50,0,0"
+                        Margin="0,0,0,0"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="{x:Static rs:Resources.SocketCount}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intSocketCount"
-                        Width="100"
-                        Margin="0,-25,0,0"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.SocketCountMax, Mode=TwoWay}"
+                        Width="120"
+                        Margin="0,0,0,0"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.SocketCountMax, Mode=TwoWay}"
                         Minimum="0"
-                        Value="{Binding ItemDataManager.FrameViewModel.SocketCount, Mode=TwoWay}" />
+                        Value="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Mode=TwoWay}" />
                 </StackPanel>
                 <!--  left Column socket color  -->
                 <StackPanel
+                    Grid.Row="1"
                     Grid.Column="0"
-                    Width="110"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
                     <Label
                         x:Name="lbSocketColor1"
-                        Margin="0,10,0,0"
+                        Margin="0,0,0,0"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="{Binding Source={x:Static rs:Resources.SocketColor}, Converter={StaticResource StringFormatConverter}, ConverterParameter=1}"
@@ -392,14 +407,14 @@
                         x:Name="cbSocketColor1"
                         Width="48"
                         Height="44"
+                        Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemDataManager.SocketColorItems}"
-                        RenderTransformOrigin="0.417,1.091"
-                        SelectedValue="{Binding ItemDataManager.FrameViewModel.Socket01Color, Mode=TwoWay}"
+                        SelectedValue="{Binding ItemDataManager.ItemDataViewModel.Socket01Color, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox_image}" />
@@ -414,20 +429,20 @@
                         x:Name="cbSocketColor2"
                         Width="48"
                         Height="44"
-                        Margin="0,-5,0,0"
+                        Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemDataManager.SocketColorItems}"
-                        SelectedValue="{Binding ItemDataManager.FrameViewModel.Socket02Color, Mode=TwoWay}"
+                        SelectedValue="{Binding ItemDataManager.ItemDataViewModel.Socket02Color, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox_image}" />
                     <Label
                         x:Name="lbSocketColor3"
-                        Margin="0,-9,0,0"
+                        Margin="0,-10,0,0"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="{Binding Source={x:Static rs:Resources.SocketColor}, Converter={StaticResource StringFormatConverter}, ConverterParameter=3}"
@@ -439,23 +454,26 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemDataManager.SocketColorItems}"
-                        SelectedValue="{Binding ItemDataManager.FrameViewModel.Socket03Color, Mode=TwoWay}"
+                        SelectedValue="{Binding ItemDataManager.ItemDataViewModel.Socket03Color, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox_image}" />
                 </StackPanel>
                 <!--  center Column socket option  -->
                 <StackPanel
+                    Grid.Row="1"
                     Grid.Column="1"
-                    Margin="0,10"
+                    Margin="0,0,0,0"
                     HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
                     Orientation="Vertical">
                     <Label
                         x:Name="lbSocketOption1"
+                        Margin="0,0,0,0"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
                         Content="{Binding Source={x:Static rs:Resources.SocketOption}, Converter={StaticResource StringFormatConverter}, ConverterParameter=1}"
@@ -470,11 +488,11 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemDataManager.OptionView}"
-                        SelectedValue="{Binding ItemDataManager.FrameViewModel.SocketOption01, Mode=TwoWay}"
+                        SelectedValue="{Binding ItemDataManager.ItemDataViewModel.SocketOption01, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -494,11 +512,11 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemDataManager.OptionView}"
-                        SelectedValue="{Binding ItemDataManager.FrameViewModel.SocketOption02, Mode=TwoWay}"
+                        SelectedValue="{Binding ItemDataManager.ItemDataViewModel.SocketOption02, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
@@ -518,20 +536,22 @@
                         HorizontalContentAlignment="Left"
                         VerticalContentAlignment="Center"
                         DisplayMemberPath="Name"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         IsEnabledChanged="ComboBox_IsEnabledChanged"
                         IsReadOnly="True"
                         ItemsSource="{Binding ItemDataManager.OptionView}"
-                        SelectedValue="{Binding ItemDataManager.FrameViewModel.SocketOption03, Mode=TwoWay}"
+                        SelectedValue="{Binding ItemDataManager.ItemDataViewModel.SocketOption03, Mode=TwoWay}"
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
                 </StackPanel>
                 <!--  Right Column socket option value  -->
                 <StackPanel
+                    Grid.Row="1"
                     Grid.Column="2"
-                    Margin="0,10"
+                    Margin="0,0"
                     HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
                     Orientation="Vertical">
                     <Label
                         x:Name="lbSocketOptionValue1"
@@ -541,13 +561,13 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intSocketValue1"
-                        Width="100"
+                        Width="120"
                         Margin="0,10,0,0"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
-                        LargeChange="{Binding ItemDataManager.FrameViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.OptionMaxValue}"
-                        Minimum="{Binding ItemDataManager.FrameViewModel.OptionMinValue}"
-                        Value="{Binding ItemDataManager.FrameViewModel.SocketOption01Value, Mode=TwoWay}" />
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
+                        LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue}"
+                        Minimum="{Binding ItemDataManager.ItemDataViewModel.OptionMinValue}"
+                        Value="{Binding ItemDataManager.ItemDataViewModel.SocketOption01Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbSocketOptionValue2"
                         VerticalAlignment="Top"
@@ -556,13 +576,13 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intSocketValue2"
-                        Width="100"
+                        Width="120"
                         Margin="0,10,0,0"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
-                        LargeChange="{Binding ItemDataManager.FrameViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.OptionMaxValue}"
-                        Minimum="{Binding ItemDataManager.FrameViewModel.OptionMinValue}"
-                        Value="{Binding ItemDataManager.FrameViewModel.SocketOption02Value, Mode=TwoWay}" />
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
+                        LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue}"
+                        Minimum="{Binding ItemDataManager.ItemDataViewModel.OptionMinValue}"
+                        Value="{Binding ItemDataManager.ItemDataViewModel.SocketOption02Value, Mode=TwoWay}" />
                     <Label
                         x:Name="lbSocketOptionValue3"
                         VerticalAlignment="Top"
@@ -571,13 +591,13 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intSocketValue3"
-                        Width="100"
+                        Width="120"
                         Margin="0,10,0,0"
-                        IsEnabled="{Binding ItemDataManager.FrameViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
-                        LargeChange="{Binding ItemDataManager.FrameViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.OptionMaxValue}"
-                        Minimum="{Binding ItemDataManager.FrameViewModel.OptionMinValue}"
-                        Value="{Binding ItemDataManager.FrameViewModel.SocketOption03Value, Mode=TwoWay}" />
+                        IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
+                        LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue}"
+                        Minimum="{Binding ItemDataManager.ItemDataViewModel.OptionMinValue}"
+                        Value="{Binding ItemDataManager.ItemDataViewModel.SocketOption03Value, Mode=TwoWay}" />
                 </StackPanel>
             </Grid>
             <!--  Selected Item  -->
@@ -612,10 +632,10 @@
                         Width="120"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
-                        Maximum="{Binding ItemDataManager.FrameViewModel.OverlapCnt}"
+                        Maximum="{Binding ItemDataManager.ItemDataViewModel.OverlapCnt}"
                         Minimum="1"
                         Visibility="{Binding IsItemAmountVisible}"
-                        Value="{Binding ItemDataManager.FrameViewModel.ItemAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding ItemDataManager.ItemDataViewModel.ItemAmount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1">
                     <Label
@@ -634,7 +654,7 @@
                         Maximum="{Binding SlotIndexMax}"
                         Minimum="{Binding SlotIndexMin}"
                         Visibility="{Binding IsSlotVisible}"
-                        Value="{Binding ItemDataManager.FrameViewModel.SlotIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding ItemDataManager.ItemDataViewModel.SlotIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -642,7 +662,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top">
                     <Label Content="Selected Item" Foreground="Gold" />
-                    <control:ItemSlot FrameViewModel="{Binding ItemDataManager.FrameViewModel}" ItemNameVisibility="Visible" />
+                    <control:ItemSlot ItemDataViewModel="{Binding ItemDataManager.ItemDataViewModel}" ItemNameVisibility="Visible" />
                 </StackPanel>
                 <Button
                     x:Name="btnAddItem"
@@ -664,7 +684,7 @@
                 Grid.Row="1"
                 Grid.RowSpan="2"
                 Grid.Column="1"
-                Margin="0,5"
+                Margin="0,5,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 Style="{StaticResource lb_scrollviewer}"
@@ -673,18 +693,18 @@
                     <control:ItemFrame
                         x:Name="itemFrame"
                         Width="300"
-                        Height="400"
+                        Height="Auto"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        DataContext="{Binding ItemDataManager.FrameViewModel}"
+                        DataContext="{Binding ItemDataManager.ItemDataViewModel}"
                         Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=1}" />
                     <control:CostumeFrame
                         x:Name="costumeFrame"
                         Width="300"
-                        Height="400"
+                        Height="Auto"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        DataContext="{Binding ItemDataManager.FrameViewModel}"
+                        DataContext="{Binding ItemDataManager.ItemDataViewModel}"
                         Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=2}" />
                     <control:GearFrame
                         x:Name="gearFrame"
@@ -692,7 +712,7 @@
                         Height="Auto"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        DataContext="{Binding ItemDataManager.FrameViewModel}"
+                        DataContext="{Binding ItemDataManager.ItemDataViewModel}"
                         Visibility="{Binding Type, Converter={StaticResource ValueToVisibilityConverter}, ConverterParameter=3|4}" />
                 </Grid>
             </ScrollViewer>

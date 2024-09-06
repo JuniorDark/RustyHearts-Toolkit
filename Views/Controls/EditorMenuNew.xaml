@@ -17,12 +17,17 @@
             <ui:MenuItem Header="File" Icon="{ui:SymbolIcon DocumentSplitHint20}">
                 <MenuItem
                     Command="{Binding CreateFileCommand}"
-                    Header="New"
+                    Header="Create New"
                     Icon="{ui:SymbolIcon DocumentAdd24}"
                     InputGestureText="Ctrl+N" />
                 <MenuItem
                     Command="{Binding LoadFileCommand}"
-                    Header="Open cashshop File..."
+                    Header="Open File"
+                    Icon="{ui:SymbolIcon DocumentAdd24}"
+                    InputGestureText="Ctrl+O" />
+                <MenuItem
+                    Command="{Binding LoadFileAsCommand}"
+                    Header="Open File as..."
                     Icon="{ui:SymbolIcon DocumentAdd24}"
                     InputGestureText="Ctrl+O" />
                 <MenuItem
@@ -78,18 +83,18 @@
                     InputGestureText="Ctrl+Shift+Z" />
                 <Separator />
                 <MenuItem
-                    Command="{Binding AddItemCommand}"
-                    Header="Add Item"
+                    Command="{Binding AddRowCommand}"
+                    Header="Add Row"
                     Icon="{ui:SymbolIcon AddCircle24}"
                     InputGestureText="Ctrl+I" />
                 <MenuItem
                     Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                    Header="Duplicate Selected Item"
+                    Header="Duplicate Selected Row"
                     Icon="{ui:SymbolIcon Copy24}"
                     InputGestureText="Ctrl+D" />
                 <MenuItem
                     Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
-                    Header="Delete Selected Item"
+                    Header="Delete Selected Row"
                     Icon="{ui:SymbolIcon Delete24}"
                     InputGestureText="Delete" />
                 <Separator />

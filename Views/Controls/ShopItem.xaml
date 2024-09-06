@@ -45,7 +45,7 @@
             Background="Transparent"
             BorderBrush="Transparent"
             Cursor="Hand"
-            Tag="{Binding FrameViewModel, RelativeSource={RelativeSource AncestorType=UserControl}}">
+            Tag="{Binding ItemDataViewModel, RelativeSource={RelativeSource AncestorType=UserControl}}">
             <Button.ToolTip>
                 <ToolTip
                     MaxWidth="325"
@@ -130,7 +130,7 @@
             FontWeight="Bold"
             Foreground="White"
             IsHitTestVisible="False"
-            Text="{Binding FrameViewModel.ItemName, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+            Text="{Binding ItemDataViewModel.ItemName, RelativeSource={RelativeSource AncestorType=UserControl}}" />
         <Image
             x:Name="imgItemState"
             Grid.Row="0"

@@ -300,9 +300,9 @@ namespace RHToolkit.ViewModels.Windows
             if (itemData.ItemId != 0)
             {
                 DataTableManager.StartGroupingEdits();
-                var frameViewModel = ItemDataManager.GetFrameViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
                 DropGroupItems[itemData.SlotIndex].DropItemCode = itemData.ItemId;
-                DropGroupItems[itemData.SlotIndex].FrameViewModel = frameViewModel;
+                DropGroupItems[itemData.SlotIndex].ItemDataViewModel = itemDataViewModel;
                 OnPropertyChanged(nameof(DropGroupItems));
                 DataTableManager.EndGroupingEdits();
             }
@@ -334,7 +334,7 @@ namespace RHToolkit.ViewModels.Windows
             if (slotIndex >= 0 && slotIndex <= DropGroupItems.Count)
             {
                 DataTableManager.StartGroupingEdits();
-                DropGroupItems[slotIndex].FrameViewModel = null;
+                DropGroupItems[slotIndex].ItemDataViewModel = null;
                 DropGroupItems[slotIndex].DropItemCode = 0;
                 DropGroupItems[slotIndex].FDropItemCount = 0;
                 DropGroupItems[slotIndex].NDropItemCount = 0;
@@ -453,7 +453,7 @@ namespace RHToolkit.ViewModels.Windows
                         End = selectedItem.Row.Table.Columns.Contains($"nEnd{i + 1:00}")
                         ? (int)selectedItem[$"nEnd{i + 1:00}"]
                         : 0,
-                        FrameViewModel = ItemDataManager.GetFrameViewModel((int)selectedItem[$"nDropItemCode{i + 1:00}"], i + 1, 1)
+                        ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nDropItemCode{i + 1:00}"], i + 1, 1)
                     };
 
                     DropGroupItems.Add(item);

@@ -10,7 +10,7 @@ namespace RHToolkit.Views.Controls
             InitializeComponent();
         }
 
-        public GearFrame(FrameViewModel viewModel)
+        public GearFrame(ItemDataViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;

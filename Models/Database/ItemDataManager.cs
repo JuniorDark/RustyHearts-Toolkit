@@ -3,8 +3,9 @@ using RHToolkit.Models.SQLite;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
-using static RHToolkit.Models.EnumService;
+using RHToolkit.ViewModels.Windows.Database.VM;
 using System.ComponentModel;
+using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Models.Database;
 
@@ -13,7 +14,8 @@ public partial class ItemDataManager: ObservableObject
     private readonly IFrameService _frameService;
     private readonly IGMDatabaseService _gmDatabaseService;
     private readonly CachedDataManager _cachedDataManager;
-    private readonly System.Timers.Timer _searchTimer;
+    private readonly System.Timers.Timer _itemFilterUpdateTimer;
+    private readonly System.Timers.Timer _optionFilterUpdateTimer;
 
     public ItemDataManager(CachedDataManager cachedDataManager, IGMDatabaseService gmDatabaseService, IFrameService frameService)
     {
@@ -21,12 +23,19 @@ public partial class ItemDataManager: ObservableObject
         _gmDatabaseService = gmDatabaseService;
         _cachedDataManager = cachedDataManager;
 
-        _searchTimer = new()
+        _itemFilterUpdateTimer = new()
         {
-            Interval = 1000,
+            Interval = 400,
             AutoReset = false
         };
-        _searchTimer.Elapsed += SearchTimerElapsed;
+        _itemFilterUpdateTimer.Elapsed += ItemFilterUpdateTimerElapsed;
+
+        _optionFilterUpdateTimer = new()
+        {
+            Interval = 400,
+            AutoReset = false
+        };
+        _optionFilterUpdateTimer.Elapsed += OptionFilterUpdateTimerElapsed;
 
         PopulateItemDataItems();
         PopulateOptionItems();
@@ -48,8 +57,24 @@ public partial class ItemDataManager: ObservableObject
 
     }
 
+    public static ObservableCollection<InventoryItem> InitializeCollection(int itemCount, int pageIndex)
+    {
+        var collection = new ObservableCollection<InventoryItem>();
+
+        for (int i = 0; i < itemCount; i++)
+        {
+            collection.Add(new InventoryItem
+            {
+                SlotIndex = i,
+                PageIndex = pageIndex
+            });
+        }
+
+        return collection;
+    }
+
     [ObservableProperty]
-    private FrameViewModel? _frameViewModel;
+    private ItemDataViewModel? _itemDataViewModel;
 
     #region ItemData
     public bool IsInvalidItemID(int itemID)
@@ -109,7 +134,7 @@ public partial class ItemDataManager: ObservableObject
         return newItem;
     }
 
-    public FrameViewModel GetItemData(ItemData item)
+    public ItemDataViewModel GetItemData(ItemData item)
     {
         // Find the corresponding ItemData in the _cachedItemDataList
         ItemData? cachedItem = _cachedDataManager.CachedItemDataList?.FirstOrDefault(i => i.ItemId == item.ItemId);
@@ -141,6 +166,7 @@ public partial class ItemDataManager: ObservableObject
                 PetFood = cachedItem.PetFood,
                 JobClass = cachedItem.JobClass,
                 SetId = cachedItem.SetId,
+                TitleList = cachedItem.TitleList,
                 FixOption1Code = cachedItem.FixOption1Code,
                 FixOption1Value = cachedItem.FixOption1Value,
                 FixOption2Code = cachedItem.FixOption2Code,
@@ -204,15 +230,49 @@ public partial class ItemDataManager: ObservableObject
             };
         }
 
-        var frameViewModel = new FrameViewModel(_frameService, _gmDatabaseService)
+        var itemDataViewModel = new ItemDataViewModel(_frameService, _gmDatabaseService)
         {
             ItemData = itemData
         };
 
-        return frameViewModel;
+        return itemDataViewModel;
     }
 
-    public FrameViewModel? GetFrameViewModel(int itemId, int slotIndex, int itemAmount)
+    public static ItemData UpdateItemData(ItemData existingItem, ItemData newItem)
+    {
+        existingItem.IsEditedItem = !existingItem.IsNewItem;
+        existingItem.UpdateTime = DateTime.Now;
+        existingItem.ItemAmount = newItem.ItemAmount;
+        existingItem.Durability = newItem.Durability;
+        existingItem.DurabilityMax = newItem.DurabilityMax;
+        existingItem.EnhanceLevel = newItem.EnhanceLevel;
+        existingItem.AugmentStone = newItem.AugmentStone;
+        existingItem.Rank = newItem.Rank;
+        existingItem.Weight = newItem.Weight;
+        existingItem.Reconstruction = newItem.Reconstruction;
+        existingItem.ReconstructionMax = newItem.ReconstructionMax;
+        existingItem.ItemAmount = newItem.ItemAmount;
+        existingItem.Option1Code = newItem.Option1Code;
+        existingItem.Option2Code = newItem.Option2Code;
+        existingItem.Option3Code = newItem.Option3Code;
+        existingItem.Option1Value = newItem.Option1Value;
+        existingItem.Option2Value = newItem.Option2Value;
+        existingItem.Option3Value = newItem.Option3Value;
+        existingItem.SocketCount = newItem.SocketCount;
+        existingItem.Socket1Color = newItem.Socket1Color;
+        existingItem.Socket2Color = newItem.Socket2Color;
+        existingItem.Socket3Color = newItem.Socket3Color;
+        existingItem.Socket1Code = newItem.Socket1Code;
+        existingItem.Socket2Code = newItem.Socket2Code;
+        existingItem.Socket3Code = newItem.Socket3Code;
+        existingItem.Socket1Value = newItem.Socket1Value;
+        existingItem.Socket2Value = newItem.Socket2Value;
+        existingItem.Socket3Value = newItem.Socket3Value;
+
+        return existingItem;
+    }
+
+    public ItemDataViewModel? GetItemDataViewModel(int itemId, int slotIndex, int itemAmount)
     {
         if (itemId != 0)
         {
@@ -223,8 +283,8 @@ public partial class ItemDataManager: ObservableObject
                 ItemAmount = itemAmount
             };
 
-            var frameViewModel = GetItemData(itemData);
-            return frameViewModel;
+            var itemDataViewModel = GetItemData(itemData);
+            return itemDataViewModel;
         }
         return null;
     }
@@ -322,14 +382,14 @@ public partial class ItemDataManager: ObservableObject
             if (option.ID == 0)
                 return true;
 
-            if (FrameViewModel != null)
+            if (ItemDataViewModel != null)
             {
-                selectedOptions.Add(FrameViewModel.RandomOption01);
-                selectedOptions.Add(FrameViewModel.RandomOption02);
-                selectedOptions.Add(FrameViewModel.RandomOption03);
-                selectedOptions.Add(FrameViewModel.SocketOption01);
-                selectedOptions.Add(FrameViewModel.SocketOption02);
-                selectedOptions.Add(FrameViewModel.SocketOption03);
+                selectedOptions.Add(ItemDataViewModel.RandomOption01);
+                selectedOptions.Add(ItemDataViewModel.RandomOption02);
+                selectedOptions.Add(ItemDataViewModel.RandomOption03);
+                selectedOptions.Add(ItemDataViewModel.SocketOption01);
+                selectedOptions.Add(ItemDataViewModel.SocketOption02);
+                selectedOptions.Add(ItemDataViewModel.SocketOption03);
 
                 if (selectedOptions.Contains(option.ID))
                     return true;
@@ -359,8 +419,8 @@ public partial class ItemDataManager: ObservableObject
     private string? _optionSearch;
     partial void OnOptionSearchChanged(string? value)
     {
-        _searchTimer.Stop();
-        _searchTimer.Start();
+        _optionFilterUpdateTimer.Stop();
+        _optionFilterUpdateTimer.Start();
     }
 
     #endregion
@@ -423,14 +483,23 @@ public partial class ItemDataManager: ObservableObject
     private string? _searchText;
     partial void OnSearchTextChanged(string? value)
     {
-        _searchTimer.Stop();
-        _searchTimer.Start();
+        _itemFilterUpdateTimer.Stop();
+        _itemFilterUpdateTimer.Start();
     }
 
-    private void SearchTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    private void ItemFilterUpdateTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    {
+        RefreshView();
+    }
+
+    private void OptionFilterUpdateTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    {
+        Application.Current.Dispatcher.Invoke(OptionView.Refresh);
+    }
+
+    private void RefreshView()
     {
         Application.Current.Dispatcher.Invoke(ItemDataView.Refresh);
-        Application.Current.Dispatcher.Invoke(OptionView.Refresh);
     }
 
     #endregion
@@ -487,10 +556,6 @@ public partial class ItemDataManager: ObservableObject
     partial void OnItemTypeFilterChanged(int value)
     {
         PopulateCategoryItemsFilter((ItemType)value);
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
     }
 
     [ObservableProperty]
@@ -500,10 +565,7 @@ public partial class ItemDataManager: ObservableObject
     private int _itemCategoryFilter;
     partial void OnItemCategoryFilterChanged(int value)
     {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
+        RefreshView();
     }
 
     [ObservableProperty]
@@ -513,11 +575,7 @@ public partial class ItemDataManager: ObservableObject
     private int _itemSubCategoryFilter;
     partial void OnItemSubCategoryFilterChanged(int value)
     {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
-
+        RefreshView();
     }
 
     [ObservableProperty]
@@ -527,10 +585,7 @@ public partial class ItemDataManager: ObservableObject
     private int _itemTradeFilter;
     partial void OnItemTradeFilterChanged(int value)
     {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
+        RefreshView();
     }
 
     [ObservableProperty]
@@ -538,10 +593,7 @@ public partial class ItemDataManager: ObservableObject
 
     partial void OnItemClassFilterChanged(int value)
     {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
+        RefreshView();
     }
 
     [ObservableProperty]
@@ -552,10 +604,7 @@ public partial class ItemDataManager: ObservableObject
 
     partial void OnItemBranchFilterChanged(int value)
     {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
+        RefreshView();
     }
 
     [ObservableProperty]
@@ -626,20 +675,14 @@ public partial class ItemDataManager: ObservableObject
     private int _inventoryTypeFilter;
     partial void OnInventoryTypeFilterChanged(int value)
     {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
+        RefreshView();
     }
 
     [ObservableProperty]
     private int _accountStorageFilter;
     partial void OnAccountStorageFilterChanged(int value)
     {
-        if (ItemDataView != null)
-        {
-            ItemDataView.Refresh();
-        }
+        RefreshView();
     }
 
     [ObservableProperty]

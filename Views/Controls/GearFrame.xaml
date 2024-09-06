@@ -7,380 +7,381 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="Frame"
     Height="Auto"
-    MaxHeight="750"
-    d:DataContext="{d:DesignInstance Type=controls:FrameViewModel}"
-    d:DesignHeight="750"
+    d:DataContext="{d:DesignInstance Type=controls:ItemDataViewModel}"
+    d:DesignHeight="600"
     d:DesignWidth="300"
-    Template="{StaticResource lb_def_box01}"
     mc:Ignorable="d">
-    <Grid x:Name="gearGrid">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="22" />
-            <RowDefinition Height="22" />
-            <RowDefinition Height="22" />
-            <RowDefinition Height="22" />
-            <RowDefinition Height="22" />
-            <RowDefinition Height="22" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="22" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="35" />
-            <RowDefinition Height="150" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="22" />
-        </Grid.RowDefinitions>
-        <!--  ItemName  -->
-        <TextBlock
-            x:Name="tbItemName"
-            Margin="1,3,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Style="{StaticResource ArialMS}">
+    <ContentControl Template="{StaticResource lb_def_box01}">
+        <Grid x:Name="gearGrid">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--  ItemName  -->
             <TextBlock
+                x:Name="tbItemName"
                 Grid.Row="0"
-                d:Text="+10"
-                Foreground="#06EBE8"
-                Text="{Binding EnhanceLevel, StringFormat=' +{0}'}">
-                <TextBlock.Style>
-                    <Style TargetType="TextBlock">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding EnhanceLevel}" Value="0">
-                                <Setter Property="Visibility" Value="Collapsed" />
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
+                Margin="3,3,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Style="{StaticResource ArialMS}">
+                <TextBlock
+                    d:Text="+10"
+                    Foreground="#06EBE8"
+                    Text="{Binding EnhanceLevel, StringFormat=' +{0}'}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding EnhanceLevel}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <Run Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}" Text="{Binding OptionGroupText}" />
+                <Run
+                    d:Foreground="White"
+                    d:Text="Item Name"
+                    Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}"
+                    Text="{Binding ItemName}" />
+
             </TextBlock>
-            <Run Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}" Text="{Binding OptionGroupText}" />
-            <Run
+
+            <!--  Category and SubCategory  -->
+            <TextBlock
+                x:Name="tbCategory"
+                Grid.Row="1"
+                Margin="10,5,0,0"
+                VerticalAlignment="Top"
+                d:Text="Category"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding CategoryText}" />
+            <TextBlock
+                x:Name="tbSubCategory"
+                Grid.Row="1"
+                Margin="0,5,10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
                 d:Foreground="White"
-                d:Text="Item Name"
-                Foreground="{Binding ItemNameColor, Converter={StaticResource StringToBrushConverter}}"
-                Text="{Binding ItemName}" />
+                d:Text="Sub Category"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding SubCategoryText}" />
+            <!--  ReqLevel and JobClass  -->
+            <TextBlock
+                x:Name="tbReqLevel"
+                Grid.Row="2"
+                Margin="10,0,118,0"
+                VerticalAlignment="Top"
+                d:Text="Required Level: 1"
+                Foreground="#FFA9A9A9"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding RequiredLevelText}" />
+            <TextBlock
+                x:Name="tbJobClass"
+                Grid.Row="2"
+                Margin="-250,0,10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                d:Text="Natasha"
+                Foreground="#FFA9A9A9"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding JobClassText}" />
+            <!--  Attribute and Rank  -->
+            <TextBlock
+                x:Name="tbAttribute"
+                Grid.Row="3"
+                Margin="10,1,0,0"
+                VerticalAlignment="Top"
+                d:Text="Attribute Item (2 Times/2 Times)"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding ReconstructionText, Mode=OneWay}" />
+            <TextBlock
+                x:Name="tbRank"
+                Grid.Row="3"
+                Margin="-210,0,10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                d:Text="Rank : 5th Rank"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding RankText}" />
+            <!--  ItemTrade and Weight  -->
+            <TextBlock
+                x:Name="tbItemTrade"
+                Grid.Row="4"
+                Margin="10,1,0,0"
+                d:Text="Trade Unavailable"
+                Foreground="#e75151"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding ItemTradeText}" />
+            <TextBlock
+                x:Name="tbWeight"
+                Grid.Row="4"
+                Margin="-250,0,10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                d:Text="0,001Kg"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding WeightText}" />
+            <!--  Durability and Value  -->
+            <TextBlock
+                x:Name="tbDurability"
+                Grid.Row="5"
+                Margin="10,1,0,0"
+                d:Text="Durability: 1000/1000"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding DurabilityText}" />
+            <TextBlock
+                x:Name="tbValue"
+                Grid.Row="5"
+                Margin="-215,0,10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"
+                d:Text="1000000 Gold"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding SellValueText}" />
+            <!--  MainStat  -->
+            <TextBlock
+                x:Name="tbMainStat"
+                Grid.Row="6"
+                Margin="10,5,0,10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Text="Physical Damage +0~0&#x0a;Magic Damage +0~0"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding MainStatText}" />
+            <!--  Augment  -->
+            <TextBlock
+                x:Name="tbAugment"
+                Grid.Row="7"
+                Margin="10,0,0,0"
+                VerticalAlignment="Top"
+                d:Text="Augment Stone"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding AugmentStone}"
+                Visibility="{Binding AugmentValue, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+            <TextBlock
+                x:Name="tbAugmentName"
+                Grid.Row="8"
+                Height="Auto"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="Physical/Magic Damage +0"
+                Foreground="#06EBE8"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding AugmentText}"
+                Visibility="{Binding AugmentValue, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
 
-        </TextBlock>
+            <!--  SetName  -->
+            <TextBlock
+                x:Name="tbSetName"
+                Grid.Row="9"
+                Margin="10,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Text="Set Name"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding SetNameText}" />
+            <TextBlock
+                x:Name="tbSetEffect"
+                Grid.Row="10"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Text="Set Effect"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding SetEffectText}" />
+            <!--  FixedOption  -->
+            <TextBlock
+                x:Name="tbFixedOption"
+                Grid.Row="11"
+                Margin="10,10,0,0"
+                VerticalAlignment="Top"
+                d:Text="[Fixed Buff]"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding FixedOption}"
+                Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
+            <TextBlock
+                x:Name="tbFixedOption01"
+                Grid.Row="12"
+                Height="Auto"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
+                Foreground="{Binding FixedOption01Color, Converter={StaticResource StringToBrushConverter}}"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding FixedOption01Text}"
+                TextWrapping="Wrap"
+                Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
+            <TextBlock
+                x:Name="tbFixedOption02"
+                Grid.Row="13"
+                Height="Auto"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
+                Foreground="{Binding FixedOption02Color, Converter={StaticResource StringToBrushConverter}}"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding FixedOption02Text}"
+                TextWrapping="Wrap"
+                Visibility="{Binding FixedOption02, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
+            <!--  RandomOption and its children  -->
+            <TextBlock
+                x:Name="tbRandomOption"
+                Grid.Row="14"
+                Margin="10,10,0,0"
+                VerticalAlignment="Top"
+                d:Text="[Random Option]"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding RandomOption}"
+                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+            <TextBlock
+                x:Name="tbRandomOption01"
+                Grid.Row="15"
+                Height="Auto"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
+                Foreground="{Binding RandomOption01Color, Converter={StaticResource StringToBrushConverter}}"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding RandomOption01Text}"
+                TextWrapping="Wrap"
+                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+            <TextBlock
+                x:Name="tbRandomOption02"
+                Grid.Row="16"
+                Height="Auto"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
+                Foreground="{Binding RandomOption02Color, Converter={StaticResource StringToBrushConverter}}"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding RandomOption02Text}"
+                TextWrapping="Wrap"
+                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
+            <TextBlock
+                x:Name="tbRandomOption03"
+                Grid.Row="17"
+                Height="Auto"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
+                Foreground="{Binding RandomOption03Color, Converter={StaticResource StringToBrushConverter}}"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding RandomOption03Text}"
+                TextWrapping="Wrap"
+                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
+            <!--  SocketOption  -->
+            <TextBlock
+                x:Name="tbSocketOption"
+                Grid.Row="18"
+                Margin="10,20,0,0"
+                VerticalAlignment="Top"
+                d:Text="[Socket]"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding SocketOption}"
+                Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+            <TextBlock
+                x:Name="tbSocketOption01"
+                Grid.Row="19"
+                Height="Auto"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
+                Foreground="{Binding SocketOption01Color, Converter={StaticResource StringToBrushConverter}}"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding SocketOption01Text}"
+                TextWrapping="Wrap"
+                Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+            <TextBlock
+                x:Name="tbSocketOption02"
+                Grid.Row="20"
+                Height="Auto"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
+                Foreground="{Binding SocketOption02Color, Converter={StaticResource StringToBrushConverter}}"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding SocketOption02Text}"
+                TextWrapping="Wrap"
+                Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
+            <TextBlock
+                x:Name="tbSocketOption03"
+                Grid.Row="21"
+                Height="Auto"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
+                Foreground="{Binding SocketOption03Color, Converter={StaticResource StringToBrushConverter}}"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding SocketOption03Text}"
+                TextWrapping="Wrap"
+                Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
+            <TextBlock
+                x:Name="tbPetFood"
+                Grid.Row="22"
+                Margin="10,10,0,10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                d:Foreground="#e75151"
+                d:Text="This item cannot be used as Pet Food"
+                Foreground="{Binding PetFoodColor, Converter={StaticResource StringToBrushConverter}}"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding PetFoodText}" />
+        </Grid>
+    </ContentControl>
 
-        <!--  Category and SubCategory  -->
-        <TextBlock
-            x:Name="tbCategory"
-            Grid.Row="1"
-            Margin="10,0,118,0"
-            VerticalAlignment="Center"
-            d:Text="Category"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding CategoryText}" />
-        <TextBlock
-            x:Name="tbSubCategory"
-            Grid.Row="1"
-            Margin="-225,0,10,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            d:Foreground="White"
-            d:Text="Sub Category"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding SubCategoryText}" />
-        <!--  ReqLevel and JobClass  -->
-        <TextBlock
-            x:Name="tbReqLevel"
-            Grid.Row="2"
-            Margin="10,0,118,0"
-            VerticalAlignment="Top"
-            d:Text="Required Level: 1"
-            Foreground="#FFA9A9A9"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding RequiredLevelText}" />
-        <TextBlock
-            x:Name="tbJobClass"
-            Grid.Row="2"
-            Margin="-250,0,10,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            d:Text="Natasha"
-            Foreground="#FFA9A9A9"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding JobClassText}" />
-        <!--  Attribute and Rank  -->
-        <TextBlock
-            x:Name="tbAttribute"
-            Grid.Row="3"
-            Margin="10,1,0,0"
-            VerticalAlignment="Top"
-            d:Text="Attribute Item (2 Times/2 Times)"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding ReconstructionText, Mode=OneWay}" />
-        <TextBlock
-            x:Name="tbRank"
-            Grid.Row="3"
-            Margin="-210,0,10,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            d:Text="Rank : 5th Rank"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding RankText}" />
-        <!--  ItemTrade and Weight  -->
-        <TextBlock
-            x:Name="tbItemTrade"
-            Grid.Row="4"
-            Margin="10,1,0,0"
-            d:Text="Trade Unavailable"
-            Foreground="#e75151"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding ItemTradeText}" />
-        <TextBlock
-            x:Name="tbWeight"
-            Grid.Row="4"
-            Margin="-250,0,10,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            d:Text="0,001Kg"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding WeightText}" />
-        <!--  Durability and Value  -->
-        <TextBlock
-            x:Name="tbDurability"
-            Grid.Row="5"
-            Margin="10,1,0,0"
-            d:Text="Durability: 1000/1000"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding DurabilityText}" />
-        <TextBlock
-            x:Name="tbValue"
-            Grid.Row="5"
-            Margin="-215,0,10,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            d:Text="1000000 Gold"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding SellValueText}" />
-        <!--  MainStat  -->
-        <TextBlock
-            x:Name="tbMainStat"
-            Grid.Row="6"
-            Margin="10,5,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Text="Physical Damage +0~0&#x0a;Magic Damage +0~0"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding MainStatText}" />
-        <!--  Augment  -->
-        <TextBlock
-            x:Name="tbAugment"
-            Grid.Row="7"
-            Margin="10,0,0,0"
-            VerticalAlignment="Top"
-            d:Text="Augment Stone"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding AugmentStone}"
-            Visibility="{Binding AugmentValue, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
-        <TextBlock
-            x:Name="tbAugmentName"
-            Grid.Row="8"
-            Height="Auto"
-            Margin="10,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Foreground="White"
-            d:Text="Physical/Magic Damage +0"
-            Foreground="#06EBE8"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding AugmentText}"
-            Visibility="{Binding AugmentValue, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
-
-        <!--  SetName  -->
-        <TextBlock
-            x:Name="tbSetName"
-            Grid.Row="9"
-            Margin="10"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Text="Set Name"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding SetNameText}" />
-        <TextBlock
-            x:Name="tbSetEffect"
-            Grid.Row="10"
-            Margin="10"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Text="Set Effect"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding SetEffectText}" />
-        <!--  FixedOption  -->
-        <TextBlock
-            x:Name="tbFixedOption"
-            Grid.Row="11"
-            Margin="10,0,0,0"
-            VerticalAlignment="Top"
-            d:Text="[Fixed Buff]"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding FixedOption}"
-            Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
-        <TextBlock
-            x:Name="tbFixedOption01"
-            Grid.Row="12"
-            Height="Auto"
-            Margin="10,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Foreground="White"
-            d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding FixedOption01Color, Converter={StaticResource StringToBrushConverter}}"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding FixedOption01Text}"
-            TextWrapping="Wrap"
-            Visibility="{Binding FixedOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
-        <TextBlock
-            x:Name="tbFixedOption02"
-            Grid.Row="13"
-            Height="Auto"
-            Margin="10,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Foreground="White"
-            d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding FixedOption02Color, Converter={StaticResource StringToBrushConverter}}"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding FixedOption02Text}"
-            TextWrapping="Wrap"
-            Visibility="{Binding FixedOption02, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
-        <!--  RandomOption and its children  -->
-        <TextBlock
-            x:Name="tbRandomOption"
-            Grid.Row="14"
-            Margin="10,0,0,0"
-            VerticalAlignment="Top"
-            d:Text="[Random Option]"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding RandomOption}"
-            Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
-        <TextBlock
-            x:Name="tbRandomOption01"
-            Grid.Row="15"
-            Height="Auto"
-            Margin="10,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Foreground="White"
-            d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding RandomOption01Color, Converter={StaticResource StringToBrushConverter}}"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding RandomOption01Text}"
-            TextWrapping="Wrap"
-            Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
-        <TextBlock
-            x:Name="tbRandomOption02"
-            Grid.Row="16"
-            Height="Auto"
-            Margin="10,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Foreground="White"
-            d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding RandomOption02Color, Converter={StaticResource StringToBrushConverter}}"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding RandomOption02Text}"
-            TextWrapping="Wrap"
-            Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
-        <TextBlock
-            x:Name="tbRandomOption03"
-            Grid.Row="17"
-            Height="Auto"
-            Margin="10,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Foreground="White"
-            d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding RandomOption03Color, Converter={StaticResource StringToBrushConverter}}"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding RandomOption03Text}"
-            TextWrapping="Wrap"
-            Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
-        <!--  SocketOption  -->
-        <TextBlock
-            x:Name="tbSocketOption"
-            Grid.Row="18"
-            Margin="10,0,0,0"
-            VerticalAlignment="Top"
-            d:Text="[Socket]"
-            Foreground="White"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding SocketOption}"
-            Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
-        <TextBlock
-            x:Name="tbSocketOption01"
-            Grid.Row="19"
-            Height="Auto"
-            Margin="10,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Foreground="White"
-            d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding SocketOption01Color, Converter={StaticResource StringToBrushConverter}}"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding SocketOption01Text}"
-            TextWrapping="Wrap"
-            Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
-        <TextBlock
-            x:Name="tbSocketOption02"
-            Grid.Row="20"
-            Height="Auto"
-            Margin="10,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Foreground="White"
-            d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding SocketOption02Color, Converter={StaticResource StringToBrushConverter}}"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding SocketOption02Text}"
-            TextWrapping="Wrap"
-            Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
-        <TextBlock
-            x:Name="tbSocketOption03"
-            Grid.Row="21"
-            Height="Auto"
-            Margin="10,0,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            d:Foreground="White"
-            d:Text="#@value02@#% of all #@value01@# damage will be converted to Lightning Damage."
-            Foreground="{Binding SocketOption03Color, Converter={StaticResource StringToBrushConverter}}"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding SocketOption03Text}"
-            TextWrapping="Wrap"
-            Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
-        <TextBlock
-            x:Name="tbPetFood"
-            Grid.Row="22"
-            Margin="0,0,80,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Bottom"
-            d:Foreground="#e75151"
-            d:Text="This item cannot be used as Pet Food"
-            Foreground="{Binding PetFoodColor, Converter={StaticResource StringToBrushConverter}}"
-            Style="{StaticResource ArialMS}"
-            Text="{Binding PetFoodText}" />
-    </Grid>
 </UserControl>

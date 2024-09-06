@@ -20,8 +20,8 @@ namespace RHToolkit.Views.Controls
         public static readonly DependencyProperty SlotIconProperty = DependencyProperty.Register(
             "SlotIcon", typeof(string), typeof(ItemSlot), new PropertyMetadata(string.Empty));
 
-        public static readonly DependencyProperty FrameViewModelProperty = DependencyProperty.Register(
-            "FrameViewModel", typeof(FrameViewModel), typeof(ItemSlot), new PropertyMetadata(null));
+        public static readonly DependencyProperty ItemDataViewModelProperty = DependencyProperty.Register(
+            "ItemDataViewModel", typeof(ItemDataViewModel), typeof(ItemSlot), new PropertyMetadata(null));
 
         public static readonly DependencyProperty InventorySizeProperty = DependencyProperty.Register(
             "InventorySize", typeof(string), typeof(ItemSlot), new PropertyMetadata(null, OnInventorySizeChanged));
@@ -29,10 +29,10 @@ namespace RHToolkit.Views.Controls
         public static readonly DependencyProperty ItemNameVisibilityProperty = DependencyProperty.Register(
             "ItemNameVisibility", typeof(Visibility), typeof(ItemSlot), new PropertyMetadata(Visibility.Collapsed));
 
-        public FrameViewModel FrameViewModel
+        public ItemDataViewModel ItemDataViewModel
         {
-            get => (FrameViewModel)GetValue(FrameViewModelProperty);
-            set => SetValue(FrameViewModelProperty, value);
+            get => (ItemDataViewModel)GetValue(ItemDataViewModelProperty);
+            set => SetValue(ItemDataViewModelProperty, value);
         }
 
         public string InventorySize

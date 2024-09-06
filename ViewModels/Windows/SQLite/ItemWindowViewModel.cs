@@ -41,7 +41,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             CharacterData = null;
             CharacterData = message.Value;
         }
-
         WeakReferenceMessenger.Default.Unregister<CharacterDataMessage>(this);
     }
 
@@ -51,9 +50,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     [RelayCommand(CanExecute = nameof(CanExecuteCommand))]
     private void AddItem()
     {
-        if (ItemDataManager.FrameViewModel != null)
+        if (ItemDataManager.ItemDataViewModel != null)
         {
-            var itemData = ItemDataManager.FrameViewModel.GetItemData();
+            var itemData = ItemDataManager.ItemDataViewModel.GetItemData();
 
             if (itemData != null && !string.IsNullOrEmpty(MessageType))
             {
@@ -121,7 +120,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                 var itemData = message.Value;
                 MessageType = message.MessageType;
 
-                Dispatcher.CurrentDispatcher.Invoke(() =>
+                Dispatcher.CurrentDispatcher.BeginInvoke(() =>
                 {
                     Title = GetTitle(MessageType, itemData);
 
@@ -135,7 +134,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                     }
                     else
                     {
-                        UpdateFrameViewModel(itemData);
+                        UpdateItemDataViewModel(itemData);
                     }
                 }, DispatcherPriority.ContextIdle);
             }
@@ -164,6 +163,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             {
                 settings.SlotIndexMax = 2;
                 settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
                 settings.IsOptionsVisible = Visibility.Visible;
             },
             ["EquipItem"] = settings =>
@@ -171,7 +171,6 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                 settings.SlotIndexMin = itemData.SlotIndex;
                 settings.SlotIndexMax = itemData.SlotIndex;
                 SlotFilter(itemData.SlotIndex);
-                settings.IsSlotVisible = Visibility.Visible;
                 settings.IsOptionsVisible = Visibility.Visible;
             },
             ["InventoryItem"] = settings =>
@@ -179,12 +178,14 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                 settings.SlotIndexMax = itemData.PageIndex == 5 ? 119 : 23;
                 ItemDataManager.InventoryTypeFilter = itemData.PageIndex;
                 settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
                 settings.IsOptionsVisible = Visibility.Visible;
             },
             ["StorageItem"] = settings =>
             {
                 settings.SlotIndexMax = 179;
                 settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
                 settings.IsOptionsVisible = Visibility.Visible;
             },
             ["AccountStorageItem"] = settings =>
@@ -192,25 +193,22 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                 settings.SlotIndexMax = 179;
                 ItemDataManager.AccountStorageFilter = 1;
                 settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
                 settings.IsOptionsVisible = Visibility.Visible;
             },
             ["CashShopItemAdd"] = settings =>
             {
                 settings.SelectionMode = DataGridSelectionMode.Extended;
-                settings.IsSlotVisible = Visibility.Hidden;
-                settings.IsOptionsVisible = Visibility.Hidden;
+                settings.IsItemAmountVisible = Visibility.Visible;
                 AddItemText = "Add Selected Item(s)";
             },
             ["CashShopItemUpdate"] = settings =>
             {
-                settings.IsSlotVisible = Visibility.Hidden;
-                settings.IsOptionsVisible = Visibility.Hidden;
+                settings.IsItemAmountVisible = Visibility.Visible;
             },
             ["CouponItem"] = settings =>
             {
                 IsNewItem = itemData.IsNewItem;
-                settings.IsSlotVisible = Visibility.Hidden;
-                settings.IsOptionsVisible = Visibility.Hidden;
             },
             ["Package"] = settings =>
             {
@@ -221,12 +219,14 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             {
                 settings.SlotIndexMax = 11;
                 settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
             },
             ["TradeShopItems"] = settings =>
             {
                 settings.SlotIndexMax = 4;
                 settings.IsItemAmountVisible = Visibility.Visible;
                 settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
             },
             ["ItemMixItems"] = settings =>
             {
@@ -277,12 +277,12 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
         SelectionMode = settings.SelectionMode;
     }
 
-    private void UpdateFrameViewModel(ItemData itemData)
+    private void UpdateItemDataViewModel(ItemData itemData)
     {
-        if (ItemDataManager.FrameViewModel != null)
+        if (ItemDataManager.ItemDataViewModel != null)
         {
-            ItemDataManager.FrameViewModel.PageIndex = itemData.PageIndex;
-            ItemDataManager.FrameViewModel.SlotIndex = itemData.SlotIndex;
+            ItemDataManager.ItemDataViewModel.PageIndex = itemData.PageIndex;
+            ItemDataManager.ItemDataViewModel.SlotIndex = itemData.SlotIndex;
         }
     }
 
@@ -500,21 +500,55 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
 
     private void LoadItemData(ItemData itemData)
     {
-        var frameViewModel = ItemDataManager.GetItemData(itemData);
-        ItemDataManager.FrameViewModel = frameViewModel;
+        var itemDataViewModel = ItemDataManager.GetItemData(itemData);
+        ItemDataManager.ItemDataViewModel = itemDataViewModel;
         SelectedItem = ItemDataManager.ItemDataItems?.FirstOrDefault(item => item.ItemId == itemData.ItemId);
     }
 
     private void UpdateItemData(ItemData itemData)
     {
-        var frameViewModel = ItemDataManager.GetItemData(itemData);
-        if (ItemDataManager.FrameViewModel != null)
+        if (ItemDataManager.ItemDataViewModel != null)
         {
-            frameViewModel.SlotIndex = ItemDataManager.FrameViewModel.SlotIndex;
-            frameViewModel.ItemAmount = ItemDataManager.FrameViewModel.ItemAmount <= frameViewModel.OverlapCnt ? ItemDataManager.FrameViewModel.ItemAmount : 1;
+            ItemDataManager.ItemDataViewModel.IsNewItem = IsNewItem;
+            ItemDataManager.ItemDataViewModel.ItemId = itemData.ItemId;
+            ItemDataManager.ItemDataViewModel.ItemName = itemData.ItemName;
+            ItemDataManager.ItemDataViewModel.Description = itemData.Description;
+            ItemDataManager.ItemDataViewModel.ItemBranch = itemData.Branch;
+            ItemDataManager.ItemDataViewModel.IconName = itemData.IconName;
+            ItemDataManager.ItemDataViewModel.ItemTrade = itemData.ItemTrade;
+            ItemDataManager.ItemDataViewModel.MaxDurability = itemData.Durability;
+            ItemDataManager.ItemDataViewModel.Weight = itemData.Weight;
+            ItemDataManager.ItemDataViewModel.ReconstructionMax = itemData.ReconstructionMax;
+            ItemDataManager.ItemDataViewModel.Reconstruction = itemData.ReconstructionMax;
+            ItemDataManager.ItemDataViewModel.OverlapCnt = itemData.OverlapCnt;
+            ItemDataManager.ItemDataViewModel.ItemAmount = ItemDataManager.ItemDataViewModel.ItemAmount <= itemData.OverlapCnt ? ItemDataManager.ItemDataViewModel.ItemAmount : 1;
+            ItemDataManager.ItemDataViewModel.Rank = itemData.Rank;
+            ItemDataManager.ItemDataViewModel.Type = itemData.Type;
+            ItemDataManager.ItemDataViewModel.Category = itemData.Category;
+            ItemDataManager.ItemDataViewModel.SubCategory = itemData.SubCategory;
+            ItemDataManager.ItemDataViewModel.JobClass = itemData.JobClass;
+            ItemDataManager.ItemDataViewModel.Defense = itemData.Defense;
+            ItemDataManager.ItemDataViewModel.MagicDefense = itemData.MagicDefense;
+            ItemDataManager.ItemDataViewModel.WeaponID00 = itemData.WeaponID00;
+            ItemDataManager.ItemDataViewModel.SellPrice = itemData.SellPrice;
+            ItemDataManager.ItemDataViewModel.RequiredLevel = itemData.LevelLimit;
+            ItemDataManager.ItemDataViewModel.SetId = itemData.SetId;
+            ItemDataManager.ItemDataViewModel.TitleList = itemData.TitleList;
+            ItemDataManager.ItemDataViewModel.PetFood = itemData.PetFood;
+            ItemDataManager.ItemDataViewModel.FixedOption01 = itemData.FixOption1Code;
+            ItemDataManager.ItemDataViewModel.FixedOption01Value = itemData.FixOption1Value;
+            ItemDataManager.ItemDataViewModel.FixedOption02 = itemData.FixOption2Code;
+            ItemDataManager.ItemDataViewModel.FixedOption02Value = itemData.FixOption2Value;
+            ItemDataManager.ItemDataViewModel.OptionCountMax = itemData.Type != 1 ? itemData.OptionCountMax : (itemData.Type == 1 && itemData.Category == 29 ? 1 : 0);
+            ItemDataManager.ItemDataViewModel.SocketCountMax = itemData.SocketCountMax;
+            ItemDataManager.ItemDataViewModel.SocketCount = itemData.SocketCountMax;
         }
-        
-        ItemDataManager.FrameViewModel = frameViewModel;
+        else
+        {
+            var itemDataViewModel = ItemDataManager.GetItemData(itemData);
+            ItemDataManager.ItemDataViewModel = itemDataViewModel;
+        }
+
     }
 
     #endregion

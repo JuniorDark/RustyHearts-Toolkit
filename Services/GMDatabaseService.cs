@@ -53,6 +53,7 @@ namespace RHToolkit.Services
                         PetFood = Convert.ToInt32(reader["nPetEatGroup"]),
                         JobClass = Convert.ToInt32(reader["nJobClass"]),
                         SetId = Convert.ToInt32(reader["nSetId"]),
+                        TitleList = Convert.ToInt32(reader["nTitleList"]),
                         FixOption1Code = Convert.ToInt32(reader["nFixOption00"]),
                         FixOption1Value = Convert.ToInt32(reader["nFixOptionValue00"]),
                         FixOption2Code = Convert.ToInt32(reader["nFixOption01"]),
@@ -93,7 +94,7 @@ namespace RHToolkit.Services
                 SELECT 
                     nID, nWeaponID00, szIconName, nCategory, nSubCategory, nBranch, nInventoryType, nAccountStorage, nSocketCountMax, nReconstructionMax, nJobClass, nLevelLimit, 
                     nItemTrade, nOverlapCnt, nDurability, nDefense, nMagicDefense, nWeight, nSellPrice, nOptionCountMax, nSetId, 
-                    nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup,
+                    nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup, nTitleList,
                     wszDesc, {descriptionField}
                 FROM {itemTableName}";
                 }
@@ -104,7 +105,7 @@ namespace RHToolkit.Services
             SELECT 
                 i.nID, i.nWeaponID00, i.szIconName, i.nCategory, i.nSubCategory, i.nBranch, i.nInventoryType, i.nAccountStorage, i.nSocketCountMax, i.nReconstructionMax, i.nJobClass, i.nLevelLimit, 
                 i.nItemTrade, i.nOverlapCnt, i.nDurability, i.nDefense, i.nMagicDefense, i.nWeight, i.nSellPrice, i.nOptionCountMax, i.nSetId, 
-                i.nFixOption00, i.nFixOptionValue00, i.nFixOption01, i.nFixOptionValue01, i.nPetEatGroup,
+                i.nFixOption00, i.nFixOptionValue00, i.nFixOption01, i.nFixOptionValue01, i.nPetEatGroup, nTitleList,
                 s.wszDesc, s.{descriptionField}
             FROM {itemTableName} i
             LEFT JOIN {itemTableName}_string s ON i.nID = s.nID";

@@ -20,7 +20,7 @@ public partial class PackageItem : ObservableObject
     private double _stringID;
 
     [ObservableProperty]
-    private FrameViewModel? _frameViewModel;
+    private ItemDataViewModel? _itemDataViewModel;
 
     [ObservableProperty]
     private double _effectValueMin;

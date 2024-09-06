@@ -1,4 +1,6 @@
-﻿using RHToolkit.Properties;
+﻿using RHToolkit.Models.MessageBox;
+using RHToolkit.Properties;
+using RHToolkit.Utilities;
 using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Services
@@ -108,7 +110,7 @@ namespace RHToolkit.Services
             {
                 if (enhanceLevel > 0)
                 {
-                    mainStat = $"{Resources.PhysicalDefense} +{physicalStat}\nAdd {Resources.PhysicalDefense} +{physicalStat * enhanceValue}\n{Resources.MagicDefense} +{magicStat}\nAdd {Resources.MagicDefense} +{magicStat * enhanceValue}";
+                    mainStat = $"{Resources.PhysicalDefense} +{physicalStat}\nAdd {Resources.PhysicalDefense} +{Math.Round(physicalStat * enhanceValue)}\n{Resources.MagicDefense} +{magicStat}\nAdd {Resources.MagicDefense} +{Math.Round(magicStat * enhanceValue)}";
                 }
                 else
                 {
@@ -137,8 +139,8 @@ namespace RHToolkit.Services
         {
             (int nSetOption00, int nSetOptionvlue00, int nSetOption01, int nSetOptionvlue01, int nSetOption02, int nSetOptionvlue02, int nSetOption03, int nSetOptionvlue03, int nSetOption04, int nSetOptionvlue04) = _gmDatabaseService.GetSetInfo(setId);
 
-            if (nSetOption00 == 0)
-                return "";
+            if (nSetOption00 == 0 && nSetOption01 == 0 && nSetOption02 == 0 && nSetOption03 == 0 && nSetOption04 == 0)
+                return string.Empty;
 
             string setEffect01 = GetOptionName(nSetOption00, nSetOptionvlue00);
             string setEffect02 = GetOptionName(nSetOption01, nSetOptionvlue01);
@@ -163,7 +165,7 @@ namespace RHToolkit.Services
 
         public static string FormatSellValue(int sellPrice)
         {
-            return sellPrice > 0 ? $"{sellPrice:N0} {Resources.Gold}" : "";
+            return sellPrice > 0 ? $"Sell Value: {sellPrice:N0} {Resources.Gold}" : "";
         }
 
         public static string FormatRequiredLevel(int levelLimit)
@@ -204,6 +206,11 @@ namespace RHToolkit.Services
         public static string FormatAugmentStone(int value)
         {
             return value > 0 ? $"{Resources.PhysicalMagicDamage} +{value}" : "";
+        }
+
+        public static string FormatAugmentStoneLevel(int value)
+        {
+            return value > 0 ? $"Augment Level +{value}" : "";
         }
 
         private const string ColorTagStart = "<COLOR:";
@@ -381,5 +388,47 @@ namespace RHToolkit.Services
             return input;
         }
 
+        public string FormatTitleEffect(int titleId)
+        {
+            try
+            {
+                (int titleCategory, int remainTime, int nAddEffectID00, int nAddEffectID01, int nAddEffectID02, int nAddEffectID03, int nAddEffectID04, int nAddEffectID05, string titleDesc) = _gmDatabaseService.GetTitleInfo(titleId);
+
+                string formattedRemainTime = DateTimeFormatter.FormatRemainTime(remainTime);
+
+                StringBuilder description = new();
+
+                if (nAddEffectID00 == 0)
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    description.Append("[Title Effect]");
+
+                    if (!string.IsNullOrEmpty(_gmDatabaseService.GetAddEffectName(nAddEffectID00)))
+                        description.AppendLine().Append(_gmDatabaseService.GetAddEffectName(nAddEffectID00));
+                    if (!string.IsNullOrEmpty(_gmDatabaseService.GetAddEffectName(nAddEffectID01)))
+                        description.AppendLine().Append(_gmDatabaseService.GetAddEffectName(nAddEffectID01));
+                    if (!string.IsNullOrEmpty(_gmDatabaseService.GetAddEffectName(nAddEffectID02)))
+                        description.AppendLine().Append(_gmDatabaseService.GetAddEffectName(nAddEffectID02));
+                    if (!string.IsNullOrEmpty(_gmDatabaseService.GetAddEffectName(nAddEffectID03)))
+                        description.AppendLine().Append(_gmDatabaseService.GetAddEffectName(nAddEffectID03));
+                    if (!string.IsNullOrEmpty(_gmDatabaseService.GetAddEffectName(nAddEffectID04)))
+                        description.AppendLine().Append(_gmDatabaseService.GetAddEffectName(nAddEffectID04));
+                    if (!string.IsNullOrEmpty(_gmDatabaseService.GetAddEffectName(nAddEffectID05)))
+                        description.AppendLine().Append(_gmDatabaseService.GetAddEffectName(nAddEffectID05));
+
+                    description.AppendLine($"\n\nValid For: {formattedRemainTime}");
+                }
+
+                return description.ToString();
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage("Error: " + ex.Message);
+                return string.Empty;
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.ViewModels.Controls;
 
-public partial class FrameViewModel(IFrameService frameService, IGMDatabaseService gmDatabaseService) : ObservableObject
+public partial class ItemDataViewModel(IFrameService frameService, IGMDatabaseService gmDatabaseService) : ObservableObject
 {
     private readonly IFrameService _frameService = frameService;
     private readonly IGMDatabaseService _gmDatabaseService = gmDatabaseService;
@@ -52,6 +52,7 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
             EnhanceLevel = itemData.EnhanceLevel;
             AugmentValue = itemData.AugmentStone;
             Weight = itemData.Weight;
+            TitleList = itemData.TitleList;
             ReconstructionMax = itemData.ReconstructionMax;
             Reconstruction = itemData.Reconstruction;
             RandomOption01 = itemData.Option1Code;
@@ -72,7 +73,6 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
             SocketOption02Value = itemData.Socket2Value;
             SocketOption03Value = itemData.Socket3Value;
         }
-
     }
 
     public ItemData GetItemData()
@@ -187,6 +187,12 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
     private string? _description;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(TitleEffectText))]
+    private int _titleList;
+
+    public string TitleEffectText => _frameService.FormatTitleEffect(TitleList);
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(WeightText))]
     private int _weight;
 
@@ -248,10 +254,23 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
             MaxDurability = 0;
             MaxDurabilityMax = 0;
         }
+        else if (value == 24 && ItemId != 50023) //  Enchant Item
+        {
+            AugmentValueMax = 100000;
+        }
         else
         {
+            AugmentValue = 0;
+
+            if (Type == 3 || Type == 4)
+            {
+                AugmentValueMax = 100000;
+            }
+            else
+            {
+                AugmentValueMax = 0;
+            }
             EnhanceLevelMax = 25;
-            AugmentValueMax = 100000;
             MaxDurabilityMax = 100000;
         }
     }
@@ -323,12 +342,15 @@ public partial class FrameViewModel(IFrameService frameService, IGMDatabaseServi
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AugmentText))]
+    [NotifyPropertyChangedFor(nameof(AugmentLevelText))]
     private int _augmentValue;
 
     [ObservableProperty]
     private int _augmentValueMax = 100000;
 
     public string AugmentText => FrameService.FormatAugmentStone(AugmentValue);
+
+    public string AugmentLevelText => FrameService.FormatAugmentStoneLevel(AugmentValue);
 
     #endregion
 

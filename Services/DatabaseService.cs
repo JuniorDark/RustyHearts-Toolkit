@@ -174,7 +174,7 @@ namespace RHToolkit.Services
                 // mail message
 
                 // Fetch equipped items
-                List<ItemData> equipItems = await GetItemList(characterData.CharacterID, "N_EquipItem");
+                ObservableCollection<ItemData> equipItems = await GetItemList(characterData.CharacterID, "N_EquipItem");
 
                 // Filter items with SlotIndex 0 (weapon) and 10 to 19 (costumes)
                 List<ItemData> filteredItems = equipItems
@@ -537,7 +537,7 @@ namespace RHToolkit.Services
 
         #region Item
 
-        public async Task<List<ItemData>> GetItemList(Guid characterId, string tableName)
+        public async Task<ObservableCollection<ItemData>> GetItemList(Guid characterId, string tableName)
         {
             string selectQuery = tableName switch
             {
@@ -551,7 +551,7 @@ namespace RHToolkit.Services
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             DataTable dataTable = await _sqlDatabaseService.ExecuteDataQueryAsync(selectQuery, connection, null, ("@character_id", characterId));
 
-            List<ItemData> itemList = [];
+            ObservableCollection<ItemData> itemList = [];
 
             foreach (DataRow row in dataTable.Rows)
             {
@@ -609,7 +609,7 @@ namespace RHToolkit.Services
             return itemList;
         }
 
-        public async Task SaveInventoryItem(CharacterData characterData, List<ItemData>? itemDataList, List<ItemData>? deletedItemDataList, string tableName)
+        public async Task SaveInventoryItem(CharacterData characterData, ObservableCollection<ItemData>? itemDataList, ObservableCollection<ItemData>? deletedItemDataList, string tableName)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();

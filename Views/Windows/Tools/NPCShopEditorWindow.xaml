@@ -162,7 +162,7 @@
                                 <control:ItemSlot
                                     AddItemCommand="{Binding DataContext.AddItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-                                    FrameViewModel="{Binding FrameViewModel}"
+                                    ItemDataViewModel="{Binding ItemDataViewModel}"
                                     ItemNameVisibility="Visible"
                                     RemoveItemCommand="{Binding DataContext.RemoveItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                             </DataTemplate>
@@ -308,7 +308,7 @@
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-                                        FrameViewModel="{Binding FrameViewModel}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
                                         ItemNameVisibility="Visible"
                                         RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                 </StackPanel>
@@ -343,7 +343,7 @@
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-                                        FrameViewModel="{Binding FrameViewModel}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
                                         ItemNameVisibility="Visible"
                                         RemoveItemCommand="{Binding DataContext.RemoveItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                 </StackPanel>
@@ -633,7 +633,7 @@
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-                                        FrameViewModel="{Binding FrameViewModel}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
                                         ItemNameVisibility="Visible"
                                         RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                 </StackPanel>
@@ -722,7 +722,7 @@
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-                                        FrameViewModel="{Binding FrameViewModel}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
                                         ItemNameVisibility="Visible"
                                         RemoveItemCommand="{Binding DataContext.RemoveItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                 </StackPanel>
@@ -870,7 +870,7 @@
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-                                        FrameViewModel="{Binding FrameViewModel}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
                                         ItemNameVisibility="Visible"
                                         RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                 </StackPanel>
@@ -959,7 +959,7 @@
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-                                        FrameViewModel="{Binding FrameViewModel}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
                                         ItemNameVisibility="Visible"
                                         RemoveItemCommand="{Binding DataContext.RemoveItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                 </StackPanel>
@@ -1096,7 +1096,7 @@
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-                                        FrameViewModel="{Binding FrameViewModel}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
                                         ItemNameVisibility="Visible"
                                         RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                 </StackPanel>

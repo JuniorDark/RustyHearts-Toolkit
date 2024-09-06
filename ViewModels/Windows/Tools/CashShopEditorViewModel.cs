@@ -1,4 +1,5 @@
-﻿using RHToolkit.Messages;
+﻿using Microsoft.Win32;
+using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
@@ -114,11 +115,7 @@ namespace RHToolkit.ViewModels.Windows
 
                 if (isLoaded)
                 {
-                    Title = $"Cash Shop Editor ({DataTableManager.CurrentFileName})";
-                    OpenMessage = "";
-                    ApplyFilter();
-                    OnCanExecuteFileCommandChanged();
-                    IsVisible = Visibility.Visible;
+                    IsLoaded();
                 }
             }
             catch (Exception ex)
@@ -133,16 +130,12 @@ namespace RHToolkit.ViewModels.Windows
             try
             {
                 await CloseFile();
-                string filter = "cashshoplist.rh|cashshoplist.rh|All Files (*.*)|*.*";
-                bool isLoaded = await DataTableManager.LoadFile(filter, null, "nCashCost00", "Cash Shop");
+
+                bool isLoaded = await DataTableManager.LoadFileFromPath("cashshoplist.rh", null, "nCashCost00", "Cash Shop");
 
                 if (isLoaded)
                 {
-                    Title = $"Cash Shop Editor ({DataTableManager.CurrentFileName})";
-                    OpenMessage = "";
-                    ApplyFilter();
-                    OnCanExecuteFileCommandChanged();
-                    IsVisible = Visibility.Visible;
+                    IsLoaded();
                 }
             }
             catch (Exception ex)
@@ -151,6 +144,49 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        [RelayCommand]
+        private async Task LoadFileAs()
+        {
+            try
+            {
+                await CloseFile();
+
+                string filter = "cashshoplist.rh|" +
+                                "cashshoplist.rh|" +
+                                "All Files (*.*)|*.*";
+
+                OpenFileDialog openFileDialog = new()
+                {
+                    Filter = filter,
+                    FilterIndex = 1
+                };
+
+                if (openFileDialog.ShowDialog() == true)
+                {
+                    string fileName = Path.GetFileName(openFileDialog.FileName);
+
+                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, null, "nCashCost00", "Cash Shop");
+
+                    if (isLoaded)
+                    {
+                        IsLoaded();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            }
+        }
+
+        private void IsLoaded()
+        {
+            Title = $"Cash Shop Editor ({DataTableManager.CurrentFileName})";
+            OpenMessage = "";
+            ApplyFilter();
+            OnCanExecuteFileCommandChanged();
+            IsVisible = Visibility.Visible;
+        }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
         private void OpenSearchDialog(string? parameter)
@@ -190,7 +226,7 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            FrameViewModel = null;
+            ItemDataViewModel = null;
             Title = $"Cash Shop Editor";
             OpenMessage = "Open a file";
             IsVisible = Visibility.Hidden;
@@ -216,7 +252,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             CloseFileCommand.NotifyCanExecuteChanged();
             OpenSearchDialogCommand.NotifyCanExecuteChanged();
-            AddItemCommand.NotifyCanExecuteChanged();
+            AddRowCommand.NotifyCanExecuteChanged();
         }
 
         #endregion
@@ -224,7 +260,7 @@ namespace RHToolkit.ViewModels.Windows
         #region Add Item
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private void AddItem()
+        private void AddRow()
         {
             try
             {
@@ -296,40 +332,44 @@ namespace RHToolkit.ViewModels.Windows
 
         private void CreateItem(ItemData itemData)
         {
+            DataTableManager.StartGroupingEdits();
+
             DataTableManager.AddNewRow();
-
-            var frameViewModel = ItemDataManager.GetItemData(itemData);
-            FrameViewModel = frameViewModel;
-
-            ItemID = frameViewModel.ItemId;
-            ItemAmount = frameViewModel.ItemAmount;
-            ItemName = frameViewModel.ItemName;
-            IconName = ItemDataManager.GetShopIcon(frameViewModel.IconName!);
+            var itemDataViewModel = ItemDataManager.GetItemData(itemData);
+            ItemDataViewModel = itemDataViewModel;
+            ItemID = itemDataViewModel.ItemId;
+            ItemAmount = itemDataViewModel.ItemAmount;
+            ItemName = itemDataViewModel.ItemName;
+            IconName = ItemDataManager.GetShopIcon(itemDataViewModel.IconName!);
             ShopDescription = PaymentType == 0 ? $"{BonusRate}% of the price goes to Bonus" : "Purchased with Bonus";
-            ShopCategory = GetShopCategory(frameViewModel.SubCategory);
-            CostumeCategory = GetCostumeCategory(frameViewModel.SubCategory);
-            Class = frameViewModel.JobClass;
+            ShopCategory = GetShopCategory(itemDataViewModel.SubCategory);
+            CostumeCategory = GetCostumeCategory(itemDataViewModel.SubCategory);
+            Class = itemDataViewModel.JobClass;
             ItemState = 2;
             StartSellingDate = DateTime.Today;
             EndSellingDate = DateTime.Today.AddYears(10);
             SaleStartSellingDate = null;
             SaleEndSellingDate = null;
+
+            DataTableManager.EndGroupingEdits();
         }
 
         private void UpdateItem(ItemData itemData)
         {
-            var frameViewModel = ItemDataManager.GetItemData(itemData);
-            FrameViewModel = frameViewModel;
+            var itemDataViewModel = ItemDataManager.GetItemData(itemData);
+            ItemDataViewModel = itemDataViewModel;
 
             if (DataTableManager.SelectedItem != null)
             {
-                ItemID = frameViewModel.ItemId;
-                ItemName = frameViewModel.ItemName;
-                IconName = ItemDataManager.GetShopIcon(frameViewModel.IconName!);
-                ItemAmount = frameViewModel.ItemAmount;
-                ShopCategory = GetShopCategory(frameViewModel.SubCategory);
-                CostumeCategory = GetCostumeCategory(frameViewModel.SubCategory);
-                Class = frameViewModel.JobClass;
+                DataTableManager.StartGroupingEdits();
+                ItemID = itemDataViewModel.ItemId;
+                ItemName = itemDataViewModel.ItemName;
+                IconName = ItemDataManager.GetShopIcon(itemDataViewModel.IconName!);
+                ItemAmount = itemDataViewModel.ItemAmount;
+                ShopCategory = GetShopCategory(itemDataViewModel.SubCategory);
+                CostumeCategory = GetCostumeCategory(itemDataViewModel.SubCategory);
+                Class = itemDataViewModel.JobClass;
+                DataTableManager.EndGroupingEdits();
             }
         }
 
@@ -389,12 +429,12 @@ namespace RHToolkit.ViewModels.Windows
                     ItemId = (int)selectedItem["nItemID"]
                 };
 
-                FrameViewModel = ItemDataManager.GetItemData(itemData);
+                ItemDataViewModel = ItemDataManager.GetItemData(itemData);
                 ItemAmountMax = (int)selectedItem["nCategory"] switch
                 {
                     0 => 525600,
                     1 => 0,
-                    _ => FrameViewModel.OverlapCnt
+                    _ => ItemDataViewModel.OverlapCnt
 
                 };
                 IsSelectedItemVisible = Visibility.Visible;
@@ -705,7 +745,7 @@ namespace RHToolkit.ViewModels.Windows
         #region SelectedItem
 
         [ObservableProperty]
-        private FrameViewModel? _frameViewModel;
+        private ItemDataViewModel? _itemDataViewModel;
 
         private bool _isUpdatingSelectedItem = false;
 
@@ -785,13 +825,13 @@ namespace RHToolkit.ViewModels.Windows
                     ItemId = newValue
                 };
 
-                FrameViewModel = ItemDataManager.GetItemData(itemData);
-                ItemName = FrameViewModel.ItemName;
-                IconName = ItemDataManager.GetShopIcon(FrameViewModel.IconName!);
-                ShopCategory = GetShopCategory(FrameViewModel.SubCategory);
-                CostumeCategory = GetCostumeCategory(FrameViewModel.SubCategory);
-                Class = FrameViewModel.JobClass;
-                ItemAmountMax = FrameViewModel.OverlapCnt;
+                ItemDataViewModel = ItemDataManager.GetItemData(itemData);
+                ItemName = ItemDataViewModel.ItemName;
+                IconName = ItemDataManager.GetShopIcon(ItemDataViewModel.IconName!);
+                ShopCategory = GetShopCategory(ItemDataViewModel.SubCategory);
+                CostumeCategory = GetCostumeCategory(ItemDataViewModel.SubCategory);
+                Class = ItemDataViewModel.JobClass;
+                ItemAmountMax = ItemDataViewModel.OverlapCnt;
             }
         }
 

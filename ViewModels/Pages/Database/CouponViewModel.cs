@@ -217,9 +217,9 @@ namespace RHToolkit.ViewModels.Pages
             {
                 var itemData = message.Value;
                 ItemData = itemData;
-                var frameViewModel= _itemDataManager.GetItemData(itemData);
+                var itemDataViewModel= _itemDataManager.GetItemData(itemData);
 
-                FrameViewModel = frameViewModel;
+                ItemDataViewModel = itemDataViewModel;
             }
         }
 
@@ -231,7 +231,7 @@ namespace RHToolkit.ViewModels.Pages
         private void RemoveItem(string parameter)
         {
             ItemData = null;
-            FrameViewModel = null;
+            ItemDataViewModel = null;
         }
         #endregion
 
@@ -269,8 +269,8 @@ namespace RHToolkit.ViewModels.Pages
 
         [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(ItemName))]
-        private FrameViewModel? _frameViewModel;
-        partial void OnFrameViewModelChanged(FrameViewModel? value)
+        private ItemDataViewModel? _itemDataViewModel;
+        partial void OnItemDataViewModelChanged(ItemDataViewModel? value)
         {
             ItemName = value != null ? value.ItemName : "Select a Item";
         }

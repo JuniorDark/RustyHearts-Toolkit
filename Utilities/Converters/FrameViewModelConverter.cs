@@ -1,16 +1,26 @@
 ﻿using RHToolkit.ViewModels.Controls;
+using RHToolkit.ViewModels.Windows.Database.VM;
 
 namespace RHToolkit.Utilities.Converters;
 
-public class FrameViewModelConverter : IValueConverter
+public class ItemDataViewModelConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        if (value is List<FrameViewModel> frameViewModels && parameter is string indexString && int.TryParse(indexString, out int index))
+        if (parameter is string indexString && int.TryParse(indexString, out int index))
         {
-            var result = frameViewModels.FirstOrDefault(vm => vm.SlotIndex == index);
-            return result ?? DependencyProperty.UnsetValue;
+            if (value is List<ItemDataViewModel> itemDataViewModels)
+            {
+                var result = itemDataViewModels.FirstOrDefault(vm => vm.SlotIndex == index);
+                return result ?? DependencyProperty.UnsetValue;
+            }
+            else if (value is ObservableCollection<InventoryItem> inventoryItems)
+            {
+                var result = inventoryItems.FirstOrDefault(item => item.SlotIndex == index)?.ItemDataViewModel;
+                return result ?? DependencyProperty.UnsetValue;
+            }
         }
+
         return DependencyProperty.UnsetValue;
     }
 
@@ -19,3 +29,4 @@ public class FrameViewModelConverter : IValueConverter
         throw new NotImplementedException();
     }
 }
+

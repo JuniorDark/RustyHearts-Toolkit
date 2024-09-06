@@ -3,7 +3,7 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Services;
-using RHToolkit.ViewModels.Controls;
+using RHToolkit.ViewModels.Windows.Database.VM;
 using System.Data;
 
 namespace RHToolkit.ViewModels.Windows;
@@ -13,6 +13,12 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     private readonly IWindowsService _windowsService;
     private readonly IDatabaseService _databaseService;
     private readonly ItemDataManager _itemDataManager;
+
+    private enum StorageType
+    {
+        PersonalStorage,
+        AccountStorage
+    }
 
     public StorageWindowViewModel(IWindowsService windowsService, IDatabaseService databaseService, ItemDataManager itemDataManager)
     {
@@ -27,174 +33,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
     }
 
-    #region Messenger
-
-    #region Load CharacterData
-
-    public async void Receive(CharacterDataMessage message)
-    {
-        if (Token == Guid.Empty)
-        {
-            Token = message.Token;
-        }
-
-        if (message.Recipient == "StorageWindow" && message.Token == Token)
-        {
-            var characterData = message.Value;
-
-            await ReadCharacterData(characterData.CharacterName!);
-        }
-
-        WeakReferenceMessenger.Default.Unregister<CharacterDataMessage>(this);
-    }
-
-    private async Task ReadCharacterData(string characterName)
-    {
-        try
-        {
-            var characterData = await _databaseService.GetCharacterDataAsync(characterName);
-
-            if (characterData != null)
-            {
-                ClearData();
-                CharacterData = characterData;
-                Title = $"Character Storage ({characterData.CharacterName})";
-                UniAccountInfo = await _databaseService.GetUniAccountInfoAsync(characterData.AuthID);
-                var storageItems = await _databaseService.GetItemList(characterData.CharacterID, "tbl_Personal_Storage");
-                var accountStorageItems = await _databaseService.GetItemList(characterData.AuthID, "tbl_Account_Storage");
-                LoadStorageItems(storageItems);
-                StorageItemDatabaseList = storageItems;
-
-                LoadAccountStorageItems(accountStorageItems);
-                AccountStorageItemDatabaseList = accountStorageItems;
-            }
-            else
-            {
-                RHMessageBoxHelper.ShowOKMessage($"The character '{characterName}' does not exist.", "Invalid Character");
-                return;
-            }
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
-        }
-    }
-
-    private void ClearData()
-    {
-        CharacterData = null;
-        StorageItemDatabaseList = null;
-        DeletedStorageItemDatabaseList = null;
-        StorageFrameViewModels?.Clear();
-        OnPropertyChanged(nameof(StorageFrameViewModels));
-        AccountStorageItemDatabaseList = null;
-        DeletedAccountStorageItemDatabaseList = null;
-        AccountStorageFrameViewModels?.Clear();
-        OnPropertyChanged(nameof(AccountStorageFrameViewModels));
-    }
-    #endregion
-
-    #region Send ItemData
-
-    [RelayCommand]
-    private void AddStorageItem(string parameter)
-    {
-        if (CharacterData == null) return;
-
-        try
-        {
-            if (int.TryParse(parameter, out int slotIndex))
-            {
-                ItemData? itemData = StorageItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
-                _windowsService.OpenItemWindow(CharacterData.CharacterID, "StorageItem", itemData, CharacterData);
-            }
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error adding storage item: {ex.Message}", "Error");
-        }
-    }
-
-    [RelayCommand]
-    private void AddAccountStorageItem(string parameter)
-    {
-        if (CharacterData == null) return;
-
-        try
-        {
-            if (int.TryParse(parameter, out int slotIndex))
-            {
-                ItemData? itemData = AccountStorageItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
-                _windowsService.OpenItemWindow(CharacterData.CharacterID, "AccountStorageItem", itemData, CharacterData);
-            }
-        }
-        catch (Exception ex)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"Error adding account storage item: {ex.Message}", "Error");
-        }
-    }
-
-
-    #endregion
-
-    #region Receive ItemData
-    public void Receive(ItemDataMessage message)
-    {
-        if (message.MessageType == "StorageItem" && message.Token == Token)
-        {
-            var newItemData = message.Value;
-
-            StorageItemDatabaseList ??= [];
-
-            // Find the existing item in ItemDatabaseList
-            var existingItem = StorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == newItemData.SlotIndex);
-
-            if (existingItem != null)
-            {
-                // Update existing item
-                UpdateStorageItem(existingItem, newItemData);
-
-            }
-            else
-            {
-                if (newItemData.ItemId != 0)
-                {
-                    // Create new item
-                    CreateStorageItem(newItemData);
-                }
-
-            }
-        }
-        else if (message.MessageType == "AccountStorageItem" && message.Token == Token)
-        {
-            var newItemData = message.Value;
-
-            AccountStorageItemDatabaseList ??= [];
-
-            // Find the existing item in ItemDatabaseList
-            var existingItem = AccountStorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == newItemData.SlotIndex);
-
-            if (existingItem != null)
-            {
-                // Update existing item
-                UpdateAccountStorageItem(existingItem, newItemData);
-
-            }
-            else
-            {
-                if (newItemData.ItemId != 0)
-                {
-                    // Create new item
-                    CreateAccountStorageItem(newItemData);
-                }
-
-            }
-        }
-    }
-
-    #endregion
-
-    #endregion
+    #region Commands
 
     #region Storage
 
@@ -220,7 +59,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
             {
                 await _databaseService.SaveInventoryItem(CharacterData, StorageItemDatabaseList, DeletedStorageItemDatabaseList, "N_InventoryItem");
                 RHMessageBoxHelper.ShowOKMessage("Storage saved successfully!", "Success");
-                await ReadCharacterData(CharacterData.CharacterName!);
+                await ReadStorageData();
             }
 
         }
@@ -228,6 +67,24 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         {
             RHMessageBoxHelper.ShowOKMessage($"Error saving storage changes: {ex.Message}", "Error");
         }
+    }
+
+    private async Task ReadStorageData()
+    {
+        if (CharacterData != null)
+        {
+            ClearStorageData();
+            var storageItems = await _databaseService.GetItemList(CharacterData.CharacterID, "tbl_Personal_Storage");
+            LoadStorageItems(storageItems, StorageType.PersonalStorage);
+            StorageItemDatabaseList = storageItems;
+        }
+    }
+
+    private void ClearStorageData()
+    {
+        StorageItemDatabaseList?.Clear();
+        DeletedStorageItemDatabaseList?.Clear();
+        StorageItemDataViewModels?.Clear();
     }
 
     #endregion
@@ -239,24 +96,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     {
         if (int.TryParse(parameter, out int slotIndex))
         {
-            if (StorageItemDatabaseList != null)
-            {
-                // Find the existing item in ItemDatabaseList
-                var removedItem = StorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == slotIndex);
-
-                if (removedItem != null)
-                {
-                    if (!removedItem.IsNewItem)
-                    {
-                        DeletedStorageItemDatabaseList ??= [];
-                        DeletedStorageItemDatabaseList.Add(removedItem);
-                    }
-
-                    StorageItemDatabaseList.Remove(removedItem);
-                    RemoveStorageFrameViewModel(removedItem);
-                }
-
-            }
+            RemoveItem(slotIndex, StorageType.PersonalStorage);
         }
     }
 
@@ -318,7 +158,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
             {
                 await _databaseService.SaveInventoryItem(CharacterData, AccountStorageItemDatabaseList, DeletedAccountStorageItemDatabaseList, "tbl_Account_Storage");
                 RHMessageBoxHelper.ShowOKMessage("Account Storage saved successfully!", "Success");
-                await ReadCharacterData(CharacterData.CharacterName!);
+                await ReadAccountStorageData();
             }
 
         }
@@ -326,6 +166,24 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         {
             RHMessageBoxHelper.ShowOKMessage($"Error saving storage changes: {ex.Message}", "Error");
         }
+    }
+
+    private async Task ReadAccountStorageData()
+    {
+        if (CharacterData != null)
+        {
+            ClearAccountStorageData();
+            var accountStorageItems = await _databaseService.GetItemList(CharacterData.AuthID, "tbl_Account_Storage");
+            LoadAccountStorageItems(accountStorageItems, StorageType.AccountStorage);
+            AccountStorageItemDatabaseList = accountStorageItems;
+        }
+    }
+
+    private void ClearAccountStorageData()
+    {
+        AccountStorageItemDatabaseList?.Clear();
+        DeletedAccountStorageItemDatabaseList?.Clear();
+        AccountStorageItemDataViewModels?.Clear();
     }
 
     #endregion
@@ -337,25 +195,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     {
         if (int.TryParse(parameter, out int slotIndex))
         {
-            if (AccountStorageItemDatabaseList != null)
-            {
-                // Find the existing item in ItemDatabaseList
-                var removedItem = AccountStorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == slotIndex);
-                var removedItemIndex = AccountStorageItemDatabaseList.FindIndex(item => item.SlotIndex == slotIndex);
-                
-                if (removedItem != null)
-                {
-                    if (!removedItem.IsNewItem)
-                    {
-                        DeletedAccountStorageItemDatabaseList ??= [];
-                        DeletedAccountStorageItemDatabaseList.Add(removedItem);
-                    }
-
-                    AccountStorageItemDatabaseList.RemoveAt(removedItemIndex);
-                    RemoveAccountStorageFrameViewModel(removedItem);
-                }
-
-            }
+            RemoveItem(slotIndex, StorageType.AccountStorage);
         }
     }
 
@@ -393,221 +233,332 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
 
     #endregion
 
-    #region Item Methods
+    #endregion
 
-    #region Storage
+    #region Messenger
 
-    private void LoadStorageItems(List<ItemData> storageItems)
+    #region Load CharacterData
+
+    public async void Receive(CharacterDataMessage message)
     {
-        if (storageItems != null)
+        if (Token == Guid.Empty)
         {
-            foreach (var storageItem in storageItems)
+            Token = message.Token;
+        }
+
+        if (message.Recipient == "StorageWindow" && message.Token == Token)
+        {
+            var characterData = message.Value;
+
+            await ReadCharacterData(characterData.CharacterName!);
+        }
+
+        WeakReferenceMessenger.Default.Unregister<CharacterDataMessage>(this);
+    }
+
+    private async Task ReadCharacterData(string characterName)
+    {
+        try
+        {
+            var characterData = await _databaseService.GetCharacterDataAsync(characterName);
+
+            if (characterData != null)
             {
-                var frameViewModel = _itemDataManager.GetItemData(storageItem);
-                SetStorageFrameViewModel(frameViewModel);
+                ClearData();
+                CharacterData = characterData;
+                Title = $"Character Storage ({characterData.CharacterName})";
+                UniAccountInfo = await _databaseService.GetUniAccountInfoAsync(characterData.AuthID);
+
+                await ReadStorageData();
+                await ReadAccountStorageData();
+            }
+            else
+            {
+                RHMessageBoxHelper.ShowOKMessage($"The character '{characterName}' does not exist.", "Invalid Character");
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
+        }
+    }
+
+    private void LoadStorageItems(ObservableCollection<ItemData> storageItems, StorageType storageType)
+    {
+        if (storageItems == null) return;
+
+        StorageItemDataViewModels = ItemDataManager.InitializeCollection(180, 21);
+
+        foreach (var storageItem in storageItems)
+        {
+            SetStorageItemDataViewModel(storageItem, storageType);
+        }
+    }
+
+    private void LoadAccountStorageItems(ObservableCollection<ItemData> storageItems, StorageType storageType)
+    {
+        if (storageItems == null) return;
+
+        AccountStorageItemDataViewModels = ItemDataManager.InitializeCollection(180, 3);
+
+        foreach (var storageItem in storageItems)
+        {
+            SetStorageItemDataViewModel(storageItem, storageType);
+        }
+    }
+
+    private bool IsSlotLocked(int slotIndex, StorageType storageType)
+    {
+        if (storageType == StorageType.PersonalStorage)
+        {
+            return slotIndex > CharacterData!.StorageCount - 1;
+        }
+        else if (storageType == StorageType.AccountStorage)
+        {
+            return slotIndex > AccountStorageCount - 1;
+        }
+        return true;
+    }
+
+    private ObservableCollection<ItemData>? GetStorageItemList(StorageType storageType)
+    {
+        return storageType switch
+        {
+            StorageType.PersonalStorage => StorageItemDatabaseList,
+            StorageType.AccountStorage => AccountStorageItemDatabaseList,
+            _ => null
+        };
+    }
+
+    private void ClearData()
+    {
+        CharacterData = null;
+        StorageItemDatabaseList?.Clear();
+        DeletedStorageItemDatabaseList?.Clear();
+        StorageItemDataViewModels?.Clear();
+        AccountStorageItemDatabaseList?.Clear();
+        DeletedAccountStorageItemDatabaseList?.Clear();
+        AccountStorageItemDataViewModels?.Clear();
+    }
+    #endregion
+
+    #region Send ItemData
+
+    [RelayCommand]
+    private void AddStorageItem(string parameter)
+    {
+        if (CharacterData == null) return;
+
+        try
+        {
+            if (int.TryParse(parameter, out int slotIndex))
+            {
+                ItemData? itemData = StorageItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
+                _windowsService.OpenItemWindow(CharacterData.CharacterID, "StorageItem", itemData, CharacterData);
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error adding storage item: {ex.Message}", "Error");
+        }
+    }
+
+    [RelayCommand]
+    private void AddAccountStorageItem(string parameter)
+    {
+        if (CharacterData == null) return;
+
+        try
+        {
+            if (int.TryParse(parameter, out int slotIndex))
+            {
+                ItemData? itemData = AccountStorageItemDatabaseList?.FirstOrDefault(i => i.SlotIndex == slotIndex) ?? new ItemData { SlotIndex = slotIndex };
+                _windowsService.OpenItemWindow(CharacterData.CharacterID, "AccountStorageItem", itemData, CharacterData);
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Error adding account storage item: {ex.Message}", "Error");
+        }
+    }
+
+    #endregion
+
+    #region Receive ItemData
+    public void Receive(ItemDataMessage message)
+    {
+        if (message.Recipient != "StorageWindow" || message.Token != Token)
+            return;
+
+        var newItemData = message.Value;
+        var storageType = message.MessageType == "StorageItem" ? StorageType.PersonalStorage : StorageType.AccountStorage;
+
+        if (IsSlotLocked(newItemData.SlotIndex, storageType))
+        {
+            RHMessageBoxHelper.ShowOKMessage($"The slot '{newItemData.SlotIndex}' is locked.", "Cant Add Storage Item");
+            return;
+        }
+
+        var storageList = GetStorageItemList(storageType);
+        if (storageList == null)
+            return;
+
+        var existingItem = storageList.FirstOrDefault(item => item.SlotIndex == newItemData.SlotIndex);
+
+        if (existingItem != null)
+        {
+            if (existingItem.ItemId != newItemData.ItemId && !existingItem.IsNewItem)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"The slot '{newItemData.SlotIndex}' is already in use.", "Cant Add Storage Item");
+                return;
+            }
+            else if (existingItem.IsNewItem)
+            {
+                RemoveItem(existingItem.SlotIndex, storageType);
+                CreateStorageItem(newItemData, storageType);
+            }
+            else
+            {
+                UpdateStorageItem(existingItem, newItemData, storageType);
+            }
+            
+        }
+        else if (newItemData.ItemId != 0)
+        {
+            CreateStorageItem(newItemData, storageType);
+        }
+    }
+
+    #endregion
+
+    #endregion
+
+    #region Storage Item Methods
+
+    private void CreateStorageItem(ItemData newItemData, StorageType storageType)
+    {
+        if (CharacterData == null) return;
+
+        var storagePage = storageType == StorageType.PersonalStorage ? 21 : 3;
+
+        var newItem = ItemDataManager.CreateNewItem(CharacterData, newItemData, storagePage);
+
+        if (storageType == StorageType.PersonalStorage)
+        {
+            StorageItemDatabaseList ??= [];
+            StorageItemDatabaseList.Add(newItem);
+        }
+        else if (storageType == StorageType.AccountStorage)
+        {
+            AccountStorageItemDatabaseList ??= [];
+            AccountStorageItemDatabaseList.Add(newItem);
+        }
+
+        OnPropertyChanged(GetPropertyName(storageType));
+
+        SetStorageItemDataViewModel(newItem, storageType);
+    }
+
+    private void UpdateStorageItem(ItemData existingItem, ItemData newItem, StorageType storageType)
+    {
+        var updatedItem = ItemDataManager.UpdateItemData(existingItem, newItem);
+
+        if (StorageItemDatabaseList != null && storageType == StorageType.PersonalStorage)
+        {
+            var index = StorageItemDatabaseList.IndexOf(existingItem);
+            if (index >= 0)
+            {
+                StorageItemDatabaseList[index] = updatedItem;
+            }
+        }
+        else if (AccountStorageItemDatabaseList != null && storageType == StorageType.AccountStorage)
+        {
+            var index = AccountStorageItemDatabaseList.IndexOf(existingItem);
+            if (index >= 0)
+            {
+                AccountStorageItemDatabaseList[index] = updatedItem;
+            }
+        }
+
+        OnPropertyChanged(GetPropertyName(storageType));
+        SetStorageItemDataViewModel(updatedItem, storageType);
+    }
+
+    private void SetStorageItemDataViewModel(ItemData itemData, StorageType storageType)
+    {
+        var storageItemDataViewModels = GetStorageItemDataViewModels(storageType);
+
+        if (storageItemDataViewModels != null)
+        {
+            var itemDataViewModel = _itemDataManager.GetItemData(itemData);
+            storageItemDataViewModels[itemDataViewModel.SlotIndex].ItemDataViewModel = itemDataViewModel;
+            storageItemDataViewModels[itemDataViewModel.SlotIndex].SlotIndex = itemDataViewModel.SlotIndex;
+            OnPropertyChanged(GetItemDataViewModelsPropertyName(storageType));
+        }
+    }
+
+    private void RemoveStorageItemDataViewModel(ItemData removedItem, StorageType storageType)
+    {
+        var storageItemDataViewModels = GetStorageItemDataViewModels(storageType);
+
+        if (storageItemDataViewModels != null)
+        {
+            storageItemDataViewModels[removedItem.SlotIndex].ItemDataViewModel = null;
+            OnPropertyChanged(GetItemDataViewModelsPropertyName(storageType));
+        }
+    }
+
+    private void RemoveItem(int slotIndex, StorageType storageType)
+    {
+        if (StorageItemDatabaseList != null && storageType == StorageType.PersonalStorage)
+        {
+            // Find the existing item in ItemDatabaseList
+            var removedItem = StorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == slotIndex);
+
+            if (removedItem != null)
+            {
+                if (!removedItem.IsNewItem)
+                {
+                    DeletedStorageItemDatabaseList ??= [];
+                    DeletedStorageItemDatabaseList.Add(removedItem);
+                }
+
+                StorageItemDatabaseList.Remove(removedItem);
+                RemoveStorageItemDataViewModel(removedItem, storageType);
+            }
+        }
+        else if (AccountStorageItemDatabaseList != null && storageType == StorageType.AccountStorage)
+        {
+            // Find the existing item in ItemDatabaseList
+            var removedItem = AccountStorageItemDatabaseList.FirstOrDefault(item => item.SlotIndex == slotIndex);
+
+            if (removedItem != null)
+            {
+                if (!removedItem.IsNewItem)
+                {
+                    DeletedAccountStorageItemDatabaseList ??= [];
+                    DeletedAccountStorageItemDatabaseList.Add(removedItem);
+                }
+
+                AccountStorageItemDatabaseList.Remove(removedItem);
+                RemoveStorageItemDataViewModel(removedItem, storageType);
             }
         }
     }
 
-    private void CreateStorageItem(ItemData newItemData)
-    {
-        if (CharacterData == null) return;
+    private string GetPropertyName(StorageType storageType) =>
+        storageType == StorageType.PersonalStorage ? nameof(StorageItemDatabaseList) : nameof(AccountStorageItemDatabaseList);
 
-        var newItem = ItemDataManager.CreateNewItem(CharacterData, newItemData, 3);
-        StorageItemDatabaseList ??= [];
-        StorageItemDatabaseList.Add(newItem);
-        var frameViewModel = _itemDataManager.GetItemData(newItem);
+    private string GetItemDataViewModelsPropertyName(StorageType storageType) =>
+        storageType == StorageType.PersonalStorage ? nameof(StorageItemDataViewModels) : nameof(AccountStorageItemDataViewModels);
 
-        SetStorageFrameViewModel(frameViewModel);
-    }
-
-    private void UpdateStorageItem(ItemData existingItem, ItemData newItem)
-    {
-        if (CharacterData == null) return;
-
-        StorageItemDatabaseList ??= [];
-
-        // Check if the IDs are different
-        if (existingItem.ItemId != newItem.ItemId && !existingItem.IsNewItem)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"The slot '{newItem.SlotIndex}' is already in use.", "Info");
-            return;
-        }
-
-        if (existingItem.IsNewItem)
-        {
-            RemoveStorageItem(existingItem.SlotIndex.ToString());
-            CreateStorageItem(newItem);
-        }
-        else
-        {
-            // Update existingItem
-
-            existingItem.IsEditedItem = !existingItem.IsNewItem;
-            existingItem.UpdateTime = DateTime.Now;
-            existingItem.Durability = newItem.Durability;
-            existingItem.DurabilityMax = newItem.DurabilityMax;
-            existingItem.EnhanceLevel = newItem.EnhanceLevel;
-            existingItem.AugmentStone = newItem.AugmentStone;
-            existingItem.Rank = newItem.Rank;
-            existingItem.Weight = newItem.Weight;
-            existingItem.Reconstruction = newItem.Reconstruction;
-            existingItem.ReconstructionMax = newItem.ReconstructionMax;
-            existingItem.ItemAmount = newItem.ItemAmount;
-            existingItem.Option1Code = newItem.Option1Code;
-            existingItem.Option2Code = newItem.Option2Code;
-            existingItem.Option3Code = newItem.Option3Code;
-            existingItem.Option1Value = newItem.Option1Value;
-            existingItem.Option2Value = newItem.Option2Value;
-            existingItem.Option3Value = newItem.Option3Value;
-            existingItem.SocketCount = newItem.SocketCount;
-            existingItem.Socket1Color = newItem.Socket1Color;
-            existingItem.Socket2Color = newItem.Socket2Color;
-            existingItem.Socket3Color = newItem.Socket3Color;
-            existingItem.Socket1Code = newItem.Socket1Code;
-            existingItem.Socket2Code = newItem.Socket2Code;
-            existingItem.Socket3Code = newItem.Socket3Code;
-            existingItem.Socket1Value = newItem.Socket1Value;
-            existingItem.Socket2Value = newItem.Socket2Value;
-            existingItem.Socket3Value = newItem.Socket3Value;
-
-            RemoveStorageItem(existingItem.SlotIndex.ToString());
-            var frameViewModel = _itemDataManager.GetItemData(existingItem);
-            StorageItemDatabaseList.Add(existingItem);
-            SetStorageFrameViewModel(frameViewModel);
-        }
-    }
-
-    private void SetStorageFrameViewModel(FrameViewModel frameViewModel)
-    {
-        StorageFrameViewModels ??= [];
-
-        StorageFrameViewModels.Add(frameViewModel);
-        OnPropertyChanged(nameof(StorageFrameViewModels));
-    }
-
-    private void RemoveStorageFrameViewModel(ItemData removedItem)
-    {
-        StorageFrameViewModels ??= [];
-
-        var removedStorageItemIndex = StorageFrameViewModels.FindIndex(f => f.SlotIndex == removedItem.SlotIndex);
-        if (removedStorageItemIndex != -1)
-        {
-            StorageFrameViewModels.RemoveAt(removedStorageItemIndex);
-            OnPropertyChanged(nameof(StorageFrameViewModels));
-        }
-
-    }
-    #endregion
-
-    #region Account Storage
-
-    private void LoadAccountStorageItems(List<ItemData> accountStorageItems)
-    {
-        if (accountStorageItems != null)
-        {
-            foreach (var accountStorageItem in accountStorageItems)
-            {
-                var frameViewModel = _itemDataManager.GetItemData(accountStorageItem);
-                SetAccountStorageFrameViewModel(frameViewModel);
-            }
-        }
-    }
-
-    private void CreateAccountStorageItem(ItemData newItemData)
-    {
-        if (CharacterData == null) return;
-
-        var newItem = ItemDataManager.CreateNewItem(CharacterData, newItemData, 3);
-        AccountStorageItemDatabaseList ??= [];
-        AccountStorageItemDatabaseList.Add(newItem);
-        var frameViewModel = _itemDataManager.GetItemData(newItem);
-
-        SetAccountStorageFrameViewModel(frameViewModel);
-    }
-
-    private void UpdateAccountStorageItem(ItemData existingItem, ItemData newItem)
-    {
-        if (CharacterData == null) return;
-
-        AccountStorageItemDatabaseList ??= [];
-
-        // Check if the IDs are different
-        if (existingItem.ItemId != newItem.ItemId && !existingItem.IsNewItem)
-        {
-            RHMessageBoxHelper.ShowOKMessage($"The slot '{newItem.SlotIndex}' is already in use.", "Info");
-            return;
-        }
-
-        if (existingItem.IsNewItem)
-        {
-            RemoveAccountStorageItem(existingItem.SlotIndex.ToString());
-            CreateAccountStorageItem(newItem);
-        }
-        else
-        {
-            // Update existingItem
-
-            existingItem.IsEditedItem = !existingItem.IsNewItem;
-            existingItem.UpdateTime = DateTime.Now;
-            existingItem.Durability = newItem.Durability;
-            existingItem.DurabilityMax = newItem.DurabilityMax;
-            existingItem.EnhanceLevel = newItem.EnhanceLevel;
-            existingItem.AugmentStone = newItem.AugmentStone;
-            existingItem.Rank = newItem.Rank;
-            existingItem.Weight = newItem.Weight;
-            existingItem.Reconstruction = newItem.Reconstruction;
-            existingItem.ReconstructionMax = newItem.ReconstructionMax;
-            existingItem.ItemAmount = newItem.ItemAmount;
-            existingItem.Option1Code = newItem.Option1Code;
-            existingItem.Option2Code = newItem.Option2Code;
-            existingItem.Option3Code = newItem.Option3Code;
-            existingItem.Option1Value = newItem.Option1Value;
-            existingItem.Option2Value = newItem.Option2Value;
-            existingItem.Option3Value = newItem.Option3Value;
-            existingItem.SocketCount = newItem.SocketCount;
-            existingItem.Socket1Color = newItem.Socket1Color;
-            existingItem.Socket2Color = newItem.Socket2Color;
-            existingItem.Socket3Color = newItem.Socket3Color;
-            existingItem.Socket1Code = newItem.Socket1Code;
-            existingItem.Socket2Code = newItem.Socket2Code;
-            existingItem.Socket3Code = newItem.Socket3Code;
-            existingItem.Socket1Value = newItem.Socket1Value;
-            existingItem.Socket2Value = newItem.Socket2Value;
-            existingItem.Socket3Value = newItem.Socket3Value;
-
-            RemoveAccountStorageItem(existingItem.SlotIndex.ToString());
-            var frameViewModel = _itemDataManager.GetItemData(existingItem);
-            AccountStorageItemDatabaseList.Add(existingItem);
-            SetAccountStorageFrameViewModel(frameViewModel);
-        }
-    }
-
-    private void SetAccountStorageFrameViewModel(FrameViewModel frameViewModel)
-    {
-        AccountStorageFrameViewModels ??= [];
-
-        AccountStorageFrameViewModels.Add(frameViewModel);
-        OnPropertyChanged(nameof(AccountStorageFrameViewModels));
-    }
-
-    private void RemoveAccountStorageFrameViewModel(ItemData removedItem)
-    {
-        AccountStorageFrameViewModels ??= [];
-
-        var removedAccountStorageItemIndex = AccountStorageFrameViewModels.FindIndex(f => f.SlotIndex == removedItem.SlotIndex);
-        if (removedAccountStorageItemIndex != -1)
-        {
-            AccountStorageFrameViewModels.RemoveAt(removedAccountStorageItemIndex);
-            OnPropertyChanged(nameof(AccountStorageFrameViewModels));
-        }
-
-    }
-    #endregion
+    private ObservableCollection<InventoryItem>? GetStorageItemDataViewModels(StorageType storageType) =>
+        storageType == StorageType.PersonalStorage ? StorageItemDataViewModels : AccountStorageItemDataViewModels;
 
     #endregion
 
-    #region Properties
+    #region Properties 
 
     [ObservableProperty]
     private Guid? _token = Guid.Empty;
@@ -645,13 +596,13 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     #region Storage
 
     [ObservableProperty]
-    private List<ItemData>? _storageItemDatabaseList;
+    private ObservableCollection<ItemData>? _storageItemDatabaseList;
 
     [ObservableProperty]
-    private List<ItemData>? _deletedStorageItemDatabaseList;
+    private ObservableCollection<ItemData>? _deletedStorageItemDatabaseList;
 
     [ObservableProperty]
-    private List<FrameViewModel>? _storageFrameViewModels;
+    private ObservableCollection<InventoryItem>? _storageItemDataViewModels;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StoragePageText))]
@@ -669,13 +620,13 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     #region Account Storage
 
     [ObservableProperty]
-    private List<ItemData>? _accountStorageItemDatabaseList;
+    private ObservableCollection<ItemData>? _accountStorageItemDatabaseList;
 
     [ObservableProperty]
-    private List<ItemData>? _deletedAccountStorageItemDatabaseList;
+    private ObservableCollection<ItemData>? _deletedAccountStorageItemDatabaseList;
 
     [ObservableProperty]
-    private List<FrameViewModel>? _accountStorageFrameViewModels;
+    private ObservableCollection<InventoryItem>? _accountStorageItemDataViewModels;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(AccountStoragePageText))]

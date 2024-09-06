@@ -14,7 +14,7 @@ public partial class RuneItem : ObservableObject
     private int _itemCount;
 
     [ObservableProperty]
-    private FrameViewModel? _frameViewModel;
+    private ItemDataViewModel? _itemDataViewModel;
 
     [ObservableProperty]
     private bool _isEnabled = false;
