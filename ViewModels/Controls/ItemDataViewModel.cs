@@ -10,7 +10,7 @@ public partial class ItemDataViewModel(IFrameService frameService, IGMDatabaseSe
     private readonly IFrameService _frameService = frameService;
     private readonly IGMDatabaseService _gmDatabaseService = gmDatabaseService;
 
-    private void UpdateItemData(ItemData? itemData)
+    public void UpdateItemData(ItemData? itemData)
     {
         if (itemData != null)
         {
@@ -311,7 +311,7 @@ public partial class ItemDataViewModel(IFrameService frameService, IGMDatabaseSe
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ItemTradeText))]
-    private int _itemTrade;
+    private int _itemTrade = 1;
 
     public string ItemTradeText => FrameService.FormatItemTrade(ItemTrade);
 

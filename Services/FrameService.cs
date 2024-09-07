@@ -165,27 +165,27 @@ namespace RHToolkit.Services
 
         public static string FormatSellValue(int sellPrice)
         {
-            return sellPrice > 0 ? $"Sell Value: {sellPrice:N0} {Resources.Gold}" : "";
+            return sellPrice > 0 ? $"Sell Value: {sellPrice:N0} {Resources.Gold}" : string.Empty;
         }
 
         public static string FormatRequiredLevel(int levelLimit)
         {
-            return $"{Resources.RequiredLevel}: {levelLimit}";
+            return levelLimit != 0 ? $"{Resources.RequiredLevel}: {levelLimit}" : string.Empty;
         }
 
         public static string FormatItemTrade(int itemTrade)
         {
-            return itemTrade == 0 ? $"{Resources.TradeUnavailable}" : "";
+            return itemTrade == 0 ? $"{Resources.TradeUnavailable}" : string.Empty;
         }
 
         public static string FormatDurability(int durability)
         {
-            return durability > 0 ? $"{Resources.Durability}: {durability / 100}/{durability / 100}" : "";
+            return durability > 0 ? $"{Resources.Durability}: {durability / 100}/{durability / 100}" : string.Empty;
         }
 
         public static string FormatWeight(int weight)
         {
-            return weight > 0 ? $"{weight / 1000.0:0.000}{Resources.Kg}" : "";
+            return weight > 0 ? $"{weight / 1000.0:0.000}{Resources.Kg}" : string.Empty;
         }
 
         public static string FormatReconstruction(int reconstruction, int reconstructionMax, int itemTrade)
@@ -205,12 +205,12 @@ namespace RHToolkit.Services
 
         public static string FormatAugmentStone(int value)
         {
-            return value > 0 ? $"{Resources.PhysicalMagicDamage} +{value}" : "";
+            return value > 0 ? $"{Resources.PhysicalMagicDamage} +{value}" : string.Empty;
         }
 
         public static string FormatAugmentStoneLevel(int value)
         {
-            return value > 0 ? $"Augment Level +{value}" : "";
+            return value > 0 ? $"Augment Level +{value}" : string.Empty;
         }
 
         private const string ColorTagStart = "<COLOR:";

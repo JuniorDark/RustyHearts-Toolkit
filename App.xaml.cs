@@ -100,6 +100,8 @@ public partial class App : Application
                 _ = services.AddTransient<DropGroupEditorViewModel>();
                 _ = services.AddTransient<NPCShopEditorWindow>();
                 _ = services.AddTransient<NPCShopEditorViewModel>();
+                _ = services.AddTransient<TitleEditorWindow>();
+                _ = services.AddTransient<TitleEditorViewModel>();
 
             }
         )

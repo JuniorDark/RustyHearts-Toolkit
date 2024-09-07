@@ -109,8 +109,8 @@
                     FontTypography="BodyStrong"
                     Text="{x:Static rs:Resources.SQLAddress}" />
                 <ui:TextBox
-                    Width="150"
-                    Height="33"
+                    Width="200"
+                    Height="35"
                     IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
                     PlaceholderText="{x:Static rs:Resources.SQLServer}"
                     Text="{Binding ViewModel.SQLServer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -121,8 +121,8 @@
                     FontTypography="BodyStrong"
                     Text="{x:Static rs:Resources.SQLUser}" />
                 <ui:TextBox
-                    Width="150"
-                    Height="33"
+                    Width="200"
+                    Height="35"
                     IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
                     PlaceholderText="{x:Static rs:Resources.SQLUser}"
                     Text="{Binding ViewModel.SQLUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -132,9 +132,9 @@
                     d:Text="SQL Password"
                     FontTypography="BodyStrong"
                     Text="{x:Static rs:Resources.SQLPassword}" />
-                <ui:TextBox
-                    Width="150"
-                    Height="33"
+                <ui:PasswordBox
+                    Width="200"
+                    Height="35"
                     IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
                     PlaceholderText="{x:Static rs:Resources.SQLPassword}"
                     Text="{Binding ViewModel.SQLPwd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />

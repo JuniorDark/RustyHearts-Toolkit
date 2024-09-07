@@ -32,6 +32,7 @@ To start using the Rusty Hearts Toolkit, download the latest release from the [G
 - **Package Editor:** Item packages and effects (unionpackage.rh).
 - **Random Rune Editor:** Edit 'gacha' items (randomrune.rh).
 - **Set Editor:** Edit item sets and their effects (setitem.rh).
+- **Title Editor:** Edit titles their effects (charactertitle.rh).
 
 ### Language Settings
 
@@ -53,7 +54,7 @@ To set up the toolkit and generate the necessary SQLite database:
 ## Prerequisites for Development
 * Visual Studio 2022 (Any Edition - 17.9 or later)
 * Windows 10 SDK or Windows 11 SDK via Visual Studio Installer
-*.NET Core 8 SDK (8.0.107 or later)
+* .NET Core 8 SDK (8.0.107 or later)
 
 ## Building
 
@@ -112,7 +113,6 @@ A: Fork the repository, make your changes, and submit a pull request.
 - **Pet Editor**
 - **Quest Editor**
 - **Skill Editor**
-- **Title Editor**
 - **World/Map Editor**
 
 ## Credits

@@ -1,6 +1,4 @@
-﻿using System.Windows.Documents;
-
-namespace RHToolkit.Services
+﻿namespace RHToolkit.Services
 {
     public interface IFrameService
     {

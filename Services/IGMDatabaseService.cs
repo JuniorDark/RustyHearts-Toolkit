@@ -19,6 +19,7 @@ namespace RHToolkit.Services
         string GetOptionGroupName(int optionID);
         List<NameID> GetOptionItems();
         List<NameID> GetQuestListItems();
+        List<NameID> GetAddEffectItems();
         string GetOptionName(int optionID);
         (int secTime, float value) GetOptionValues(int optionID);
         (int nSetOption00, int nSetOptionvlue00, int nSetOption01, int nSetOptionvlue01, int nSetOption02, int nSetOptionvlue02, int nSetOption03, int nSetOptionvlue03, int nSetOption04, int nSetOptionvlue04) GetSetInfo(int setID);

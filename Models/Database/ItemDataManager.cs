@@ -17,12 +17,12 @@ public partial class ItemDataManager: ObservableObject
     private readonly System.Timers.Timer _itemFilterUpdateTimer;
     private readonly System.Timers.Timer _optionFilterUpdateTimer;
 
-    public ItemDataManager(CachedDataManager cachedDataManager, IGMDatabaseService gmDatabaseService, IFrameService frameService)
+    public ItemDataManager(CachedDataManager cachedDataManager, IGMDatabaseService gmDatabaseService, IFrameService frameService, ItemDataViewModel itemDataViewModel)
     {
         _frameService = frameService;
         _gmDatabaseService = gmDatabaseService;
         _cachedDataManager = cachedDataManager;
-
+        _itemDataViewModel = itemDataViewModel;
         _itemFilterUpdateTimer = new()
         {
             Interval = 400,
@@ -48,6 +48,7 @@ public partial class ItemDataManager: ObservableObject
         PopulateItemTradeItemsFilter();
         PopulateQuestConditionItems();
         PopulateQuestListItems();
+        PopulateAddEffectItems();
 
         _itemDataView = new CollectionViewSource { Source = ItemDataItems }.View;
         _itemDataView.Filter = FilterItems;
@@ -74,7 +75,7 @@ public partial class ItemDataManager: ObservableObject
     }
 
     [ObservableProperty]
-    private ItemDataViewModel? _itemDataViewModel;
+    private ItemDataViewModel _itemDataViewModel;
 
     #region ItemData
     public bool IsInvalidItemID(int itemID)
@@ -752,6 +753,22 @@ public partial class ItemDataManager: ObservableObject
         try
         {
             QuestListItems = _gmDatabaseService.GetQuestListItems();
+
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+        }
+    }
+
+    [ObservableProperty]
+    private List<NameID>? _addEffectItems;
+
+    private void PopulateAddEffectItems()
+    {
+        try
+        {
+            AddEffectItems = _gmDatabaseService.GetAddEffectItems();
 
         }
         catch (Exception ex)

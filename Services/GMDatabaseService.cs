@@ -311,6 +311,34 @@ namespace RHToolkit.Services
             return questItems;
         }
 
+        public List<NameID> GetAddEffectItems()
+        {
+            List<NameID> addEffectItems = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = "SELECT nID, wszDescription FROM addeffect_string";
+                using var reader = _sqLiteDatabaseService.ExecuteReader(query, connection);
+                addEffectItems.Add(new NameID { ID = 0, Name = Resources.None });
+
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    string name = reader.GetString(1);
+
+                    string formattedName = $"({id}) {name}";
+
+                    addEffectItems.Add(new NameID { ID = id, Name = formattedName });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving addeffect from the database.", ex);
+            }
+
+            return addEffectItems;
+        }
+
         private string GetStringValueFromQuery(string query, params (string, object)[] parameters)
         {
             using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();

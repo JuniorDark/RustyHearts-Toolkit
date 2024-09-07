@@ -12,14 +12,20 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
     private WindowCard[] _windowCards =
     [
         new("RH Table Editor", "Edit .rh table files", SymbolRegular.DocumentEdit24, "rheditor"),
+    ];
+
+    [ObservableProperty]
+    private WindowCard[] _windowCardsTools =
+    [
         new("Cash Shop Editor", "Edit cash shop .rh table file", SymbolRegular.DocumentEdit24, "cashshopeditor"),
         new("Package Editor", "Edit unionpackage .rh table file", SymbolRegular.DocumentEdit24, "packageeditor"),
         new("Set Item Editor", "Edit setitem .rh table file", SymbolRegular.DocumentEdit24, "setitemeditor"),
         new("Random Rune Editor", "Edit randomrune .rh table file", SymbolRegular.DocumentEdit24, "randomruneeditor"),
-        new("Drop Group Editor", "Edit dropgroup .rh table file", SymbolRegular.DocumentEdit24, "dropgroupeditor"),
-        new("NPC Shop Editor", "Edit npcshop .rh table file", SymbolRegular.DocumentEdit24, "npcshopeditor"),
+        new("Drop Group Editor", "Edit dropgroup .rh table files", SymbolRegular.DocumentEdit24, "dropgroupeditor"),
+        new("NPC Shop Editor", "Edit npcshop .rh table files", SymbolRegular.DocumentEdit24, "npcshopeditor"),
+        new("Title Editor", "Edit title .rh table file", SymbolRegular.DocumentEdit24, "titleeditor"),
 
-];
+    ];
 
     [RelayCommand]
     public void OnOpenWindow(string value)
@@ -53,6 +59,9 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
                     break;
                 case "npcshopeditor":
                     windowsProviderService.Show<NPCShopEditorWindow>(true);
+                    break;
+                case "titleeditor":
+                    windowsProviderService.Show<TitleEditorWindow>(true);
                     break;
             }
         }
