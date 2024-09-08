@@ -478,8 +478,9 @@ namespace RHToolkit.Models
             NpcShop = 1,
             TradeShop = 2,
             ItemMix = 3,
-            ShopItemVisibleFilter = 4,
-            ItemPreview = 5
+            CostumeMix = 4,
+            ShopItemVisibleFilter = 5,
+            ItemPreview = 6
         }
     }
 }

@@ -35,7 +35,7 @@
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="100*" />
                 <RowDefinition Height="120*" />
                 <RowDefinition Height="120*" />
             </Grid.RowDefinitions>

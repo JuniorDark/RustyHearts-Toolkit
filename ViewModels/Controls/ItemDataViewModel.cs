@@ -53,6 +53,7 @@ public partial class ItemDataViewModel(IFrameService frameService, IGMDatabaseSe
             AugmentValue = itemData.AugmentStone;
             Weight = itemData.Weight;
             TitleList = itemData.TitleList;
+            CooldownValue = itemData.Cooltime;
             ReconstructionMax = itemData.ReconstructionMax;
             Reconstruction = itemData.Reconstruction;
             RandomOption01 = itemData.Option1Code;
@@ -351,6 +352,12 @@ public partial class ItemDataViewModel(IFrameService frameService, IGMDatabaseSe
     public string AugmentText => FrameService.FormatAugmentStone(AugmentValue);
 
     public string AugmentLevelText => FrameService.FormatAugmentStoneLevel(AugmentValue);
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CooldownText))]
+    private float _cooldownValue;
+
+    public string CooldownText => FrameService.FormatCooldown(CooldownValue);
 
     #endregion
 

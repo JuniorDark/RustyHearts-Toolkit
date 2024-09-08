@@ -38,15 +38,21 @@
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="4"
-                        Header="Open shopitemvisiblefilter.rh"
+                        Header="Open costumemix.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+4" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="5"
-                        Header="Open itempreview.rh"
+                        Header="Open shopitemvisiblefilter.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+5" />
+                    <MenuItem
+                        Command="{Binding LoadFileCommand}"
+                        CommandParameter="6"
+                        Header="Open itempreview.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}"
+                        InputGestureText="Ctrl+Shift+6" />
                 </MenuItem>
                 <MenuItem
                     Command="{Binding DataTableManager.SaveFileCommand}"

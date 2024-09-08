@@ -168,6 +168,7 @@ public partial class ItemDataManager: ObservableObject
                 JobClass = cachedItem.JobClass,
                 SetId = cachedItem.SetId,
                 TitleList = cachedItem.TitleList,
+                Cooltime = cachedItem.Cooltime,
                 FixOption1Code = cachedItem.FixOption1Code,
                 FixOption1Value = cachedItem.FixOption1Value,
                 FixOption2Code = cachedItem.FixOption2Code,

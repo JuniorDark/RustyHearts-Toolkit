@@ -213,6 +213,11 @@ namespace RHToolkit.Services
             return value > 0 ? $"Augment Level +{value}" : string.Empty;
         }
 
+        public static string FormatCooldown(float value)
+        {
+            return value > 0 ? $"Cooldown: {value:F2} second{(value > 1 ? "s" : string.Empty)}" : string.Empty;
+        }
+
         private const string ColorTagStart = "<COLOR:";
         private const string ColorTagEnd = ">";
         private const string ColorTagClose = "</COLOR>";

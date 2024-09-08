@@ -116,7 +116,17 @@
                 Foreground="White"
                 Style="{StaticResource ArialMS}"
                 Text="{Binding WeightText}" />
-            <!--  Durability and Value  -->
+            <!--  Cooldown and Durability  -->
+            <TextBlock
+                x:Name="tbCD"
+                Grid.Row="4"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Text="Cooldown: 0"
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding CooldownText}" />
             <TextBlock
                 x:Name="tbValue"
                 Grid.Row="4"

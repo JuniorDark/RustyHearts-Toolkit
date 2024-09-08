@@ -8,6 +8,7 @@ namespace RHToolkit.Models.DataTemplates
         public DataTemplate? NpcShop { get; set; }
         public DataTemplate? TradeShop { get; set; }
         public DataTemplate? ItemMix { get; set; }
+        public DataTemplate? CostumeMix { get; set; }
         public DataTemplate? ShopItemVisibleFilter { get; set; }
         public DataTemplate? ItemPreview { get; set; }
 
@@ -18,6 +19,7 @@ namespace RHToolkit.Models.DataTemplates
                 NpcShopType.NpcShop => NpcShop,
                 NpcShopType.TradeShop => TradeShop,
                 NpcShopType.ItemMix => ItemMix,
+                NpcShopType.CostumeMix => CostumeMix,
                 NpcShopType.ShopItemVisibleFilter => ShopItemVisibleFilter,
                 NpcShopType.ItemPreview => ItemPreview,
                 _ => null,

@@ -534,6 +534,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             ItemDataManager.ItemDataViewModel.RequiredLevel = itemData.LevelLimit;
             ItemDataManager.ItemDataViewModel.SetId = itemData.SetId;
             ItemDataManager.ItemDataViewModel.TitleList = itemData.TitleList;
+            ItemDataManager.ItemDataViewModel.CooldownValue = itemData.Cooltime;
             ItemDataManager.ItemDataViewModel.PetFood = itemData.PetFood;
             ItemDataManager.ItemDataViewModel.FixedOption01 = itemData.FixOption1Code;
             ItemDataManager.ItemDataViewModel.FixedOption01Value = itemData.FixOption1Value;

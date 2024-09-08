@@ -81,7 +81,7 @@ namespace RHToolkit.ViewModels.Windows
                 await CloseFile();
 
                 string filter = "NPC Shop Files .rh|" +
-                                "npcshop.rh;tradeshop.rh;itemmix.rh;shopitemvisiblefilter.rh;itempreview.rh|" +
+                                "npcshop.rh;tradeshop.rh;itemmix.rh;costumemix.rh;shopitemvisiblefilter.rh;itempreview.rh|" +
                                 "All Files (*.*)|*.*";
 
                 OpenFileDialog openFileDialog = new()
@@ -135,6 +135,7 @@ namespace RHToolkit.ViewModels.Windows
                 NpcShopType.NpcShop => "NPC Shop",
                 NpcShopType.TradeShop => "NPC Trade Shop",
                 NpcShopType.ItemMix => "Item Craft",
+                NpcShopType.CostumeMix => "Costume Craft",
                 NpcShopType.ShopItemVisibleFilter => "NPC Shop Visible Filter",
                 NpcShopType.ItemPreview => "NPC Shop Item Preview",
                 _ => "NPC Shop",
@@ -148,8 +149,9 @@ namespace RHToolkit.ViewModels.Windows
                 1 => "npcshop.rh",
                 2 => "tradeshop.rh",
                 3 => "itemmix.rh",
-                4 => "shopitemvisiblefilter.rh",
-                5 => "itempreview.rh",
+                4 => "costumemix.rh",
+                5 => "shopitemvisiblefilter.rh",
+                6 => "itempreview.rh",
                 _ => throw new ArgumentOutOfRangeException(nameof(dropGroupType)),
             };
         }
@@ -161,8 +163,9 @@ namespace RHToolkit.ViewModels.Windows
                 "npcshop.rh" => 1,
                 "tradeshop.rh" => 2,
                 "itemmix.rh" => 3,
-                "shopitemvisiblefilter.rh" => 4,
-                "itempreview.rh" => 5,
+                "costumemix.rh" => 4,
+                "shopitemvisiblefilter.rh" => 5,
+                "itempreview.rh" => 6,
                 _ => -1,
             };
         }
@@ -173,7 +176,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 "npcshop.rh" => "wszNpcName",
                 "tradeshop.rh" => "nTokenID00",
-                "itemmix.rh" => "nMixAble",
+                "itemmix.rh" or "costumemix.rh" => "nMixAble",
                 "shopitemvisiblefilter.rh" => "nQuestID00",
                 "itempreview.rh" => "nPreViewItemID",
                 _ => "",
@@ -268,7 +271,7 @@ namespace RHToolkit.ViewModels.Windows
                         case NpcShopType.TradeShop:
                             messageType = "TradeShopItem";
                             break;
-                        case NpcShopType.ItemMix:
+                        case NpcShopType.ItemMix or NpcShopType.CostumeMix:
                             messageType = "ItemMixItem";
                             break;
                     }
@@ -309,7 +312,7 @@ namespace RHToolkit.ViewModels.Windows
                         case NpcShopType.TradeShop:
                             messageType = "TradeShopItems";
                             break;
-                        case NpcShopType.ItemMix:
+                        case NpcShopType.ItemMix or NpcShopType.CostumeMix:
                             messageType = "ItemMixItems";
                             break;
                         case NpcShopType.ShopItemVisibleFilter:
@@ -500,6 +503,7 @@ namespace RHToolkit.ViewModels.Windows
                         UpdateTradeShop(selectedItem);
                         break;
                     case NpcShopType.ItemMix:
+                    case NpcShopType.CostumeMix:
                         UpdateItemMix(selectedItem);
                         break;
                     case NpcShopType.ShopItemVisibleFilter:
@@ -640,15 +644,26 @@ namespace RHToolkit.ViewModels.Windows
             Classify00 = (int)selectedItem["nClassify00"];
             Classify01 = (int)selectedItem["nClassify01"];
             Classify02 = (int)selectedItem["nClassify02"];
-            CraftType = (int)selectedItem["nCraftType"];
-            CraftGroup = (int)selectedItem["nCraftGroup"];
-            HoldItem = (int)selectedItem["nHoldItem"];
-            NextItem = (int)selectedItem["nNextItem"];
-            string szMixCategory = (string)selectedItem["szMixCategory"];
+            CharacterNum = selectedItem.Row.Table.Columns.Contains("szCharacterNum")
+                        ? (string)selectedItem["szCharacterNum"] : "";
+            CraftType = selectedItem.Row.Table.Columns.Contains("nCraftType")
+                        ? (int)selectedItem["nCraftType"] : 0;
+            CraftGroup = selectedItem.Row.Table.Columns.Contains("nCraftGroup")
+                        ? (int)selectedItem["nCraftGroup"] : 0;
+            HoldItem = selectedItem.Row.Table.Columns.Contains("nHoldItem")
+                        ? (int)selectedItem["nHoldItem"] : 0;
+            NextItem = selectedItem.Row.Table.Columns.Contains("nNextItem")
+                        ? (int)selectedItem["nNextItem"] : 0;
+            string szMixCategory = selectedItem.Row.Table.Columns.Contains("szMixCategory")
+                        ? (string)selectedItem["szMixCategory"] : "";
             MixCategory = string.IsNullOrEmpty(szMixCategory) ? "0" : szMixCategory;
-            MixSubCategory = (int)selectedItem["nMixSubCategory"];
+            MixSubCategory = selectedItem.Row.Table.Columns.Contains("nMixSubCategory")
+                        ? (int)selectedItem["nMixSubCategory"] : 0;
             MixAble = (int)selectedItem["nMixAble"] == 1;
-            Group = (string)selectedItem["szGroup"];
+            SGroup = selectedItem.Row.Table.Columns.Contains("szGroup")
+                        ? (string)selectedItem["szGroup"] : "";
+            NGroup = selectedItem.Row.Table.Columns.Contains("nGroup")
+                        ? (int)selectedItem["nGroup"] : 0;
             Cost = (int)selectedItem["nCost"];
 
             ItemMix = [];
@@ -893,6 +908,14 @@ namespace RHToolkit.ViewModels.Windows
                     columns.Add("wszDesc");
                     columns.Add($"CONVERT(szMixCategory, 'System.String')");
                     columns.Add($"CONVERT(nMixSubCategory, 'System.String')");
+                    for (int i = 0; i < 5; i++)
+                    {
+                        string columnName = $"nItemCode{i:00}";
+                        columns.Add($"CONVERT({columnName}, 'System.String')");
+                    }
+                    break;
+                case NpcShopType.CostumeMix:
+                    columns.Add("wszDesc");
                     for (int i = 0; i < 5; i++)
                     {
                         string columnName = $"nItemCode{i:00}";
@@ -1146,8 +1169,8 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
-        private string? _group;
-        partial void OnGroupChanged(string? value)
+        private string? _sGroup;
+        partial void OnSGroupChanged(string? value)
         {
             UpdateSelectedItemValue(value, "szGroup");
         }
@@ -1166,6 +1189,19 @@ namespace RHToolkit.ViewModels.Windows
             UpdateSelectedItemValue(value, "nVisible");
         }
 
+        [ObservableProperty]
+        private string? _characterNum;
+        partial void OnCharacterNumChanged(string? value)
+        {
+            UpdateSelectedItemValue(value, "szCharacterNum");
+        }
+
+        [ObservableProperty]
+        private int _nGroup;
+        partial void OnNGroupChanged(int value)
+        {
+            UpdateSelectedItemValue(value, "nGroup");
+        }
         #endregion
 
         #region ShopItemVisibleFilter

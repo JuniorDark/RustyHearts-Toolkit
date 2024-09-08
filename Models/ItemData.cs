@@ -74,6 +74,7 @@
         public int DurabilityMax { get; set; }
         public int Weight { get; set; }
         public int TitleList { get; set; }
+        public float Cooltime { get; set; }
 
     }
 
