@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.SQLite;
+using RHToolkit.Models.UISettings;
 using RHToolkit.Services;
 
 namespace RHToolkit.ViewModels.Pages
@@ -91,7 +92,7 @@ namespace RHToolkit.ViewModels.Pages
         private Visibility _isVisible = Visibility.Hidden;
 
         [ObservableProperty]
-        private string? _selectedFolder;
+        private string? _selectedFolder = RegistrySettingsHelper.GetTableFolder();
         partial void OnSelectedFolderChanged(string? value)
         {
             CreateDatabaseCommand.NotifyCanExecuteChanged();

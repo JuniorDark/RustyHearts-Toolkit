@@ -26,9 +26,10 @@ To start using the Rusty Hearts Toolkit, download the latest release from the [G
 ### Table Editor Tools
 - **Table Editor:** Edit `.rh` table files on the go and export them to various formats, including XML, XLSX, and MIP.
 - **Specialized Table Editors:**
-- **Cash Shop Editor:** Manage in-game cash shop items and packages (cashshoplist.rh).
+- **Cash Shop Editor:**Cash shop items (cashshoplist.rh).
 - **Item Drop Group Editor** Item drops (itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh).
-- **NPC Shop Editor** Npc Shop (npcshop.rh), Trade Shop (tradeshop.rh), Item Craft (itemmix.rh), shop item visible filter (shopitemvisiblefilter.rh).
+- **NPC Editor:** (npcinstance.rh).
+- **NPC Shop Editor** Npc Shop (npcshop.rh), Trade Shop (tradeshop.rh), Item Craft (itemmix.rh, costumemix.rh), shop item visible filter (shopitemvisiblefilter.rh).
 - **Package Editor:** Item packages and effects (unionpackage.rh).
 - **Random Rune Editor:** Edit 'gacha' items (randomrune.rh).
 - **Set Editor:** Edit item sets and their effects (setitem.rh).
@@ -109,7 +110,6 @@ A: Fork the repository, make your changes, and submit a pull request.
 - **Add Effect Editor**
 - **Enemy Editor**
 - **Item Editor**
-- **NPC Editor**
 - **Pet Editor**
 - **Quest Editor**
 - **Skill Editor**

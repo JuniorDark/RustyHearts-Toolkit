@@ -49,6 +49,7 @@ public partial class ItemDataManager: ObservableObject
         PopulateQuestConditionItems();
         PopulateQuestListItems();
         PopulateAddEffectItems();
+        PopulateNpcShopItems();
 
         _itemDataView = new CollectionViewSource { Source = ItemDataItems }.View;
         _itemDataView.Filter = FilterItems;
@@ -770,6 +771,22 @@ public partial class ItemDataManager: ObservableObject
         try
         {
             AddEffectItems = _gmDatabaseService.GetAddEffectItems();
+
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+        }
+    }
+
+    [ObservableProperty]
+    private List<NameID>? _npcShopItems;
+
+    private void PopulateNpcShopItems()
+    {
+        try
+        {
+            NpcShopItems = _gmDatabaseService.GetNpcShopItems();
 
         }
         catch (Exception ex)

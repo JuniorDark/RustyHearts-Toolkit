@@ -1317,36 +1317,6 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
-        private List<NameID>? _selectedClassItems;
-        partial void OnSelectedClassItemsChanged(List<NameID>? value)
-        {
-            if (!_isUpdating)
-            {
-                UpdatePreviewClassList();
-            }
-        }
-
-        private void UpdatePreviewClassList()
-        {
-            _isUpdating = true;
-            try
-            {
-                if (SelectedClassItems != null)
-                {
-                    PreviewClassList = string.Join(", ", SelectedClassItems.Select(i => i.ID));
-                }
-                else
-                {
-                    PreviewClassList = "0";
-                }
-            }
-            finally
-            {
-                _isUpdating = false;
-            }
-        }
-
-        [ObservableProperty]
         private string? _note00;
         partial void OnNote00Changed(string? value)
         {

@@ -183,6 +183,12 @@
                 Content="GitHub"
                 NavigateUri="https://github.com/JuniorDark/RHToolkit"
                 ToolTip="https://github.com/JuniorDark/RHToolkit" />
+            <ui:HyperlinkButton
+                Margin="8,0,0,0"
+                Padding="4"
+                Content="Rusty Hearts Files Structures Gitbook"
+                NavigateUri="https://juniordark.gitbook.io/rusty-hearts-files-structures"
+                ToolTip="https://juniordark.gitbook.io/rusty-hearts-files-structures" />
 
         </StackPanel>
     </Grid>

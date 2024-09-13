@@ -1384,16 +1384,17 @@
                     VerticalAlignment="Top"
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Preview Classes" />
-                    <ui:ListView
-                        x:Name="classListView"
+                    <ListView
                         Width="300"
-                        Height="150"
+                        Height="120"
                         Margin="0,0,0,0"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding DataContext.ItemDataManager.ClassItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                        SelectedItem="{Binding DataContext.SelectedClassItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                        SelectionChanged="ListView_SelectionChanged"
-                        SelectionMode="Multiple" />
+                        SelectionMode="Multiple">
+                        <i:Interaction.Behaviors>
+                            <bh:ListViewSelectionBehavior SelectedItemsString="{Binding DataContext.PreviewClassList, RelativeSource={RelativeSource AncestorType=ContentControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </i:Interaction.Behaviors>
+                    </ListView>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"

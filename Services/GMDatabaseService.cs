@@ -156,12 +156,14 @@ namespace RHToolkit.Services
                     int id = command.GetInt32(0);
                     string name = command.GetString(1);
 
-                    items.Add(new NameID { ID = id, Name = name });
+                    string formattedName = $"({id}) {name}";
+
+                    items.Add(new NameID { ID = id, Name = formattedName });
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving items from the database", ex);
+                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
             }
 
             return items;
@@ -185,6 +187,71 @@ namespace RHToolkit.Services
         public List<NameID> GetLobbyItems()
         {
             return GetItemsFromQuery("SELECT nID, wszDesc FROM serverlobbyid");
+        }
+
+        public List<NameID> GetQuestListItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszTitle FROM queststring");
+        }
+
+        public List<NameID> GetAddEffectItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszDescription FROM addeffect_string");
+        }
+
+        public List<NameID> GetNpcShopItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszEct FROM npcshop");
+        }
+
+        public List<NameID> GetQuestGroupItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszNpcNameTitle FROM questgroup");
+        }
+
+        public List<NameID> GetStringItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszString FROM string");
+        }
+
+        public List<NameID> GetNpcListItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszName FROM npc");
+        }
+
+        public List<NameID> GetNpcDialogItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszDesc FROM npc_dialog");
+        }
+
+        public List<NameID> GetTradeItemGroupItems()
+        {
+            List<NameID> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = "SELECT nID, nCategoryName FROM tradeitemgroup";
+
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                items.Add(new NameID { ID = 0, Name = Resources.None });
+
+                while (command.Read())
+                {
+                    int id = command.GetInt32(0);
+                    int name = command.GetInt32(1);
+
+                    string formattedName = $"({id}) {GetString(name)}";
+
+                    items.Add(new NameID { ID = id, Name = formattedName });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+            }
+
+            return items;
         }
 
         public List<NameID> GetCategoryItems(ItemType itemType, bool isSubCategory)
@@ -233,33 +300,7 @@ namespace RHToolkit.Services
 
         public List<NameID> GetSubCategoryItems()
         {
-            List<NameID> categoryItems = [];
-            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
-            try
-            {
-                string query = "SELECT nID, wszName02 FROM itemcategory WHERE wszName02 <> ''";
-
-                using var command = connection.CreateCommand();
-                command.CommandText = query;
-
-                using var reader = _sqLiteDatabaseService.ExecuteReader(query, connection);
-
-                categoryItems.Add(new NameID { ID = 0, Name = Resources.None });
-
-                while (reader.Read())
-                {
-                    int id = reader.GetInt32(0);
-                    string name = reader.GetString(1);
-
-                    categoryItems.Add(new NameID { ID = id, Name = name });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error:", ex);
-            }
-
-            return categoryItems;
+            return GetItemsFromQuery("SELECT nID, wszName02 FROM itemcategory WHERE wszName02 <> ''");
         }
 
         private static int[] GetCategoryIDsForItemType(ItemType itemType)
@@ -284,61 +325,101 @@ namespace RHToolkit.Services
             };
         }
 
-        public List<NameID> GetQuestListItems()
+        private List<NameID> GetUniqueItems(string query, bool isInt)
         {
-            List<NameID> questItems = [];
+            var items = GetUniqueItemsFromQuery(query, isInt);
+
+            HashSet<string> uniqueGroups = [];
+
+            foreach (var item in items)
+            {
+                if (!isInt)
+                {
+                    var groups = (item.Name?.Split(',') ?? [])
+                                  .Select(g => g.Trim());
+
+                    foreach (var group in groups)
+                    {
+                        if (!string.IsNullOrEmpty(group))
+                        {
+                            uniqueGroups.Add(group);
+                        }
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(item.Name))
+                    {
+                        uniqueGroups.Add(item.Name);
+                    }
+                }
+            }
+
+            List<NameID> result = [.. uniqueGroups
+                .Select(group => new NameID { ID = int.Parse(group), Name = group })
+                .OrderBy(item => item.ID)];
+
+            return result;
+        }
+
+        private List<NameID> GetUniqueItemsFromQuery(string query, bool isInt)
+        {
+            List<NameID> items = [];
+
             using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
-                string query = "SELECT nID, wszTitle FROM queststring";
-                using var reader = _sqLiteDatabaseService.ExecuteReader(query, connection);
-                questItems.Add(new NameID { ID = 0, Name = Resources.None });
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
 
-                while (reader.Read())
+                while (command.Read())
                 {
-                    int id = reader.GetInt32(0);
-                    string name = reader.GetString(1);
-
-                    string formattedName = $"({id}) {name}";
-
-                    questItems.Add(new NameID { ID = id, Name = formattedName });
+                    if (isInt)
+                    {
+                        int id = command.GetInt32(0);
+                        items.Add(new NameID { ID = id, Name = id.ToString() });
+                    }
+                    else
+                    {
+                        string id = command.GetString(0);
+                        items.Add(new NameID { ID = 0, Name = id });
+                    }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception("Error retrieving quests from the database.", ex);
+                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
             }
 
-            return questItems;
+            return items;
         }
 
-        public List<NameID> GetAddEffectItems()
+        public List<NameID> GetItemMixGroupItems()
         {
-            List<NameID> addEffectItems = [];
-            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
-            try
-            {
-                string query = "SELECT nID, wszDescription FROM addeffect_string";
-                using var reader = _sqLiteDatabaseService.ExecuteReader(query, connection);
-                addEffectItems.Add(new NameID { ID = 0, Name = Resources.None });
-
-                while (reader.Read())
-                {
-                    int id = reader.GetInt32(0);
-                    string name = reader.GetString(1);
-
-                    string formattedName = $"({id}) {name}";
-
-                    addEffectItems.Add(new NameID { ID = id, Name = formattedName });
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error retrieving addeffect from the database.", ex);
-            }
-
-            return addEffectItems;
+            return GetUniqueItems("SELECT szGroup FROM itemmix", false);
         }
+
+        public List<NameID> GetCostumeMixGroupItems()
+        {
+            return GetUniqueItems("SELECT nGroup FROM costumemix", true);
+        }
+
+        public List<NameID> GetTradeShopGroupItems()
+        {
+            return GetUniqueItems("SELECT nGroupID FROM tradeshop", true);
+        }
+
+        public List<NameID> GetNpcShopsItems()
+        {
+            var npcShopItems = GetNpcShopItems();
+            var tradeShopGroupItems = GetTradeShopGroupItems();
+
+            var mergedItems = npcShopItems.Concat(tradeShopGroupItems).ToList();
+
+            mergedItems = [.. mergedItems.OrderBy(item => item.ID)];
+
+            return mergedItems;
+        }
+
 
         private string GetStringValueFromQuery(string query, params (string, object)[] parameters)
         {

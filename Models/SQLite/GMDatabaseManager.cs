@@ -11,12 +11,45 @@ public class GMDatabaseManager
     private readonly FileManager _fileManager = new();
 
     public static readonly List<string> RequiredTables =
-[
-    "addeffect_string", "angelaweapon", "charactertitle", "charactertitle_string", "enchantinfo", "exp", "fortune", "frantzweapon", "itemcategory", "itemlist", "itemlist_string",
-    "itemlist_armor", "itemlist_armor_string", "itemlist_costume", "itemlist_costume_string", "queststring",
-    "itemlist_weapon", "itemlist_weapon_string", "itemoptionlist", "new_itemoptioncondition_string", "natashaweapon", "nick_filter", "startpoint_renewal", "serverlobbyid",
-    "setitem", "setitem_string", "string", "tudeweapon"
-];
+    [
+        "addeffect_string",
+        "angelaweapon",
+        "charactertitle",
+        "charactertitle_string",
+        "enchantinfo",
+        "exp",
+        "fortune",
+        "frantzweapon",
+        "itemcategory",
+        "itemlist",
+        "itemlist_string",
+        "itemlist_armor",
+        "itemlist_armor_string",
+        "itemlist_costume",
+        "itemlist_costume_string",
+        "queststring",
+        "itemlist_weapon",
+        "itemlist_weapon_string",
+        "itemoptionlist",
+        "new_itemoptioncondition_string",
+        "natashaweapon",
+        "nick_filter",
+        "startpoint_renewal",
+        "serverlobbyid",
+        "setitem",
+        "setitem_string",
+        "string",
+        "tudeweapon",
+        "npcshop",
+        "npc_dialog",
+        "questgroup",
+        "itemmix",
+        "costumemix",
+        "tradeshop",
+        "tradeitemgroup",
+        "npc"
+    ];
+
 
     public async Task CreateGMDatabase(string dataFolder, Action<string> reportProgress, CancellationToken cancellationToken)
     {

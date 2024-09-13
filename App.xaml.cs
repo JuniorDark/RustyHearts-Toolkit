@@ -98,6 +98,8 @@ public partial class App : Application
                 _ = services.AddTransient<RandomRuneEditorViewModel>();
                 _ = services.AddTransient<DropGroupEditorWindow>();
                 _ = services.AddTransient<DropGroupEditorViewModel>();
+                _ = services.AddTransient<NpcEditorWindow>();
+                _ = services.AddTransient<NpcEditorViewModel>();
                 _ = services.AddTransient<NPCShopEditorWindow>();
                 _ = services.AddTransient<NPCShopEditorViewModel>();
                 _ = services.AddTransient<TitleEditorWindow>();

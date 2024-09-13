@@ -3,9 +3,9 @@ using System.ComponentModel;
 
 namespace RHToolkit.Views.Windows
 {
-    public partial class NPCShopEditorWindow : Window
+    public partial class NpcEditorWindow : Window
     {
-        public NPCShopEditorWindow(NPCShopEditorViewModel viewModel)
+        public NpcEditorWindow(NpcEditorViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
@@ -15,7 +15,7 @@ namespace RHToolkit.Views.Windows
         {
             base.OnClosing(e);
 
-            if (DataContext is NPCShopEditorViewModel viewModel)
+            if (DataContext is NpcEditorViewModel viewModel)
             {
                 bool canClose = await viewModel.CloseFile();
 

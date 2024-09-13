@@ -455,7 +455,7 @@ public partial class DataTableManager : ObservableObject
                 if (DataTableString != null && CurrentStringFileName != null && directory != null)
                 {
                     string stringFilePath = Path.Combine(directory, CurrentStringFileName);
-                    await _fileManager.DataTableToRHFileAsync(file, DataTableString);
+                    await _fileManager.DataTableToRHFileAsync(CurrentStringFileName, DataTableString);
                 }
             }
             catch (Exception ex)
@@ -1277,12 +1277,29 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    [RelayCommand]
+    private void UpdateItemValue((object? newValue, string column) parameter)
+    {
+        var (newValue, column) = parameter;
+
+        UpdateItemValue(SelectedItem, newValue, column);
+    }
+
+    [RelayCommand]
+    private void UpdateItemStringValue((object? newValue, string column) parameter)
+    {
+        var (newValue, column) = parameter;
+
+        UpdateItemValue(SelectedItemString, newValue, column);
+    }
+
     private void UpdateItemValue(DataRowView? item, object? newValue, string column)
     {
         if (item != null && item.Row.Table.Columns.Contains(column))
         {
             var currentValue = item[column];
-            bool isDifferent = !Equals(currentValue, newValue);
+
+            bool isDifferent = !AreValuesEqual(currentValue, newValue);
 
             if (isDifferent)
             {
@@ -1314,6 +1331,29 @@ public partial class DataTableManager : ObservableObject
             }
         }
     }
+
+    private static bool AreValuesEqual(object? value1, object? value2)
+    {
+        if (value1 == null || value2 == null)
+        {
+            return Equals(value1, value2);
+        }
+
+        if (value1.GetType() != value2.GetType())
+        {
+            try
+            {
+                value2 = Convert.ChangeType(value2, value1.GetType());
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        return Equals(value1, value2);
+    }
+
 
     public void UpdateSelectedItemValue(object? newValue, string column)
     {

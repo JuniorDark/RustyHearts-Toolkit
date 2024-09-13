@@ -132,7 +132,7 @@
                     d:Text="SQL Password"
                     FontTypography="BodyStrong"
                     Text="{x:Static rs:Resources.SQLPassword}" />
-                <ui:PasswordBox
+                <ui:TextBox
                     Width="200"
                     Height="35"
                     IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
