@@ -19,14 +19,14 @@ jobs:
 
       # Build with --self-contained false
       - name: Build Rusty Hearts Toolkit (No Self-Contained)
-        run: dotnet publish --configuration Release --self-contained false --runtime win-x64 /p:PublishSingleFile=false --output ./publish/RHToolkit_framework_dependent
+        run: dotnet publish ./RHToolkit.sln --configuration Release --self-contained false --runtime win-x64 /p:PublishSingleFile=false /p:PublishDir=./publish/RHToolkit_framework_dependent
 
       - name: Zip output files (No Self-Contained)
         run: Compress-Archive -Path "./publish/RHToolkit_framework_dependent" -DestinationPath RustyHearts-Toolkit-Framework-Dependent.zip
 
       # Build with --self-contained true
       - name: Build Rusty Hearts Toolkit (Self-Contained)
-        run: dotnet publish --configuration Release --self-contained true --runtime win-x64 /p:PublishSingleFile=false --output ./publish/RHToolkit_self
+        run: dotnet publish ./RHToolkit.sln --configuration Release --self-contained true --runtime win-x64 /p:PublishSingleFile=false /p:PublishDir=./publish/RHToolkit_self
 
       - name: Zip output files (Self-Contained)
         run: Compress-Archive -Path "./publish/RHToolkit_self" -DestinationPath RustyHearts-Toolkit-SelfContained.zip
