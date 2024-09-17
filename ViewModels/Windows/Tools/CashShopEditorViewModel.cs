@@ -747,16 +747,11 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private ItemDataViewModel? _itemDataViewModel;
 
-        private bool _isUpdatingSelectedItem = false;
-
         [ObservableProperty]
         private string? _itemName;
-        partial void OnItemNameChanged(string? oldValue, string? newValue)
+        partial void OnItemNameChanged(string? value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
-            {
-                DataTableManager.SelectedItem["wszName"] = newValue;
-            }
+            UpdateSelectedItemValue(value, "wszName");
         }
 
         private void UpdateItemName()
@@ -772,12 +767,9 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private string? _shopDescription;
-        partial void OnShopDescriptionChanged(string? oldValue, string? newValue)
+        partial void OnShopDescriptionChanged(string? value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
-            {
-                DataTableManager.SelectedItem["wszDesc"] = newValue;
-            }
+            UpdateSelectedItemValue(value, "wszDesc");
         }
 
         [ObservableProperty]
@@ -804,12 +796,9 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private string? _iconName;
 
-        partial void OnIconNameChanged(string? oldValue, string? newValue)
+        partial void OnIconNameChanged(string? value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
-            {
-                DataTableManager.SelectedItem["szShopBigIcon"] = newValue;
-            }
+            UpdateSelectedItemValue(value, "szShopBigIcon");
         }
 
         [ObservableProperty]
@@ -824,25 +813,22 @@ namespace RHToolkit.ViewModels.Windows
                 {
                     ItemId = newValue
                 };
-
-                ItemDataViewModel = ItemDataManager.GetItemData(itemData);
-                ItemName = ItemDataViewModel.ItemName;
-                IconName = ItemDataManager.GetShopIcon(ItemDataViewModel.IconName!);
-                ShopCategory = GetShopCategory(ItemDataViewModel.SubCategory);
-                CostumeCategory = GetCostumeCategory(ItemDataViewModel.SubCategory);
-                Class = ItemDataViewModel.JobClass;
-                ItemAmountMax = ItemDataViewModel.OverlapCnt;
+                var itemDataViewModel = ItemDataManager.GetItemData(itemData);
+                ItemDataViewModel = itemDataViewModel;
+                ItemName = itemDataViewModel.ItemName;
+                IconName = ItemDataManager.GetShopIcon(itemDataViewModel.IconName!);
+                ShopCategory = GetShopCategory(itemDataViewModel.SubCategory);
+                CostumeCategory = GetCostumeCategory(itemDataViewModel.SubCategory);
+                Class = itemDataViewModel.JobClass;
+                ItemAmountMax = itemDataViewModel.OverlapCnt;
             }
         }
 
         [ObservableProperty]
         private int _shopID;
-        partial void OnShopIDChanged(int oldValue, int newValue)
+        partial void OnShopIDChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
-            {
-                DataTableManager.SelectedItem["nID"] = newValue;
-            }
+            UpdateSelectedItemValue(value, "nID");
         }
 
         [ObservableProperty]
@@ -852,24 +838,21 @@ namespace RHToolkit.ViewModels.Windows
         private int _itemAmountMax;
 
         [ObservableProperty]
-        private string _itemAmountText = "Item Amount";
+        private string _itemAmountText = "Item Amount/Duration (Minutes)";
 
         partial void OnItemAmountChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["nValue00"] = value;
-                UpdateItemName();
-            }
+            UpdateSelectedItemValue(value, "nValue00");
+            UpdateItemName();
         }
 
         [ObservableProperty]
         private int _paymentType;
         partial void OnPaymentTypeChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
+            UpdateSelectedItemValue(value, "nPaymentType");
+            if (!_isUpdatingSelectedItem)
             {
-                DataTableManager.SelectedItem["nPaymentType"] = value;
                 IsBonusEnabled = value == 0;
                 NoGift = value == 1;
                 if (BonusRate != 0)
@@ -882,13 +865,10 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private int _class;
-        partial void OnClassChanged(int oldValue, int newValue)
+        partial void OnClassChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
-            {
-                DataTableManager.SelectedItem["nJob"] = newValue;
-                DataTableManager.SelectedItem["szJob"] = newValue;
-            }
+            UpdateSelectedItemValue(value, "nJob");
+            UpdateSelectedItemValue(value, "szJob");
         }
 
         [ObservableProperty]
@@ -917,94 +897,67 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private int _cashCost;
-        partial void OnCashCostChanged(int oldValue, int newValue)
+        partial void OnCashCostChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
+            UpdateSelectedItemValue(value, "nCashCost00");
+            if (BonusRate != 0 && PaymentType == 0)
             {
-                if (BonusRate != 0 && PaymentType == 0)
-                {
-                    CashMileage = newValue * BonusRate / 100;
-                }
-                else
-                {
-                    CashMileage = 0;
-                }
-
-                DataTableManager.SelectedItem["nCashCost00"] = newValue;
+                CashMileage = value * BonusRate / 100;
+            }
+            else
+            {
+                CashMileage = 0;
             }
         }
 
         [ObservableProperty]
         private int _saleCashCost;
-        partial void OnSaleCashCostChanged(int oldValue, int newValue)
+        partial void OnSaleCashCostChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["nSaleCashCost00"] = newValue;
-            }
+            UpdateSelectedItemValue(value, "nSaleCashCost00");
         }
 
         [ObservableProperty]
         private int _cashMileage;
-        partial void OnCashMileageChanged(int oldValue, int newValue)
+        partial void OnCashMileageChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
-            {
-                DataTableManager.SelectedItem["nCashMileage"] = newValue;
-            }
+            UpdateSelectedItemValue(value, "nCashMileage");
         }
 
         [ObservableProperty]
         private int _itemState;
-        partial void OnItemStateChanged(int oldValue, int newValue)
+        partial void OnItemStateChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
-            {
-                DataTableManager.SelectedItem["nItemState"] = newValue;
-            }
+            UpdateSelectedItemValue(value, "nItemState");
         }
 
         [ObservableProperty]
         private bool _isHidden;
-        partial void OnIsHiddenChanged(bool oldValue, bool newValue)
+        partial void OnIsHiddenChanged(bool value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
-            {
-                DataTableManager.SelectedItem["nHidden"] = newValue == true ? 1 : 0;
-            }
+            UpdateSelectedItemValue(value, "nHidden");
         }
 
         [ObservableProperty]
         private bool _noGift;
-        partial void OnNoGiftChanged(bool oldValue, bool newValue)
+        partial void OnNoGiftChanged(bool value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null && oldValue != newValue)
-            {
-                DataTableManager.SelectedItem["nNoGift"] = newValue == true ? 1 : 0;
-            }
+            UpdateSelectedItemValue(value, "nNoGift");
         }
 
         [ObservableProperty]
         private int _shopCategory;
         partial void OnShopCategoryChanged(int value)
         {
-            ItemAmountText = value == 0 ? "Duration (Minutes)" : "Item Amount";
             PopulateCostumeCategoryItems(value);
-
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["nCategory"] = value;
-            }
+            UpdateSelectedItemValue(value, "nCategory");
         }
 
         [ObservableProperty]
         private int _costumeCategory;
         partial void OnCostumeCategoryChanged(int value)
         {
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                DataTableManager.SelectedItem["nCostumeCategory"] = value;
-            }
+            UpdateSelectedItemValue(value, "nCostumeCategory");
         }
 
         [ObservableProperty]
@@ -1043,15 +996,26 @@ namespace RHToolkit.ViewModels.Windows
             var formattedDate = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : "No Date Set";
 
             GetType().GetProperty(dateValueProperty)?.SetValue(this, formattedDate);
+            int dateIntValue = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
 
-            if (!_isUpdatingSelectedItem && DataTableManager.SelectedItem != null)
-            {
-                int dateIntValue = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
-                DataTableManager.SelectedItem[dataTableKey] = dateIntValue;
-            }
+            UpdateSelectedItemValue(dateIntValue, dataTableKey);
         }
 
         #endregion
+
+        #endregion
+
+        #region Properties Helper
+
+        private bool _isUpdatingSelectedItem = false;
+
+        private void UpdateSelectedItemValue(object? newValue, string column)
+        {
+            if (_isUpdatingSelectedItem)
+                return;
+
+            DataTableManager.UpdateSelectedItemValue(newValue, column);
+        }
 
         #endregion
     }
