@@ -9,14 +9,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.0.x'
+
       - name: Build Rusty Hearts Toolkit
-        run: dotnet publish --configuration Release --self-contained false --runtime win-x64 /p:PublishSingleFile=false --output ./publish/RHToolkit
+        run: dotnet publish ./path/to/your/project.csproj --configuration Release --self-contained false --runtime win-x64 /p:PublishSingleFile=false /p:PublishDir=./publish/RHToolkit
+      
       - name: Zip output files
         run: Compress-Archive -Path "./publish/RHToolkit" -DestinationPath RustyHearts-Toolkit.zip
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
