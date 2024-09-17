@@ -1,0 +1,72 @@
+name: Release
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # Build with --self-contained false
+      - name: Build Rusty Hearts Toolkit (No Self-Contained)
+        run: dotnet publish --configuration Release --self-contained false --runtime win-x64 /p:PublishSingleFile=false --output ./publish/RHToolkit_framework_dependent
+
+      - name: Zip output files (No Self-Contained)
+        run: Compress-Archive -Path "./publish/RHToolkit_framework_dependent" -DestinationPath RustyHearts-Toolkit-Framework-Dependent.zip
+
+      # Build with --self-contained true
+      - name: Build Rusty Hearts Toolkit (Self-Contained)
+        run: dotnet publish --configuration Release --self-contained true --runtime win-x64 /p:PublishSingleFile=false --output ./publish/RHToolkit_self
+
+      - name: Zip output files (Self-Contained)
+        run: Compress-Archive -Path "./publish/RHToolkit_self" -DestinationPath RustyHearts-Toolkit-SelfContained.zip
+
+      - name: Get version from compiled assembly
+        id: version
+        run: |
+          $version = (Get-Command "./publish/RHToolkit_framework_dependent/Rusty Hearts Toolkit.dll").FileVersionInfo.FileVersion
+          echo "::set-output name=version::$version"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          release_name: v${{ steps.version.outputs.version }}
+          body: Automated release created by GitHub Actions.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload the first asset (No Self-Contained)
+      - name: Upload No Self-Contained Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./RustyHearts-Toolkit-Framework-Dependent.zip
+          asset_name: RustyHearts-Toolkit-Framework-Dependent.zip
+          asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Upload the second asset (Self-Contained)
+      - name: Upload Self-Contained Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./RustyHearts-Toolkit-SelfContained.zip
+          asset_name: RustyHearts-Toolkit-SelfContained.zip
+          asset_content_type: application/zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
