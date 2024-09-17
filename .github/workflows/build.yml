@@ -16,7 +16,7 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Build Rusty Hearts Toolkit
-        run: dotnet publish ./path/to/your/project.csproj --configuration Release --self-contained false --runtime win-x64 /p:PublishSingleFile=false /p:PublishDir=./publish/RHToolkit
+        run: dotnet publish ./RHToolkit.sln --configuration Release --self-contained false --runtime win-x64 /p:PublishSingleFile=false /p:PublishDir=./publish/RHToolkit
       
       - name: Zip output files
         run: Compress-Archive -Path "./publish/RHToolkit" -DestinationPath RustyHearts-Toolkit.zip
