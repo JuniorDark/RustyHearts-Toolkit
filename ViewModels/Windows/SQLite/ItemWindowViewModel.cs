@@ -19,6 +19,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
         _cachedDataManager = cachedDataManager;
         _itemDataManager = itemDataManager;
 
+        IsSlotVisible = Visibility.Collapsed;
+        IsOptionsVisible = Visibility.Collapsed;
+        IsItemAmountVisible = Visibility.Collapsed;
+
         WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
     }
@@ -557,7 +561,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     #region Properties
 
     [ObservableProperty]
-    private string _title = "Add Item";
+    private string _title = "Item List";
 
     [ObservableProperty]
     private string _addItemText = "Add Selected Item";

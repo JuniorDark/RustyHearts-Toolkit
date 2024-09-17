@@ -12,6 +12,8 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
 
     #region Windows
 
+    #region Item Window
+
     private readonly Dictionary<Guid, Window> _itemWindows = [];
 
     public void OpenItemWindow(Guid token, string messageType, ItemData itemData, CharacterData? characterData = null)
@@ -47,6 +49,75 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
 
         WeakReferenceMessenger.Default.Send(new ItemDataMessage(itemData, "ItemWindow", messageType, token));
     }
+
+    #endregion
+
+    #region Npc Shop Window
+
+    private readonly Dictionary<Guid, Window> _npcShopWindows = [];
+
+    public void OpenNpcShopWindow(Guid token, NameID shopID, NameID? shopTitle)
+    {
+        if (_npcShopWindows.TryGetValue(token, out Window? existingWindow))
+        {
+            if (existingWindow.WindowState == WindowState.Minimized)
+            {
+                existingWindow.WindowState = WindowState.Normal;
+            }
+
+            existingWindow.Focus();
+        }
+        else
+        {
+            var npcShopWindow = _windowsProviderService.ShowInstance<NpcShopWindow>(true);
+            if (npcShopWindow != null)
+            {
+                _openWindowsCount++;
+                npcShopWindow.Closed += (sender, args) =>
+                {
+                    _npcShopWindows.Remove(token);
+                    _openWindowsCount--;
+                };
+                _npcShopWindows[token] = npcShopWindow;
+            }
+        }
+
+        WeakReferenceMessenger.Default.Send(new NpcShopMessage(shopID, token, shopTitle));
+    }
+
+    private readonly Dictionary<Guid, Window> _itemMixWindows = [];
+
+    public void OpenItemMixWindow(Guid token, string group, string? messageType)
+    {
+        if (_itemMixWindows.TryGetValue(token, out Window? existingWindow))
+        {
+            if (existingWindow.WindowState == WindowState.Minimized)
+            {
+                existingWindow.WindowState = WindowState.Normal;
+            }
+
+            existingWindow.Focus();
+        }
+        else
+        {
+            var itemMixWindow = _windowsProviderService.ShowInstance<ItemMixWindow>(true);
+            if (itemMixWindow != null)
+            {
+                _openWindowsCount++;
+                itemMixWindow.Closed += (sender, args) =>
+                {
+                    _itemMixWindows.Remove(token);
+                    _openWindowsCount--;
+                };
+                _itemMixWindows[token] = itemMixWindow;
+            }
+        }
+
+        WeakReferenceMessenger.Default.Send(new ItemMixMessage(group, token, messageType));
+    }
+    #endregion
+
+    #region Database Windows
 
     private static int _openWindowsCount = 0;
     private readonly Dictionary<Guid, Window> _characterWindows = [];
@@ -134,6 +205,8 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
     {
         OpenWindow<FortuneWindow>(characterData, () => _windowsProviderService.ShowInstance<FortuneWindow>(true), _fortuneWindows, "FortuneWindow");
     }
+
+    #endregion
 
     #endregion
 }

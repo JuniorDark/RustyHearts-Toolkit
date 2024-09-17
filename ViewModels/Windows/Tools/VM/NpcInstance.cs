@@ -1,4 +1,6 @@
-﻿public partial class NpcInstance : ObservableObject
+﻿using RHToolkit.Models;
+
+public partial class NpcInstance : ObservableObject
 {
     [ObservableProperty]
     private int _randomQuestGroup;
@@ -14,5 +16,8 @@
 
     [ObservableProperty]
     private int _shopID;
+
+    [ObservableProperty]
+    private NameID? _selectedShop;
 
 }

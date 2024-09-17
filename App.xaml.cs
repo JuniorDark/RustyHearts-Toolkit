@@ -54,7 +54,6 @@ public partial class App : Application
                 _ = services.AddSingleton<GMDatabaseManagerViewModel>();
                 _ = services.AddSingleton<CouponPage>();
                 _ = services.AddSingleton<CouponViewModel>();
-
                 // All other services and viewmodels
                 _ = services.AddSingleton<ISqlDatabaseService, SqlDatabaseService>();
                 _ = services.AddSingleton<IDatabaseService, DatabaseService>();
@@ -64,16 +63,14 @@ public partial class App : Application
                 _ = services.AddSingleton<CachedDataManager>();
                 _ = services.AddSingleton<CharacterDataManager>();
                 _ = services.AddSingleton<MailDataManager>();
+                // Database services and viewmodels
                 _ = services.AddTransient<ItemDataManager>();
-
-                _ = services.AddTransient<MailWindow>();
-                _ = services.AddTransient<MailWindowViewModel>();
-                _ = services.AddTransient<ItemWindow>();
-                _ = services.AddTransient<ItemWindowViewModel>();
                 _ = services.AddTransient<ItemDataViewModel>();
                 _ = services.AddTransient<CharacterWindow>();
                 _ = services.AddTransient<CharacterWindowViewModel>();
                 _ = services.AddTransient<CharacterDataViewModel>();
+                _ = services.AddTransient<MailWindow>();
+                _ = services.AddTransient<MailWindowViewModel>();
                 _ = services.AddTransient<TitleWindow>();
                 _ = services.AddTransient<TitleWindowViewModel>();
                 _ = services.AddTransient<SanctionWindow>();
@@ -86,6 +83,7 @@ public partial class App : Application
                 _ = services.AddTransient<InventoryWindowViewModel>();
                 _ = services.AddTransient<StorageWindow>();
                 _ = services.AddTransient<StorageWindowViewModel>();
+                // Editor services and viewmodels
                 _ = services.AddTransient<RHEditorWindow>();
                 _ = services.AddTransient<RHEditorViewModel>();
                 _ = services.AddTransient<CashShopEditorWindow>();
@@ -104,6 +102,13 @@ public partial class App : Application
                 _ = services.AddTransient<NPCShopEditorViewModel>();
                 _ = services.AddTransient<TitleEditorWindow>();
                 _ = services.AddTransient<TitleEditorViewModel>();
+                // SQLite services and viewmodels
+                _ = services.AddTransient<ItemWindow>();
+                _ = services.AddTransient<ItemWindowViewModel>();
+                _ = services.AddTransient<NpcShopWindow>();
+                _ = services.AddTransient<NPCShopViewModel>();
+                _ = services.AddTransient<ItemMixWindow>();
+                _ = services.AddTransient<ItemMixViewModel>();
 
             }
         )

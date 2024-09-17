@@ -1392,7 +1392,10 @@
                         ItemsSource="{Binding DataContext.ItemDataManager.ClassItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         SelectionMode="Multiple">
                         <i:Interaction.Behaviors>
-                            <bh:ListViewSelectionBehavior SelectedItemsString="{Binding DataContext.PreviewClassList, RelativeSource={RelativeSource AncestorType=ContentControl}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <bh:DataRowViewBehavior
+                                Column="szPreViewClass"
+                                SelectedItemsString="{Binding DataTableManager.SelectedItem[szPreViewClass], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                         </i:Interaction.Behaviors>
                     </ListView>
                 </StackPanel>

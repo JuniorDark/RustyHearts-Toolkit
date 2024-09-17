@@ -8,12 +8,13 @@
     x:Name="Frame"
     Height="Auto"
     d:DataContext="{d:DesignInstance Type=controls:ItemDataViewModel}"
-    d:DesignHeight="600"
+    d:DesignHeight="650"
     d:DesignWidth="300"
     mc:Ignorable="d">
     <ContentControl Template="{StaticResource lb_def_box01}">
         <Grid x:Name="gearGrid">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -372,7 +373,7 @@
                 Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
             <TextBlock
                 x:Name="tbPetFood"
-                Grid.Row="22"
+                Grid.Row="23"
                 Margin="10,10,0,10"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
@@ -381,6 +382,17 @@
                 Foreground="{Binding PetFoodColor, Converter={StaticResource StringToBrushConverter}}"
                 Style="{StaticResource ArialMS}"
                 Text="{Binding PetFoodText}" />
+            <TextBlock
+                x:Name="tbid"
+                Grid.Row="22"
+                Margin="10,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="Item ID: "
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding ItemId, StringFormat=' Item ID: {0}'}" />
         </Grid>
     </ContentControl>
 

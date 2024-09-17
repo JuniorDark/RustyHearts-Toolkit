@@ -73,6 +73,19 @@ namespace RHToolkit.Services
             return itemList;
         }
 
+        public List<ItemData> GetItemDataLists()
+        {
+            List<ItemData> itemList =
+                [
+                    .. GetItemDataList(ItemType.Item, "itemlist"),
+                    .. GetItemDataList(ItemType.Costume, "itemlist_costume"),
+                    .. GetItemDataList(ItemType.Armor, "itemlist_armor"),
+                    .. GetItemDataList(ItemType.Weapon, "itemlist_weapon"),
+                ];
+
+            return itemList;
+        }
+
         private string GetItemQuery(string itemTableName)
         {
             string descriptionField = currentLanguage == "ko-KR" && itemTableName == "itemlist_costume" ? "szItemDescription" : "wszItemDescription";
@@ -141,7 +154,7 @@ namespace RHToolkit.Services
             return optionItems;
         }
 
-        private List<NameID> GetItemsFromQuery(string query)
+        private List<NameID> GetItemsFromQuery(string query, string? type = null)
         {
             List<NameID> items = [];
             using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
@@ -156,9 +169,18 @@ namespace RHToolkit.Services
                     int id = command.GetInt32(0);
                     string name = command.GetString(1);
 
-                    string formattedName = $"({id}) {name}";
+                    string formattedName;
 
-                    items.Add(new NameID { ID = id, Name = formattedName });
+                    if (type != null)
+                    {
+                        formattedName = $"({type}) ({id}) {name}";
+                    }
+                    else
+                    {
+                        formattedName = $"({id}) {name}";
+                    }
+
+                    items.Add(new NameID { ID = id, Name = formattedName, Type = type });
                 }
             }
             catch (Exception ex)
@@ -201,7 +223,7 @@ namespace RHToolkit.Services
 
         public List<NameID> GetNpcShopItems()
         {
-            return GetItemsFromQuery("SELECT nID, wszEct FROM npcshop");
+            return GetItemsFromQuery("SELECT nID, wszEct FROM npcshop", "NpcShop");
         }
 
         public List<NameID> GetQuestGroupItems()
@@ -249,6 +271,217 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+            }
+
+            return items;
+        }
+
+        public List<int> GetNpcShopItems(int shopID)
+        {
+            List<int> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = $"SELECT nItem00, nItem01, nItem02, nItem03, nItem04, nItem05, nItem06, nItem07, nItem08, nItem09, nItem10, nItem11, nItem12, nItem13, nItem14, nItem15, nItem16, nItem17, nItem18, nItem19 FROM npcshop WHERE nID = {shopID}";
+
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                while (command.Read())
+                {
+                    for (int i = 0; i < 20; i++)
+                    {
+                        int item = command.GetInt32(i);
+                        items.Add(item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving npcshop items from the database: {ex.Message}", ex);
+            }
+
+            return items;
+        }
+
+        public List<int> GetTradeShopItems(int shopID)
+        {
+            List<int> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = $"SELECT nItemID FROM tradeshop WHERE nGroupID = {shopID}";
+
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                while (command.Read())
+                {
+                    int item = command.GetInt32(0);
+                    items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving tradeshop items from the database: {ex.Message}", ex);
+            }
+
+            return items;
+        }
+
+        public List<int> GetItemMixItems(string groupIDs)
+        {
+            List<int> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                var groupIDList = groupIDs.Split(',').Select(id => id.Trim()).ToList();
+
+                string query = "SELECT nID FROM itemmix WHERE szGroup IN (" + string.Join(",", groupIDList.Select(id => $"'{id}'")) + ")";
+
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                while (command.Read())
+                {
+                    int item = command.GetInt32(0);
+                    items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving itemmix items from the database: {ex.Message}", ex);
+            }
+
+            return items;
+        }
+
+        public List<int> GetCostumeMixItems(string groupIDs)
+        {
+            List<int> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                var groupIDList = groupIDs.Split(',').Select(id => id.Trim()).ToList();
+
+                string query = "SELECT nID FROM costumemix WHERE nGroup IN (" + string.Join(",", groupIDList) + ")";
+
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                while (command.Read())
+                {
+                    int item = command.GetInt32(0);
+                    items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving costumemix items from the database: {ex.Message}", ex);
+            }
+
+            return items;
+        }
+
+        public ObservableCollection<ItemMixData> GetItemMixList()
+        {
+            ObservableCollection<ItemMixData> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+
+            try
+            {
+                var itemList = GetItemDataLists();
+
+                var itemDictionary = itemList.ToDictionary(i => i.ItemId, i => i);
+
+                string query = @"
+                SELECT 
+                    nID, 
+                    nMixAble, 
+                    fItemMixPro00, 
+                    nItemMixCo00, 
+                    fItemMixPro01, 
+                    nItemMixCo01, 
+                    fItemMixPro02, 
+                    nItemMixCo02, 
+                    nCost, 
+                    nItemCode00, 
+                    nItemCount00, 
+                    nItemCode01, 
+                    nItemCount01, 
+                    nItemCode02, 
+                    nItemCount02, 
+                    nItemCode03, 
+                    nItemCount03, 
+                    nItemCode04, 
+                    nItemCount04, 
+                    szGroup AS MixGroup,
+                    '1' AS MixType 
+                FROM itemmix
+                UNION ALL
+                SELECT 
+                    nID, 
+                    nMixAble, 
+                    fItemMixPro00, 
+                    nItemMixCo00, 
+                    fItemMixPro01, 
+                    nItemMixCo01, 
+                    fItemMixPro02, 
+                    nItemMixCo02, 
+                    nCost, 
+                    nItemCode00, 
+                    nItemCount00, 
+                    nItemCode01, 
+                    nItemCount01, 
+                    nItemCode02, 
+                    nItemCount02, 
+                    nItemCode03, 
+                    nItemCount03, 
+                    nItemCode04, 
+                    nItemCount04, 
+                    CAST(nGroup AS TEXT) AS MixGroup,
+                    '2' AS MixType 
+                FROM costumemix
+                ";
+
+                using var reader = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                while (reader.Read())
+                {
+                    int itemId = Convert.ToInt32(reader["nID"]);
+
+                    itemDictionary.TryGetValue(itemId, out var cachedItem);
+
+                    ItemMixData item = new()
+                    {
+                        ID = itemId,
+                        MixAble = Convert.ToInt32(reader["nMixAble"]),
+                        ItemMixPro00 = Convert.ToSingle(reader["fItemMixPro00"]),
+                        ItemMixCo00 = Convert.ToInt32(reader["nItemMixCo00"]),
+                        ItemMixPro01 = Convert.ToSingle(reader["fItemMixPro01"]),
+                        ItemMixCo01 = Convert.ToInt32(reader["nItemMixCo01"]),
+                        ItemMixPro02 = Convert.ToSingle(reader["fItemMixPro02"]),
+                        ItemMixCo02 = Convert.ToInt32(reader["nItemMixCo02"]),
+                        Cost = Convert.ToInt32(reader["nCost"]),
+                        ItemCode00 = Convert.ToInt32(reader["nItemCode00"]),
+                        ItemCount00 = Convert.ToInt32(reader["nItemCount00"]),
+                        ItemCode01 = Convert.ToInt32(reader["nItemCode01"]),
+                        ItemCount01 = Convert.ToInt32(reader["nItemCount01"]),
+                        ItemCode02 = Convert.ToInt32(reader["nItemCode02"]),
+                        ItemCount02 = Convert.ToInt32(reader["nItemCount02"]),
+                        ItemCode03 = Convert.ToInt32(reader["nItemCode03"]),
+                        ItemCount03 = Convert.ToInt32(reader["nItemCount03"]),
+                        ItemCode04 = Convert.ToInt32(reader["nItemCode04"]),
+                        ItemCount04 = Convert.ToInt32(reader["nItemCount04"]),
+                        MixGroup = reader["MixGroup"].ToString(),
+                        MixType = Convert.ToInt32(reader["MixType"]),
+                        ItemName = cachedItem?.ItemName ?? "Unknown Item",
+                        IconName = cachedItem?.IconName ?? "icon_empty_def",
+                        ItemBranch = cachedItem?.Branch ?? 0,
+                    };
+
+                    items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving item mix data from the database: {ex.Message}", ex);
             }
 
             return items;
@@ -325,7 +558,7 @@ namespace RHToolkit.Services
             };
         }
 
-        private List<NameID> GetUniqueItems(string query, bool isInt)
+        private List<NameID> GetUniqueItems(string query, bool isInt, string? type = null)
         {
             var items = GetUniqueItemsFromQuery(query, isInt);
 
@@ -356,7 +589,7 @@ namespace RHToolkit.Services
             }
 
             List<NameID> result = [.. uniqueGroups
-                .Select(group => new NameID { ID = int.Parse(group), Name = group })
+                .Select(group => new NameID { ID = int.Parse(group), Name = type != null ?  $"({type}) {group}": group, Type = type})
                 .OrderBy(item => item.ID)];
 
             return result;
@@ -395,17 +628,17 @@ namespace RHToolkit.Services
 
         public List<NameID> GetItemMixGroupItems()
         {
-            return GetUniqueItems("SELECT szGroup FROM itemmix", false);
+            return GetUniqueItems("SELECT szGroup FROM itemmix", false, "ItemMix");
         }
 
         public List<NameID> GetCostumeMixGroupItems()
         {
-            return GetUniqueItems("SELECT nGroup FROM costumemix", true);
+            return GetUniqueItems("SELECT nGroup FROM costumemix", true, "CostumeMix");
         }
 
         public List<NameID> GetTradeShopGroupItems()
         {
-            return GetUniqueItems("SELECT nGroupID FROM tradeshop", true);
+            return GetUniqueItems("SELECT nGroupID FROM tradeshop", true, "TradeShop");
         }
 
         public List<NameID> GetNpcShopsItems()
@@ -419,7 +652,6 @@ namespace RHToolkit.Services
 
             return mergedItems;
         }
-
 
         private string GetStringValueFromQuery(string query, params (string, object)[] parameters)
         {

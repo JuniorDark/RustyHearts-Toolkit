@@ -67,8 +67,8 @@
                 Foreground="White">
                 <ui:TitleBar.Icon>
                     <ui:ImageIcon
-                        Width="20"
-                        Height="20"
+                        Width="16"
+                        Height="16"
                         Margin="0,-1,0,-3"
                         Source="/Assets/icon/icon_ui_roulette.png" />
                 </ui:TitleBar.Icon>
@@ -150,6 +150,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -214,6 +215,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -234,6 +236,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nLookAtType], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -254,6 +257,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[fLookAtRange], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -325,8 +329,10 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
-                                            Value="{Binding DataTableManager.SelectedItem[nLevel], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                            ValidationMode="Disabled"
+                                            Value="{Binding DataTableManager.SelectedItem[nLevel], Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                             <i:Interaction.Behaviors>
                                                 <bh:DataRowViewBehavior Column="nLevel" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                             </i:Interaction.Behaviors>
@@ -345,6 +351,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[fMove01Speed], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -365,6 +372,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[fMove02Speed], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -385,6 +393,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nHPClass], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -405,6 +414,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[fHPRevision], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -425,6 +435,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nMPClass], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -445,6 +456,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[fMPRevision], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -516,7 +528,6 @@
                                         </TextBox>
                                     </StackPanel>
                                 </Grid>
-
                             </TabItem>
                             <TabItem
                                 Width="300"
@@ -556,6 +567,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nSkillFrantz00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -576,6 +588,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nSkillAngela00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -596,6 +609,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nSkillTude00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -616,6 +630,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nSkillNatacha00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -636,6 +651,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nskillGroupFrantz00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -656,6 +672,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nskillGroupAngela00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -676,6 +693,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nskillGroupTude00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -696,6 +714,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nskillGroupNatacha00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -716,6 +735,7 @@
                                             Margin="0,0,0,0"
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Top"
+                                            Maximum="2147483647"
                                             Minimum="0"
                                             Value="{Binding DataTableManager.SelectedItem[nskillGroupGuild00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
                                             <i:Interaction.Behaviors>
@@ -725,7 +745,6 @@
                                     </StackPanel>
                                 </Grid>
                             </TabItem>
-
                         </ui:TabView>
                     </TabItem>
                     <TabItem
@@ -741,10 +760,10 @@
                             Background="Transparent"
                             BorderBrush="Transparent">
                             <TabItem
-                                Width="300"
+                                Width="200"
                                 Height="Auto"
                                 Foreground="White"
-                                Header="Shop Data"
+                                Header="Shops"
                                 Style="{StaticResource lb_tab}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -756,93 +775,75 @@
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <StackPanel
+                                        Grid.Row="0"
                                         Grid.Column="0"
-                                        Margin="5,0,0,0"
+                                        Margin="0,0,0,0"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
+                                        VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Shop Type" />
-                                        <ui:NumberBox
-                                            Width="140"
+                                        <TextBlock Foreground="White" Text="Craft Groups" />
+                                        <ListView
+                                            Width="300"
+                                            Height="120"
                                             Margin="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            Minimum="0"
-                                            Value="{Binding DataTableManager.SelectedItem[nShopType], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                            DisplayMemberPath="Name"
+                                            ItemsSource="{Binding DataContext.ItemMixItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                            SelectionMode="Multiple">
                                             <i:Interaction.Behaviors>
-                                                <bh:DataRowViewBehavior Column="nShopType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                <bh:DataRowViewBehavior
+                                                    Column="szMixGroup"
+                                                    SelectedItemsString="{Binding DataTableManager.SelectedItem[szMixGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                             </i:Interaction.Behaviors>
-                                        </ui:NumberBox>
+                                        </ListView>
+                                        <Button
+                                            Width="140"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Command="{Binding DataContext.OpenItemMixWindowCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding DataTableManager.SelectedItem[szMixGroup]}"
+                                            Content="Preview"
+                                            Cursor="Hand"
+                                            Foreground="White"
+                                            Style="{StaticResource lb_def_button02}" />
                                     </StackPanel>
                                     <StackPanel
+                                        Grid.Row="0"
                                         Grid.Column="1"
-                                        Margin="5,0,0,0"
+                                        Margin="0,0,0,0"
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
+                                        VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Shop SubType" />
-                                        <ui:NumberBox
-                                            Width="140"
+                                        <TextBlock Foreground="White" Text="Costume Groups" />
+                                        <ListView
+                                            Width="300"
+                                            Height="120"
                                             Margin="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            Minimum="0"
-                                            Value="{Binding DataTableManager.SelectedItem[nShopSubType], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                            DisplayMemberPath="Name"
+                                            ItemsSource="{Binding DataContext.CostumeMixItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                            SelectionMode="Multiple">
                                             <i:Interaction.Behaviors>
-                                                <bh:DataRowViewBehavior Column="nShopSubType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                <bh:DataRowViewBehavior
+                                                    Column="szCostumeGroup"
+                                                    SelectedItemsString="{Binding DataTableManager.SelectedItem[szCostumeGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                             </i:Interaction.Behaviors>
-                                        </ui:NumberBox>
+                                        </ListView>
+                                        <Button
+                                            Width="140"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Command="{Binding DataContext.OpenCostumeMixWindowCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding DataTableManager.SelectedItem[szCostumeGroup]}"
+                                            Content="Preview"
+                                            Cursor="Hand"
+                                            Foreground="White"
+                                            Style="{StaticResource lb_def_button02}" />
                                     </StackPanel>
                                     <StackPanel
                                         Grid.Row="1"
-                                        Grid.Column="0"
-                                        Margin="5,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Fortune Group" />
-                                        <ui:NumberBox
-                                            Width="140"
-                                            Margin="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            Minimum="0"
-                                            Value="{Binding DataTableManager.SelectedItem[nfortuneGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
-                                            <i:Interaction.Behaviors>
-                                                <bh:DataRowViewBehavior Column="nfortuneGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                            </i:Interaction.Behaviors>
-                                        </ui:NumberBox>
-                                    </StackPanel>
-                                    <StackPanel
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        Margin="5,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Rune Machine Group" />
-                                        <ui:NumberBox
-                                            Width="140"
-                                            Margin="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            Minimum="0"
-                                            Value="{Binding DataTableManager.SelectedItem[nRuneMachineGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
-                                            <i:Interaction.Behaviors>
-                                                <bh:DataRowViewBehavior Column="nRuneMachineGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                            </i:Interaction.Behaviors>
-                                        </ui:NumberBox>
-                                    </StackPanel>
-                                    <StackPanel
-                                        Grid.Row="5"
                                         Grid.Column="0"
                                         Margin="5,0,0,0"
                                         HorizontalAlignment="Left"
@@ -865,27 +866,7 @@
                                         </ComboBox>
                                     </StackPanel>
                                     <StackPanel
-                                        Grid.Row="2"
-                                        Grid.Column="0"
-                                        Margin="5,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Hair Cut Shop Group" />
-                                        <ui:NumberBox
-                                            Width="140"
-                                            Margin="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            Minimum="0"
-                                            Value="{Binding DataTableManager.SelectedItem[nHairCutShopGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
-                                            <i:Interaction.Behaviors>
-                                                <bh:DataRowViewBehavior Column="nHairCutShopGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                            </i:Interaction.Behaviors>
-                                        </ui:NumberBox>
-                                    </StackPanel>
-                                    <StackPanel
-                                        Grid.Row="5"
+                                        Grid.Row="1"
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2"
                                         Margin="5,0,0,0"
@@ -910,46 +891,6 @@
                                     </StackPanel>
                                     <StackPanel
                                         Grid.Row="2"
-                                        Grid.Column="1"
-                                        Margin="5,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Hair Dyeing Shop Group" />
-                                        <ui:NumberBox
-                                            Width="140"
-                                            Margin="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            Minimum="0"
-                                            Value="{Binding DataTableManager.SelectedItem[nDyeingShopGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
-                                            <i:Interaction.Behaviors>
-                                                <bh:DataRowViewBehavior Column="nDyeingShopGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                            </i:Interaction.Behaviors>
-                                        </ui:NumberBox>
-                                    </StackPanel>
-                                    <StackPanel
-                                        Grid.Row="3"
-                                        Grid.Column="0"
-                                        Margin="5,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center"
-                                        Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Trade Window Type" />
-                                        <ui:NumberBox
-                                            Width="140"
-                                            Margin="0,0,0,0"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            Minimum="0"
-                                            Value="{Binding DataTableManager.SelectedItem[nTradeWindowType], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
-                                            <i:Interaction.Behaviors>
-                                                <bh:DataRowViewBehavior Column="nTradeWindowType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                            </i:Interaction.Behaviors>
-                                        </ui:NumberBox>
-                                    </StackPanel>
-                                    <StackPanel
-                                        Grid.Row="6"
                                         Grid.Column="0"
                                         Margin="5,0,0,0"
                                         HorizontalAlignment="Left"
@@ -962,6 +903,7 @@
                                             DisplayMemberPath="Name"
                                             IsReadOnly="True"
                                             ItemsSource="{Binding DataContext.StringItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            SelectedItem="{Binding DataContext.SelectedTradeShopTitle, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             SelectedValue="{Binding DataTableManager.SelectedItem[nTradeShopTitle], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                             SelectedValuePath="ID"
                                             Style="{StaticResource ComboBoxStyle}"
@@ -972,7 +914,7 @@
                                         </ComboBox>
                                     </StackPanel>
                                     <StackPanel
-                                        Grid.Row="6"
+                                        Grid.Row="2"
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2"
                                         Margin="5,0,0,0"
@@ -986,6 +928,7 @@
                                             DisplayMemberPath="Name"
                                             IsReadOnly="True"
                                             ItemsSource="{Binding DataContext.StringItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            SelectedItem="{Binding DataContext.SelectedShopTitle, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             SelectedValue="{Binding DataTableManager.SelectedItem[nShopTitleStringID], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                             SelectedValuePath="ID"
                                             Style="{StaticResource ComboBoxStyle}"
@@ -996,47 +939,219 @@
                                         </ComboBox>
                                     </StackPanel>
                                     <ItemsControl
-                                        Grid.Row="7"
+                                        Grid.Row="3"
                                         Grid.ColumnSpan="3"
-                                        Margin="0,20,0,0"
+                                        Margin="0,5,0,0"
                                         AlternationCount="{Binding ShopID.Count}"
                                         ItemsSource="{Binding ShopID}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <UniformGrid Columns="2" />
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <StackPanel
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Top"
-                                                    Orientation="Vertical">
-                                                    <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Shop ID {0}'}" />
+                                                    Orientation="Horizontal">
+                                                    <TextBlock
+                                                        Margin="0,0,10,0"
+                                                        VerticalAlignment="Center"
+                                                        Foreground="White"
+                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Shop ID {0}'}" />
                                                     <ComboBox
-                                                        Width="300"
+                                                        Width="350"
                                                         Height="24"
                                                         DisplayMemberPath="Name"
                                                         IsReadOnly="True"
                                                         ItemsSource="{Binding DataContext.NpcShopsItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        SelectedItem="{Binding SelectedShop}"
                                                         SelectedValue="{Binding ShopID}"
                                                         SelectedValuePath="ID"
                                                         Style="{StaticResource ComboBoxStyle}"
                                                         Template="{StaticResource lb_combobox}" />
+                                                    <Button
+                                                        Width="140"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Command="{Binding DataContext.OpenShopWindowCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                        CommandParameter="{Binding SelectedShop}"
+                                                        Content="Preview Shop"
+                                                        Cursor="Hand"
+                                                        Foreground="White"
+                                                        Style="{StaticResource lb_def_button02}" />
                                                 </StackPanel>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </Grid>
-
                             </TabItem>
                             <TabItem
-                                Width="300"
+                                Width="200"
                                 Height="Auto"
                                 Foreground="White"
-                                Header="Shop Group"
+                                Header="Shop Data"
+                                Style="{StaticResource lb_tab}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel
+                                        Grid.Column="0"
+                                        Margin="5,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Orientation="Vertical">
+                                        <TextBlock Foreground="White" Text="Shop Type" />
+                                        <ui:NumberBox
+                                            Width="140"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top"
+                                            Maximum="2147483647"
+                                            Minimum="0"
+                                            Value="{Binding DataTableManager.SelectedItem[nShopType], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                            <i:Interaction.Behaviors>
+                                                <bh:DataRowViewBehavior Column="nShopType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                            </i:Interaction.Behaviors>
+                                        </ui:NumberBox>
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Column="1"
+                                        Margin="5,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Orientation="Vertical">
+                                        <TextBlock Foreground="White" Text="Shop SubType" />
+                                        <ui:NumberBox
+                                            Width="140"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top"
+                                            Maximum="2147483647"
+                                            Minimum="0"
+                                            Value="{Binding DataTableManager.SelectedItem[nShopSubType], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                            <i:Interaction.Behaviors>
+                                                <bh:DataRowViewBehavior Column="nShopSubType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                            </i:Interaction.Behaviors>
+                                        </ui:NumberBox>
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Margin="5,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Orientation="Vertical">
+                                        <TextBlock Foreground="White" Text="Fortune Group" />
+                                        <ui:NumberBox
+                                            Width="140"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top"
+                                            Maximum="2147483647"
+                                            Minimum="0"
+                                            Value="{Binding DataTableManager.SelectedItem[nfortuneGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                            <i:Interaction.Behaviors>
+                                                <bh:DataRowViewBehavior Column="nfortuneGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                            </i:Interaction.Behaviors>
+                                        </ui:NumberBox>
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Margin="5,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Orientation="Vertical">
+                                        <TextBlock Foreground="White" Text="Rune Machine Group" />
+                                        <ui:NumberBox
+                                            Width="140"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top"
+                                            Maximum="2147483647"
+                                            Minimum="0"
+                                            Value="{Binding DataTableManager.SelectedItem[nRuneMachineGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                            <i:Interaction.Behaviors>
+                                                <bh:DataRowViewBehavior Column="nRuneMachineGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                            </i:Interaction.Behaviors>
+                                        </ui:NumberBox>
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        Margin="5,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Orientation="Vertical">
+                                        <TextBlock Foreground="White" Text="Hair Cut Shop Group" />
+                                        <ui:NumberBox
+                                            Width="140"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top"
+                                            Maximum="2147483647"
+                                            Minimum="0"
+                                            Value="{Binding DataTableManager.SelectedItem[nHairCutShopGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                            <i:Interaction.Behaviors>
+                                                <bh:DataRowViewBehavior Column="nHairCutShopGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                            </i:Interaction.Behaviors>
+                                        </ui:NumberBox>
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Row="1"
+                                        Grid.Column="2"
+                                        Margin="5,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Orientation="Vertical">
+                                        <TextBlock Foreground="White" Text="Hair Dyeing Shop Group" />
+                                        <ui:NumberBox
+                                            Width="140"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top"
+                                            Maximum="2147483647"
+                                            Minimum="0"
+                                            Value="{Binding DataTableManager.SelectedItem[nDyeingShopGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                            <i:Interaction.Behaviors>
+                                                <bh:DataRowViewBehavior Column="nDyeingShopGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                            </i:Interaction.Behaviors>
+                                        </ui:NumberBox>
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Margin="5,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Orientation="Vertical">
+                                        <TextBlock Foreground="White" Text="Trade Window Type" />
+                                        <ui:NumberBox
+                                            Width="140"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top"
+                                            Maximum="2147483647"
+                                            Minimum="0"
+                                            Value="{Binding DataTableManager.SelectedItem[nTradeWindowType], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                            <i:Interaction.Behaviors>
+                                                <bh:DataRowViewBehavior Column="nTradeWindowType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                            </i:Interaction.Behaviors>
+                                        </ui:NumberBox>
+                                    </StackPanel>
+                                </Grid>
+                            </TabItem>
+                            <TabItem
+                                Width="200"
+                                Height="Auto"
+                                Foreground="White"
+                                Header="Shop Categories"
                                 Style="{StaticResource lb_tab}">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -1058,13 +1173,13 @@
                                         <RowDefinition Height="Auto" />
                                     </Grid.RowDefinitions>
                                     <StackPanel
-                                        Grid.Row="0"
+                                        Grid.Row="1"
                                         Grid.Column="0"
                                         Margin="0,0,0,0"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Shop Type" />
+                                        <TextBlock Foreground="White" Text="Shop Types" />
                                         <ListView
                                             Width="300"
                                             Height="120"
@@ -1073,47 +1188,10 @@
                                             ItemsSource="{Binding DataContext.ItemDataManager.CategoryFilterItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                             SelectionMode="Multiple">
                                             <i:Interaction.Behaviors>
-                                                <bh:ListViewSelectionBehavior SelectedItemsString="{Binding SShopType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                            </i:Interaction.Behaviors>
-                                        </ListView>
-                                    </StackPanel>
-                                    <StackPanel
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Margin="0,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"
-                                        Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Craft Group" />
-                                        <ListView
-                                            Width="300"
-                                            Height="120"
-                                            Margin="0,0,0,0"
-                                            DisplayMemberPath="Name"
-                                            ItemsSource="{Binding DataContext.ItemMixItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                                            SelectionMode="Multiple">
-                                            <i:Interaction.Behaviors>
-                                                <bh:ListViewSelectionBehavior SelectedItemsString="{Binding MixGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                            </i:Interaction.Behaviors>
-                                        </ListView>
-                                    </StackPanel>
-                                    <StackPanel
-                                        Grid.Row="1"
-                                        Grid.Column="0"
-                                        Margin="0,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"
-                                        Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Costume Group" />
-                                        <ListView
-                                            Width="300"
-                                            Height="120"
-                                            Margin="0,0,0,0"
-                                            DisplayMemberPath="Name"
-                                            ItemsSource="{Binding DataContext.CostumeMixItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
-                                            SelectionMode="Multiple">
-                                            <i:Interaction.Behaviors>
-                                                <bh:ListViewSelectionBehavior SelectedItemsString="{Binding CostumeGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                <bh:DataRowViewBehavior
+                                                    Column="szShopType"
+                                                    SelectedItemsString="{Binding DataTableManager.SelectedItem[szShopType], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                             </i:Interaction.Behaviors>
                                         </ListView>
                                     </StackPanel>
@@ -1124,7 +1202,7 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Trade Shop Category" />
+                                        <TextBlock Foreground="White" Text="Trade Shop Categories" />
                                         <ListView
                                             Width="300"
                                             Height="120"
@@ -1133,7 +1211,10 @@
                                             ItemsSource="{Binding DataContext.TradeShopItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                             SelectionMode="Multiple">
                                             <i:Interaction.Behaviors>
-                                                <bh:ListViewSelectionBehavior SelectedItemsString="{Binding TradeShopCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                <bh:DataRowViewBehavior
+                                                    Column="szTradeShopCategory"
+                                                    SelectedItemsString="{Binding DataTableManager.SelectedItem[szTradeShopCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                             </i:Interaction.Behaviors>
                                         </ListView>
                                     </StackPanel>
@@ -1144,7 +1225,7 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Item Craft Category" />
+                                        <TextBlock Foreground="White" Text="Item Craft Categories" />
                                         <ListView
                                             Width="300"
                                             Height="120"
@@ -1153,7 +1234,10 @@
                                             ItemsSource="{Binding DataContext.ItemDataManager.CategoryFilterItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                             SelectionMode="Multiple">
                                             <i:Interaction.Behaviors>
-                                                <bh:ListViewSelectionBehavior SelectedItemsString="{Binding NpcItemMixCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                <bh:DataRowViewBehavior
+                                                    Column="szNpcItemMixCategory"
+                                                    SelectedItemsString="{Binding DataTableManager.SelectedItem[szNpcItemMixCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                             </i:Interaction.Behaviors>
                                         </ListView>
                                     </StackPanel>
@@ -1164,7 +1248,7 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Item Craft Sub Category" />
+                                        <TextBlock Foreground="White" Text="Item Craft Sub Categories" />
                                         <ListView
                                             Width="300"
                                             Height="120"
@@ -1173,7 +1257,10 @@
                                             ItemsSource="{Binding DataContext.ItemDataManager.SubCategoryItemsFilter, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                             SelectionMode="Multiple">
                                             <i:Interaction.Behaviors>
-                                                <bh:ListViewSelectionBehavior SelectedItemsString="{Binding NpcItemMixSubCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                <bh:DataRowViewBehavior
+                                                    Column="szNpcItemMixSubCategory"
+                                                    SelectedItemsString="{Binding DataTableManager.SelectedItem[szNpcItemMixSubCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                             </i:Interaction.Behaviors>
                                         </ListView>
                                     </StackPanel>
@@ -1184,7 +1271,7 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Shop Category" />
+                                        <TextBlock Foreground="White" Text="Shop Categories" />
                                         <ListView
                                             Width="300"
                                             Height="120"
@@ -1193,7 +1280,10 @@
                                             ItemsSource="{Binding DataContext.ItemDataManager.CategoryFilterItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                             SelectionMode="Multiple">
                                             <i:Interaction.Behaviors>
-                                                <bh:ListViewSelectionBehavior SelectedItemsString="{Binding ShopCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                <bh:DataRowViewBehavior
+                                                    Column="szShopCategory"
+                                                    SelectedItemsString="{Binding DataTableManager.SelectedItem[szShopCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                             </i:Interaction.Behaviors>
                                         </ListView>
                                     </StackPanel>
@@ -1204,7 +1294,7 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Shop Sub Category" />
+                                        <TextBlock Foreground="White" Text="Shop Sub Categories" />
                                         <ListView
                                             Width="300"
                                             Height="120"
@@ -1213,15 +1303,16 @@
                                             ItemsSource="{Binding DataContext.ItemDataManager.SubCategoryItemsFilter, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                             SelectionMode="Multiple">
                                             <i:Interaction.Behaviors>
-                                                <bh:ListViewSelectionBehavior SelectedItemsString="{Binding ShopSubCategory, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                <bh:DataRowViewBehavior
+                                                    Column="szShopSubCategory"
+                                                    SelectedItemsString="{Binding DataTableManager.SelectedItem[szShopSubCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                             </i:Interaction.Behaviors>
                                         </ListView>
                                     </StackPanel>
                                 </Grid>
-
                             </TabItem>
                         </ui:TabView>
-
                     </TabItem>
                     <TabItem
                         x:Name="tab3"
@@ -1340,6 +1431,7 @@
                                                             Margin="0,0,0,0"
                                                             HorizontalAlignment="Center"
                                                             VerticalAlignment="Top"
+                                                            Maximum="2147483647"
                                                             Minimum="0"
                                                             Value="{Binding MissionGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                                     </StackPanel>
@@ -1405,7 +1497,6 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
-
                             </TabItem>
                         </ui:TabView>
                     </TabItem>

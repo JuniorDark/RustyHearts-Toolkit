@@ -14,7 +14,9 @@ namespace RHToolkit.ViewModels.Pages
         [ObservableProperty]
         private WindowCard[] _windowCards =
         [
-            new(Resources.ItemDatabase, Resources.ItemDatabaseDesc, SymbolRegular.BookDatabase24, "item"),
+            new(Resources.ItemDatabase, "Item List", SymbolRegular.BookDatabase24, "item"),
+            new("Item Craft Database", "Item Craft List", SymbolRegular.BookDatabase24, "itemmix"),
+            new("NPC Shop Database", "NPC Shop List", SymbolRegular.BookDatabase24, "npcshop"),
     ];
 
         [RelayCommand]
@@ -35,7 +37,13 @@ namespace RHToolkit.ViewModels.Pages
                 switch (value)
                 {
                     case "item":
-                        windowsProviderService.Show<ItemWindow>();
+                        windowsProviderService.ShowInstance<ItemWindow>(true);
+                        break;
+                    case "itemmix":
+                        windowsProviderService.ShowInstance<ItemMixWindow>(true);
+                        break;
+                    case "npcshop":
+                        windowsProviderService.ShowInstance<NpcShopWindow>(true);
                         break;
                 }
             }

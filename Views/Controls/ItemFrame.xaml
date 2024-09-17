@@ -27,6 +27,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <!--  ItemName  -->
             <TextBlock
@@ -210,7 +211,7 @@
                 Text="{Binding TitleEffectText}" />
             <TextBlock
                 x:Name="tbPetFood"
-                Grid.Row="9"
+                Grid.Row="10"
                 Margin="10,20,0,10"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
@@ -219,6 +220,17 @@
                 Foreground="{Binding PetFoodColor, Converter={StaticResource StringToBrushConverter}}"
                 Style="{StaticResource ArialMS}"
                 Text="{Binding PetFoodText}" />
+            <TextBlock
+                x:Name="tbid"
+                Grid.Row="9"
+                Margin="10,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="Item ID: "
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding ItemId, StringFormat=' Item ID: {0}'}" />
         </Grid>
     </ContentControl>
 </UserControl>

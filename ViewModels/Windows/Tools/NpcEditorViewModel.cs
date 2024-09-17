@@ -167,6 +167,62 @@ namespace RHToolkit.ViewModels.Windows
 
         #endregion
 
+        #region Open Shop Window
+
+        [RelayCommand]
+        private void OpenShopWindow(NameID parameter)
+        {
+            try
+            {
+                if (parameter != null && parameter.ID != 0)
+                {
+                    var shopTitle = parameter.Type == "NpcShop" ? SelectedShopTitle : SelectedTradeShopTitle;
+
+                    _windowsService.OpenNpcShopWindow(_token, parameter, shopTitle);
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
+        #endregion
+
+        #region Open ItemMix Window
+
+        [RelayCommand]
+        private void OpenItemMixWindow(string parameter)
+        {
+            try
+            {
+                if (parameter != null)
+                {
+                    _windowsService.OpenItemMixWindow(_token, parameter, "ItemMix");
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
+
+        [RelayCommand]
+        private void OpenCostumeMixWindow(string parameter)
+        {
+            try
+            {
+                if (parameter != null)
+                {
+                    _windowsService.OpenItemMixWindow(_token, parameter, "CostumeMix");
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
+        #endregion
+
         #region Add Row
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
@@ -216,14 +272,6 @@ namespace RHToolkit.ViewModels.Windows
             if (selectedItem != null)
             {
                 NpcRole = (int)selectedItem["nNPCRole"];
-                SShopType = (string?)selectedItem["szShopType"];
-                MixGroup = (string?)selectedItem["szMixGroup"];
-                CostumeGroup = (string?)selectedItem["szCostumeGroup"];
-                NpcItemMixCategory = (string?)selectedItem["szNpcItemMixCategory"];
-                NpcItemMixSubCategory = (string?)selectedItem["szNpcItemMixSubCategory"];
-                TradeShopCategory = (string?)selectedItem["szTradeShopCategory"];
-                ShopCategory = (string?)selectedItem["szShopCategory"];
-                ShopSubCategory = (string?)selectedItem["szShopSubCategory"];
 
                 QuestGroup = [];
                 RandomQuestGroup = [];
@@ -397,14 +445,22 @@ namespace RHToolkit.ViewModels.Windows
 
         private void PopulateListItems()
         {
-            QuestGroupItems = _gmDatabaseService.GetQuestGroupItems();
-            StringItems = _gmDatabaseService.GetStringItems();
-            ItemMixItems = _gmDatabaseService.GetItemMixGroupItems();
-            CostumeMixItems = _gmDatabaseService.GetCostumeMixGroupItems();
-            TradeShopItems = _gmDatabaseService.GetTradeItemGroupItems();
-            NpcShopsItems = _gmDatabaseService.GetNpcShopsItems();
-            NpcListItems = _gmDatabaseService.GetNpcListItems();
-            NpcDialogItems = _gmDatabaseService.GetNpcDialogItems();
+            try
+            {
+                QuestGroupItems = _gmDatabaseService.GetQuestGroupItems();
+                StringItems = _gmDatabaseService.GetStringItems();
+                ItemMixItems = _gmDatabaseService.GetItemMixGroupItems();
+                CostumeMixItems = _gmDatabaseService.GetCostumeMixGroupItems();
+                TradeShopItems = _gmDatabaseService.GetTradeItemGroupItems();
+                NpcShopsItems = _gmDatabaseService.GetNpcShopsItems();
+                NpcListItems = _gmDatabaseService.GetNpcListItems();
+                NpcDialogItems = _gmDatabaseService.GetNpcDialogItems();
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+            
         }
 
         #endregion
@@ -447,71 +503,22 @@ namespace RHToolkit.ViewModels.Windows
         private ObservableCollection<NpcInstance> _shopID = [];
 
         [ObservableProperty]
+        private NameID? _selectedShopTitle;
+
+        [ObservableProperty]
+        private NameID? _selectedTradeShopTitle;
+
+        [ObservableProperty]
+        private NameID? _selectedItemMix;
+
+        [ObservableProperty]
+        private NameID? _selectedCostumeMix;
+
+        [ObservableProperty]
         [NotifyPropertyChangedFor(nameof(NpcRoleText))]
         private int _npcRole;
-        partial void OnNpcRoleChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nNPCRole");
-        }
 
         public string? NpcRoleText => NpcRole != 0 ? $"<{_gmDatabaseService.GetString(NpcRole)}>" : string.Empty;
-
-        [ObservableProperty]
-        private string? _sShopType;
-        partial void OnSShopTypeChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szShopType");
-        }
-
-        [ObservableProperty]
-        private string? _mixGroup;
-        partial void OnMixGroupChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szMixGroup");
-        }
-
-        [ObservableProperty]
-        private string? _costumeGroup;
-        partial void OnCostumeGroupChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szCostumeGroup");
-        }
-
-        [ObservableProperty]
-        private string? _npcItemMixCategory;
-        partial void OnNpcItemMixCategoryChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szNpcItemMixCategory");
-        }
-
-        [ObservableProperty]
-        private string? _npcItemMixSubCategory;
-        partial void OnNpcItemMixSubCategoryChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szNpcItemMixSubCategory");
-        }
-
-        [ObservableProperty]
-        private string? _tradeShopCategory;
-        partial void OnTradeShopCategoryChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szTradeShopCategory");
-        }
-
-        [ObservableProperty]
-        private string? _shopCategory;
-        partial void OnShopCategoryChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szShopCategory");
-        }
-
-        [ObservableProperty]
-        private string? _shopSubCategory;
-        partial void OnShopSubCategoryChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szShopSubCategory");
-        }
-
         #endregion
 
         #endregion

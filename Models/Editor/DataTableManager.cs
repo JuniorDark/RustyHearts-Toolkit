@@ -1299,6 +1299,38 @@ public partial class DataTableManager : ObservableObject
         {
             var currentValue = item[column];
 
+            var columnType = item.Row.Table.Columns[column]?.DataType;
+
+            if (newValue == null || string.IsNullOrWhiteSpace(newValue.ToString()))
+            {
+                if (columnType == typeof(int) || columnType == typeof(Single))
+                {
+                    newValue = 0;
+                }
+            }
+            else if (columnType == typeof(int) && newValue is not int)
+            {
+                if (int.TryParse(newValue?.ToString(), out int intValue))
+                {
+                    if (intValue > int.MaxValue || intValue < int.MinValue)
+                    {
+                        newValue = currentValue;
+                    }
+                    else
+                    {
+                        newValue = intValue;
+                    }
+                }
+                else
+                {
+                    newValue = currentValue;
+                }
+            }
+            else if (columnType == typeof(float) && newValue is not double)
+            {
+                newValue = double.TryParse(newValue?.ToString(), out double doubleValue) ? doubleValue : currentValue;
+            }
+
             bool isDifferent = !AreValuesEqual(currentValue, newValue);
 
             if (isDifferent)
@@ -1331,6 +1363,8 @@ public partial class DataTableManager : ObservableObject
             }
         }
     }
+
+
 
     private static bool AreValuesEqual(object? value1, object? value2)
     {

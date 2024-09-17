@@ -5,6 +5,8 @@ namespace RHToolkit.Behaviors;
 
 public class DataRowViewBehavior : Behavior<FrameworkElement>
 {
+    private bool _isUpdating;
+
     public static readonly DependencyProperty ColumnProperty =
         DependencyProperty.Register(nameof(Column), typeof(string), typeof(DataRowViewBehavior), new PropertyMetadata(null));
 
@@ -23,9 +25,32 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         set => SetValue(UpdateItemValueCommandProperty, value);
     }
 
+    public static readonly DependencyProperty SelectedItemsStringProperty =
+        DependencyProperty.Register(
+            nameof(SelectedItemsString),
+            typeof(string),
+            typeof(DataRowViewBehavior),
+            new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnSelectedItemsStringChanged));
+
+    public string SelectedItemsString
+    {
+        get { return (string)GetValue(SelectedItemsStringProperty); }
+        set { SetValue(SelectedItemsStringProperty, value); }
+    }
+
+    private static void OnSelectedItemsStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var behavior = (DataRowViewBehavior)d;
+        if (behavior.AssociatedObject is ListView && !behavior._isUpdating)
+        {
+            behavior.UpdateSelectedItems();
+        }
+    }
+
     protected override void OnAttached()
     {
         base.OnAttached();
+
         if (AssociatedObject is TextBox textBox)
         {
             textBox.TextChanged += OnControlValueChanged;
@@ -43,11 +68,16 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         {
             comboBox.SelectionChanged += OnControlValueChanged;
         }
+        else if (AssociatedObject is ListView listView)
+        {
+            listView.SelectionChanged += OnListViewSelectionChanged;
+        }
     }
 
     protected override void OnDetaching()
     {
         base.OnDetaching();
+
         if (AssociatedObject is TextBox textBox)
         {
             textBox.TextChanged -= OnControlValueChanged;
@@ -64,6 +94,10 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         else if (AssociatedObject is ComboBox comboBox)
         {
             comboBox.SelectionChanged -= OnControlValueChanged;
+        }
+        else if (AssociatedObject is ListView listView)
+        {
+            listView.SelectionChanged -= OnListViewSelectionChanged;
         }
     }
 
@@ -83,7 +117,7 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
             }
             else if (AssociatedObject is Wpf.Ui.Controls.NumberBox numberBox)
             {
-                newValue = numberBox.Value;
+                newValue = numberBox.Value ?? 0;
             }
             else if (AssociatedObject is ComboBox comboBox)
             {
@@ -96,5 +130,56 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
                 UpdateItemValueCommand.Execute(parameter);
             }
         }
+    }
+
+    private void OnListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_isUpdating)
+            return;
+
+        _isUpdating = true;
+
+        if (Column != null && UpdateItemValueCommand != null && AssociatedObject is ListView listView)
+        {
+            var selectedItems = listView.SelectedItems
+                                .Cast<dynamic>()
+                                .Select(item => item.ID.ToString())
+                                .ToList();
+
+            var newValue = string.Join(",", selectedItems);
+
+            var parameter = (newValue, Column);
+            if (UpdateItemValueCommand.CanExecute(parameter))
+            {
+                UpdateItemValueCommand.Execute(parameter);
+            }
+        }
+
+        _isUpdating = false;
+    }
+
+    private void UpdateSelectedItems()
+    {
+        if (AssociatedObject is not ListView listView || listView.ItemsSource == null || _isUpdating)
+            return;
+
+        _isUpdating = true;
+
+        var selectedIds = (SelectedItemsString ?? string.Empty).Split(',')
+                            .Where(id => !string.IsNullOrWhiteSpace(id))
+                            .Select(int.Parse)
+                            .ToList();
+
+        listView.SelectedItems.Clear();
+        foreach (var item in listView.Items)
+        {
+            var itemId = (item as dynamic).ID;
+            if (selectedIds.Contains(itemId))
+            {
+                listView.SelectedItems.Add(item);
+            }
+        }
+
+        _isUpdating = false;
     }
 }

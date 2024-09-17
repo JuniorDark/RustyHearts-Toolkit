@@ -12,5 +12,7 @@ namespace RHToolkit.Services
         void OpenItemWindow(Guid token, string messageType, ItemData itemData, CharacterData? characterData = null);
         void OpenSanctionWindow(CharacterData characterData);
         void OpenTitleWindow(CharacterData characterData);
+        void OpenNpcShopWindow(Guid token, NameID shopID, NameID? shopTitle);
+        void OpenItemMixWindow(Guid token, string group, string? messageType);
     }
 }

@@ -9,6 +9,7 @@ namespace RHToolkit.Services
         List<NameID> GetCategoryItems(EnumService.ItemType itemType, bool isSubCategory);
         string GetCategoryName(int categoryID);
         List<NameID> GetCostumeMixGroupItems();
+        List<int> GetCostumeMixItems(string groupIDs);
         double GetEnhanceValue(int enhanceValue);
         long GetExperienceFromLevel(int level);
         string GetFortuneDesc(int fortuneID);
@@ -16,11 +17,15 @@ namespace RHToolkit.Services
         List<NameID> GetFortuneItems();
         (string fortuneName, string AddEffectDesc00, string AddEffectDesc01, string AddEffectDesc02, string fortuneDesc) GetFortuneValues(int fortuneID);
         List<ItemData> GetItemDataList(EnumService.ItemType itemType, string itemTableName);
+        List<ItemData> GetItemDataLists();
         List<NameID> GetItemMixGroupItems();
+        List<int> GetItemMixItems(string groupIDs);
+        ObservableCollection<ItemMixData> GetItemMixList();
         List<NameID> GetLobbyItems();
         List<NameID> GetNpcDialogItems();
         List<NameID> GetNpcListItems();
         List<NameID> GetNpcShopItems();
+        List<int> GetNpcShopItems(int shopID);
         List<NameID> GetNpcShopsItems();
         string GetOptionGroupName(int optionID);
         List<NameID> GetOptionItems();
@@ -42,6 +47,7 @@ namespace RHToolkit.Services
         int GetTitleRemainTime(int titleID);
         List<NameID> GetTradeItemGroupItems();
         List<NameID> GetTradeShopGroupItems();
+        List<int> GetTradeShopItems(int shopID);
         (int nPhysicalAttackMin, int nPhysicalAttackMax, int nMagicAttackMin, int nMagicAttackMax) GetWeaponStats(int jbClass, int weaponID);
         bool IsNameInNickFilter(string characterName);
     }

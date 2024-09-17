@@ -1307,8 +1307,6 @@ namespace RHToolkit.ViewModels.Windows
             UpdateSelectedItemValue(value, "nPreViewClass");
         }
 
-        private bool _isUpdating;
-
         [ObservableProperty]
         private string? _previewClassList;
         partial void OnPreviewClassListChanged(string? value)

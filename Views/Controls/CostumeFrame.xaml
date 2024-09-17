@@ -9,12 +9,13 @@
     x:Name="Frame"
     Height="Auto"
     d:DataContext="{d:DesignInstance Type=controls:ItemDataViewModel}"
-    d:DesignHeight="300"
+    d:DesignHeight="400"
     d:DesignWidth="300"
     mc:Ignorable="d">
     <ContentControl Template="{StaticResource lb_def_box01}">
         <Grid x:Name="gearGrid">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -210,7 +211,7 @@
                 Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
             <RichTextBox
                 x:Name="rtbDescription"
-                Grid.Row="11"
+                Grid.Row="12"
                 Width="290"
                 Height="Auto"
                 Margin="10,20,0,0"
@@ -222,6 +223,17 @@
                 Foreground="White"
                 IsReadOnly="True"
                 Style="{StaticResource ArialMSRTB}" />
+            <TextBlock
+                x:Name="tbid"
+                Grid.Row="11"
+                Margin="10,10,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                d:Foreground="White"
+                d:Text="Item ID: "
+                Foreground="White"
+                Style="{StaticResource ArialMS}"
+                Text="{Binding ItemId, StringFormat=' Item ID: {0}'}" />
         </Grid>
     </ContentControl>
 

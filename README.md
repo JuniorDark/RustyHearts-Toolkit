@@ -26,7 +26,7 @@ To start using the Rusty Hearts Toolkit, download the latest release from the [G
 ### Table Editor Tools
 - **Table Editor:** Edit `.rh` table files on the go and export them to various formats, including XML, XLSX, and MIP.
 - **Specialized Table Editors:**
-- **Cash Shop Editor:**Cash shop items (cashshoplist.rh).
+- **Cash Shop Editor:** Cash shop items (cashshoplist.rh).
 - **Item Drop Group Editor** Item drops (itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh).
 - **NPC Editor:** (npcinstance.rh).
 - **NPC Shop Editor** Npc Shop (npcshop.rh), Trade Shop (tradeshop.rh), Item Craft (itemmix.rh, costumemix.rh), shop item visible filter (shopitemvisiblefilter.rh).
@@ -50,7 +50,7 @@ To set up the toolkit and generate the necessary SQLite database:
 1. Navigate to the `SQLite Database Manager` page.
 2. Select the folder containing the `.rh` table files.
 3. Click `Create Database` to generate the `gmdb_(Lang).db` database in the `Resources` folder.
-4. Place the required icons in the `Resources` folder. Icons are available in [`Resources.rar`](Resources.rar).
+4. Place the extracted game sprites `\ui\sprite\1024` in the `Resources` folder.
 
 ## Prerequisites for Development
 * Visual Studio 2022 (Any Edition - 17.9 or later)
