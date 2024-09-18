@@ -6,8 +6,10 @@ using Wpf.Ui.Controls;
 
 namespace RHToolkit.ViewModels.Pages;
 
-public partial class EditToolsViewModel(WindowsProviderService windowsProviderService) : ObservableObject
+public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseService, WindowsProviderService windowsProviderService) : ObservableObject
 {
+    private readonly ISqLiteDatabaseService _sqLiteDatabaseService = sqLiteDatabaseService;
+
     [ObservableProperty]
     private WindowCard[] _windowCards =
     [
@@ -38,6 +40,11 @@ public partial class EditToolsViewModel(WindowsProviderService windowsProviderSe
 
         try
         {
+            if (!_sqLiteDatabaseService.ValidateDatabase())
+            {
+                return;
+            }
+
             switch (value)
             {
                 case "rheditor":

@@ -157,6 +157,11 @@ namespace RHToolkit.ViewModels.Pages
 
             try
             {
+                if (!_sqLiteDatabaseService.ValidateDatabase())
+                {
+                    return;
+                }
+
                 openWindowAction(CharacterData);
             }
             catch (Exception ex)

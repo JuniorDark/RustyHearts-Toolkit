@@ -101,7 +101,7 @@
                             TextWrapping="WrapWithOverflow" />
                         <ui:TextBlock
                             Appearance="Secondary"
-                            Text="Character Editor, Coupon"
+                            Text="Database Editors"
                             TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                 </Grid>
@@ -109,7 +109,7 @@
 
             <ui:CardAction
                 Grid.Row="0"
-                Grid.Column="1"
+                Grid.Column="2"
                 Margin="4,0,4,0"
                 Padding="0"
                 VerticalAlignment="Stretch"
@@ -141,7 +141,7 @@
 
             <ui:CardAction
                 Grid.Row="0"
-                Grid.Column="2"
+                Grid.Column="1"
                 Margin="4,0,4,0"
                 Padding="0"
                 VerticalAlignment="Stretch"
@@ -165,7 +165,7 @@
                             TextWrapping="WrapWithOverflow" />
                         <ui:TextBlock
                             Appearance="Secondary"
-                            Text="Cash Shop editor, Table editor"
+                            Text="Table Editors"
                             TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                 </Grid>
