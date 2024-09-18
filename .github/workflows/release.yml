@@ -19,22 +19,22 @@ jobs:
 
       # Build with --self-contained false
       - name: Build Rusty Hearts Toolkit (No Self-Contained)
-        run: dotnet publish ./RHToolkit.sln --configuration Release --self-contained false --runtime win-x64 /p:PublishSingleFile=false /p:PublishDir=./publish/RHToolkit_framework_dependent
+        run: dotnet publish ./RHToolkit.sln --configuration Release --self-contained false --runtime win-x64 /p:PublishSingleFile=false /p:PublishDir=./publish/RustyHearts-Toolkit_framework-dependent
 
       - name: Zip output files (No Self-Contained)
-        run: Compress-Archive -Path "./publish/RHToolkit_framework_dependent" -DestinationPath RustyHearts-Toolkit-Framework-Dependent.zip
+        run: Compress-Archive -Path "./publish/RustyHearts-Toolkit_framework-dependent" -DestinationPath RustyHearts-Toolkit-Framework-Dependent.zip
 
       # Build with --self-contained true
       - name: Build Rusty Hearts Toolkit (Self-Contained)
-        run: dotnet publish ./RHToolkit.sln --configuration Release --self-contained true --runtime win-x64 /p:PublishSingleFile=false /p:PublishDir=./publish/RHToolkit_self
+        run: dotnet publish ./RHToolkit.sln --configuration Release --self-contained true --runtime win-x64 /p:PublishSingleFile=false /p:PublishDir=./publish/RustyHearts-Toolkit_self-contained
 
       - name: Zip output files (Self-Contained)
-        run: Compress-Archive -Path "./publish/RHToolkit_self" -DestinationPath RustyHearts-Toolkit-SelfContained.zip
+        run: Compress-Archive -Path "./publish/RustyHearts-Toolkit_self-contained" -DestinationPath RustyHearts-Toolkit-SelfContained.zip
 
       - name: Get version from compiled assembly
         id: version
         run: |
-          $version = (Get-Command "./publish/RHToolkit_framework_dependent/Rusty Hearts Toolkit.dll").FileVersionInfo.FileVersion
+          $version = (Get-Command "./publish/RustyHearts-Toolkit_framework-dependent/Rusty Hearts Toolkit.dll").FileVersionInfo.FileVersion
           echo "::set-output name=version::$version"
 
       - name: Create Release
@@ -43,9 +43,9 @@ jobs:
         with:
           tag_name: v${{ steps.version.outputs.version }}
           release_name: v${{ steps.version.outputs.version }}
-          body: Automated release created by GitHub Actions.
-          draft: false
-          prerelease: false
+          body: Automated pre-release created by GitHub Actions.
+          draft: true
+          prerelease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
