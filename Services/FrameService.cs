@@ -101,16 +101,25 @@ namespace RHToolkit.Services
             return "#ffffff";
         }
 
-        public string FormatMainStat(int itemType, int physicalStat, int magicStat, int jobClass, int weaponId, int enhanceLevel)
+        // TODO: find enhance formula
+        public string FormatMainStat(int itemType, int physicalStat, int magicStat, int jobClass, int weaponId, int enhanceLevel, int gearLevel)
         {
             string mainStat = "";
-            var enhanceValue = _gmDatabaseService.GetEnhanceValue(enhanceLevel);
-
+            
             if ((ItemType)itemType == ItemType.Armor && physicalStat > 0 && magicStat > 0)
             {
                 if (enhanceLevel > 0)
                 {
-                    mainStat = $"{Resources.PhysicalDefense} +{physicalStat}\nAdd {Resources.PhysicalDefense} +{Math.Round(physicalStat * enhanceValue)}\n{Resources.MagicDefense} +{magicStat}\nAdd {Resources.MagicDefense} +{Math.Round(magicStat * enhanceValue)}";
+                    (double defenseValue, int armorPlus) = _gmDatabaseService.GetArmorEnhanceValue(enhanceLevel);
+
+                    double basePercentage = defenseValue * 100; 
+                    double percentage = basePercentage + armorPlus;
+
+                    mainStat = $"{Resources.PhysicalDefense} +{physicalStat}\n" +
+                               $"Reduce Physical Damage +{percentage:0.00}%\n" +
+                               $"{Resources.MagicDefense} +{magicStat}\n" +
+                               $"Reduce Magic Damage +{percentage:0.00}%";
+
                 }
                 else
                 {
@@ -124,7 +133,8 @@ namespace RHToolkit.Services
 
                 if (enhanceLevel > 0)
                 {
-                    mainStat = $"{Resources.PhysicalDamage} +{physicalAttackMin}~{physicalAttackMax}\nAdd {Resources.PhysicalDamage} +{Math.Round(physicalAttackMax * enhanceValue)}\n{Resources.MagicDamage} +{magicAttackMin}~{magicAttackMax}\nAdd {Resources.MagicDamage} +{Math.Round(magicAttackMax * enhanceValue)}";
+                    (var weaponValue, var weaponPlus) = _gmDatabaseService.GetWeaponEnhanceValue(enhanceLevel);
+                    mainStat = $"{Resources.PhysicalDamage} +{physicalAttackMin}~{physicalAttackMax}\nAdd {Resources.PhysicalDamage} +{Math.Round(physicalAttackMin * weaponValue + weaponPlus)}\n{Resources.MagicDamage} +{magicAttackMin}~{magicAttackMax}\nAdd {Resources.MagicDamage} +{Math.Round(magicAttackMin * weaponValue + weaponPlus)}";
                 }
                 else
                 {

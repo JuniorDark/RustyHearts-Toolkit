@@ -10,7 +10,8 @@ namespace RHToolkit.Services
         string GetCategoryName(int categoryID);
         List<NameID> GetCostumeMixGroupItems();
         List<int> GetCostumeMixItems(string groupIDs);
-        double GetEnhanceValue(int enhanceValue);
+        (float weaponValue, int weaponPlus) GetWeaponEnhanceValue(int enhanceValue);
+        (float defenseValue, int defensePlus) GetArmorEnhanceValue(int enhanceValue);
         long GetExperienceFromLevel(int level);
         string GetFortuneDesc(int fortuneID);
         List<NameID> GetFortuneDescItems();

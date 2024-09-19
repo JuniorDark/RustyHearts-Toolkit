@@ -908,24 +908,42 @@ namespace RHToolkit.Services
             }
         }
 
-        private double GetDoubleValueFromQuery(string query, params (string, object)[] parameters)
+        public (float weaponValue, int weaponPlus) GetWeaponEnhanceValue(int enhanceValue)
         {
             using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
-                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, parameters);
-                return command.Read() ? command.GetDouble(0) : 0;
+                string query = "SELECT fWeaponValue, nWeaponPlus FROM enchantinfo WHERE nID = @enhanceValue";
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@enhanceValue", enhanceValue));
+
+                return command.Read() ?
+                    (command.GetFloat(0),
+                    command.GetInt32(1)) :
+                    (0, 0);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving double value from the database", ex);
+                throw new Exception($"Error retrieving enchant values from the database", ex);
             }
         }
 
-        public double GetEnhanceValue(int enhanceValue)
+        public (float defenseValue, int defensePlus) GetArmorEnhanceValue(int enhanceValue)
         {
-            string query = "SELECT fWeaponValue FROM enchantinfo WHERE nID = @enhanceValue";
-            return GetDoubleValueFromQuery(query, ("@enhanceValue", enhanceValue));
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = "SELECT fDefenseValue, nDefensePlus FROM enchantinfo WHERE nID = @enhanceValue";
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@enhanceValue", enhanceValue));
+
+                return command.Read() ?
+                    (command.GetFloat(0),
+                    command.GetInt32(1)) :
+                    (0, 0);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving enchant values from the database", ex);
+            }
         }
     }
 }

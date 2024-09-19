@@ -559,6 +559,7 @@ public partial class ItemDataManager: ObservableObject
     partial void OnItemTypeFilterChanged(int value)
     {
         PopulateCategoryItemsFilter((ItemType)value);
+        RefreshView();
     }
 
     [ObservableProperty]

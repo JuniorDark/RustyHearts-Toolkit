@@ -296,7 +296,7 @@ public partial class ItemDataViewModel(IFrameService frameService, IGMDatabaseSe
     [NotifyPropertyChangedFor(nameof(MainStatText))]
     private int _weaponID00;
 
-    public string MainStatText => _frameService.FormatMainStat(Type, Defense, MagicDefense, JobClass, WeaponID00, EnhanceLevel);
+    public string MainStatText => _frameService.FormatMainStat(Type, Defense, MagicDefense, JobClass, WeaponID00, EnhanceLevel, RequiredLevel);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SellValueText))]
