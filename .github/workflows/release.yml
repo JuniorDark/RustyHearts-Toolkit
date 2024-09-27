@@ -35,38 +35,15 @@ jobs:
         id: version
         run: |
           $version = (Get-Command "./publish/RustyHearts-Toolkit_framework-dependent/Rusty Hearts Toolkit.dll").FileVersionInfo.FileVersion
-          echo "::set-output name=version::$version"
+          echo "version=$version" >> $GITHUB_ENV
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      # Create Release and Upload Assets using softprops/action-gh-release
+      - name: Create GitHub Release and Upload Assets
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.version.outputs.version }}
-          release_name: v${{ steps.version.outputs.version }}
-          body: Automated pre-release created by GitHub Actions.
-          draft: true
-          prerelease: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Upload the first asset (No Self-Contained)
-      - name: Upload No Self-Contained Asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./RustyHearts-Toolkit-Framework-Dependent.zip
-          asset_name: RustyHearts-Toolkit-Framework-Dependent.zip
-          asset_content_type: application/zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Upload the second asset (Self-Contained)
-      - name: Upload Self-Contained Asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./RustyHearts-Toolkit-SelfContained.zip
-          asset_name: RustyHearts-Toolkit-SelfContained.zip
-          asset_content_type: application/zip
+          tag_name: v${{ env.version }}
+          files: |
+            ./RustyHearts-Toolkit-Framework-Dependent.zip
+            ./RustyHearts-Toolkit-SelfContained.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
