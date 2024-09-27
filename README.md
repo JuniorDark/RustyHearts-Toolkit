@@ -27,13 +27,14 @@ To start using the Rusty Hearts Toolkit, download the latest release from the [G
 - **Table Editor:** Edit `.rh` table files on the go and export them to various formats, including XML, XLSX, and MIP.
 - **Specialized Table Editors:**
 - **Cash Shop Editor:** Cash shop items (cashshoplist.rh).
-- **Item Drop Group Editor** Item drops (itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh).
+- **Item Editor** Items (itemlist.rh, itemlist_armor.rh, itemlist_costume.rh, itemlist_weapon.rh).
+- **Item Drop Group Editor** Item drops (riddleboxdropgrouplist.rh, rarecarddropgrouplist.rh, rarecardrewarditemlist.rh, itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh, riddleboxdropgrouplist.rh, rarecarddropgrouplist.rh, rarecardrewarditemlist.rh).
 - **NPC Editor:** (npcinstance.rh).
 - **NPC Shop Editor** Npc Shop (npcshop.rh), Trade Shop (tradeshop.rh), Item Craft (itemmix.rh, costumemix.rh), shop item visible filter (shopitemvisiblefilter.rh).
 - **Package Editor:** Item packages and effects (unionpackage.rh).
 - **Random Rune Editor:** Edit 'gacha' items (randomrune.rh).
 - **Set Editor:** Edit item sets and their effects (setitem.rh).
-- **Title Editor:** Edit titles their effects (charactertitle.rh).
+- **Title Editor:** Edit titles and their effects (charactertitle.rh).
 
 ### Language Settings
 
@@ -51,6 +52,8 @@ To set up the toolkit and generate the necessary SQLite database:
 2. Select the folder containing the `.rh` table files.
 3. Click `Create Database` to generate the `gmdb_(Lang).db` database in the `Resources` folder.
 4. Place the extracted game sprites `\ui\sprite\1024` in the `Resources` folder.
+5. Navigate to the `Settings` page and set the `SQL Server` credentials.
+
 
 ## Prerequisites for Development
 * Visual Studio 2022 (Any Edition - 17.9 or later)
@@ -60,9 +63,6 @@ To set up the toolkit and generate the necessary SQLite database:
 ## Building
 
 If you wish to build the project yourself, follow these steps:
-
-### Prerequisites
-- **.NET Core 8 SDK (8.0.107 or later)** - [Download here](https://dotnet.microsoft.com/download/dotnet/8.0)
 
 ### Step 1
 
@@ -83,7 +83,7 @@ The built files will be found in the newly created `bin` build directory.
 
 ## License
 
-This project is licensed under the BSD 2-Clause License. See the [`LICENSE`](LICENSE) file for details.
+This project is licensed under the BSD 2-Clause License. See the [`LICENSE.txt`](LICENSE) file for details.
 
 ## Frequently Asked Questions
 
@@ -109,7 +109,6 @@ A: Fork the repository, make your changes, and submit a pull request.
 ### Specialized Table Editors
 - **Add Effect Editor**
 - **Enemy Editor**
-- **Item Editor**
 - **Pet Editor**
 - **Quest Editor**
 - **Skill Editor**

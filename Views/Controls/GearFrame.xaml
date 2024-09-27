@@ -5,6 +5,7 @@
     xmlns:controls="clr-namespace:RHToolkit.ViewModels.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ut="clr-namespace:RHToolkit.Utilities"
     x:Name="Frame"
     Height="Auto"
     d:DataContext="{d:DesignInstance Type=controls:ItemDataViewModel}"
@@ -14,6 +15,7 @@
     <ContentControl Template="{StaticResource lb_def_box01}">
         <Grid x:Name="gearGrid">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -265,7 +267,7 @@
                 Text="{Binding FixedOption02Text}"
                 TextWrapping="Wrap"
                 Visibility="{Binding FixedOption02, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
-            <!--  RandomOption and its children  -->
+            <!--  RandomOption  -->
             <TextBlock
                 x:Name="tbRandomOption"
                 Grid.Row="14"
@@ -275,7 +277,7 @@
                 Foreground="White"
                 Style="{StaticResource ArialMS}"
                 Text="{Binding RandomOption}"
-                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+                Visibility="{Binding RandomOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
             <TextBlock
                 x:Name="tbRandomOption01"
                 Grid.Row="15"
@@ -289,7 +291,7 @@
                 Style="{StaticResource ArialMS}"
                 Text="{Binding RandomOption01Text}"
                 TextWrapping="Wrap"
-                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+                Visibility="{Binding RandomOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
             <TextBlock
                 x:Name="tbRandomOption02"
                 Grid.Row="16"
@@ -303,7 +305,7 @@
                 Style="{StaticResource ArialMS}"
                 Text="{Binding RandomOption02Text}"
                 TextWrapping="Wrap"
-                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
+                Visibility="{Binding RandomOption02, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
             <TextBlock
                 x:Name="tbRandomOption03"
                 Grid.Row="17"
@@ -317,7 +319,7 @@
                 Style="{StaticResource ArialMS}"
                 Text="{Binding RandomOption03Text}"
                 TextWrapping="Wrap"
-                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
+                Visibility="{Binding RandomOption03, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
             <!--  SocketOption  -->
             <TextBlock
                 x:Name="tbSocketOption"
@@ -373,7 +375,7 @@
                 Visibility="{Binding SocketCount, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
             <TextBlock
                 x:Name="tbPetFood"
-                Grid.Row="23"
+                Grid.Row="24"
                 Margin="10,10,0,10"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Bottom"
@@ -382,9 +384,29 @@
                 Foreground="{Binding PetFoodColor, Converter={StaticResource StringToBrushConverter}}"
                 Style="{StaticResource ArialMS}"
                 Text="{Binding PetFoodText}" />
+            <RichTextBox
+                x:Name="rtbDescription"
+                Grid.Row="22"
+                Width="290"
+                Height="Auto"
+                Margin="10,20,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                ut:RichTextBoxHelper.FormattedText="{Binding Description}"
+                Background="Transparent"
+                BorderThickness="0"
+                Foreground="White"
+                IsReadOnly="True"
+                Style="{StaticResource ArialMSRTB}">
+                <RichTextBox.Resources>
+                    <Style TargetType="Paragraph">
+                        <Setter Property="Margin" Value="Auto" />
+                    </Style>
+                </RichTextBox.Resources>
+            </RichTextBox>
             <TextBlock
                 x:Name="tbid"
-                Grid.Row="22"
+                Grid.Row="23"
                 Margin="10,10,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
@@ -392,7 +414,8 @@
                 d:Text="Item ID: "
                 Foreground="White"
                 Style="{StaticResource ArialMS}"
-                Text="{Binding ItemId, StringFormat=' Item ID: {0}'}" />
+                Text="{Binding ItemId, StringFormat=' Item ID: {0}'}"
+                Visibility="{Binding ItemId, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         </Grid>
     </ContentControl>
 

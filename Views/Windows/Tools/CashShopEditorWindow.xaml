@@ -150,6 +150,7 @@
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
+                                Maximum="2147483647"
                                 Minimum="0"
                                 Value="{Binding ItemID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
@@ -164,6 +165,7 @@
                             <ui:NumberBox
                                 Width="150"
                                 Margin="0,0,0,0"
+                                Maximum="2147483647"
                                 Minimum="0"
                                 Value="{Binding ShopID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
@@ -311,6 +313,7 @@
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
+                                Maximum="2147483647"
                                 Minimum="0"
                                 Value="{Binding CashCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
@@ -327,6 +330,7 @@
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
+                                Maximum="2147483647"
                                 Minimum="0"
                                 Value="{Binding SaleCashCost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>
@@ -344,6 +348,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
                                 IsEnabled="{Binding IsBonusEnabled}"
+                                Maximum="2147483647"
                                 Minimum="0"
                                 Value="{Binding CashMileage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </StackPanel>

@@ -55,9 +55,9 @@ namespace RHToolkit.Services
 
                 if (missingTables.Count > 0)
                 {
-                    string missingTablesMessage = $"The database file ({Path.GetFileName(dbFilePath)}) is missing tables.\n\nThe following required tables are missing in the database:";
+                    string missingTablesMessage = $"The database file ({Path.GetFileName(dbFilePath)}) is missing tables.\n\nThe following required tables are missing in the database:\n";
                     missingTablesMessage += string.Join("\n", missingTables);
-                    missingTablesMessage += $"Please ensure you have created the database with the required tables.";
+                    missingTablesMessage += $"\nPlease ensure you have created the database with the required tables.";
 
                     RHMessageBoxHelper.ShowOKMessage(missingTablesMessage, "Table Not Found");
                     return false;

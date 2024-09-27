@@ -27,6 +27,7 @@ public class ItemData
     public int InventoryType { get; set; }
     public int AccountStorage { get; set; }
     public int OptionCountMax { get; set; }
+    public int BindingOff { get; set; }
     public int SocketCountMax { get; set; }
     public int Reconstruction { get; set; }
     public byte ReconstructionMax { get; set; }

@@ -76,6 +76,18 @@
             Command="{Binding LoadFileCommand}"
             CommandParameter="9"
             Gesture="Ctrl+Shift+9" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="10"
+            Gesture="Ctrl+1" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="11"
+            Gesture="Ctrl+2" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="12"
+            Gesture="Ctrl+3" />
     </Window.InputBindings>
     <Window.Resources>
         <!--  Template for ItemDropGroupList  -->
@@ -100,13 +112,17 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -117,13 +133,17 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Max Range" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.MaxRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nMaxRange], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nMaxRange" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -134,13 +154,17 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Seed" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.Seed, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nSeed], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nSeed" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -183,13 +207,17 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -200,13 +228,17 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Max Range" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.MaxRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nMaxRange], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nMaxRange" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -217,14 +249,17 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Max Count" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
-                        Maximum="40"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.MaxCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nMaxCount], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nMaxCount" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -270,13 +305,17 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -294,7 +333,11 @@
                         d:Text="Note"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
-                        Text="{Binding DataContext.Note, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Text="{Binding DataContext.DataTableManager.SelectedItem[wszNote], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="wszNote" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -340,13 +383,17 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -357,13 +404,17 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Max Range" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.MaxRange, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nMaxRange], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nMaxRange" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -374,32 +425,17 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Group" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.Group, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                </StackPanel>
-
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Margin="0,0,0,10"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Orientation="Vertical">
-                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F3}%'}" />
-                    <ui:NumberBox
-                        Width="150"
-                        Margin="0,0,0,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
-                        Maximum="100000"
-                        Minimum="0"
-                        Value="{Binding DataContext.DropItemCountTotalValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nGroup" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -419,39 +455,24 @@
 
                 <StackPanel
                     Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="0,0,0,0"
+                    Grid.Column="1"
+                    Margin="0,0,0,10"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Margin="0,0,0,10"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Orientation="Vertical">
-                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
-                    <ui:NumberBox
-                        Width="150"
-                        Margin="0,0,0,0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
-                        LargeChange="0.01"
-                        Minimum="0"
-                        SmallChange="0.001"
-                        Value="{Binding DataContext.DropItemCountTotalValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -478,13 +499,17 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="140"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding DataContext.DropGroupId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
                 <StackPanel
                     Grid.Row="0"
@@ -499,29 +524,194 @@
                         Width="300"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="Note"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
-                        Text="{Binding DataContext.Name, RelativeSource={RelativeSource AncestorType=ContentControl}, UpdateSourceTrigger=PropertyChanged}" />
+                        Text="{Binding DataContext.DataTableManager.SelectedItem[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
                 </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Template for RiddleBoxDropGroupList  -->
+        <DataTemplate x:Key="RiddleBoxDropGroupList">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Margin="0,0,0,10"
-                    HorizontalAlignment="Center"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
+                    <TextBlock Foreground="White" Text="ID" />
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
-                        LargeChange="0.01"
+                        Maximum="2147483647"
                         Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Map" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nMap], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nMap" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="RiddleBox Group" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nRiddleboxGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nRiddleboxGroup" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,10"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="Gold" Text="Description" />
+                    <TextBox
+                        Width="500"
+                        Height="30"
+                        Margin="0,0,0,0"
+                        d:Text="Icon"
+                        FontSize="12"
+                        Template="{StaticResource lb_textbox11}"
+                        Text="{Binding DataContext.DataTableManager.SelectedItem[wszLvelDisc], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="wszLvelDisc" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Template for RareCardDropGroupList  -->
+        <DataTemplate x:Key="RareCardDropGroupList">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="ID" />
+                    <ui:NumberBox
+                        Width="140"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="0,0,0,30"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Remaining Probability" />
+                    <ui:NumberBox
+                        Width="140"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        LargeChange="0.01"
+                        MaxDecimalPlaces="4"
+                        Maximum="1"
+                        Minimum="-1"
                         SmallChange="0.001"
-                        Value="{Binding DataContext.DropItemCountTotalValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        Value="{Binding DataContext.FNilValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Template for RareCardRewardItemList  -->
+        <DataTemplate x:Key="RareCardRewardItemList">
+            <Grid>
+                <StackPanel
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="ID" />
+                    <ui:NumberBox
+                        Width="140"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -760,7 +950,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         ClearButtonEnabled="False"
-                        Maximum="{Binding DataContext.MaxRange, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        Maximum="{Binding DataContext.DataTableManager.SelectedItem[nMaxRange], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Minimum="0"
                         Value="{Binding Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </StackPanel>
@@ -777,9 +967,457 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         ClearButtonEnabled="False"
-                        Maximum="{Binding DataContext.MaxRange, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        Maximum="{Binding DataContext.DataTableManager.SelectedItem[nMaxRange], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Minimum="0"
                         Value="{Binding End, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Item Template for RiddleBoxDropGroupList  -->
+        <DataTemplate x:Key="RiddleBoxDropGroupListItems">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}}" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                        ItemDataViewModel="{Binding ItemDataViewModel}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Section Start 01" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding SectionStart00, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="2"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Section End 01" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding SectionEnd00, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="3"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Probability 01" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding Probability00, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="4"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Section Start 02" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding SectionStart01, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="5"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Section End 02" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding SectionEnd01, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="6"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Probability 02" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding Probability01, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="7"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Section Start 03" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding SectionStart02, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="8"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Section End 03" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding SectionEnd02, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="9"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Probability 03" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding Probability02, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="10"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Section Start 04" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding SectionStart03, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="11"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Section End 04" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding SectionEnd03, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Column="12"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Probability 04" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding Probability03, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Item Template for RareCardDropGroupList  -->
+        <DataTemplate x:Key="RareCardDropGroupListItems">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Vertical">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="Bronze Card" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding DataContext.AddRareCardItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="0"
+                        ItemDataViewModel="{Binding BronzeCard}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding DataContext.RemoveRareCardItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                    <Button
+                        Width="140"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Command="{Binding DataContext.OpenRareCardRewardItemListCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nBronzeCardID], RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        Content="Preview"
+                        Cursor="Hand"
+                        Foreground="White"
+                        Style="{StaticResource lb_def_button02}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Probability" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        LargeChange="0.01"
+                        MaxDecimalPlaces="4"
+                        Maximum="1"
+                        Minimum="0"
+                        SmallChange="0.001"
+                        Value="{Binding BronzeCardProbability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Vertical">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="Silver Card" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding DataContext.AddRareCardItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="1"
+                        ItemDataViewModel="{Binding SilverCard}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding DataContext.RemoveRareCardItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                    <Button
+                        Width="140"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Command="{Binding DataContext.OpenRareCardRewardItemListCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nSilverCardID], RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        Content="Preview"
+                        Cursor="Hand"
+                        Foreground="White"
+                        Style="{StaticResource lb_def_button02}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Probability" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        LargeChange="0.01"
+                        MaxDecimalPlaces="4"
+                        Maximum="1"
+                        Minimum="0"
+                        SmallChange="0.001"
+                        Value="{Binding SilverCardProbability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Vertical">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="Gold Card" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding DataContext.AddRareCardItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="2"
+                        ItemDataViewModel="{Binding GoldCard}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding DataContext.RemoveRareCardItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                    <Button
+                        Width="140"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Command="{Binding DataContext.OpenRareCardRewardItemListCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nGoldCardID], RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        Content="Preview"
+                        Cursor="Hand"
+                        Foreground="White"
+                        Style="{StaticResource lb_def_button02}" />
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Probability" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        ClearButtonEnabled="False"
+                        LargeChange="0.01"
+                        MaxDecimalPlaces="4"
+                        Maximum="1"
+                        Minimum="0"
+                        SmallChange="0.001"
+                        Value="{Binding GoldCardProbability, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+        <!--  Item Template for RareCardRewardItemListItems  -->
+        <DataTemplate x:Key="RareCardRewardItemListItems">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <StackPanel
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Horizontal">
+                    <TextBlock
+                        Margin="0,0,10,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="Transparent"
+                        FontSize="12"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}"
+                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}}" />
+                    <control:ItemSlot
+                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                        ItemDataViewModel="{Binding ItemDataViewModel}"
+                        ItemNameVisibility="Visible"
+                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
                 </StackPanel>
             </Grid>
         </DataTemplate>
@@ -791,6 +1429,9 @@
             ItemDropGroupList="{StaticResource ItemDropGroupList}"
             ItemDropGroupListF="{StaticResource ItemDropGroupListF}"
             QuestItemDropGroupList="{StaticResource QuestItemDropGroupList}"
+            RareCardDropGroupList="{StaticResource RareCardDropGroupList}"
+            RareCardRewardItemList="{StaticResource RareCardRewardItemList}"
+            RiddleBoxDropGroupList="{StaticResource RiddleBoxDropGroupList}"
             WorldItemDropGroupList="{StaticResource WorldItemDropGroupList}" />
 
         <dt:DropItemGroupItemsTemplateSelector
@@ -798,6 +1439,9 @@
             InstanceItemDropGroupListItems="{StaticResource InstanceItemDropGroupListItems}"
             ItemDropGroupListFItems="{StaticResource ItemDropGroupListFItems}"
             ItemDropGroupListItems="{StaticResource ItemDropGroupListItems}"
+            RareCardDropGroupListItems="{StaticResource RareCardDropGroupListItems}"
+            RareCardRewardItemListItems="{StaticResource RareCardRewardItemListItems}"
+            RiddleBoxDropGroupListItems="{StaticResource RiddleBoxDropGroupListItems}"
             WorldItemDropGroupListItems="{StaticResource WorldItemDropGroupListItems}" />
 
     </Window.Resources>
@@ -836,8 +1480,6 @@
                 </ui:TitleBar.Icon>
             </ui:TitleBar>
             <control:DropGroupEditorMenu Grid.Row="1" />
-            <control:EditorIconMenu Grid.Row="2" />
-
             <Grid
                 Grid.Row="1"
                 Grid.RowSpan="4"

@@ -48,6 +48,7 @@ namespace RHToolkit.Services
                         AccountStorage = Convert.ToInt32(reader["nAccountStorage"]),
                         OptionCountMax = Convert.ToInt32(reader["nOptionCountMax"]),
                         SocketCountMax = Convert.ToInt32(reader["nSocketCountMax"]),
+                        BindingOff = Convert.ToInt32(reader["nBindingOff"]),
                         ReconstructionMax = Convert.ToByte(reader["nReconstructionMax"]),
                         SellPrice = Convert.ToInt32(reader["nSellPrice"]),
                         PetFood = Convert.ToInt32(reader["nPetEatGroup"]),
@@ -67,7 +68,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error retrieving ItemData from the database.", ex);
+                throw new Exception($"Error retrieving ItemData from the database: {ex.Message}", ex);
             }
 
             return itemList;
@@ -98,7 +99,7 @@ namespace RHToolkit.Services
                 SELECT 
                     nID, nWeaponID00, szIconName, nCategory, nSubCategory, nBranch, nInventoryType, nAccountStorage, nSocketCountMax, nReconstructionMax, nJobClass, nLevelLimit, 
                     nItemTrade, nOverlapCnt, nDurability, nDefense, nMagicDefense, nWeight, nSellPrice, nOptionCountMax, nSetId, 
-                    nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup, nTitleList, fCooltime, 
+                    nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup, nTitleList, fCooltime, nBindingOff,  
                     wszDesc, {descriptionField}
                 FROM {itemTableName}";
                 }
@@ -108,7 +109,7 @@ namespace RHToolkit.Services
                 SELECT 
                     nID, nWeaponID00, szIconName, nCategory, nSubCategory, nBranch, nInventoryType, nAccountStorage, nSocketCountMax, nReconstructionMax, nJobClass, nLevelLimit, 
                     nItemTrade, nOverlapCnt, nDurability, nDefense, nMagicDefense, nWeight, nSellPrice, nOptionCountMax, nSetId, 
-                    nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup, nTitleList, fCooltime, 
+                    nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup, nTitleList, fCooltime, nBindingOff, 
                     wszDesc, {descriptionField}
                 FROM {itemTableName}";
                 }
@@ -119,7 +120,7 @@ namespace RHToolkit.Services
             SELECT 
                 i.nID, i.nWeaponID00, i.szIconName, i.nCategory, i.nSubCategory, i.nBranch, i.nInventoryType, i.nAccountStorage, i.nSocketCountMax, i.nReconstructionMax, i.nJobClass, i.nLevelLimit, 
                 i.nItemTrade, i.nOverlapCnt, i.nDurability, i.nDefense, i.nMagicDefense, i.nWeight, i.nSellPrice, i.nOptionCountMax, i.nSetId, 
-                i.nFixOption00, i.nFixOptionValue00, i.nFixOption01, i.nFixOptionValue01, i.nPetEatGroup, nTitleList, fCooltime, 
+                i.nFixOption00, i.nFixOptionValue00, i.nFixOption01, i.nFixOptionValue01, i.nPetEatGroup, nTitleList, fCooltime, nBindingOff, 
                 s.wszDesc, s.{descriptionField}
             FROM {itemTableName} i
             LEFT JOIN {itemTableName}_string s ON i.nID = s.nID";
@@ -244,6 +245,84 @@ namespace RHToolkit.Services
         public List<NameID> GetNpcDialogItems()
         {
             return GetItemsFromQuery("SELECT nID, wszDesc FROM npc_dialog");
+        }
+
+        public List<NameID> GetFielMeshItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszDesc FROM itemfieldmesh");
+        }
+
+        public List<NameID> GetUnionPackageItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszName FROM unionpackage_string");
+        }
+
+        public List<NameID> GetCostumePackItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszDesc FROM costumepack");
+        }
+
+        public List<NameID> GetTitleListItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszTitleName FROM charactertitle_string");
+        }
+
+        public List<NameID> GetSetItemItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszName FROM setitem_string");
+        }
+
+        public List<NameID> GetPetEatItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszDesc FROM peteatitem");
+        }
+
+        public List<NameID> GetRiddleGroupItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszLvelDisc FROM riddleboxdropgrouplist");
+        }
+
+        public List<NameID> GetAuctionCategoryItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszName00 FROM auctioncategory WHERE wszName00 <> ''");
+        }
+
+        public List<NameID> GetCostumePartItems(int jobClass)
+        {
+            string tableName = jobClass switch
+            {
+                0 or 1 => "frantzparts",
+                2 => "angelaparts",
+                3 => "tudeparts",
+                4 => "natashaparts",
+                101 => "frantz_avatar01_parts",
+                102 => "frantz_avatar02_parts",
+                201 => "angela_avatar01_parts",
+                301 => "tude_avatar01_parts",
+                401 => "natasha_avatar01_parts",
+                _ => throw new Exception($"Invalid class: {jobClass}")
+            };
+
+            return GetItemsFromQuery($"SELECT nID, wszName FROM {tableName}");
+        }
+
+        public List<NameID> GetSkillListItems(int jobClass)
+        {
+            (string skillTableName, string stringTableName) = jobClass switch
+            {
+                1 or 101 or 102 => ("frantzskill", "frantzskill_string"),
+                2 or 201 => ("angelaskill", "angelaskill_string"),
+                3 or 301 => ("tudeskill", "tudeskill_string"),
+                4 or 401 => ("natashaskill", "natashaskill_string"),
+                _ => throw new Exception($"Invalid class: {jobClass}")
+            };
+
+            string query = $@"
+            SELECT s.nSkillID, ss.wszName 
+            FROM {skillTableName} s
+            JOIN {stringTableName} ss ON s.nID = ss.nID";
+
+            return GetItemsFromQuery(query);
         }
 
         public List<NameID> GetTradeItemGroupItems()

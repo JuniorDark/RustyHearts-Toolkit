@@ -9,7 +9,7 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Models.Database;
 
-public partial class ItemDataManager: ObservableObject
+public partial class ItemDataManager : ObservableObject
 {
     private readonly IFrameService _frameService;
     private readonly IGMDatabaseService _gmDatabaseService;
@@ -46,6 +46,7 @@ public partial class ItemDataManager: ObservableObject
         PopulateClassItemsFilter();
         PopulateBranchItemsFilter();
         PopulateItemTradeItemsFilter();
+        PopulateInventoryTypeItemsFilter();
         PopulateQuestConditionItems();
         PopulateQuestListItems();
         PopulateAddEffectItems();
@@ -55,8 +56,6 @@ public partial class ItemDataManager: ObservableObject
         _itemDataView.Filter = FilterItems;
         _optionView = CollectionViewSource.GetDefaultView(OptionItems);
         _optionView.Filter = FilterOption;
-        ItemTradeFilter = 2;
-
     }
 
     public static ObservableCollection<InventoryItem> InitializeCollection(int itemCount, int pageIndex)
@@ -143,7 +142,7 @@ public partial class ItemDataManager: ObservableObject
 
         ItemData itemData = new();
 
-        if (cachedItem != null) 
+        if (cachedItem != null)
         {
             itemData = new()
             {
@@ -159,6 +158,7 @@ public partial class ItemDataManager: ObservableObject
                 ItemTrade = cachedItem.ItemTrade,
                 InventoryType = cachedItem.InventoryType,
                 OverlapCnt = cachedItem.OverlapCnt,
+                BindingOff = cachedItem.BindingOff,
                 Defense = cachedItem.Defense,
                 MagicDefense = cachedItem.MagicDefense,
                 Branch = cachedItem.Branch,
@@ -438,6 +438,9 @@ public partial class ItemDataManager: ObservableObject
         if (obj is ItemData item)
         {
             //combobox filter 
+            if (ItemTypesFilter.Count != 0 && !ItemTypesFilter.Contains(item.Type))
+                return false;
+
             if (ItemTypeFilter != 0 && item.Type != ItemTypeFilter)
                 return false;
 
@@ -453,7 +456,7 @@ public partial class ItemDataManager: ObservableObject
             if (ItemBranchFilter != 0 && item.Branch != ItemBranchFilter)
                 return false;
 
-            if (ItemTradeFilter != 2 && item.ItemTrade != ItemTradeFilter)
+            if (ItemTradeFilter != -1 && item.ItemTrade != ItemTradeFilter)
                 return false;
 
             if (InventoryTypeFilter != 0 && item.InventoryType != InventoryTypeFilter)
@@ -566,6 +569,14 @@ public partial class ItemDataManager: ObservableObject
     private bool _itemTypeEnabled = true;
 
     [ObservableProperty]
+    private List<int> _itemTypesFilter = [];
+
+    partial void OnItemTypesFilterChanged(List<int> value)
+    {
+        RefreshView();
+    }
+
+    [ObservableProperty]
     private int _itemCategoryFilter;
     partial void OnItemCategoryFilterChanged(int value)
     {
@@ -586,7 +597,7 @@ public partial class ItemDataManager: ObservableObject
     private bool _itemSubCategoryEnabled = true;
 
     [ObservableProperty]
-    private int _itemTradeFilter;
+    private int _itemTradeFilter = -1;
     partial void OnItemTradeFilterChanged(int value)
     {
         RefreshView();
@@ -683,6 +694,31 @@ public partial class ItemDataManager: ObservableObject
     }
 
     [ObservableProperty]
+    private List<NameID>? _inventoryTypeItems;
+
+    private void PopulateInventoryTypeItemsFilter()
+    {
+        try
+        {
+            InventoryTypeItems =
+            [
+                new NameID { ID = 0, Name = Resources.None },
+                new NameID { ID = 1, Name = Resources.Equipment },
+                new NameID { ID = 2, Name = Resources.Consume },
+                new NameID { ID = 3, Name = Resources.Other },
+                new NameID { ID = 4, Name = Resources.Quest },
+                new NameID { ID = 5, Name = Resources.Costume },
+                new NameID { ID = 6, Name = Resources.TriggerItem }
+            ];
+
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+        }
+    }
+
+    [ObservableProperty]
     private int _accountStorageFilter;
     partial void OnAccountStorageFilterChanged(int value)
     {
@@ -698,9 +734,9 @@ public partial class ItemDataManager: ObservableObject
         {
             ItemTradeFilterItems =
             [
+                new NameID { ID = -1, Name = Resources.All },
                 new NameID { ID = 0, Name = Resources.Untradeable },
-                new NameID { ID = 1, Name = Resources.Tradeable },
-                new NameID { ID = 2, Name = Resources.All }
+                new NameID { ID = 1, Name = Resources.Tradeable }
             ];
 
         }

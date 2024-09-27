@@ -198,9 +198,20 @@ namespace RHToolkit.Services
             return weight > 0 ? $"{weight / 1000.0:0.000}{Resources.Kg}" : string.Empty;
         }
 
-        public static string FormatReconstruction(int reconstruction, int reconstructionMax, int itemTrade)
+        public static string FormatReconstruction(int reconstruction, int reconstructionMax, int itemBinding)
         {
-            return reconstructionMax > 0 && itemTrade != 0 ? $"{Resources.AttributeItem} ({reconstruction} {Resources.Times}/{reconstructionMax} {Resources.Times})" : $"{Resources.BoundItem}";
+            if (reconstructionMax > 0 && itemBinding == 1)
+            {
+                return $"{Resources.AttributeItem} ({reconstruction} {Resources.Times}/{reconstructionMax} {Resources.Times})";
+            }
+            else if (reconstructionMax > 0 && itemBinding == 0)
+            {
+                return $"{Resources.BoundItem}";
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
 
         public static string FormatPetFood(int petFood)

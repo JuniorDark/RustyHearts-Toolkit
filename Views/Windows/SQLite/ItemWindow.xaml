@@ -749,33 +749,18 @@
                     VerticalContentAlignment="Center"
                     bh:DataGridBehavior.EnableScrollIntoView="True"
                     AutoGenerateColumns="False"
-                    BorderBrush="#FF0F0D0A"
                     CanUserAddRows="False"
                     ColumnWidth="Auto"
                     EnableColumnVirtualization="True"
                     EnableRowVirtualization="True"
-                    FontFamily="{StaticResource ArialUnicodeMS}"
-                    FontSize="12"
                     HeadersVisibility="Column"
-                    HorizontalGridLinesBrush="White"
                     HorizontalScrollBarVisibility="Disabled"
                     ItemsSource="{Binding ItemDataManager.ItemDataView}"
                     Loaded="DataGridView_Loaded"
                     SelectedItem="{Binding SelectedItem}"
                     SelectionChanged="DataGridView_SelectionChanged"
                     SelectionMode="{Binding SelectionMode}"
-                    Template="{StaticResource lb_datagrid}"
-                    VerticalGridLinesBrush="White">
-                    <DataGrid.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkBlue" />
-                    </DataGrid.Resources>
-                    <DataGrid.Foreground>
-                        <ImageBrush />
-                    </DataGrid.Foreground>
-                    <DataGrid.Background>
-                        <ImageBrush />
-                    </DataGrid.Background>
+                    Template="{StaticResource lb_datagrid}">
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="*"

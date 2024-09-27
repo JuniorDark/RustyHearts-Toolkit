@@ -208,7 +208,8 @@
                 d:Text="[Title Efffect]"
                 Foreground="#06EBE8"
                 Style="{StaticResource ArialMS}"
-                Text="{Binding TitleEffectText}" />
+                Text="{Binding TitleEffectText}"
+                TextWrapping="Wrap" />
             <TextBlock
                 x:Name="tbPetFood"
                 Grid.Row="10"
@@ -230,7 +231,8 @@
                 d:Text="Item ID: "
                 Foreground="White"
                 Style="{StaticResource ArialMS}"
-                Text="{Binding ItemId, StringFormat=' Item ID: {0}'}" />
+                Text="{Binding ItemId, StringFormat=' Item ID: {0}'}"
+                Visibility="{Binding ItemId, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         </Grid>
     </ContentControl>
 </UserControl>

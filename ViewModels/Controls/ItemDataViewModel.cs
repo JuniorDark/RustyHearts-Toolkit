@@ -25,6 +25,7 @@ public partial class ItemDataViewModel(IFrameService frameService, IGMDatabaseSe
             MaxDurability = itemData.Durability;
             ReconstructionMax = itemData.ReconstructionMax;
             Reconstruction = itemData.ReconstructionMax;
+            BindingOff = itemData.BindingOff;
             Type = itemData.Type;
             Category = itemData.Category;
             SubCategory = itemData.SubCategory;
@@ -219,13 +220,17 @@ public partial class ItemDataViewModel(IFrameService frameService, IGMDatabaseSe
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ReconstructionText))]
+    private int _bindingOff;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ReconstructionText))]
     private int _reconstruction;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ReconstructionText))]
     private int _reconstructionMax;
 
-    public string ReconstructionText => FrameService.FormatReconstruction(Reconstruction, ReconstructionMax, ItemTrade);
+    public string ReconstructionText => FrameService.FormatReconstruction(Reconstruction, ReconstructionMax, BindingOff);
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(RankText))]
@@ -400,7 +405,7 @@ public partial class ItemDataViewModel(IFrameService frameService, IGMDatabaseSe
     private int _optionMinValue;
 
     [ObservableProperty]
-    private int _optionMaxValue;
+    private int _optionMaxValue = 10000;
 
     private int CalculateOptionValue(int option, int value)
     {

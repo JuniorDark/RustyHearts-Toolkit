@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="RHToolkit.Views.Controls.DropGroupEditorMenu"
+    x:Class="RHToolkit.Views.Controls.ItemEditorMenu"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:control="clr-namespace:RHToolkit.Views.Controls"
@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
-    d:DataContext="{d:DesignInstance Type=windows:DropGroupEditorViewModel}"
+    d:DataContext="{d:DesignInstance Type=windows:ItemEditorViewModel}"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -23,79 +23,31 @@
             FontSize="14"
             Foreground="White">
             <ui:MenuItem Header="File" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                <MenuItem Header="Open Drop Group File..." Icon="{ui:SymbolIcon DocumentAdd24}">
+                <MenuItem Header="Open ItemList File..." Icon="{ui:SymbolIcon DocumentAdd24}">
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="1"
-                        Header="Open itemdropgrouplist_f.rh"
+                        Header="Open itemlist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+1" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="2"
-                        Header="Open itemdropgrouplist.rh"
+                        Header="Open itemlist_costume.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+2" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="3"
-                        Header="Open championitemdropgrouplist.rh"
+                        Header="Open itemlist_armor.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+3" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="4"
-                        Header="Open eventworlditemdropgrouplist.rh"
+                        Header="Open itemlist_weapon.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+4" />
-                    <MenuItem
-                        Command="{Binding LoadFileCommand}"
-                        CommandParameter="5"
-                        Header="Open instanceitemdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+5" />
-                    <MenuItem
-                        Command="{Binding LoadFileCommand}"
-                        CommandParameter="6"
-                        Header="Open questitemdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+6" />
-                    <MenuItem
-                        Command="{Binding LoadFileCommand}"
-                        CommandParameter="7"
-                        Header="Open worldinstanceitemdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+7" />
-                    <MenuItem
-                        Command="{Binding LoadFileCommand}"
-                        CommandParameter="8"
-                        Header="Open worlditemdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+8" />
-                    <MenuItem
-                        Command="{Binding LoadFileCommand}"
-                        CommandParameter="9"
-                        Header="Open worlditemdropgrouplist_fatigue.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+9" />
-                    <MenuItem
-                        Command="{Binding LoadFileCommand}"
-                        CommandParameter="10"
-                        Header="Open riddleboxdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+1" />
-                    <MenuItem
-                        Command="{Binding LoadFileCommand}"
-                        CommandParameter="11"
-                        Header="Open rarecarddropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+2" />
-                    <MenuItem
-                        Command="{Binding LoadFileCommand}"
-                        CommandParameter="12"
-                        Header="Open rarecardrewarditemlist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+3" />
                 </MenuItem>
                 <MenuItem
                     Command="{Binding DataTableManager.SaveFileCommand}"

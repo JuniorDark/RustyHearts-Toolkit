@@ -1342,6 +1342,17 @@ public partial class DataTableManager : ObservableObject
 
                 item[column] = newValue;
 
+                if (item.Row.Table == SelectedItem?.Row.Table)
+                {
+                    SelectedItem = null;
+                    SelectedItem = item;
+                }
+                else if (item.Row.Table == SelectedItemString?.Row.Table && DataTable != null)
+                {
+                    SelectedItem = null;
+                    SelectedItem = GetRowViewById(DataTable, item);
+                }
+
                 var editHistory = new EditHistory
                 {
                     Row = item.Row.Table.Rows.IndexOf(item.Row),
@@ -1364,8 +1375,6 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
-
-
     private static bool AreValuesEqual(object? value1, object? value2)
     {
         if (value1 == null || value2 == null)
@@ -1387,7 +1396,6 @@ public partial class DataTableManager : ObservableObject
 
         return Equals(value1, value2);
     }
-
 
     public void UpdateSelectedItemValue(object? newValue, string column)
     {

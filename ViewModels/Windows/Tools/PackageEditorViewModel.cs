@@ -276,13 +276,15 @@ namespace RHToolkit.ViewModels.Windows
             {
                 DataTableManager.StartGroupingEdits();
                 DataTableManager.AddNewRow();
-                PackageName = "New Package";
-                PackageDesc = "New Package Description";
-
+                if (DataTableManager.SelectedItem != null)
+                {
+                    DataTableManager.SelectedItem["wszName"] = "New Package";
+                    DataTableManager.SelectedItem["wszDesc"] = "New Package Description";
+                }
                 if (DataTableManager.SelectedItemString != null)
                 {
-                    PackageNameString = "New Package";
-                    PackageDescString = "New Package Description";
+                    DataTableManager.SelectedItemString["wszName"] = "New Package";
+                    DataTableManager.SelectedItemString["wszDesc"] = "New Package Description";
                 }
                 DataTableManager.EndGroupingEdits();
             }
@@ -343,61 +345,73 @@ namespace RHToolkit.ViewModels.Windows
         private void UpdateSelectedItem(DataRowView? selectedItem)
         {
             _isUpdatingSelectedItem = true;
-            PackageItems?.Clear();
-            PackageEffects?.Clear();
 
             if (selectedItem != null)
             {
-                PackageID = (int)selectedItem["nID"];
-                PackageName = (string)selectedItem["wszName"];
-                PackageDesc = (string)selectedItem["wszDesc"];
-                PackageIcon = (string)selectedItem["szPackageIcon"];
                 PackageType = (int)selectedItem["nPackageType"];
                 EffectRemainTime = (int)selectedItem["nEffectRemainTime"];
-                RuneGroup00 = (int)selectedItem["nRuneGroup00"];
-                RuneGroup01 = (int)selectedItem["nRuneGroup01"];
-                RuneGroup02 = (int)selectedItem["nRuneGroup02"];
 
-                if (DataTableManager.DataTableString != null && DataTableManager.SelectedItemString != null)
-                {
-                    PackageNameString = (string)DataTableManager.SelectedItemString["wszName"];
-                    PackageDescString = (string)DataTableManager.SelectedItemString["wszDesc"];
-                }
-                else
-                {
-                    PackageNameString = "Missing Name String";
-                    PackageDescString = "Missing Desc String";
-                }
-
-                PackageItems = [];
-                PackageEffects = [];
+                PackageItems ??= [];
+                PackageEffects ??= [];
 
                 for (int i = 0; i < 12; i++)
                 {
-                    var item = new PackageItem
+                    var itemCode = (int)selectedItem[$"nItemCode{i:00}"];
+                    var itemCount = (int)selectedItem[$"nItemCount{i:00}"];
+                    var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, i, itemCount);
+
+                    if (i < PackageItems.Count)
                     {
-                        ItemCode = (int)selectedItem[$"nItemCode{i:00}"],
-                        ItemCount = (int)selectedItem[$"nItemCount{i:00}"],
-                        ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItemCode{i:00}"], i, (int)selectedItem[$"nItemCount{i:00}"])
-                    };
+                        var existingItem = PackageItems[i];
 
-                    PackageItems.Add(item);
+                        existingItem.ItemCode = itemCode;
+                        existingItem.ItemCount = itemCount;
+                        existingItem.ItemDataViewModel = itemDataViewModel;
+                    }
+                    else
+                    {
+                        var item = new PackageItem
+                        {
+                            ItemCode = itemCode,
+                            ItemCount = itemCount,
+                            ItemDataViewModel = itemDataViewModel
+                        };
 
-                    ItemPropertyChanged(item, i);
+                        PackageItems.Add(item);
+
+                        ItemPropertyChanged(item, i);
+                    }
+                    
                 }
                 for (int i = 0; i < 6; i++)
                 {
-                    var item = new PackageItem
-                    {
-                        EffectCode = (int)selectedItem[$"nEffectCode{i:00}"],
-                        EffectValue = (float)selectedItem[$"fEffectValue{i:00}"],
-                        StringID = (int)selectedItem[$"nStringID{i:00}"]
-                    };
+                    var effectCode = (int)selectedItem[$"nEffectCode{i:00}"];
+                    var effectValue = (float)selectedItem[$"fEffectValue{i:00}"];
+                    var stringID = (int)selectedItem[$"nStringID{i:00}"];
 
-                    PackageEffects.Add(item);
-                    EffectPropertyChanged(item, i);
-                    UpdateEffectValueRanges(i, item.EffectCode);
+                    if (i < PackageEffects.Count)
+                    {
+                        var existingItem = PackageEffects[i];
+
+                        existingItem.EffectCode = effectCode;
+                        existingItem.EffectValue = effectValue;
+                        existingItem.StringID = stringID;
+                    }
+                    else
+                    {
+                        var item = new PackageItem
+                        {
+                            EffectCode = (int)selectedItem[$"nEffectCode{i:00}"],
+                            EffectValue = (float)selectedItem[$"fEffectValue{i:00}"],
+                            StringID = (int)selectedItem[$"nStringID{i:00}"]
+                        };
+
+                        PackageEffects.Add(item);
+                        EffectPropertyChanged(item, i);
+                        UpdateEffectValueRanges(i, item.EffectCode);
+                    }
                 }
+
                 FormatPackageEffect();
                 IsSelectedItemVisible = Visibility.Visible;
             }
@@ -507,7 +521,7 @@ namespace RHToolkit.ViewModels.Windows
                     new NameID { ID = 2, Name = "Extra Auction Slots" },
                     new NameID { ID = 3, Name = "Repurchase Cost Decrease" },
                     new NameID { ID = 4, Name = "Guild EXP Bonus" },
-                    //new NameID { ID = 5, Name = "Potions available at the shops ?" },
+                    new NameID { ID = 5, Name = "Exclusive Items available at the shops" },
                     new NameID { ID = 6, Name = "Can Use High Level Items" },
                     new NameID { ID = 7, Name = "Increases Gold Card Drop Rate" },
                     new NameID { ID = 8, Name = "Bonus Card Selection" },
@@ -592,67 +606,6 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private ObservableCollection<PackageItem> _packageEffects = [];
 
-        private bool _isUpdatingSelectedItem = false;
-
-        private void UpdateSelectedItemValue(object? newValue, string column)
-        {
-            if (_isUpdatingSelectedItem)
-                return;
-            DataTableManager.UpdateSelectedItemValue(newValue, column);
-        }
-
-        private void UpdateSelectedItemStringValue(object? newValue, string column)
-        {
-            if (_isUpdatingSelectedItem)
-                return;
-            DataTableManager.UpdateSelectedItemStringValue(newValue, column);
-        }
-
-        [ObservableProperty]
-        private int _packageID;
-        partial void OnPackageIDChanged(int value)
-        {
-            DataTableManager.StartGroupingEdits();
-            UpdateSelectedItemValue(value, "nID");
-            UpdateSelectedItemStringValue(value, "nID");
-            DataTableManager.EndGroupingEdits();
-        }
-
-        [ObservableProperty]
-        private string? _packageName;
-        partial void OnPackageNameChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszName");
-        }
-
-        [ObservableProperty]
-        private string? _packageNameString;
-        partial void OnPackageNameStringChanged(string? value)
-        {
-            UpdateSelectedItemStringValue(value, "wszName");
-        }
-
-        [ObservableProperty]
-        private string? _packageDesc;
-        partial void OnPackageDescChanged(string? value)
-        {
-             UpdateSelectedItemValue(value, "wszDesc");
-        }
-
-        [ObservableProperty]
-        private string? _packageDescString;
-        partial void OnPackageDescStringChanged(string? value)
-        {
-            UpdateSelectedItemStringValue(value, "wszDesc");
-        }
-
-        [ObservableProperty]
-        private string? _packageIcon;
-        partial void OnPackageIconChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szPackageIcon");
-        }
-
         [ObservableProperty]
         private int _packageType;
         partial void OnPackageTypeChanged(int value)
@@ -701,23 +654,6 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
-        private int _runeGroup00;
-        partial void OnRuneGroup00Changed(int value) => OnRuneGroupChanged(0, value);
-
-        [ObservableProperty]
-        private int _runeGroup01;
-        partial void OnRuneGroup01Changed(int value) => OnRuneGroupChanged(1, value);
-
-        [ObservableProperty]
-        private int _runeGroup02;
-        partial void OnRuneGroup02Changed(int value) => OnRuneGroupChanged(2, value);
-
-        private void OnRuneGroupChanged(int value, int index)
-        {
-            UpdateSelectedItemValue(value, $"nRuneGroup{index:00}");
-        }
-
-        [ObservableProperty]
         private bool _isPackageEffectEnabled = true;
 
         #endregion
@@ -725,6 +661,22 @@ namespace RHToolkit.ViewModels.Windows
         #endregion
 
         #region Properties Helper
+        private bool _isUpdatingSelectedItem = false;
+
+        private void UpdateSelectedItemValue(object? newValue, string column)
+        {
+            if (_isUpdatingSelectedItem)
+                return;
+            DataTableManager.UpdateSelectedItemValue(newValue, column);
+        }
+
+        private void UpdateSelectedItemStringValue(object? newValue, string column)
+        {
+            if (_isUpdatingSelectedItem)
+                return;
+            DataTableManager.UpdateSelectedItemStringValue(newValue, column);
+        }
+
         private void FormatPackageEffect()
         {
             string effectRemainTime = DateTimeFormatter.FormatMinutesToDate(EffectRemainTime);

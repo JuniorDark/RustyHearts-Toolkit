@@ -166,7 +166,7 @@
                 Foreground="White"
                 Style="{StaticResource ArialMS}"
                 Text="{Binding RandomOption}"
-                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+                Visibility="{Binding RandomOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
             <TextBlock
                 x:Name="tbRandomOption01"
                 Grid.Row="8"
@@ -180,7 +180,7 @@
                 Style="{StaticResource ArialMS}"
                 Text="{Binding RandomOption01Text}"
                 TextWrapping="Wrap"
-                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
+                Visibility="{Binding RandomOption01, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
             <TextBlock
                 x:Name="tbRandomOption02"
                 Grid.Row="9"
@@ -194,7 +194,7 @@
                 Style="{StaticResource ArialMS}"
                 Text="{Binding RandomOption02Text}"
                 TextWrapping="Wrap"
-                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=2}" />
+                Visibility="{Binding RandomOption02, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
             <TextBlock
                 x:Name="tbRandomOption03"
                 Grid.Row="10"
@@ -208,7 +208,7 @@
                 Style="{StaticResource ArialMS}"
                 Text="{Binding RandomOption03Text}"
                 TextWrapping="Wrap"
-                Visibility="{Binding OptionCountMax, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=3}" />
+                Visibility="{Binding RandomOption03, Converter={StaticResource EqualValueToVisibilityConverter}, ConverterParameter=0}" />
             <RichTextBox
                 x:Name="rtbDescription"
                 Grid.Row="12"
@@ -233,7 +233,8 @@
                 d:Text="Item ID: "
                 Foreground="White"
                 Style="{StaticResource ArialMS}"
-                Text="{Binding ItemId, StringFormat=' Item ID: {0}'}" />
+                Text="{Binding ItemId, StringFormat=' Item ID: {0}'}"
+                Visibility="{Binding ItemId, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         </Grid>
     </ContentControl>
 

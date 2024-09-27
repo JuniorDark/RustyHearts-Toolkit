@@ -229,13 +229,17 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
+                DataTableManager.StartGroupingEdits();
                 DataTableManager.AddNewRow();
-                SetName = "New Set";
-
+                if (DataTableManager.SelectedItem != null)
+                {
+                    DataTableManager.SelectedItem["wszName"] = "New Set";
+                }
                 if (DataTableManager.SelectedItemString != null)
                 {
-                    SetNameString = "New Set";
+                    DataTableManager.SelectedItemString["wszName"] = "New Set";;
                 }
+                DataTableManager.EndGroupingEdits();
             }
             catch (Exception ex)
             {
@@ -275,6 +279,8 @@ namespace RHToolkit.ViewModels.Windows
         }
         #endregion
 
+        #endregion
+
         #region DataRowViewMessage
         public void Receive(DataRowViewMessage message)
         {
@@ -289,54 +295,66 @@ namespace RHToolkit.ViewModels.Windows
         private void UpdateSelectedItem(DataRowView? selectedItem)
         {
             _isUpdatingSelectedItem = true;
-            SetItems?.Clear();
-            SetOptions?.Clear();
 
             if (selectedItem != null)
             {
-                SetID = (int)selectedItem["nID"];
-                SetName = (string)selectedItem["wszName"];
-
-                SetItems = [];
-                SetOptions = [];
+                SetItems ??= [];
+                SetOptions ??= [];
 
                 for (int i = 0; i < 6; i++)
                 {
-                    var item = new SetItem
+                    var setItemID = (int)selectedItem[$"nSetItemID{i:00}"];
+                    var itemDataViewModel = ItemDataManager.GetItemDataViewModel(setItemID, i, 1);
+
+                    if (i < SetItems.Count)
                     {
-                        SetItemID = (int)selectedItem[$"nSetItemID{i:00}"],
-                        ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nSetItemID{i:00}"], i, 1)
-                    };
+                        var existingItem = SetItems[i];
 
-                    SetItems.Add(item);
+                        existingItem.SetItemID = setItemID;
+                        existingItem.ItemDataViewModel = itemDataViewModel;
+                    }
+                    else
+                    {
+                        var item = new SetItem
+                        {
+                            SetItemID = setItemID,
+                            ItemDataViewModel = itemDataViewModel
+                        };
 
-                    SetItemPropertyChanged(item, i);
+                        SetItems.Add(item);
+                        SetItemPropertyChanged(item, i);
+                    }
                 }
 
                 for (int i = 0; i < 5; i++)
                 {
-                    var item = new SetItem
+                    var setOption = (int)selectedItem[$"nSetOption{i:00}"];
+                    var setOptionValue = (int)selectedItem[$"nSetOptionvlue{i:00}"];
+
+                    if (i < SetOptions.Count)
                     {
-                        SetOption = (int)selectedItem[$"nSetOption{i:00}"],
-                        SetOptionValue = (int)selectedItem[$"nSetOptionvlue{i:00}"]
-                    };
+                        var existingItem = SetOptions[i];
 
-                    SetOptions.Add(item);
+                        existingItem.SetOption = setOption;
+                        existingItem.SetOptionValue = setOptionValue;
+                    }
+                    else
+                    {
+                        var item = new SetItem
+                        {
+                            SetOption = setOption,
+                            SetOptionValue = setOptionValue
+                        };
 
-                    SetOptionPropertyChanged(item, i);
+                        SetOptions.Add(item);
+
+                        SetOptionPropertyChanged(item, i);
+                    }
                 }
 
                 FormatSetEffect();
                 UpdateSetOptions();
 
-                if (DataTableManager.DataTableString != null && DataTableManager.SelectedItemString != null)
-                {
-                    SetNameString = (string)DataTableManager.SelectedItemString["wszName"];
-                }
-                else
-                {
-                    SetNameString = "Missing Name String";
-                }
                 IsSelectedItemVisible = Visibility.Visible;
             }
             else
@@ -370,8 +388,6 @@ namespace RHToolkit.ViewModels.Windows
                 }
             };
         }
-
-        #endregion
 
         #endregion
 
@@ -471,27 +487,6 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private ObservableCollection<SetItem> _setOptions = [];
 
-        [ObservableProperty]
-        private int _setID;
-        partial void OnSetIDChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nID");
-        }
-
-        [ObservableProperty]
-        private string? _setName;
-        partial void OnSetNameChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszName");
-        }
-
-        [ObservableProperty]
-        private string? _setNameString;
-        partial void OnSetNameStringChanged(string? value)
-        {
-            UpdateSelectedItemStringValue(value, "wszName");
-        }
-
         private void OnSetItemChanged(int newValue, string column)
         {
             if (!_isUpdatingSelectedItem)
@@ -531,22 +526,6 @@ namespace RHToolkit.ViewModels.Windows
         #region Properties Helper
 
         private bool _isUpdatingSelectedItem = false;
-
-        private void UpdateSelectedItemValue(object? newValue, string column)
-        {
-            if (_isUpdatingSelectedItem)
-                return;
-
-            DataTableManager.UpdateSelectedItemValue(newValue, column);
-        }
-
-        private void UpdateSelectedItemStringValue(object? newValue, string column)
-        {
-            if (_isUpdatingSelectedItem)
-                return;
-
-            DataTableManager.UpdateSelectedItemStringValue(newValue, column);
-        }
 
         private void FormatSetEffect()
         {

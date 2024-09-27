@@ -58,9 +58,10 @@ namespace RHToolkit.ViewModels.Windows
                     string? fileName = GetFileNameFromDropGroupType(dropGroupType);
                     if (fileName == null) return;
 
+                    string columnName = GetColumnName(fileName);
                     SetDropGroupProperties(dropGroupType);
 
-                    bool isLoaded = await DataTableManager.LoadFileFromPath(fileName, null, "nDropItemCode01", "DropGroup");
+                    bool isLoaded = await DataTableManager.LoadFileFromPath(fileName, null, columnName, "DropGroup");
 
                     if (isLoaded)
                     {
@@ -85,7 +86,8 @@ namespace RHToolkit.ViewModels.Windows
                                 "itemdropgrouplist_f.rh;itemdropgrouplist.rh;championitemdropgrouplist.rh;" +
                                 "eventworlditemdropgrouplist.rh;instanceitemdropgrouplist.rh;" +
                                 "questitemdropgrouplist.rh;worldinstanceitemdropgrouplist.rh;" +
-                                "worlditemdropgrouplist.rh;worlditemdropgrouplist_fatigue.rh|" +
+                                "worlditemdropgrouplist.rh;worlditemdropgrouplist_fatigue.rh;" +
+                                "riddleboxdropgrouplist.rh;rarecarddropgrouplist.rh;rarecardrewarditemlist.rh|" +
                                 "All Files (*.*)|*.*";
 
                 OpenFileDialog openFileDialog = new()
@@ -105,9 +107,10 @@ namespace RHToolkit.ViewModels.Windows
                         return;
                     }
 
+                    string columnName = GetColumnName(fileName);
                     SetDropGroupProperties(dropGroupType);
 
-                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, null, "nDropItemCode01", "DropGroup");
+                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, null, columnName, "DropGroup");
 
                     if (isLoaded)
                     {
@@ -142,6 +145,9 @@ namespace RHToolkit.ViewModels.Windows
                 7 => "worldinstanceitemdropgrouplist.rh",
                 8 => "worlditemdropgrouplist.rh",
                 9 => "worlditemdropgrouplist_fatigue.rh",
+                10 => "riddleboxdropgrouplist.rh",
+                11 => "rarecarddropgrouplist.rh",
+                12 => "rarecardrewarditemlist.rh",
                 _ => throw new ArgumentOutOfRangeException(nameof(dropGroupType)),
             };
         }
@@ -159,7 +165,21 @@ namespace RHToolkit.ViewModels.Windows
                 "worldinstanceitemdropgrouplist.rh" => 7,
                 "worlditemdropgrouplist.rh" => 8,
                 "worlditemdropgrouplist_fatigue.rh" => 9,
+                "riddleboxdropgrouplist.rh" => 10,
+                "rarecarddropgrouplist.rh" => 11,
+                "rarecardrewarditemlist.rh" => 12,
                 _ => -1,
+            };
+        }
+
+        private static string GetColumnName(string fileName)
+        {
+            return fileName switch
+            {
+                "riddleboxdropgrouplist.rh" => "nRiddleboxGroup",
+                "rarecarddropgrouplist.rh" => "nBronzeCardID",
+                "rarecardrewarditemlist.rh" => "nRewardItem01",
+                _ => "nDropItemCode01",
             };
         }
 
@@ -169,9 +189,10 @@ namespace RHToolkit.ViewModels.Windows
             DropItemCount = DropGroupType switch
             {
                 ItemDropGroupType.ChampionItemItemDropGroupList or ItemDropGroupType.InstanceItemDropGroupList or ItemDropGroupType.QuestItemDropGroupList or ItemDropGroupType.WorldInstanceItemDropGroupList => 30,
-                ItemDropGroupType.ItemDropGroupListF or ItemDropGroupType.ItemDropGroupList => 40,
+                ItemDropGroupType.ItemDropGroupListF or ItemDropGroupType.ItemDropGroupList or ItemDropGroupType.RareCardRewardItemList => 40,
                 ItemDropGroupType.EventWorldItemDropGroupList or ItemDropGroupType.WorldItemDropGroupList or ItemDropGroupType.WorldItemDropGroupListF => 60,
-                _ => 0,
+                ItemDropGroupType.RiddleBoxDropGroupList => 25,
+                _ => 1,
             };
         }
 
@@ -241,8 +262,22 @@ namespace RHToolkit.ViewModels.Windows
 
         #endregion
 
-        #region Add Item
+        #region Add Row
+        [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+        private void AddRow()
+        {
+            try
+            {
+                DataTableManager.AddNewRow();
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
+        #endregion
 
+        #region Add Item
         [RelayCommand(CanExecute = nameof(CanExecuteSelectedItemCommand))]
         private void AddItem(string parameter)
         {
@@ -269,25 +304,31 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
-        public void Receive(ItemDataMessage message)
-        {
-            if (message.Recipient == "DropGroupEditorWindow" && message.Token == _token)
-            {
-                var itemData = message.Value;
-
-                if (DataTableManager.SelectedItem != null && itemData.SlotIndex >= 0 && itemData.SlotIndex <= DropGroupItems.Count)
-                {
-                    UpdateDropGroupItem(itemData);
-                }
-            }
-        }
-
-        [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
-        private void AddRow()
+        [RelayCommand(CanExecute = nameof(CanExecuteSelectedItemCommand))]
+        private void AddRareCardItem(string parameter)
         {
             try
             {
-                DataTableManager.AddNewRow();
+                if (int.TryParse(parameter, out int slotIndex))
+                {
+                    int rarecard = slotIndex switch
+                    {
+                        0 => DropGroupItems[0].BronzeCardCode,
+                        1 => DropGroupItems[0].SilverCardCode,
+                        2 => DropGroupItems[0].GoldCardCode,
+                        _ => throw new ArgumentOutOfRangeException($"Invalid slotIndex: {slotIndex}"),
+                    };
+                    var itemData = new ItemData
+                    {
+                        SlotIndex = slotIndex,
+                        ItemId = rarecard
+                    };
+
+                    var token = _token;
+
+                    _windowsService.OpenItemWindow(token, "RareCard", itemData);
+                }
+
             }
             catch (Exception ex)
             {
@@ -295,17 +336,59 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        public void Receive(ItemDataMessage message)
+        {
+            if (message.Recipient == "DropGroupEditorWindow" && message.Token == _token)
+            {
+                var itemData = message.Value;
+
+                if (itemData.ItemId != 0)
+                {
+                    if (DropGroupType == ItemDropGroupType.RareCardDropGroupList)
+                    {
+                        UpdateRareCardItem(itemData);
+                    }
+                    else
+                    {
+                        if (DataTableManager.SelectedItem != null && itemData.SlotIndex >= 0 && itemData.SlotIndex < DropGroupItems.Count)
+                        {
+                            UpdateDropGroupItem(itemData);
+                        }
+                    }
+                }
+            }
+        }
+
         private void UpdateDropGroupItem(ItemData itemData)
         {
-            if (itemData.ItemId != 0)
+            DataTableManager.StartGroupingEdits();
+            var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+            DropGroupItems[itemData.SlotIndex].DropItemCode = itemData.ItemId;
+            DropGroupItems[itemData.SlotIndex].ItemDataViewModel = itemDataViewModel;
+            OnPropertyChanged(nameof(DropGroupItems));
+            DataTableManager.EndGroupingEdits();
+        }
+
+        private void UpdateRareCardItem(ItemData itemData)
+        {
+            var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+            switch (itemData.SlotIndex)
             {
-                DataTableManager.StartGroupingEdits();
-                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
-                DropGroupItems[itemData.SlotIndex].DropItemCode = itemData.ItemId;
-                DropGroupItems[itemData.SlotIndex].ItemDataViewModel = itemDataViewModel;
-                OnPropertyChanged(nameof(DropGroupItems));
-                DataTableManager.EndGroupingEdits();
+                case 0:
+                    DropGroupItems[0].BronzeCardCode = itemData.ItemId;
+                    DropGroupItems[0].BronzeCard = itemDataViewModel;
+                    break;
+                case 1:
+                    DropGroupItems[0].SilverCardCode = itemData.ItemId;
+                    DropGroupItems[0].SilverCard = itemDataViewModel;
+                    break;
+                case 2:
+                    DropGroupItems[0].GoldCardCode = itemData.ItemId;
+                    DropGroupItems[0].GoldCard = itemDataViewModel;
+                    break;
             }
+
+            OnPropertyChanged(nameof(DropGroupItems));
         }
 
         #endregion
@@ -331,7 +414,7 @@ namespace RHToolkit.ViewModels.Windows
 
         private void RemoveDropGroupItem(int slotIndex)
         {
-            if (slotIndex >= 0 && slotIndex <= DropGroupItems.Count)
+            if (slotIndex >= 0 && slotIndex < DropGroupItems.Count)
             {
                 DataTableManager.StartGroupingEdits();
                 DropGroupItems[slotIndex].ItemDataViewModel = null;
@@ -343,6 +426,56 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        [RelayCommand]
+        private void RemoveRareCardItem(string parameter)
+        {
+            try
+            {
+                if (int.TryParse(parameter, out int slotIndex))
+                {
+                    switch (slotIndex)
+                    {
+                        case 0:
+                            DropGroupItems[0].BronzeCardCode = 0;
+                            DropGroupItems[0].BronzeCard = null;
+                            break;
+                        case 1:
+                            DropGroupItems[0].SilverCardCode = 0;
+                            DropGroupItems[0].SilverCard = null;
+                            break;
+                        case 2:
+                            DropGroupItems[0].GoldCardCode = 0;
+                            DropGroupItems[0].GoldCard = null;
+                            break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+
+        }
+
+        #endregion
+
+        #region Open RareCardRewardItemList
+
+        [RelayCommand]
+        private void OpenRareCardRewardItemList(int parameter)
+        {
+            try
+            {
+                if (parameter != 0)
+                {
+                    //_windowsService.OpenNpcShopWindow(_token, parameter);
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
         #endregion
 
         #endregion
@@ -354,13 +487,38 @@ namespace RHToolkit.ViewModels.Windows
 
             List<string> columns = [];
 
-            columns.Insert(0, "CONVERT(nID, 'System.String')");
+            columns.Add("CONVERT(nID, 'System.String')");
 
-            for (int i = 1; i <= DropItemCount; i++)
+            switch (DropGroupType)
             {
-                string columnName = $"nDropItemCode{i:00}";
-                columns.Add($"CONVERT({columnName}, 'System.String')");
+                case ItemDropGroupType.RiddleBoxDropGroupList:
+                    for (int i = 0; i < DropItemCount; i++)
+                    {
+                        string columnName = $"nItem{i:00}";
+                        columns.Add($"CONVERT({columnName}, 'System.String')");
+                    }
+                    break;
+                case ItemDropGroupType.RareCardDropGroupList:
+                    columns.Add("CONVERT(nBronzeCardID, 'System.String')");
+                    columns.Add("CONVERT(nSilverCardID, 'System.String')");
+                    columns.Add("CONVERT(nGoldCardID, 'System.String')");
+                    break;
+                case ItemDropGroupType.RareCardRewardItemList:
+                    for (int i = 0; i < DropItemCount; i++)
+                    {
+                        string columnName = $"nRewardItem{i + 1:00}";
+                        columns.Add($"CONVERT({columnName}, 'System.String')");
+                    }
+                    break;
+                default:
+                    for (int i = 0; i < DropItemCount; i++)
+                    {
+                        string columnName = $"nDropItemCode{i + 1:00}";
+                        columns.Add($"CONVERT({columnName}, 'System.String')");
+                    }
+                    break;
             }
+
             if (columns.Count > 0)
             {
                 DataTableManager.ApplyFileDataFilter(filterParts, [.. columns], SearchText, MatchCase);
@@ -404,62 +562,84 @@ namespace RHToolkit.ViewModels.Windows
             {
                 var selectedItem = message.Value;
 
-                UpdateSelectedItem(selectedItem);
+                switch (DropGroupType)
+                {
+                    case ItemDropGroupType.RiddleBoxDropGroupList:
+                        UpdateRiddleDropGroupSelectedItem(selectedItem);
+                        break;
+                    case ItemDropGroupType.RareCardDropGroupList:
+                        UpdateRareCardDropGroupSelectedItem(selectedItem);
+                        break;
+                    case ItemDropGroupType.RareCardRewardItemList:
+                        UpdateRareCardRewardItemSelectedItem(selectedItem);
+                        break;
+                    default:
+                        UpdateDropGroupSelectedItem(selectedItem);
+                        break;
+                }
+
             }
         }
 
-        private void UpdateSelectedItem(DataRowView? selectedItem)
+        #region DropGroup
+        private void UpdateDropGroupSelectedItem(DataRowView? selectedItem)
         {
             _isUpdatingSelectedItem = true;
-            DropGroupItems?.Clear();
 
             if (selectedItem != null)
             {
-                DropGroupId = (int)selectedItem["nID"];
-                MaxRange = selectedItem.Row.Table.Columns.Contains("nMaxRange")
-                        ? (int)selectedItem["nMaxRange"] : 0;
-                MaxCount = selectedItem.Row.Table.Columns.Contains("nMaxCount")
-                        ? (int)selectedItem["nMaxCount"] : 0;
-                Seed = selectedItem.Row.Table.Columns.Contains("nSeed")
-                        ? (int)selectedItem["nSeed"] : 0;
-
-                Note = selectedItem.Row.Table.Columns.Contains("wszNote")
-                        ? (string)selectedItem["wszNote"] : string.Empty;
-                Name = selectedItem.Row.Table.Columns.Contains("wszName")
-                        ? (string)selectedItem["wszName"] : string.Empty;
-                Group = selectedItem.Row.Table.Columns.Contains("nGroup")
-                        ? (int)selectedItem["nGroup"] : 0;
-
-                DropGroupItems = [];
+                DropGroupItems ??= [];
 
                 for (int i = 0; i < DropItemCount; i++)
                 {
-                    var item = new ItemDropGroup
+                    int dropItemCode = (int)selectedItem[$"nDropItemCode{i + 1:00}"];
+                    var itemDataViewModel = ItemDataManager.GetItemDataViewModel(dropItemCode, i + 1, 1);
+
+                    // Check if the item at this index already exists
+                    if (i < DropGroupItems.Count)
                     {
-                        DropItemGroupType = DropGroupType,
-                        DropItemCode = (int)selectedItem[$"nDropItemCode{i + 1:00}"],
-                        FDropItemCount = selectedItem.Row.Table.Columns.Contains($"fDropItemCount{i + 1:00}")
-                        ? (float)selectedItem[$"fDropItemCount{i + 1:00}"]
-                        : 0,
-                        NDropItemCount = selectedItem.Row.Table.Columns.Contains($"nDropItemCount{i + 1:00}")
-                        ? (int)selectedItem[$"nDropItemCount{i + 1:00}"]
-                        : 0,
-                        Link = selectedItem.Row.Table.Columns.Contains($"nDropItemLink{i + 1:00}")
-                        ? (int)selectedItem[$"nDropItemLink{i + 1:00}"]
-                        : 0,
-                        Start = selectedItem.Row.Table.Columns.Contains($"nStart{i + 1:00}")
-                        ? (int)selectedItem[$"nStart{i + 1:00}"]
-                        : 0,
-                        End = selectedItem.Row.Table.Columns.Contains($"nEnd{i + 1:00}")
-                        ? (int)selectedItem[$"nEnd{i + 1:00}"]
-                        : 0,
-                        ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nDropItemCode{i + 1:00}"], i + 1, 1)
-                    };
+                        var existingItem = DropGroupItems[i];
+                        existingItem.DropItemGroupType = DropGroupType;
+                        existingItem.DropItemCode = dropItemCode;
+                        existingItem.FDropItemCount = selectedItem.Row.Table.Columns.Contains($"fDropItemCount{i + 1:00}")
+                            ? (float)selectedItem[$"fDropItemCount{i + 1:00}"] : 0;
+                        existingItem.NDropItemCount = selectedItem.Row.Table.Columns.Contains($"nDropItemCount{i + 1:00}")
+                            ? (int)selectedItem[$"nDropItemCount{i + 1:00}"] : 0;
+                        existingItem.Link = selectedItem.Row.Table.Columns.Contains($"nDropItemLink{i + 1:00}")
+                            ? (int)selectedItem[$"nDropItemLink{i + 1:00}"] : 0;
+                        existingItem.Start = selectedItem.Row.Table.Columns.Contains($"nStart{i + 1:00}")
+                            ? (int)selectedItem[$"nStart{i + 1:00}"] : 0;
+                        existingItem.End = selectedItem.Row.Table.Columns.Contains($"nEnd{i + 1:00}")
+                            ? (int)selectedItem[$"nEnd{i + 1:00}"] : 0;
+                        existingItem.ItemDataViewModel = itemDataViewModel;
 
-                    DropGroupItems.Add(item);
+                        ItemPropertyChanged(existingItem, i);
+                    }
+                    else
+                    {
+                        // If not enough items exist, add new ones
+                        var newItem = new ItemDropGroup
+                        {
+                            DropItemGroupType = DropGroupType,
+                            DropItemCode = dropItemCode,
+                            FDropItemCount = selectedItem.Row.Table.Columns.Contains($"fDropItemCount{i + 1:00}")
+                                ? (float)selectedItem[$"fDropItemCount{i + 1:00}"] : 0,
+                            NDropItemCount = selectedItem.Row.Table.Columns.Contains($"nDropItemCount{i + 1:00}")
+                                ? (int)selectedItem[$"nDropItemCount{i + 1:00}"] : 0,
+                            Link = selectedItem.Row.Table.Columns.Contains($"nDropItemLink{i + 1:00}")
+                                ? (int)selectedItem[$"nDropItemLink{i + 1:00}"] : 0,
+                            Start = selectedItem.Row.Table.Columns.Contains($"nStart{i + 1:00}")
+                                ? (int)selectedItem[$"nStart{i + 1:00}"] : 0,
+                            End = selectedItem.Row.Table.Columns.Contains($"nEnd{i + 1:00}")
+                                ? (int)selectedItem[$"nEnd{i + 1:00}"] : 0,
+                            ItemDataViewModel = itemDataViewModel
+                        };
 
-                    ItemPropertyChanged(item, i);
+                        DropGroupItems.Add(newItem);
+                        ItemPropertyChanged(newItem, i);
+                    }
                 }
+
                 CalculateDropItemCountTotal();
                 IsSelectedItemVisible = Visibility.Visible;
             }
@@ -471,6 +651,7 @@ namespace RHToolkit.ViewModels.Windows
             _isUpdatingSelectedItem = false;
             OnCanExecuteSelectedItemCommandChanged();
         }
+
 
         private void ItemPropertyChanged(ItemDropGroup item, int index)
         {
@@ -489,6 +670,236 @@ namespace RHToolkit.ViewModels.Windows
                 }
             };
         }
+
+        #endregion
+
+        #region RiddleBoxDropGroup
+        private void UpdateRiddleDropGroupSelectedItem(DataRowView? selectedItem)
+        {
+            _isUpdatingSelectedItem = true;
+
+            if (selectedItem != null)
+            {
+                DropGroupItems ??= [];
+
+                // Update existing items or add new ones
+                for (int i = 0; i < DropItemCount; i++)
+                {
+                    int dropItemCode = (int)selectedItem[$"nItem{i:00}"];
+                    var itemDataViewModel = ItemDataManager.GetItemDataViewModel(dropItemCode, i, 1);
+
+                    // Check if the item at this index already exists
+                    if (i < DropGroupItems.Count)
+                    {
+                        var existingItem = DropGroupItems[i];
+                        existingItem.DropItemGroupType = DropGroupType;
+                        existingItem.DropItemCode = dropItemCode;
+                        existingItem.ItemDataViewModel = itemDataViewModel;
+                        existingItem.SectionStart00 = (int)selectedItem[$"nSectionStart00"];
+                        existingItem.SectionEnd00 = (int)selectedItem[$"nSectionEnd00"];
+                        existingItem.Probability00 = (int)selectedItem[$"nProbability00"];
+                        existingItem.SectionStart01 = (int)selectedItem[$"nSectionStart01"];
+                        existingItem.SectionEnd01 = (int)selectedItem[$"nSectionEnd01"];
+                        existingItem.Probability01 = (int)selectedItem[$"nProbability01"];
+                        existingItem.SectionStart02 = (int)selectedItem[$"nSectionStart02"];
+                        existingItem.SectionEnd02 = (int)selectedItem[$"nSectionEnd02"];
+                        existingItem.Probability02 = (int)selectedItem[$"nProbability02"];
+                        existingItem.SectionStart03 = (int)selectedItem[$"nSectionStart03"];
+                        existingItem.SectionEnd03 = (int)selectedItem[$"nSectionEnd03"];
+                        existingItem.Probability03 = (int)selectedItem[$"nProbability03"];
+
+                        RiddleDropItemPropertyChanged(existingItem, i);
+                    }
+                    else
+                    {
+                        var newItem = new ItemDropGroup
+                        {
+                            DropItemGroupType = DropGroupType,
+                            DropItemCode = dropItemCode,
+                            ItemDataViewModel = itemDataViewModel,
+                            SectionStart00 = (int)selectedItem[$"nSectionStart00"],
+                            SectionEnd00 = (int)selectedItem[$"nSectionEnd00"],
+                            Probability00 = (int)selectedItem[$"nProbability00"],
+                            SectionStart01 = (int)selectedItem[$"nSectionStart01"],
+                            SectionEnd01 = (int)selectedItem[$"nSectionEnd01"],
+                            Probability01 = (int)selectedItem[$"nProbability01"],
+                            SectionStart02 = (int)selectedItem[$"nSectionStart02"],
+                            SectionEnd02 = (int)selectedItem[$"nSectionEnd02"],
+                            Probability02 = (int)selectedItem[$"nProbability02"],
+                            SectionStart03 = (int)selectedItem[$"nSectionStart03"],
+                            SectionEnd03 = (int)selectedItem[$"nSectionEnd03"],
+                            Probability03 = (int)selectedItem[$"nProbability03"]
+                        };
+
+                        DropGroupItems.Add(newItem);
+                        RiddleDropItemPropertyChanged(newItem, i);
+                    }
+                }
+
+                IsSelectedItemVisible = Visibility.Visible;
+            }
+            else
+            {
+                IsSelectedItemVisible = Visibility.Hidden;
+            }
+
+            _isUpdatingSelectedItem = false;
+            OnCanExecuteSelectedItemCommandChanged();
+        }
+
+
+        private void RiddleDropItemPropertyChanged(ItemDropGroup item, int index)
+        {
+            item.PropertyChanged += (s, e) =>
+            {
+                if (s is ItemDropGroup itemDropGroup)
+                {
+                    UpdateSelectedItemValue(itemDropGroup.DropItemCode, $"nItem{index:00}");
+                    UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart00");
+                    UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd00");
+                    UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability00");
+                    UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart01");
+                    UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd01");
+                    UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability01");
+                    UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart02");
+                    UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd02");
+                    UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability02");
+                    UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart03");
+                    UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd03");
+                    UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability03");
+
+                }
+            };
+        }
+        #endregion
+
+        #region RareCardDropGroup
+        private void UpdateRareCardDropGroupSelectedItem(DataRowView? selectedItem)
+        {
+            _isUpdatingSelectedItem = true;
+            DropGroupItems?.Clear();
+
+            if (selectedItem != null)
+            {
+                DropGroupItems = [];
+
+                FNilValue = (float)selectedItem["fNil"];
+
+                int bronzeCardCode = (int)selectedItem["nBronzeCardID"];
+                var bronzeCard = ItemDataManager.GetItemDataViewModel(bronzeCardCode, 1, 1);
+                double bronzeCardProbability = (float)selectedItem["fBronzeCard"];
+                int silverCardCode = (int)selectedItem["nSilverCardID"];
+                var silverCard = ItemDataManager.GetItemDataViewModel(silverCardCode, 1, 1);
+                double silverCardProbability = (float)selectedItem["fSilverCard"];
+                int goldCardCode = (int)selectedItem["nGoldCardID"];
+                var goldCard = ItemDataManager.GetItemDataViewModel(goldCardCode, 1, 1);
+                double goldCardProbability = (float)selectedItem["fGoldCard"];
+
+                var newItem = new ItemDropGroup
+                {
+                    DropItemGroupType = DropGroupType,
+                    BronzeCardCode = bronzeCardCode,
+                    BronzeCard = bronzeCard,
+                    BronzeCardProbability = bronzeCardProbability,
+                    SilverCardCode = silverCardCode,
+                    SilverCard = silverCard,
+                    SilverCardProbability = silverCardProbability,
+                    GoldCardCode = goldCardCode,
+                    GoldCard = goldCard,
+                    GoldCardProbability = goldCardProbability
+                };
+
+                DropGroupItems.Add(newItem);
+                RareCardDropItemPropertyChanged(newItem);
+
+                IsSelectedItemVisible = Visibility.Visible;
+            }
+            else
+            {
+                IsSelectedItemVisible = Visibility.Hidden;
+            }
+
+            _isUpdatingSelectedItem = false;
+            OnCanExecuteSelectedItemCommandChanged();
+        }
+
+        private void RareCardDropItemPropertyChanged(ItemDropGroup item)
+        {
+            item.PropertyChanged += (s, e) =>
+            {
+                if (s is ItemDropGroup rareCardDropGroup)
+                {
+                    UpdateSelectedItemValue(rareCardDropGroup.BronzeCardCode, $"nBronzeCardID");
+                    UpdateSelectedItemValue(rareCardDropGroup.BronzeCardProbability, $"fBronzeCard");
+                    UpdateSelectedItemValue(rareCardDropGroup.SilverCardCode, $"nSilverCardID");
+                    UpdateSelectedItemValue(rareCardDropGroup.SilverCardProbability, $"fSilverCard");
+                    UpdateSelectedItemValue(rareCardDropGroup.GoldCardCode, $"nGoldCardID");
+                    UpdateSelectedItemValue(rareCardDropGroup.GoldCardProbability, $"fGoldCard");
+                    CalculateRareCardFNilValue();
+                }
+            };
+        }
+        #endregion
+
+        #region RareCardRewardItemList
+        private void UpdateRareCardRewardItemSelectedItem(DataRowView? selectedItem)
+        {
+            _isUpdatingSelectedItem = true;
+
+            if (selectedItem != null)
+            {
+                DropGroupItems ??= [];
+
+                for (int i = 0; i < DropItemCount; i++)
+                {
+                    int rewardItemCode = (int)selectedItem[$"nRewardItem{i + 1:00}"];
+                    var itemDataViewModel = ItemDataManager.GetItemDataViewModel(rewardItemCode, i + 1, 1);
+
+                    if (i < DropGroupItems.Count)
+                    {
+                        var existingItem = DropGroupItems[i];
+                        existingItem.DropItemGroupType = DropGroupType;
+                        existingItem.DropItemCode = rewardItemCode;
+                        existingItem.ItemDataViewModel = itemDataViewModel;
+
+                        RareCardRewardItemPropertyChanged(existingItem, i);
+                    }
+                    else
+                    {
+                        var newItem = new ItemDropGroup
+                        {
+                            DropItemGroupType = DropGroupType,
+                            DropItemCode = rewardItemCode,
+                            ItemDataViewModel = itemDataViewModel,
+                        };
+
+                        DropGroupItems.Add(newItem);
+                        RareCardRewardItemPropertyChanged(newItem, i);
+                    }
+                }
+
+                IsSelectedItemVisible = Visibility.Visible;
+            }
+            else
+            {
+                IsSelectedItemVisible = Visibility.Hidden;
+            }
+
+            _isUpdatingSelectedItem = false;
+            OnCanExecuteSelectedItemCommandChanged();
+        }
+
+        private void RareCardRewardItemPropertyChanged(ItemDropGroup item, int index)
+        {
+            item.PropertyChanged += (s, e) =>
+            {
+                if (s is ItemDropGroup itemDropGroup)
+                {
+                    UpdateSelectedItemValue(itemDropGroup.DropItemCode, $"nRewardItem{index + 1:00}");
+                }
+            };
+        }
+        #endregion
 
         #endregion
 
@@ -522,55 +933,6 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private int _dropItemCount;
-
-        [ObservableProperty]
-        private int _dropGroupId;
-        partial void OnDropGroupIdChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nID");
-        }
-
-        [ObservableProperty]
-        private int _maxRange;
-        partial void OnMaxRangeChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nMaxRange");
-        }
-
-        [ObservableProperty]
-        private int _maxCount;
-        partial void OnMaxCountChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nMaxCount");
-        }
-
-        [ObservableProperty]
-        private int _seed;
-        partial void OnSeedChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nSeed");
-        }
-
-        [ObservableProperty]
-        private int _group;
-        partial void OnGroupChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nGroup");
-        }
-
-        [ObservableProperty]
-        private string? _note;
-        partial void OnNoteChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszNote");
-        }
-
-        [ObservableProperty]
-        private string? _name;
-        partial void OnNameChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszName");
-        }
 
         [ObservableProperty]
         private ObservableCollection<ItemDropGroup> _dropGroupItems = [];
@@ -636,6 +998,13 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        [ObservableProperty]
+        private double _fNilValue;
+        partial void OnFNilValueChanged(double value)
+        {
+            UpdateSelectedItemValue(value, "fNil");
+        }
+
         #endregion
 
         #endregion
@@ -650,6 +1019,8 @@ namespace RHToolkit.ViewModels.Windows
 
             DataTableManager.UpdateSelectedItemValue(newValue, column);
         }
+
+        #region DropGroup
 
         private bool _isUpdatingDropItemCountTotal = false;
 
@@ -694,6 +1065,25 @@ namespace RHToolkit.ViewModels.Windows
             }
 
         }
+
+        #endregion
+
+        #region RareCard
+
+        private void CalculateRareCardFNilValue()
+        {
+            if (DataTableManager.SelectedItem != null)
+            {
+
+                double currentTotal = DropGroupItems.Sum(item => item.BronzeCardProbability
+                                                              + item.SilverCardProbability
+                                                              + item.GoldCardProbability);
+
+                FNilValue = 1 - currentTotal;
+            }
+        }
+        #endregion
+
         #endregion
     }
 }

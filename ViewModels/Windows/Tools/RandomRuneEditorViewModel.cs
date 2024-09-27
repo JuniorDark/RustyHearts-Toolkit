@@ -233,7 +233,6 @@ namespace RHToolkit.ViewModels.Windows
             try
             {
                 DataTableManager.AddNewRow();
-                RuneDesc = "New";
             }
             catch (Exception ex)
             {
@@ -291,34 +290,47 @@ namespace RHToolkit.ViewModels.Windows
         private void UpdateSelectedItem(DataRowView? selectedItem)
         {
             _isUpdatingSelectedItem = true;
-            RuneItems?.Clear();
 
             if (selectedItem != null)
             {
-                RuneId = (int)selectedItem["nid"];
-                RuneDesc = (string)selectedItem["wszDisc"];
-                ChangeType = (int)selectedItem["nChangeType"] == 1;
-                RandomRuneGroup = (int)selectedItem["nRandomRuneGroup"];
-                RuneGrade = (int)selectedItem["nRuneGrade"];
-                RandomGroupProbability = (float)selectedItem["fRandomGroupProbability"];
                 MaxCount = (int)selectedItem["nMaxCount"];
 
-                RuneItems = [];
+                RuneItems ??= [];
 
                 for (int i = 0; i < 10; i++)
                 {
-                    var item = new RuneItem
+                    var itemCode = (int)selectedItem[$"nItemCode{i:00}"];
+                    var itemCodeCount = (int)selectedItem[$"nItemCodeCount{i:00}"];
+                    var itemCount = (int)selectedItem[$"nItemCount{i:00}"];
+                    var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, i, itemCodeCount);
+                    var isEnabled = (int)selectedItem[$"nItemCode{i:00}"] != 0;
+
+                    if (i < RuneItems.Count)
                     {
-                        ItemCode = (int)selectedItem[$"nItemCode{i:00}"],
-                        ItemCodeCount = (int)selectedItem[$"nItemCodeCount{i:00}"],
-                        ItemCount = (int)selectedItem[$"nItemCount{i:00}"],
-                        ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItemCode{i:00}"], i, (int)selectedItem[$"nItemCodeCount{i:00}"]),
-                        IsEnabled = (int)selectedItem[$"nItemCode{i:00}"] != 0
-                    };
+                        var existingItem = RuneItems[i];
 
-                    RuneItems.Add(item);
+                        existingItem.ItemCode = itemCode;
+                        existingItem.ItemCodeCount = itemCodeCount;
+                        existingItem.ItemCount = itemCount;
+                        existingItem.ItemDataViewModel = itemDataViewModel;
+                        existingItem.IsEnabled = isEnabled;
+                    }
+                    else
+                    {
+                        var item = new RuneItem
+                        {
+                            ItemCode = itemCode,
+                            ItemCodeCount = itemCodeCount,
+                            ItemCount = itemCount,
+                            ItemDataViewModel = itemDataViewModel,
+                            IsEnabled = isEnabled
+                        };
 
-                    SetItemPropertyChanged(item, i);
+                        RuneItems.Add(item);
+
+                        SetItemPropertyChanged(item, i);
+                    }
+
                 }
                 IsSelectedItemVisible = Visibility.Visible;
             }
@@ -459,48 +471,6 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private ObservableCollection<RuneItem> _runeItems = [];
-
-        [ObservableProperty]
-        private int _runeId;
-        partial void OnRuneIdChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nid");
-        }
-
-        [ObservableProperty]
-        private string? _runeDesc;
-        partial void OnRuneDescChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszDisc");
-        }
-
-        [ObservableProperty]
-        private bool _changeType;
-        partial void OnChangeTypeChanged(bool value)
-        {
-            UpdateSelectedItemValue(value, "nChangeType");
-        }
-
-        [ObservableProperty]
-        private int _randomRuneGroup;
-        partial void OnRandomRuneGroupChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nRandomRuneGroup");
-        }
-
-        [ObservableProperty]
-        private int _runeGrade;
-        partial void OnRuneGradeChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nRuneGrade");
-        }
-
-        [ObservableProperty]
-        private double _randomGroupProbability;
-        partial void OnRandomGroupProbabilityChanged(double value)
-        {
-            UpdateSelectedItemValue(value, "fRandomGroupProbability");
-        }
 
         [ObservableProperty]
         private int _MaxCount;

@@ -449,7 +449,6 @@ namespace RHToolkit.ViewModels.Windows
                 IconName = (string)selectedItem["szShopBigIcon"];
                 ShopDescription = (string)selectedItem["wszDesc"];
                 ShopCategory = (int)selectedItem["nCategory"];
-                ItemAmountText = ShopCategory == 0 ? "Duration (Minutes)" : "Item Amount";
                 CostumeCategory = (int)selectedItem["nCostumeCategory"];
                 ItemAmount = (int)selectedItem["nValue00"];
                 ItemState = (int)selectedItem["nItemState"];

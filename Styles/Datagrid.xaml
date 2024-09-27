@@ -105,6 +105,29 @@
     <Style TargetType="DataGridRowHeader">
         <Setter Property="Background" Value="Gray" />
         <Setter Property="Foreground" Value="White" />
+        <Setter Property="Padding" Value="15,5,5,5" />
+        <Setter Property="Cursor" Value="Arrow" />
     </Style>
+
+    <!--  Style for DataGrid  -->
+    <Style TargetType="DataGridCellsPresenter">
+        <Style.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkBlue" />
+        </Style.Resources>
+
+        <Setter Property="BorderBrush" Value="#FF0F0D0A" />
+        <Setter Property="FontFamily" Value="{StaticResource ArialUnicodeMS}" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
+    <Style BasedOn="{StaticResource {x:Type DataGrid}}" TargetType="DataGrid">
+        <Style.Triggers>
+            <Trigger Property="HeadersVisibility" Value="Column">
+                <Setter Property="RowHeaderWidth" Value="0" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 
 </ResourceDictionary>

@@ -148,8 +148,13 @@
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
+                                    Maximum="2147483647"
                                     Minimum="0"
-                                    Value="{Binding PackageID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Value="{Binding DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </ui:NumberBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="0"
@@ -186,8 +191,13 @@
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
+                                    Maximum="2147483647"
                                     Minimum="0"
-                                    Value="{Binding RuneGroup00, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Value="{Binding DataTableManager.SelectedItem[nRuneGroup00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nRuneGroup00" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </ui:NumberBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="1"
@@ -200,8 +210,15 @@
                                 <ui:NumberBox
                                     Width="150"
                                     Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
                                     Minimum="0"
-                                    Value="{Binding RuneGroup01, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Value="{Binding DataTableManager.SelectedItem[nRuneGroup01], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nRuneGroup01" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </ui:NumberBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="1"
@@ -216,8 +233,13 @@
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
+                                    Maximum="2147483647"
                                     Minimum="0"
-                                    Value="{Binding RuneGroup02, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Value="{Binding DataTableManager.SelectedItem[nRuneGroup02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nRuneGroup02" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </ui:NumberBox>
                             </StackPanel>
 
                             <StackPanel
@@ -236,7 +258,11 @@
                                     d:Text="Name"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding PackageNameString, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding DataTableManager.SelectedItemString[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="3"
@@ -254,7 +280,11 @@
                                     d:Text="Icon Name"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding PackageIcon, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding DataTableManager.SelectedItem[szPackageIcon], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szPackageIcon" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="4"
@@ -272,8 +302,12 @@
                                     d:Text="Description"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding PackageDescString, UpdateSourceTrigger=PropertyChanged}"
-                                    TextWrapping="Wrap" />
+                                    Text="{Binding DataTableManager.SelectedItemString[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    TextWrapping="Wrap">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszDesc" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="5"
@@ -291,7 +325,11 @@
                                     d:Text="Name"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding PackageName, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding DataTableManager.SelectedItem[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="6"
@@ -309,8 +347,12 @@
                                     d:Text="Description"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding PackageDesc, UpdateSourceTrigger=PropertyChanged}"
-                                    TextWrapping="Wrap" />
+                                    Text="{Binding DataTableManager.SelectedItem[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    TextWrapping="Wrap">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszDesc" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
                             </StackPanel>
                         </Grid>
                     </TabItem>
@@ -468,9 +510,7 @@
                             </StackPanel>
                         </Grid>
                     </TabItem>
-
                 </ui:TabView>
-
             </Grid>
             <DataGrid
                 x:Name="dataGridView"

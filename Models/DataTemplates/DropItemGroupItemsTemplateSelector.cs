@@ -10,6 +10,9 @@ namespace RHToolkit.Models.DataTemplates
         public DataTemplate? ItemDropGroupListItems { get; set; }
         public DataTemplate? InstanceItemDropGroupListItems { get; set; }
         public DataTemplate? WorldItemDropGroupListItems { get; set; }
+        public DataTemplate? RiddleBoxDropGroupListItems { get; set; }
+        public DataTemplate? RareCardDropGroupListItems { get; set; }
+        public DataTemplate? RareCardRewardItemListItems { get; set; }
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
@@ -21,6 +24,9 @@ namespace RHToolkit.Models.DataTemplates
                     ItemDropGroupType.ItemDropGroupList => ItemDropGroupListItems,
                     ItemDropGroupType.ChampionItemItemDropGroupList or ItemDropGroupType.InstanceItemDropGroupList or ItemDropGroupType.QuestItemDropGroupList or ItemDropGroupType.WorldInstanceItemDropGroupList => InstanceItemDropGroupListItems,
                     ItemDropGroupType.EventWorldItemDropGroupList or ItemDropGroupType.WorldItemDropGroupList or ItemDropGroupType.WorldItemDropGroupListF => WorldItemDropGroupListItems,
+                    ItemDropGroupType.RiddleBoxDropGroupList => RiddleBoxDropGroupListItems,
+                    ItemDropGroupType.RareCardDropGroupList => RareCardDropGroupListItems,
+                    ItemDropGroupType.RareCardRewardItemList => RareCardRewardItemListItems,
                     _ => null,
                 };
             }

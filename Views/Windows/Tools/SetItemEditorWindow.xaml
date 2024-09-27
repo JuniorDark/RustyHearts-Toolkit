@@ -125,11 +125,17 @@
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Set ID" />
                                 <ui:NumberBox
-                                    Width="120"
+                                    Width="150"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    Value="{Binding SetID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Maximum="2147483647"
+                                    Minimum="0"
+                                    Value="{Binding DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </ui:NumberBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="1"
@@ -142,11 +148,15 @@
                                 <TextBox
                                     Width="400"
                                     Height="30"
-                                    Margin="0,0,0,0"
+                                    Margin="0,0"
                                     d:Text="Name"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding SetNameString, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding DataTableManager.SelectedItemString[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="2"
@@ -163,13 +173,23 @@
                                     d:Text="Name"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding SetName, UpdateSourceTrigger=PropertyChanged}" />
+                                    Text="{Binding DataTableManager.SelectedItem[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
                             </StackPanel>
-
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.ColumnSpan="3"
+                                Margin="0,10,0,0"
+                                HorizontalAlignment="Center"
+                                Foreground="Gold"
+                                Text="Set Pieces" />
                             <StackPanel
                                 Grid.Row="3"
                                 Grid.ColumnSpan="2"
-                                Margin="0,10,0,0"
+                                Margin="0,20,0,0"
                                 HorizontalAlignment="Left"
                                 Orientation="Horizontal">
                                 <ItemsControl AlternationCount="{Binding SetItems.Count}" ItemsSource="{Binding SetItems}">

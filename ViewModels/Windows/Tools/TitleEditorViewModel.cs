@@ -178,13 +178,13 @@ namespace RHToolkit.ViewModels.Windows
             {
                 DataTableManager.StartGroupingEdits();
                 DataTableManager.AddNewRow();
-                TitleName = "New Title";
-                TitleDesc = "New Title";
-
+                if (DataTableManager.SelectedItem != null)
+                {
+                    DataTableManager.SelectedItem["wszTitleName"] = "New Title";
+                }
                 if (DataTableManager.SelectedItemString != null)
                 {
-                    TitleNameString = "New Title";
-                    TitleDescString = "New Title";
+                    DataTableManager.SelectedItemString["wszTitleName"] = "New Title"; ;
                 }
                 DataTableManager.EndGroupingEdits();
             }
@@ -193,6 +193,8 @@ namespace RHToolkit.ViewModels.Windows
                 RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
             }
         }
+        #endregion
+
         #endregion
 
         #region DataRowViewMessage
@@ -209,62 +211,67 @@ namespace RHToolkit.ViewModels.Windows
         private void UpdateSelectedItem(DataRowView? selectedItem)
         {
             _isUpdatingSelectedItem = true;
-            TitleEffects?.Clear();
-            TitleOptions?.Clear();
 
             if (selectedItem != null)
             {
-                TitleID = (int)selectedItem["nID"];
-                TitleType = (int)selectedItem["nTitleType"];
-                TitleCategory = (int)selectedItem["nTitleCategory"];
-                RechargeAble = (int)selectedItem["nRechargeAble"];
-                RemainTime = (int)selectedItem["nRemainTime"];
-                TitleName = (string)selectedItem["wszTitleName"];
-                TitleDesc = (string)selectedItem["wszTitleDesc"];
-                TitleSpriteName = (string)selectedItem["szTitleSpriteName"];
-
-                TitleEffects = [];
-                TitleOptions = [];
+                TitleEffects ??= [];
+                TitleOptions ??= [];
 
                 for (int i = 0; i < 6; i++)
                 {
-                    var item = new TitleEffect
+                    var addEffectID = (int)selectedItem[$"nAddEffectID{i:00}"];
+
+                    if (i < TitleEffects.Count)
                     {
-                        AddEffectID = (int)selectedItem[$"nAddEffectID{i:00}"]
-                    };
+                        var existingItem = TitleEffects[i];
 
-                    TitleEffects.Add(item);
+                        existingItem.AddEffectID = addEffectID;
+                    }
+                    else
+                    {
+                        var item = new TitleEffect
+                        {
+                            AddEffectID = addEffectID
+                        };
 
-                    TitleEffectPropertyChanged(item, i);
+                        TitleEffects.Add(item);
+                        TitleEffectPropertyChanged(item, i);
+                    }
                 }
 
                 for (int i = 0; i < 3; i++)
                 {
-                    var item = new TitleEffect
+                    var dummyName = (string)selectedItem[$"szDummyName{i:00}"];
+                    var mdataName = (string)selectedItem[$"szMdataName{i:00}"];
+                    var motionName = (string)selectedItem[$"szMotionName{i:00}"];
+                    var offSet = (string)selectedItem[$"szOffSet{i:00}"];
+
+                    if (i < TitleOptions.Count)
                     {
-                        DummyName = (string)selectedItem[$"szDummyName{i:00}"],
-                        MdataName = (string)selectedItem[$"szMdataName{i:00}"],
-                        MotionName = (string)selectedItem[$"szMotionName{i:00}"],
-                        OffSet = (string)selectedItem[$"szOffSet{i:00}"]
-                    };
+                        var existingItem = TitleOptions[i];
 
-                    TitleOptions.Add(item);
+                        existingItem.DummyName = dummyName;
+                        existingItem.MdataName = mdataName;
+                        existingItem.MotionName = motionName;
+                        existingItem.OffSet = offSet;
+                    }
+                    else
+                    {
+                        var item = new TitleEffect
+                        {
+                            DummyName = dummyName,
+                            MdataName = mdataName,
+                            MotionName = motionName,
+                            OffSet = offSet
+                        };
 
-                    TitleStringPropertyChanged(item, i);
+                        TitleOptions.Add(item);
+                        TitleStringPropertyChanged(item, i);
+                    }
                 }
 
                 FormatTitleEffect();
 
-                if (DataTableManager.DataTableString != null && DataTableManager.SelectedItemString != null)
-                {
-                    TitleNameString = (string)DataTableManager.SelectedItemString["wszTitleName"];
-                    TitleDescString = (string)DataTableManager.SelectedItemString["wszTitleDesc"];
-                }
-                else
-                {
-                    TitleNameString = "Missing Name String";
-                    TitleDescString = "Missing Desc String";
-                }
                 IsSelectedItemVisible = Visibility.Visible;
             }
             else
@@ -299,8 +306,6 @@ namespace RHToolkit.ViewModels.Windows
                 }
             };
         }
-
-        #endregion
 
         #endregion
 
@@ -414,84 +419,10 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private ObservableCollection<TitleEffect> _titleOptions = [];
 
-        [ObservableProperty]
-        private int _titleID;
-        partial void OnTitleIDChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nID");
-        }
-
-        [ObservableProperty]
-        private int _titleType;
-        partial void OnTitleTypeChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nTitleType");
-        }
-
-        [ObservableProperty]
-        private int _titleCategory;
-        partial void OnTitleCategoryChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nTitleCategory");
-        }
-
-        [ObservableProperty]
-        private string? _titleName;
-        partial void OnTitleNameChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszTitleName");
-        }
-
-        [ObservableProperty]
-        private string? _titleSpriteName;
-        partial void OnTitleSpriteNameChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szTitleSpriteName");
-        }
-
-        [ObservableProperty]
-        private string? _titleDesc;
-        partial void OnTitleDescChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszTitleDesc");
-        }
-
-        [ObservableProperty]
-        private string? _titleNameString;
-        partial void OnTitleNameStringChanged(string? value)
-        {
-            UpdateSelectedItemStringValue(value, "wszTitleName");
-        }
-
-        [ObservableProperty]
-        private string? _titleDescString;
-        partial void OnTitleDescStringChanged(string? value)
-        {
-            UpdateSelectedItemStringValue(value, "wszTitleDesc");
-        }
-        
         private void OnTitleEffectChanged(int newValue, string column)
         {
-            if (!_isUpdatingSelectedItem)
-            {
-                DataTableManager.UpdateSelectedItemValue(newValue, column);
-
-                FormatTitleEffect();
-            }
-        }
-
-        [ObservableProperty]
-        private int _rechargeAble;
-        partial void OnRechargeAbleChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nRechargeAble");
-        }
-
-        [ObservableProperty]
-        private int _remainTime;
-        partial void OnRemainTimeChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nRemainTime");
+            UpdateSelectedItemValue(newValue, column);
+            FormatTitleEffect();
         }
 
         [ObservableProperty]
@@ -513,14 +444,6 @@ namespace RHToolkit.ViewModels.Windows
             DataTableManager.UpdateSelectedItemValue(newValue, column);
         }
 
-        private void UpdateSelectedItemStringValue(object? newValue, string column)
-        {
-            if (_isUpdatingSelectedItem)
-                return;
-
-            DataTableManager.UpdateSelectedItemStringValue(newValue, column);
-        }
-
         private void FormatTitleEffect()
         {
             StringBuilder titleEffect = new($"[Title Effect]\n");
@@ -534,7 +457,9 @@ namespace RHToolkit.ViewModels.Windows
                 }
             }
 
-            string formattedRemainTime = DateTimeFormatter.FormatRemainTime(RemainTime);
+            int remainTime = (int)DataTableManager.SelectedItem!["nRemainTime"];
+
+            string formattedRemainTime = DateTimeFormatter.FormatRemainTime(remainTime);
             titleEffect.AppendLine($"\nTitle Duration: {formattedRemainTime}");
             TitleEffectText = titleEffect.ToString();
         }

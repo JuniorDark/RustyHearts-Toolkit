@@ -51,21 +51,32 @@ namespace RHToolkit.ViewModels.Windows
 
         private void UpdateNpcShop(int shopID)
         {
-            NpcShopItems?.Clear();
-
-            NpcShopItems = [];
+            NpcShopItems ??= [];
 
             var items = _gmDatabaseService.GetNpcShopItems(shopID);
 
             for (int i = 0; i < items.Count; i++)
             {
-                var item = new NPCShopItem
-                {
-                    ItemCode = items[i],
-                    ItemDataViewModel = ItemDataManager.GetItemDataViewModel(items[i], i, 1)
-                };
+                var itemCode = items[i];
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, i, 1);
 
-                NpcShopItems.Add(item);
+                if (i < NpcShopItems.Count)
+                {
+                    var existingItem = NpcShopItems[i];
+
+                    existingItem.ItemCode = itemCode;
+                    existingItem.ItemDataViewModel = itemDataViewModel;
+                }
+                else
+                {
+                    var item = new NPCShopItem
+                    {
+                        ItemCode = itemCode,
+                        ItemDataViewModel = itemDataViewModel
+                    };
+
+                    NpcShopItems.Add(item);
+                }
             }
         }
 

@@ -113,7 +113,7 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
             }
             else if (AssociatedObject is CheckBox checkBox)
             {
-                newValue = checkBox.IsChecked ?? false;
+                newValue = checkBox.IsChecked == true ? 1 : 0;
             }
             else if (AssociatedObject is Wpf.Ui.Controls.NumberBox numberBox)
             {

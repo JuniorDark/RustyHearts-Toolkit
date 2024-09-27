@@ -52,7 +52,7 @@
                         <ui:TextBlock
                             FontTypography="BodyStrong"
                             Foreground="#B7FFFFFF"
-                            Text="A collection of tools for editing Rusty Hearts database/table files." />
+                            Text="A collection of tools for editing Rusty Hearts database ant table files." />
                     </StackPanel>
                     <ui:TextBlock
                         Margin="12"
@@ -181,8 +181,8 @@
                 Margin="8,0,0,0"
                 Padding="4"
                 Content="GitHub"
-                NavigateUri="https://github.com/JuniorDark/RHToolkit"
-                ToolTip="https://github.com/JuniorDark/RHToolkit" />
+                NavigateUri="https://github.com/JuniorDark/RustyHearts-Toolkit"
+                ToolTip="https://github.com/JuniorDark/RustyHearts-Toolkit" />
             <ui:HyperlinkButton
                 Margin="8,0,0,0"
                 Padding="4"

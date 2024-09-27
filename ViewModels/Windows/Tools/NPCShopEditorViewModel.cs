@@ -224,6 +224,9 @@ namespace RHToolkit.ViewModels.Windows
             Title = $"NPC Shop Editor";
             OpenMessage = "Open a file";
             IsVisible = Visibility.Hidden;
+            ItemMix?.Clear();
+            NpcShopItem?.Clear();
+            NpcShopItems?.Clear();
             OnCanExecuteFileCommandChanged();
         }
 
@@ -358,7 +361,7 @@ namespace RHToolkit.ViewModels.Windows
 
         private void UpdateItem(ItemData itemData)
         {
-            if (itemData.ItemId != 0 && itemData.SlotIndex <= NpcShopItem.Count)
+            if (itemData.ItemId != 0 && itemData.SlotIndex < NpcShopItem.Count)
             {
                 DataTableManager.StartGroupingEdits();
                 var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
@@ -372,7 +375,7 @@ namespace RHToolkit.ViewModels.Windows
 
         private void UpdateItems(ItemData itemData)
         {
-            if (itemData.ItemId != 0 && itemData.SlotIndex <= NpcShopItems.Count)
+            if (itemData.ItemId != 0 && itemData.SlotIndex < NpcShopItems.Count)
             {
                 DataTableManager.StartGroupingEdits();
                 var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
@@ -394,14 +397,14 @@ namespace RHToolkit.ViewModels.Windows
                 switch (NpcShopType)
                 {
                     case NpcShopType.NpcShop:
-                        Description = "New Npc Shop";
-                        NpcName = "Npc Name";
+                        UpdateSelectedItemValue("New Npc Shop", "wszEct");
+                        UpdateSelectedItemValue("Npc Name", "wszNpcName");
                         break;
                     case NpcShopType.TradeShop:
-                        Desc = "New Trade Item";
+                        UpdateSelectedItemValue("New Trade Item", "wszDesc");
                         break;
                     case NpcShopType.ItemMix:
-                        Desc = "New Item Craft ";
+                        UpdateSelectedItemValue("New Item Craft ", "wszDesc");
                         break;
                 }
                 
@@ -529,25 +532,31 @@ namespace RHToolkit.ViewModels.Windows
 
         private void UpdateNpcShop(DataRowView selectedItem)
         {
-            NpcShopItems?.Clear();
-
-            ShopID = (int)selectedItem["nID"];
-            Description = (string)selectedItem["wszEct"];
-            NpcName = (string)selectedItem["wszNpcName"];
-            IsPreview = (int)selectedItem["nPreView"] == 1;
-
-            NpcShopItems = [];
+            NpcShopItems ??= [];
 
             for (int i = 0; i < 20; i++)
             {
-                var item = new NPCShopItem
-                {
-                    ItemCode = (int)selectedItem[$"nItem{i:00}"],
-                    ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItem{i:00}"], i, 1)
-                };
+                int itemCode = (int)selectedItem[$"nItem{i:00}"];
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, i, 1);
 
-                NpcShopItems.Add(item);
-                NpcShopItemPropertyChanged(item, i);
+                if (i < NpcShopItems.Count)
+                {
+                    var existingItem = NpcShopItems[i];
+
+                    existingItem.ItemCode = itemCode;
+                    existingItem.ItemDataViewModel = itemDataViewModel;
+                }
+                else
+                {
+                    var item = new NPCShopItem
+                    {
+                        ItemCode = itemCode,
+                        ItemDataViewModel = itemDataViewModel
+                    };
+
+                    NpcShopItems.Add(item);
+                    NpcShopItemPropertyChanged(item, i);
+                }
             }
         }
 
@@ -567,40 +576,64 @@ namespace RHToolkit.ViewModels.Windows
 
         private void UpdateTradeShop(DataRowView selectedItem)
         {
-            NpcShopItem?.Clear();
-            NpcShopItems?.Clear();
+            NpcShopItem ??= [];
 
-            ShopID = (int)selectedItem["nID"];
-            SortNumber = (int)selectedItem["nSortNumber"];
-            Desc = (string)selectedItem["wszDesc"];
-            Type = (int)selectedItem["nType"];
-            GroupID = (int)selectedItem["nGroupID"];
-            DuelPoint = (int)selectedItem["nDuelPoint"];
-
-            NpcShopItem = [];
-            NpcShopItems = [];
-
-            var tradeItem = new NPCShopItem
+            for (int i = 0; i < 1; i++)
             {
-                ItemCode = (int)selectedItem[$"nItemID"],
-                ItemCount = (int)selectedItem["nItemCount"],
-                ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItemID"], 0, (int)selectedItem[$"nItemCount"])
-            };
+                var itemCode = (int)selectedItem[$"nItemID"];
+                var itemCount = (int)selectedItem["nItemCount"];
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, itemCount);
 
-            NpcShopItem.Add(tradeItem);
-            TradeShopItemPropertyChanged(tradeItem);
+                if (i < NpcShopItem.Count)
+                {
+                    var existingItem = NpcShopItem[i];
+
+                    existingItem.ItemCode = itemCode;
+                    existingItem.ItemCount = itemCount;
+                    existingItem.ItemDataViewModel = itemDataViewModel;
+                }
+                else
+                {
+                    var tradeItem = new NPCShopItem
+                    {
+                        ItemCode = itemCode,
+                        ItemCount = itemCount,
+                        ItemDataViewModel = itemDataViewModel
+                    };
+
+                    NpcShopItem.Add(tradeItem);
+                    TradeShopItemPropertyChanged(tradeItem);
+                }
+            }
+
+            NpcShopItems ??= [];
 
             for (int i = 0; i < 5; i++)
             {
-                var tokenItem = new NPCShopItem
-                {
-                    ItemCode = (int)selectedItem[$"nTokenID{i:00}"],
-                    ItemCount = (int)selectedItem[$"nTokenCount{i:00}"],
-                    ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nTokenID{i:00}"], i, (int)selectedItem[$"nTokenCount{i:00}"])
-                };
+                var itemCode = (int)selectedItem[$"nTokenID{i:00}"];
+                var itemCount = (int)selectedItem[$"nTokenCount{i:00}"];
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, itemCount);
 
-                NpcShopItems.Add(tokenItem);
-                TradeShopTokenItemPropertyChanged(tokenItem, i);
+                if (i < NpcShopItems.Count)
+                {
+                    var existingItem = NpcShopItems[i];
+
+                    existingItem.ItemCode = itemCode;
+                    existingItem.ItemCount = itemCount;
+                    existingItem.ItemDataViewModel = itemDataViewModel;
+                }
+                else
+                {
+                    var tokenItem = new NPCShopItem
+                    {
+                        ItemCode = itemCode,
+                        ItemCount = itemCount,
+                        ItemDataViewModel = itemDataViewModel
+                    };
+
+                    NpcShopItems.Add(tokenItem);
+                    TradeShopTokenItemPropertyChanged(tokenItem, i);
+                }
             }
         }
 
@@ -633,75 +666,90 @@ namespace RHToolkit.ViewModels.Windows
 
         private void UpdateItemMix(DataRowView selectedItem)
         {
-            ItemMix?.Clear();
-            NpcShopItem?.Clear();
-            NpcShopItems?.Clear();
-
             CraftItemID = (int)selectedItem["nID"];
-            SortNumber = (int)selectedItem["nSortNumber"];
-            Desc = (string)selectedItem["wszDesc"];
-            Visible = (int)selectedItem["nVisible"] == 1;
-            Classify00 = (int)selectedItem["nClassify00"];
-            Classify01 = (int)selectedItem["nClassify01"];
-            Classify02 = (int)selectedItem["nClassify02"];
-            CharacterNum = selectedItem.Row.Table.Columns.Contains("szCharacterNum")
-                        ? (string)selectedItem["szCharacterNum"] : "";
-            CraftType = selectedItem.Row.Table.Columns.Contains("nCraftType")
-                        ? (int)selectedItem["nCraftType"] : 0;
-            CraftGroup = selectedItem.Row.Table.Columns.Contains("nCraftGroup")
-                        ? (int)selectedItem["nCraftGroup"] : 0;
-            HoldItem = selectedItem.Row.Table.Columns.Contains("nHoldItem")
-                        ? (int)selectedItem["nHoldItem"] : 0;
-            NextItem = selectedItem.Row.Table.Columns.Contains("nNextItem")
-                        ? (int)selectedItem["nNextItem"] : 0;
-            string szMixCategory = selectedItem.Row.Table.Columns.Contains("szMixCategory")
-                        ? (string)selectedItem["szMixCategory"] : "";
-            MixCategory = string.IsNullOrEmpty(szMixCategory) ? "0" : szMixCategory;
-            MixSubCategory = selectedItem.Row.Table.Columns.Contains("nMixSubCategory")
-                        ? (int)selectedItem["nMixSubCategory"] : 0;
-            MixAble = (int)selectedItem["nMixAble"] == 1;
-            SGroup = selectedItem.Row.Table.Columns.Contains("szGroup")
-                        ? (string)selectedItem["szGroup"] : "";
-            NGroup = selectedItem.Row.Table.Columns.Contains("nGroup")
-                        ? (int)selectedItem["nGroup"] : 0;
-            Cost = (int)selectedItem["nCost"];
+            
+            NpcShopItem ??= [];
 
-            ItemMix = [];
-            NpcShopItem = [];
-            NpcShopItems = [];
-
-            var craftItem = new NPCShopItem
+            for (int i = 0; i < 1; i++)
             {
-                ItemCode = (int)selectedItem[$"nID"],
-                ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nID"], 0, 1)
-            };
+                var itemCode = (int)selectedItem[$"nID"];
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, 1);
 
-            NpcShopItem.Add(craftItem);
-            ItemMixItemPropertyChanged(craftItem);
+                if (i < NpcShopItem.Count)
+                {
+                    var existingItem = NpcShopItem[i];
+
+                    existingItem.ItemCode = itemCode;
+                    existingItem.ItemDataViewModel = itemDataViewModel;
+                }
+                else
+                {
+                    var craftItem = new NPCShopItem
+                    {
+                        ItemCode = itemCode,
+                        ItemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, 1)
+                    };
+
+                    NpcShopItem.Add(craftItem);
+                    ItemMixItemPropertyChanged(craftItem);
+                }
+            }
+
+            ItemMix ??= [];
 
             for (int i = 0; i < 3; i++)
             {
-                var item = new NPCShopItem
-                {
-                    ItemMixPro = (float)selectedItem[$"fItemMixPro{i:00}"],
-                    ItemMixCo = (int)selectedItem[$"nItemMixCo{i:00}"]
-                };
+                var itemMixPro = (float)selectedItem[$"fItemMixPro{i:00}"];
+                var itemMixCo = (int)selectedItem[$"nItemMixCo{i:00}"];
 
-                ItemMix.Add(item);
-                ItemMixPropertyChanged(item, i);
+                if (i < ItemMix.Count)
+                {
+                    var existingItem = ItemMix[i];
+
+                    existingItem.ItemMixPro = itemMixPro;
+                    existingItem.ItemMixCo = itemMixCo;
+                }
+                else
+                {
+                    var item = new NPCShopItem
+                    {
+                        ItemMixPro = itemMixPro,
+                        ItemMixCo = itemMixCo
+                    };
+
+                    ItemMix.Add(item);
+                    ItemMixPropertyChanged(item, i);
+                }
             }
+
+            NpcShopItems ??= [];
 
             for (int i = 0; i < 5; i++)
             {
-                var itemMaterial = new NPCShopItem
-                {
-                    ItemCode = (int)selectedItem[$"nItemCode{i:00}"],
-                    ItemCount = (int)selectedItem[$"nItemCount{i:00}"],
-                    ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItemCode{i:00}"], i, (int)selectedItem[$"nItemCount{i:00}"])
-                };
+                var itemCode = (int)selectedItem[$"nItemCode{i:00}"];
+                var itemCount = (int)selectedItem[$"nItemCount{i:00}"];
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, itemCount);
 
-                NpcShopItems.Add(itemMaterial);
-                ItemMixItemsPropertyChanged(itemMaterial, i);
+                if (i < NpcShopItems.Count)
+                {
+                    var existingItem = NpcShopItems[i];
+
+                    existingItem.ItemCode = itemCode;
+                    existingItem.ItemCount = itemCount;
+                    existingItem.ItemDataViewModel = itemDataViewModel;
+                }
+                else
+                {
+                    var itemMaterial = new NPCShopItem
+                    {
+                        ItemCode = itemCode,
+                        ItemCount = itemCount,
+                        ItemDataViewModel = itemDataViewModel
+                    };
+
+                    NpcShopItems.Add(itemMaterial);
+                    ItemMixItemsPropertyChanged(itemMaterial, i);
+                }
             }
         }
 
@@ -745,55 +793,90 @@ namespace RHToolkit.ViewModels.Windows
 
         private void UpdateShopItemVisibleFilter(DataRowView selectedItem)
         {
-            NpcShopItem?.Clear();
-            NpcShopItems?.Clear();
-            QuestItems?.Clear();
-
             ItemID = (int)selectedItem["nID"];
-            ItemName = (string)selectedItem["wszItemName"];
-            PackageEffectCode = (int)selectedItem["nPackageEffectCode"];
-            Level = (int)selectedItem["nLevel"];
-            QuestType = (int)selectedItem["nQuestType"];
-            ItemType = (int)selectedItem["nItemType"];
 
-            NpcShopItem = [];
+            NpcShopItem ??= [];
 
-            var shopItem = new NPCShopItem
+            for (int i = 0; i < 1; i++)
             {
-                ItemCode = (int)selectedItem[$"nID"],
-                ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nID"], 0, 1)
-            };
+                var itemCode = (int)selectedItem[$"nID"];
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, 1);
 
-            NpcShopItem.Add(shopItem);
-            ShopItemPropertyChanged(shopItem);
-
-            QuestItems = [];
-
-            for (int i = 0; i < 3; i++)
-            {
-                var item = new NPCShopItem
+                if (i < NpcShopItem.Count)
                 {
-                    QuestID = (int)selectedItem[$"nQuestID{i:00}"],
-                    QuestCondition = (int)selectedItem[$"nQuestCondition{i:00}"]
-                };
+                    var existingItem = NpcShopItem[i];
 
-                QuestItems.Add(item);
-                ShopItemFilterQuestPropertyChanged(item, i);
+                    existingItem.ItemCode = itemCode;
+                    existingItem.ItemDataViewModel = itemDataViewModel;
+                }
+                else
+                {
+                    var shopItem = new NPCShopItem
+                    {
+                        ItemCode = itemCode,
+                        ItemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, 1)
+                    };
+
+                    NpcShopItem.Add(shopItem);
+                    ShopItemPropertyChanged(shopItem);
+                }
             }
 
-            NpcShopItems = [];
+            QuestItems ??= [];
 
             for (int i = 0; i < 3; i++)
             {
-                var item = new NPCShopItem
-                {
-                    ItemCode = (int)selectedItem[$"nItemID{i:00}"],
-                    ItemCount = (int)selectedItem[$"nItemCount{i:00}"],
-                    ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nItemID{i:00}"], i, (int)selectedItem[$"nItemCount{i:00}"])
-                };
+                var questID = (int)selectedItem[$"nQuestID{i:00}"];
+                var questCondition = (int)selectedItem[$"nQuestCondition{i:00}"];
 
-                NpcShopItems.Add(item);
-                ShopItemFilterPropertyChanged(item, i);
+                if (i < QuestItems.Count)
+                {
+                    var existingItem = QuestItems[i];
+
+                    existingItem.QuestID = questID;
+                    existingItem.QuestCondition = questCondition;
+                }
+                else
+                {
+                    var item = new NPCShopItem
+                    {
+                        QuestID = (int)selectedItem[$"nQuestID{i:00}"],
+                        QuestCondition = (int)selectedItem[$"nQuestCondition{i:00}"]
+                    };
+
+                    QuestItems.Add(item);
+                    ShopItemFilterQuestPropertyChanged(item, i);
+                }
+            }
+
+            NpcShopItems ??= [];
+
+            for (int i = 0; i < 3; i++)
+            {
+                var itemCode = (int)selectedItem[$"nItemID{i:00}"];
+                var itemCount = (int)selectedItem[$"nItemCount{i:00}"];
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, itemCount);
+
+                if (i < NpcShopItems.Count)
+                {
+                    var existingItem = NpcShopItems[i];
+
+                    existingItem.ItemCode = itemCode;
+                    existingItem.ItemCount = itemCount;
+                    existingItem.ItemDataViewModel = itemDataViewModel;
+                }
+                else
+                {
+                    var item = new NPCShopItem
+                    {
+                        ItemCode = itemCode,
+                        ItemCount = itemCount,
+                        ItemDataViewModel = itemDataViewModel
+                    };
+
+                    NpcShopItems.Add(item);
+                    ShopItemFilterPropertyChanged(item, i);
+                }
             }
         }
 
@@ -837,25 +920,34 @@ namespace RHToolkit.ViewModels.Windows
 
         private void UpdateItemPreview(DataRowView selectedItem)
         {
-            NpcShopItem?.Clear();
-
-            ID = (int)selectedItem["nID"];
             PreviewItemID = (int)selectedItem["nPreViewItemID"];
-            PreviewClass = (int)selectedItem["nPreViewClass"];
-            PreviewClassList = (string)selectedItem["szPreViewClass"];
-            Note00 = (string)selectedItem["wszNote00"];
-            Note02 = (string)selectedItem["wszNote02"];
 
-            NpcShopItem = [];
+            NpcShopItem ??= [];
 
-            var item = new NPCShopItem
+            for (int i = 0; i < 1; i++)
             {
-                ItemCode = (int)selectedItem[$"nPreViewItemID"],
-                ItemDataViewModel = ItemDataManager.GetItemDataViewModel((int)selectedItem[$"nPreViewItemID"], 0, 1)
-            };
+                var itemCode = (int)selectedItem[$"nPreViewItemID"];
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, 1);
 
-            NpcShopItem.Add(item);
-            ItemPreviewPropertyChanged(item);
+                if (i < NpcShopItem.Count)
+                {
+                    var existingItem = NpcShopItem[i];
+
+                    existingItem.ItemCode = itemCode;
+                    existingItem.ItemDataViewModel = itemDataViewModel;
+                }
+                else
+                {
+                    var item = new NPCShopItem
+                    {
+                        ItemCode = itemCode,
+                        ItemDataViewModel = itemDataViewModel
+                    };
+
+                    NpcShopItem.Add(item);
+                    ItemPreviewPropertyChanged(item);
+                }
+            }
 
         }
 
@@ -1000,76 +1092,6 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private NpcShopType _npcShopType;
 
-        #region NpcShop
-
-        [ObservableProperty]
-        private int _shopID;
-        partial void OnShopIDChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nID");
-        }
-
-        [ObservableProperty]
-        private string? _description;
-        partial void OnDescriptionChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszEct");
-        }
-
-        [ObservableProperty]
-        private string? _npcName;
-        partial void OnNpcNameChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszNpcName");
-        }
-
-        [ObservableProperty]
-        private bool _isPreview;
-        partial void OnIsPreviewChanged(bool value)
-        {
-            UpdateSelectedItemValue(value, "nPreView");
-        }
-
-        #endregion
-
-        #region TradeShop
-
-        [ObservableProperty]
-        private int _sortNumber;
-        partial void OnSortNumberChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nSortNumber");
-        }
-
-        [ObservableProperty]
-        private string? _desc;
-        partial void OnDescChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszDesc");
-        }
-
-        [ObservableProperty]
-        private int _type;
-        partial void OnTypeChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nType");
-        }
-
-        [ObservableProperty]
-        private int _groupID;
-        partial void OnGroupIDChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nGroupID");
-        }
-
-        [ObservableProperty]
-        private int _duelPoint;
-        partial void OnDuelPointChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nDuelPoint");
-        }
-        #endregion
-
         #region ItemMix
 
         [ObservableProperty]
@@ -1090,117 +1112,12 @@ namespace RHToolkit.ViewModels.Windows
 
             if (itemDataViewModel != null)
             {
-                Desc = itemDataViewModel.ItemName;
+                UpdateSelectedItemValue(itemDataViewModel.ItemName, "wszDesc");
             }
             else
             {
-                Desc = "";
+                UpdateSelectedItemValue(string.Empty, "wszDesc");
             }
-        }
-
-        [ObservableProperty]
-        private int _classify00;
-        partial void OnClassify00Changed(int value)
-        {
-            UpdateSelectedItemValue(value, "nClassify00");
-        }
-
-        [ObservableProperty]
-        private int _classify01;
-        partial void OnClassify01Changed(int value)
-        {
-            UpdateSelectedItemValue(value, "nClassify01");
-        }
-
-        [ObservableProperty]
-        private int _classify02;
-        partial void OnClassify02Changed(int value)
-        {
-            UpdateSelectedItemValue(value, "nClassify02");
-        }
-
-        [ObservableProperty]
-        private int _craftType;
-        partial void OnCraftTypeChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nCraftType");
-        }
-
-        [ObservableProperty]
-        private int _craftGroup;
-        partial void OnCraftGroupChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nCraftGroup");
-        }
-
-        [ObservableProperty]
-        private int _holdItem;
-        partial void OnHoldItemChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nHoldItem");
-        }
-
-        [ObservableProperty]
-        private int _nextItem;
-        partial void OnNextItemChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nNextItem");
-        }
-
-        [ObservableProperty]
-        private int _mixSubCategory;
-        partial void OnMixSubCategoryChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nMixSubCategory");
-        }
-
-        [ObservableProperty]
-        private int _cost;
-        partial void OnCostChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nCost");
-        }
-
-        [ObservableProperty]
-        private string? _mixCategory;
-        partial void OnMixCategoryChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szMixCategory");
-        }
-
-        [ObservableProperty]
-        private string? _sGroup;
-        partial void OnSGroupChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szGroup");
-        }
-
-        [ObservableProperty]
-        private bool _mixAble;
-        partial void OnMixAbleChanged(bool value)
-        {
-            UpdateSelectedItemValue(value, "nMixAble");
-        }
-
-        [ObservableProperty]
-        private bool _visible;
-        partial void OnVisibleChanged(bool value)
-        {
-            UpdateSelectedItemValue(value, "nVisible");
-        }
-
-        [ObservableProperty]
-        private string? _characterNum;
-        partial void OnCharacterNumChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szCharacterNum");
-        }
-
-        [ObservableProperty]
-        private int _nGroup;
-        partial void OnNGroupChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nGroup");
         }
         #endregion
 
@@ -1224,59 +1141,16 @@ namespace RHToolkit.ViewModels.Windows
 
             if (itemDataViewModel != null)
             {
-                ItemName = itemDataViewModel.ItemName;
+                UpdateSelectedItemValue(itemDataViewModel.ItemName, "wszItemName");
             }
             else
             {
-                ItemName = "";
+                UpdateSelectedItemValue(string.Empty, "wszItemName");
             }
-        }
-
-        [ObservableProperty]
-        private string? _itemName;
-        partial void OnItemNameChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszItemName");
-        }
-
-        [ObservableProperty]
-        private int _packageEffectCode;
-        partial void OnPackageEffectCodeChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nPackageEffectCode");
-        }
-
-        [ObservableProperty]
-        private int _level;
-        partial void OnLevelChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nLevel");
-        }
-
-        [ObservableProperty]
-        private int _questType;
-        partial void OnQuestTypeChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nQuestType");
-        }
-
-        [ObservableProperty]
-        private int _itemType;
-        partial void OnItemTypeChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nItemType");
         }
         #endregion
 
         #region ItemPreview
-
-        [ObservableProperty]
-        private int _ID;
-        partial void OnIDChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nID");
-        }
-
         [ObservableProperty]
         private int _previewItemID;
         partial void OnPreviewItemIDChanged(int value)
@@ -1292,40 +1166,12 @@ namespace RHToolkit.ViewModels.Windows
 
             if (itemDataViewModel != null)
             {
-                Note00 = itemDataViewModel.ItemName;
+                UpdateSelectedItemValue(itemDataViewModel.ItemName, "wszNote00");
             }
             else
             {
-                Note00 = "";
+                UpdateSelectedItemValue(string.Empty, "wszNote00");
             }
-        }
-
-        [ObservableProperty]
-        private int _previewClass;
-        partial void OnPreviewClassChanged(int value)
-        {
-            UpdateSelectedItemValue(value, "nPreViewClass");
-        }
-
-        [ObservableProperty]
-        private string? _previewClassList;
-        partial void OnPreviewClassListChanged(string? value)
-        {
-            UpdateSelectedItemValue(value, "szPreViewClass");
-        }
-
-        [ObservableProperty]
-        private string? _note00;
-        partial void OnNote00Changed(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszNote00");
-        }
-
-        [ObservableProperty]
-        private string? _note02;
-        partial void OnNote02Changed(string? value)
-        {
-            UpdateSelectedItemValue(value, "wszNote02");
         }
 
         #endregion

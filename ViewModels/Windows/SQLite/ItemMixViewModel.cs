@@ -60,7 +60,7 @@ namespace RHToolkit.ViewModels.Windows
         #region SelectedItem
         private void UpdateItemMixMaterial(ItemMixData? selectedItem)
         {
-            ItemMixMaterialsItems?.Clear();
+            ItemMixMaterialsItems ??= [];
 
             if (selectedItem != null)
             {
@@ -78,7 +78,14 @@ namespace RHToolkit.ViewModels.Windows
 
                     var itemMaterial = ItemDataManager.GetItemDataViewModel(itemCode, i, itemCount);
 
-                    ItemMixMaterialsItems.Add(itemMaterial!);
+                    if (i < ItemMixMaterialsItems.Count)
+                    {
+                        ItemMixMaterialsItems[i] = itemMaterial!;
+                    }
+                    else
+                    {
+                        ItemMixMaterialsItems.Add(itemMaterial!);
+                    }
                 }
 
                 IsSelectedItemVisible = Visibility.Visible;

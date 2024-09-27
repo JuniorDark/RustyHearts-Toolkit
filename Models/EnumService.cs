@@ -469,7 +469,10 @@ namespace RHToolkit.Models
             QuestItemDropGroupList = 6,
             WorldInstanceItemDropGroupList = 7,
             WorldItemDropGroupList = 8,
-            WorldItemDropGroupListF = 9
+            WorldItemDropGroupListF = 9,
+            RiddleBoxDropGroupList = 10,
+            RareCardDropGroupList = 11,
+            RareCardRewardItemList = 12,
         }
 
         public enum NpcShopType

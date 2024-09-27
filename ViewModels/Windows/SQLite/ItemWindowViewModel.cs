@@ -79,6 +79,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                     { "TradeShopItem", "NpcShopEditorWindowItem" },
                     { "ItemMixItem", "NpcShopEditorWindowItem" },
                     { "DropGroup", "DropGroupEditorWindow" },
+                    { "RareCard", "DropGroupEditorWindow" },
                     { "CashShopItemUpdate", "CashShopEditorWindow" }
                 };
 
@@ -256,10 +257,18 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                 settings.SlotIndexMax = itemData.OverlapCnt - 1;
                 settings.IsSlotVisible = Visibility.Visible;
             },
+            ["RareCard"] = settings =>
+            {
+                settings.SlotIndexMax = 2;
+                ItemDataManager.ItemSubCategoryFilter = 91;
+                settings.IsSlotVisible = Visibility.Visible;
+            },
             ["SetItem"] = settings =>
             {
                 settings.SlotIndexMax = 5;
                 settings.IsSlotVisible = Visibility.Visible;
+                ItemDataManager.ItemTypesFilter = [3,4];
+                ItemDataManager.ItemTypeEnabled = false;
             }
         };
 
@@ -318,6 +327,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             "TradeShopItem" or "TradeShopItems" => "Add Trade Shop Item",
             "ItemMixItem" or "ItemMixItems" => "Add Item Craft Item",
             "DropGroup" => "Add Drop Group Item",
+            "RareCard" => "Add Rare Card Group Item",
             "SetItem" => "Add Set Item",
             _ => "Add Item",
         };
@@ -522,6 +532,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             ItemDataManager.ItemDataViewModel.ItemTrade = itemData.ItemTrade;
             ItemDataManager.ItemDataViewModel.MaxDurability = itemData.Durability;
             ItemDataManager.ItemDataViewModel.Weight = itemData.Weight;
+            ItemDataManager.ItemDataViewModel.BindingOff = itemData.BindingOff;
             ItemDataManager.ItemDataViewModel.ReconstructionMax = itemData.ReconstructionMax;
             ItemDataManager.ItemDataViewModel.Reconstruction = itemData.ReconstructionMax;
             ItemDataManager.ItemDataViewModel.OverlapCnt = itemData.OverlapCnt;

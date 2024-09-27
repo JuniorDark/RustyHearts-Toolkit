@@ -14,42 +14,64 @@ public class GMDatabaseManager
     [
         "addeffect_string",
         "angelaweapon",
+        "auctioncategory",
         "charactertitle",
         "charactertitle_string",
+        "costumemix",
+        "costumepack",
         "enchantinfo",
         "exp",
         "fortune",
         "frantzweapon",
         "itemcategory",
+        "itemfieldmesh",
         "itemlist",
-        "itemlist_string",
         "itemlist_armor",
         "itemlist_armor_string",
         "itemlist_costume",
         "itemlist_costume_string",
-        "queststring",
+        "itemlist_string",
         "itemlist_weapon",
         "itemlist_weapon_string",
+        "itemmix",
         "itemoptionlist",
-        "new_itemoptioncondition_string",
         "natashaweapon",
+        "new_itemoptioncondition_string",
         "nick_filter",
-        "startpoint_renewal",
+        "npc",
+        "npc_dialog",
+        "npcshop",
+        "peteatitem",
+        "questgroup",
+        "queststring",
         "serverlobbyid",
         "setitem",
         "setitem_string",
+        "startpoint_renewal",
         "string",
-        "tudeweapon",
-        "npcshop",
-        "npc_dialog",
-        "questgroup",
-        "itemmix",
-        "costumemix",
-        "tradeshop",
         "tradeitemgroup",
-        "npc"
+        "tradeshop",
+        "tudeweapon",
+        "unionpackage_string",
+        "riddleboxdropgrouplist",
+        "frantzparts",
+        "angelaparts",
+        "tudeparts",
+        "natashaparts",
+        "frantz_avatar01_parts",
+        "frantz_avatar02_parts",
+        "angela_avatar01_parts",
+        "tude_avatar01_parts",
+        "natasha_avatar01_parts",
+        "frantzskill",
+        "frantzskill_string",
+        "angelaskill",
+        "angelaskill_string",
+        "tudeskill",
+        "tudeskill_string",
+        "natashaskill",
+        "natashaskill_string"
     ];
-
 
     public async Task CreateGMDatabase(string dataFolder, Action<string> reportProgress, CancellationToken cancellationToken)
     {
@@ -128,7 +150,7 @@ public class GMDatabaseManager
         }
         catch (Exception ex)
         {
-            reportProgress("Error...");
+            reportProgress("Error: " + ex.Message);
             throw new Exception("Error: " + ex.Message, ex);
         }
     }
@@ -145,12 +167,12 @@ public class GMDatabaseManager
 
     private static void CreateSQLiteTable(SQLiteConnection connection, DataTable dataTable, string tableName)
     {
-        StringBuilder createTableQuery = new($"CREATE TABLE IF NOT EXISTS [{tableName}] (");
+        StringBuilder createTableQuery = new($"CREATE TABLE IF NOT EXISTS \"{tableName}\" (");
 
         foreach (DataColumn column in dataTable.Columns)
         {
             string sqliteDataType = MapDataColumnTypeToSqlite(column.DataType);
-            createTableQuery.Append($"[{column.ColumnName}] {sqliteDataType}, ");
+            createTableQuery.Append($"\"{column.ColumnName}\" {sqliteDataType}, ");
         }
 
         createTableQuery.Remove(createTableQuery.Length - 2, 2); // Remove the last comma and space
@@ -160,6 +182,7 @@ public class GMDatabaseManager
         command.ExecuteNonQuery();
     }
 
+
     private static void InsertDataIntoSQLiteTable(SQLiteConnection connection, DataTable dataTable, string tableName, Action<string> reportProgress)
     {
         using SQLiteTransaction transaction = connection.BeginTransaction();
@@ -167,7 +190,7 @@ public class GMDatabaseManager
 
         foreach (DataRow row in dataTable.Rows)
         {
-            StringBuilder insertQuery = new($"INSERT INTO [{tableName}] VALUES (");
+            StringBuilder insertQuery = new($"INSERT INTO \"{tableName}\" VALUES (");
 
             for (int i = 0; i < dataTable.Columns.Count; i++)
             {
