@@ -42,7 +42,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.version }}
-          release_name: v${{ steps.version.outputs.version }}
           body: Automated pre-release created by GitHub Actions.
           draft: true
           prerelease: true
