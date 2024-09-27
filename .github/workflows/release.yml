@@ -34,8 +34,7 @@ jobs:
       - name: Get version from compiled assembly
         id: version
         run: |
-          $assemblyPath = "./publish/RustyHearts-Toolkit_framework-dependent/Rusty Hearts Toolkit.dll"
-          $version = [System.Diagnostics.FileVersionInfo]::GetVersionInfo($assemblyPath).FileVersion
+          $version = (Get-Command "./publish/RustyHearts-Toolkit_framework-dependent/Rusty Hearts Toolkit.dll").FileVersionInfo.FileVersion
           echo "version=$version" >> $GITHUB_ENV
 
       # Create Release and Upload Assets using softprops/action-gh-release
@@ -43,6 +42,10 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ env.version }}
+          release_name: v${{ steps.version.outputs.version }}
+          body: Automated pre-release created by GitHub Actions.
+          draft: true
+          prerelease: true
           files: |
             ./RustyHearts-Toolkit-Framework-Dependent.zip
             ./RustyHearts-Toolkit-SelfContained.zip
