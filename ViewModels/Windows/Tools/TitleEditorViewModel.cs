@@ -159,6 +159,7 @@ namespace RHToolkit.ViewModels.Windows
             Title = $"Title Editor";
             OpenMessage = "Open a file";
             SearchText = "";
+            AddEffectSearch = "";
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }
@@ -392,6 +393,9 @@ namespace RHToolkit.ViewModels.Windows
                     selectedAddEffect.Add(TitleEffects[3].AddEffectID);
                     selectedAddEffect.Add(TitleEffects[4].AddEffectID);
                     selectedAddEffect.Add(TitleEffects[5].AddEffectID);
+
+                    if (selectedAddEffect.Contains(addEffect.ID))
+                        return true;
                 }
 
                 // text search filter

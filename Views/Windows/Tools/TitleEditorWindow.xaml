@@ -342,98 +342,108 @@
                         Foreground="White"
                         Header="Title Effect"
                         Style="{StaticResource lb_tab}">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <TextBlock
-                                Grid.Row="2"
-                                Margin="0,20,0,0"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Top"
-                                d:Text="Ttile Effect"
-                                Background="Transparent"
-                                FontSize="14"
-                                Foreground="Gold"
-                                Style="{StaticResource ArialMS}"
-                                Text="{Binding TitleEffectText}" />
-                            <StackPanel
-                                Grid.Row="0"
-                                Grid.ColumnSpan="2"
-                                Margin="0,0,0,10"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Top"
-                                Orientation="Vertical">
-                                <Label
-                                    x:Name="lbOptionSearch"
+                        <ScrollViewer
+                            Grid.Row="1"
+                            Grid.ColumnSpan="3"
+                            Margin="0,0,0,0"
+                            HorizontalScrollBarVisibility="Auto"
+                            Style="{StaticResource lb_scrollviewer}"
+                            VerticalScrollBarVisibility="Auto"
+                            Visibility="{Binding IsSelectedItemVisible}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <TextBlock
+                                    Grid.Row="2"
+                                    Margin="0,20,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    HorizontalContentAlignment="Center"
-                                    Content="Filter"
-                                    Style="{StaticResource ArialMSWhite}" />
-                                <TextBox
-                                    x:Name="tbOptionSearch"
-                                    Width="300"
-                                    Height="35"
-                                    CaretBrush="White"
-                                    FontFamily="{StaticResource ArialUnicodeMS}"
-                                    FontSize="12"
+                                    d:Text="Ttile Effect"
+                                    Background="Transparent"
+                                    FontSize="14"
                                     Foreground="Gold"
-                                    Tag="{x:Static rs:Resources.OptionNameID}"
-                                    Template="{StaticResource lb_textbox}"
-                                    Text="{Binding AddEffectSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Style="{StaticResource ArialMS}"
+                                    Text="{Binding TitleEffectText}" />
+                                <StackPanel
+                                    Grid.Row="0"
+                                    Grid.ColumnSpan="2"
+                                    Margin="0,0,0,10"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Orientation="Vertical">
+                                    <Label
+                                        x:Name="lbOptionSearch"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        HorizontalContentAlignment="Center"
+                                        Content="Filter"
+                                        Style="{StaticResource ArialMSWhite}" />
+                                    <TextBox
+                                        x:Name="tbOptionSearch"
+                                        Width="300"
+                                        Height="35"
+                                        CaretBrush="White"
+                                        FontFamily="{StaticResource ArialUnicodeMS}"
+                                        FontSize="12"
+                                        Foreground="Gold"
+                                        Tag="{x:Static rs:Resources.OptionNameID}"
+                                        Template="{StaticResource lb_textbox}"
+                                        Text="{Binding AddEffectSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                            </StackPanel>
-                            <ItemsControl
-                                Grid.Row="1"
-                                AlternationCount="{Binding TitleEffects.Count}"
-                                ItemsSource="{Binding TitleEffects}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel
-                                            Margin="0,10,0,0"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Center"
-                                            Orientation="Vertical">
-                                            <TextBlock
-                                                HorizontalAlignment="Center"
-                                                Foreground="White"
-                                                Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Title Effect {0}'}" />
-                                            <ComboBox
-                                                x:Name="cbAddEffect"
-                                                Width="600"
-                                                Height="24"
+                                </StackPanel>
+                                <ItemsControl
+                                    Grid.Row="1"
+                                    AlternationCount="{Binding TitleEffects.Count}"
+                                    ItemsSource="{Binding TitleEffects}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel
+                                                Margin="0,10,0,0"
                                                 HorizontalAlignment="Left"
-                                                VerticalAlignment="Top"
-                                                DisplayMemberPath="Name"
-                                                IsReadOnly="True"
-                                                ItemsSource="{Binding DataContext.ItemDataManager.AddEffectItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                SelectedValue="{Binding AddEffectID}"
-                                                SelectedValuePath="ID"
-                                                Style="{StaticResource ComboBoxStyle}"
-                                                Template="{StaticResource lb_combobox}" />
-                                            <TextBlock
-                                                x:Name="lbTotalItem"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Top"
-                                                d:Text="Showing {0}/{1} Items"
-                                                Foreground="Gold"
-                                                Style="{StaticResource ArialMS}">
-                                                <TextBlock.Text>
-                                                    <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
-                                                        <Binding ElementName="cbAddEffect" Path="Items.Count" />
-                                                        <Binding Path="DataContext.ItemDataManager.AddEffectItems.Count" RelativeSource="{RelativeSource AncestorType=ItemsControl}" />
-                                                    </MultiBinding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                                                VerticalAlignment="Center"
+                                                Orientation="Vertical">
+                                                <TextBlock
+                                                    HorizontalAlignment="Center"
+                                                    Foreground="White"
+                                                    Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Title Effect {0}'}" />
+                                                <ComboBox
+                                                    x:Name="cbAddEffect"
+                                                    Width="600"
+                                                    Height="24"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Top"
+                                                    DisplayMemberPath="Name"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding DataContext.ItemDataManager.AddEffectItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                    SelectedValue="{Binding AddEffectID}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}" />
+                                                <TextBlock
+                                                    x:Name="lbTotalItem"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    d:Text="Showing {0}/{1} Items"
+                                                    Foreground="Gold"
+                                                    Style="{StaticResource ArialMS}">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                                                            <Binding ElementName="cbAddEffect" Path="Items.Count" />
+                                                            <Binding Path="DataContext.ItemDataManager.AddEffectItems.Count" RelativeSource="{RelativeSource AncestorType=ItemsControl}" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
 
-                        </Grid>
+                            </Grid>
+                        </ScrollViewer>
+
                     </TabItem>
                     <TabItem
                         x:Name="tab3"
