@@ -992,7 +992,7 @@ namespace RHToolkit.ViewModels.Windows
 
                     for (int i = 0; i < 5; i++)
                     {
-                        string columnName = $"TokenID{i:00}";
+                        string columnName = $"nTokenID{i:00}";
                         columns.Add($"CONVERT({columnName}, 'System.String')");
                     }
                     break;

@@ -27,8 +27,8 @@ To start using the Rusty Hearts Toolkit, download the latest release from the [G
 - **Table Editor:** Edit `.rh` table files on the go and export them to various formats, including XML, XLSX, and MIP.
 - **Specialized Table Editors:**
 - **Cash Shop Editor:** Cash shop items (cashshoplist.rh).
-- **Item Editor** Items (itemlist.rh, itemlist_armor.rh, itemlist_costume.rh, itemlist_weapon.rh).
-- **Item Drop Group Editor** Item drops (riddleboxdropgrouplist.rh, rarecarddropgrouplist.rh, rarecardrewarditemlist.rh, itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh, riddleboxdropgrouplist.rh, rarecarddropgrouplist.rh, rarecardrewarditemlist.rh).
+- **Item Editor:** Items (itemlist.rh, itemlist_armor.rh, itemlist_costume.rh, itemlist_weapon.rh).
+- **Item Drop Group Editor** Item drops (itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh, riddleboxdropgrouplist.rh, rarecarddropgrouplist.rh, rarecardrewarditemlist.rh).
 - **NPC Editor:** (npcinstance.rh).
 - **NPC Shop Editor** Npc Shop (npcshop.rh), Trade Shop (tradeshop.rh), Item Craft (itemmix.rh, costumemix.rh), shop item visible filter (shopitemvisiblefilter.rh).
 - **Package Editor:** Item packages and effects (unionpackage.rh).
@@ -83,7 +83,7 @@ The built files will be found in the newly created `bin` build directory.
 
 ## License
 
-This project is licensed under the BSD 2-Clause License. See the [`LICENSE.txt`](LICENSE) file for details.
+This project is licensed under the BSD 2-Clause License. See the [`LICENSE`](LICENSE.txt) file for details.
 
 ## Frequently Asked Questions
 
