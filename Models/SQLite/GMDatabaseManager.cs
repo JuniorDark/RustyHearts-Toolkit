@@ -42,6 +42,7 @@ public class GMDatabaseManager
         "npc_dialog",
         "npcshop",
         "peteatitem",
+        "petrebirth",
         "questgroup",
         "queststring",
         "serverlobbyid",

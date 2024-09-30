@@ -28,6 +28,7 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
         new("NPC Shop Editor", "Edit npcshop .rh table files", SymbolRegular.DocumentEdit24, "npcshopeditor"),
         new("Title Editor", "Edit title .rh table file", SymbolRegular.DocumentEdit24, "titleeditor"),
         new("Item Editor", "Edit items .rh table files", SymbolRegular.DocumentEdit24, "itemeditor"),
+        new("Pet Editor", "Edit pet .rh table file", SymbolRegular.DocumentEdit24, "peteditor"),
 
     ];
 
@@ -77,6 +78,9 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
                     break;
                 case "itemeditor":
                     windowsProviderService.Show<ItemEditorWindow>(true);
+                    break;
+                case "peteditor":
+                    windowsProviderService.Show<PetEditorWindow>(true);
                     break;
             }
         }

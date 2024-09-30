@@ -104,6 +104,8 @@ public partial class App : Application
                 _ = services.AddTransient<TitleEditorViewModel>();
                 _ = services.AddTransient<ItemEditorWindow>();
                 _ = services.AddTransient<ItemEditorViewModel>();
+                _ = services.AddTransient<PetEditorWindow>();
+                _ = services.AddTransient<PetEditorViewModel>();
                 // SQLite services and viewmodels
                 _ = services.AddTransient<ItemWindow>();
                 _ = services.AddTransient<ItemWindowViewModel>();

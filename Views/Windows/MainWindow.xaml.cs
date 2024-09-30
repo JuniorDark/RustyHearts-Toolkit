@@ -3,7 +3,6 @@ using RHToolkit.ViewModels.Pages;
 using RHToolkit.ViewModels.Windows;
 using RHToolkit.Views.Pages;
 using Wpf.Ui;
-using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 
 namespace RHToolkit.Views.Windows
@@ -17,9 +16,8 @@ namespace RHToolkit.Views.Windows
         IServiceProvider serviceProvider,
         ISnackbarService snackbarService,
         IContentDialogService contentDialogService
-    )
+        )
         {
-            SystemThemeWatcher.Watch(this);
 
             ViewModel = viewModel;
             DataContext = this;

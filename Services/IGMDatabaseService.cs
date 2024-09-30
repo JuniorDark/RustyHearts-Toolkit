@@ -36,6 +36,7 @@ namespace RHToolkit.Services
         string GetOptionName(int optionID);
         (int secTime, float value) GetOptionValues(int optionID);
         List<NameID> GetPetEatItems();
+        List<NameID> GetPetRebirthItems();
         List<NameID> GetQuestGroupItems();
         List<NameID> GetQuestListItems();
         List<NameID> GetRiddleGroupItems();

@@ -448,15 +448,16 @@ public partial class DataTableManager : ObservableObject
                 string? directory = Path.GetDirectoryName(file);
                 await _fileManager.DataTableToRHFileAsync(file, DataTable);
                 FileManager.ClearTempFile(CurrentFileName);
-                HasChanges = false;
-                CurrentFile = file;
-                CurrentFileName = Path.GetFileName(file);
-
+                
                 if (DataTableString != null && CurrentStringFileName != null && directory != null)
                 {
                     string stringFilePath = Path.Combine(directory, CurrentStringFileName);
-                    await _fileManager.DataTableToRHFileAsync(CurrentStringFileName, DataTableString);
+                    await _fileManager.DataTableToRHFileAsync(stringFilePath, DataTableString);
                 }
+
+                HasChanges = false;
+                CurrentFile = file;
+                CurrentFileName = Path.GetFileName(file);
             }
             catch (Exception ex)
             {
@@ -849,34 +850,9 @@ public partial class DataTableManager : ObservableObject
         {
             if (SelectedItem == null || DataTable == null) return;
 
-            // Find the index of the current selected item
-            int index = DataTable.Rows.IndexOf(SelectedItem.Row);
+            var newSelectedItem = DeleteSelectedRow(DataTable, SelectedItem);
 
-            // Delete the row and update the DataTable
-            DeleteSelectedRow(DataTable, SelectedItem);
-
-            // Determine the new selected item
-            if (DataTable.Rows.Count > 0)
-            {
-                // If the index is out of bounds (e.g., deleting the last row), adjust the index to the new last row
-                if (index >= DataTable.Rows.Count)
-                {
-                    index = DataTable.Rows.Count - 1;
-                }
-
-                // Set the selected item to the last row if the deleted row was the last row
-                if (index < DataTable.Rows.Count)
-                {
-                    SelectedItem = DataTable.DefaultView[index];
-                }
-            }
-            else
-            {
-                // No rows left in the DataTable
-                SelectedItem = null;
-            }
-
-            OnPropertyChanged(nameof(SelectedItem));
+            SelectedItem = newSelectedItem;
         }
         catch (Exception ex)
         {
@@ -903,18 +879,18 @@ public partial class DataTableManager : ObservableObject
         int newID = GetMaxId();
         EditHistory editHistory = CreateEditHistory(EditAction.RowInsert);
 
-        // If DataTableString exists, add a corresponding row
-        if (DataTableString != null)
+        AddNewRow(dataTable, newID, editHistory);
+
+        if (dataTable.DefaultView.Count > 0)
         {
-            AddNewRow(DataTableString, newID, editHistory);
-            OnPropertyChanged(nameof(DataTableString));
+            SelectedItem = dataTable.DefaultView[^1];
+        }
+        else
+        {
+            SelectedItem = null;
         }
 
-        // Add a row to the main DataTable
-        AddNewRow(dataTable, newID, editHistory);
-        SelectedItem = dataTable.DefaultView[dataTable.Rows.Count - 1];
         OnPropertyChanged(nameof(dataTable));
-
         _undoStack.Push(editHistory);
         _redoStack.Clear();
         OnCanExecuteChangesChanged();
@@ -927,22 +903,18 @@ public partial class DataTableManager : ObservableObject
         int newID = GetMaxId();
         EditHistory editHistory = CreateEditHistory(EditAction.RowInsert);
 
-        // Duplicate row in DataTableString if it exists
-        if (DataTableString != null && DataTableString.Columns.Contains("nID"))
-        {
-            var selectedItemString = GetRowViewById(DataTableString, selectedItem);
-            if (selectedItemString != null)
-            {
-                var duplicateString = DuplicateRow(selectedItemString.Row, DataTableString);
-                UpdateAndAddRow(duplicateString, DataTableString, newID, editHistory);
-                OnPropertyChanged(nameof(DataTableString));
-            }
-        }
-
-        // Duplicate row in the main DataTable
+        // Duplicate row in DataTable
         var duplicate = DuplicateRow(selectedItem.Row, dataTable);
         UpdateAndAddRow(duplicate, dataTable, newID, editHistory);
-        selectedItem = dataTable.DefaultView[dataTable.Rows.Count - 1];
+
+        if (dataTable.DefaultView.Count > 0)
+        {
+            SelectedItem = dataTable.DefaultView[^1];
+        }
+        else
+        {
+            SelectedItem = null;
+        }
 
         OnPropertyChanged(nameof(dataTable));
 
@@ -950,7 +922,7 @@ public partial class DataTableManager : ObservableObject
         _redoStack.Clear();
         OnCanExecuteChangesChanged();
 
-        return selectedItem;
+        return SelectedItem;
     }
 
     private DataRowView? DeleteSelectedRow(DataTable? dataTable, DataRowView? selectedItem)
@@ -973,7 +945,7 @@ public partial class DataTableManager : ObservableObject
         RemoveRow(dataTable, selectedItem.Row, editHistory);
 
         // Set new selection
-        int rowIndex = dataTable.Rows.Count - 1;
+        int rowIndex = dataTable.DefaultView.Count - 1;
         selectedItem = rowIndex >= 0 ? dataTable.DefaultView[Math.Max(rowIndex, 0)] : null;
 
         OnPropertyChanged(nameof(dataTable));
@@ -1182,7 +1154,11 @@ public partial class DataTableManager : ObservableObject
                                         DataRow newRow = table.NewRow();
                                         newRow.ItemArray = (object?[])groupedEdit.OldValue!;
                                         table.Rows.InsertAt(newRow, groupedEdit.Row);
-                                        lastAffectedItem = table.DefaultView[groupedEdit.Row];
+
+                                        if (groupedEdit.Row < table.DefaultView.Count)
+                                        {
+                                            lastAffectedItem = table.DefaultView[groupedEdit.Row];
+                                        }
                                     }
                                 }
                                 else

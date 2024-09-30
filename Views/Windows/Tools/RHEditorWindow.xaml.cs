@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Data;
 using System.Windows.Controls;
-using Wpf.Ui.Appearance;
 
 namespace RHToolkit.Views.Windows
 {
@@ -10,7 +9,6 @@ namespace RHToolkit.Views.Windows
     {
         public RHEditorWindow(RHEditorViewModel viewModel)
         {
-            SystemThemeWatcher.Watch(this);
             InitializeComponent();
             DataContext = viewModel;
         }

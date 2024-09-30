@@ -5,6 +5,7 @@
     xmlns:bh="clr-namespace:RHToolkit.Behaviors"
     xmlns:control="clr-namespace:RHToolkit.Views.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dt="clr-namespace:RHToolkit.Models.DataTemplates"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:RHToolkit.Utilities.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,6 +18,8 @@
     MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
     bh:WindowBehaviors.EnableDragMove="True"
     d:DataContext="{d:DesignInstance Type=windows:PackageEditorViewModel}"
+    d:MaxHeight="720"
+    d:MaxWidth="1280"
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/icon/icon_silverpack.png"
@@ -39,47 +42,26 @@
             Command="{Binding OpenSearchDialogCommand}"
             CommandParameter="Replace"
             Gesture="Ctrl+H" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="1"
+            Gesture="Ctrl+Shift+1" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="2"
+            Gesture="Ctrl+Shift+2" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="3"
+            Gesture="Ctrl+Shift+3" />
     </Window.InputBindings>
-    <ContentControl Template="{StaticResource box_violet02}">
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <ui:TitleBar
-                x:Name="TitleBar"
-                Title="{Binding Title}"
-                Grid.ColumnSpan="3"
-                Height="30"
-                Margin="30,0,0,0"
-                VerticalAlignment="Center"
-                d:Title="Package Editor"
-                ButtonsForeground="White"
-                FontSize="15"
-                Foreground="White">
-                <ui:TitleBar.Icon>
-                    <ui:ImageIcon
-                        Width="20"
-                        Height="20"
-                        Margin="0,-1,0,-3"
-                        Source="/Assets/icon/icon_silverpack.png" />
-                </ui:TitleBar.Icon>
-            </ui:TitleBar>
-            <control:PackageEditorMenu Grid.Row="1" />
-            <control:EditorIconMenu Grid.Row="2" />
-            <Grid
-                Grid.Row="1"
-                Grid.RowSpan="4"
-                Grid.Column="1"
-                Visibility="{Binding IsSelectedItemVisible}">
+    <Window.Resources>
+        <!--  Template for ConditionSelectItem  -->
+        <DataTemplate x:Key="ConditionSelectItem">
+            <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
@@ -88,32 +70,275 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="ID" />
+                    <ui:NumberBox
+                        MinWidth="140"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Description" />
+                    <TextBox
+                        Width="Auto"
+                        Height="30"
+                        Margin="0,0"
+                        d:Text="Name"
+                        FontSize="12"
+                        Template="{StaticResource lb_textbox11}"
+                        Text="{Binding DataContext.DataTableManager.SelectedItem[szName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="szName" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Level Min" />
+                    <ui:NumberBox
+                        MinWidth="140"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="100"
+                        Minimum="1"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nLevelMin], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nLevelMin" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Level Max" />
+                    <ui:NumberBox
+                        MinWidth="140"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="100"
+                        Minimum="1"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nLevelMax], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nLevelMax" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Group" />
+                    <ui:NumberBox
+                        MinWidth="140"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nGroup" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Random Group" />
+                    <ui:NumberBox
+                        MinWidth="140"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nRandomGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nRandomGroup" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+                    <CheckBox
+                        Margin="0,0,0,0"
+                        Content="Select Item Type"
+                        Foreground="White"
+                        IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nSelectItemType], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                        Template="{StaticResource lb_checkbox}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nSelectItemType" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                        </i:Interaction.Behaviors>
+                    </CheckBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+                    <CheckBox
+                        Margin="0,0,0,0"
+                        Content="Take Item Type"
+                        Foreground="White"
+                        IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nTakeItemType], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                        Template="{StaticResource lb_checkbox}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nTakeItemType" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                        </i:Interaction.Behaviors>
+                    </CheckBox>
+                </StackPanel>
 
-                <ui:TabView
-                    x:Name="tabView"
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Class" />
+                    <ListView
+                        Width="250"
+                        Height="120"
+                        Margin="0,0,0,0"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding DataContext.ItemDataManager.ClassItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                        SelectionMode="Multiple">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior
+                                Column="szClass"
+                                SelectedItemsString="{Binding DataContext.DataTableManager.SelectedItem[szClass], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ListView>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Focus" />
+                    <ListView
+                        Width="250"
+                        Height="120"
+                        Margin="0,0,0,0"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding DataContext.JobItems, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                        SelectionMode="Multiple">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior
+                                Column="szJob"
+                                SelectedItemsString="{Binding DataContext.DataTableManager.SelectedItem[szJob], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ListView>
+                </StackPanel>
+
+                <ScrollViewer
+                    Grid.Row="4"
+                    Grid.ColumnSpan="3"
+                    Margin="0,10,0,0"
+                    HorizontalScrollBarVisibility="Auto"
+                    Style="{StaticResource lb_scrollviewer}"
+                    VerticalScrollBarVisibility="Auto">
+                    <ItemsControl AlternationCount="{Binding DataContext.PackageItems.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.PackageItems, RelativeSource={RelativeSource AncestorType=Window}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel
+                                    Grid.Column="0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Orientation="Horizontal">
+                                    <TextBlock
+                                        Margin="0,0,10,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Background="Transparent"
+                                        FontSize="12"
+                                        Foreground="Gold"
+                                        Style="{StaticResource ArialMS}"
+                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item {0}'}" />
+                                    <control:ItemSlot
+                                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
+                                        ItemNameVisibility="Visible"
+                                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </DataTemplate>
+        <!--  Template for UnionPackage  -->
+        <DataTemplate x:Key="UnionPackage">
+            <Grid>
+                <UniformGrid Columns="3">
+                    <FrameworkElement x:Name="c1" />
+                </UniformGrid>
+                <TabControl
                     Grid.Row="0"
                     Grid.ColumnSpan="2"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Background="Transparent"
-                    BorderBrush="Transparent"
-                    Visibility="{Binding IsSelectedItemVisible}">
+                    BorderBrush="Transparent">
                     <TabItem
                         x:Name="tab1"
-                        Width="200"
-                        Height="Auto"
+                        Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
                         Header="Package Details"
                         Style="{StaticResource lb_tab}"
@@ -144,15 +369,15 @@
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Package ID" />
                                 <ui:NumberBox
-                                    Width="150"
+                                    Width="Auto"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
                                     Maximum="2147483647"
                                     Minimum="0"
-                                    Value="{Binding DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
                                     <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                        <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
                                     </i:Interaction.Behaviors>
                                 </ui:NumberBox>
                             </StackPanel>
@@ -165,14 +390,14 @@
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Package Type" />
                                 <ComboBox
-                                    Width="150"
+                                    Width="Auto"
                                     Height="24"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     IsReadOnly="True"
-                                    ItemsSource="{Binding PackageTypeItems}"
-                                    SelectedValue="{Binding PackageType, Mode=TwoWay}"
+                                    ItemsSource="{Binding DataContext.PackageTypeItems, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                    SelectedValue="{Binding DataContext.PackageType, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                     SelectedValuePath="ID"
                                     Style="{StaticResource ComboBoxStyle}"
                                     Template="{StaticResource lb_combobox}" />
@@ -187,15 +412,15 @@
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Rune Group 01" />
                                 <ui:NumberBox
-                                    Width="150"
+                                    Width="Auto"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
                                     Maximum="2147483647"
                                     Minimum="0"
-                                    Value="{Binding DataTableManager.SelectedItem[nRuneGroup00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    Value="{Binding DataContext.DataTableManager.SelectedItem[nRuneGroup00], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
                                     <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nRuneGroup00" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                        <bh:DataRowViewBehavior Column="nRuneGroup00" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
                                     </i:Interaction.Behaviors>
                                 </ui:NumberBox>
                             </StackPanel>
@@ -208,15 +433,15 @@
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Rune Group 02" />
                                 <ui:NumberBox
-                                    Width="150"
+                                    Width="Auto"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
                                     Maximum="2147483647"
                                     Minimum="0"
-                                    Value="{Binding DataTableManager.SelectedItem[nRuneGroup01], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    Value="{Binding DataContext.DataTableManager.SelectedItem[nRuneGroup01], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
                                     <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nRuneGroup01" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                        <bh:DataRowViewBehavior Column="nRuneGroup01" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
                                     </i:Interaction.Behaviors>
                                 </ui:NumberBox>
                             </StackPanel>
@@ -229,15 +454,15 @@
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Rune Group 03" />
                                 <ui:NumberBox
-                                    Width="150"
+                                    Width="Auto"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
                                     Maximum="2147483647"
                                     Minimum="0"
-                                    Value="{Binding DataTableManager.SelectedItem[nRuneGroup02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    Value="{Binding DataContext.DataTableManager.SelectedItem[nRuneGroup02], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
                                     <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nRuneGroup02" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                        <bh:DataRowViewBehavior Column="nRuneGroup02" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
                                     </i:Interaction.Behaviors>
                                 </ui:NumberBox>
                             </StackPanel>
@@ -252,15 +477,15 @@
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Package Name" />
                                 <TextBox
-                                    Width="300"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="Name"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataTableManager.SelectedItemString[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    Text="{Binding DataContext.DataTableManager.SelectedItemString[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
                                     <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
+                                        <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemStringValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
@@ -274,15 +499,15 @@
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Package Icon" />
                                 <TextBox
-                                    Width="300"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="Icon Name"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataTableManager.SelectedItem[szPackageIcon], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    Text="{Binding DataContext.DataTableManager.SelectedItem[szPackageIcon], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
                                     <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="szPackageIcon" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                        <bh:DataRowViewBehavior Column="szPackageIcon" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
@@ -296,16 +521,16 @@
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Package Description" />
                                 <TextBox
-                                    Width="600"
+                                    Width="Auto"
                                     Height="150"
                                     Margin="0,0"
                                     d:Text="Description"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataTableManager.SelectedItemString[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    Text="{Binding DataContext.DataTableManager.SelectedItemString[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                     TextWrapping="Wrap">
                                     <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="wszDesc" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
+                                        <bh:DataRowViewBehavior Column="wszDesc" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemStringValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
@@ -319,15 +544,15 @@
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Name (Internal)" />
                                 <TextBox
-                                    Width="300"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="Name"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataTableManager.SelectedItem[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    Text="{Binding DataContext.DataTableManager.SelectedItem[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
                                     <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                        <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
@@ -341,16 +566,16 @@
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Description (Internal)" />
                                 <TextBox
-                                    Width="600"
+                                    Width="Auto"
                                     Height="150"
                                     Margin="0,0"
                                     d:Text="Description"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataTableManager.SelectedItem[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    Text="{Binding DataContext.DataTableManager.SelectedItem[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                     TextWrapping="Wrap">
                                     <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="wszDesc" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                        <bh:DataRowViewBehavior Column="wszDesc" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
@@ -358,15 +583,15 @@
                     </TabItem>
                     <TabItem
                         x:Name="tab2"
-                        Width="200"
+                        Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
                         Header="Package Effect"
-                        IsEnabled="{Binding IsPackageEffectEnabled}"
+                        IsEnabled="{Binding DataContext.IsPackageEffectEnabled, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -384,7 +609,7 @@
                                 FontSize="12"
                                 Foreground="Gold"
                                 Style="{StaticResource ArialMS}"
-                                Text="{Binding PackageEffectText}" />
+                                Text="{Binding DataContext.PackageEffectText, RelativeSource={RelativeSource AncestorType=Window}}" />
                             <StackPanel
                                 Grid.Row="0"
                                 Grid.ColumnSpan="2"
@@ -400,34 +625,32 @@
                                     VerticalAlignment="Top"
                                     Maximum="525960"
                                     Minimum="0"
-                                    Value="{Binding EffectRemainTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Value="{Binding DataContext.EffectRemainTime, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=Window}}" />
                             </StackPanel>
-
                             <StackPanel
                                 Grid.Row="1"
                                 Grid.Column="0"
-                                Grid.ColumnSpan="2"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <ItemsControl AlternationCount="{Binding PackageEffects.Count}" ItemsSource="{Binding PackageEffects}">
+                                <ItemsControl AlternationCount="{Binding DataContext.PackageEffects.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.PackageEffects, RelativeSource={RelativeSource AncestorType=Window}}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Margin="0,10,0,0" Orientation="Vertical">
                                                 <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Effect {0}'}" />
                                                 <ComboBox
-                                                    Width="400"
+                                                    Width="Auto"
                                                     Height="24"
                                                     Margin="0,0,0,0"
+                                                    IsEnabled="{Binding DataContext.IsPackageEffectEnabled, RelativeSource={RelativeSource AncestorType=Window}}"
                                                     IsReadOnly="True"
-                                                    ItemsSource="{Binding DataContext.PackageEffectItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                    ItemsSource="{Binding DataContext.PackageEffectItems, RelativeSource={RelativeSource AncestorType=Window}}"
                                                     SelectedValue="{Binding EffectCode, UpdateSourceTrigger=PropertyChanged}"
                                                     SelectedValuePath="ID"
                                                     Style="{StaticResource ComboBoxStyle}"
                                                     Template="{StaticResource lb_combobox}" />
                                             </StackPanel>
-
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
@@ -436,17 +659,19 @@
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 Margin="0,0,0,0"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <ItemsControl AlternationCount="{Binding PackageEffects.Count}" ItemsSource="{Binding PackageEffects}">
+                                <ItemsControl AlternationCount="{Binding DataContext.PackageEffects.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.PackageEffects, RelativeSource={RelativeSource AncestorType=Window}}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Margin="0,10,0,0" Orientation="Vertical">
                                                 <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Effect {0} Value'}" />
                                                 <ui:NumberBox
-                                                    Width="120"
+                                                    Width="Auto"
+                                                    MinWidth="120"
                                                     Margin="0,0,0,0"
+                                                    IsEnabled="{Binding DataContext.IsPackageEffectEnabled, RelativeSource={RelativeSource AncestorType=Window}}"
                                                     LargeChange="{Binding EffectValueLargeIncrement, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                     Maximum="{Binding EffectValueMax, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                     Minimum="{Binding EffectValueMin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -457,12 +682,11 @@
                                     </ItemsControl.ItemTemplate>
                                 </ItemsControl>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab3"
-                        Width="200"
+                        Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
                         Header="Package Items"
                         Style="{StaticResource lb_tab}">
@@ -480,7 +704,7 @@
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 Orientation="Horizontal">
-                                <ItemsControl AlternationCount="{Binding PackageItems.Count}" ItemsSource="{Binding PackageItems}">
+                                <ItemsControl AlternationCount="{Binding DataContext.PackageItems.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.PackageItems, RelativeSource={RelativeSource AncestorType=Window}}">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel
@@ -498,11 +722,11 @@
                                                     Style="{StaticResource ArialMS}"
                                                     Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}}" />
                                                 <control:ItemSlot
-                                                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                     CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
                                                     ItemDataViewModel="{Binding ItemDataViewModel}"
                                                     ItemNameVisibility="Visible"
-                                                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                                                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                             </StackPanel>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
@@ -510,111 +734,79 @@
                             </StackPanel>
                         </Grid>
                     </TabItem>
-                </ui:TabView>
+                </TabControl>
             </Grid>
-            <DataGrid
-                x:Name="dataGridView"
-                Grid.Row="3"
-                Grid.Column="0"
-                Height="400"
-                MinWidth="550"
-                Margin="5,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                bh:DataGridBehavior.EnableScrollIntoView="True"
-                bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
-                AutoGenerateColumns="False"
-                Background="Transparent"
-                BorderBrush="#FF0F0D0A"
-                CanUserAddRows="False"
-                ColumnWidth="*"
-                EnableRowVirtualization="True"
-                FontFamily="{StaticResource ArialUnicodeMS}"
-                FontSize="12"
-                HeadersVisibility="Column"
-                HorizontalGridLinesBrush="White"
-                HorizontalScrollBarVisibility="Auto"
-                ItemsSource="{Binding DataTableManager.DataTable}"
-                SelectedItem="{Binding DataTableManager.SelectedItem}"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
-                Template="{StaticResource lb_datagrid}"
-                VerticalGridLinesBrush="White"
-                Visibility="{Binding IsVisible}">
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-                <DataGrid.InputBindings>
-                    <KeyBinding
-                        Key="I"
-                        Command="{Binding DataTableManager.AddNewRowCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="D"
-                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                        Modifiers="Control" />
-                    <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.UndoChangesCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.RedoChangesCommand}"
-                        Modifiers="Ctrl+Shift" />
-                    <KeyBinding
-                        Key="F"
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Find"
-                        Modifiers="Ctrl" />
-                </DataGrid.InputBindings>
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="Auto"
-                        Binding="{Binding nID}"
-                        Header="ID"
-                        IsReadOnly="True" />
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding wszName}"
-                        Header="{x:Static rs:Resources.Name}"
-                        IsReadOnly="True" />
-                    <DataGridTemplateColumn
-                        Width="36"
-                        Header="{x:Static rs:Resources.Icon}"
-                        IsReadOnly="True">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Image
-                                    Width="36"
-                                    Height="36"
-                                    Source="{Binding szPackageIcon, Converter={StaticResource IconNameToImageSourceConverter}}" />
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            <Grid
-                Grid.Row="4"
-                Grid.Column="0"
-                Visibility="{Binding IsVisible}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+        </DataTemplate>
+
+        <!--  Template for ConditionSelectItemDatagrid  -->
+        <DataTemplate x:Key="ConditionSelectItemDatagrid">
+            <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                <DataGrid
+                    x:Name="dataGridView"
+                    Grid.Row="0"
+                    Height="400"
+                    MinWidth="550"
+                    Margin="5,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    bh:DataGridBehavior.EnableScrollIntoView="True"
+                    bh:DataGridBehavior.SelectedRow="{Binding DataContext.DataTableManager.SelectedRow, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ColumnWidth="*"
+                    EnableRowVirtualization="True"
+                    HeadersVisibility="Column"
+                    HorizontalScrollBarVisibility="Auto"
+                    ItemsSource="{Binding DataContext.DataTableManager.DataTable, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    SelectedItem="{Binding DataContext.DataTableManager.SelectedItem, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    Template="{StaticResource lb_datagrid}">
+
+                    <DataGrid.InputBindings>
+                        <KeyBinding
+                            Key="I"
+                            Command="{Binding DataContext.DataTableManager.AddNewRowCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="D"
+                            Command="{Binding DataContext.DataTableManager.DuplicateSelectedRowCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                            Modifiers="Control" />
+                        <KeyBinding Key="Delete" Command="{Binding DataContext.DataTableManager.DeleteSelectedRowCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataContext.DataTableManager.UndoChangesCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataContext.DataTableManager.RedoChangesCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                            Modifiers="Ctrl+Shift" />
+                        <KeyBinding
+                            Key="F"
+                            Command="{Binding DataContext.OpenSearchDialogCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                            CommandParameter="Find"
+                            Modifiers="Ctrl" />
+                    </DataGrid.InputBindings>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding nID}"
+                            Header="ID"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding szName}"
+                            Header="{x:Static rs:Resources.Name}"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
                 <TextBlock
                     x:Name="lbTotalItem"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
+                    Grid.Row="1"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
@@ -624,42 +816,191 @@
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
                             <Binding ElementName="dataGridView" Path="Items.Count" />
-                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                            <Binding Path="DataContext.DataTableManager.DataTable.Rows.Count" RelativeSource="{RelativeSource AncestorType=ContentControl}" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-
-                <StackPanel
-                    Grid.Row="2"
-                    Grid.ColumnSpan="2"
+            </Grid>
+        </DataTemplate>
+        <!--  Template for UnionPackageDatagrid  -->
+        <DataTemplate x:Key="UnionPackageDatagrid">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <DataGrid
+                    x:Name="dataGridView"
+                    Grid.Row="0"
+                    Height="400"
+                    MinWidth="550"
+                    Margin="5,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    bh:DataGridBehavior.EnableScrollIntoView="True"
+                    bh:DataGridBehavior.SelectedRow="{Binding DataContext.DataTableManager.SelectedRow, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ColumnWidth="*"
+                    EnableRowVirtualization="True"
+                    HeadersVisibility="Column"
+                    HorizontalScrollBarVisibility="Auto"
+                    ItemsSource="{Binding DataContext.DataTableManager.DataTable, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    SelectedItem="{Binding DataContext.DataTableManager.SelectedItem, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    Template="{StaticResource lb_datagrid}">
+                    <DataGrid.InputBindings>
+                        <KeyBinding
+                            Key="I"
+                            Command="{Binding DataContext.DataTableManager.AddNewRowCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="D"
+                            Command="{Binding DataContext.DataTableManager.DuplicateSelectedRowCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                            Modifiers="Control" />
+                        <KeyBinding Key="Delete" Command="{Binding DataContext.DataTableManager.DeleteSelectedRowCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataContext.DataTableManager.UndoChangesCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataContext.DataTableManager.RedoChangesCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                            Modifiers="Ctrl+Shift" />
+                        <KeyBinding
+                            Key="F"
+                            Command="{Binding DataContext.OpenSearchDialogCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                            CommandParameter="Find"
+                            Modifiers="Ctrl" />
+                    </DataGrid.InputBindings>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding nID}"
+                            Header="ID"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding wszName}"
+                            Header="{x:Static rs:Resources.Name}"
+                            IsReadOnly="True" />
+                        <DataGridTemplateColumn
+                            Width="36"
+                            Header="{x:Static rs:Resources.Icon}"
+                            IsReadOnly="True">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Image
+                                        Width="36"
+                                        Height="36"
+                                        Source="{Binding szPackageIcon, Converter={StaticResource IconNameToImageSourceConverter}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+                <TextBlock
+                    x:Name="lbTotalItem"
+                    Grid.Row="1"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Orientation="Vertical">
-                    <Label
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
-                        Content="Package Type"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <ComboBox
-                        x:Name="cmbItemCategory"
-                        Width="200"
-                        Height="24"
-                        Margin="0,0,0,0"
-                        HorizontalAlignment="Left"
-                        HorizontalContentAlignment="Left"
-                        VerticalContentAlignment="Center"
-                        IsReadOnly="True"
-                        ItemsSource="{Binding PackageTypeItemsFilter}"
-                        SelectedValue="{Binding PackageTypeFilter, Mode=TwoWay}"
-                        SelectedValuePath="ID"
-                        Style="{StaticResource ComboBoxStyle}"
-                        Template="{StaticResource lb_combobox}" />
-                </StackPanel>
+                    d:Text="Showing {0}/{1} Items"
+                    Foreground="Gold"
+                    Style="{StaticResource ArialMS}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                            <Binding ElementName="dataGridView" Path="Items.Count" />
+                            <Binding Path="DataContext.DataTableManager.DataTable.Rows.Count" RelativeSource="{RelativeSource AncestorType=ContentControl}" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </DataTemplate>
 
+        <dt:PackageTemplateSelector
+            x:Key="PackageTemplateSelector"
+            ConditionSelectItem="{StaticResource ConditionSelectItem}"
+            UnionPackage="{StaticResource UnionPackage}" />
+
+        <dt:PackageTemplateSelector
+            x:Key="DatagridTemplateSelector"
+            ConditionSelectItem="{StaticResource ConditionSelectItemDatagrid}"
+            UnionPackage="{StaticResource UnionPackageDatagrid}" />
+    </Window.Resources>
+    <ContentControl Template="{StaticResource box_violet02}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <ui:TitleBar
+                x:Name="TitleBar"
+                Title="{Binding Title}"
+                Grid.ColumnSpan="3"
+                Height="30"
+                Margin="30,0,0,0"
+                VerticalAlignment="Center"
+                d:Title="Package Editor"
+                ButtonsForeground="White"
+                FontSize="15"
+                Foreground="White">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon
+                        Width="20"
+                        Height="20"
+                        Margin="0,-1,0,-3"
+                        Source="/Assets/icon/icon_silverpack.png" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+            <control:PackageEditorMenu Grid.Row="1" />
+
+            <!--  Controls  -->
+            <ContentControl
+                Grid.Row="1"
+                Grid.RowSpan="4"
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                Content="{Binding PackageTeplateType}"
+                ContentTemplateSelector="{StaticResource PackageTemplateSelector}"
+                Visibility="{Binding IsSelectedItemVisible}" />
+            <!--  Datagrid  -->
+            <ContentControl
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="10,0,0,0"
+                Content="{Binding PackageTeplateType}"
+                ContentTemplateSelector="{StaticResource DatagridTemplateSelector}"
+                Visibility="{Binding IsSelectedItemVisible}">
+                <ContentControl.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
+                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
+                    </ContextMenu>
+                </ContentControl.ContextMenu>
+            </ContentControl>
+
+            <Grid
+                Grid.Row="3"
+                Grid.Column="0"
+                Visibility="{Binding IsVisible}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <StackPanel
-                    Grid.Row="1"
+                    Grid.Row="0"
                     Grid.ColumnSpan="2"
                     Margin="0,10,0,0"
                     HorizontalAlignment="Center"

@@ -38,8 +38,7 @@ namespace RHToolkit.ViewModels.Windows
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
 
-            PopulatePackageTypeItems();
-            PopulatePackageEffectItems();
+            PopulateListItems();
 
             WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
             WeakReferenceMessenger.Default.Register<DataRowViewMessage>(this);
@@ -59,10 +58,13 @@ namespace RHToolkit.ViewModels.Windows
                 if (int.TryParse(parameter, out int unionPackageType))
                 {
                     string? fileName = GetFileName(unionPackageType);
-                    string? stringFileName = GetStringFileName(unionPackageType);
                     if (fileName == null) return;
 
-                    bool isLoaded = await DataTableManager.LoadFileFromPath(fileName, stringFileName, "nPackageType", "Package");
+                    string? stringFileName = GetStringFileName(unionPackageType);
+                    PackageTeplateType = unionPackageType;
+                    string columnName = GetColumnName(fileName);
+
+                    bool isLoaded = await DataTableManager.LoadFileFromPath(fileName, stringFileName, columnName, "Package");
 
                     if (isLoaded)
                     {
@@ -84,7 +86,7 @@ namespace RHToolkit.ViewModels.Windows
                 await CloseFile();
 
                 string filter = "UnionPackage Files|" +
-                                "unionpackage.rh;unionpackage_local.rh|" +
+                                "unionpackage.rh;unionpackage_local.rh;conditionselectitem.rh|" +
                                 "All Files (*.*)|*.*";
 
                 OpenFileDialog openFileDialog = new()
@@ -101,13 +103,15 @@ namespace RHToolkit.ViewModels.Windows
                     {
                         "unionpackage.rh" => 1,
                         "unionpackage_local.rh" => 2,
-                        _ => throw new Exception($"The file '{selectedFileName}' is not a valid unionpackage file."),
+                        "conditionselectitem.rh" => 3,
+                        _ => throw new Exception($"The file '{selectedFileName}' is not a valid package file."),
                     };
 
-                    string? fileName = GetFileName(unionPackageType);
+                    string fileName = GetFileName(unionPackageType);
                     string? stringFileName = GetStringFileName(unionPackageType);
-
-                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, stringFileName, "nPackageType", "Package");
+                    string? columnName = GetColumnName(fileName);
+                    PackageTeplateType = unionPackageType;
+                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, stringFileName, columnName, "Package");
 
                     if (isLoaded)
                     {
@@ -121,13 +125,13 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
-
-        private static string? GetFileName(int unionPackageType)
+        private static string GetFileName(int unionPackageType)
         {
             return unionPackageType switch
             {
                 1 => "unionpackage.rh",
                 2 => "unionpackage_local.rh",
+                3 => "conditionselectitem.rh",
                 _ => throw new ArgumentOutOfRangeException(nameof(unionPackageType)),
             };
         }
@@ -138,7 +142,18 @@ namespace RHToolkit.ViewModels.Windows
             {
                 1 => "unionpackage_string.rh",
                 2 => "unionpackage_local_string.rh",
+                3 => null,
                 _ => throw new ArgumentOutOfRangeException(nameof(unionPackageType)),
+            };
+        }
+
+        private static string GetColumnName(string fileName)
+        {
+            return fileName switch
+            {
+                "unionpackage.rh" or "unionpackage_local.rh" => "nPackageType",
+                "conditionselectitem.rh" => "nTakeItemType",
+                _ => "",
             };
         }
 
@@ -185,6 +200,9 @@ namespace RHToolkit.ViewModels.Windows
         {
             Title = $"Package Editor";
             OpenMessage = "Open a file";
+            PackageTeplateType = 0;
+            PackageItems?.Clear();
+            PackageEffects?.Clear();
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }
@@ -232,7 +250,7 @@ namespace RHToolkit.ViewModels.Windows
 
                     var token = _token;
 
-                    _windowsService.OpenItemWindow(token, "Package", itemData);
+                    _windowsService.OpenItemWindow(token, PackageTeplateType == 3 ? "PackageCondition" : "Package", itemData);
                 }
 
             }
@@ -248,7 +266,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 var itemData = message.Value;
 
-                if (DataTableManager.SelectedItem != null && itemData.SlotIndex >= 0 && itemData.SlotIndex < 10)
+                if (itemData.SlotIndex >= 0 && itemData.SlotIndex < 12)
                 {
                     UpdatePackageItem(itemData);
                 }
@@ -276,15 +294,18 @@ namespace RHToolkit.ViewModels.Windows
             {
                 DataTableManager.StartGroupingEdits();
                 DataTableManager.AddNewRow();
-                if (DataTableManager.SelectedItem != null)
+                if (PackageTeplateType != 3)
                 {
-                    DataTableManager.SelectedItem["wszName"] = "New Package";
-                    DataTableManager.SelectedItem["wszDesc"] = "New Package Description";
-                }
-                if (DataTableManager.SelectedItemString != null)
-                {
-                    DataTableManager.SelectedItemString["wszName"] = "New Package";
-                    DataTableManager.SelectedItemString["wszDesc"] = "New Package Description";
+                    if (DataTableManager.SelectedItem != null)
+                    {
+                        DataTableManager.SelectedItem["wszName"] = "New Package";
+                        DataTableManager.SelectedItem["wszDesc"] = "New Package Description";
+                    }
+                    if (DataTableManager.SelectedItemString != null)
+                    {
+                        DataTableManager.SelectedItemString["wszName"] = "New Package";
+                        DataTableManager.SelectedItemString["wszDesc"] = "New Package Description";
+                    }
                 }
                 DataTableManager.EndGroupingEdits();
             }
@@ -338,11 +359,19 @@ namespace RHToolkit.ViewModels.Windows
             {
                 var selectedItem = message.Value;
 
-                UpdateSelectedItem(selectedItem);
+                if (PackageTeplateType == 3)
+                {
+                    UpdateConditionSelectedItem(selectedItem);
+                }
+                else
+                {
+                    UpdatePackageSelectedItem(selectedItem);
+                }
             }
         }
 
-        private void UpdateSelectedItem(DataRowView? selectedItem)
+        #region Package
+        private void UpdatePackageSelectedItem(DataRowView? selectedItem)
         {
             _isUpdatingSelectedItem = true;
 
@@ -352,7 +381,6 @@ namespace RHToolkit.ViewModels.Windows
                 EffectRemainTime = (int)selectedItem["nEffectRemainTime"];
 
                 PackageItems ??= [];
-                PackageEffects ??= [];
 
                 for (int i = 0; i < 12; i++)
                 {
@@ -381,35 +409,28 @@ namespace RHToolkit.ViewModels.Windows
 
                         ItemPropertyChanged(item, i);
                     }
-                    
+
                 }
+
+                PackageEffects?.Clear();
+                PackageEffects = [];
+
                 for (int i = 0; i < 6; i++)
                 {
                     var effectCode = (int)selectedItem[$"nEffectCode{i:00}"];
                     var effectValue = (float)selectedItem[$"fEffectValue{i:00}"];
                     var stringID = (int)selectedItem[$"nStringID{i:00}"];
 
-                    if (i < PackageEffects.Count)
+                    var item = new PackageItem
                     {
-                        var existingItem = PackageEffects[i];
+                        EffectCode = effectCode,
+                        EffectValue = effectValue,
+                        StringID = stringID
+                    };
 
-                        existingItem.EffectCode = effectCode;
-                        existingItem.EffectValue = effectValue;
-                        existingItem.StringID = stringID;
-                    }
-                    else
-                    {
-                        var item = new PackageItem
-                        {
-                            EffectCode = (int)selectedItem[$"nEffectCode{i:00}"],
-                            EffectValue = (float)selectedItem[$"fEffectValue{i:00}"],
-                            StringID = (int)selectedItem[$"nStringID{i:00}"]
-                        };
-
-                        PackageEffects.Add(item);
-                        EffectPropertyChanged(item, i);
-                        UpdateEffectValueRanges(i, item.EffectCode);
-                    }
+                    PackageEffects.Add(item);
+                    EffectPropertyChanged(item, i);
+                    UpdateEffectValueRanges(i, item.EffectCode);
                 }
 
                 FormatPackageEffect();
@@ -447,6 +468,69 @@ namespace RHToolkit.ViewModels.Windows
                 }
             };
         }
+        #endregion
+
+        #region ConditionSelectItem
+        private void UpdateConditionSelectedItem(DataRowView? selectedItem)
+        {
+            _isUpdatingSelectedItem = true;
+
+            if (selectedItem != null)
+            {
+                PackageItems ??= [];
+
+                for (int i = 0; i < 6; i++)
+                {
+                    var itemCode = (int)selectedItem[$"nItemID{i:00}"];
+                    var itemCount = (int)selectedItem[$"nItemCount{i:00}"];
+                    var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, i, itemCount);
+
+                    if (i < PackageItems.Count)
+                    {
+                        var existingItem = PackageItems[i];
+
+                        existingItem.ItemCode = itemCode;
+                        existingItem.ItemCount = itemCount;
+                        existingItem.ItemDataViewModel = itemDataViewModel;
+                    }
+                    else
+                    {
+                        var item = new PackageItem
+                        {
+                            ItemCode = itemCode,
+                            ItemCount = itemCount,
+                            ItemDataViewModel = itemDataViewModel
+                        };
+
+                        PackageItems.Add(item);
+
+                        ConditionItemPropertyChanged(item, i);
+                    }
+                }
+                
+                IsSelectedItemVisible = Visibility.Visible;
+            }
+            else
+            {
+                IsSelectedItemVisible = Visibility.Hidden;
+            }
+
+            _isUpdatingSelectedItem = false;
+            OnCanExecuteSelectedItemCommandChanged();
+        }
+
+        private void ConditionItemPropertyChanged(PackageItem item, int index)
+        {
+            item.PropertyChanged += (s, e) =>
+            {
+                if (s is PackageItem packageItem)
+                {
+                    UpdateSelectedItemValue(packageItem.ItemCode, $"nItemID{index:00}");
+                    UpdateSelectedItemValue(packageItem.ItemCount, $"nItemCount{index:00}");
+                }
+            };
+        }
+        #endregion
 
         #endregion
 
@@ -456,21 +540,34 @@ namespace RHToolkit.ViewModels.Windows
         {
             List<string> filterParts = [];
 
-            if (PackageTypeFilter != -1)
-            {
-                filterParts.Add($"nPackageType = {PackageTypeFilter}");
-            }
-
             List<string> columns = [];
 
             columns.Add("CONVERT(nID, 'System.String')");
-            columns.Add("wszName");
-
-            for (int i = 0; i < 12; i++)
+            
+            switch (PackageTeplateType)
             {
-                string columnName = $"nItemCode{i:00}";
-                columns.Add($"CONVERT({columnName}, 'System.String')");
+                case 1 or 2:
+                    columns.Add("wszName");
+                    for (int i = 0; i < 12; i++)
+                    {
+                        string columnName = $"nItemCode{i:00}";
+                        columns.Add($"CONVERT({columnName}, 'System.String')");
+                    }
+                    break;
+                case 3:
+                    columns.Add("szName");
+                    columns.Add("CONVERT(nGroup, 'System.String')");
+                    columns.Add("CONVERT(nRandomGroup, 'System.String')");
+                    for (int i = 0; i < 6; i++)
+                    {
+                        string columnName = $"nItemID{i:00}";
+                        columns.Add($"CONVERT({columnName}, 'System.String')");
+                    }
+                    break;
+                default:
+                    break;
             }
+
             if (columns.Count > 0)
             {
                 DataTableManager.ApplyFileDataFilter(filterParts, [.. columns], SearchText, MatchCase);
@@ -512,8 +609,20 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private List<NameID>? _packageEffectItems;
 
-        private void PopulatePackageEffectItems()
+        [ObservableProperty]
+        private List<NameID>? _jobItems;
+
+        [ObservableProperty]
+        private List<NameID>? _packageTypeItems;
+
+        private void PopulateListItems()
         {
+            PackageTypeItems =
+                [
+                    new NameID { ID = 0, Name = "Effect Package" },
+                    new NameID { ID = 2, Name = "Item Package" }
+                ];
+
             PackageEffectItems =
                 [
                     new NameID { ID = 0, Name = "None" },
@@ -535,39 +644,13 @@ namespace RHToolkit.ViewModels.Windows
                     //new NameID { ID = 16, Name = "Unknown" },
                     new NameID { ID = 17, Name = "Can Reset Skills" }
                 ];
-
-        }
-
-        [ObservableProperty]
-        private List<NameID>? _packageTypeItems;
-
-        [ObservableProperty]
-        private List<NameID>? _packageTypeItemsFilter;
-
-        private void PopulatePackageTypeItems()
-        {
-            PackageTypeItems =
+            JobItems =
                 [
-                    new NameID { ID = 0, Name = "Effect Package" },
-                    new NameID { ID = 2, Name = "Item Package" }
+                    new NameID { ID = 0, Name = "Basic Focus" },
+                    new NameID { ID = 1, Name = "Focus 1" },
+                    new NameID { ID = 2, Name = "Focus 2" },
+                    new NameID { ID = 3, Name = "Focus 3" }
                 ];
-
-            PackageTypeItemsFilter =
-                [
-                    new NameID { ID = -1, Name = "All" },
-                    new NameID { ID = 0, Name = "Effect Package" },
-                    new NameID { ID = 2, Name = "Item Package" }
-                ];
-
-            PackageTypeFilter = -1;
-        }
-
-        [ObservableProperty]
-        private int _packageTypeFilter;
-
-        partial void OnPackageTypeFilterChanged(int value)
-        {
-            TriggerFilterUpdate();
         }
 
         #endregion
@@ -578,9 +661,6 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private string? _openMessage = "Open a file";
-
-        [ObservableProperty]
-        private string? _packageEffectText;
 
         [ObservableProperty]
         private Visibility _isSelectedItemVisible = Visibility.Hidden;
@@ -596,6 +676,9 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [ObservableProperty]
+        private int _packageTeplateType;
+
+        [ObservableProperty]
         private ItemDataManager _itemDataManager;
 
         #region SelectedItem
@@ -605,6 +688,9 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private ObservableCollection<PackageItem> _packageEffects = [];
+
+        [ObservableProperty]
+        private string? _packageEffectText;
 
         [ObservableProperty]
         private int _packageType;
@@ -668,13 +754,6 @@ namespace RHToolkit.ViewModels.Windows
             if (_isUpdatingSelectedItem)
                 return;
             DataTableManager.UpdateSelectedItemValue(newValue, column);
-        }
-
-        private void UpdateSelectedItemStringValue(object? newValue, string column)
-        {
-            if (_isUpdatingSelectedItem)
-                return;
-            DataTableManager.UpdateSelectedItemStringValue(newValue, column);
         }
 
         private void FormatPackageEffect()

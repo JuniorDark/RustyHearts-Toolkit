@@ -70,6 +70,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                     { "CouponItem", "CouponWindow" },
                     { "SetItem", "SetItemEditorWindow" },
                     { "Package", "PackageEditorWindow" },
+                    { "PackageCondition", "PackageEditorWindow" },
                     { "RandomRune", "RandomRuneEditorWindow" },
                     { "NpcShopItems", "NpcShopEditorWindowItems" },
                     { "NpcShopFilterItems", "NpcShopEditorWindowItems" },
@@ -80,7 +81,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                     { "ItemMixItem", "NpcShopEditorWindowItem" },
                     { "DropGroup", "DropGroupEditorWindow" },
                     { "RareCard", "DropGroupEditorWindow" },
-                    { "CashShopItemUpdate", "CashShopEditorWindow" }
+                    { "CashShopItemUpdate", "CashShopEditorWindow" },
+                    { "PetDeathDropItem", "PetEditorWindow" }
                 };
 
                 if (windowMapping.TryGetValue(MessageType, out var windowName))
@@ -220,6 +222,11 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                 settings.SlotIndexMax = 11;
                 settings.IsSlotVisible = Visibility.Visible;
             },
+            ["PackageCondition"] = settings =>
+            {
+                settings.SlotIndexMax = 5;
+                settings.IsSlotVisible = Visibility.Visible;
+            },
             ["RandomRune"] = settings =>
             {
                 settings.SlotIndexMax = 11;
@@ -249,6 +256,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                 settings.SlotIndexMax = 2;
                 settings.IsSlotVisible = Visibility.Visible;
             },
+            ["PetDeathDropItem"] = settings => { },
             ["NpcShopItem"] = settings => { },
             ["TradeShopItem"] = settings => { },
             ["ItemMixItem"] = settings => { },
@@ -321,7 +329,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             "StorageItem" => $"Add Storage Item [{CharacterData?.CharacterName}]",
             "AccountStorageItem" => $"Add Account Storage Item [{CharacterData?.AccountName}]",
             "Mail" => "Add Mail Item",
-            "Package" => "Add Package Item",
+            "Package" or "PackageCondition" => "Add Package Item",
             "RandomRune" => "Add Random Rune Item",
             "NpcShopItem" or "NpcShopItems" or "NpcShopFilterItems" => "Add Npc Shop Item",
             "TradeShopItem" or "TradeShopItems" => "Add Trade Shop Item",
@@ -329,6 +337,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             "DropGroup" => "Add Drop Group Item",
             "RareCard" => "Add Rare Card Group Item",
             "SetItem" => "Add Set Item",
+            "PetDeathDropItem" => "Add Pet Death Drop Item",
             _ => "Add Item",
         };
     }

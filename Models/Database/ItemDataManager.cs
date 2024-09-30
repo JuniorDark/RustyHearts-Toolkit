@@ -75,7 +75,7 @@ public partial class ItemDataManager : ObservableObject
     }
 
     [ObservableProperty]
-    private ItemDataViewModel _itemDataViewModel;
+    private ItemDataViewModel? _itemDataViewModel;
 
     #region ItemData
     public bool IsInvalidItemID(int itemID)

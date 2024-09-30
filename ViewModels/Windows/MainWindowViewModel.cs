@@ -25,6 +25,7 @@ public partial class MainWindowViewModel : ObservableObject
             new NavigationViewItem(Resources.Tools, SymbolRegular.WindowDatabase24, typeof(DatabaseToolsPage)),
         }
     },
+    new NavigationViewItem("Edit Tools", SymbolRegular.DocumentTextToolbox24, typeof(EditToolsPage)),
     new NavigationViewItem()
     {
         Content = "SQLite Database",
@@ -35,7 +36,6 @@ public partial class MainWindowViewModel : ObservableObject
              new NavigationViewItem(Resources.Database, SymbolRegular.WindowDatabase24, typeof(DatabasePage)),
         }
     },
-    new NavigationViewItem("Edit Tools", SymbolRegular.DocumentTextToolbox24, typeof(EditToolsPage)),
     ];
 
     [ObservableProperty]

@@ -277,6 +277,11 @@ namespace RHToolkit.Services
             return GetItemsFromQuery("SELECT nID, wszDesc FROM peteatitem");
         }
 
+        public List<NameID> GetPetRebirthItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszMemo FROM petrebirth");
+        }
+
         public List<NameID> GetRiddleGroupItems()
         {
             return GetItemsFromQuery("SELECT nID, wszLvelDisc FROM riddleboxdropgrouplist");
