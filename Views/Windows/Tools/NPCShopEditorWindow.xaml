@@ -18,6 +18,8 @@
     MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
     bh:WindowBehaviors.EnableDragMove="True"
     d:DataContext="{d:DesignInstance Type=windows:NPCShopEditorViewModel}"
+    d:MaxHeight="720"
+    d:MaxWidth="1280"
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/icon/rhicon.png"
@@ -64,6 +66,10 @@
             Command="{Binding LoadFileCommand}"
             CommandParameter="6"
             Gesture="Ctrl+Shift+6" />
+        <KeyBinding
+            Command="{Binding LoadFileCommand}"
+            CommandParameter="7"
+            Gesture="Ctrl+Shift+7" />
     </Window.InputBindings>
     <Window.Resources>
         <!--  Template for NpcShop  -->
@@ -1663,10 +1669,314 @@
                 </StackPanel>
             </Grid>
         </DataTemplate>
+        <!--  Template for ItemBroken  -->
+        <DataTemplate x:Key="ItemBroken">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="ID" />
+                    <ui:NumberBox
+                        MinWidth="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="2147483647"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Name" />
+                    <TextBox
+                        Width="Auto"
+                        Height="30"
+                        Margin="0,0"
+                        d:Text="Name"
+                        FontSize="12"
+                        Template="{StaticResource lb_textbox11}"
+                        Text="{Binding DataContext.DataTableManager.SelectedItem[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Min Level" />
+                    <ui:NumberBox
+                        MinWidth="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="100"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nItemMinLv], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nItemMinLv" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Max Level" />
+                    <ui:NumberBox
+                        MinWidth="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="100"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nItemMaxLv], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nItemMaxLv" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Category" />
+                    <ListView
+                        Width="300"
+                        Height="120"
+                        Margin="0,0,0,0"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding DataContext.ItemDataManager.CategoryFilterItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                        SelectionMode="Multiple">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior
+                                Column="szCategory"
+                                SelectedItemsString="{Binding DataContext.DataTableManager.SelectedItem[szCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ListView>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Sub Category" />
+                    <ListView
+                        Width="300"
+                        Height="120"
+                        Margin="0,0,0,0"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding DataContext.ItemDataManager.SubCategoryItemsFilter, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                        SelectionMode="Multiple">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior
+                                Column="szSubCategory"
+                                SelectedItemsString="{Binding DataContext.DataTableManager.SelectedItem[szSubCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ListView>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Quality" />
+                    <ListView
+                        Width="300"
+                        Height="120"
+                        Margin="0,0,0,0"
+                        DisplayMemberPath="Name"
+                        ItemsSource="{Binding DataContext.ItemDataManager.BranchItemsFilter, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                        SelectionMode="Multiple">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior
+                                Column="szBranch"
+                                SelectedItemsString="{Binding DataContext.DataTableManager.SelectedItem[szBranch], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ListView>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="3"
+                    Grid.ColumnSpan="3"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <ItemsControl AlternationCount="{Binding DataContext.ItemBrokenTargetItem.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.ItemBrokenTargetItem, RelativeSource={RelativeSource AncestorType=Window}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Orientation="Vertical">
+                                    <TextBlock
+                                        Margin="0,0,10,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        Background="Transparent"
+                                        FontSize="12"
+                                        Foreground="Gold"
+                                        Style="{StaticResource ArialMS}"
+                                        Text="Dismantled Item" />
+                                    <control:ItemSlot
+                                        AddItemCommand="{Binding DataContext.AddItemBrokenTargetItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
+                                        ItemNameVisibility="Visible"
+                                        RemoveItemCommand="{Binding DataContext.RemoveItemBrokenTargetItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="4"
+                    Grid.ColumnSpan="3"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <ItemsControl AlternationCount="{Binding DataContext.ItemBrokenItem.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.ItemBrokenItem, RelativeSource={RelativeSource AncestorType=Window}}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Orientation="Vertical">
+                                    <TextBlock
+                                        Margin="0,0,10,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        Background="Transparent"
+                                        FontSize="12"
+                                        Foreground="Gold"
+                                        Style="{StaticResource ArialMS}"
+                                        Text="Dismantle Item" />
+                                    <control:ItemSlot
+                                        AddItemCommand="{Binding DataContext.AddItemBrokenItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        ItemDataViewModel="{Binding ItemDataViewModel}"
+                                        ItemNameVisibility="Visible"
+                                        RemoveItemCommand="{Binding DataContext.RemoveItemBrokenItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Dismantle Probability" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="1"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[fBrokenProbability], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="fBrokenProbability" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="5"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Dismantle Min Count" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="999"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nItemrokenMinCount], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nItemrokenMinCount" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+                <StackPanel
+                    Grid.Row="5"
+                    Grid.Column="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <TextBlock Foreground="White" Text="Item Dismantle Max Count" />
+                    <ui:NumberBox
+                        Width="150"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Maximum="999"
+                        Minimum="0"
+                        Value="{Binding DataContext.DataTableManager.SelectedItem[nItemBrokenMaxCount], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nItemBrokenMaxCount" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
 
         <dt:NpcShopTemplateSelector
             x:Key="NpcShopTemplateSelector"
             CostumeMix="{StaticResource CostumeMix}"
+            ItemBroken="{StaticResource ItemBroken}"
             ItemMix="{StaticResource ItemMix}"
             ItemPreview="{StaticResource ItemPreview}"
             NpcShop="{StaticResource NpcShop}"
@@ -1707,7 +2017,6 @@
                 </ui:TitleBar.Icon>
             </ui:TitleBar>
             <control:NpcShopEditorMenu Grid.Row="1" />
-            <control:EditorIconMenu Grid.Row="2" />
 
             <ContentControl
                 Grid.Row="1"
@@ -1730,15 +2039,10 @@
                 bh:DataGridBehavior.EnableScrollIntoView="True"
                 bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
                 AutoGenerateColumns="True"
-                Background="Transparent"
-                BorderBrush="#FF0F0D0A"
                 CanUserAddRows="False"
                 ColumnWidth="Auto"
                 EnableRowVirtualization="True"
-                FontFamily="{StaticResource ArialUnicodeMS}"
-                FontSize="12"
                 HeadersVisibility="Column"
-                HorizontalGridLinesBrush="White"
                 HorizontalScrollBarVisibility="Auto"
                 IsReadOnly="True"
                 ItemsSource="{Binding DataTableManager.DataTable}"
@@ -1746,7 +2050,6 @@
                 SelectionMode="Single"
                 SelectionUnit="FullRow"
                 Template="{StaticResource lb_datagrid}"
-                VerticalGridLinesBrush="White"
                 Visibility="{Binding IsVisible}">
                 <DataGrid.ContextMenu>
                     <ContextMenu>

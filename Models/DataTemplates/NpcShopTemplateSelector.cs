@@ -11,6 +11,7 @@ namespace RHToolkit.Models.DataTemplates
         public DataTemplate? CostumeMix { get; set; }
         public DataTemplate? ShopItemVisibleFilter { get; set; }
         public DataTemplate? ItemPreview { get; set; }
+        public DataTemplate? ItemBroken { get; set; }
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
@@ -22,6 +23,7 @@ namespace RHToolkit.Models.DataTemplates
                 NpcShopType.CostumeMix => CostumeMix,
                 NpcShopType.ShopItemVisibleFilter => ShopItemVisibleFilter,
                 NpcShopType.ItemPreview => ItemPreview,
+                NpcShopType.ItemBroken => ItemBroken,
                 _ => null,
             };
         }

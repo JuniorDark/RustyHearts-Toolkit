@@ -81,7 +81,7 @@ namespace RHToolkit.ViewModels.Windows
                 await CloseFile();
 
                 string filter = "NPC Shop Files .rh|" +
-                                "npcshop.rh;tradeshop.rh;itemmix.rh;costumemix.rh;shopitemvisiblefilter.rh;itempreview.rh|" +
+                                "npcshop.rh;tradeshop.rh;itemmix.rh;costumemix.rh;shopitemvisiblefilter.rh;itempreview.rh;itembroken.rh|" +
                                 "All Files (*.*)|*.*";
 
                 OpenFileDialog openFileDialog = new()
@@ -138,13 +138,14 @@ namespace RHToolkit.ViewModels.Windows
                 NpcShopType.CostumeMix => "Costume Craft",
                 NpcShopType.ShopItemVisibleFilter => "NPC Shop Visible Filter",
                 NpcShopType.ItemPreview => "NPC Shop Item Preview",
+                NpcShopType.ItemBroken => "Item Dismantle",
                 _ => "NPC Shop",
             };
         }
 
-        private static string? GetFileNameFromShopType(int dropGroupType)
+        private static string? GetFileNameFromShopType(int shopType)
         {
-            return dropGroupType switch
+            return shopType switch
             {
                 1 => "npcshop.rh",
                 2 => "tradeshop.rh",
@@ -152,7 +153,8 @@ namespace RHToolkit.ViewModels.Windows
                 4 => "costumemix.rh",
                 5 => "shopitemvisiblefilter.rh",
                 6 => "itempreview.rh",
-                _ => throw new ArgumentOutOfRangeException(nameof(dropGroupType)),
+                7 => "itembroken.rh",
+                _ => throw new ArgumentOutOfRangeException(nameof(shopType)),
             };
         }
 
@@ -166,6 +168,7 @@ namespace RHToolkit.ViewModels.Windows
                 "costumemix.rh" => 4,
                 "shopitemvisiblefilter.rh" => 5,
                 "itempreview.rh" => 6,
+                "itembroken.rh" => 7,
                 _ => -1,
             };
         }
@@ -179,6 +182,7 @@ namespace RHToolkit.ViewModels.Windows
                 "itemmix.rh" or "costumemix.rh" => "nMixAble",
                 "shopitemvisiblefilter.rh" => "nQuestID00",
                 "itempreview.rh" => "nPreViewItemID",
+                "itembroken.rh" => "fBrokenProbability",
                 _ => "",
             };
         }
@@ -348,14 +352,22 @@ namespace RHToolkit.ViewModels.Windows
             {
                 var itemData = message.Value;
 
-                if (message.Recipient == "NpcShopEditorWindowItem")
+                switch (message.Recipient)
                 {
-                    UpdateItem(itemData);
+                    case "NpcShopEditorWindowItem":
+                        UpdateItem(itemData);
+                        break;
+                    case "NpcShopEditorWindowItems":
+                        UpdateItems(itemData);
+                        break;
+                    case "NpcShopEditorWindowItemBroken":
+                        UpdateItemBrokenItem(itemData);
+                        break;
+                    case "NpcShopEditorWindowItemBrokenTarget":
+                        UpdateItemBrokenTargetItem(itemData);
+                        break;
                 }
-                else if (message.Recipient == "NpcShopEditorWindowItems")
-                {
-                    UpdateItems(itemData);
-                }
+
             }
         }
 
@@ -478,6 +490,115 @@ namespace RHToolkit.ViewModels.Windows
         }
         #endregion
 
+        #region ItemBroken
+
+        [RelayCommand(CanExecute = nameof(CanExecuteSelectedItemCommand))]
+        private void AddItemBrokenItem()
+        {
+            try
+            {
+                var itemData = new ItemData
+                {
+                    ItemId = ItemBrokenItem[0].ItemCode
+                };
+
+                _windowsService.OpenItemWindow(_token, "ItemBrokenItem", itemData);
+
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
+
+        private void UpdateItemBrokenItem(ItemData itemData)
+        {
+            if (itemData.ItemId != 0)
+            {
+                DataTableManager.StartGroupingEdits();
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, 0, 1);
+                ItemBrokenItem[0].ItemCode = itemData.ItemId;
+                ItemBrokenItem[0].ItemDataViewModel = itemDataViewModel;
+                UpdateSelectedItemValue(itemDataViewModel!.ItemName, "wszName");
+                OnPropertyChanged(nameof(ItemBrokenItem));
+                DataTableManager.EndGroupingEdits();
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(CanExecuteSelectedItemCommand))]
+        private void AddItemBrokenTargetItem()
+        {
+            try
+            {
+                var itemData = new ItemData
+                {
+                    ItemId = ItemBrokenTargetItem[0].ItemCode
+                };
+
+                _windowsService.OpenItemWindow(_token, "ItemBrokenTargetItem", itemData);
+
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
+
+        private void UpdateItemBrokenTargetItem(ItemData itemData)
+        {
+            if (itemData.ItemId != 0)
+            {
+                DataTableManager.StartGroupingEdits();
+                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, 0, 1);
+                ItemBrokenTargetItem[0].ItemCode = itemData.ItemId;
+                ItemBrokenTargetItem[0].ItemDataViewModel = itemDataViewModel;
+                OnPropertyChanged(nameof(ItemBrokenTargetItem));
+                DataTableManager.EndGroupingEdits();
+            }
+        }
+
+        #region Remove Item
+
+        [RelayCommand]
+        private void RemoveItemBrokenItem()
+        {
+            try
+            {
+                if (ItemBrokenItem[0].ItemCode != 0)
+                {
+                    ItemBrokenItem[0].ItemCode = 0;
+                    ItemBrokenItem[0].ItemDataViewModel = null;
+                    OnPropertyChanged(nameof(ItemBrokenItem));
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
+
+        [RelayCommand]
+        private void RemoveItemBrokenTargetItem()
+        {
+            try
+            {
+                if (ItemBrokenTargetItem[0].ItemCode != 0)
+                {
+                    ItemBrokenTargetItem[0].ItemCode = 0;
+                    ItemBrokenTargetItem[0].ItemDataViewModel = null;
+                    OnPropertyChanged(nameof(ItemBrokenTargetItem));
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
+
+        #endregion
+
+        #endregion
+
         #endregion
 
         #region DataRowViewMessage
@@ -514,6 +635,9 @@ namespace RHToolkit.ViewModels.Windows
                         break;
                     case NpcShopType.ItemPreview:
                         UpdateItemPreview(selectedItem);
+                        break;
+                    case NpcShopType.ItemBroken:
+                        UpdateItemBroken(selectedItem);
                         break;
                 }
 
@@ -964,6 +1088,65 @@ namespace RHToolkit.ViewModels.Windows
 
         #endregion
 
+        #region ItemBroken
+
+        private void UpdateItemBroken(DataRowView selectedItem)
+        {
+            ItemBrokenItem?.Clear();
+            ItemBrokenTargetItem?.Clear();
+
+            ItemBrokenItem = [];
+            ItemBrokenTargetItem = [];
+
+            var item = (int)selectedItem[$"nItem"];
+            var itemDataViewModel = ItemDataManager.GetItemDataViewModel(item, 0, 1);
+
+            var itemBrokenItem = new NPCShopItem
+            {
+                ItemCode = item,
+                ItemDataViewModel = itemDataViewModel
+            };
+
+            ItemBrokenItem.Add(itemBrokenItem);
+            ItemBrokenItemPropertyChanged(itemBrokenItem);
+
+            var itemID = (int)selectedItem[$"nItemID"];
+            var itemDataViewModelID = ItemDataManager.GetItemDataViewModel(itemID, 0, 1);
+
+            var itemBrokenTargetItem = new NPCShopItem
+            {
+                ItemCode = itemID,
+                ItemDataViewModel = itemDataViewModelID
+            };
+
+            ItemBrokenTargetItem.Add(itemBrokenTargetItem);
+            ItemBrokenTargetPropertyChanged(itemBrokenTargetItem);
+        }
+
+        private void ItemBrokenItemPropertyChanged(NPCShopItem item)
+        {
+            item.PropertyChanged += (s, e) =>
+            {
+                if (s is NPCShopItem item)
+                {
+                    UpdateSelectedItemValue(item.ItemCode, $"nItem");
+                }
+            };
+        }
+
+        private void ItemBrokenTargetPropertyChanged(NPCShopItem item)
+        {
+            item.PropertyChanged += (s, e) =>
+            {
+                if (s is NPCShopItem item)
+                {
+                    UpdateSelectedItemValue(item.ItemCode, $"nItemID");
+                }
+            };
+        }
+
+        #endregion
+
         #endregion
 
         #region Filter
@@ -1088,6 +1271,12 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private ObservableCollection<NPCShopItem> _npcShopItems = [];
+
+        [ObservableProperty]
+        private ObservableCollection<NPCShopItem> _itemBrokenItem = [];
+
+        [ObservableProperty]
+        private ObservableCollection<NPCShopItem> _itemBrokenTargetItem = [];
 
         [ObservableProperty]
         private NpcShopType _npcShopType;

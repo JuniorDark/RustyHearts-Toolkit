@@ -79,6 +79,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                     { "NpcShopItem", "NpcShopEditorWindowItem" },
                     { "TradeShopItem", "NpcShopEditorWindowItem" },
                     { "ItemMixItem", "NpcShopEditorWindowItem" },
+                    { "ItemBrokenItem", "NpcShopEditorWindowItemBroken" },
+                    { "ItemBrokenTargetItem", "NpcShopEditorWindowItemBrokenTarget" },
                     { "DropGroup", "DropGroupEditorWindow" },
                     { "RareCard", "DropGroupEditorWindow" },
                     { "CashShopItemUpdate", "CashShopEditorWindow" },
@@ -260,6 +262,8 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             ["NpcShopItem"] = settings => { },
             ["TradeShopItem"] = settings => { },
             ["ItemMixItem"] = settings => { },
+            ["ItemBrokenItem"] = settings => { },
+            ["ItemBrokenTargetItem"] = settings => { },
             ["DropGroup"] = settings =>
             {
                 settings.SlotIndexMax = itemData.OverlapCnt - 1;
@@ -338,6 +342,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             "RareCard" => "Add Rare Card Group Item",
             "SetItem" => "Add Set Item",
             "PetDeathDropItem" => "Add Pet Death Drop Item",
+            "ItemBrokenItem" or "ItemBrokenTargetItem" => "Add Dismantle Item",
             _ => "Add Item",
         };
     }

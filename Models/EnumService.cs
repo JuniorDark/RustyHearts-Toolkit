@@ -483,7 +483,8 @@ namespace RHToolkit.Models
             ItemMix = 3,
             CostumeMix = 4,
             ShopItemVisibleFilter = 5,
-            ItemPreview = 6
+            ItemPreview = 6,
+            ItemBroken = 7,
         }
     }
 }
