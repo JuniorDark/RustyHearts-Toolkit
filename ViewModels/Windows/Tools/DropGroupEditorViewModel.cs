@@ -6,8 +6,10 @@ using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
+using RHToolkit.ViewModels.Controls;
 using RHToolkit.ViewModels.Windows.Tools.VM;
 using RHToolkit.Views.Windows;
+using System.ComponentModel;
 using System.Data;
 using System.Windows.Controls;
 using static RHToolkit.Models.EnumService;
@@ -417,11 +419,19 @@ namespace RHToolkit.ViewModels.Windows
             if (slotIndex >= 0 && slotIndex < DropGroupItems.Count)
             {
                 DataTableManager.StartGroupingEdits();
-                DropGroupItems[slotIndex].ItemDataViewModel = null;
-                DropGroupItems[slotIndex].DropItemCode = 0;
-                DropGroupItems[slotIndex].FDropItemCount = 0;
-                DropGroupItems[slotIndex].NDropItemCount = 0;
-                OnPropertyChanged(nameof(DropGroupItems));
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var item = DropGroupItems[slotIndex];
+                    if (item != null)
+                    {
+                        item.ItemDataViewModel = null;
+                        item.DropItemCode = 0;
+                        item.FDropItemCount = 0;
+                        item.NDropItemCount = 0;
+                    }
+                });
+                
                 DataTableManager.EndGroupingEdits();
             }
         }
@@ -593,12 +603,20 @@ namespace RHToolkit.ViewModels.Windows
                 for (int i = 0; i < DropItemCount; i++)
                 {
                     int dropItemCode = (int)selectedItem[$"nDropItemCode{i + 1:00}"];
-                    var itemDataViewModel = ItemDataManager.GetItemDataViewModel(dropItemCode, i + 1, 1);
+                    ItemDataViewModel? itemDataViewModel = null;
 
                     // Check if the item at this index already exists
                     if (i < DropGroupItems.Count)
                     {
                         var existingItem = DropGroupItems[i];
+
+                        // If the DropItemCode is different, create a new ItemDataViewModel
+                        if (existingItem.DropItemCode != dropItemCode)
+                        {
+                            itemDataViewModel = ItemDataManager.GetItemDataViewModel(dropItemCode, i + 1, 1);
+                            existingItem.ItemDataViewModel = itemDataViewModel;
+                        }
+
                         existingItem.DropItemGroupType = DropGroupType;
                         existingItem.DropItemCode = dropItemCode;
                         existingItem.FDropItemCount = selectedItem.Row.Table.Columns.Contains($"fDropItemCount{i + 1:00}")
@@ -611,13 +629,14 @@ namespace RHToolkit.ViewModels.Windows
                             ? (int)selectedItem[$"nStart{i + 1:00}"] : 0;
                         existingItem.End = selectedItem.Row.Table.Columns.Contains($"nEnd{i + 1:00}")
                             ? (int)selectedItem[$"nEnd{i + 1:00}"] : 0;
-                        existingItem.ItemDataViewModel = itemDataViewModel;
 
-                        ItemPropertyChanged(existingItem, i);
+                        ItemPropertyChanged(existingItem);
                     }
                     else
                     {
                         // If not enough items exist, add new ones
+                        itemDataViewModel = ItemDataManager.GetItemDataViewModel(dropItemCode, i + 1, 1);
+
                         var newItem = new ItemDropGroup
                         {
                             DropItemGroupType = DropGroupType,
@@ -635,8 +654,8 @@ namespace RHToolkit.ViewModels.Windows
                             ItemDataViewModel = itemDataViewModel
                         };
 
-                        DropGroupItems.Add(newItem);
-                        ItemPropertyChanged(newItem, i);
+                        Application.Current.Dispatcher.Invoke(() => DropGroupItems.Add(newItem));
+                        ItemPropertyChanged(newItem);
                     }
                 }
 
@@ -652,23 +671,27 @@ namespace RHToolkit.ViewModels.Windows
             OnCanExecuteSelectedItemCommandChanged();
         }
 
-
-        private void ItemPropertyChanged(ItemDropGroup item, int index)
+        private void ItemPropertyChanged(ItemDropGroup item)
         {
-            item.PropertyChanged += (s, e) =>
-            {
-                if (s is ItemDropGroup itemDropGroup)
-                {
-                    UpdateSelectedItemValue(itemDropGroup.DropItemCode, $"nDropItemCode{index + 1:00}");
-                    UpdateSelectedItemValue(itemDropGroup.FDropItemCount, $"fDropItemCount{index + 1:00}");
-                    UpdateSelectedItemValue(itemDropGroup.NDropItemCount, $"nDropItemCount{index + 1:00}");
-                    UpdateSelectedItemValue(itemDropGroup.Link, $"nDropItemLink{index + 1:00}");
-                    UpdateSelectedItemValue(itemDropGroup.Start, $"nStart{index + 1:00}");
-                    UpdateSelectedItemValue(itemDropGroup.End, $"nEnd{index + 1:00}");
+            item.PropertyChanged -= OnItemPropertyChanged;
 
-                    CalculateDropItemCountTotal();
-                }
-            };
+            item.PropertyChanged += OnItemPropertyChanged;
+        }
+
+        private void OnItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is ItemDropGroup itemDropGroup)
+            {
+                int index = DropGroupItems.IndexOf(itemDropGroup);
+                UpdateSelectedItemValue(itemDropGroup.DropItemCode, $"nDropItemCode{index + 1:00}");
+                UpdateSelectedItemValue(itemDropGroup.FDropItemCount, $"fDropItemCount{index + 1:00}");
+                UpdateSelectedItemValue(itemDropGroup.NDropItemCount, $"nDropItemCount{index + 1:00}");
+                UpdateSelectedItemValue(itemDropGroup.Link, $"nDropItemLink{index + 1:00}");
+                UpdateSelectedItemValue(itemDropGroup.Start, $"nStart{index + 1:00}");
+                UpdateSelectedItemValue(itemDropGroup.End, $"nEnd{index + 1:00}");
+
+                CalculateDropItemCountTotal();
+            }
         }
 
         #endregion
@@ -686,15 +709,22 @@ namespace RHToolkit.ViewModels.Windows
                 for (int i = 0; i < DropItemCount; i++)
                 {
                     int dropItemCode = (int)selectedItem[$"nItem{i:00}"];
-                    var itemDataViewModel = ItemDataManager.GetItemDataViewModel(dropItemCode, i, 1);
+                    ItemDataViewModel? itemDataViewModel = null;
 
                     // Check if the item at this index already exists
                     if (i < DropGroupItems.Count)
                     {
                         var existingItem = DropGroupItems[i];
+
+                        // If the DropItemCode is different, create a new ItemDataViewModel
+                        if (existingItem.DropItemCode != dropItemCode)
+                        {
+                            itemDataViewModel = ItemDataManager.GetItemDataViewModel(dropItemCode, i, 1);
+                            existingItem.ItemDataViewModel = itemDataViewModel;
+                        }
+
                         existingItem.DropItemGroupType = DropGroupType;
                         existingItem.DropItemCode = dropItemCode;
-                        existingItem.ItemDataViewModel = itemDataViewModel;
                         existingItem.SectionStart00 = (int)selectedItem[$"nSectionStart00"];
                         existingItem.SectionEnd00 = (int)selectedItem[$"nSectionEnd00"];
                         existingItem.Probability00 = (int)selectedItem[$"nProbability00"];
@@ -708,10 +738,12 @@ namespace RHToolkit.ViewModels.Windows
                         existingItem.SectionEnd03 = (int)selectedItem[$"nSectionEnd03"];
                         existingItem.Probability03 = (int)selectedItem[$"nProbability03"];
 
-                        RiddleDropItemPropertyChanged(existingItem, i);
+                        RiddleDropItemPropertyChanged(existingItem);
                     }
                     else
                     {
+                        itemDataViewModel = ItemDataManager.GetItemDataViewModel(dropItemCode, i , 1);
+
                         var newItem = new ItemDropGroup
                         {
                             DropItemGroupType = DropGroupType,
@@ -731,8 +763,8 @@ namespace RHToolkit.ViewModels.Windows
                             Probability03 = (int)selectedItem[$"nProbability03"]
                         };
 
-                        DropGroupItems.Add(newItem);
-                        RiddleDropItemPropertyChanged(newItem, i);
+                        Application.Current.Dispatcher.Invoke(() => DropGroupItems.Add(newItem));
+                        RiddleDropItemPropertyChanged(newItem);
                     }
                 }
 
@@ -747,30 +779,33 @@ namespace RHToolkit.ViewModels.Windows
             OnCanExecuteSelectedItemCommandChanged();
         }
 
-
-        private void RiddleDropItemPropertyChanged(ItemDropGroup item, int index)
+        private void RiddleDropItemPropertyChanged(ItemDropGroup item)
         {
-            item.PropertyChanged += (s, e) =>
-            {
-                if (s is ItemDropGroup itemDropGroup)
-                {
-                    UpdateSelectedItemValue(itemDropGroup.DropItemCode, $"nItem{index:00}");
-                    UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart00");
-                    UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd00");
-                    UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability00");
-                    UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart01");
-                    UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd01");
-                    UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability01");
-                    UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart02");
-                    UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd02");
-                    UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability02");
-                    UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart03");
-                    UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd03");
-                    UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability03");
-
-                }
-            };
+            item.PropertyChanged -= OnRiddleDropItemPropertyChanged;
+            item.PropertyChanged += OnRiddleDropItemPropertyChanged;
         }
+
+        private void OnRiddleDropItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is ItemDropGroup itemDropGroup)
+            {
+                int index = DropGroupItems.IndexOf(itemDropGroup);
+                UpdateSelectedItemValue(itemDropGroup.DropItemCode, $"nItem{index:00}");
+                UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart00");
+                UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd00");
+                UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability00");
+                UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart01");
+                UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd01");
+                UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability01");
+                UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart02");
+                UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd02");
+                UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability02");
+                UpdateSelectedItemValue(itemDropGroup.SectionStart00, $"nSectionStart03");
+                UpdateSelectedItemValue(itemDropGroup.SectionEnd00, $"nSectionEnd03");
+                UpdateSelectedItemValue(itemDropGroup.Probability00, $"nProbability03");
+            }
+        }
+
         #endregion
 
         #region RareCardDropGroup
@@ -825,20 +860,25 @@ namespace RHToolkit.ViewModels.Windows
 
         private void RareCardDropItemPropertyChanged(ItemDropGroup item)
         {
-            item.PropertyChanged += (s, e) =>
-            {
-                if (s is ItemDropGroup rareCardDropGroup)
-                {
-                    UpdateSelectedItemValue(rareCardDropGroup.BronzeCardCode, $"nBronzeCardID");
-                    UpdateSelectedItemValue(rareCardDropGroup.BronzeCardProbability, $"fBronzeCard");
-                    UpdateSelectedItemValue(rareCardDropGroup.SilverCardCode, $"nSilverCardID");
-                    UpdateSelectedItemValue(rareCardDropGroup.SilverCardProbability, $"fSilverCard");
-                    UpdateSelectedItemValue(rareCardDropGroup.GoldCardCode, $"nGoldCardID");
-                    UpdateSelectedItemValue(rareCardDropGroup.GoldCardProbability, $"fGoldCard");
-                    CalculateRareCardFNilValue();
-                }
-            };
+            item.PropertyChanged -= OnRareCardDropItemPropertyChanged;
+
+            item.PropertyChanged += OnRareCardDropItemPropertyChanged;
         }
+
+        private void OnRareCardDropItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is ItemDropGroup rareCardDropGroup)
+            {
+                UpdateSelectedItemValue(rareCardDropGroup.BronzeCardCode, $"nBronzeCardID");
+                UpdateSelectedItemValue(rareCardDropGroup.BronzeCardProbability, $"fBronzeCard");
+                UpdateSelectedItemValue(rareCardDropGroup.SilverCardCode, $"nSilverCardID");
+                UpdateSelectedItemValue(rareCardDropGroup.SilverCardProbability, $"fSilverCard");
+                UpdateSelectedItemValue(rareCardDropGroup.GoldCardCode, $"nGoldCardID");
+                UpdateSelectedItemValue(rareCardDropGroup.GoldCardProbability, $"fGoldCard");
+                CalculateRareCardFNilValue();
+            }
+        }
+
         #endregion
 
         #region RareCardRewardItemList
@@ -862,7 +902,7 @@ namespace RHToolkit.ViewModels.Windows
                         existingItem.DropItemCode = rewardItemCode;
                         existingItem.ItemDataViewModel = itemDataViewModel;
 
-                        RareCardRewardItemPropertyChanged(existingItem, i);
+                        RareCardRewardItemPropertyChanged(existingItem);
                     }
                     else
                     {
@@ -874,7 +914,7 @@ namespace RHToolkit.ViewModels.Windows
                         };
 
                         DropGroupItems.Add(newItem);
-                        RareCardRewardItemPropertyChanged(newItem, i);
+                        RareCardRewardItemPropertyChanged(newItem);
                     }
                 }
 
@@ -889,16 +929,22 @@ namespace RHToolkit.ViewModels.Windows
             OnCanExecuteSelectedItemCommandChanged();
         }
 
-        private void RareCardRewardItemPropertyChanged(ItemDropGroup item, int index)
+        private void RareCardRewardItemPropertyChanged(ItemDropGroup item)
         {
-            item.PropertyChanged += (s, e) =>
-            {
-                if (s is ItemDropGroup itemDropGroup)
-                {
-                    UpdateSelectedItemValue(itemDropGroup.DropItemCode, $"nRewardItem{index + 1:00}");
-                }
-            };
+            item.PropertyChanged -= OnRareCardRewardItemPropertyChanged;
+
+            item.PropertyChanged += OnRareCardRewardItemPropertyChanged;
         }
+
+        private void OnRareCardRewardItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is ItemDropGroup itemDropGroup)
+            {
+                int index = DropGroupItems.IndexOf(itemDropGroup);
+                UpdateSelectedItemValue(itemDropGroup.DropItemCode, $"nRewardItem{index + 1:00}");
+            }
+        }
+
         #endregion
 
         #endregion
@@ -953,44 +999,40 @@ namespace RHToolkit.ViewModels.Windows
             {
                 if (DataTableManager.SelectedItem != null)
                 {
-                    DataTableManager.StartGroupingEdits();
+                    int itemCount = 0;
 
-                    if (DropGroupType == ItemDropGroupType.ItemDropGroupList)
+                    foreach (var item in DropGroupItems)
                     {
-                        // Update NDropItemCount values proportionally
-                        int currentTotal = DropGroupItems.Sum(item => item.NDropItemCount);
-                        if (currentTotal > 0)
+                        if (item.DropItemCode != 0)
                         {
-                            int scale = (int)value / currentTotal;
-                            foreach (var item in DropGroupItems)
+                            itemCount++;
+                        }
+                    }
+
+                    if (itemCount > 0)
+                    {
+                        double newDropValuePerItem = value / itemCount;
+
+                        foreach (var item in DropGroupItems)
+                        {
+                            if (item.DropItemCode != 0)
                             {
-                                if (item.DropItemCode > 0)
+                                if (DropGroupType == ItemDropGroupType.ItemDropGroupList)
                                 {
-                                    item.NDropItemCount *= scale;
+                                    item.NDropItemCount = (int)newDropValuePerItem;
+                                }
+                                else
+                                {
+                                    item.FDropItemCount = newDropValuePerItem;
                                 }
                             }
                         }
                     }
-                    else
-                    {
-                        // Update FDropItemCount values proportionally
-                        double currentTotal = DropGroupItems.Sum(item => item.FDropItemCount);
-                        if (currentTotal > 0)
-                        {
-                            double scale = value / currentTotal;
-                            foreach (var item in DropGroupItems)
-                            {
-                                if (item.DropItemCode > 0)
-                                {
-                                    item.FDropItemCount *= scale;
-                                }
-                            }
-                        }
-                    }
+
+                    DataTableManager.EndGroupingEdits();
+                    CalculateDropItemCountTotal();
                 }
-                OnPropertyChanged(nameof(DropGroupItems));
-                DataTableManager.EndGroupingEdits();
-                CalculateDropItemCountTotal();
+                
             }
             finally
             {

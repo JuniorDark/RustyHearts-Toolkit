@@ -880,6 +880,11 @@ public partial class DataTableManager : ObservableObject
         EditHistory editHistory = CreateEditHistory(EditAction.RowInsert);
 
         AddNewRow(dataTable, newID, editHistory);
+        // Add a new row to DataTableString if it exists
+        if (DataTableString != null)
+        {
+            AddNewRow(DataTableString, newID, editHistory);
+        }
 
         if (dataTable.DefaultView.Count > 0)
         {
@@ -906,6 +911,17 @@ public partial class DataTableManager : ObservableObject
         // Duplicate row in DataTable
         var duplicate = DuplicateRow(selectedItem.Row, dataTable);
         UpdateAndAddRow(duplicate, dataTable, newID, editHistory);
+
+        // Add a corresponding row to DataTableString with the same newID
+        if (DataTableString != null && DataTableString.Columns.Contains("nID"))
+        {
+            var selectedItemString = GetRowViewById(DataTableString, selectedItem);
+            if (selectedItemString != null)
+            {
+                var duplicateStringRow = DuplicateRow(selectedItemString.Row, DataTableString);
+                UpdateAndAddRow(duplicateStringRow, DataTableString, newID, editHistory);
+            }
+        }
 
         if (dataTable.DefaultView.Count > 0)
         {
@@ -941,15 +957,40 @@ public partial class DataTableManager : ObservableObject
             }
         }
 
+        // Find the index of the selectedItem in the DataView
+        int selectedIndex = -1;
+        for (int i = 0; i < dataTable.DefaultView.Count; i++)
+        {
+            if (dataTable.DefaultView[i] == selectedItem)
+            {
+                selectedIndex = i;
+                break;
+            }
+        }
+
         // Delete row from the main DataTable
         RemoveRow(dataTable, selectedItem.Row, editHistory);
 
-        // Set new selection
-        int rowIndex = dataTable.DefaultView.Count - 1;
-        selectedItem = rowIndex >= 0 ? dataTable.DefaultView[Math.Max(rowIndex, 0)] : null;
+        // Set new selection based on the next or previous item
+        if (dataTable.DefaultView.Count > 0)
+        {
+            if (selectedIndex < dataTable.DefaultView.Count)
+            {
+                // Select the next row if the deleted row wasn't the last one
+                selectedItem = dataTable.DefaultView[Math.Min(selectedIndex, dataTable.DefaultView.Count - 1)];
+            }
+            else if (selectedIndex >= dataTable.DefaultView.Count)
+            {
+                // If the deleted row was the last one, select the previous row
+                selectedItem = dataTable.DefaultView[dataTable.DefaultView.Count - 1];
+            }
+        }
+        else
+        {
+            selectedItem = null;
+        }
 
         OnPropertyChanged(nameof(dataTable));
-
         _undoStack.Push(editHistory);
         _redoStack.Clear();
         OnCanExecuteChangesChanged();
@@ -1134,7 +1175,7 @@ public partial class DataTableManager : ObservableObject
                                     {
                                         DataRow insertRow = table.NewRow();
                                         insertRow.ItemArray = (object?[])groupedEdit.NewValue!;
-                                        if (groupedEdit.Row < table.Rows.Count)
+                                        if (groupedEdit.Row <= table.Rows.Count)
                                         {
                                             table.Rows.InsertAt(insertRow, groupedEdit.Row);
                                         }
@@ -1142,7 +1183,10 @@ public partial class DataTableManager : ObservableObject
                                         {
                                             table.Rows.Add(insertRow);
                                         }
-                                        lastAffectedItem = table.DefaultView[groupedEdit.Row];
+
+                                        RefreshView(table);
+
+                                        lastAffectedItem = table.DefaultView[groupedEdit.Row < table.DefaultView.Count ? groupedEdit.Row : table.DefaultView.Count - 1];
                                     }
                                 }
                                 break;
@@ -1154,7 +1198,6 @@ public partial class DataTableManager : ObservableObject
                                         DataRow newRow = table.NewRow();
                                         newRow.ItemArray = (object?[])groupedEdit.OldValue!;
                                         table.Rows.InsertAt(newRow, groupedEdit.Row);
-
                                         if (groupedEdit.Row < table.DefaultView.Count)
                                         {
                                             lastAffectedItem = table.DefaultView[groupedEdit.Row];
@@ -1181,14 +1224,16 @@ public partial class DataTableManager : ObservableObject
                 {
                     if (lastAffectedItem.Row.Table == SelectedItem?.Row.Table)
                     {
-                        SelectedItem = null;
                         SelectedItem = lastAffectedItem;
                     }
                     else if (lastAffectedItem.Row.Table == SelectedItemString?.Row.Table && DataTable != null)
                     {
-                        SelectedItem = null;
                         SelectedItem = GetRowViewById(DataTable, lastAffectedItem);
                     }
+                }
+                else
+                {
+                    SelectedItem = null;
                 }
             }
         }
@@ -1197,6 +1242,17 @@ public partial class DataTableManager : ObservableObject
             RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
         }
     }
+
+    private static void RefreshView(DataTable table)
+    {
+        if (!string.IsNullOrEmpty(table.DefaultView.RowFilter))
+        {
+            string currentFilter = table.DefaultView.RowFilter;
+            table.DefaultView.RowFilter = string.Empty; // Clear the filter
+            table.DefaultView.RowFilter = currentFilter; // Reapply the existing filter
+        }
+    }
+
 
     public void AddGroupedEdits(List<EditHistory> groupedEdits)
     {
@@ -1408,7 +1464,7 @@ public partial class DataTableManager : ObservableObject
                 {
                     searchText = matchCase ? searchText : searchText.ToLower();
 
-                    // Escape special characters for SQL LIKE pattern
+                    // Escape special characters for SQL LIKE pattern 
                     searchText = searchText.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
 
                     string operatorPattern = matchCase ? "{0} LIKE '{1}'" : "{0} LIKE '%{1}%'";

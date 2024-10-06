@@ -246,6 +246,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             {
                 settings.SlotIndexMax = 4;
                 settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
             },
             ["NpcShopItems"] = settings =>
             {

@@ -44,12 +44,12 @@ namespace RHToolkit.Utilities
             foreach (string part in parts)
             {
                 Paragraph paragraph = new();
-                string[] colorSeparator = ["</COLOR>", "<COLOR>", "</color>"];
+                string[] colorSeparator = ["</COLOR>", "<COLOR>", "</color>", "</Color>"];
                 string[] colorParts = part.Split(colorSeparator, StringSplitOptions.None);
 
                 foreach (string colorPart in colorParts)
                 {
-                    int startTagIndex = colorPart.IndexOf("<COLOR:");
+                    int startTagIndex = colorPart.IndexOf("<COLOR:", StringComparison.OrdinalIgnoreCase);
                     if (startTagIndex != -1)
                     {
                         string textBeforeColor = colorPart[..startTagIndex];

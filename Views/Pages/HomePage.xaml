@@ -52,7 +52,7 @@
                         <ui:TextBlock
                             FontTypography="BodyStrong"
                             Foreground="#B7FFFFFF"
-                            Text="A collection of tools for editing Rusty Hearts database ant table files." />
+                            Text="A collection of tools for editing Rusty Hearts database and table files." />
                     </StackPanel>
                     <ui:TextBlock
                         Margin="12"

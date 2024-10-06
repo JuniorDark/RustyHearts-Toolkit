@@ -197,10 +197,14 @@
                                             DisplayMemberPath="Name"
                                             IsReadOnly="True"
                                             ItemsSource="{Binding DataContext.StringItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            SelectedValue="{Binding NpcRole, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                            SelectedValue="{Binding DataTableManager.SelectedItem[nNPCRole], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                             SelectedValuePath="ID"
                                             Style="{StaticResource ComboBoxStyle}"
-                                            Template="{StaticResource lb_combobox}" />
+                                            Template="{StaticResource lb_combobox}">
+                                            <i:Interaction.Behaviors>
+                                                <bh:DataRowViewBehavior Column="nNPCRole" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                            </i:Interaction.Behaviors>
+                                        </ComboBox>
                                     </StackPanel>
                                     <StackPanel
                                         Grid.Row="1"

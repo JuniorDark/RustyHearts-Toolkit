@@ -424,10 +424,16 @@
                         Header="ID"
                         IsReadOnly="True" />
                     <DataGridTextColumn
+                        Width="Auto"
+                        Binding="{Binding nRandomRuneGroup}"
+                        Header="Group"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
                         Width="*"
                         Binding="{Binding wszDisc}"
                         Header="{x:Static rs:Resources.Name}"
                         IsReadOnly="True" />
+
                 </DataGrid.Columns>
             </DataGrid>
 

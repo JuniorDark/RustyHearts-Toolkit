@@ -228,6 +228,7 @@ namespace RHToolkit.ViewModels.Windows
 
                 if (DataTableManager.SelectedItemString != null)
                 {
+                    DataTableManager.SelectedItemString["wszDesc"] = "New Item";
                     DataTableManager.SelectedItemString["wszItemDescription"] = "New Item";
                 }
                 DataTableManager.EndGroupingEdits();

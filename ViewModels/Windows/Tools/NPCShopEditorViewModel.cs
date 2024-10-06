@@ -380,6 +380,12 @@ namespace RHToolkit.ViewModels.Windows
                 NpcShopItem[itemData.SlotIndex].ItemCode = itemData.ItemId;
                 NpcShopItem[itemData.SlotIndex].ItemCount = itemData.ItemAmount;
                 NpcShopItem[itemData.SlotIndex].ItemDataViewModel = itemDataViewModel;
+                switch (NpcShopType)
+                {
+                    case NpcShopType.TradeShop:
+                        UpdateSelectedItemValue(itemDataViewModel!.ItemName, "wszDesc");
+                        break;
+                }
                 OnPropertyChanged(nameof(NpcShopItem));
                 DataTableManager.EndGroupingEdits();
             }
