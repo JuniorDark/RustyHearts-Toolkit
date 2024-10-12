@@ -208,5 +208,39 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
 
     #endregion
 
+    #region Rare Card Reward Window
+
+    private readonly Dictionary<Guid, Window> _rareCardRewardWindows = [];
+
+    public void OpenRareCardRewardWindow(Guid token, int id, string? messageType)
+    {
+        if (_rareCardRewardWindows.TryGetValue(token, out Window? existingWindow))
+        {
+            if (existingWindow.WindowState == WindowState.Minimized)
+            {
+                existingWindow.WindowState = WindowState.Normal;
+            }
+
+            existingWindow.Focus();
+        }
+        else
+        {
+            var rareCardRewardWindow = _windowsProviderService.ShowInstance<RareCardRewardWindow>(true);
+            if (rareCardRewardWindow != null)
+            {
+                _openWindowsCount++;
+                rareCardRewardWindow.Closed += (sender, args) =>
+                {
+                    _rareCardRewardWindows.Remove(token);
+                    _openWindowsCount--;
+                };
+                _rareCardRewardWindows[token] = rareCardRewardWindow;
+            }
+        }
+
+        WeakReferenceMessenger.Default.Send(new IDMessage(id, token, messageType));
+    }
+    #endregion
+
     #endregion
 }

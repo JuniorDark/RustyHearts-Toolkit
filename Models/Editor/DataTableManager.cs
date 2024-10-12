@@ -1253,7 +1253,6 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
-
     public void AddGroupedEdits(List<EditHistory> groupedEdits)
     {
         if (groupedEdits.Count > 0)

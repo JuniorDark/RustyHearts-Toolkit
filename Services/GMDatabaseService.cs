@@ -242,6 +242,11 @@ namespace RHToolkit.Services
             return GetItemsFromQuery("SELECT nID, wszName FROM npc");
         }
 
+        public List<NameID> GetNpcInstanceItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszDesc FROM npcinstance_string");
+        }
+
         public List<NameID> GetNpcDialogItems()
         {
             return GetItemsFromQuery("SELECT nID, wszDesc FROM npc_dialog");
@@ -285,6 +290,16 @@ namespace RHToolkit.Services
         public List<NameID> GetRiddleGroupItems()
         {
             return GetItemsFromQuery("SELECT nID, wszLvelDisc FROM riddleboxdropgrouplist");
+        }
+
+        public List<NameID> GetWorldNameItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszNameUI FROM world_string");
+        }
+
+        public List<NameID> GetMissionItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszTitle FROM missionstring");
         }
 
         public List<NameID> GetAuctionCategoryItems()
@@ -360,13 +375,49 @@ namespace RHToolkit.Services
             return items;
         }
 
+        public List<RareCardReward> GetRareCardRewardItems()
+        {
+            List<RareCardReward> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                var columnNames = string.Join(", ", Enumerable.Range(1, 40).Select(i => $"nRewardItem{i:D2}"));
+                string query = $"SELECT nID, {columnNames} FROM rarecardrewarditemlist";
+
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                while (command.Read())
+                {
+                    RareCardReward reward = new()
+                    {
+                        ID = command.GetInt32(0)
+                    };
+
+                    for (int i = 1; i <= 40; i++)
+                    {
+                        var property = typeof(RareCardReward).GetProperty($"RewardItem{i:D2}");
+                        property?.SetValue(reward, command.GetInt32(i));
+                    }
+
+                    items.Add(reward);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+            }
+
+            return items;
+        }
+
         public List<int> GetNpcShopItems(int shopID)
         {
             List<int> items = [];
             using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
             try
             {
-                string query = $"SELECT nItem00, nItem01, nItem02, nItem03, nItem04, nItem05, nItem06, nItem07, nItem08, nItem09, nItem10, nItem11, nItem12, nItem13, nItem14, nItem15, nItem16, nItem17, nItem18, nItem19 FROM npcshop WHERE nID = {shopID}";
+                string columns = string.Join(", ", Enumerable.Range(0, 20).Select(i => $"nItem{i:00}"));
+                string query = $"SELECT {columns} FROM npcshop WHERE nID = {shopID}";
 
                 using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
 

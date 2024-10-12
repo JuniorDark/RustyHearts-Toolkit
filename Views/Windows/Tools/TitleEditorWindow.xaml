@@ -392,7 +392,6 @@
                                         Tag="{x:Static rs:Resources.OptionNameID}"
                                         Template="{StaticResource lb_textbox}"
                                         Text="{Binding AddEffectSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
                                 </StackPanel>
                                 <ItemsControl
                                     Grid.Row="1"

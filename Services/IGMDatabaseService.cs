@@ -26,7 +26,9 @@ namespace RHToolkit.Services
         List<int> GetItemMixItems(string groupIDs);
         ObservableCollection<ItemMixData> GetItemMixList();
         List<NameID> GetLobbyItems();
+        List<NameID> GetMissionItems();
         List<NameID> GetNpcDialogItems();
+        List<NameID> GetNpcInstanceItems();
         List<NameID> GetNpcListItems();
         List<NameID> GetNpcShopItems();
         List<int> GetNpcShopItems(int shopID);
@@ -39,6 +41,7 @@ namespace RHToolkit.Services
         List<NameID> GetPetRebirthItems();
         List<NameID> GetQuestGroupItems();
         List<NameID> GetQuestListItems();
+        List<RareCardReward> GetRareCardRewardItems();
         List<NameID> GetRiddleGroupItems();
         (int nSetOption00, int nSetOptionvlue00, int nSetOption01, int nSetOptionvlue01, int nSetOption02, int nSetOptionvlue02, int nSetOption03, int nSetOptionvlue03, int nSetOption04, int nSetOptionvlue04) GetSetInfo(int setID);
         List<NameID> GetSetItemItems();
@@ -61,6 +64,7 @@ namespace RHToolkit.Services
         List<NameID> GetUnionPackageItems();
         (float weaponValue, int weaponPlus) GetWeaponEnhanceValue(int enhanceValue);
         (int nPhysicalAttackMin, int nPhysicalAttackMax, int nMagicAttackMin, int nMagicAttackMax) GetWeaponStats(int jbClass, int weaponID);
+        List<NameID> GetWorldNameItems();
         bool IsNameInNickFilter(string characterName);
     }
 }

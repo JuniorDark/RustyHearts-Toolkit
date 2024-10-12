@@ -1,0 +1,179 @@
+﻿<Window
+    x:Class="RHToolkit.Views.Windows.RareCardRewardWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:bh="clr-namespace:RHToolkit.Behaviors"
+    xmlns:control="clr-namespace:RHToolkit.Views.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:dt="clr-namespace:RHToolkit.Models.DataTemplates"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
+    Title="{Binding Title}"
+    Width="1280"
+    Height="720"
+    MinWidth="1280"
+    MinHeight="720"
+    MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
+    bh:WindowBehaviors.EnableDragMove="True"
+    d:DataContext="{d:DesignInstance Type=windows:RareCardRewardViewModel}"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="/Assets/icon/icon_rarecard_gold.png"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <ContentControl Template="{StaticResource box_green02}">
+        <Grid Margin="5,5,5,5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ui:TitleBar
+                x:Name="TitleBar"
+                Title="{Binding Title}"
+                Grid.Row="0"
+                Grid.ColumnSpan="2"
+                Height="30"
+                Margin="10,0,0,0"
+                VerticalAlignment="Top"
+                d:Title="Rare Card Reward List"
+                FontSize="15"
+                Foreground="White">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon
+                        Width="20"
+                        Height="20"
+                        Margin="0,-1,0,-3"
+                        Source="/Assets/icon/icon_rarecard_gold.png" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+            <Grid
+                Grid.Row="1"
+                Grid.RowSpan="4"
+                Grid.Column="0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    x:Name="lbTotalItem"
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    d:Text="Showing {0}/{1} Items"
+                    Foreground="Gold"
+                    Style="{StaticResource ArialMS}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                            <Binding ElementName="dataGridView" Path="Items.Count" />
+                            <Binding Path="RareCardRewardView.Count" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <DataGrid
+                    x:Name="dataGridView"
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Height="500"
+                    MinWidth="300"
+                    Margin="0,20,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    bh:DataGridBehavior.EnableScrollIntoView="True"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ColumnWidth="Auto"
+                    EnableRowVirtualization="True"
+                    HeadersVisibility="Column"
+                    HorizontalScrollBarVisibility="Auto"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding RareCardRewardView}"
+                    SelectedItem="{Binding SelectedItem}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    Template="{StaticResource lb_datagrid}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding ID}"
+                            Header="{x:Static rs:Resources.ID}"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <StackPanel
+                    Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Vertical">
+                    <Label
+                        x:Name="lbSearch"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Content="{x:Static rs:Resources.Search}"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <TextBox
+                        x:Name="tbSearch"
+                        Width="250"
+                        Height="40"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        CaretBrush="White"
+                        Foreground="Gold"
+                        Tag="{x:Static rs:Resources.SearchNameID}"
+                        Template="{StaticResource lb_textbox}"
+                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Grid>
+            <ItemsControl
+                Grid.Row="2"
+                Grid.Column="1"
+                Height="650"
+                Margin="10,10,0,0"
+                AlternationCount="{Binding DataContext.RareCardItems.Count, RelativeSource={RelativeSource AncestorType=Window}}"
+                ItemsSource="{Binding DataContext.RareCardItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                Visibility="{Binding IsSelectedItemVisible}">
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="ItemsControl">
+                        <ScrollViewer Style="{StaticResource lb_scrollviewer}" VerticalScrollBarVisibility="Auto">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal">
+                            <control:ItemSlot
+                                AddItemCommand="{Binding DataContext.AddFilterItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                CommandParameter="{Binding ItemDataViewModel.ItemId}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
+                                ItemNameVisibility="Visible" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </ContentControl>
+</Window>

@@ -443,6 +443,9 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private List<NameID>? _npcDialogItems;
 
+        [ObservableProperty]
+        private List<NameID>? _npcMenuItems;
+
         private void PopulateListItems()
         {
             try
@@ -455,6 +458,36 @@ namespace RHToolkit.ViewModels.Windows
                 NpcShopsItems = _gmDatabaseService.GetNpcShopsItems();
                 NpcListItems = _gmDatabaseService.GetNpcListItems();
                 NpcDialogItems = _gmDatabaseService.GetNpcDialogItems();
+
+                NpcMenuItems =
+                [
+                    new NameID { ID = 0, Name = "None" },
+                    new NameID { ID = 1, Name = "Shop" },
+                    new NameID { ID = 2, Name = "x" },
+                    new NameID { ID = 3, Name = "Item Upgrade" },
+                    new NameID { ID = 4, Name = "Item Craft" },
+                    new NameID { ID = 5, Name = "Zen Menu" },
+                    new NameID { ID = 6, Name = "Guild Menu" },
+                    new NameID { ID = 7, Name = "Dismantle" },
+                    new NameID { ID = 8, Name = "Costume Craft" },
+                    new NameID { ID = 9, Name = "Trade Shop" },
+                    new NameID { ID = 10, Name = "x" },
+                    new NameID { ID = 11, Name = "x" },
+                    new NameID { ID = 12, Name = "Guild Warehouse" },
+                    new NameID { ID = 13, Name = "Guild Skill" },
+                    new NameID { ID = 14, Name = "Add Guild EXP" },
+                    new NameID { ID = 15, Name = "x" },
+                    new NameID { ID = 16, Name = "Guild EXP History" },
+                    new NameID { ID = 17, Name = "x" },
+                    new NameID { ID = 18, Name = "x" },
+                    new NameID { ID = 19, Name = "Change Hair Style" },
+                    new NameID { ID = 20, Name = "Dye Hair" },
+                    new NameID { ID = 21, Name = "See How Lucky You Will Be" },
+                    new NameID { ID = 22, Name = "Resurrect Pet" },
+                    new NameID { ID = 23, Name = "x" },
+                    new NameID { ID = 24, Name = "Move To Village" }
+                ];
+
             }
             catch (Exception ex)
             {

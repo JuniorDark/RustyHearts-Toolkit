@@ -478,7 +478,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 if (parameter != 0)
                 {
-                    //_windowsService.OpenNpcShopWindow(_token, parameter);
+                    _windowsService.OpenRareCardRewardWindow(_token, parameter, null);
                 }
             }
             catch (Exception ex)
@@ -893,27 +893,35 @@ namespace RHToolkit.ViewModels.Windows
                 for (int i = 0; i < DropItemCount; i++)
                 {
                     int rewardItemCode = (int)selectedItem[$"nRewardItem{i + 1:00}"];
-                    var itemDataViewModel = ItemDataManager.GetItemDataViewModel(rewardItemCode, i + 1, 1);
+                    ItemDataViewModel? itemDataViewModel = null;
 
                     if (i < DropGroupItems.Count)
                     {
                         var existingItem = DropGroupItems[i];
+
+                        if (existingItem.DropItemCode != rewardItemCode)
+                        {
+                            itemDataViewModel = ItemDataManager.GetItemDataViewModel(rewardItemCode, i + 1, 1);
+                            existingItem.ItemDataViewModel = itemDataViewModel;
+                        }
+
                         existingItem.DropItemGroupType = DropGroupType;
                         existingItem.DropItemCode = rewardItemCode;
-                        existingItem.ItemDataViewModel = itemDataViewModel;
 
                         RareCardRewardItemPropertyChanged(existingItem);
                     }
                     else
                     {
+                        itemDataViewModel = ItemDataManager.GetItemDataViewModel(rewardItemCode, i + 1, 1);
+
                         var newItem = new ItemDropGroup
                         {
                             DropItemGroupType = DropGroupType,
                             DropItemCode = rewardItemCode,
-                            ItemDataViewModel = itemDataViewModel,
+                            ItemDataViewModel = itemDataViewModel
                         };
 
-                        DropGroupItems.Add(newItem);
+                        Application.Current.Dispatcher.Invoke(() => DropGroupItems.Add(newItem));
                         RareCardRewardItemPropertyChanged(newItem);
                     }
                 }

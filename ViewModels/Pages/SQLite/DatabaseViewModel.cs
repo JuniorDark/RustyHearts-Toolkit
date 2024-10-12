@@ -17,6 +17,7 @@ namespace RHToolkit.ViewModels.Pages
             new(Resources.ItemDatabase, "Item List", SymbolRegular.BookDatabase24, "item"),
             new("Item Craft Database", "Item Craft List", SymbolRegular.BookDatabase24, "itemmix"),
             new("NPC Shop Database", "NPC Shop List", SymbolRegular.BookDatabase24, "npcshop"),
+            new("Rare Card Reward Database", "Rare Card Reward List", SymbolRegular.BookDatabase24, "rarecardreward"),
     ];
 
         [RelayCommand]
@@ -44,6 +45,9 @@ namespace RHToolkit.ViewModels.Pages
                         break;
                     case "npcshop":
                         windowsProviderService.ShowInstance<NpcShopWindow>(true);
+                        break;
+                    case "rarecardreward":
+                        windowsProviderService.ShowInstance<RareCardRewardWindow>(true);
                         break;
                 }
             }

@@ -12,7 +12,7 @@ namespace RHToolkit.Models
 
             if (addAll)
             {
-                enumItems.Add(new NameID { ID = 0, Name = Resources.All });
+                enumItems.Add(new NameID { ID = 0, Name = Resources.None });
             }
 
             foreach (T enumValue in Enum.GetValues(typeof(T)))
@@ -485,6 +485,24 @@ namespace RHToolkit.Models
             ShopItemVisibleFilter = 5,
             ItemPreview = 6,
             ItemBroken = 7,
+        }
+
+        public enum QuestType
+        {
+            None = 0,
+            Mission = 1,
+            MissionReward = 2,
+            PartyMission = 3,
+            Quest = 4,
+            QuestString = 5,
+            QuestComplete = 6,
+            QuestGroup = 7,
+            QuestGroupString = 8,
+            QuestGroupComplete = 9,
+            QuestGroupRequest = 10,
+            QuestRequest = 11,
+            QuestAcquire = 12,
+            QuestAcquireString = 13
         }
     }
 }

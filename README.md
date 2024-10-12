@@ -33,6 +33,7 @@ To start using the Rusty Hearts Toolkit, download the latest release from the [G
 - **NPC Shop Editor** Npc Shop (npcshop.rh), Trade Shop (tradeshop.rh), Item Craft (itemmix.rh, costumemix.rh), shop item visible filter (shopitemvisiblefilter.rh), Item Dismantle (itembroken.rh).
 - **Package Editor:** Item packages and effects (unionpackage.rh, conditionselectitem.rh).
 - **Pet Editor:** Edit pets (pet.rh).
+- **Quest Editor:** Edit quest files.
 - **Random Rune Editor:** Edit 'gacha' items (randomrune.rh).
 - **Set Editor:** Edit item sets and their effects (setitem.rh).
 - **Title Editor:** Edit titles and their effects (charactertitle.rh).
@@ -110,7 +111,6 @@ A: Fork the repository, make your changes, and submit a pull request.
 ### Specialized Table Editors
 - **Add Effect Editor**
 - **Enemy Editor**
-- **Quest Editor**
 - **Skill Editor**
 - **World/Map Editor**
 

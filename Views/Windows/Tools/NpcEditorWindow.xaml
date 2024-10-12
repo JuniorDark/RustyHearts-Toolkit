@@ -1183,13 +1183,13 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="Shop Types" />
+                                        <TextBlock Foreground="White" Text="Npc Menu" />
                                         <ListView
                                             Width="300"
                                             Height="120"
                                             Margin="0,0,0,0"
                                             DisplayMemberPath="Name"
-                                            ItemsSource="{Binding DataContext.ItemDataManager.CategoryFilterItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
+                                            ItemsSource="{Binding DataContext.NpcMenuItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                                             SelectionMode="Multiple">
                                             <i:Interaction.Behaviors>
                                                 <bh:DataRowViewBehavior

@@ -14,5 +14,6 @@ namespace RHToolkit.Services
         void OpenTitleWindow(CharacterData characterData);
         void OpenNpcShopWindow(Guid token, NameID shopID, NameID? shopTitle);
         void OpenItemMixWindow(Guid token, string group, string? messageType);
+        void OpenRareCardRewardWindow(Guid token, int id, string? messageType);
     }
 }

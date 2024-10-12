@@ -281,6 +281,9 @@ namespace RHToolkit.ViewModels.Windows
                         case NpcShopType.ItemMix or NpcShopType.CostumeMix:
                             messageType = "ItemMixItem";
                             break;
+                        case NpcShopType.ItemPreview:
+                            messageType = "ItemPreviewItem";
+                            break;
                     }
 
                     var itemData = new ItemData
@@ -354,7 +357,7 @@ namespace RHToolkit.ViewModels.Windows
 
                 switch (message.Recipient)
                 {
-                    case "NpcShopEditorWindowItem":
+                    case "NpcShopEditorWindowItem" or "NpcShopItemPreviewItem":
                         UpdateItem(itemData);
                         break;
                     case "NpcShopEditorWindowItems":

@@ -463,8 +463,8 @@
                                                     Content="{x:Static rs:Resources.Class}"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                    MinWidth="250"
                                                     Height="24"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -494,8 +494,8 @@
                                                     Content="Inventory Type"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                    MinWidth="250"
                                                     Height="24"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -525,8 +525,8 @@
                                                     Content="Auction Category"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                    MinWidth="250"
                                                     Height="24"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -556,8 +556,8 @@
                                                     Content="Field Mesh Item ID"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                    MinWidth="250"
                                                     Height="24"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -587,8 +587,8 @@
                                                     Content="Union Package ID"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                    MinWidth="250"
                                                     Height="24"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -618,8 +618,8 @@
                                                     Content="Costume Pack ID"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                   MinWidth="250"
                                                     Height="24"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -649,8 +649,8 @@
                                                     Content="Title ID"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                    MinWidth="250"
                                                     Height="24"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -680,8 +680,8 @@
                                                     Content="AddEffect ID 01"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                   MinWidth="250"
                                                     Height="24"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -711,8 +711,8 @@
                                                     Content="AddEffect ID 02"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                    MinWidth="250"
                                                     Height="24"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -742,8 +742,8 @@
                                                     Content="Riddle Group"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                    MinWidth="250"
                                                     Height="24"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -773,8 +773,8 @@
                                                     Content="Pet Eat Group"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                    MinWidth="250"
                                                     Height="24"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -800,8 +800,8 @@
                                                 Orientation="Vertical">
                                                 <TextBlock Foreground="White" Text="Equip Class" />
                                                 <ListView
-                                                    MinWidth="250"
                                                     Height="120"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     DisplayMemberPath="Name"
                                                     ItemsSource="{Binding DataContext.ItemDataManager.ClassItemsFilter, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
@@ -823,8 +823,8 @@
                                                 Orientation="Vertical">
                                                 <TextBlock Foreground="White" Text="Rune Rank" />
                                                 <ListView
-                                                    MinWidth="250"
                                                     Height="120"
+                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     DisplayMemberPath="Name"
                                                     ItemsSource="{Binding RuneBranchItems}"

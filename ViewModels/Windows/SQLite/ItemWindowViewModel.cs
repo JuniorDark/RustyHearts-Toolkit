@@ -79,12 +79,17 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                     { "NpcShopItem", "NpcShopEditorWindowItem" },
                     { "TradeShopItem", "NpcShopEditorWindowItem" },
                     { "ItemMixItem", "NpcShopEditorWindowItem" },
+                    { "ItemPreviewItem", "NpcShopItemPreviewItem" },
                     { "ItemBrokenItem", "NpcShopEditorWindowItemBroken" },
                     { "ItemBrokenTargetItem", "NpcShopEditorWindowItemBrokenTarget" },
                     { "DropGroup", "DropGroupEditorWindow" },
                     { "RareCard", "DropGroupEditorWindow" },
                     { "CashShopItemUpdate", "CashShopEditorWindow" },
-                    { "PetDeathDropItem", "PetEditorWindow" }
+                    { "PetDeathDropItem", "PetEditorWindow" },
+                    { "PartyMissionItem", "QuestEditorWindow" },
+                    { "QuestItem", "QuestEditorWindow" },
+                    { "QuestItems", "QuestEditorWindow" },
+                    { "QuestRewardItem", "QuestEditorWindow" },
                 };
 
                 if (windowMapping.TryGetValue(MessageType, out var windowName))
@@ -263,6 +268,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             ["NpcShopItem"] = settings => { },
             ["TradeShopItem"] = settings => { },
             ["ItemMixItem"] = settings => { },
+            ["ItemPreviewItem"] = settings => { },
             ["ItemBrokenItem"] = settings => { },
             ["ItemBrokenTargetItem"] = settings => { },
             ["DropGroup"] = settings =>
@@ -282,7 +288,30 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                 settings.IsSlotVisible = Visibility.Visible;
                 ItemDataManager.ItemTypesFilter = [3,4];
                 ItemDataManager.ItemTypeEnabled = false;
-            }
+            },
+            ["PartyMissionItem"] = settings =>
+            {
+                settings.SlotIndexMax = 2;
+                settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
+            },
+            ["QuestItem"] = settings =>
+            {
+                settings.SlotIndexMax = 0;
+                settings.IsItemAmountVisible = Visibility.Visible;
+            },
+            ["QuestItems"] = settings =>
+            {
+                settings.SlotIndexMax = 2;
+                settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
+            },
+            ["QuestRewardItem"] = settings =>
+            {
+                settings.SlotIndexMax = 4;
+                settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
+            },
         };
 
         if (!string.IsNullOrEmpty(messageType) && visibilitySettings.TryGetValue(messageType, out var action))
@@ -339,11 +368,14 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             "NpcShopItem" or "NpcShopItems" or "NpcShopFilterItems" => "Add Npc Shop Item",
             "TradeShopItem" or "TradeShopItems" => "Add Trade Shop Item",
             "ItemMixItem" or "ItemMixItems" => "Add Item Craft Item",
+            "ItemPreviewItem" => "Add Npc Shop Item Preview Item",
             "DropGroup" => "Add Drop Group Item",
             "RareCard" => "Add Rare Card Group Item",
             "SetItem" => "Add Set Item",
             "PetDeathDropItem" => "Add Pet Death Drop Item",
             "ItemBrokenItem" or "ItemBrokenTargetItem" => "Add Dismantle Item",
+            "PartyMissionItem" => "Add Party Mission Item",
+            "QuestItem" or "QuestItems" or "QuestReward" => "Add Quest Item",
             _ => "Add Item",
         };
     }
