@@ -442,11 +442,11 @@
                                     Style="{StaticResource ArialMS}"
                                     Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item {0}'}" />
                                 <control:ItemSlot
-                                    AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    AddItemCommand="{Binding DataContext.AddQuestItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
                                     ItemDataViewModel="{Binding ItemDataViewModel}"
                                     ItemNameVisibility="Visible"
-                                    RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                    RemoveItemCommand="{Binding DataContext.RemoveQuestItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                             </StackPanel>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

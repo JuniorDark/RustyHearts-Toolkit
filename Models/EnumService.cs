@@ -504,5 +504,11 @@ namespace RHToolkit.Models
             QuestAcquire = 12,
             QuestAcquireString = 13
         }
+
+        public enum EnemyType
+        {
+            None = 0,
+            Enemy = 1,
+        }
     }
 }

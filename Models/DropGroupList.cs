@@ -1,0 +1,70 @@
+﻿namespace RHToolkit.Models;
+
+public class DropGroupList
+{
+    public int ID { get; set; }
+    public int BronzeCardID { get; set; }
+    public int SilverCardID { get; set; }
+    public int GoldCardID { get; set; }
+    public int DropItemCode01 { get; set; }
+    public int DropItemCode02 { get; set; }
+    public int DropItemCode03 { get; set; }
+    public int DropItemCode04 { get; set; }
+    public int DropItemCode05 { get; set; }
+    public int DropItemCode06 { get; set; }
+    public int DropItemCode07 { get; set; }
+    public int DropItemCode08 { get; set; }
+    public int DropItemCode09 { get; set; }
+    public int DropItemCode10 { get; set; }
+    public int DropItemCode11 { get; set; }
+    public int DropItemCode12 { get; set; }
+    public int DropItemCode13 { get; set; }
+    public int DropItemCode14 { get; set; }
+    public int DropItemCode15 { get; set; }
+    public int DropItemCode16 { get; set; }
+    public int DropItemCode17 { get; set; }
+    public int DropItemCode18 { get; set; }
+    public int DropItemCode19 { get; set; }
+    public int DropItemCode20 { get; set; }
+    public int DropItemCode21 { get; set; }
+    public int DropItemCode22 { get; set; }
+    public int DropItemCode23 { get; set; }
+    public int DropItemCode24 { get; set; }
+    public int DropItemCode25 { get; set; }
+    public int DropItemCode26 { get; set; }
+    public int DropItemCode27 { get; set; }
+    public int DropItemCode28 { get; set; }
+    public int DropItemCode29 { get; set; }
+    public int DropItemCode30 { get; set; }
+    public int DropItemCode31 { get; set; }
+    public int DropItemCode32 { get; set; }
+    public int DropItemCode33 { get; set; }
+    public int DropItemCode34 { get; set; }
+    public int DropItemCode35 { get; set; }
+    public int DropItemCode36 { get; set; }
+    public int DropItemCode37 { get; set; }
+    public int DropItemCode38 { get; set; }
+    public int DropItemCode39 { get; set; }
+    public int DropItemCode40 { get; set; }
+    public int DropItemCode41 { get; set; }
+    public int DropItemCode42 { get; set; }
+    public int DropItemCode43 { get; set; }
+    public int DropItemCode44 { get; set; }
+    public int DropItemCode45 { get; set; }
+    public int DropItemCode46 { get; set; }
+    public int DropItemCode47 { get; set; }
+    public int DropItemCode48 { get; set; }
+    public int DropItemCode49 { get; set; }
+    public int DropItemCode50 { get; set; }
+    public int DropItemCode51 { get; set; }
+    public int DropItemCode52 { get; set; }
+    public int DropItemCode53 { get; set; }
+    public int DropItemCode54 { get; set; }
+    public int DropItemCode55 { get; set; }
+    public int DropItemCode56 { get; set; }
+    public int DropItemCode57 { get; set; }
+    public int DropItemCode58 { get; set; }
+    public int DropItemCode59 { get; set; }
+    public int DropItemCode60 { get; set; }
+}
+

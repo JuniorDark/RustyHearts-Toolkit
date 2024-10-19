@@ -20,9 +20,9 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
     private WindowCard[] _windowCardsTools =
     [
         new("Cash Shop Editor", "Edit cash shop .rh table file", SymbolRegular.DocumentEdit24, "cashshopeditor"),
-        new("Package Editor", "Edit unionpackage .rh table file", SymbolRegular.DocumentEdit24, "packageeditor"),
+        new("Package Editor", "Edit package .rh table files", SymbolRegular.DocumentEdit24, "packageeditor"),
         new("Set Item Editor", "Edit setitem .rh table file", SymbolRegular.DocumentEdit24, "setitemeditor"),
-        new("Random Rune Editor", "Edit randomrune .rh table file", SymbolRegular.DocumentEdit24, "randomruneeditor"),
+        new("Random Box Editor", "Edit randomrune .rh table file", SymbolRegular.DocumentEdit24, "randomruneeditor"),
         new("Drop Group Editor", "Edit dropgroup .rh table files", SymbolRegular.DocumentEdit24, "dropgroupeditor"),
         new("NPC Editor", "Edit npc .rh table files", SymbolRegular.DocumentEdit24, "npceditor"),
         new("NPC Shop Editor", "Edit npcshop .rh table files", SymbolRegular.DocumentEdit24, "npcshopeditor"),
@@ -30,6 +30,7 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
         new("Item Editor", "Edit items .rh table files", SymbolRegular.DocumentEdit24, "itemeditor"),
         new("Pet Editor", "Edit pet .rh table file", SymbolRegular.DocumentEdit24, "peteditor"),
         new("Quest Editor", "Edit quest .rh table files", SymbolRegular.DocumentEdit24, "questeditor"),
+        new("Enemy Editor", "Edit enemy .rh table files", SymbolRegular.DocumentEdit24, "enemyeditor"),
 
     ];
 
@@ -85,6 +86,9 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
                     break;
                 case "questeditor":
                     windowsProviderService.Show<QuestEditorWindow>(true);
+                    break;
+                case "enemyeditor":
+                    windowsProviderService.Show<EnemyEditorWindow>(true);
                     break;
             }
         }

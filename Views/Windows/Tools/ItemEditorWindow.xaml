@@ -162,7 +162,7 @@
                                 <TabItem
                                     Width="{Binding ElementName=c2, Path=ActualWidth}"
                                     Foreground="White"
-                                    Header="Item Data"
+                                    Header="Item Info"
                                     Style="{StaticResource lb_tab}">
                                     <Grid HorizontalAlignment="Center">
                                         <Grid.ColumnDefinitions>
@@ -331,7 +331,7 @@
                                 <TabItem
                                     Width="{Binding ElementName=c2, Path=ActualWidth}"
                                     Foreground="White"
-                                    Header="Item Categories"
+                                    Header="Item Data"
                                     Style="{StaticResource lb_tab}">
                                     <ScrollViewer
                                         Margin="0,0,0,0"
@@ -680,8 +680,8 @@
                                                     Content="AddEffect ID 01"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
+                                                    Width="250"
                                                     Height="24"
-                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -711,8 +711,8 @@
                                                     Content="AddEffect ID 02"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
+                                                    Width="250"
                                                     Height="24"
-                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -836,6 +836,31 @@
                                                             UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                                     </i:Interaction.Behaviors>
                                                 </ListView>
+                                            </StackPanel>
+
+                                            <StackPanel
+                                                Grid.Row="9"
+                                                Grid.ColumnSpan="2"
+                                                Margin="0,0,0,10"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Top"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    HorizontalContentAlignment="Center"
+                                                    Content="AddEffect Filter"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <TextBox
+                                                    Width="250"
+                                                    Height="35"
+                                                    CaretBrush="White"
+                                                    FontFamily="{StaticResource ArialUnicodeMS}"
+                                                    FontSize="12"
+                                                    Foreground="Gold"
+                                                    Tag="{x:Static rs:Resources.OptionNameID}"
+                                                    Template="{StaticResource lb_textbox}"
+                                                    Text="{Binding AddEffectSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                             </StackPanel>
                                         </Grid>
                                     </ScrollViewer>

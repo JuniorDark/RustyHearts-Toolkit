@@ -108,6 +108,8 @@ public partial class App : Application
                 _ = services.AddTransient<PetEditorViewModel>();
                 _ = services.AddTransient<QuestEditorWindow>();
                 _ = services.AddTransient<QuestEditorViewModel>();
+                _ = services.AddTransient<EnemyEditorWindow>();
+                _ = services.AddTransient<EnemyEditorViewModel>();
                 // SQLite services and viewmodels
                 _ = services.AddTransient<ItemWindow>();
                 _ = services.AddTransient<ItemWindowViewModel>();
@@ -117,6 +119,8 @@ public partial class App : Application
                 _ = services.AddTransient<ItemMixViewModel>();
                 _ = services.AddTransient<RareCardRewardWindow>();
                 _ = services.AddTransient<RareCardRewardViewModel>();
+                _ = services.AddTransient<DropGroupListWindow>();
+                _ = services.AddTransient<DropGroupListViewModel>();
 
             }
         )

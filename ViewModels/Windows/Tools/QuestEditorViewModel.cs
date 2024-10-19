@@ -222,8 +222,8 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? shopEditorWindow = Application.Current.Windows.OfType<QuestEditorWindow>().FirstOrDefault();
-                Window owner = shopEditorWindow ?? Application.Current.MainWindow;
+                Window? questEditorWindow = Application.Current.Windows.OfType<QuestEditorWindow>().FirstOrDefault();
+                Window owner = questEditorWindow ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
             }
             catch (Exception ex)
@@ -398,7 +398,7 @@ namespace RHToolkit.ViewModels.Windows
                         case "QuestItem":
                             UpdateQuestItem(itemData);
                             break;
-                        case "QuestItems":
+                        case "QuestItems" or "PartyMissionItem":
                             UpdateQuestItems(itemData);
                             break;
                         case "QuestRewardItem":
@@ -957,7 +957,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 int index = QuestItems.IndexOf(questItem);
                 UpdateSelectedItemValue(questItem.ItemID, $"nGetItem{index:00}");
-                UpdateSelectedItemValue(questItem.ItemID, $"nGetItemCount{index:00}");
+                UpdateSelectedItemValue(questItem.ItemCount, $"nGetItemCount{index:00}");
             }
         }
 

@@ -14,6 +14,7 @@ namespace RHToolkit.Services
         List<int> GetCostumeMixItems(string groupIDs);
         List<NameID> GetCostumePackItems();
         List<NameID> GetCostumePartItems(int jobClass);
+        List<DropGroupList> GetDropGroupListItems(string tableName, int dropItemCount);
         long GetExperienceFromLevel(int level);
         List<NameID> GetFielMeshItems();
         string GetFortuneDesc(int fortuneID);
@@ -41,6 +42,7 @@ namespace RHToolkit.Services
         List<NameID> GetPetRebirthItems();
         List<NameID> GetQuestGroupItems();
         List<NameID> GetQuestListItems();
+        List<DropGroupList> GetRareCardDropGroupListItems();
         List<RareCardReward> GetRareCardRewardItems();
         List<NameID> GetRiddleGroupItems();
         (int nSetOption00, int nSetOptionvlue00, int nSetOption01, int nSetOptionvlue01, int nSetOption02, int nSetOptionvlue02, int nSetOption03, int nSetOptionvlue03, int nSetOption04, int nSetOptionvlue04) GetSetInfo(int setID);

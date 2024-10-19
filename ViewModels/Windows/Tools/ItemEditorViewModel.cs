@@ -7,6 +7,7 @@ using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
+using System.ComponentModel;
 using System.Data;
 using System.Windows.Controls;
 
@@ -18,6 +19,7 @@ namespace RHToolkit.ViewModels.Windows
         private readonly IWindowsService _windowsService;
         private readonly IGMDatabaseService _gmDatabaseService;
         private readonly System.Timers.Timer _filterUpdateTimer;
+        private readonly System.Timers.Timer _addEffectFilterUpdateTimer;
 
         public ItemEditorViewModel(IWindowsService windowsService, IGMDatabaseService gmDatabaseService, ItemDataManager itemDataManager)
         {
@@ -37,8 +39,17 @@ namespace RHToolkit.ViewModels.Windows
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
+            _addEffectFilterUpdateTimer = new()
+            {
+                Interval = 400,
+                AutoReset = false
+            };
+            _addEffectFilterUpdateTimer.Elapsed += AddEffectFilterUpdateTimerElapsed;
             PopulateListItems();
             WeakReferenceMessenger.Default.Register(this);
+
+            _addEffectView = CollectionViewSource.GetDefaultView(_itemDataManager.AddEffectItems);
+            _addEffectView.Filter = FilterAddEffect;
         }
 
         #region Commands 
@@ -439,6 +450,64 @@ namespace RHToolkit.ViewModels.Windows
         {
             ApplyFilter();
         }
+
+        #region AddEffect Filter
+        [ObservableProperty]
+        private ICollectionView _addEffectView;
+
+        private readonly List<int> selectedAddEffect = [];
+        private bool FilterAddEffect(object obj)
+        {
+            if (obj is NameID addEffect)
+            {
+                if (addEffect.ID == 0)
+                    return true;
+
+                if (DataTableManager.SelectedItem != null)
+                {
+                    var selectedEffect01 = (int)DataTableManager.SelectedItem["nAddEffectID"];
+                    var selectedEffect02 = (int)DataTableManager.SelectedItem["nAddEffectID01"];
+
+                    selectedAddEffect.Add(selectedEffect01);
+                    selectedAddEffect.Add(selectedEffect02);
+
+                    if (selectedAddEffect.Contains(addEffect.ID))
+                        return true;
+                }
+
+                // text search filter
+                if (!string.IsNullOrEmpty(AddEffectSearch))
+                {
+                    string searchText = AddEffectSearch.ToLower();
+
+                    // Check if either option ID or option Name contains the search text
+                    if (!string.IsNullOrEmpty(addEffect.ID.ToString()) && addEffect.ID.ToString().Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+
+                    if (!string.IsNullOrEmpty(addEffect.Name) && addEffect.Name.Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        [ObservableProperty]
+        private string? _addEffectSearch;
+        partial void OnAddEffectSearchChanged(string? value)
+        {
+            _addEffectFilterUpdateTimer.Stop();
+            _addEffectFilterUpdateTimer.Start();
+        }
+
+        private void AddEffectFilterUpdateTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(AddEffectView.Refresh);
+        }
+        #endregion
         #endregion
 
         #region Comboboxes

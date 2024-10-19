@@ -228,10 +228,12 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             {
                 settings.SlotIndexMax = 11;
                 settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
             },
             ["PackageCondition"] = settings =>
             {
                 settings.SlotIndexMax = 5;
+                settings.IsItemAmountVisible = Visibility.Visible;
                 settings.IsSlotVisible = Visibility.Visible;
             },
             ["RandomRune"] = settings =>

@@ -3,6 +3,7 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Views.Windows;
+using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Services;
 
@@ -239,6 +240,40 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
         }
 
         WeakReferenceMessenger.Default.Send(new IDMessage(id, token, messageType));
+    }
+    #endregion
+
+    #region Drop Group List Window
+
+    private readonly Dictionary<Guid, Window> _dropGroupListWindows = [];
+
+    public void OpenDropGroupListWindow(Guid token, int id, ItemDropGroupType dropGroupType)
+    {
+        if (_dropGroupListWindows.TryGetValue(token, out Window? existingWindow))
+        {
+            if (existingWindow.WindowState == WindowState.Minimized)
+            {
+                existingWindow.WindowState = WindowState.Normal;
+            }
+
+            existingWindow.Focus();
+        }
+        else
+        {
+            var dropGroupListWindow = _windowsProviderService.ShowInstance<DropGroupListWindow>(true);
+            if (dropGroupListWindow != null)
+            {
+                _openWindowsCount++;
+                dropGroupListWindow.Closed += (sender, args) =>
+                {
+                    _dropGroupListWindows.Remove(token);
+                    _openWindowsCount--;
+                };
+                _dropGroupListWindows[token] = dropGroupListWindow;
+            }
+        }
+
+        WeakReferenceMessenger.Default.Send(new DropGroupMessage(id, token, dropGroupType));
     }
     #endregion
 

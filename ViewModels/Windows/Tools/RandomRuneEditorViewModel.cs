@@ -263,11 +263,13 @@ namespace RHToolkit.ViewModels.Windows
         {
             if (slotIndex >= 0 && slotIndex < 10 && RuneItems[slotIndex].ItemCode != 0)
             {
+                var item = RuneItems[slotIndex];
+
                 DataTableManager.StartGroupingEdits();
-                RuneItems[slotIndex].ItemCode = 0;
-                RuneItems[slotIndex].ItemCount = 0;
-                RuneItems[slotIndex].ItemCodeCount = 0;
-                RuneItems[slotIndex].ItemDataViewModel = null;
+                item.ItemCode = 0;
+                item.ItemCount = 0;
+                item.ItemCodeCount = 0;
+                item.ItemDataViewModel = null;
                 OnPropertyChanged(nameof(RuneItems));
                 DataTableManager.EndGroupingEdits();
             }
@@ -293,8 +295,6 @@ namespace RHToolkit.ViewModels.Windows
 
             if (selectedItem != null)
             {
-                MaxCount = (int)selectedItem["nMaxCount"];
-
                 RuneItems ??= [];
 
                 for (int i = 0; i < 10; i++)
@@ -350,8 +350,8 @@ namespace RHToolkit.ViewModels.Windows
                 if (s is RuneItem runeItem)
                 {
                     OnRuneItemCodeChanged(runeItem.ItemCode, $"nItemCode{index:00}", index);
-                    OnRuneItemCountChanged(runeItem.ItemCodeCount, $"nItemCodeCount{index:00}", index);
-                    UpdateSelectedItemValue(runeItem.ItemCount, $"nItemCount{index:00}");
+                    OnRuneItemCodeCountChanged(runeItem.ItemCodeCount, $"nItemCodeCount{index:00}", index);
+                    OnRuneItemCountChanged(runeItem.ItemCount, $"nItemCount{index:00}", index);
                 }
             };
         }
@@ -472,28 +472,6 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private ObservableCollection<RuneItem> _runeItems = [];
 
-        [ObservableProperty]
-        private int _MaxCount;
-
-        partial void OnMaxCountChanged(int value)
-        {
-            if (_isUpdating) return;
-
-            _isUpdating = true;
-
-            try
-            {
-                DataTableManager.StartGroupingEdits();
-                UpdateSelectedItemValue(value, "nMaxCount");
-                RecalculateItemCount(value);
-                DataTableManager.EndGroupingEdits();
-            }
-            finally
-            {
-                _isUpdating = false;
-            }
-        }
-
         private void OnRuneItemCodeChanged(int newValue, string column, int index)
         {
             if (_isUpdatingSelectedItem)
@@ -503,30 +481,25 @@ namespace RHToolkit.ViewModels.Windows
             IsEnabled(index);
         }
 
-        private bool _isUpdating = false;
+        private void OnRuneItemCodeCountChanged(int newValue, string column, int index)
+        {
+            if (_isUpdatingSelectedItem) return;
+
+            var itemDataViewModel = RuneItems[index].ItemDataViewModel;
+            if (itemDataViewModel != null)
+            {
+                itemDataViewModel.ItemAmount = newValue;
+                RuneItems[index].ItemDataViewModel = itemDataViewModel;
+            }
+
+            UpdateSelectedItemValue(newValue, column);
+        }
 
         private void OnRuneItemCountChanged(int newValue, string column, int index)
         {
-            if (_isUpdating) return;
-
-            _isUpdating = true;
-
-            try
-            {
-                var itemDataViewModel = RuneItems[index].ItemDataViewModel;
-                if (itemDataViewModel != null)
-                {
-                    itemDataViewModel.ItemAmount = newValue;
-                    RuneItems[index].ItemDataViewModel = itemDataViewModel;
-                }
-                
-                UpdateSelectedItemValue(newValue, column);
-                CalculateMaxCount();
-            }
-            finally
-            {
-                _isUpdating = false;
-            }
+            if (_isUpdatingSelectedItem) return;
+            UpdateSelectedItemValue(newValue, column);
+            CalculateMaxCount();
         }
 
         #endregion
@@ -548,32 +521,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             // Sum all ItemCount values
             int totalRuneItemCount = RuneItems.Sum(item => item.ItemCount);
-
-            if (MaxCount != totalRuneItemCount)
-            {
-                MaxCount = totalRuneItemCount;
-            }
-        }
-
-        private void RecalculateItemCount(int value)
-        {
-            if (DataTableManager.SelectedItem != null)
-            {
-                int currentTotal = RuneItems.Sum(item => item.ItemCount);
-                if (currentTotal > 0)
-                {
-                    int scale = value / currentTotal;
-                    foreach (var item in RuneItems)
-                    {
-                        if (item.ItemCode > 0)
-                        {
-                            item.ItemCount *= scale;
-                        }
-                    }
-                }
-            }
-
-            OnPropertyChanged(nameof(RuneItems));
+            UpdateSelectedItemValue(totalRuneItemCount, "nMaxCount");
         }
 
         private void IsEnabled(int index)

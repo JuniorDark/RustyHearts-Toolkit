@@ -262,7 +262,7 @@ namespace RHToolkit.ViewModels.Windows
 
                     var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, 1);
 
-                    ItemDataManager.ItemDataViewModel = itemDataViewModel;
+                    ItemDataManager.ItemDataViewModel = itemDataViewModel!;
                 }
             }
         }
@@ -301,7 +301,7 @@ namespace RHToolkit.ViewModels.Windows
                 var itemCode = (int)selectedItem[$"nDeathDropItemID"];
                 var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, 1);
 
-                ItemDataManager.ItemDataViewModel = itemDataViewModel;
+                ItemDataManager.ItemDataViewModel = itemDataViewModel!;
 
                 IsSelectedItemVisible = Visibility.Visible;
             }

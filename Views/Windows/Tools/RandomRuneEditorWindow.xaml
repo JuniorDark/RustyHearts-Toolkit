@@ -249,8 +249,13 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
+                        Maximum="2147483647"
                         Minimum="0"
-                        Value="{Binding MaxCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        Value="{Binding DataTableManager.SelectedItem[nMaxCount], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                        <i:Interaction.Behaviors>
+                            <bh:DataRowViewBehavior Column="nMaxCount" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                        </i:Interaction.Behaviors>
+                    </ui:NumberBox>
                 </StackPanel>
 
                 <StackPanel

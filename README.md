@@ -31,6 +31,7 @@ To start using the Rusty Hearts Toolkit, download the latest release from the [G
 - **Item Drop Group Editor** Item drops (itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh, riddleboxdropgrouplist.rh, rarecarddropgrouplist.rh, rarecardrewarditemlist.rh).
 - **NPC Editor:** (npcinstance.rh).
 - **NPC Shop Editor** Npc Shop (npcshop.rh), Trade Shop (tradeshop.rh), Item Craft (itemmix.rh, costumemix.rh), shop item visible filter (shopitemvisiblefilter.rh), Item Dismantle (itembroken.rh).
+- **Enemy Editor:** Edit enemies (enemy.rh).
 - **Package Editor:** Item packages and effects (unionpackage.rh, conditionselectitem.rh).
 - **Pet Editor:** Edit pets (pet.rh).
 - **Quest Editor:** Edit quest files.
@@ -110,7 +111,6 @@ A: Fork the repository, make your changes, and submit a pull request.
 
 ### Specialized Table Editors
 - **Add Effect Editor**
-- **Enemy Editor**
 - **Skill Editor**
 - **World/Map Editor**
 

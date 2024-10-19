@@ -168,7 +168,16 @@ namespace RHToolkit.Services
                 while (command.Read())
                 {
                     int id = command.GetInt32(0);
-                    string name = command.GetString(1);
+                    string name;
+
+                    if (command.FieldCount < 2)
+                    {
+                        name = id.ToString();
+                    }
+                    else
+                    {
+                        name = command.GetString(1);
+                    }
 
                     string formattedName;
 
@@ -400,6 +409,72 @@ namespace RHToolkit.Services
                     }
 
                     items.Add(reward);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+            }
+
+            return items;
+        }
+
+        public List<DropGroupList> GetRareCardDropGroupListItems()
+        {
+            List<DropGroupList> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = $"SELECT nID, nBronzeCardID, nSilverCardID, nGoldCardID FROM rarecarddropgrouplist";
+
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                while (command.Read())
+                {
+                    DropGroupList reward = new()
+                    {
+                        ID = command.GetInt32(0),
+                        BronzeCardID = command.GetInt32(1),
+                        SilverCardID = command.GetInt32(2),
+                        GoldCardID = command.GetInt32(3)
+                    };
+
+                    items.Add(reward);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+            }
+
+            return items;
+        }
+
+        public List<DropGroupList> GetDropGroupListItems(string tableName, int dropItemCount)
+        {
+            List<DropGroupList> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                var columnNames = string.Join(", ", Enumerable.Range(1, dropItemCount).Select(i => $"nDropItemCode{i:D2}"));
+                string query = $"SELECT nID, {columnNames} FROM {tableName}";
+
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                while (command.Read())
+                {
+                    DropGroupList dropGroup = new()
+                    {
+                        ID = command.GetInt32(0)
+                    };
+
+                    for (int i = 1; i <= dropItemCount; i++)
+                    {
+                        var property = typeof(DropGroupList).GetProperty($"DropItemCode{i:D2}");
+                        property?.SetValue(dropGroup, command.GetInt32(i));
+                    }
+
+                    items.Add(dropGroup);
                 }
             }
             catch (Exception ex)

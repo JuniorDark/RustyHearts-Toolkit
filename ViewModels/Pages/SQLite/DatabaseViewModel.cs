@@ -18,6 +18,7 @@ namespace RHToolkit.ViewModels.Pages
             new("Item Craft Database", "Item Craft List", SymbolRegular.BookDatabase24, "itemmix"),
             new("NPC Shop Database", "NPC Shop List", SymbolRegular.BookDatabase24, "npcshop"),
             new("Rare Card Reward Database", "Rare Card Reward List", SymbolRegular.BookDatabase24, "rarecardreward"),
+            new("Drop Group Database", "Drop Group Item List", SymbolRegular.BookDatabase24, "dropgroup"),
     ];
 
         [RelayCommand]
@@ -48,6 +49,9 @@ namespace RHToolkit.ViewModels.Pages
                         break;
                     case "rarecardreward":
                         windowsProviderService.ShowInstance<RareCardRewardWindow>(true);
+                        break;
+                    case "dropgroup":
+                        windowsProviderService.ShowInstance<DropGroupListWindow>(true);
                         break;
                 }
             }

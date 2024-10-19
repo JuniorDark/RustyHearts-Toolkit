@@ -1212,6 +1212,10 @@ namespace RHToolkit.ViewModels.Windows
                 case NpcShopType.ItemPreview:
                     columns.Add($"CONVERT(nPreViewItemID, 'System.String')");
                     break;
+                case NpcShopType.ItemBroken:
+                    columns.Add($"CONVERT(nItem, 'System.String')");
+                    columns.Add($"CONVERT(nItemID, 'System.String')");
+                    break;
             }
 
             if (columns.Count > 0)
