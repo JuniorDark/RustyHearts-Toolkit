@@ -3399,7 +3399,7 @@
                                                 FontSize="12"
                                                 Foreground="Gold"
                                                 Style="{StaticResource ArialMS}"
-                                                Text="Quest Item" />
+                                                Text="Quest Show Conditon Item" />
                                             <control:ItemSlot
                                                 AddItemCommand="{Binding DataContext.AddQuestItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -3414,8 +3414,8 @@
                                 Grid.Row="1"
                                 Grid.ColumnSpan="4"
                                 Margin="0,20,0,0"
-                                AlternationCount="{Binding DataContext.QuestItems.Count, RelativeSource={RelativeSource AncestorType=Window}}"
-                                ItemsSource="{Binding DataContext.QuestItems, RelativeSource={RelativeSource AncestorType=Window}}">
+                                AlternationCount="{Binding DataContext.QuestGetItems.Count, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemsSource="{Binding DataContext.QuestGetItems, RelativeSource={RelativeSource AncestorType=Window}}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel
@@ -3430,13 +3430,13 @@
                                                 FontSize="12"
                                                 Foreground="Gold"
                                                 Style="{StaticResource ArialMS}"
-                                                Text="Quest Reward Item" />
+                                                Text="Get Reward Item" />
                                             <control:ItemSlot
-                                                AddItemCommand="{Binding DataContext.AddQuestItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                AddItemCommand="{Binding DataContext.AddQuestGetItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
                                                 ItemDataViewModel="{Binding ItemDataViewModel}"
                                                 ItemNameVisibility="Visible"
-                                                RemoveItemCommand="{Binding DataContext.RemoveQuestItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                                RemoveItemCommand="{Binding DataContext.RemoveQuestGetItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -3461,13 +3461,44 @@
                                                 FontSize="12"
                                                 Foreground="Gold"
                                                 Style="{StaticResource ArialMS}"
-                                                Text="Select Reward Item" />
+                                                Text="Reward Item" />
                                             <control:ItemSlot
                                                 AddItemCommand="{Binding DataContext.AddQuestRewardItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
                                                 ItemDataViewModel="{Binding ItemDataViewModel}"
                                                 ItemNameVisibility="Visible"
                                                 RemoveItemCommand="{Binding DataContext.RemoveQuestRewardItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <ItemsControl
+                                Grid.Row="3"
+                                Grid.ColumnSpan="4"
+                                Margin="0,20,0,0"
+                                AlternationCount="{Binding DataContext.QuestSelectRewardItems.Count, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemsSource="{Binding DataContext.QuestSelectRewardItems, RelativeSource={RelativeSource AncestorType=Window}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel
+                                            Grid.Column="0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Horizontal">
+                                            <TextBlock
+                                                Margin="0,0,10,0"
+                                                VerticalAlignment="Center"
+                                                Background="Transparent"
+                                                FontSize="12"
+                                                Foreground="Gold"
+                                                Style="{StaticResource ArialMS}"
+                                                Text="Select Reward Item" />
+                                            <control:ItemSlot
+                                                AddItemCommand="{Binding DataContext.AddQuestSelectRewardItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                                                ItemDataViewModel="{Binding ItemDataViewModel}"
+                                                ItemNameVisibility="Visible"
+                                                RemoveItemCommand="{Binding DataContext.RemoveQuestSelectRewardItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

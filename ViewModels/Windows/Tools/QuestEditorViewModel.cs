@@ -254,6 +254,7 @@ namespace RHToolkit.ViewModels.Windows
             QuestItems?.Clear();
             QuestRewardItems?.Clear();
             QuestItemsValue?.Clear();
+            SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }
@@ -361,6 +362,30 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteSelectedItemCommand))]
+        private void AddQuestGetItem(string parameter)
+        {
+            try
+            {
+                if (int.TryParse(parameter, out int slotIndex))
+                {
+                    var itemData = new ItemData
+                    {
+                        SlotIndex = slotIndex,
+                        ItemId = QuestGetItems[slotIndex].ItemID,
+                        ItemAmount = QuestGetItems[slotIndex].ItemCount,
+                    };
+
+                    _windowsService.OpenItemWindow(_token, "QuestGetItem", itemData);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(CanExecuteSelectedItemCommand))]
         private void AddQuestRewardItem(string parameter)
         {
             try
@@ -375,6 +400,30 @@ namespace RHToolkit.ViewModels.Windows
                     };
 
                     _windowsService.OpenItemWindow(_token, "QuestRewardItem", itemData);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+        }
+
+        [RelayCommand(CanExecute = nameof(CanExecuteSelectedItemCommand))]
+        private void AddQuestSelectRewardItem(string parameter)
+        {
+            try
+            {
+                if (int.TryParse(parameter, out int slotIndex))
+                {
+                    var itemData = new ItemData
+                    {
+                        SlotIndex = slotIndex,
+                        ItemId = QuestSelectRewardItems[slotIndex].ItemID,
+                        ItemAmount = QuestSelectRewardItems[slotIndex].ItemCount,
+                    };
+
+                    _windowsService.OpenItemWindow(_token, "QuestSelectRewardItem", itemData);
                 }
 
             }
@@ -403,6 +452,12 @@ namespace RHToolkit.ViewModels.Windows
                             break;
                         case "QuestRewardItem":
                             UpdateQuestRewardItem(itemData);
+                            break;
+                        case "QuestGetItem":
+                            UpdateQuestGetItem(itemData);
+                            break;
+                        case "QuestSelectRewardItem":
+                            UpdateQuestSelectRewardItem(itemData);
                             break;
                     }
                 }
@@ -442,6 +497,30 @@ namespace RHToolkit.ViewModels.Windows
             item.ItemCount = itemData.ItemAmount;
             item.ItemDataViewModel = itemDataViewModel;
             OnPropertyChanged(nameof(QuestRewardItems));
+            DataTableManager.EndGroupingEdits();
+        }
+
+        private void UpdateQuestGetItem(ItemData itemData)
+        {
+            DataTableManager.StartGroupingEdits();
+            var item = QuestGetItems[itemData.SlotIndex];
+            var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+            item.ItemID = itemData.ItemId;
+            item.ItemCount = itemData.ItemAmount;
+            item.ItemDataViewModel = itemDataViewModel;
+            OnPropertyChanged(nameof(QuestGetItems));
+            DataTableManager.EndGroupingEdits();
+        }
+
+        private void UpdateQuestSelectRewardItem(ItemData itemData)
+        {
+            DataTableManager.StartGroupingEdits();
+            var item = QuestSelectRewardItems[itemData.SlotIndex];
+            var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemData.ItemId, itemData.SlotIndex, itemData.ItemAmount);
+            item.ItemID = itemData.ItemId;
+            item.ItemCount = itemData.ItemAmount;
+            item.ItemDataViewModel = itemDataViewModel;
+            OnPropertyChanged(nameof(QuestSelectRewardItems));
             DataTableManager.EndGroupingEdits();
         }
 
@@ -526,6 +605,44 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         [RelayCommand]
+        private void RemoveQuestGetItem(string parameter)
+        {
+            try
+            {
+                if (int.TryParse(parameter, out int slotIndex))
+                {
+                    RemoveQuestGetItem(slotIndex);
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+
+        }
+
+        private void RemoveQuestGetItem(int slotIndex)
+        {
+            if (slotIndex >= 0 && slotIndex < QuestGetItems.Count)
+            {
+                DataTableManager.StartGroupingEdits();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var item = QuestGetItems[slotIndex];
+                    if (item != null)
+                    {
+                        item.ItemDataViewModel = null;
+                        item.ItemID = 0;
+                        item.ItemCount = 0;
+                    }
+                });
+
+                DataTableManager.EndGroupingEdits();
+            }
+        }
+
+        [RelayCommand]
         private void RemoveQuestRewardItem(string parameter)
         {
             try
@@ -563,6 +680,44 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        [RelayCommand]
+        private void RemoveQuestSelectRewardItem(string parameter)
+        {
+            try
+            {
+                if (int.TryParse(parameter, out int slotIndex))
+                {
+                    RemoveQuestSelectRewardItem(slotIndex);
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            }
+
+        }
+
+        private void RemoveQuestSelectRewardItem(int slotIndex)
+        {
+            if (slotIndex >= 0 && slotIndex < QuestRewardItems.Count)
+            {
+                DataTableManager.StartGroupingEdits();
+
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    var item = QuestSelectRewardItems[slotIndex];
+                    if (item != null)
+                    {
+                        item.ItemDataViewModel = null;
+                        item.ItemID = 0;
+                        item.ItemCount = 0;
+                    }
+                });
+
+                DataTableManager.EndGroupingEdits();
+            }
+        }
+
         #endregion
 
         #endregion
@@ -581,15 +736,14 @@ namespace RHToolkit.ViewModels.Windows
                 case QuestType.PartyMission:
                     for (int i = 0; i < 3; i++)
                     {
-                        string columnName = $"nItemID{i + 1:00}";
-                        columns.Add($"CONVERT({columnName}, 'System.String')");
+                        columns.Add($"CONVERT(nItemID{i + 1:00}, 'System.String')");
                     }
                     break;
                 case QuestType.Quest or QuestType.QuestAcquire:
                     for (int i = 0; i < 3; i++)
                     {
-                        string columnName = $"nGetItem{i:00}";
-                        columns.Add($"CONVERT({columnName}, 'System.String')");
+                        columns.Add($"CONVERT(nGetItem{i:00}, 'System.String')");
+                        columns.Add($"CONVERT(nItemValue{i:00}, 'System.String')");
                     }
                     columns.Add("CONVERT(nQuestItemID, 'System.String')");
                     columns.Add("CONVERT(nSelItemValue00, 'System.String')");
@@ -597,6 +751,10 @@ namespace RHToolkit.ViewModels.Windows
                     columns.Add("CONVERT(nSelItemValue04, 'System.String')");
                     columns.Add("CONVERT(nSelItemValue06, 'System.String')");
                     columns.Add("CONVERT(nSelItemValue08, 'System.String')");
+                    break;
+                case QuestType.QuestString:
+                    columns.Add("CONVERT(wszTitle, 'System.String')");
+                    columns.Add("CONVERT(wszDesc, 'System.String')");
                     break;
             }
 
@@ -815,7 +973,7 @@ namespace RHToolkit.ViewModels.Windows
                 Application.Current.Dispatcher.Invoke(() => QuestItem.Add(newItem));
                 QuestItemPropertyChanged(newItem);
 
-                QuestItems ??= [];
+                QuestGetItems ??= [];
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -823,9 +981,9 @@ namespace RHToolkit.ViewModels.Windows
                     int getItemCount = (int)selectedItem[$"nGetItemCount{i:00}"];
                     ItemDataViewModel? getItemItemDataViewModel = null;
 
-                    if (i < QuestItems.Count)
+                    if (i < QuestGetItems.Count)
                     {
-                        var existingItem = QuestItems[i];
+                        var existingItem = QuestGetItems[i];
 
                         if (existingItem.ItemID != getItemCode)
                         {
@@ -848,23 +1006,58 @@ namespace RHToolkit.ViewModels.Windows
                             ItemDataViewModel = getItemItemDataViewModel
                         };
 
-                        Application.Current.Dispatcher.Invoke(() => QuestItems.Add(getItem));
+                        Application.Current.Dispatcher.Invoke(() => QuestGetItems.Add(getItem));
                         QuestGetItemPropertyChanged(getItem);
                     }
                 }
 
                 QuestRewardItems ??= [];
 
-                for (int i = 0; i < 10; i += 2) 
+                for (int i = 0; i < 5; i += 2) 
                 {
-                    int selectItemCode = (int)selectedItem[$"nSelItemValue{i:00}"];
-                    int selectItemCount = (int)selectedItem[$"nSelItemValue{i + 1:00}"];
+                    int selectItemCode = (int)selectedItem[$"nItemValue{i:00}"];
+                    int selectItemCount = (int)selectedItem[$"nItemValue{i + 1:00}"];
 
                     var selectItemDataViewModel = ItemDataManager.GetItemDataViewModel(selectItemCode, i / 2, selectItemCount);
 
                     if ((i / 2) < QuestRewardItems.Count)
                     {
                         var existingItem = QuestRewardItems[i / 2];
+                        if (existingItem.ItemID != selectItemCode || existingItem.ItemCount != selectItemCount)
+                        {
+                            existingItem.ItemID = selectItemCode;
+                            existingItem.ItemCount = selectItemCount;
+                            existingItem.ItemDataViewModel = selectItemDataViewModel;
+                        }
+
+                        QuestRewardItemPropertyChanged(existingItem);
+                    }
+                    else
+                    {
+                        var selectItem = new Quest
+                        {
+                            ItemID = selectItemCode,
+                            ItemCount = selectItemCount,
+                            ItemDataViewModel = selectItemDataViewModel
+                        };
+
+                        Application.Current.Dispatcher.Invoke(() => QuestRewardItems.Add(selectItem));
+                        QuestRewardItemPropertyChanged(selectItem);
+                    }
+                }
+
+                QuestSelectRewardItems ??= [];
+
+                for (int i = 0; i < 10; i += 2)
+                {
+                    int selectItemCode = (int)selectedItem[$"nSelItemValue{i:00}"];
+                    int selectItemCount = (int)selectedItem[$"nSelItemValue{i + 1:00}"];
+
+                    var selectItemDataViewModel = ItemDataManager.GetItemDataViewModel(selectItemCode, i / 2, selectItemCount);
+
+                    if ((i / 2) < QuestSelectRewardItems.Count)
+                    {
+                        var existingItem = QuestSelectRewardItems[i / 2];
                         if (existingItem.ItemID != selectItemCode || existingItem.ItemCount != selectItemCount)
                         {
                             existingItem.ItemID = selectItemCode;
@@ -883,7 +1076,7 @@ namespace RHToolkit.ViewModels.Windows
                             ItemDataViewModel = selectItemDataViewModel
                         };
 
-                        Application.Current.Dispatcher.Invoke(() => QuestRewardItems.Add(selectItem));
+                        Application.Current.Dispatcher.Invoke(() => QuestSelectRewardItems.Add(selectItem));
                         QuestSelectItemPropertyChanged(selectItem);
                     }
                 }
@@ -955,7 +1148,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             if (sender is Quest questItem)
             {
-                int index = QuestItems.IndexOf(questItem);
+                int index = QuestGetItems.IndexOf(questItem);
                 UpdateSelectedItemValue(questItem.ItemID, $"nGetItem{index:00}");
                 UpdateSelectedItemValue(questItem.ItemCount, $"nGetItemCount{index:00}");
             }
@@ -973,7 +1166,24 @@ namespace RHToolkit.ViewModels.Windows
             if (sender is Quest questItem)
             {
                 int index = QuestItemsValue.IndexOf(questItem);
-                UpdateSelectedItemValue(questItem.ItemID, $"nValue{index:00}");
+                UpdateSelectedItemValue(questItem.Value, $"nValue{index:00}");
+            }
+        }
+
+        private void QuestRewardItemPropertyChanged(Quest item)
+        {
+            item.PropertyChanged -= OnQuestRewardItemPropertyChanged;
+
+            item.PropertyChanged += OnQuestRewardItemPropertyChanged;
+        }
+
+        private void OnQuestRewardItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is Quest questItem)
+            {
+                int index = QuestRewardItems.IndexOf(questItem);
+                UpdateSelectedItemValue(questItem.ItemID, $"nItemValue{index * 2:00}");
+                UpdateSelectedItemValue(questItem.ItemCount, $"nItemValue{index * 2 + 1:00}");
             }
         }
 
@@ -988,7 +1198,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             if (sender is Quest questItem)
             {
-                int index = QuestRewardItems.IndexOf(questItem);
+                int index = QuestSelectRewardItems.IndexOf(questItem);
                 UpdateSelectedItemValue(questItem.ItemID, $"nSelItemValue{index * 2:00}");
                 UpdateSelectedItemValue(questItem.ItemCount, $"nSelItemValue{index * 2 + 1:00}");
             }
@@ -1378,7 +1588,13 @@ namespace RHToolkit.ViewModels.Windows
         private ObservableCollection<Quest> _questItems = [];
 
         [ObservableProperty]
+        private ObservableCollection<Quest> _questGetItems = [];
+
+        [ObservableProperty]
         private ObservableCollection<Quest> _questRewardItems = [];
+
+        [ObservableProperty]
+        private ObservableCollection<Quest> _questSelectRewardItems = [];
 
         [ObservableProperty]
         private ObservableCollection<Quest> _questItemsValue = [];

@@ -89,7 +89,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
                     { "PartyMissionItem", "QuestEditorWindow" },
                     { "QuestItem", "QuestEditorWindow" },
                     { "QuestItems", "QuestEditorWindow" },
+                    { "QuestGetItem", "QuestEditorWindow" },
                     { "QuestRewardItem", "QuestEditorWindow" },
+                    { "QuestSelectRewardItem", "QuestEditorWindow" },
                 };
 
                 if (windowMapping.TryGetValue(MessageType, out var windowName))
@@ -310,6 +312,18 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             },
             ["QuestRewardItem"] = settings =>
             {
+                settings.SlotIndexMax = 2;
+                settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
+            },
+            ["QuestGetItem"] = settings =>
+            {
+                settings.SlotIndexMax = 2;
+                settings.IsSlotVisible = Visibility.Visible;
+                settings.IsItemAmountVisible = Visibility.Visible;
+            },
+            ["QuestSelectRewardItem"] = settings =>
+            {
                 settings.SlotIndexMax = 4;
                 settings.IsSlotVisible = Visibility.Visible;
                 settings.IsItemAmountVisible = Visibility.Visible;
@@ -377,7 +391,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             "PetDeathDropItem" => "Add Pet Death Drop Item",
             "ItemBrokenItem" or "ItemBrokenTargetItem" => "Add Dismantle Item",
             "PartyMissionItem" => "Add Party Mission Item",
-            "QuestItem" or "QuestItems" or "QuestReward" => "Add Quest Item",
+            "QuestItem" or "QuestItems" or "QuestRewardItem" or "QuestGetItem" or "QuestSelectRewardItem" => "Add Quest Item",
             _ => "Add Item",
         };
     }

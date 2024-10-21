@@ -1464,7 +1464,10 @@ public partial class DataTableManager : ObservableObject
                     searchText = matchCase ? searchText : searchText.ToLower();
 
                     // Escape special characters for SQL LIKE pattern 
-                    searchText = searchText.Replace("[", "[[]").Replace("%", "[%]").Replace("_", "[_]");
+                    searchText = searchText.Replace("[", "[[]")
+                                       .Replace("%", "[%]")
+                                       .Replace("_", "[_]")
+                                       .Replace("'", "''");
 
                     string operatorPattern = matchCase ? "{0} LIKE '{1}'" : "{0} LIKE '%{1}%'";
                     List<string> columnFilters = columns
