@@ -52,9 +52,9 @@ namespace RHToolkit.ViewModels.Windows
             {
                 await CloseFile();
 
-                if (int.TryParse(parameter, out int dropGroupType))
+                if (int.TryParse(parameter, out int type))
                 {
-                    string? fileName = GetFileNameFromEnemyType(dropGroupType);
+                    string? fileName = GetFileNameFromEnemyType(type);
                     if (fileName == null) return;
                     int enemyType = GetEnemyTypeFromFileName(fileName);
                     string columnName = GetColumnName(fileName);
@@ -62,7 +62,7 @@ namespace RHToolkit.ViewModels.Windows
 
                     EnemyType = (EnemyType)enemyType;
 
-                    bool isLoaded = await DataTableManager.LoadFileFromPath(fileName, stringFileName, columnName, "Quest");
+                    bool isLoaded = await DataTableManager.LoadFileFromPath(fileName, stringFileName, columnName, "Enemy");
 
                     if (isLoaded)
                     {
@@ -109,7 +109,7 @@ namespace RHToolkit.ViewModels.Windows
 
                     EnemyType = (EnemyType)enemyType;
 
-                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, stringFileName, columnName, "Quest");
+                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, stringFileName, columnName, "Enemy");
 
                     if (isLoaded)
                     {
@@ -131,12 +131,12 @@ namespace RHToolkit.ViewModels.Windows
             OnCanExecuteFileCommandChanged();
         }
 
-        private static string? GetFileNameFromEnemyType(int questType)
+        private static string? GetFileNameFromEnemyType(int type)
         {
-            return questType switch
+            return type switch
             {
                 1 => "enemy.rh",
-                _ => throw new ArgumentOutOfRangeException(nameof(questType)),
+                _ => throw new ArgumentOutOfRangeException(nameof(type)),
             };
         }
 
@@ -158,9 +158,9 @@ namespace RHToolkit.ViewModels.Windows
             };
         }
 
-        private static string? GetStringFileName(int questType)
+        private static string? GetStringFileName(int type)
         {
-            return questType switch
+            return type switch
             {
                 1 => "enemy_string.rh",
                 _ => null,
@@ -202,6 +202,7 @@ namespace RHToolkit.ViewModels.Windows
             OpenMessage = "Open a file";
             EnemyDropGroups?.Clear();
             EnemyConditionResistance?.Clear();
+            SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }
@@ -209,16 +210,6 @@ namespace RHToolkit.ViewModels.Windows
         private bool CanExecuteFileCommand()
         {
             return DataTableManager.DataTable != null;
-        }
-
-        private bool CanExecuteSelectedItemCommand()
-        {
-            return DataTableManager.SelectedItem != null;
-        }
-
-        private void OnCanExecuteSelectedItemCommandChanged()
-        {
-
         }
 
         private void OnCanExecuteFileCommandChanged()
@@ -549,7 +540,6 @@ namespace RHToolkit.ViewModels.Windows
             }
 
             _isUpdatingSelectedItem = false;
-            OnCanExecuteSelectedItemCommandChanged();
         }
 
         private void EnemyDropGroupItemPropertyChanged(Enemy item)

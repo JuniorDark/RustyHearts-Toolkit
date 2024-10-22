@@ -975,4 +975,22 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="CharacterEdit" xml:space="preserve">
+    <value>Character Edit</value>
+  </data>
+  <data name="CharacterRestore" xml:space="preserve">
+    <value>Character Restore</value>
+  </data>
+  <data name="Coupon" xml:space="preserve">
+    <value>Coupon</value>
+  </data>
+  <data name="EditTools" xml:space="preserve">
+    <value>Edit Tools</value>
+  </data>
+  <data name="SQLiteDatabase" xml:space="preserve">
+    <value>SQLite Database</value>
+  </data>
+  <data name="SQLiteDatabaseManager" xml:space="preserve">
+    <value>SQLite Database Manager</value>
+  </data>
 </root>

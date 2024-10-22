@@ -1,0 +1,1176 @@
+﻿<Window
+    x:Class="RHToolkit.Views.Windows.AddEffectEditorWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:bh="clr-namespace:RHToolkit.Behaviors"
+    xmlns:control="clr-namespace:RHToolkit.Views.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:RHToolkit.Utilities.Converters"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
+    Title="{Binding Title}"
+    MinWidth="1280"
+    MinHeight="720"
+    MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
+    bh:WindowBehaviors.EnableDragMove="True"
+    d:DataContext="{d:DesignInstance Type=windows:AddEffectEditorViewModel}"
+    d:MaxHeight="720"
+    d:MaxWidth="1280"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="/Assets/icon/icon_con_lightning.png"
+    ResizeMode="CanResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding LoadFileCommand}" Gesture="Ctrl+O" />
+        <KeyBinding Command="{Binding LoadFileAsCommand}" Gesture="Ctrl+Shift+O" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileCommand}" Gesture="Ctrl+S" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
+        <KeyBinding Command="{Binding DataTableManager.SaveFileAsMIPCommand}" Gesture="Ctrl+Shift+S" />
+        <KeyBinding Command="{Binding CloseFileCommand}" Gesture="Ctrl+W" />
+        <KeyBinding
+            Command="{Binding OpenSearchDialogCommand}"
+            CommandParameter="Find"
+            Gesture="Ctrl+F" />
+        <KeyBinding
+            Command="{Binding OpenSearchDialogCommand}"
+            CommandParameter="Replace"
+            Gesture="Ctrl+H" />
+    </Window.InputBindings>
+    <ContentControl Template="{StaticResource box_violet02}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ui:TitleBar
+                x:Name="TitleBar"
+                Title="{Binding Title}"
+                Grid.ColumnSpan="3"
+                Height="30"
+                Margin="30,0,0,0"
+                VerticalAlignment="Center"
+                d:Title="AddEffect Editor"
+                ButtonsForeground="White"
+                FontSize="15"
+                Foreground="White">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon
+                        Width="20"
+                        Height="20"
+                        Margin="0,-1,0,-3"
+                        Source="/Assets/icon/icon_con_lightning.png" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+
+            <control:EditorMenu Grid.Row="1" />
+
+            <Grid
+                Grid.Row="1"
+                Grid.RowSpan="4"
+                Grid.Column="1"
+                Visibility="{Binding IsSelectedItemVisible}">
+                <UniformGrid Columns="3">
+                    <FrameworkElement x:Name="c1" />
+                </UniformGrid>
+                <TabControl
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Visibility="{Binding IsSelectedItemVisible}">
+                    <TabItem
+                        x:Name="tab1"
+                        Width="{Binding ElementName=c1, Path=ActualWidth}"
+                        Height="Auto"
+                        Foreground="White"
+                        Header="Details"
+                        Style="{StaticResource lb_tab}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="ID" />
+                                <ui:NumberBox
+                                    Width="150"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
+                                    Minimum="0"
+                                    Value="{Binding DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </ui:NumberBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Type" />
+                                <ui:NumberBox
+                                    Width="150"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
+                                    Minimum="0"
+                                    Value="{Binding DataTableManager.SelectedItem[nType], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </ui:NumberBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Sub Type" />
+                                <ui:NumberBox
+                                    Width="150"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
+                                    Minimum="0"
+                                    Value="{Binding DataTableManager.SelectedItem[nSubType], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nSubType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </ui:NumberBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="1"
+                                Grid.Column="2"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Sub AddEffect ID" />
+                                <ui:NumberBox
+                                    Width="150"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
+                                    Minimum="0"
+                                    Value="{Binding DataTableManager.SelectedItem[nSubAddEffectID], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nSubAddEffectID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </ui:NumberBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Group" />
+                                <ui:NumberBox
+                                    Width="150"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
+                                    Minimum="0"
+                                    Value="{Binding DataTableManager.SelectedItem[nGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </ui:NumberBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Group Level" />
+                                <ui:NumberBox
+                                    Width="150"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
+                                    Minimum="0"
+                                    Value="{Binding DataTableManager.SelectedItem[nGroupLv], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nGroupLv" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </ui:NumberBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <CheckBox
+                                    Margin="0,0,0,0"
+                                    Content="Print"
+                                    Foreground="White"
+                                    IsChecked="{Binding DataTableManager.SelectedItem[nPrint], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    Template="{StaticResource lb_checkbox}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nPrint" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </CheckBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <CheckBox
+                                    Margin="0,0,0,0"
+                                    Content="Pet Passive"
+                                    Foreground="White"
+                                    IsChecked="{Binding DataTableManager.SelectedItem[nPetPassive], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    Template="{StaticResource lb_checkbox}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nPetPassive" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </CheckBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="2"
+                                Grid.Column="2"
+                                Margin="5,0,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <CheckBox
+                                    Margin="0,0,0,0"
+                                    Content="Stack Option"
+                                    Foreground="White"
+                                    IsChecked="{Binding DataTableManager.SelectedItem[nStackOption], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    Template="{StaticResource lb_checkbox}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="nStackOption" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </CheckBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Icon" />
+                                <TextBox
+                                    Width="500"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="szIcon"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szIcon], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szIcon" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="3"
+                                Grid.Column="2"
+                                Margin="20,10,0,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <Image
+                                    Width="36"
+                                    Height="36"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Source="{Binding DataContext.DataTableManager.SelectedItem[szIcon], RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource IconNameToImageSourceConverter}}"
+                                    Stretch="Fill">
+                                    <Image.LayoutTransform>
+                                        <ScaleTransform ScaleX="1" ScaleY="1" />
+                                    </Image.LayoutTransform>
+                                </Image>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Name" />
+                                <TextBox
+                                    Width="600"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="wszName"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItemString[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="5"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Description" />
+                                <TextBox
+                                    Width="600"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="wszDescription"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItemString[wszDescription], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    TextWrapping="Wrap">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszDescription" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="6"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Desc" />
+                                <TextBox
+                                    Width="600"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="wszDesc"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItemString[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    TextWrapping="Wrap">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszDesc" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="7"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Name (Internal)" />
+                                <TextBox
+                                    Width="600"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="wszName"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="8"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Description (Internal)" />
+                                <TextBox
+                                    Width="600"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="wszDescription"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[wszDescription], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    TextWrapping="Wrap">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszDescription" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="9"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Desc (Internal)" />
+                                <TextBox
+                                    Width="600"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="wszDesc"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    TextWrapping="Wrap">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszDesc" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="10"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Note" />
+                                <TextBox
+                                    Width="600"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="wszNote"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[wszNote], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    TextWrapping="Wrap">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszNote" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="11"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="4"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Scroll Desc" />
+                                <TextBox
+                                    Width="600"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="wszScrollDesc"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[wszScrollDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                    TextWrapping="Wrap">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="wszScrollDesc" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                        </Grid>
+                    </TabItem>
+                    <TabItem
+                        x:Name="tab2"
+                        Width="{Binding ElementName=c1, Path=ActualWidth}"
+                        Foreground="White"
+                        Header="Data"
+                        Style="{StaticResource lb_tab}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <StackPanel
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Clear Group" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szClearGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szClearGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Block Group" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szBlockGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szBlockGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="1"
+                                Grid.ColumnSpan="2"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Mdata Name 01" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szMdataName00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szMdataName00" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Dummy Name 01" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szDummyName00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szDummyName00" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Dummy Name 02" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szDummyName01], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szDummyName01" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Mdata Name 02" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szMdataName01], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szMdataName01" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Mdata Name 03" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szMdataName02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szMdataName02" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Motion Name 01" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szMotionName00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szMotionName00" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Motion Name 02" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szMotionName01], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szMotionName01" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="5"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Start Motion Name" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szStartMotionName02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szStartMotionName02" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Stay Motion Name" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szStayMotionName02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szStayMotionName02" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="6"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="End Motion Name" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szEndMotionName02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szEndMotionName02" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Mdata Scale" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[fMdtaScale02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="fMdtaScale02" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="7"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Target" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szTarget], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szTarget" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="7"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Pet Target" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szPetTarget], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szPetTarget" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="8"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Wild Card Param" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szWildCardParam], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szWildCardParam" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="8"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Wild Card Value" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szWildCardValue], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szWildCardValue" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="9"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Type Name" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szTypeName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szTypeName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="9"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Target" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szT_Target], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szT_Target" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                            <StackPanel
+                                Grid.Row="10"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Pet Target" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szT_PetTarget], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szT_PetTarget" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+                            <StackPanel
+                                Grid.Row="10"
+                                Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical">
+                                <TextBlock Foreground="White" Text="Target" />
+                                <TextBox
+                                    Width="Auto"
+                                    Height="30"
+                                    Margin="0,0"
+                                    d:Text="Name"
+                                    FontSize="12"
+                                    Template="{StaticResource lb_textbox11}"
+                                    Text="{Binding DataTableManager.SelectedItem[szT_Target], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                    <i:Interaction.Behaviors>
+                                        <bh:DataRowViewBehavior Column="szT_Target" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                    </i:Interaction.Behaviors>
+                                </TextBox>
+                            </StackPanel>
+
+                        </Grid>
+                    </TabItem>
+                    <TabItem
+                        x:Name="tab3"
+                        Width="{Binding ElementName=c1, Path=ActualWidth}"
+                        Foreground="White"
+                        Header="Values"
+                        Style="{StaticResource lb_tab}">
+                        <ItemsControl AlternationCount="{Binding AddEffectValues.Count}" ItemsSource="{Binding AddEffectValues}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel
+                                        Margin="0,0,0,0"
+                                        VerticalAlignment="Top"
+                                        Orientation="Vertical">
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            Foreground="White"
+                                            Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat=' Description {0}'}" />
+                                        <TextBox
+                                            Width="Auto"
+                                            Height="30"
+                                            Margin="0,0,0,0"
+                                            d:Text="Name"
+                                            FontSize="12"
+                                            Template="{StaticResource lb_textbox11}"
+                                            Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            Foreground="White"
+                                            Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat=' Value {0}'}" />
+                                        <ui:NumberBox
+                                            Width="200"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top"
+                                            Maximum="2147483647"
+                                            Minimum="0"
+                                            Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+
+            <DataGrid
+                x:Name="dataGridView"
+                Grid.Row="3"
+                Grid.Column="0"
+                Height="450"
+                MinWidth="550"
+                Margin="5,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                bh:DataGridBehavior.EnableScrollIntoView="True"
+                bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
+                AutoGenerateColumns="False"
+                Background="Transparent"
+                BorderBrush="#FF0F0D0A"
+                CanUserAddRows="False"
+                ColumnWidth="*"
+                EnableRowVirtualization="True"
+                FontFamily="{StaticResource ArialUnicodeMS}"
+                FontSize="12"
+                HeadersVisibility="Column"
+                HorizontalGridLinesBrush="White"
+                HorizontalScrollBarVisibility="Auto"
+                ItemsSource="{Binding DataTableManager.DataTable}"
+                SelectedItem="{Binding DataTableManager.SelectedItem}"
+                SelectionMode="Single"
+                SelectionUnit="FullRow"
+                Template="{StaticResource lb_datagrid}"
+                VerticalGridLinesBrush="White"
+                Visibility="{Binding IsVisible}">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
+                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.InputBindings>
+                    <KeyBinding
+                        Key="I"
+                        Command="{Binding DataTableManager.AddNewRowCommand}"
+                        Modifiers="Ctrl" />
+                    <KeyBinding
+                        Key="D"
+                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                        Modifiers="Control" />
+                    <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
+                    <KeyBinding
+                        Key="Z"
+                        Command="{Binding DataTableManager.UndoChangesCommand}"
+                        Modifiers="Ctrl" />
+                    <KeyBinding
+                        Key="Z"
+                        Command="{Binding DataTableManager.RedoChangesCommand}"
+                        Modifiers="Ctrl+Shift" />
+                    <KeyBinding
+                        Key="F"
+                        Command="{Binding OpenSearchDialogCommand}"
+                        CommandParameter="Find"
+                        Modifiers="Ctrl" />
+                </DataGrid.InputBindings>
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="Auto"
+                        Binding="{Binding nID}"
+                        Header="ID"
+                        IsReadOnly="True" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding wszName}"
+                        Header="{x:Static rs:Resources.Name}"
+                        IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <Grid
+                Grid.Row="4"
+                Grid.Column="0"
+                Visibility="{Binding IsVisible}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    d:Text="Showing {0}/{1} Items"
+                    Foreground="Gold"
+                    Style="{StaticResource ArialMS}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                            <Binding ElementName="dataGridView" Path="Items.Count" />
+                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Orientation="Horizontal">
+                    <Label
+                        x:Name="lbSearch"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Content="{x:Static rs:Resources.Search}"
+                        Style="{StaticResource ArialMSWhite}" />
+                    <TextBox
+                        x:Name="tbSearch"
+                        Width="250"
+                        Height="34"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        CaretBrush="White"
+                        Foreground="Gold"
+                        Tag="{x:Static rs:Resources.SearchNameID}"
+                        Template="{StaticResource lb_textbox}"
+                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <CheckBox
+                        x:Name="MatchCaseCheckBox"
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Top"
+                        Content="Match Case"
+                        IsChecked="{Binding MatchCase}"
+                        Template="{StaticResource lb_checkbox}" />
+                </StackPanel>
+            </Grid>
+            <TextBlock
+                Grid.Row="3"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="15"
+                Foreground="White"
+                Text="{Binding OpenMessage}" />
+        </Grid>
+    </ContentControl>
+</Window>

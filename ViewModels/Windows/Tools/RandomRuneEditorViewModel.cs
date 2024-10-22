@@ -145,6 +145,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             Title = $"Random Rune Editor";
             OpenMessage = "Open a file";
+            SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }

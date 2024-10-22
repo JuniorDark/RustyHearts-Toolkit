@@ -975,4 +975,22 @@
   <data name="Yes" xml:space="preserve">
     <value>예</value>
   </data>
+  <data name="CharacterEdit" xml:space="preserve">
+    <value>캐릭터 편집</value>
+  </data>
+  <data name="CharacterRestore" xml:space="preserve">
+    <value>캐릭터 복구</value>
+  </data>
+  <data name="Coupon" xml:space="preserve">
+    <value>쿠폰</value>
+  </data>
+  <data name="EditTools" xml:space="preserve">
+    <value>편집 도구</value>
+  </data>
+  <data name="SQLiteDatabase" xml:space="preserve">
+    <value>SQLite 데이터베이스</value>
+  </data>
+  <data name="SQLiteDatabaseManager" xml:space="preserve">
+    <value>SQLite 데이터베이스 관리자</value>
+  </data>
 </root>

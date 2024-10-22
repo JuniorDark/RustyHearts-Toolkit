@@ -198,7 +198,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             Title = $"Item Editor";
             OpenMessage = "Open a file";
-            SearchText = "";
+            SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             ItemType = 0;
             OnCanExecuteFileCommandChanged();

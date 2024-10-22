@@ -26,6 +26,7 @@ To start using the Rusty Hearts Toolkit, download the latest release from the [G
 ### Table Editor Tools
 - **Table Editor:** Edit `.rh` table files on the go and export them to various formats, including XML, XLSX, and MIP.
 - **Specialized Table Editors:**
+- **AddEffect Editor:** Edit addeffect file.
 - **Cash Shop Editor:** Cash shop items (cashshoplist.rh).
 - **Item Editor:** Items (itemlist.rh, itemlist_armor.rh, itemlist_costume.rh, itemlist_weapon.rh).
 - **Item Drop Group Editor** Item drops (itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh, riddleboxdropgrouplist.rh, rarecarddropgrouplist.rh, rarecardrewarditemlist.rh).
@@ -52,7 +53,7 @@ The toolkit curently supports 2 languages. You can change the language in the `S
 To set up the toolkit and generate the necessary SQLite database:
 
 1. Navigate to the `SQLite Database Manager` page.
-2. Select the folder containing the `.rh` table files.
+2. Select the `table` folder containing the `.rh` table files.
 3. Click `Create Database` to generate the `gmdb_(Lang).db` database in the `Resources` folder.
 4. Place the extracted game sprites `\ui\sprite\1024` in the `Resources` folder.
 5. Navigate to the `Settings` page and set the `SQL Server` credentials.
@@ -104,15 +105,9 @@ A: Fork the repository, make your changes, and submit a pull request.
 ### SQLite Databases
 - **Portable Databases:** Enemy/Item/Skills.
 
-### Database Tools
-- **Character Skills**
-- **Character Quests**
-- **Character Pets**
-
 ### Specialized Table Editors
-- **Add Effect Editor**
 - **Skill Editor**
-- **World/Map Editor**
+- **World Editor**
 
 ## Credits
 

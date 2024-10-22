@@ -143,7 +143,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             Title = $"NPC Editor";
             OpenMessage = "Open a file";
-            SearchText = "";
+            SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }

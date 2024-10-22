@@ -20,33 +20,6 @@
             d:Text="Appearance"
             FontTypography="BodyStrong"
             Text="{x:Static rs:Resources.Appearance}" />
-        <ui:CardControl Margin="0,0,0,12" Icon="{ui:SymbolIcon Color24}">
-            <ui:CardControl.Header>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <ui:TextBlock
-                        Grid.Row="0"
-                        d:Text="App theme"
-                        FontTypography="Body"
-                        Text="{x:Static rs:Resources.AppTheme}" />
-                    <ui:TextBlock
-                        Grid.Row="1"
-                        d:Text="Select which app theme to display"
-                        Foreground="{ui:ThemeResource TextFillColorSecondaryBrush}"
-                        Text="{x:Static rs:Resources.AppThemeDesc}" />
-                </Grid>
-            </ui:CardControl.Header>
-            <ComboBox
-                x:Name="cmbAppTheme"
-                Grid.Column="1"
-                MinWidth="200"
-                ItemsSource="{Binding ViewModel.Themes}"
-                SelectedIndex="{Binding ViewModel.CurrentApplicationTheme, Converter={StaticResource ThemeToIndexConverter}, Mode=TwoWay}" />
-        </ui:CardControl>
-
         <ui:CardControl Margin="0,0,0,12" Icon="{ui:SymbolIcon LocalLanguage24}">
             <ui:CardControl.Header>
                 <Grid>
@@ -167,10 +140,12 @@
                         Grid.Column="0"
                         FontTypography="Body"
                         Text="{x:Static rs:Resources.AppTitle}" />
-                    <ui:TextBlock
+                    <ui:HyperlinkButton
                         Grid.Row="1"
                         Grid.Column="0"
-                        Text="© 2024 JuniorDark" />
+                        Content="© 2024 JuniorDark"
+                        NavigateUri="https://forum.ragezone.com/members/juniordark.1333434657"
+                        ToolTip="https://forum.ragezone.com/members/juniordark.1333434657" />
                     <TextBlock
                         Grid.Row="0"
                         Grid.RowSpan="2"
@@ -195,7 +170,11 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="{x:Static rs:Resources.GithubRepository}" />
+                        <ui:HyperlinkButton
+                            Grid.Column="0"
+                            Content="{x:Static rs:Resources.GithubRepository}"
+                            NavigateUri="https://github.com/JuniorDark/RHToolkit"
+                            ToolTip="https://github.com/JuniorDark/RHToolkit" />
                         <ui:SymbolIcon Grid.Column="1" Symbol="Link24" />
                     </Grid>
                 </ui:Anchor>

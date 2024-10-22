@@ -231,6 +231,7 @@ namespace RHToolkit.ViewModels.Windows
             ItemMix?.Clear();
             NpcShopItem?.Clear();
             NpcShopItems?.Clear();
+            SearchText = string.Empty;
             OnCanExecuteFileCommandChanged();
         }
 

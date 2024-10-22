@@ -110,6 +110,8 @@ public partial class App : Application
                 _ = services.AddTransient<QuestEditorViewModel>();
                 _ = services.AddTransient<EnemyEditorWindow>();
                 _ = services.AddTransient<EnemyEditorViewModel>();
+                _ = services.AddTransient<AddEffectEditorWindow>();
+                _ = services.AddTransient<AddEffectEditorViewModel>();
                 // SQLite services and viewmodels
                 _ = services.AddTransient<ItemWindow>();
                 _ = services.AddTransient<ItemWindowViewModel>();

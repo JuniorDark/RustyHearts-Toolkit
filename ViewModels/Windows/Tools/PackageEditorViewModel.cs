@@ -203,6 +203,7 @@ namespace RHToolkit.ViewModels.Windows
             PackageTeplateType = 0;
             PackageItems?.Clear();
             PackageEffects?.Clear();
+            SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }

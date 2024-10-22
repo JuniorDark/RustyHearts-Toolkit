@@ -19,18 +19,19 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
     [ObservableProperty]
     private WindowCard[] _windowCardsTools =
     [
+        new("Add Effect Editor", "Edit addeffect .rh table files", SymbolRegular.DocumentEdit24, "addeffecteditor"),
         new("Cash Shop Editor", "Edit cash shop .rh table file", SymbolRegular.DocumentEdit24, "cashshopeditor"),
-        new("Package Editor", "Edit package .rh table files", SymbolRegular.DocumentEdit24, "packageeditor"),
-        new("Set Item Editor", "Edit setitem .rh table file", SymbolRegular.DocumentEdit24, "setitemeditor"),
-        new("Random Box Editor", "Edit randomrune .rh table file", SymbolRegular.DocumentEdit24, "randomruneeditor"),
         new("Drop Group Editor", "Edit dropgroup .rh table files", SymbolRegular.DocumentEdit24, "dropgroupeditor"),
+        new("Enemy Editor", "Edit enemy .rh table files", SymbolRegular.DocumentEdit24, "enemyeditor"),
+        new("Item Editor", "Edit items .rh table files", SymbolRegular.DocumentEdit24, "itemeditor"),
         new("NPC Editor", "Edit npc .rh table files", SymbolRegular.DocumentEdit24, "npceditor"),
         new("NPC Shop Editor", "Edit npcshop .rh table files", SymbolRegular.DocumentEdit24, "npcshopeditor"),
-        new("Title Editor", "Edit title .rh table file", SymbolRegular.DocumentEdit24, "titleeditor"),
-        new("Item Editor", "Edit items .rh table files", SymbolRegular.DocumentEdit24, "itemeditor"),
+        new("Package Editor", "Edit package .rh table files", SymbolRegular.DocumentEdit24, "packageeditor"),
         new("Pet Editor", "Edit pet .rh table file", SymbolRegular.DocumentEdit24, "peteditor"),
         new("Quest Editor", "Edit quest .rh table files", SymbolRegular.DocumentEdit24, "questeditor"),
-        new("Enemy Editor", "Edit enemy .rh table files", SymbolRegular.DocumentEdit24, "enemyeditor"),
+        new("Random Box Editor", "Edit randomrune .rh table file", SymbolRegular.DocumentEdit24, "randomruneeditor"),
+        new("Set Item Editor", "Edit setitem .rh table file", SymbolRegular.DocumentEdit24, "setitemeditor"),
+        new("Title Editor", "Edit title .rh table file", SymbolRegular.DocumentEdit24, "titleeditor"),
 
     ];
 
@@ -89,6 +90,9 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
                     break;
                 case "enemyeditor":
                     windowsProviderService.Show<EnemyEditorWindow>(true);
+                    break;
+                case "addeffecteditor":
+                    windowsProviderService.Show<AddEffectEditorWindow>(true);
                     break;
             }
         }

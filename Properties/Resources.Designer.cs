@@ -331,6 +331,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Character Edit.
+        /// </summary>
+        public static string CharacterEdit {
+            get {
+                return ResourceManager.GetString("CharacterEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Character Editor.
         /// </summary>
         public static string CharacterEditor {
@@ -345,6 +354,15 @@ namespace RHToolkit.Properties {
         public static string CharacterEditorDesc {
             get {
                 return ResourceManager.GetString("CharacterEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character Restore.
+        /// </summary>
+        public static string CharacterRestore {
+            get {
+                return ResourceManager.GetString("CharacterRestore", resourceCulture);
             }
         }
         
@@ -408,6 +426,15 @@ namespace RHToolkit.Properties {
         public static string CostumePack {
             get {
                 return ResourceManager.GetString("CostumePack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coupon.
+        /// </summary>
+        public static string Coupon {
+            get {
+                return ResourceManager.GetString("Coupon", resourceCulture);
             }
         }
         
@@ -498,6 +525,15 @@ namespace RHToolkit.Properties {
         public static string EditItemHelp {
             get {
                 return ResourceManager.GetString("EditItemHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Tools.
+        /// </summary>
+        public static string EditTools {
+            get {
+                return ResourceManager.GetString("EditTools", resourceCulture);
             }
         }
         
@@ -2379,6 +2415,24 @@ namespace RHToolkit.Properties {
         public static string SQLInfo {
             get {
                 return ResourceManager.GetString("SQLInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SQLite Database.
+        /// </summary>
+        public static string SQLiteDatabase {
+            get {
+                return ResourceManager.GetString("SQLiteDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SQLite Database Manager.
+        /// </summary>
+        public static string SQLiteDatabaseManager {
+            get {
+                return ResourceManager.GetString("SQLiteDatabaseManager", resourceCulture);
             }
         }
         

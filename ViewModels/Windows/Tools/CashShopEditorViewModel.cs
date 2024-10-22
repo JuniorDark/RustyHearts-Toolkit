@@ -229,6 +229,7 @@ namespace RHToolkit.ViewModels.Windows
             ItemDataViewModel = null;
             Title = $"Cash Shop Editor";
             OpenMessage = "Open a file";
+            SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }

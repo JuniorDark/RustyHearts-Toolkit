@@ -235,6 +235,7 @@ namespace RHToolkit.ViewModels.Windows
             DropItemCountTotal = 0;
             DropItemCountTotalValue = 0;
             DropGroupItems?.Clear();
+            SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }

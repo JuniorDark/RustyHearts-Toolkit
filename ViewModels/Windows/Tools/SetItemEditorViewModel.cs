@@ -143,7 +143,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             Title = $"Set Item Editor";
             OpenMessage = "Open a file";
-            SearchText = "";
+            SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }

@@ -158,8 +158,8 @@ namespace RHToolkit.ViewModels.Windows
         {
             Title = $"Title Editor";
             OpenMessage = "Open a file";
-            SearchText = "";
-            AddEffectSearch = "";
+            SearchText = string.Empty;
+            AddEffectSearch = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }

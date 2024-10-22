@@ -1,47 +1,43 @@
 ﻿using Microsoft.Win32;
 using RHToolkit.Messages;
-using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Properties;
 using RHToolkit.Services;
+using RHToolkit.ViewModels.Windows.Tools.VM;
 using RHToolkit.Views.Windows;
+using System.ComponentModel;
 using System.Data;
 using System.Windows.Controls;
 
 namespace RHToolkit.ViewModels.Windows
 {
-    public partial class PetEditorViewModel : ObservableObject, IRecipient<ItemDataMessage>, IRecipient<DataRowViewMessage>
+    public partial class AddEffectEditorViewModel : ObservableObject, IRecipient<DataRowViewMessage>
     {
         private readonly Guid _token;
         private readonly IWindowsService _windowsService;
         private readonly IGMDatabaseService _gmDatabaseService;
         private readonly System.Timers.Timer _filterUpdateTimer;
 
-        public PetEditorViewModel(IWindowsService windowsService, IGMDatabaseService gmDatabaseService, ItemDataManager itemDataManager)
+        public AddEffectEditorViewModel(IWindowsService windowsService, IGMDatabaseService gmDatabaseService, ItemDataManager itemDataManager)
         {
             _token = Guid.NewGuid();
             _windowsService = windowsService;
             _gmDatabaseService = gmDatabaseService;
             _itemDataManager = itemDataManager;
-
             DataTableManager = new()
             {
                 Token = _token
             };
-
             _filterUpdateTimer = new()
             {
-                Interval = 400,
+                Interval = 500,
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
-            
-            PopulateListItems();
 
-            WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
-            WeakReferenceMessenger.Default.Register<DataRowViewMessage>(this);
+            WeakReferenceMessenger.Default.Register(this);
         }
 
         #region Commands 
@@ -55,7 +51,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 await CloseFile();
 
-                bool isLoaded = await DataTableManager.LoadFileFromPath("pet.rh", "pet_string.rh", "nPetType", "Pet");
+                bool isLoaded = await DataTableManager.LoadFileFromPath("addeffect.rh", "addeffect_string.rh", "nSubAddEffectID", "AddEffect");
 
                 if (isLoaded)
                 {
@@ -75,8 +71,8 @@ namespace RHToolkit.ViewModels.Windows
             {
                 await CloseFile();
 
-                string filter = "Pet Files|" +
-                                "pet.rh|" +
+                string filter = "addeffect.rh|" +
+                                "addeffect.rh|" +
                                 "All Files (*.*)|*.*";
 
                 OpenFileDialog openFileDialog = new()
@@ -87,18 +83,9 @@ namespace RHToolkit.ViewModels.Windows
 
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    string selectedFileName = Path.GetFileName(openFileDialog.FileName);
+                    string fileName = Path.GetFileName(openFileDialog.FileName);
 
-                    int petType = selectedFileName switch
-                    {
-                        "pet.rh" => 1,
-                        _ => throw new Exception($"The file '{selectedFileName}' is not a valid pet file."),
-                    };
-
-                    string? fileName = GetFileName(petType);
-                    string? stringFileName = GetStringFileName(petType);
-
-                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, stringFileName, "nPetType", "Pet");
+                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, "charactertitle_string.rh", "nSubAddEffectID", "AddEffect");
 
                     if (isLoaded)
                     {
@@ -112,27 +99,9 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
-        private static string? GetFileName(int petType)
-        {
-            return petType switch
-            {
-                1 => "pet.rh",
-                _ => throw new ArgumentOutOfRangeException(nameof(petType)),
-            };
-        }
-
-        private static string? GetStringFileName(int petType)
-        {
-            return petType switch
-            {
-                1 => "pet_string.rh",
-                _ => throw new ArgumentOutOfRangeException(nameof(petType)),
-            };
-        }
-
         private void IsLoaded()
         {
-            Title = $"Pet Editor ({DataTableManager.CurrentFileName})";
+            Title = $"Add Effect Editor ({DataTableManager.CurrentFileName})";
             OpenMessage = "";
             IsVisible = Visibility.Visible;
             OnCanExecuteFileCommandChanged();
@@ -143,16 +112,14 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? shopEditorWindow = Application.Current.Windows.OfType<PetEditorWindow>().FirstOrDefault();
-                Window owner = shopEditorWindow ?? Application.Current.MainWindow;
+                Window? addEffectEditorWindow = Application.Current.Windows.OfType<AddEffectEditorWindow>().FirstOrDefault();
+                Window owner = addEffectEditorWindow ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
-
             }
             catch (Exception ex)
             {
                 RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
             }
-
         }
 
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
@@ -171,8 +138,9 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            Title = $"Pet Editor";
+            Title = $"Add Effect Editor";
             OpenMessage = "Open a file";
+            AddEffectValues?.Clear();
             SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
@@ -181,11 +149,6 @@ namespace RHToolkit.ViewModels.Windows
         private bool CanExecuteFileCommand()
         {
             return DataTableManager.DataTable != null;
-        }
-
-        private bool CanExecuteSelectedItemCommand()
-        {
-            return DataTableManager.SelectedItem != null;
         }
 
         private void OnCanExecuteFileCommandChanged()
@@ -198,127 +161,23 @@ namespace RHToolkit.ViewModels.Windows
         #endregion
 
         #region Add Row
-
         [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
         private void AddRow()
         {
             try
             {
-                DataTableManager.StartGroupingEdits();
                 DataTableManager.AddNewRow();
-                if (DataTableManager.SelectedItem != null)
-                {
-                    DataTableManager.SelectedItem["wszName"] = "New Pet";
-                }
-
-                if (DataTableManager.SelectedItemString != null)
-                {
-                    DataTableManager.SelectedItemString["wszName"] = "New Pet";
-                }
-                DataTableManager.EndGroupingEdits();
             }
             catch (Exception ex)
             {
                 RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
             }
         }
-        #endregion
-
-        #region Add Item
-
-        [RelayCommand]
-        private void AddPetDeathDropItem()
-        {
-            try
-            {
-                if (DataTableManager.SelectedItem != null)
-                {
-                    var itemCode = (int)DataTableManager.SelectedItem[$"nDeathDropItemID"];
-
-                    var itemData = new ItemData
-                    {
-                        ItemId = itemCode
-                    };
-
-                    _windowsService.OpenItemWindow(_token, "PetDeathDropItem", itemData);
-                }
-            }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
-            }
-        }
-
-        public void Receive(ItemDataMessage message)
-        {
-            if (message.Recipient == "PetEditorWindow" && message.Token == _token)
-            {
-                var itemData = message.Value;
-
-                if (DataTableManager.SelectedItem != null)
-                {
-                    var itemCode = itemData.ItemId;
-                    UpdateSelectedItemValue(itemCode, "nDeathDropItemID");
-
-                    var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, 1);
-
-                    ItemDataManager.ItemDataViewModel = itemDataViewModel!;
-                }
-            }
-        }
-
-        #endregion
-
-        #region Remove Item
-
-        [RelayCommand]
-        private void RemovePetDeathDropItem()
-        {
-            if (DataTableManager.SelectedItem != null)
-            {
-                UpdateSelectedItemValue(0, "nDeathDropItemID");
-            }
-        }
-        #endregion
-
-        #region DataRowViewMessage
-        public void Receive(DataRowViewMessage message)
-        {
-            if (message.Token == _token)
-            {
-                var selectedItem = message.Value;
-
-                UpdateSelectedItem(selectedItem);
-            }
-        }
-
-        private void UpdateSelectedItem(DataRowView? selectedItem)
-        {
-            _isUpdatingSelectedItem = true;
-
-            if (selectedItem != null)
-            {
-                var itemCode = (int)selectedItem[$"nDeathDropItemID"];
-                var itemDataViewModel = ItemDataManager.GetItemDataViewModel(itemCode, 0, 1);
-
-                ItemDataManager.ItemDataViewModel = itemDataViewModel!;
-
-                IsSelectedItemVisible = Visibility.Visible;
-            }
-            else
-            {
-                IsSelectedItemVisible = Visibility.Hidden;
-            }
-
-            _isUpdatingSelectedItem = false;
-        }
-
         #endregion
 
         #endregion
 
         #region Filter
-
         private void ApplyFilter()
         {
             List<string> filterParts = [];
@@ -326,8 +185,18 @@ namespace RHToolkit.ViewModels.Windows
             List<string> columns = [];
 
             columns.Add("CONVERT(nID, 'System.String')");
-            columns.Add("wszName");
-            columns.Add("szIcon");
+            columns.Add("CONVERT(wszName, 'System.String')");
+            columns.Add("CONVERT(wszDesc, 'System.String')");
+            columns.Add("CONVERT(szIcon, 'System.String')");
+            columns.Add("CONVERT(wszDescription, 'System.String')");
+            columns.Add("CONVERT(wszDescription, 'System.String')");
+            columns.Add("CONVERT(szTypeName, 'System.String')");
+
+            for (int i = 0; i < 6; i++)
+            {
+                columns.Add($"CONVERT(szDesc{i:00}, 'System.String')");
+                columns.Add($"CONVERT(fValue{i:00}, 'System.String')");
+            }
 
             if (columns.Count > 0)
             {
@@ -365,32 +234,87 @@ namespace RHToolkit.ViewModels.Windows
         }
         #endregion
 
-        #region Comboboxes
-
-        [ObservableProperty]
-        private List<NameID>? _stringItems;
-
-        [ObservableProperty]
-        private List<NameID>? _petRebirthItems;
-
-        private void PopulateListItems()
+        #region DataRowViewMessage
+        public void Receive(DataRowViewMessage message)
         {
-            try
+            if (message.Token == _token)
             {
-                PetRebirthItems = _gmDatabaseService.GetPetRebirthItems();
-                StringItems = _gmDatabaseService.GetStringItems();
+                var selectedItem = message.Value;
+
+                UpdateAddEffectSelectedItem(selectedItem);
             }
-            catch (Exception ex)
-            {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
-            }
-            
         }
+
+        #region AddEffect
+        private void UpdateAddEffectSelectedItem(DataRowView? selectedItem)
+        {
+            _isUpdatingSelectedItem = true;
+
+            if (selectedItem != null)
+            {
+                AddEffectValues ??= [];
+
+                for (int i = 0; i < 6; i++)
+                {
+                    string description = (string)selectedItem[$"szDesc{i:00}"];
+                    double value = (float)selectedItem[$"fValue{i:00}"];
+
+                    if (i < AddEffectValues.Count)
+                    {
+                        var existingItem = AddEffectValues[i];
+
+                        existingItem.Description = description;
+                        existingItem.Value = value;
+
+                        AddEffectValuesItemPropertyChanged(existingItem);
+                    }
+                    else
+                    {
+                        var values = new AddEffect
+                        {
+                            Description = description,
+                            Value = value
+                        };
+
+                        Application.Current.Dispatcher.Invoke(() => AddEffectValues.Add(values));
+                        AddEffectValuesItemPropertyChanged(values);
+                    }
+                }
+
+                IsSelectedItemVisible = Visibility.Visible;
+            }
+            else
+            {
+                IsSelectedItemVisible = Visibility.Hidden;
+            }
+
+            _isUpdatingSelectedItem = false;
+        }
+
+        private void AddEffectValuesItemPropertyChanged(AddEffect item)
+        {
+            item.PropertyChanged -= OnAddEffectValuesItemPropertyChanged;
+
+            item.PropertyChanged += OnAddEffectValuesItemPropertyChanged;
+        }
+
+        private void OnAddEffectValuesItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is AddEffect addEffect)
+            {
+                int index = AddEffectValues.IndexOf(addEffect);
+                UpdateSelectedItemValue(addEffect.Description, $"szDesc{index:00}");
+                UpdateSelectedItemValue(addEffect.Value, $"fValue{index:00}");
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"Pet Editor";
+        private string _title = $"Add Effect Editor";
 
         [ObservableProperty]
         private string? _openMessage = "Open a file";
@@ -411,10 +335,16 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private ItemDataManager _itemDataManager;
 
+        #region SelectedItem
+
+        [ObservableProperty]
+        private ObservableCollection<AddEffect> _addEffectValues = [];
+
+        #endregion
+
         #endregion
 
         #region Properties Helper
-
         private bool _isUpdatingSelectedItem = false;
 
         private void UpdateSelectedItemValue(object? newValue, string column)

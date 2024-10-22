@@ -19,21 +19,21 @@ public partial class MainWindowViewModel : ObservableObject
         Icon = new SymbolIcon { Symbol = SymbolRegular.TextBulletListSquareToolbox20 },
         MenuItemsSource = new object[]
         {
-            new NavigationViewItem("Character Edit", SymbolRegular.WindowDatabase24, typeof(CharacterEditPage)),
-            new NavigationViewItem("Character Restore", SymbolRegular.WindowDatabase24, typeof(CharacterRestorePage)),
-            new NavigationViewItem("Coupon", SymbolRegular.WindowDatabase24, typeof(CouponPage)),
+            new NavigationViewItem(Resources.CharacterEdit, SymbolRegular.WindowDatabase24, typeof(CharacterEditPage)),
+            new NavigationViewItem(Resources.CharacterRestore, SymbolRegular.WindowDatabase24, typeof(CharacterRestorePage)),
+            new NavigationViewItem(Resources.Coupon, SymbolRegular.WindowDatabase24, typeof(CouponPage)),
             new NavigationViewItem(Resources.Tools, SymbolRegular.WindowDatabase24, typeof(DatabaseToolsPage)),
         }
     },
-    new NavigationViewItem("Edit Tools", SymbolRegular.DocumentTextToolbox24, typeof(EditToolsPage)),
+    new NavigationViewItem(Resources.EditTools, SymbolRegular.DocumentTextToolbox24, typeof(EditToolsPage)),
     new NavigationViewItem()
     {
-        Content = "SQLite Database",
+        Content = Resources.SQLiteDatabase,
         Icon = new SymbolIcon { Symbol = SymbolRegular.TextBulletListSquareToolbox20 },
         MenuItemsSource = new object[]
         {
-             new NavigationViewItem("SQLite Database Manager", SymbolRegular.HomeDatabase24, typeof(GMDatabaseManagerPage)),
              new NavigationViewItem(Resources.Database, SymbolRegular.WindowDatabase24, typeof(DatabasePage)),
+             new NavigationViewItem(Resources.SQLiteDatabaseManager, SymbolRegular.HomeDatabase24, typeof(GMDatabaseManagerPage)),
         }
     },
     ];
@@ -48,6 +48,6 @@ public partial class MainWindowViewModel : ObservableObject
     private ObservableCollection<MenuItem> _trayMenuItems =
     [
         new MenuItem { Header = Resources.Home, Tag = "tray_home" },
-    new MenuItem { Header = "Close", Tag = "tray_close" }
+        new MenuItem { Header = "Close", Tag = "tray_close" }
     ];
 }
