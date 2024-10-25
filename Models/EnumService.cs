@@ -510,5 +510,13 @@ namespace RHToolkit.Models
             None = 0,
             Enemy = 1,
         }
+
+        public enum WorldType
+        {
+            None = 0,
+            World = 1,
+            MapSelectCurtis = 2,
+            DungeonInfoList = 3,
+        }
     }
 }

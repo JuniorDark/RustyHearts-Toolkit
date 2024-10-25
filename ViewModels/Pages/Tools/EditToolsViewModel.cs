@@ -25,13 +25,14 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
         new("Enemy Editor", "Edit enemy .rh table files", SymbolRegular.DocumentEdit24, "enemyeditor"),
         new("Item Editor", "Edit items .rh table files", SymbolRegular.DocumentEdit24, "itemeditor"),
         new("NPC Editor", "Edit npc .rh table files", SymbolRegular.DocumentEdit24, "npceditor"),
-        new("NPC Shop Editor", "Edit npcshop .rh table files", SymbolRegular.DocumentEdit24, "npcshopeditor"),
+        new("NPC Shop Editor", "Edit npcshops .rh table files", SymbolRegular.DocumentEdit24, "npcshopeditor"),
         new("Package Editor", "Edit package .rh table files", SymbolRegular.DocumentEdit24, "packageeditor"),
         new("Pet Editor", "Edit pet .rh table file", SymbolRegular.DocumentEdit24, "peteditor"),
         new("Quest Editor", "Edit quest .rh table files", SymbolRegular.DocumentEdit24, "questeditor"),
         new("Random Box Editor", "Edit randomrune .rh table file", SymbolRegular.DocumentEdit24, "randomruneeditor"),
         new("Set Item Editor", "Edit setitem .rh table file", SymbolRegular.DocumentEdit24, "setitemeditor"),
         new("Title Editor", "Edit title .rh table file", SymbolRegular.DocumentEdit24, "titleeditor"),
+        new("World Editor", "Edit world .rh table files", SymbolRegular.DocumentEdit24, "worldeditor"),
 
     ];
 
@@ -93,6 +94,9 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
                     break;
                 case "addeffecteditor":
                     windowsProviderService.Show<AddEffectEditorWindow>(true);
+                    break;
+                case "worldeditor":
+                    windowsProviderService.Show<WorldEditorWindow>(true);
                     break;
             }
         }

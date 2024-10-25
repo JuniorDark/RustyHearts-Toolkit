@@ -112,6 +112,8 @@ public partial class App : Application
                 _ = services.AddTransient<EnemyEditorViewModel>();
                 _ = services.AddTransient<AddEffectEditorWindow>();
                 _ = services.AddTransient<AddEffectEditorViewModel>();
+                _ = services.AddTransient<WorldEditorWindow>();
+                _ = services.AddTransient<WorldEditorViewModel>();
                 // SQLite services and viewmodels
                 _ = services.AddTransient<ItemWindow>();
                 _ = services.AddTransient<ItemWindowViewModel>();

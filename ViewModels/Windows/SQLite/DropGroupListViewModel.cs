@@ -267,6 +267,8 @@ namespace RHToolkit.ViewModels.Windows
                 _ => null,
             };
 
+            DropGroupItemView = CollectionViewSource.GetDefaultView(CurrentDropGroupItems);
+            DropGroupItemView.Filter = FilterItems;
             OnPropertyChanged(nameof(CurrentDropGroupItems));
         }
 
@@ -307,16 +309,16 @@ namespace RHToolkit.ViewModels.Windows
         {
             DropGroupsItems =
                 [
-                    new NameID { ID = 1, Name = "ItemDropGroupListF" },
-                    new NameID { ID = 2, Name = "ItemDropGroupList" },
-                    new NameID { ID = 3, Name = "ChampionItemItemDropGroupList" },
-                    new NameID { ID = 4, Name = "EventWorldItemDropGroupList " },
-                    new NameID { ID = 5, Name = "InstanceItemDropGroupList" },
-                    new NameID { ID = 6, Name = "QuestItemDropGroupList" },
-                    new NameID { ID = 7, Name = "WorldInstanceItemDropGroupList" },
-                    new NameID { ID = 8, Name = "WorldItemDropGroupList" },
-                    new NameID { ID = 9, Name = "WorldItemDropGroupListF" },
-                    new NameID { ID = 11, Name = "RareCardDropGroupList" },
+                    new NameID { ID = 1, Name = "Item Drop Group List F" },
+                    new NameID { ID = 2, Name = "Item Drop Group List" },
+                    new NameID { ID = 3, Name = "Champion Item Drop Group List" },
+                    new NameID { ID = 4, Name = "Event World Item Drop Group List " },
+                    new NameID { ID = 5, Name = "Instance Item Drop Group List" },
+                    new NameID { ID = 6, Name = "Quest Item Drop Group List" },
+                    new NameID { ID = 7, Name = "World Instance Item Drop Group List" },
+                    new NameID { ID = 8, Name = "World Item Drop Group List" },
+                    new NameID { ID = 9, Name = "World Item Drop Group List F" },
+                    new NameID { ID = 11, Name = "Rare Card Drop Group List" },
                 ];
 
             ItemDropGroupItems = _gmDatabaseService.GetDropGroupListItems("itemdropgrouplist", 40);

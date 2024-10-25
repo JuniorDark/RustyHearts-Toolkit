@@ -24,6 +24,7 @@ public class GMDatabaseManager
         "costumemix",
         "costumepack",
         "enchantinfo",
+        "enemy_string",
         "exp",
         "fortune",
         "frantz_avatar01_parts",

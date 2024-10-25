@@ -6,7 +6,7 @@
 
 ## Overview
 
-**Rusty Hearts Toolkit** is a set of GUI tools designed for editing Rusty Hearts game files and database.
+**Rusty Hearts Toolkit** is a set of GUI tools designed for editing Rusty Hearts game table files and database.
 
 ## Preview
 <!-- Include screenshots later here to provide a visual overview of the toolkit. -->
@@ -26,19 +26,20 @@ To start using the Rusty Hearts Toolkit, download the latest release from the [G
 ### Table Editor Tools
 - **Table Editor:** Edit `.rh` table files on the go and export them to various formats, including XML, XLSX, and MIP.
 - **Specialized Table Editors:**
-- **AddEffect Editor:** Edit addeffect file.
+- **AddEffect Editor:** Edit buffs/effects (addeffect.rh).
 - **Cash Shop Editor:** Cash shop items (cashshoplist.rh).
+- **Enemy Editor:** Edit enemies stats (enemy.rh).
 - **Item Editor:** Items (itemlist.rh, itemlist_armor.rh, itemlist_costume.rh, itemlist_weapon.rh).
 - **Item Drop Group Editor** Item drops (itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh, riddleboxdropgrouplist.rh, rarecarddropgrouplist.rh, rarecardrewarditemlist.rh).
-- **NPC Editor:** (npcinstance.rh).
+- **NPC Editor:** Edit npcs (npcinstance.rh).
 - **NPC Shop Editor** Npc Shop (npcshop.rh), Trade Shop (tradeshop.rh), Item Craft (itemmix.rh, costumemix.rh), shop item visible filter (shopitemvisiblefilter.rh), Item Dismantle (itembroken.rh).
-- **Enemy Editor:** Edit enemies (enemy.rh).
 - **Package Editor:** Item packages and effects (unionpackage.rh, conditionselectitem.rh).
 - **Pet Editor:** Edit pets (pet.rh).
 - **Quest Editor:** Edit quest files.
 - **Random Rune Editor:** Edit 'gacha' items (randomrune.rh).
 - **Set Editor:** Edit item sets and their effects (setitem.rh).
 - **Title Editor:** Edit titles and their effects (charactertitle.rh).
+- **World Editor** Edit world files (world.rh, dungeoninfolist.rh, mapselect_curtis.rh).
 
 ### Language Settings
 
@@ -57,7 +58,6 @@ To set up the toolkit and generate the necessary SQLite database:
 3. Click `Create Database` to generate the `gmdb_(Lang).db` database in the `Resources` folder.
 4. Place the extracted game sprites `\ui\sprite\1024` in the `Resources` folder.
 5. Navigate to the `Settings` page and set the `SQL Server` credentials.
-
 
 ## Prerequisites for Development
 * Visual Studio 2022 (Any Edition - 17.9 or later)
@@ -107,7 +107,6 @@ A: Fork the repository, make your changes, and submit a pull request.
 
 ### Specialized Table Editors
 - **Skill Editor**
-- **World Editor**
 
 ## Credits
 

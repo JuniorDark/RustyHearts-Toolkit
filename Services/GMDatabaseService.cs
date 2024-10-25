@@ -306,6 +306,30 @@ namespace RHToolkit.Services
             return GetItemsFromQuery("SELECT nID, wszNameUI FROM world_string");
         }
 
+        public List<string> GetEnemyNameItems()
+        {
+            List<string> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = $"SELECT wszName FROM enemy_string";
+
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                while (command.Read())
+                {
+                    string item = command.GetString(0);
+                    items.Add(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+            }
+
+            return items;
+        }
+
         public List<NameID> GetMissionItems()
         {
             return GetItemsFromQuery("SELECT nID, wszTitle FROM missionstring");

@@ -142,9 +142,26 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         if (Column != null && UpdateItemValueCommand != null && AssociatedObject is ListView listView)
         {
             var selectedItems = listView.SelectedItems
-                                .Cast<dynamic>()
-                                .Select(item => item.ID.ToString())
-                                .ToList();
+                                    .Cast<object>()
+                                    .Select(item =>
+                                    {
+                                        if (item is string itemIdString)
+                                        {
+                                            return itemIdString;
+                                        }
+                                        else
+                                        {
+                                            var itemType = item.GetType();
+                                            var idProperty = itemType.GetProperty("ID");
+                                            if (idProperty != null)
+                                            {
+                                                return idProperty.GetValue(item)?.ToString();
+                                            }
+                                            return null;
+                                        }
+                                    })
+                                    .Where(id => !string.IsNullOrEmpty(id))
+                                    .ToList();
 
             var newValue = string.Join(",", selectedItems);
 
@@ -158,6 +175,7 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         _isUpdating = false;
     }
 
+
     private void UpdateSelectedItems()
     {
         if (AssociatedObject is not ListView listView || listView.ItemsSource == null || _isUpdating)
@@ -166,20 +184,37 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         _isUpdating = true;
 
         var selectedIds = (SelectedItemsString ?? string.Empty).Split(',')
-                            .Where(id => !string.IsNullOrWhiteSpace(id))
-                            .Select(int.Parse)
-                            .ToList();
+                                .Where(id => !string.IsNullOrWhiteSpace(id))
+                                .Select(id => id.Trim())
+                                .ToList();
 
         listView.SelectedItems.Clear();
         foreach (var item in listView.Items)
         {
-            var itemId = (item as dynamic).ID;
-            if (selectedIds.Contains(itemId))
+            if (item is string itemIdString)
             {
-                listView.SelectedItems.Add(item);
+                if (selectedIds.Contains(itemIdString))
+                {
+                    listView.SelectedItems.Add(item);
+                }
+            }
+            else
+            {
+                var itemType = item.GetType();
+                var idProperty = itemType.GetProperty("ID");
+
+                if (idProperty != null)
+                {
+                    var itemId = idProperty.GetValue(item)?.ToString();
+                    if (!string.IsNullOrEmpty(itemId) && selectedIds.Contains(itemId))
+                    {
+                        listView.SelectedItems.Add(item);
+                    }
+                }
             }
         }
 
         _isUpdating = false;
     }
+
 }

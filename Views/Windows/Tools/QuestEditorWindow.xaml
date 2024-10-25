@@ -2551,23 +2551,18 @@
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="Move NPC" />
-                                <ComboBox
-                                    Height="24"
-                                    MinWidth="200"
+                                <ui:NumberBox
+                                    MinWidth="150"
                                     Margin="0,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    HorizontalContentAlignment="Left"
-                                    VerticalContentAlignment="Center"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding DataContext.NpcInstanceItems, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nMoveNPC], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}">
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
+                                    Minimum="0"
+                                    Value="{Binding DataContext.DataTableManager.SelectedItem[nMoveNPC], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
                                     <i:Interaction.Behaviors>
                                         <bh:DataRowViewBehavior Column="nMoveNPC" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                     </i:Interaction.Behaviors>
-                                </ComboBox>
+                                </ui:NumberBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="5"
@@ -2938,7 +2933,7 @@
                                     SelectionMode="Multiple">
                                     <i:Interaction.Behaviors>
                                         <bh:DataRowViewBehavior
-                                            Column="wszClassLimi"
+                                            Column="wszClassLimit"
                                             SelectedItemsString="{Binding DataContext.DataTableManager.SelectedItem[wszClassLimit], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                             UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                     </i:Interaction.Behaviors>

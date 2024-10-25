@@ -1484,6 +1484,7 @@ namespace RHToolkit.ViewModels.Windows
                 int index = QuestItems.IndexOf(questItem);
                 UpdateSelectedItemValue(questItem.Sprite, $"szSprite{index:00}");
                 UpdateSelectedItemValue(questItem.NpcID, $"nNPCID{index:00}");
+                UpdateSelectedItemValue(questItem.Text, $"wszText{index:00}");
             }
         }
 

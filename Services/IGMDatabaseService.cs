@@ -32,6 +32,7 @@ namespace RHToolkit.Services
         List<NameID> GetNpcInstanceItems();
         List<NameID> GetNpcListItems();
         List<NameID> GetNpcShopItems();
+        List<string> GetEnemyNameItems();
         List<int> GetNpcShopItems(int shopID);
         List<NameID> GetNpcShopsItems();
         string GetOptionGroupName(int optionID);
