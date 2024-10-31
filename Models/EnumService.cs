@@ -24,43 +24,14 @@ namespace RHToolkit.Models
             return enumItems;
         }
 
-        public static List<NameID> GetSocketColorItems()
-        {
-            List<NameID> socketColorItems = [];
-
-            foreach (SocketColor color in Enum.GetValues(typeof(SocketColor)))
-            {
-                int id = (int)color;
-                string description = GetEnumDescription(color);
-                string imagePath = GetSocketColorImagePath(color);
-                socketColorItems.Add(new NameID { ID = id, Name = description, ImagePath = imagePath });
-            }
-
-            return socketColorItems;
-        }
-
-        private static string GetSocketColorImagePath(SocketColor color)
-        {
-            return color switch
-            {
-                SocketColor.None => "/Assets/images/socket_a.png",
-                SocketColor.Red => "/Assets/images/socket_r.png",
-                SocketColor.Blue => "/Assets/images/socket_b.png",
-                SocketColor.Yellow => "/Assets/images/socket_y.png",
-                SocketColor.Green => "/Assets/images/socket_g.png",
-                SocketColor.Colorless => "/Assets/images/socket_all.png",
-                SocketColor.Gray => "/Assets/images/socket_a.png",
-                _ => "/Assets/images/socket_a.png",
-            };
-        }
-
-
         public static string GetEnumDescription(Enum value)
         {
             FieldInfo? field = value.GetType().GetField(value.ToString());
             DescriptionAttribute? attribute = field?.GetCustomAttribute<DescriptionAttribute>();
             return attribute == null ? value.ToString() : attribute.Description;
         }
+
+        #region Class/Job
 
         public static Enum GetJobEnum(CharClass charClass, int jobValue)
         {
@@ -105,7 +76,9 @@ namespace RHToolkit.Models
             [LocalizedDescription("Axe")]
             Axe = 2,
             [LocalizedDescription("TwinSwords")]
-            TwinSwords = 3
+            TwinSwords = 3,
+            [LocalizedDescription("NotUsed")]
+            NotUsed = 4
         }
 
         public enum AngelaJob
@@ -117,7 +90,9 @@ namespace RHToolkit.Models
             [LocalizedDescription("Scythe")]
             Scythe = 2,
             [LocalizedDescription("Glaive")]
-            Glaive = 3
+            Glaive = 3,
+            [LocalizedDescription("NotUsed")]
+            NotUsed = 4
         }
 
         public enum TudeJob
@@ -129,7 +104,9 @@ namespace RHToolkit.Models
             [LocalizedDescription("Claw")]
             Claw = 2,
             [LocalizedDescription("DemonHands")]
-            DemonHands = 3
+            DemonHands = 3,
+            [LocalizedDescription("NotUsed")]
+            NotUsed = 4
         }
 
         public enum NatashaJob
@@ -141,8 +118,28 @@ namespace RHToolkit.Models
             [LocalizedDescription("Musket")]
             Musket = 2,
             [LocalizedDescription("WeaponBag")]
-            WeaponBag = 3
+            WeaponBag = 3,
+            [LocalizedDescription("NotUsed")]
+            NotUsed = 4
         }
+
+        public enum GenericJob
+        {
+            [LocalizedDescription("All")]
+            All = 0,
+            [LocalizedDescription("Focus1")]
+            Focus1 = 1,
+            [LocalizedDescription("Focus2")]
+            Focus2 = 2,
+            [LocalizedDescription("Focus3")]
+            Focus3 = 3,
+            [LocalizedDescription("NotUsed")]
+            NotUsed = 4
+        }
+
+        #endregion
+
+        #region Item
 
         public enum Branch
         {
@@ -158,24 +155,6 @@ namespace RHToolkit.Models
             Epic = 6
         }
 
-        public enum SocketColor
-        {
-            [LocalizedDescription("SocketColorNone")]
-            None = 0,
-            [LocalizedDescription("SocketColorRed")]
-            Red = 1,
-            [LocalizedDescription("SocketColorBlue")]
-            Blue = 2,
-            [LocalizedDescription("SocketColorYellow")]
-            Yellow = 3,
-            [LocalizedDescription("SocketColorGreen")]
-            Green = 4,
-            [LocalizedDescription("SocketColorColorless")]
-            Colorless = 5,
-            [LocalizedDescription("SocketColorGray")]
-            Gray = 6
-        }
-
         public enum ItemType
         {
             [LocalizedDescription("All")]
@@ -188,62 +167,6 @@ namespace RHToolkit.Models
             Armor,
             [LocalizedDescription("Weapon")]
             Weapon
-        }
-
-        public enum SanctionOperationType
-        {
-            Add = 1,
-            Remove = 2
-        }
-
-        public enum SanctionType
-        {
-            [LocalizedDescription("SanctionHacking")]
-            Hacking = 1,
-            [LocalizedDescription("SanctionAccountSteal")]
-            AccountSteal = 2,
-            [LocalizedDescription("SanctionAbusing")]
-            Abusing = 3,
-            [LocalizedDescription("SanctionImpersonation")]
-            ImpersonationScam = 4,
-            [LocalizedDescription("SanctionBugExploiting")]
-            BugExploiting = 5,
-            [LocalizedDescription("SanctionScam")]
-            Scam = 6,
-            [LocalizedDescription("SanctionAbusingLanguage")]
-            AbusiveLanguage = 7,
-            [LocalizedDescription("SanctionAdvertising")]
-            CommercialAdvertising = 8,
-            [LocalizedDescription("SanctionFalseReport")]
-            FalseReport = 9
-        }
-
-        public enum SanctionCount
-        {
-            [LocalizedDescription("SanctionFirst")]
-            First = 1,
-            [LocalizedDescription("SanctionSecond")]
-            Second = 2,
-            [LocalizedDescription("SanctionThird")]
-            Third = 3,
-            [LocalizedDescription("SanctionFourth")]
-            Fourth = 4,
-            [LocalizedDescription("SanctionFifth")]
-            Fifth = 5
-        }
-
-        public enum SanctionPeriod
-        {
-            [LocalizedDescription("Sanction3Days")]
-            ThreeDays = 1,
-            [LocalizedDescription("Sanction7Days")]
-            SevenDays = 2,
-            [LocalizedDescription("Sanction10Days")]
-            TenDays = 3,
-            [LocalizedDescription("Sanction15Days")]
-            FifteenDays = 4,
-            [LocalizedDescription("SanctionPermanent")]
-            Permanent = 5
         }
 
         public enum EquipCategory
@@ -335,6 +258,122 @@ namespace RHToolkit.Models
             [LocalizedDescription("Storage")]
             Storage = 21,
         }
+
+        #endregion
+
+        #region Socket
+
+        public enum SocketColor
+        {
+            [LocalizedDescription("SocketColorNone")]
+            None = 0,
+            [LocalizedDescription("SocketColorRed")]
+            Red = 1,
+            [LocalizedDescription("SocketColorBlue")]
+            Blue = 2,
+            [LocalizedDescription("SocketColorYellow")]
+            Yellow = 3,
+            [LocalizedDescription("SocketColorGreen")]
+            Green = 4,
+            [LocalizedDescription("SocketColorColorless")]
+            Colorless = 5,
+            [LocalizedDescription("SocketColorGray")]
+            Gray = 6
+        }
+
+        public static List<NameID> GetSocketColorItems()
+        {
+            List<NameID> socketColorItems = [];
+
+            foreach (SocketColor color in Enum.GetValues(typeof(SocketColor)))
+            {
+                int id = (int)color;
+                string description = GetEnumDescription(color);
+                string imagePath = GetSocketColorImagePath(color);
+                socketColorItems.Add(new NameID { ID = id, Name = description, ImagePath = imagePath });
+            }
+
+            return socketColorItems;
+        }
+
+        private static string GetSocketColorImagePath(SocketColor color)
+        {
+            return color switch
+            {
+                SocketColor.None => "/Assets/images/socket_a.png",
+                SocketColor.Red => "/Assets/images/socket_r.png",
+                SocketColor.Blue => "/Assets/images/socket_b.png",
+                SocketColor.Yellow => "/Assets/images/socket_y.png",
+                SocketColor.Green => "/Assets/images/socket_g.png",
+                SocketColor.Colorless => "/Assets/images/socket_all.png",
+                SocketColor.Gray => "/Assets/images/socket_a.png",
+                _ => "/Assets/images/socket_a.png",
+            };
+        }
+
+        #endregion
+
+        #region Sanction
+
+        public enum SanctionOperationType
+        {
+            Add = 1,
+            Remove = 2
+        }
+
+        public enum SanctionType
+        {
+            [LocalizedDescription("SanctionHacking")]
+            Hacking = 1,
+            [LocalizedDescription("SanctionAccountSteal")]
+            AccountSteal = 2,
+            [LocalizedDescription("SanctionAbusing")]
+            Abusing = 3,
+            [LocalizedDescription("SanctionImpersonation")]
+            ImpersonationScam = 4,
+            [LocalizedDescription("SanctionBugExploiting")]
+            BugExploiting = 5,
+            [LocalizedDescription("SanctionScam")]
+            Scam = 6,
+            [LocalizedDescription("SanctionAbusingLanguage")]
+            AbusiveLanguage = 7,
+            [LocalizedDescription("SanctionAdvertising")]
+            CommercialAdvertising = 8,
+            [LocalizedDescription("SanctionFalseReport")]
+            FalseReport = 9
+        }
+
+        public enum SanctionCount
+        {
+            [LocalizedDescription("SanctionFirst")]
+            First = 1,
+            [LocalizedDescription("SanctionSecond")]
+            Second = 2,
+            [LocalizedDescription("SanctionThird")]
+            Third = 3,
+            [LocalizedDescription("SanctionFourth")]
+            Fourth = 4,
+            [LocalizedDescription("SanctionFifth")]
+            Fifth = 5
+        }
+
+        public enum SanctionPeriod
+        {
+            [LocalizedDescription("Sanction3Days")]
+            ThreeDays = 1,
+            [LocalizedDescription("Sanction7Days")]
+            SevenDays = 2,
+            [LocalizedDescription("Sanction10Days")]
+            TenDays = 3,
+            [LocalizedDescription("Sanction15Days")]
+            FifteenDays = 4,
+            [LocalizedDescription("SanctionPermanent")]
+            Permanent = 5
+        }
+
+        #endregion
+
+        #region CashShop
 
         public enum CashShopCategory
         {
@@ -458,6 +497,10 @@ namespace RHToolkit.Models
             All = 0
         }
 
+        #endregion
+
+        #region DataTemplate
+
         public enum ItemDropGroupType
         {
             None = 0,
@@ -518,5 +561,341 @@ namespace RHToolkit.Models
             MapSelectCurtis = 2,
             DungeonInfoList = 3,
         }
+
+        #endregion
+
+        #region Skill
+
+        public enum SkillType
+        {
+            [LocalizedDescription("None")]
+            None = 0,
+            [LocalizedDescription("Frantz")]
+            SkillFrantz = 1,
+            [LocalizedDescription("Angela")]
+            SkillAngela = 2,
+            [LocalizedDescription("Tude")]
+            SkillTude = 3,
+            [LocalizedDescription("Natasha")]
+            SkillNatasha = 4,
+            SkillTreeFrantz = 5,
+            SkillTreeAngela = 6,
+            SkillTreeTude = 7,
+            SkillTreeNatasha = 8,
+            SkillUIFrantz = 9,
+            SkillUIAngela = 10,
+            SkillUITude = 11,
+            SkillUINatasha = 12,
+        }
+
+        public static string GetSkillJob(SkillType characterSkillType, string? characterType)
+        {
+            Enum characterFocus = characterSkillType switch
+            {
+                SkillType.SkillFrantz => (FrantzJob)GetJobFocus(characterType),
+                SkillType.SkillAngela => (AngelaJob)GetJobFocus(characterType),
+                SkillType.SkillTude => (TudeJob)GetJobFocus(characterType),
+                SkillType.SkillNatasha => (NatashaJob)GetJobFocus(characterType),
+                _ => throw new ArgumentException($"Invalid SkillType: {characterSkillType}")
+            };
+
+            return GetEnumDescription(characterFocus);
+        }
+
+        private static int GetJobFocus(string? characterType)
+        {
+            return characterType switch
+            {
+                "TYPE_ALL" => 0,
+                "TYPE_A" => 1,
+                "TYPE_B" => 2,
+                "TYPE_C" => 3,
+                _ => 0,
+            };
+        }
+
+        public static SkillType GetCharacterSkillType(SkillType skillType)
+        {
+            switch (skillType)
+            {
+                case SkillType.SkillFrantz or SkillType.SkillTreeFrantz or SkillType.SkillUIFrantz:
+                    skillType = SkillType.SkillFrantz;
+                    break;
+                case SkillType.SkillAngela or SkillType.SkillTreeAngela or SkillType.SkillAngela or SkillType.SkillUIAngela:
+                    skillType = SkillType.SkillAngela;
+                    break;
+                case SkillType.SkillTude or SkillType.SkillTreeTude or SkillType.SkillUITude:
+                    skillType = SkillType.SkillTude;
+                    break;
+                case SkillType.SkillNatasha or SkillType.SkillTreeNatasha or SkillType.SkillUINatasha:
+                    skillType = SkillType.SkillNatasha;
+                    break;
+            }
+
+            return skillType;
+        }
+
+        public enum BaseSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("BeforeFocusChange")]
+            BeforeChange = 2
+        }
+
+        public enum NotUsedSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("NotUsed")]
+            NotUsed1 = 2,
+            [LocalizedDescription("NotUsed")]
+            NotUsed2 = 3,
+            [LocalizedDescription("NotUsed")]
+            NotUsed3 = 4,
+        }
+
+        public enum FrantzSwordSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("WeaponSkill")]
+            Weapon = 2,
+            [LocalizedDescription("CurseSkill")]
+            Curse = 3,
+            [LocalizedDescription("BlackSorcerySkill")]
+            BlackSorcery = 4
+        }
+
+        public enum FrantzAxeSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("WeaponSkill")]
+            Weapon = 2,
+            [LocalizedDescription("CurseSkill")]
+            Curse = 3,
+            [LocalizedDescription("SummonSkill")]
+            Summon = 4
+        }
+
+        public enum FrantzTwinSwordSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("WeaponSkill")]
+            Weapon = 2,
+            [LocalizedDescription("CurseSkill")]
+            Curse = 3,
+            [LocalizedDescription("BlackSorcerySkill")]
+            BlackSorcery = 4
+        }
+
+        public enum AngelaMagicSwordSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("LightSkill")]
+            Light = 2,
+            [LocalizedDescription("FireEarthSkills")]
+            FireEarth = 3,
+            [LocalizedDescription("WindSkill")]
+            Wind = 4
+        }
+
+        public enum AngelaScytleSwordSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("LightSkill")]
+            Light = 2,
+            [LocalizedDescription("FireSkill")]
+            Fire = 3,
+            [LocalizedDescription("WindWaterSkills")]
+            WindWater = 4
+        }
+
+        public enum AngelaGlaiveSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("LightSkill")]
+            Light = 2,
+            [LocalizedDescription("FireEarthSkills")]
+            FireEarth = 3,
+            [LocalizedDescription("WindSkill")]
+            Wind = 4
+        }
+
+        public enum TudeClawSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("FightingSkills")]
+            FightingSkills = 2,
+            [LocalizedDescription("SavageGrabSkills")]
+            SavageGrab = 3,
+            [LocalizedDescription("KiGongShoutSkills")]
+            KiGongShout = 4
+        }
+
+        public enum TudeGauntletsSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("FightingSkills")]
+            FightingSkills = 2,
+            [LocalizedDescription("SavageSkill")]
+            Savage = 3,
+            [LocalizedDescription("KiGongShoutSkills")]
+            KiGongShout = 4
+        }
+
+        public enum TudeDemonHandsSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("FightingSkills")]
+            FightingSkills = 2,
+            [LocalizedDescription("SavageSkill")]
+            Savage = 3,
+            [LocalizedDescription("KiGongShoutSkills")]
+            KiGongShout = 4
+        }
+
+        public enum NatashaRevolverSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("FirearmSkill")]
+            Firearm = 2,
+            [LocalizedDescription("TacticalSkill")]
+            Tactical = 3,
+            [LocalizedDescription("DeviceSkill")]
+            Device = 4
+        }
+
+        public enum NatashaMusketSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("FirearmSkill")]
+            Firearm = 2,
+            [LocalizedDescription("TacticalSkill")]
+            Tactical = 3,
+            [LocalizedDescription("HeavyWeaponSkill")]
+            HeavyWeapon = 4
+        }
+
+        public enum NatashaWeaponBagSkill
+        {
+            [LocalizedDescription("BaseSkill")]
+            Base = 1,
+            [LocalizedDescription("HeavyWeaponSkill")]
+            HeavyWeapon = 2,
+            [LocalizedDescription("TacticalSkill")]
+            Tactical = 3,
+            [LocalizedDescription("DeviceSkill")]
+            Device = 4
+        }
+
+        public static string GetSkillClassName(SkillType skillType, int job, int skillClass)
+        {
+            Type? skillEnumType = skillType switch
+            {
+                SkillType.SkillUIFrantz => job switch
+                {
+                    0 => typeof(BaseSkill),
+                    1 => typeof(FrantzSwordSkill),
+                    2 => typeof(FrantzAxeSkill),
+                    3 => typeof(FrantzTwinSwordSkill),
+                    4 => typeof(NotUsedSkill),
+                    _ => throw new ArgumentException($"Invalid job for Frantz : {job}")
+                },
+                SkillType.SkillUIAngela => job switch
+                {
+                    0 => typeof(BaseSkill),
+                    1 => typeof(AngelaMagicSwordSkill),
+                    2 => typeof(AngelaScytleSwordSkill),
+                    3 => typeof(AngelaGlaiveSkill),
+                    4 => typeof(NotUsedSkill),
+                    _ => throw new ArgumentException($"Invalid job for Angela : {job}")
+                },
+                SkillType.SkillUITude => job switch
+                {
+                    0 => typeof(BaseSkill),
+                    1 => typeof(TudeClawSkill),
+                    2 => typeof(TudeGauntletsSkill),
+                    3 => typeof(TudeDemonHandsSkill),
+                    4 => typeof(NotUsedSkill),
+                    _ => throw new ArgumentException($"Invalid job for Tude : {job}")
+                },
+                SkillType.SkillUINatasha => job switch
+                {
+                    0 => typeof(BaseSkill),
+                    1 => typeof(NatashaRevolverSkill),
+                    2 => typeof(NatashaMusketSkill),
+                    3 => typeof(NatashaWeaponBagSkill),
+                    4 => typeof(NotUsedSkill),
+                    _ => throw new ArgumentException($"Invalid job for Natasha : {job}")
+                },
+                _ => throw new ArgumentException($"Invalid SkillType: {skillType}")
+            } ?? throw new ArgumentException("Invalid combination of SkillType and Job");
+
+            if (Enum.IsDefined(skillEnumType, skillClass))
+            {
+                var enumValue = (Enum)Enum.ToObject(skillEnumType, skillClass);
+                return GetEnumDescription(enumValue);
+            }
+
+            throw new ArgumentException("Invalid Skill Class for selected Skill Tree Type and Focus");
+        }
+
+        public static List<NameID> GetSkillClassList(SkillType skillType, int job)
+        {
+            return skillType switch
+            {
+                SkillType.SkillUIFrantz => job switch
+                {
+                    0 => GetEnumItems<BaseSkill>(false),
+                    1 => GetEnumItems<FrantzSwordSkill>(false),
+                    2 => GetEnumItems<FrantzAxeSkill>(false),
+                    3 => GetEnumItems<FrantzTwinSwordSkill>(false),
+                    4 => GetEnumItems<NotUsedSkill>(false),
+                    _ => throw new ArgumentException($"Invalid job for Frantz : {job}")
+                },
+                SkillType.SkillUIAngela => job switch
+                {
+                    0 => GetEnumItems<BaseSkill>(false),
+                    1 => GetEnumItems<AngelaMagicSwordSkill>(false),
+                    2 => GetEnumItems<AngelaScytleSwordSkill>(false),
+                    3 => GetEnumItems<AngelaGlaiveSkill>(false),
+                    4 => GetEnumItems<NotUsedSkill>(false),
+                    _ => throw new ArgumentException($"Invalid job for Angela : {job}")
+                },
+                SkillType.SkillUITude => job switch
+                {
+                    0 => GetEnumItems<BaseSkill>(false),
+                    1 => GetEnumItems<TudeClawSkill>(false),
+                    2 => GetEnumItems<TudeGauntletsSkill>(false),
+                    3 => GetEnumItems<TudeDemonHandsSkill>(false),
+                    4 => GetEnumItems<NotUsedSkill>(false),
+                    _ => throw new ArgumentException($"Invalid job for Tude : {job}")
+                },
+                SkillType.SkillUINatasha => job switch
+                {
+                    0 => GetEnumItems<BaseSkill>(false),
+                    1 => GetEnumItems<NatashaRevolverSkill>(false),
+                    2 => GetEnumItems<NatashaMusketSkill>(false),
+                    3 => GetEnumItems<NatashaWeaponBagSkill>(false),
+                    4 => GetEnumItems<NotUsedSkill>(false),
+                    _ => throw new ArgumentException($"Invalid job for Natasha : {job}")
+                },
+                _ => throw new ArgumentException($"Invalid SkillType : {skillType}"),
+            };
+        }
+
+        #endregion
+
     }
 }

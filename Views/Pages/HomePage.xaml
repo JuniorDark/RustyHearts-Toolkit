@@ -52,15 +52,16 @@
                         <ui:TextBlock
                             FontTypography="BodyStrong"
                             Foreground="#B7FFFFFF"
-                            Text="A collection of tools for editing Rusty Hearts database and table files." />
+                            Text="A comprehensive toolkit for editing Rusty Hearts database and table files."
+                            TextWrapping="WrapWithOverflow" />
                     </StackPanel>
-                    <ui:TextBlock
+                    <ui:HyperlinkButton
                         Margin="12"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"
-                        FontTypography="Caption"
-                        Foreground="#57FFFFFF"
-                        Text="Created by JuniorDark" />
+                        Content="Created by JuniorDark"
+                        NavigateUri="https://forum.ragezone.com/members/juniordark.1333434657"
+                        ToolTip="https://forum.ragezone.com/members/juniordark.1333434657" />
                 </Grid>
             </Border>
         </Border>
@@ -129,11 +130,11 @@
                         <ui:TextBlock
                             Margin="0"
                             FontTypography="BodyStrong"
-                            Text="SQLite Manager"
+                            Text="Local Databases"
                             TextWrapping="WrapWithOverflow" />
                         <ui:TextBlock
                             Appearance="Secondary"
-                            Text="Manage local databases"
+                            Text="View and manage local databases"
                             TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                 </Grid>

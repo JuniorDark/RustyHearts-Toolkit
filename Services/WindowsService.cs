@@ -53,6 +53,46 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
 
     #endregion
 
+    #region Skill Window
+
+    private readonly Dictionary<Guid, Window> _skillWindows = [];
+
+    public void OpenSkillWindow(Guid token, string messageType, SkillData skillData, CharacterData? characterData = null)
+    {
+        if (_skillWindows.TryGetValue(token, out Window? existingWindow))
+        {
+            if (existingWindow.WindowState == WindowState.Minimized)
+            {
+                existingWindow.WindowState = WindowState.Normal;
+            }
+
+            existingWindow.Focus();
+        }
+        else
+        {
+            var skillWindow = _windowsProviderService.ShowInstance<SkillWindow>(true);
+            if (skillWindow != null)
+            {
+                _openWindowsCount++;
+                skillWindow.Closed += (sender, args) =>
+                {
+                    _skillWindows.Remove(token);
+                    _openWindowsCount--;
+                };
+                _skillWindows[token] = skillWindow;
+            }
+        }
+
+        if (characterData != null)
+        {
+            WeakReferenceMessenger.Default.Send(new CharacterDataMessage(characterData, "SkillWindow", token));
+        }
+
+        WeakReferenceMessenger.Default.Send(new SkillDataMessage(skillData, "SkillWindow", messageType, token));
+    }
+
+    #endregion
+
     #region Npc Shop Window
 
     private readonly Dictionary<Guid, Window> _npcShopWindows = [];

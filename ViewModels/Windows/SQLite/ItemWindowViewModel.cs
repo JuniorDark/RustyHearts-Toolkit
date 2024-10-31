@@ -19,9 +19,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
         _cachedDataManager = cachedDataManager;
         _itemDataManager = itemDataManager;
 
-        IsSlotVisible = Visibility.Collapsed;
-        IsOptionsVisible = Visibility.Collapsed;
-        IsItemAmountVisible = Visibility.Collapsed;
+        IsButtonVisible = Visibility.Collapsed;
 
         WeakReferenceMessenger.Default.Register<CharacterDataMessage>(this);
         WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
@@ -166,6 +164,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
         var defaultSettings = new VisibilitySettings
         {
             IsSlotVisible = Visibility.Collapsed,
+            IsButtonVisible = Visibility.Visible,
             IsOptionsVisible = Visibility.Collapsed,
             IsItemAmountVisible = Visibility.Collapsed,
             SelectionMode = DataGridSelectionMode.Single,
@@ -360,6 +359,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     private class VisibilitySettings
     {
         public Visibility IsSlotVisible { get; set; }
+        public Visibility IsButtonVisible { get; set; }
         public Visibility IsOptionsVisible { get; set; }
         public Visibility IsItemAmountVisible { get; set; }
         public DataGridSelectionMode SelectionMode { get; set; }
@@ -642,6 +642,9 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
 
     [ObservableProperty]
     private Visibility _isSlotVisible = Visibility.Collapsed;
+
+    [ObservableProperty]
+    private Visibility _isButtonVisible = Visibility.Visible;
 
     [ObservableProperty]
     private Visibility _isItemAmountVisible = Visibility.Collapsed;

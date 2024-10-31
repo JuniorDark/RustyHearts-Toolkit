@@ -6,40 +6,47 @@
 
 ## Overview
 
-**Rusty Hearts Toolkit** is a set of GUI tools designed for editing Rusty Hearts game table files and database.
+**Rusty Hearts Toolkit** is a comprehensive suite of graphical tools created for in-depth editing of *Rusty Hearts* game files and databases, enabling users to manage and customize various in-game elements efficiently. This toolkit is designed to simplify the editing process for both casual users and developers, offering easy access to database modifications, in-game items, characters, and other game features.
 
 ## Preview
-<!-- Include screenshots later here to provide a visual overview of the toolkit. -->
+<!-- Include screenshots here to give a visual overview of the toolkit’s layout and functionality. -->
 
 ## Getting Started
 
-To start using the Rusty Hearts Toolkit, download the latest release from the [GitHub repository](https://github.com/JuniorDark/RustyHearts-Toolkit/releases/latest).
+To start using Rusty Hearts Toolkit, download the latest release from the [GitHub repository](https://github.com/JuniorDark/RustyHearts-Toolkit/releases/latest).
 
 ## Current Features
 
 ### Database Editing Tools
-- **Character Edit Tools:** Modify character such as equipment, inventory, storage, fortune, sanctions, and titles.
-- **Coupon Generator:** Create redeem in-game coupons code.
-- **Send Mail:** Send in-game mail with customizable item attachments.
-- **Mail Templates:** Save and reuse mail templates in JSON format.
+- **Character Edit Tools**: Customize character attributes, including equipment, inventory, storage, fortune, sanctions, and titles.
+- **Coupon Generator**: Generate unique in-game coupon codes for redeemable items rewards.
+- **Send Mail**: Send in-game mail with customizable item attachments. Save mail as templates in JSON format for easy reuse.
 
 ### Table Editor Tools
-- **Table Editor:** Edit `.rh` table files on the go and export them to various formats, including XML, XLSX, and MIP.
-- **Specialized Table Editors:**
-- **AddEffect Editor:** Edit buffs/effects (addeffect.rh).
-- **Cash Shop Editor:** Cash shop items (cashshoplist.rh).
-- **Enemy Editor:** Edit enemies stats (enemy.rh).
-- **Item Editor:** Items (itemlist.rh, itemlist_armor.rh, itemlist_costume.rh, itemlist_weapon.rh).
-- **Item Drop Group Editor** Item drops (itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh, riddleboxdropgrouplist.rh, rarecarddropgrouplist.rh, rarecardrewarditemlist.rh).
-- **NPC Editor:** Edit npcs (npcinstance.rh).
-- **NPC Shop Editor** Npc Shop (npcshop.rh), Trade Shop (tradeshop.rh), Item Craft (itemmix.rh, costumemix.rh), shop item visible filter (shopitemvisiblefilter.rh), Item Dismantle (itembroken.rh).
-- **Package Editor:** Item packages and effects (unionpackage.rh, conditionselectitem.rh).
-- **Pet Editor:** Edit pets (pet.rh).
-- **Quest Editor:** Edit quest files.
-- **Random Rune Editor:** Edit 'gacha' items (randomrune.rh).
-- **Set Editor:** Edit item sets and their effects (setitem.rh).
-- **Title Editor:** Edit titles and their effects (charactertitle.rh).
-- **World Editor** Edit world files (world.rh, dungeoninfolist.rh, mapselect_curtis.rh).
+- **Table Editor**: Edit `.rh` table files directly, with options to export into various formats like XML, XLSX, and MIP.
+  
+- **Specialized Table Editors**:
+  - **AddEffect Editor**: Edit buffs and effects (addeffect.rh).
+  - **Cash Shop Editor**: Edit in-game cash shop items (cashshoplist.rh).
+  - **Enemy Editor**: Edit enemy stats, attributes, and more (enemy.rh).
+  - **Item Editor**: Edit item lists, including armor, costumes, and weapons (itemlist.rh, itemlist_armor.rh, itemlist_costume.rh, itemlist_weapon.rh).
+  - **Item Drop Group Editor**: Edit item drop rates and groups across multiple files (itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh, riddleboxdropgrouplist.rh, rarecarddropgrouplist.rh, rarecardrewarditemlist.rh).
+  - **NPC Editor**: Edit NPC data (npcinstance.rh).
+  - **NPC Shop Editor**: Edit NPC and trade shop inventories, item crafting lists (itemmix.rh, costumemix.rh), shop visibility filters, and item dismantling rules (itembroken.rh).
+  - **Package Editor**: Edit item packages and define package-specific effects (unionpackage.rh, conditionselectitem.rh).
+  - **Pet Editor**: Edit pet characteristics and behaviors (pet.rh).
+  - **Quest Editor**: Edit quest requirements, rewards, and objectives.
+  - **Random Rune Editor**: Edit 'gacha' style items pools (randomrune.rh).
+  - **Set Editor**: Edit item sets and their effects (setitem.rh).
+  - **Skill Editor**: Edit and configure character skills.
+  - **Title Editor**: Edit titles and title effects (charactertitle.rh).
+  - **World Editor**: Edit world data, including maps, dungeons, and environment settings (world.rh, dungeoninfolist.rh, mapselect_curtis.rh).
+
+### Local Databases
+- **Item Database** 
+- **Item Craft Database**
+- **Item DropGroup Database**
+- **Skill Database** 
 
 ### Language Settings
 
@@ -47,7 +54,7 @@ The toolkit curently supports 2 languages. You can change the language in the `S
 
 #### Available Languages
 - **English (en-US)** - Default language
-- **Korean (ko-KR)** - Machine translated
+- **Korean (ko-KR)** - Machine translated - WIP
 
 ## Setup Guide
 
@@ -56,7 +63,7 @@ To set up the toolkit and generate the necessary SQLite database:
 1. Navigate to the `SQLite Database Manager` page.
 2. Select the `table` folder containing the `.rh` table files.
 3. Click `Create Database` to generate the `gmdb_(Lang).db` database in the `Resources` folder.
-4. Place the extracted game sprites `\ui\sprite\1024` in the `Resources` folder.
+4. Place the extracted game sprites `\ui\sprite\1024` in the `Resources` folder. A prebuild database and sprites are avaliable on [`Resources.rar`](Resources.rar)
 5. Navigate to the `Settings` page and set the `SQL Server` credentials.
 
 ## Prerequisites for Development
@@ -99,14 +106,6 @@ A: Submit an issue on GitHub with a description of the feature and its potential
 
 **Q: How do I contribute?**  
 A: Fork the repository, make your changes, and submit a pull request.
-
-## Road Map
-
-### SQLite Databases
-- **Portable Databases:** Enemy/Item/Skills.
-
-### Specialized Table Editors
-- **Skill Editor**
 
 ## Credits
 

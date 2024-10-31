@@ -30,6 +30,7 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
         new("Pet Editor", "Edit pet .rh table file", SymbolRegular.DocumentEdit24, "peteditor"),
         new("Quest Editor", "Edit quest .rh table files", SymbolRegular.DocumentEdit24, "questeditor"),
         new("Random Box Editor", "Edit randomrune .rh table file", SymbolRegular.DocumentEdit24, "randomruneeditor"),
+        new("Skill Editor", "Edit skills .rh table files", SymbolRegular.DocumentEdit24, "skilleditor"),
         new("Set Item Editor", "Edit setitem .rh table file", SymbolRegular.DocumentEdit24, "setitemeditor"),
         new("Title Editor", "Edit title .rh table file", SymbolRegular.DocumentEdit24, "titleeditor"),
         new("World Editor", "Edit world .rh table files", SymbolRegular.DocumentEdit24, "worldeditor"),
@@ -97,6 +98,9 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
                     break;
                 case "worldeditor":
                     windowsProviderService.Show<WorldEditorWindow>(true);
+                    break;
+                case "skilleditor":
+                    windowsProviderService.Show<SkillEditorWindow>(true);
                     break;
             }
         }

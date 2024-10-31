@@ -28,16 +28,16 @@
     <ContentControl Template="{StaticResource box_red02}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="190*" />
-                <ColumnDefinition Width="150*" />
-                <ColumnDefinition Width="250*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
                 <RowDefinition Height="35" />
-                <RowDefinition Height="80*" />
-                <RowDefinition Height="120*" />
-                <RowDefinition Height="140*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <ui:TitleBar
@@ -48,7 +48,7 @@
                 Height="30"
                 Margin="30,5,0,0"
                 VerticalAlignment="Center"
-                d:Title="Add Item"
+                d:Title="Item List"
                 ButtonsForeground="White"
                 FontSize="15"
                 Foreground="White">
@@ -65,14 +65,14 @@
             <Grid
                 Grid.Row="1"
                 Grid.Column="2"
-                Margin="80,10,0,0"
+                Margin="0,0,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 Visibility="{Binding IsOptionsVisible}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="140" />
-                    <ColumnDefinition Width="140" />
-                    <ColumnDefinition Width="140" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <!--  left Column  -->
                 <StackPanel
@@ -88,7 +88,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intEnchantLevel"
-                        Width="120"
+                        Width="150"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
@@ -103,7 +103,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intRank"
-                        Width="120"
+                        Width="150"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="5"
                         Minimum="1"
@@ -122,7 +122,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intAugmentValue"
-                        Width="120"
+                        Width="150"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.AugmentValueMax, Converter={StaticResource GreaterOrEqualToIsEnabledConverter}, ConverterParameter=1}"
@@ -137,7 +137,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intReconstruction"
-                        Width="120"
+                        Width="150"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         Maximum="{Binding ItemDataManager.ItemDataViewModel.ReconstructionMax}"
                         Minimum="0"
@@ -156,7 +156,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intMaxDurability"
-                        Width="120"
+                        Width="150"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         LargeChange="{Binding ItemDataManager.ItemDataViewModel.MaxDurability, Converter={StaticResource IncrementConverter}}"
                         Maximum="{Binding ItemDataManager.ItemDataViewModel.MaxDurabilityMax}"
@@ -170,7 +170,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intWeight"
-                        Width="120"
+                        Width="150"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.Type, Converter={StaticResource ValueToIsEnabledConverter}, ConverterParameter='3,4'}"
                         LargeChange="100"
                         Maximum="200000"
@@ -206,11 +206,11 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="{x:Static rs:Resources.OptionSearch}"
+                        Content="Option Filter"
                         Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbOptionSearch"
-                        Width="250"
+                        Width="300"
                         Height="35"
                         CaretBrush="White"
                         FontFamily="{StaticResource ArialUnicodeMS}"
@@ -236,7 +236,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode1"
-                        Width="380"
+                        Width="Auto"
                         Height="24"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
@@ -259,7 +259,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode2"
-                        Width="380"
+                        Width="Auto"
                         Height="24"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
@@ -282,7 +282,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbOptionCode3"
-                        Width="380"
+                        Width="Auto"
                         Height="24"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
@@ -313,7 +313,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intOptionValue1"
-                        Width="120"
+                        Width="Auto"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
                         Maximum="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue}"
@@ -327,7 +327,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intOptionValue2"
-                        Width="120"
+                        Width="Auto"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
                         Maximum="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue}"
@@ -341,7 +341,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intOptionValue3"
-                        Width="120"
+                        Width="Auto"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.OptionCountMax, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Converter={StaticResource IncrementConverter}}"
                         Maximum="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue}"
@@ -359,7 +359,7 @@
                 Visibility="{Binding IsOptionsVisible}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
@@ -382,7 +382,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intSocketCount"
-                        Width="120"
+                        Width="150"
                         Margin="0,0,0,0"
                         Maximum="{Binding ItemDataManager.ItemDataViewModel.SocketCountMax, Mode=TwoWay}"
                         Minimum="0"
@@ -480,7 +480,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketCode1"
-                        Width="300"
+                        Width="Auto"
                         Height="24"
                         Margin="0,10,0,0"
                         HorizontalAlignment="Left"
@@ -504,7 +504,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketCode2"
-                        Width="300"
+                        Width="Auto"
                         Height="24"
                         Margin="0,10,0,0"
                         HorizontalAlignment="Left"
@@ -528,7 +528,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cbSocketCode3"
-                        Width="300"
+                        Width="Auto"
                         Height="24"
                         Margin="0,10,0,0"
                         HorizontalAlignment="Left"
@@ -561,7 +561,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intSocketValue1"
-                        Width="120"
+                        Width="Auto"
                         Margin="0,10,0,0"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=1}"
                         LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
@@ -576,7 +576,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intSocketValue2"
-                        Width="120"
+                        Width="Auto"
                         Margin="0,10,0,0"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=2}"
                         LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
@@ -591,7 +591,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intSocketValue3"
-                        Width="120"
+                        Width="Auto"
                         Margin="0,10,0,0"
                         IsEnabled="{Binding ItemDataManager.ItemDataViewModel.SocketCount, Converter={StaticResource GreaterOrEqualConverter}, ConverterParameter=3}"
                         LargeChange="{Binding ItemDataManager.ItemDataViewModel.OptionMaxValue, Mode=TwoWay, Converter={StaticResource IncrementConverter}}"
@@ -677,7 +677,8 @@
                     Content="{Binding AddItemText}"
                     Cursor="Hand"
                     Foreground="White"
-                    Style="{StaticResource lb_def_button02}" />
+                    Style="{StaticResource lb_def_button02}"
+                    Visibility="{Binding IsButtonVisible}" />
             </Grid>
             <!--  Frame Controls  -->
             <ScrollViewer
@@ -744,6 +745,7 @@
                 </TextBlock>
                 <DataGrid
                     x:Name="dataGridView"
+                    Height="Auto"
                     Margin="0,5,0,0"
                     HorizontalContentAlignment="Center"
                     VerticalContentAlignment="Center"
@@ -827,16 +829,21 @@
                 x:Name="datagridFilter"
                 Grid.Row="3"
                 Grid.Column="0"
-                Margin="0,0,50,20"
+                Margin="0,0,0,20"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Bottom">
+                VerticalAlignment="Top">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <StackPanel
+                    Grid.Row="0"
                     Grid.ColumnSpan="2"
-                    Margin="0,-65,0,0"
+                    Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
@@ -848,7 +855,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbSearch"
-                        Width="250"
+                        Width="300"
                         Height="40"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -860,6 +867,7 @@
                 </StackPanel>
                 <!--  Left Column  -->
                 <StackPanel
+                    Grid.Row="1"
                     Grid.Column="0"
                     HorizontalAlignment="Left"
                     Orientation="Vertical">
@@ -872,7 +880,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemType"
-                        Width="145"
+                        Width="200"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
@@ -895,7 +903,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemCategory"
-                        Width="145"
+                        Width="200"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -917,7 +925,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbSubCategory"
-                        Width="145"
+                        Width="200"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -934,6 +942,7 @@
                 </StackPanel>
                 <!--  Right Column  -->
                 <StackPanel
+                    Grid.Row="1"
                     Grid.Column="1"
                     HorizontalAlignment="Left"
                     Orientation="Vertical">
@@ -946,7 +955,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemBranch"
-                        Width="145"
+                        Width="200"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -968,7 +977,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbJobClass"
-                        Width="145"
+                        Width="200"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -982,7 +991,6 @@
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
-
                     <Label
                         x:Name="lbItemTrade"
                         HorizontalAlignment="Center"
@@ -992,7 +1000,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemTrade"
-                        Width="145"
+                        Width="200"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"

@@ -105,14 +105,14 @@ namespace RHToolkit.Services
         public string FormatMainStat(int itemType, int physicalStat, int magicStat, int jobClass, int weaponId, int enhanceLevel, int gearLevel)
         {
             string mainStat = "";
-            
+
             if ((ItemType)itemType == ItemType.Armor && physicalStat > 0 && magicStat > 0)
             {
                 if (enhanceLevel > 0)
                 {
                     (double defenseValue, int armorPlus) = _gmDatabaseService.GetArmorEnhanceValue(enhanceLevel);
 
-                    double basePercentage = defenseValue * 100; 
+                    double basePercentage = defenseValue * 100;
                     double percentage = basePercentage + armorPlus;
 
                     mainStat = $"{Resources.PhysicalDefense} +{physicalStat}\n" +
@@ -298,7 +298,7 @@ namespace RHToolkit.Services
                 }
                 else if (optionName.Contains("Skill Damage +") || optionName.Contains("Skill Cooldown -"))
                 {
-                    string skillName = GetSkillName(optionID);
+                    string skillName = GetOptionSkillName(optionID);
 
                     optionName = optionName.Replace(valuePlaceholder01, skillName);
                     optionName = FormatPercentage(optionName, valuePlaceholder02, replacement01);
@@ -343,7 +343,7 @@ namespace RHToolkit.Services
             return optionName;
         }
 
-        private static string GetSkillName(int optionID)
+        private static string GetOptionSkillName(int optionID)
         {
             return optionID switch
             {

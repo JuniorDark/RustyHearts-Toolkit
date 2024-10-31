@@ -14,6 +14,7 @@ namespace RHToolkit.Services
         void OpenNpcShopWindow(Guid token, NameID shopID, NameID? shopTitle);
         void OpenRareCardRewardWindow(Guid token, int id, string? messageType);
         void OpenSanctionWindow(CharacterData characterData);
+        void OpenSkillWindow(Guid token, string messageType, SkillData skillData, CharacterData? characterData = null);
         void OpenStorageWindow(CharacterData characterData);
         void OpenTitleWindow(CharacterData characterData);
     }

@@ -7,6 +7,7 @@ namespace RHToolkit.Models.SQLite
         private readonly IGMDatabaseService _gmDatabaseService;
         public List<ItemData>? CachedItemDataList { get; private set; }
         public List<NameID>? CachedOptionItems { get; private set; }
+        public List<SkillData>? CachedSkillDataList { get; private set; }
 
         public CachedDataManager(IGMDatabaseService gmDatabaseService)
         {
@@ -14,6 +15,7 @@ namespace RHToolkit.Models.SQLite
 
             CachedItemDataList = null;
             CachedOptionItems = null;
+            CachedSkillDataList = null;
 
             InitializeCachedLists();
         }
@@ -28,11 +30,16 @@ namespace RHToolkit.Models.SQLite
 
                 CachedItemDataList?.Clear();
                 CachedOptionItems?.Clear();
+                CachedSkillDataList?.Clear();
 
                 // Initialize CachedItemDataList
                 CachedItemDataList = _gmDatabaseService.GetItemDataLists();
+                // Initialize CachedSkillItems
+                var cachedSkillDataList = _gmDatabaseService.GetSkillDataLists();
+                CachedSkillDataList = cachedSkillDataList;
                 // Initialize CachedOptionItems
                 CachedOptionItems = _gmDatabaseService.GetOptionItems();
+                
             }
         }
     }

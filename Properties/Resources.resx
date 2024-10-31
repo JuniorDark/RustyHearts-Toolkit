@@ -993,4 +993,76 @@
   <data name="SQLiteDatabaseManager" xml:space="preserve">
     <value>SQLite Database Manager</value>
   </data>
+  <data name="Focus1" xml:space="preserve">
+    <value>Focus 1</value>
+  </data>
+  <data name="Focus2" xml:space="preserve">
+    <value>Focus 2</value>
+  </data>
+  <data name="Focus3" xml:space="preserve">
+    <value>Focus 3</value>
+  </data>
+  <data name="BaseSkill" xml:space="preserve">
+    <value>Base</value>
+  </data>
+  <data name="BeforeFocusChange" xml:space="preserve">
+    <value>Before Focus Change</value>
+  </data>
+  <data name="WeaponSkill" xml:space="preserve">
+    <value>Weapon</value>
+  </data>
+  <data name="CurseSkill" xml:space="preserve">
+    <value>Curse</value>
+  </data>
+  <data name="BlackSorcerySkill" xml:space="preserve">
+    <value>Black Sorcery</value>
+  </data>
+  <data name="SummonSkill" xml:space="preserve">
+    <value>Summon</value>
+  </data>
+  <data name="LightSkill" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="FireEarthSkills" xml:space="preserve">
+    <value>Fire &amp; Earth</value>
+  </data>
+  <data name="WindSkill" xml:space="preserve">
+    <value>Wind</value>
+  </data>
+  <data name="FireSkill" xml:space="preserve">
+    <value>Fire</value>
+  </data>
+  <data name="WindWaterSkills" xml:space="preserve">
+    <value>Wind &amp; Water</value>
+  </data>
+  <data name="FightingSkills" xml:space="preserve">
+    <value>Fighting Skills</value>
+  </data>
+  <data name="KiGongShoutSkills" xml:space="preserve">
+    <value>KiGong &amp; Shout</value>
+  </data>
+  <data name="SavageSkill" xml:space="preserve">
+    <value>Savage</value>
+  </data>
+  <data name="FirearmSkill" xml:space="preserve">
+    <value>Firearm</value>
+  </data>
+  <data name="TacticalSkill" xml:space="preserve">
+    <value>Tactical</value>
+  </data>
+  <data name="DeviceSkill" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="HeavyWeaponSkill" xml:space="preserve">
+    <value>Heavy Weapon</value>
+  </data>
+  <data name="NotUsed" xml:space="preserve">
+    <value>Not Used</value>
+  </data>
+  <data name="SavageGrabSkills" xml:space="preserve">
+    <value>Savage &amp; Grab</value>
+  </data>
+  <data name="AddSkillHelp" xml:space="preserve">
+    <value>Click on a skill to add/edit, Right click to remove.</value>
+  </data>
 </root>

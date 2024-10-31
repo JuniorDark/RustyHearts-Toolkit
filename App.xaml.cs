@@ -63,6 +63,7 @@ public partial class App : Application
                 _ = services.AddSingleton<CachedDataManager>();
                 _ = services.AddSingleton<CharacterDataManager>();
                 _ = services.AddSingleton<MailDataManager>();
+                _ = services.AddSingleton<SkillDataManager>();
                 // Database services and viewmodels
                 _ = services.AddTransient<ItemDataManager>();
                 _ = services.AddTransient<ItemDataViewModel>();
@@ -83,6 +84,8 @@ public partial class App : Application
                 _ = services.AddTransient<InventoryWindowViewModel>();
                 _ = services.AddTransient<StorageWindow>();
                 _ = services.AddTransient<StorageWindowViewModel>();
+                _ = services.AddTransient<SkillDataViewModel>();
+                _ = services.AddTransient<SkillDataManager>();
                 // Editor services and viewmodels
                 _ = services.AddTransient<RHEditorWindow>();
                 _ = services.AddTransient<RHEditorViewModel>();
@@ -114,17 +117,21 @@ public partial class App : Application
                 _ = services.AddTransient<AddEffectEditorViewModel>();
                 _ = services.AddTransient<WorldEditorWindow>();
                 _ = services.AddTransient<WorldEditorViewModel>();
+                _ = services.AddTransient<SkillEditorWindow>();
+                _ = services.AddTransient<SkillEditorViewModel>();
                 // SQLite services and viewmodels
+                _ = services.AddTransient<DropGroupListWindow>();
+                _ = services.AddTransient<DropGroupListViewModel>();
+                _ = services.AddTransient<ItemMixWindow>();
+                _ = services.AddTransient<ItemMixViewModel>();
                 _ = services.AddTransient<ItemWindow>();
                 _ = services.AddTransient<ItemWindowViewModel>();
                 _ = services.AddTransient<NpcShopWindow>();
                 _ = services.AddTransient<NPCShopViewModel>();
-                _ = services.AddTransient<ItemMixWindow>();
-                _ = services.AddTransient<ItemMixViewModel>();
                 _ = services.AddTransient<RareCardRewardWindow>();
                 _ = services.AddTransient<RareCardRewardViewModel>();
-                _ = services.AddTransient<DropGroupListWindow>();
-                _ = services.AddTransient<DropGroupListViewModel>();
+                _ = services.AddTransient<SkillWindow>();
+                _ = services.AddTransient<SkillWindowViewModel>();
 
             }
         )

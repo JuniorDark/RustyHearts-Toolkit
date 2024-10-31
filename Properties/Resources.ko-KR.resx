@@ -993,4 +993,76 @@
   <data name="SQLiteDatabaseManager" xml:space="preserve">
     <value>SQLite 데이터베이스 관리자</value>
   </data>
+  <data name="Focus1" xml:space="preserve">
+    <value>초점 1</value>
+  </data>
+  <data name="Focus2" xml:space="preserve">
+    <value>초점 2</value>
+  </data>
+  <data name="Focus3" xml:space="preserve">
+    <value>초점 3</value>
+  </data>
+  <data name="BaseSkill" xml:space="preserve">
+    <value>베이스</value>
+  </data>
+  <data name="BeforeFocusChange" xml:space="preserve">
+    <value>포커스 변경 전</value>
+  </data>
+  <data name="WeaponSkill" xml:space="preserve">
+    <value>무기</value>
+  </data>
+  <data name="CurseSkill" xml:space="preserve">
+    <value>저주</value>
+  </data>
+  <data name="BlackSorcerySkill" xml:space="preserve">
+    <value>검은 마법</value>
+  </data>
+  <data name="SummonSkill" xml:space="preserve">
+    <value>소환하다</value>
+  </data>
+  <data name="LightSkill" xml:space="preserve">
+    <value>빛</value>
+  </data>
+  <data name="FireEarthSkills" xml:space="preserve">
+    <value>불과 땅</value>
+  </data>
+  <data name="WindSkill" xml:space="preserve">
+    <value>바람</value>
+  </data>
+  <data name="FireSkill" xml:space="preserve">
+    <value>불</value>
+  </data>
+  <data name="WindWaterSkills" xml:space="preserve">
+    <value>바람과 물</value>
+  </data>
+  <data name="FightingSkills" xml:space="preserve">
+    <value>싸움 기술</value>
+  </data>
+  <data name="KiGongShoutSkills" xml:space="preserve">
+    <value> 기공&amp;외침</value>
+  </data>
+  <data name="SavageSkill" xml:space="preserve">
+    <value>야만적인</value>
+  </data>
+  <data name="FirearmSkill" xml:space="preserve">
+    <value>총기</value>
+  </data>
+  <data name="TacticalSkill" xml:space="preserve">
+    <value>전술적</value>
+  </data>
+  <data name="DeviceSkill" xml:space="preserve">
+    <value>장치</value>
+  </data>
+  <data name="HeavyWeaponSkill" xml:space="preserve">
+    <value>중화기</value>
+  </data>
+  <data name="NotUsed" xml:space="preserve">
+    <value>사용하지 않음</value>
+  </data>
+  <data name="SavageGrabSkills" xml:space="preserve">
+    <value>새비지 앤 그랩</value>
+  </data>
+  <data name="AddSkillHelp" xml:space="preserve">
+    <value>추가/편집하려면 스킬을 클릭하세요. 제거하려면 마우스 오른쪽 버튼을 클릭하세요.</value>
+  </data>
 </root>

@@ -12,6 +12,7 @@ namespace RHToolkit.Services
 
         private readonly string currentLanguage = RegistrySettingsHelper.GetAppLanguage();
 
+        #region ItemData
         public List<ItemData> GetItemDataList(ItemType itemType, string itemTableName)
         {
             List<ItemData> itemList = [];
@@ -101,7 +102,7 @@ namespace RHToolkit.Services
                     nItemTrade, nOverlapCnt, nDurability, nDefense, nMagicDefense, nWeight, nSellPrice, nOptionCountMax, nSetId, 
                     nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup, nTitleList, fCooltime, nBindingOff,  
                     wszDesc, {descriptionField}
-                FROM {itemTableName}";
+                    FROM {itemTableName}";
                 }
                 else
                 {
@@ -111,7 +112,7 @@ namespace RHToolkit.Services
                     nItemTrade, nOverlapCnt, nDurability, nDefense, nMagicDefense, nWeight, nSellPrice, nOptionCountMax, nSetId, 
                     nFixOption00, nFixOptionValue00, nFixOption01, nFixOptionValue01, nPetEatGroup, nTitleList, fCooltime, nBindingOff, 
                     wszDesc, {descriptionField}
-                FROM {itemTableName}";
+                    FROM {itemTableName}";
                 }
             }
             else
@@ -120,12 +121,96 @@ namespace RHToolkit.Services
             SELECT 
                 i.nID, i.nWeaponID00, i.szIconName, i.nCategory, i.nSubCategory, i.nBranch, i.nInventoryType, i.nAccountStorage, i.nSocketCountMax, i.nReconstructionMax, i.nJobClass, i.nLevelLimit, 
                 i.nItemTrade, i.nOverlapCnt, i.nDurability, i.nDefense, i.nMagicDefense, i.nWeight, i.nSellPrice, i.nOptionCountMax, i.nSetId, 
-                i.nFixOption00, i.nFixOptionValue00, i.nFixOption01, i.nFixOptionValue01, i.nPetEatGroup, nTitleList, fCooltime, nBindingOff, 
+                i.nFixOption00, i.nFixOptionValue00, i.nFixOption01, i.nFixOptionValue01, i.nPetEatGroup, i.nTitleList, i.fCooltime, i.nBindingOff, 
                 s.wszDesc, s.{descriptionField}
-            FROM {itemTableName} i
-            LEFT JOIN {itemTableName}_string s ON i.nID = s.nID";
+                FROM {itemTableName} i
+                LEFT JOIN {itemTableName}_string s ON i.nID = s.nID";
             }
         }
+
+        #endregion
+
+        #region SkillData
+
+        public List<SkillData> GetSkillDataList(SkillType skillType, string skillTableName)
+        {
+            List<SkillData> skillList = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = GetSkillQuery(skillTableName);
+
+                using var command = new SQLiteCommand(query, connection);
+
+                using var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    var characterType = reader["szCharacterType"].ToString();
+
+                    int characterTypeValue = characterType switch
+                    {
+                        "TYPE_ALL" => 0,
+                        "TYPE_A" => 1,
+                        "TYPE_B" => 2,
+                        "TYPE_C" => 3,
+                        _ => 0,
+                    };
+                    SkillData skill = new()
+                    {
+                        CharacterSkillType = skillType,
+                        ID = Convert.ToInt32(reader["nID"]),
+                        SkillID = Convert.ToInt32(reader["nSkillID"]),
+                        SkillName = reader["wszName"].ToString(),
+                        IconName = reader["szIcon"].ToString(),
+                        Description1 = reader["wszDescription"].ToString(),
+                        Description2 = reader["wszDescription1"].ToString(),
+                        Description3 = reader["wszDescription2"].ToString(),
+                        Description4 = reader["wszDescription3"].ToString(),
+                        Description5 = reader["wszDescription4"].ToString(),
+                        SkillLevel = Convert.ToInt32(reader["nSkillLevel"]),
+                        RequiredLevel = Convert.ToInt32(reader["nLearnLevel"]),
+                        MPCost = Convert.ToSingle(reader["fMP"]),
+                        SPCost = Convert.ToInt32(reader["nCost"]),
+                        Cooltime = Convert.ToSingle(reader["fCoolTime"]),
+                        SkillType = reader["szSkillType"].ToString(),
+                        CharacterType = characterType,
+                        CharacterTypeValue = characterTypeValue
+                    };
+
+                    skillList.Add(skill);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving SkillData from the database: {ex.Message}\n {ex.StackTrace}", ex);
+            }
+
+            return skillList;
+        }
+
+        public List<SkillData> GetSkillDataLists()
+        {
+            List<SkillData> skillList =
+                [
+                    .. GetSkillDataList(SkillType.SkillFrantz, "frantzskill"),
+                    .. GetSkillDataList(SkillType.SkillAngela, "angelaskill"),
+                    .. GetSkillDataList(SkillType.SkillTude, "tudeskill"),
+                    .. GetSkillDataList(SkillType.SkillNatasha, "natashaskill"),
+                ];
+
+            return skillList;
+        }
+
+        private static string GetSkillQuery(string skillTableName)
+        {
+            return $@"
+            SELECT 
+                i.nID, i.nSkillID, i.nSkillLevel, i.nLearnLevel, i.fMP, i.szIcon, i.nCost, i.fCoolTime, i.szSkillType, i.szCharacterType,
+                s.wszName, s.wszDescription, s.wszDescription1, s.wszDescription2, s.wszDescription3, s.wszDescription4
+            FROM {skillTableName} i
+            LEFT JOIN {skillTableName}_string s ON i.nID = s.nID";
+        }
+        #endregion
 
         public List<NameID> GetOptionItems()
         {
@@ -195,7 +280,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
 
             return items;
@@ -324,7 +409,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
 
             return items;
@@ -402,7 +487,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
 
             return items;
@@ -437,7 +522,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
 
             return items;
@@ -468,7 +553,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
 
             return items;
@@ -503,7 +588,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
 
             return items;
@@ -854,7 +939,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving items from the database: {ex.Message}", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
 
             return items;
@@ -898,7 +983,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving string value from the database", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
         }
 
@@ -972,7 +1057,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving integer value from the database", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
         }
 
@@ -1000,7 +1085,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error retrieving option values from the database: ", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
         }
 
@@ -1029,7 +1114,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving weapon stats from the database", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
 
         }
@@ -1051,7 +1136,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving fortune values from the database", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
         }
 
@@ -1069,7 +1154,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error checking if name is in nick filter", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
         }
 
@@ -1085,7 +1170,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving experience from the database", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
         }
 
@@ -1111,7 +1196,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving title values from the database", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
         }
 
@@ -1138,7 +1223,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving set values from the database", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
         }
 
@@ -1157,7 +1242,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving enchant values from the database", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
         }
 
@@ -1176,8 +1261,115 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving enchant values from the database", ex);
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
             }
         }
+
+        #region Skills
+
+        public string FormatPreviousSkill(SkillType skillType, int skillID)
+        {
+            try
+            {
+                (int beforeSkillID00, int beforeSkillLevel00, int beforeSkillID01, int beforeSkillLevel01, int beforeSkillID02, int beforeSkillLevel02) = GetSkillTreeValues(skillType, skillID);
+
+                if (beforeSkillID00 == 0 && beforeSkillID01 == 0 && beforeSkillID02 == 0)
+                    return string.Empty;
+
+                string skillName01 = GetSkillName(skillType, beforeSkillID00, beforeSkillLevel00);
+                string skillName02 = GetSkillName(skillType, beforeSkillID01, beforeSkillLevel01);
+                string skillName03 = GetSkillName(skillType, beforeSkillID02, beforeSkillLevel02);
+
+                string skillName = $"<Required Learned Skills>\n";
+                if (beforeSkillID00 != 0)
+                    skillName += $"Lv. {beforeSkillLevel00} {skillName01}\n";
+                if (beforeSkillID01 != 0)
+                    skillName += $"Lv. {beforeSkillLevel01} {skillName02}\n";
+                if (beforeSkillID02 != 0)
+                    skillName += $"Lv. {beforeSkillLevel02} {skillName03}\n";
+
+                return skillName;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+            }
+            
+        }
+
+        public (int beforeSkillID00, int beforeSkillLevel00, int beforeSkillID01, int beforeSkillLevel01, int beforeSkillID02, int beforeSkillLevel02) GetSkillTreeValues(SkillType characterSkillType, int skillID)
+        {
+            string tableName = characterSkillType switch
+            {
+                SkillType.SkillFrantz => "frantzskilltree",
+                SkillType.SkillAngela => "angelaskilltree",
+                SkillType.SkillTude => "tudeskilltree",
+                SkillType.SkillNatasha => "natashaskilltree",
+                _ => throw new Exception($"Invalid class: {characterSkillType}")
+            };
+
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = $"SELECT nBeforeSkillID00, nBeforeSkillLevel00, nBeforeSkillID01, nBeforeSkillLevel01, nBeforeSkillID02, nBeforeSkillLevel02 FROM {tableName} WHERE nSkillID = @SkillID";
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@SkillID", skillID));
+
+                return command.Read() ?
+                (command.GetInt32(0),
+                command.GetInt32(1),
+                command.GetInt32(2),
+                command.GetInt32(3),
+                command.GetInt32(4),
+                command.GetInt32(5)) :
+                (0, 0, 0, 0, 0, 0);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+            }
+
+        }
+
+        public string GetSkillName(SkillType characterSkillType, int skillID, int skillLevel)
+        {
+            string tableName = characterSkillType switch
+            {
+                SkillType.SkillFrantz => "frantzskill",
+                SkillType.SkillAngela => "angelaskill",
+                SkillType.SkillTude => "tudeskill",
+                SkillType.SkillNatasha => "natashaskill",
+                _ => throw new Exception($"Invalid class: {characterSkillType}")
+            };
+
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                int id = GetSkillID(tableName, skillID, skillLevel);
+
+                string query = $"SELECT wszName FROM {tableName}_string WHERE nID = @SkillID";
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@SkillID", id));
+
+                return command.Read() ?
+                command.GetString(0) :
+                string.Empty;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+            }
+
+        }
+
+        private int GetSkillID(string tableName, int skillID, int skillLevel)
+        {
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+
+            string query = $"SELECT nID FROM {tableName} WHERE nSkillID = @SkillID AND nSkillLevel = @SkillLevel";
+            using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@SkillID", skillID), ("@SkillLevel", skillLevel));
+
+            return command.Read() ? command.GetInt32(0) : 0;
+        }
+
+        #endregion
     }
 }

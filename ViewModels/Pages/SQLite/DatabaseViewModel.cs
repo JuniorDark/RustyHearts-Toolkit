@@ -15,6 +15,7 @@ namespace RHToolkit.ViewModels.Pages
         private WindowCard[] _windowCards =
         [
             new(Resources.ItemDatabase, "Item List", SymbolRegular.BookDatabase24, "item"),
+            new("Skill Database", "Skill List", SymbolRegular.BookDatabase24, "skill"),
             new("Item Craft Database", "Item Craft List", SymbolRegular.BookDatabase24, "itemmix"),
             new("NPC Shop Database", "NPC Shop List", SymbolRegular.BookDatabase24, "npcshop"),
             new("Rare Card Reward Database", "Rare Card Reward List", SymbolRegular.BookDatabase24, "rarecardreward"),
@@ -38,6 +39,9 @@ namespace RHToolkit.ViewModels.Pages
 
                 switch (value)
                 {
+                    case "dropgroup":
+                        windowsProviderService.ShowInstance<DropGroupListWindow>(true);
+                        break;
                     case "item":
                         windowsProviderService.ShowInstance<ItemWindow>(true);
                         break;
@@ -50,8 +54,8 @@ namespace RHToolkit.ViewModels.Pages
                     case "rarecardreward":
                         windowsProviderService.ShowInstance<RareCardRewardWindow>(true);
                         break;
-                    case "dropgroup":
-                        windowsProviderService.ShowInstance<DropGroupListWindow>(true);
+                    case "skill":
+                        windowsProviderService.ShowInstance<SkillWindow>(true);
                         break;
                 }
             }

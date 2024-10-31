@@ -106,6 +106,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click on a skill to add/edit, Right click to remove..
+        /// </summary>
+        public static string AddSkillHelp {
+            get {
+                return ResourceManager.GetString("AddSkillHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
         public static string All {
@@ -259,11 +268,38 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Base.
+        /// </summary>
+        public static string BaseSkill {
+            get {
+                return ResourceManager.GetString("BaseSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Basic.
         /// </summary>
         public static string Basic {
             get {
                 return ResourceManager.GetString("Basic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Before Focus Change.
+        /// </summary>
+        public static string BeforeFocusChange {
+            get {
+                return ResourceManager.GetString("BeforeFocusChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Black Sorcery.
+        /// </summary>
+        public static string BlackSorcerySkill {
+            get {
+                return ResourceManager.GetString("BlackSorcerySkill", resourceCulture);
             }
         }
         
@@ -448,6 +484,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Curse.
+        /// </summary>
+        public static string CurseSkill {
+            get {
+                return ResourceManager.GetString("CurseSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Database.
         /// </summary>
         public static string Database {
@@ -480,6 +525,15 @@ namespace RHToolkit.Properties {
         public static string DemonHands {
             get {
                 return ResourceManager.GetString("DemonHands", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Device.
+        /// </summary>
+        public static string DeviceSkill {
+            get {
+                return ResourceManager.GetString("DeviceSkill", resourceCulture);
             }
         }
         
@@ -817,11 +871,74 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fighting Skills.
+        /// </summary>
+        public static string FightingSkills {
+            get {
+                return ResourceManager.GetString("FightingSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Firearm.
+        /// </summary>
+        public static string FirearmSkill {
+            get {
+                return ResourceManager.GetString("FirearmSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fire &amp; Earth.
+        /// </summary>
+        public static string FireEarthSkills {
+            get {
+                return ResourceManager.GetString("FireEarthSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fire.
+        /// </summary>
+        public static string FireSkill {
+            get {
+                return ResourceManager.GetString("FireSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fixed Buff.
         /// </summary>
         public static string FixedBuff {
             get {
                 return ResourceManager.GetString("FixedBuff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Focus 1.
+        /// </summary>
+        public static string Focus1 {
+            get {
+                return ResourceManager.GetString("Focus1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Focus 2.
+        /// </summary>
+        public static string Focus2 {
+            get {
+                return ResourceManager.GetString("Focus2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Focus 3.
+        /// </summary>
+        public static string Focus3 {
+            get {
+                return ResourceManager.GetString("Focus3", resourceCulture);
             }
         }
         
@@ -921,6 +1038,15 @@ namespace RHToolkit.Properties {
         public static string Hair {
             get {
                 return ResourceManager.GetString("Hair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Heavy Weapon.
+        /// </summary>
+        public static string HeavyWeaponSkill {
+            get {
+                return ResourceManager.GetString("HeavyWeaponSkill", resourceCulture);
             }
         }
         
@@ -1123,6 +1249,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to KiGong &amp; Shout.
+        /// </summary>
+        public static string KiGongShoutSkills {
+            get {
+                return ResourceManager.GetString("KiGongShoutSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>
         public static string Language {
@@ -1164,6 +1299,15 @@ namespace RHToolkit.Properties {
         public static string Leila {
             get {
                 return ResourceManager.GetString("Leila", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        public static string LightSkill {
+            get {
+                return ResourceManager.GetString("LightSkill", resourceCulture);
             }
         }
         
@@ -1407,6 +1551,15 @@ namespace RHToolkit.Properties {
         public static string Normal {
             get {
                 return ResourceManager.GetString("Normal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Used.
+        /// </summary>
+        public static string NotUsed {
+            get {
+                return ResourceManager.GetString("NotUsed", resourceCulture);
             }
         }
         
@@ -1960,6 +2113,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Savage &amp; Grab.
+        /// </summary>
+        public static string SavageGrabSkills {
+            get {
+                return ResourceManager.GetString("SavageGrabSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Savage.
+        /// </summary>
+        public static string SavageSkill {
+            get {
+                return ResourceManager.GetString("SavageSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save Template.
         /// </summary>
         public static string SaveTemplate {
@@ -2500,11 +2671,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Summon.
+        /// </summary>
+        public static string SummonSkill {
+            get {
+                return ResourceManager.GetString("SummonSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sword.
         /// </summary>
         public static string Sword {
             get {
                 return ResourceManager.GetString("Sword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tactical.
+        /// </summary>
+        public static string TacticalSkill {
+            get {
+                return ResourceManager.GetString("TacticalSkill", resourceCulture);
             }
         }
         
@@ -2671,11 +2860,38 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Weapon.
+        /// </summary>
+        public static string WeaponSkill {
+            get {
+                return ResourceManager.GetString("WeaponSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Weight.
         /// </summary>
         public static string Weight {
             get {
                 return ResourceManager.GetString("Weight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wind.
+        /// </summary>
+        public static string WindSkill {
+            get {
+                return ResourceManager.GetString("WindSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wind &amp; Water.
+        /// </summary>
+        public static string WindWaterSkills {
+            get {
+                return ResourceManager.GetString("WindWaterSkills", resourceCulture);
             }
         }
         
