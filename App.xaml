@@ -12,7 +12,6 @@
         <ResourceDictionary>
 
             <FontFamily x:Key="ArialUnicodeMS">pack://application:,,,/Assets/Fonts/#Arial Unicode MS</FontFamily>
-            <FontFamily x:Key="Dotum">pack://application:,,,/Assets/Fonts/#Dotum</FontFamily>
 
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemesDictionary Theme="Dark" />

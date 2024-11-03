@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:RHToolkit.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:RHToolkit.ViewModels.Pages"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
     Title="Home"
     d:DataContext="{d:DesignInstance local:CharacterRestorePage,
                                      IsDesignTimeCreatable=False}"
@@ -39,7 +40,7 @@
                 Background="Black"
                 BorderThickness="0"
                 Foreground="White"
-                Tag="Character Name/Account"
+                Tag="{x:Static rs:Resources.NameAccount}"
                 Template="{StaticResource lb_textbox}"
                 Text="{Binding ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button
@@ -49,7 +50,7 @@
                 VerticalAlignment="Center"
                 Background="Transparent"
                 Command="{Binding ViewModel.ReadDeleteCharacterDataCommand}"
-                Content="Search"
+                Content="{x:Static rs:Resources.Search}"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
@@ -70,53 +71,36 @@
                 x:Name="dataGridView"
                 Height="300"
                 Margin="0,5,0,0"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
                 AutoGenerateColumns="False"
-                BorderBrush="#FF0F0D0A"
                 CanUserAddRows="False"
                 ColumnWidth="Auto"
                 EnableColumnVirtualization="True"
                 EnableRowVirtualization="True"
-                FontFamily="{StaticResource ArialUnicodeMS}"
-                FontSize="12"
                 HeadersVisibility="Column"
-                HorizontalGridLinesBrush="White"
                 HorizontalScrollBarVisibility="Disabled"
                 ItemsSource="{Binding ViewModel.CharacterDataList}"
                 SelectedItem="{Binding ViewModel.CharacterData, Mode=TwoWay}"
                 SelectionMode="Single"
-                Template="{StaticResource lb_datagrid}"
-                VerticalGridLinesBrush="White">
-                <DataGrid.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkBlue" />
-                </DataGrid.Resources>
-                <DataGrid.Foreground>
-                    <ImageBrush />
-                </DataGrid.Foreground>
-                <DataGrid.Background>
-                    <ImageBrush />
-                </DataGrid.Background>
+                Template="{StaticResource lb_datagrid}">
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="80*"
                         Binding="{Binding AccountName}"
-                        Header="Account"
+                        Header="{x:Static rs:Resources.Account}"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="100*"
                         Binding="{Binding CharacterName}"
-                        Header="Character Name"
+                        Header="{x:Static rs:Resources.CharacterName}"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="140*"
                         Binding="{Binding CreateTime}"
-                        Header="Create Date"
+                        Header="{x:Static rs:Resources.CreateDate}"
                         IsReadOnly="True" />
                     <DataGridTemplateColumn
                         Width="50*"
-                        Header="Class"
+                        Header="{x:Static rs:Resources.Class}"
                         IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -126,7 +110,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn
                         Width="70*"
-                        Header="Focus"
+                        Header="{x:Static rs:Resources.Focus}"
                         IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -144,16 +128,16 @@
                     <DataGridTextColumn
                         Width="50*"
                         Binding="{Binding Level}"
-                        Header="Level"
+                        Header="{x:Static rs:Resources.Level}"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="90*"
                         Binding="{Binding Gold}"
-                        Header="Gold"
+                        Header="{x:Static rs:Resources.Gold}"
                         IsReadOnly="True" />
                     <DataGridTemplateColumn
                         Width="60*"
-                        Header="State"
+                        Header="{x:Static rs:Resources.State}"
                         IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -198,7 +182,7 @@
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding ViewModel.RestoreCharacterCommand}"
-                    Content="Restore Character"
+                    Content="{x:Static rs:Resources.RestoreCharacter}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />

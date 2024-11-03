@@ -44,7 +44,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -58,7 +58,7 @@ namespace RHToolkit.ViewModels.Pages
 
             if (!ValidateCouponCode(CouponCode))
             {
-                RHMessageBoxHelper.ShowOKMessage("The coupon code is invalid. It must have 20 characters and contain only letters and numbers.", "Invalid Coupon");
+                RHMessageBoxHelper.ShowOKMessage(Resources.CouponInvalidMessage, Resources.Error);
                 return;
             }
 
@@ -66,24 +66,24 @@ namespace RHToolkit.ViewModels.Pages
             {
                 string couponCode = CouponCode.Replace("-", "");
 
-                if (RHMessageBoxHelper.ConfirmMessage($"Add the coupon '{couponCode}' valid until '{ValidDate}'?"))
+                if (RHMessageBoxHelper.ConfirmMessage(Resources.CouponAddMessage))
                 {
                     if (await _databaseService.CouponExists(couponCode))
                     {
-                        RHMessageBoxHelper.ShowOKMessage($"The coupon '{couponCode}' already exists.", "Duplicate Coupon");
+                        RHMessageBoxHelper.ShowOKMessage(Resources.CouponDuplicateMessage, Resources.Error);
                         return;
                     }
 
                     await _databaseService.AddCouponAsync(couponCode, ValidDate, ItemData);
 
-                    RHMessageBoxHelper.ShowOKMessage("Coupon added successfully!", "Success");
+                    RHMessageBoxHelper.ShowOKMessage(Resources.CouponAddSuccessMessage, Resources.Success);
 
                     await ReadCouponList();
                 }
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error} : {ex.Message}");
             }
         }
 
@@ -129,7 +129,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error} : {ex.Message}");
             }
         }
 
@@ -160,16 +160,15 @@ namespace RHToolkit.ViewModels.Pages
 
             try
             {
-
                 if (SelectedCoupon != null)
                 {
-                    if (RHMessageBoxHelper.ConfirmMessage($"Delete the coupon?"))
-                    {
-                        int couponNumber = (int)SelectedCoupon["no"];
+                    int couponNumber = (int)SelectedCoupon["no"];
 
+                    if (RHMessageBoxHelper.ConfirmMessage(string.Format(Resources.CouponDeleteMessage, couponNumber)))
+                    {
                         await _databaseService.DeleteCouponAsync(couponNumber);
 
-                        RHMessageBoxHelper.ShowOKMessage($"Coupon deleted successfully!", "Success");
+                        RHMessageBoxHelper.ShowOKMessage(Resources.CouponDeleteSuccessMessage, Resources.Success);
 
                         SelectedCoupon = null;
 
@@ -179,7 +178,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error} : {ex.Message}");
             }
         }
 
@@ -207,7 +206,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error adding item: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -272,11 +271,11 @@ namespace RHToolkit.ViewModels.Pages
         private ItemDataViewModel? _itemDataViewModel;
         partial void OnItemDataViewModelChanged(ItemDataViewModel? value)
         {
-            ItemName = value != null ? value.ItemName : "Select a Item";
+            ItemName = value != null ? value.ItemName : Resources.SelectItem;
         }
 
         [ObservableProperty]
-        private string? _itemName = "Select a Item";
+        private string? _itemName = Resources.SelectItem;
 
         #endregion
     }

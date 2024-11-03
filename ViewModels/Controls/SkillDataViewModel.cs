@@ -1,5 +1,4 @@
 ﻿using RHToolkit.Models;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using static RHToolkit.Models.EnumService;
 
@@ -66,19 +65,19 @@ public partial class SkillDataViewModel(IGMDatabaseService gmDatabaseService) : 
     [NotifyPropertyChangedFor(nameof(MPCostText))]
     private double _mpCost;
 
-    public string MPCostText => MpCost > 0 ? $"MP Cost {MpCost}" : "";
+    public string MPCostText => MpCost > 0 ? $"{string.Format(Resources.MPCostText, MpCost)}" : "";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(SkillPointText))]
     private int _spCost;
 
-    public string SkillPointText => $"Skill Point {SpCost}";
+    public string SkillPointText => $"{string.Format(Resources.SkillPointText, SpCost)}";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CooldownText))]
     private double _cooltime;
 
-    public string CooldownText => Cooltime > 0 ? $"Cooldown {Cooltime:F2} Seconds" : "";
+    public string CooldownText => Cooltime > 0 ? $"{string.Format(Resources.CooldownText,$"{Cooltime:F2}")}" : "";
 
     [ObservableProperty]
     private string? _skillName;

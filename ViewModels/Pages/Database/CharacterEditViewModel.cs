@@ -30,7 +30,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -67,7 +67,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -80,19 +80,19 @@ namespace RHToolkit.ViewModels.Pages
             {
                 if (!await ValidateCharacterData()) return;
 
-                if (RHMessageBoxHelper.ConfirmMessage($"Delete the character '{CharacterData.CharacterName}'?"))
+                if (RHMessageBoxHelper.ConfirmMessage(string.Format(Resources.CharacterEditDeleteCharacterMessage, CharacterData.CharacterName)))
                 {
                     await _databaseService.DeleteCharacterAsync(CharacterData.AuthID, CharacterData.CharacterID);
                     await _databaseService.GMAuditAsync(CharacterData, "Delete Character", $"<font color=blue>Delete Character</font>]<br><font color=red>Character: {CharacterData.CharacterID}<br>{CharacterData.CharacterName}, GUID:{{{CharacterData.CharacterID}}}<br></font>");
 
-                    RHMessageBoxHelper.ShowOKMessage($"Character '{CharacterData.CharacterName}' deleted.", "Success");
+                    RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.CharacterEditDeleteSuccessMessage, CharacterData.CharacterName), Resources.Success);
 
                     await ReadCharacterData();
                 }
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -166,7 +166,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error reading Character {errorMessage}: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -242,7 +242,7 @@ namespace RHToolkit.ViewModels.Pages
         partial void OnCharacterDataChanged(CharacterData? value)
         {
             IsButtonPanelVisible = value == null ? Visibility.Hidden : Visibility.Visible;
-            SearchMessage = value == null ? "No data found." : "";
+            SearchMessage = value == null ? Resources.NoDataFoundMessage : "";
             OnCanExecuteCommandChanged();
             OnCanExecuteWindowCommandChanged();
         }
@@ -251,7 +251,7 @@ namespace RHToolkit.ViewModels.Pages
         private string? _searchText;
 
         [ObservableProperty]
-        private string? _searchMessage = "Search for a character.";
+        private string? _searchMessage = Resources.SearchCharacterMessage;
 
         [ObservableProperty]
         private Visibility _isButtonPanelVisible = Visibility.Hidden;

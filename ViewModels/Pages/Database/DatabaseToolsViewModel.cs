@@ -1,7 +1,6 @@
 ﻿using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
 using Wpf.Ui.Controls;
@@ -16,7 +15,7 @@ public partial class DatabaseToolsViewModel(ISqLiteDatabaseService sqLiteDatabas
     private WindowCard[] _windowCards =
     [
         new(Resources.Mail, Resources.MailDesc, SymbolRegular.Mail24, "mail"),
-];
+    ];
 
     [RelayCommand]
     public void OnOpenWindow(string value)
@@ -47,7 +46,7 @@ public partial class DatabaseToolsViewModel(ISqLiteDatabaseService sqLiteDatabas
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 }

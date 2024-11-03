@@ -4,7 +4,6 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Utilities;
 using RHToolkit.ViewModels.Windows.Tools.VM;
@@ -37,14 +36,14 @@ namespace RHToolkit.ViewModels.Windows
 
             _filterUpdateTimer = new()
             {
-                Interval = 400,
+                Interval = 500,
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
 
             _addEffectFilterUpdateTimer = new()
             {
-                Interval = 400,
+                Interval = 500,
                 AutoReset = false
             };
             _addEffectFilterUpdateTimer.Elapsed += AddEffectFilterUpdateTimerElapsed;
@@ -76,7 +75,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -111,13 +110,13 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
         private void IsLoaded()
         {
-            Title = $"Titile Editor ({DataTableManager.CurrentFileName})";
+            Title = string.Format(Resources.EditorTitleFileName, "Titile", DataTableManager.CurrentFileName);
             OpenMessage = "";
             IsVisible = Visibility.Visible;
             OnCanExecuteFileCommandChanged();
@@ -128,14 +127,14 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? shopEditorWindow = Application.Current.Windows.OfType<TitleEditorWindow>().FirstOrDefault();
-                Window owner = shopEditorWindow ?? Application.Current.MainWindow;
+                Window? window = Application.Current.Windows.OfType<TitleEditorWindow>().FirstOrDefault();
+                Window owner = window ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
 
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
             
         }
@@ -156,8 +155,8 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            Title = $"Title Editor";
-            OpenMessage = "Open a file";
+            Title = string.Format(Resources.EditorTitle, "Title");
+            OpenMessage = Resources.OpenFile;
             SearchText = string.Empty;
             AddEffectSearch = string.Empty;
             IsVisible = Visibility.Hidden;
@@ -204,7 +203,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -446,14 +445,14 @@ namespace RHToolkit.ViewModels.Windows
         {
             TitleTypeItems =
                 [
-                    new NameID { ID = 0, Name = "Normal" },
-                    new NameID { ID = 1, Name = "Animated" }
+                    new NameID { ID = 0, Name = Resources.TitleNormal },
+                    new NameID { ID = 1, Name = Resources.TitleAnimated }
                 ];
 
             TitleCategoryItems =
                 [
-                    new NameID { ID = 0, Name = "Normal" },
-                    new NameID { ID = 1, Name = "Special" }
+                    new NameID { ID = 0, Name = Resources.TitleNormal },
+                    new NameID { ID = 1, Name = Resources.TitleSpecial }
                 ];
         }
 
@@ -461,10 +460,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"Title Editor";
+        private string _title = string.Format(Resources.EditorTitle, "Title");
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private string? _titleEffectText;
@@ -520,7 +519,7 @@ namespace RHToolkit.ViewModels.Windows
 
         private void FormatTitleEffect()
         {
-            StringBuilder titleEffect = new($"[Title Effect]\n");
+            StringBuilder titleEffect = new($"[{Resources.TitleEffect}]\n");
 
             for (int i = 0; i < TitleEffects.Count; i++)
             {
@@ -534,7 +533,7 @@ namespace RHToolkit.ViewModels.Windows
             int remainTime = (int)DataTableManager.SelectedItem!["nRemainTime"];
 
             string formattedRemainTime = DateTimeFormatter.FormatRemainTime(remainTime);
-            titleEffect.AppendLine($"\nTitle Duration: {formattedRemainTime}");
+            titleEffect.AppendLine($"\n{Resources.TitleDuration}: {formattedRemainTime}");
             TitleEffectText = titleEffect.ToString();
         }
 

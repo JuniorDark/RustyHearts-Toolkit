@@ -4,7 +4,6 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
 using RHToolkit.ViewModels.Windows.Tools.VM;
@@ -88,7 +87,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -115,18 +114,19 @@ namespace RHToolkit.ViewModels.Windows
                 if (openFileDialog.ShowDialog() == true)
                 {
                     string fileName = Path.GetFileName(openFileDialog.FileName);
-                    int questType = GetQuestTypeFromFileName(fileName);
+                    int fileType = GetQuestTypeFromFileName(fileName);
 
-                    if (questType == -1)
+                    if (fileType == -1)
                     {
-                        RHMessageBoxHelper.ShowOKMessage($"The file '{fileName}' is not a valid Quest file.", Resources.Error);
+                        string message = string.Format(Resources.InvalidTableFileDesc, fileName, "Quest");
+                        RHMessageBoxHelper.ShowOKMessage(message, Resources.Error);
                         return;
                     }
 
                     string columnName = GetColumnName(fileName);
-                    string? stringFileName = GetStringFileName(questType);
+                    string? stringFileName = GetStringFileName(fileType);
 
-                    QuestType = (QuestType)questType;
+                    QuestType = (QuestType)fileType;
 
                     bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, stringFileName, columnName, "Quest");
 
@@ -138,13 +138,13 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
         private void IsLoaded()
         {
-            Title = $"Quest Editor ({DataTableManager.CurrentFileName})";
+            Title = string.Format(Resources.EditorTitleFileName, "Quest", DataTableManager.CurrentFileName);
             OpenMessage = "";
             IsVisible = Visibility.Visible;
             OnCanExecuteFileCommandChanged();
@@ -222,13 +222,13 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? questEditorWindow = Application.Current.Windows.OfType<QuestEditorWindow>().FirstOrDefault();
-                Window owner = questEditorWindow ?? Application.Current.MainWindow;
+                Window? window = Application.Current.Windows.OfType<QuestEditorWindow>().FirstOrDefault();
+                Window owner = window ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -248,8 +248,8 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            Title = $"Quest Editor";
-            OpenMessage = "Open a file";
+            Title = string.Format(Resources.EditorTitle, "Quest");
+            OpenMessage = Resources.OpenFile;
             QuestItem?.Clear();
             QuestItems?.Clear();
             QuestRewardItems?.Clear();
@@ -295,7 +295,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -321,7 +321,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -357,7 +357,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -381,7 +381,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -405,7 +405,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -429,7 +429,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -540,7 +540,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
             
         }
@@ -578,7 +578,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
 
         }
@@ -616,7 +616,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
 
         }
@@ -654,7 +654,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
 
         }
@@ -692,7 +692,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
 
         }
@@ -1556,10 +1556,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"Quest Editor";
+        private string _title = string.Format(Resources.EditorTitle, "Quest");
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private Visibility _isSelectedItemVisible = Visibility.Hidden;

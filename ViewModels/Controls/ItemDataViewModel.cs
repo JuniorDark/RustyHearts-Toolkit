@@ -1,5 +1,4 @@
 ﻿using RHToolkit.Models;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using static RHToolkit.Models.EnumService;
 

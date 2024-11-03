@@ -54,7 +54,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 Foreground="White"
-                Text="Craft List" />
+                Text="{x:Static rs:Resources.CraftList}" />
             <Grid
                 Grid.Row="3"
                 Grid.RowSpan="4"
@@ -94,30 +94,18 @@
                     Height="350"
                     MinWidth="300"
                     Margin="0,20,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
                     AutoGenerateColumns="False"
-                    Background="Transparent"
-                    BorderBrush="#FF0F0D0A"
                     CanUserAddRows="False"
                     ColumnWidth="Auto"
                     EnableRowVirtualization="True"
-                    FontFamily="{StaticResource ArialUnicodeMS}"
-                    FontSize="12"
                     HeadersVisibility="Column"
-                    HorizontalGridLinesBrush="White"
                     HorizontalScrollBarVisibility="Auto"
                     IsReadOnly="True"
                     ItemsSource="{Binding ItemMixDataView}"
                     SelectedItem="{Binding SelectedItem}"
                     SelectionMode="Single"
                     SelectionUnit="FullRow"
-                    Template="{StaticResource lb_datagrid}"
-                    VerticalGridLinesBrush="White">
-                    <DataGrid.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkBlue" />
-                    </DataGrid.Resources>
+                    Template="{StaticResource lb_datagrid}">
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="*"
@@ -213,7 +201,7 @@
                     <TextBlock
                         HorizontalAlignment="Center"
                         Foreground="White"
-                        Text="Craft Groups" />
+                        Text="{x:Static rs:Resources.CraftGroups}" />
                     <ListView
                         Width="400"
                         Height="150"
@@ -255,7 +243,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         Foreground="White"
-                        Text="Selected Item" />
+                        Text="{x:Static rs:Resources.SelectedItem}" />
                     <control:ItemSlot
                         HorizontalAlignment="Center"
                         ItemDataViewModel="{Binding SelectedItemDataViewModel}"
@@ -271,7 +259,7 @@
                     <TextBlock
                         Margin="0,0,0,0"
                         Foreground="White"
-                        Text="Craft Materials" />
+                        Text="{x:Static rs:Resources.CraftMaterials}" />
                     <Image
                         x:Name="imgHelp"
                         Margin="10,0,0,0"
@@ -307,7 +295,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Horizontal">
-                    <TextBlock Foreground="White" Text="Craft Cost" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.CraftCost}" />
                     <TextBlock
                         Margin="50,0,0,0"
                         d:Text="0"

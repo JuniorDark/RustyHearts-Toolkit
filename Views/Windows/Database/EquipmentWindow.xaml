@@ -21,7 +21,7 @@
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/icon/lb_main_quick_system_01character.png"
-    ResizeMode="CanResizeWithGrip"
+    ResizeMode="CanResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">

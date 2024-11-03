@@ -215,7 +215,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
             {
                 settings.SelectionMode = DataGridSelectionMode.Extended;
                 settings.IsItemAmountVisible = Visibility.Visible;
-                AddItemText = "Add Selected Item(s)";
+                AddItemText = Resources.AddSelectedItems;
             },
             ["CashShopItemUpdate"] = settings =>
             {
@@ -371,28 +371,28 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     {
         return (messageType ?? string.Empty) switch
         {
-            "CashShopItemAdd" => "Add Cash Shop Item",
-            "CashShopItemUpdate" => "Update Cash Shop Item",
-            "CouponItem" => "Add Coupon Item",
-            "EquipItem" => $"Add Equipment Item ({(EquipCategory)itemData.SlotIndex}) [{CharacterData?.CharacterName}]",
-            "InventoryItem" => $"Add Inventory Item ({(InventoryType)itemData.PageIndex}) [{CharacterData?.CharacterName}]",
-            "StorageItem" => $"Add Storage Item [{CharacterData?.CharacterName}]",
-            "AccountStorageItem" => $"Add Account Storage Item [{CharacterData?.AccountName}]",
-            "Mail" => "Add Mail Item",
-            "Package" or "PackageCondition" => "Add Package Item",
-            "RandomRune" => "Add Random Rune Item",
-            "NpcShopItem" or "NpcShopItems" or "NpcShopFilterItems" => "Add Npc Shop Item",
-            "TradeShopItem" or "TradeShopItems" => "Add Trade Shop Item",
-            "ItemMixItem" or "ItemMixItems" => "Add Item Craft Item",
-            "ItemPreviewItem" => "Add Npc Shop Item Preview Item",
-            "DropGroup" => "Add Drop Group Item",
-            "RareCard" => "Add Rare Card Group Item",
-            "SetItem" => "Add Set Item",
-            "PetDeathDropItem" => "Add Pet Death Drop Item",
-            "ItemBrokenItem" or "ItemBrokenTargetItem" => "Add Dismantle Item",
-            "PartyMissionItem" => "Add Party Mission Item",
-            "QuestItem" or "QuestItems" or "QuestRewardItem" or "QuestGetItem" or "QuestSelectRewardItem" => "Add Quest Item",
-            _ => "Add Item",
+            "AccountStorageItem" => string.Format(Resources.ItemWindowTitleName, Resources.AccountStorage, CharacterData?.AccountName),
+            "CashShopItemAdd" => string.Format(Resources.ItemWindowTitle, Resources.CashShop),
+            "CashShopItemUpdate" => string.Format(Resources.ItemWindowTitle, Resources.CashShop),
+            "CouponItem" => string.Format(Resources.ItemWindowTitle, Resources.Coupon),
+            "DropGroup" => string.Format(Resources.ItemWindowTitle, Resources.DropGroup),
+            "EquipItem" => string.Format(Resources.ItemWindowTitleName, Resources.Equipment, $"({(EquipCategory)itemData.SlotIndex}) [{CharacterData?.CharacterName}]"),
+            "InventoryItem" => string.Format(Resources.ItemWindowTitleName, Resources.Inventory, $"({(InventoryType)itemData.PageIndex}) [{CharacterData?.CharacterName}]"),
+            "ItemBrokenItem" or "ItemBrokenTargetItem" => string.Format(Resources.ItemWindowTitle, Resources.DismantleItem),
+            "ItemMixItem" or "ItemMixItems" => string.Format(Resources.ItemWindowTitle, Resources.ItemCraft),
+            "ItemPreviewItem" => string.Format(Resources.ItemWindowTitle, Resources.NPCShopPreview),
+            "Mail" => string.Format(Resources.ItemWindowTitle, Resources.Mail),
+            "NpcShopItem" or "NpcShopItems" or "NpcShopFilterItems" => string.Format(Resources.ItemWindowTitle, Resources.NPCShop),
+            "Package" or "PackageCondition" => string.Format(Resources.ItemWindowTitle, Resources.Package),
+            "PartyMissionItem" => string.Format(Resources.ItemWindowTitle, Resources.PartyMission),
+            "PetDeathDropItem" => string.Format(Resources.ItemWindowTitle, Resources.PetDeathDrop),
+            "QuestItem" or "QuestItems" or "QuestRewardItem" or "QuestGetItem" or "QuestSelectRewardItem" => string.Format(Resources.ItemWindowTitle, Resources.Quest),
+            "RandomRune" => string.Format(Resources.ItemWindowTitle, Resources.RandomRune),
+            "RareCard" => string.Format(Resources.ItemWindowTitle, Resources.RareCardGroup),
+            "SetItem" => string.Format(Resources.ItemWindowTitle, Resources.Set),
+            "StorageItem" => string.Format(Resources.ItemWindowTitleName, Resources.Storage, CharacterData?.CharacterName),
+            "TradeShopItem" or "TradeShopItems" => string.Format(Resources.ItemWindowTitle, Resources.TradeShop),
+            _ => Resources.ItemList,
         };
     }
 
@@ -635,10 +635,10 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     #region Properties
 
     [ObservableProperty]
-    private string _title = "Item List";
+    private string _title = Resources.ItemList;
 
     [ObservableProperty]
-    private string _addItemText = "Add Selected Item";
+    private string _addItemText = Resources.AddSelectedItem;
 
     [ObservableProperty]
     private Visibility _isSlotVisible = Visibility.Collapsed;

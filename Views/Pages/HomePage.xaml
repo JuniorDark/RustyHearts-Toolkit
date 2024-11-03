@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:RHToolkit.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:RHToolkit.ViewModels.Pages"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="Home Page"
     Margin="0,32,0,0"
@@ -48,11 +49,11 @@
                         <ui:TextBlock
                             FontTypography="Title"
                             Foreground="#FFFFFF"
-                            Text="Rusty Hearts Toolkit" />
+                            Text="{x:Static rs:Resources.AppTitle}" />
                         <ui:TextBlock
                             FontTypography="BodyStrong"
                             Foreground="#B7FFFFFF"
-                            Text="A comprehensive toolkit for editing Rusty Hearts database and table files."
+                            Text="{x:Static rs:Resources.AppDesc}"
                             TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                     <ui:HyperlinkButton
@@ -97,12 +98,14 @@
                         VerticalAlignment="Center">
                         <ui:TextBlock
                             Margin="0"
+                            d:Text="Database Tools"
                             FontTypography="BodyStrong"
-                            Text="Database Tools"
+                            Text="{x:Static rs:Resources.DatabaseTools}"
                             TextWrapping="WrapWithOverflow" />
                         <ui:TextBlock
+                            d:Text="Database Editors"
                             Appearance="Secondary"
-                            Text="Database Editors"
+                            Text="{x:Static rs:Resources.DatabaseEditors}"
                             TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                 </Grid>
@@ -129,12 +132,14 @@
                         VerticalAlignment="Center">
                         <ui:TextBlock
                             Margin="0"
+                            d:Text="Local Databases"
                             FontTypography="BodyStrong"
-                            Text="Local Databases"
+                            Text="{x:Static rs:Resources.LocalDatabases}"
                             TextWrapping="WrapWithOverflow" />
                         <ui:TextBlock
+                            d:Text="View and manage local databases"
                             Appearance="Secondary"
-                            Text="View and manage local databases"
+                            Text="{x:Static rs:Resources.LocalDatabasesDesc}"
                             TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                 </Grid>
@@ -161,12 +166,14 @@
                         VerticalAlignment="Center">
                         <ui:TextBlock
                             Margin="0"
+                            d:Text="Edit Tools"
                             FontTypography="BodyStrong"
-                            Text="Edit Tools"
+                            Text="{x:Static rs:Resources.EditTools}"
                             TextWrapping="WrapWithOverflow" />
                         <ui:TextBlock
+                            d:Text="Table Editors"
                             Appearance="Secondary"
-                            Text="Table Editors"
+                            Text="{x:Static rs:Resources.TableEditors}"
                             TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                 </Grid>

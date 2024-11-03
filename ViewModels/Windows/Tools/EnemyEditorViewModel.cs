@@ -3,7 +3,6 @@ using RHToolkit.Messages;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Windows.Tools.VM;
 using RHToolkit.Views.Windows;
@@ -72,7 +71,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -100,7 +99,8 @@ namespace RHToolkit.ViewModels.Windows
 
                     if (enemyType == -1)
                     {
-                        RHMessageBoxHelper.ShowOKMessage($"The file '{fileName}' is not a valid Enemy file.", Resources.Error);
+                        string message = string.Format(Resources.InvalidTableFileDesc, fileName, "Enemy");
+                        RHMessageBoxHelper.ShowOKMessage(message, Resources.Error);
                         return;
                     }
 
@@ -119,13 +119,13 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
         private void IsLoaded()
         {
-            Title = $"Enemy Editor ({DataTableManager.CurrentFileName})";
+            Title = string.Format(Resources.EditorTitleFileName, "Enemy", DataTableManager.CurrentFileName);
             OpenMessage = "";
             IsVisible = Visibility.Visible;
             OnCanExecuteFileCommandChanged();
@@ -172,13 +172,13 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? enemyEditorWindow = Application.Current.Windows.OfType<EnemyEditorWindow>().FirstOrDefault();
-                Window owner = enemyEditorWindow ?? Application.Current.MainWindow;
+                Window? window = Application.Current.Windows.OfType<EnemyEditorWindow>().FirstOrDefault();
+                Window owner = window ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -198,8 +198,8 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            Title = $"Enemy Editor";
-            OpenMessage = "Open a file";
+            Title = string.Format(Resources.EditorTitle, "Enemy");
+            OpenMessage = Resources.OpenFile;
             EnemyDropGroups?.Clear();
             EnemyConditionResistance?.Clear();
             SearchText = string.Empty;
@@ -231,7 +231,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -250,7 +250,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -269,7 +269,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -288,7 +288,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -307,7 +307,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -326,7 +326,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -345,7 +345,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -437,7 +437,7 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
-        #region Quest
+        #region Enemy
         private void UpdateEnemySelectedItem(DataRowView? selectedItem)
         {
             _isUpdatingSelectedItem = true;
@@ -592,10 +592,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"Enemy Editor";
+        private string _title = string.Format(Resources.EditorTitle, "Enemy");
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private Visibility _isSelectedItemVisible = Visibility.Hidden;

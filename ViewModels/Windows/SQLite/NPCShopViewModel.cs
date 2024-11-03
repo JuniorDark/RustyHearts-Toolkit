@@ -122,10 +122,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"NPC Shop";
+        private string _title = Resources.NPCShop;
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private string? _tabName = "Tab";

@@ -6,19 +6,14 @@
     xmlns:local="clr-namespace:RHToolkit.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:RHToolkit.ViewModels.Pages"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
     Title="Home"
     d:DataContext="{d:DesignInstance local:GMDatabaseManagerPage,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="450"
     d:DesignWidth="1280"
     mc:Ignorable="d">
-
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200*" />
-            <ColumnDefinition Width="150*" />
-            <ColumnDefinition Width="150*" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -26,17 +21,14 @@
         </Grid.RowDefinitions>
         <TextBlock
             Grid.Row="0"
-            Grid.Column="1"
             Margin="0,10,0,20"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
-            d:Text="Select the table folder"
             FontSize="20"
             Foreground="White"
-            Text="Select the table folder" />
+            Text="{x:Static rs:Resources.SelectTableFolder}" />
         <StackPanel
             Grid.Row="1"
-            Grid.ColumnSpan="3"
             Margin="0,5"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
@@ -49,7 +41,7 @@
                 Background="Black"
                 BorderThickness="0"
                 Foreground="White"
-                Tag="Select Folder"
+                Tag="{x:Static rs:Resources.SelectFolder}"
                 Template="{StaticResource lb_textbox}"
                 Text="{Binding ViewModel.SelectedFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button
@@ -59,16 +51,13 @@
                 VerticalAlignment="Center"
                 Background="Transparent"
                 Command="{Binding ViewModel.SelectFolderCommand}"
-                Content="Select Folder"
+                Content="{x:Static rs:Resources.SelectFolder}"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
         </StackPanel>
-
         <Grid
             Grid.Row="2"
-            Grid.Column="0"
-            Grid.ColumnSpan="3"
             HorizontalAlignment="Center"
             VerticalAlignment="Top">
             <Grid.RowDefinitions>
@@ -87,7 +76,7 @@
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding ViewModel.CreateDatabaseCommand}"
-                    Content="Create Database"
+                    Content="{x:Static rs:Resources.CreateDatabase}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -98,13 +87,12 @@
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding ViewModel.CancelOperationCommand}"
-                    Content="Cancel"
+                    Content="{x:Static rs:Resources.Cancel}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"
                     Visibility="{Binding ViewModel.IsVisible}" />
                 <TextBlock
-                    Grid.ColumnSpan="3"
                     d:Text="Message"
                     FontSize="15"
                     Foreground="White"

@@ -21,7 +21,7 @@ public partial class SkillDataManager : ObservableObject
         _skillDataViewModel = skillDataViewModel;
         _skillFilterUpdateTimer = new()
         {
-            Interval = 400,
+            Interval = 500,
             AutoReset = false
         };
         _skillFilterUpdateTimer.Elapsed += SkillFilterUpdateTimerElapsed;

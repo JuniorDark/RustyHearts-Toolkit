@@ -45,7 +45,7 @@ namespace RHToolkit.Services
 
             if (!File.Exists(dbFilePath))
             {
-                RHMessageBoxHelper.ShowOKMessage($"Table Database not found. Be sure to create the database first on SQLite Database Manager page.", "SQlite Database Not Found");
+                RHMessageBoxHelper.ShowOKMessage(Resources.MissingDatabaseMessage, Resources.MissingDatabaseTitle);
                 return false;
             }
 
@@ -55,11 +55,11 @@ namespace RHToolkit.Services
 
                 if (missingTables.Count > 0)
                 {
-                    string missingTablesMessage = $"The database file ({Path.GetFileName(dbFilePath)}) is missing tables.\n\nThe following required tables are missing in the database:\n";
+                    string missingTablesMessage = $"{string.Format(Resources.MissingTableMessage, Path.GetFileName(dbFilePath))}:\n";
                     missingTablesMessage += string.Join("\n", missingTables);
-                    missingTablesMessage += $"\nPlease ensure you have created the database with the required tables.";
+                    missingTablesMessage += $"\n{Resources.MissingTableMessage2}";
 
-                    RHMessageBoxHelper.ShowOKMessage(missingTablesMessage, "Table Not Found");
+                    RHMessageBoxHelper.ShowOKMessage(missingTablesMessage, Resources.Error);
                     return false;
                 }
 
@@ -94,7 +94,7 @@ namespace RHToolkit.Services
         {
             if (!File.Exists(DbFilePath))
             {
-                throw new FileNotFoundException($"SQLite Database file not found.");
+                throw new FileNotFoundException($"{Resources.MissingDatabaseTitle}\n{Resources.MissingDatabaseMessage}");
             }
 
             var connection = new SQLiteConnection($"Data Source={DbFilePath};Version=3;");

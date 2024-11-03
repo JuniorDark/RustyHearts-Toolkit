@@ -18,11 +18,8 @@
     mc:Ignorable="d">
     <ContentControl MaxHeight="500" Template="{StaticResource lb_def_box04}">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
@@ -33,41 +30,28 @@
             <DataGrid
                 x:Name="dataGridView"
                 Grid.Row="0"
-                Height="250"
+                Height="Auto"
                 Margin="0,5,0,0"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
                 AutoGenerateColumns="False"
-                Background="Transparent"
-                BorderBrush="#FF0F0D0A"
                 CanUserAddRows="False"
                 ColumnWidth="SizeToCells"
                 EnableColumnVirtualization="True"
                 EnableRowVirtualization="True"
-                FontFamily="{StaticResource ArialUnicodeMS}"
-                FontSize="12"
-                Foreground="Transparent"
                 HeadersVisibility="Column"
-                HorizontalGridLinesBrush="White"
                 HorizontalScrollBarVisibility="Auto"
                 ItemsSource="{Binding ViewModel.CouponList}"
                 SelectedItem="{Binding ViewModel.SelectedCoupon, Mode=TwoWay}"
                 SelectionMode="Single"
-                Template="{StaticResource lb_datagrid}"
-                VerticalGridLinesBrush="White">
-                <DataGrid.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkBlue" />
-                </DataGrid.Resources>
+                Template="{StaticResource lb_datagrid}">
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="Auto"
                         Binding="{Binding coupon}"
-                        Header="Coupon Code"
+                        Header="{x:Static rs:Resources.CouponCode}"
                         IsReadOnly="True" />
                     <DataGridTemplateColumn
                         Width="Auto"
-                        Header="Coupon Status"
+                        Header="{x:Static rs:Resources.CouponStatus}"
                         IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -91,32 +75,32 @@
                     <DataGridTextColumn
                         Width="Auto"
                         Binding="{Binding valid_date}"
-                        Header="Valid Until"
+                        Header="{x:Static rs:Resources.ValidUntil}"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="Auto"
                         Binding="{Binding item_code}"
-                        Header="Item (ID)"
+                        Header="{x:Static rs:Resources.ItemID}"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="Auto"
                         Binding="{Binding item_count}"
-                        Header="Item Count"
+                        Header="{x:Static rs:Resources.ItemCount}"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="Auto"
                         Binding="{Binding use_date}"
-                        Header="Use Date"
+                        Header="{x:Static rs:Resources.UseDate}"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="Auto"
                         Binding="{Binding bcust_id}"
-                        Header="Used By: Account Name"
+                        Header="{x:Static rs:Resources.UsedByAccount}"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="Auto"
                         Binding="{Binding Name}"
-                        Header="Used By: Character"
+                        Header="{x:Static rs:Resources.UsedByCharacter}"
                         IsReadOnly="True" />
                 </DataGrid.Columns>
             </DataGrid>
@@ -132,7 +116,7 @@
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding ViewModel.ReadCouponListCommand}"
-                    Content="Read"
+                    Content="{x:Static rs:Resources.Read}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -143,7 +127,7 @@
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding ViewModel.DeleteCouponCommand}"
-                    Content="Delete Coupon"
+                    Content="{x:Static rs:Resources.DeleteCoupon}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -159,34 +143,34 @@
                     Background="Transparent"
                     FontSize="12"
                     Foreground="White"
-                    Text="Coupon:" />
+                    Text="{x:Static rs:Resources.CouponCode}" />
                 <TextBox
                     Width="250"
-                    Height="35"
-                    Margin="10,0"
+                    Height="40"
+                    Margin="10,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Background="Black"
                     BorderThickness="0"
                     Foreground="White"
                     MaxLength="24"
-                    Tag="ABCDE-12345-ABCDE-12345"
+                    Tag="RUSTY-FARTS-ABCDE-12345"
                     Template="{StaticResource lb_textbox}"
                     Text="{Binding ViewModel.CouponCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <Button
                     Width="150"
-                    Margin="10,10"
+                    Margin="10,0,10,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding ViewModel.GenerateCouponCommand}"
-                    Content="Generate"
+                    Content="{x:Static rs:Resources.Generate}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
                 <ui:CalendarDatePicker
                     x:Name="CalendarDatePicker"
-                    Content="Valid Date"
+                    Content="{x:Static rs:Resources.ValidDate}"
                     Date="{Binding ViewModel.ValidDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     IsTodayHighlighted="True" />
                 <ui:TextBlock
@@ -207,7 +191,7 @@
                     Cursor="Help"
                     Source="/Assets/icon/icon_help_tip.png"
                     Stretch="None"
-                    ToolTip="{x:Static rs:Resources.AttachItemCouponHelp}" />
+                    ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
                 <control:ItemSlot
                     Margin="0,10,0,0"
                     AddItemCommand="{Binding ViewModel.AddItemCommand}"
@@ -224,7 +208,7 @@
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Command="{Binding ViewModel.AddCouponCommand}"
-                Content="Add Coupon"
+                Content="{x:Static rs:Resources.AddCoupon}"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />

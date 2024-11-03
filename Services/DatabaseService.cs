@@ -1,7 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using RHToolkit.Models;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Utilities;
 using System.Data;
 using static RHToolkit.Models.EnumService;
@@ -51,7 +50,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error updating character data: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -71,7 +70,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -95,7 +94,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error deleting character: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -124,7 +123,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error restoring character: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -230,14 +229,14 @@ namespace RHToolkit.Services
                         catch (Exception ex)
                         {
                             itemTransaction.Rollback();
-                            throw new Exception($"Error processing item: {ex.Message}", ex);
+                            throw new Exception(ex.Message, ex);
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error updating character class: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -292,7 +291,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error updating character job: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -516,7 +515,6 @@ namespace RHToolkit.Services
             }
         }
 
-
         #endregion
 
         #endregion
@@ -648,7 +646,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -738,7 +736,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error inserting item: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -831,7 +829,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error updating item: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -858,7 +856,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error deleting item: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -935,7 +933,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error inserting delete item: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1010,7 +1008,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error inserting item: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1103,7 +1101,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error updating item: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1201,7 +1199,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error adding character title: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1225,7 +1223,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error equipping character title: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1248,7 +1246,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error unequipping character title: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1272,7 +1270,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error removing character title: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1313,7 +1311,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error updating fortune: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1344,7 +1342,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error removing fortune: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
         #endregion
@@ -1390,7 +1388,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error adding sanction: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1599,7 +1597,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error sending mail: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1737,7 +1735,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error reading coupon: {ex.Message}");
+                throw new Exception(ex.Message, ex);
             }
 
             return dataTable;
@@ -1843,7 +1841,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1876,7 +1874,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1917,7 +1915,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error Sanction Log: {ex.Message} {ex.StackTrace}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1943,7 +1941,7 @@ namespace RHToolkit.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw new Exception($"Error: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
         #endregion

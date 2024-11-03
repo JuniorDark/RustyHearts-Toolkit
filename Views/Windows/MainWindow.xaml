@@ -19,7 +19,7 @@
     d:DesignWidth="1280"
     ExtendsContentIntoTitleBar="True"
     Icon="/Assets/ico/rhicon.ico"
-    ResizeMode="CanResizeWithGrip"
+    ResizeMode="CanResize"
     SizeChanged="MainWindow_OnSizeChanged"
     WindowBackdropType="Mica"
     WindowCornerPreference="Default"

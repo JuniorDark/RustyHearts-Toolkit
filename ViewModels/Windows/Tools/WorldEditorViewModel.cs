@@ -4,7 +4,6 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Windows.Tools.VM;
 using RHToolkit.Views.Windows;
@@ -75,7 +74,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -103,7 +102,8 @@ namespace RHToolkit.ViewModels.Windows
 
                     if (fileType == -1)
                     {
-                        RHMessageBoxHelper.ShowOKMessage($"The file '{fileName}' is not a valid World file.", Resources.Error);
+                        string message = string.Format(Resources.InvalidTableFileDesc, fileName, "World");
+                        RHMessageBoxHelper.ShowOKMessage(message, Resources.Error);
                         return;
                     }
 
@@ -122,13 +122,13 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
         private void IsLoaded()
         {
-            Title = $"World Editor ({DataTableManager.CurrentFileName})";
+            Title = string.Format(Resources.EditorTitleFileName, "World", DataTableManager.CurrentFileName);
             OpenMessage = "";
             IsVisible = Visibility.Visible;
             OnCanExecuteFileCommandChanged();
@@ -181,13 +181,13 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? enemyEditorWindow = Application.Current.Windows.OfType<WorldEditorWindow>().FirstOrDefault();
-                Window owner = enemyEditorWindow ?? Application.Current.MainWindow;
+                Window? window = Application.Current.Windows.OfType<WorldEditorWindow>().FirstOrDefault();
+                Window owner = window ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -207,8 +207,8 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            Title = $"World Editor";
-            OpenMessage = "Open a file";
+            Title = string.Format(Resources.EditorTitle, "World");
+            OpenMessage = Resources.OpenFile;
             WorldData?.Clear();
             WorldPreload?.Clear();
             SearchText = string.Empty;
@@ -240,7 +240,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -259,7 +259,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -278,7 +278,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -297,7 +297,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -390,10 +390,10 @@ namespace RHToolkit.ViewModels.Windows
         {
             DifficultyItems =
             [
-                new NameID { ID = 1, Name = "Normal" },
-                new NameID { ID = 2, Name = "Hard" },
-                new NameID { ID = 3, Name = "Very Hard" },
-                new NameID { ID = 4, Name = "Blood" }
+                new NameID { ID = 1, Name = Resources.DifficultyNormal },
+                new NameID { ID = 2, Name = Resources.DifficultyHard },
+                new NameID { ID = 3, Name = Resources.DifficultyVeryHard },
+                new NameID { ID = 4, Name = Resources.DifficultyBlood }
             ];
             WorldItems = _gmDatabaseService.GetWorldNameItems();
             EnemyItems = _gmDatabaseService.GetEnemyNameItems();
@@ -627,10 +627,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"World Editor";
+        private string _title = string.Format(Resources.EditorTitle, "World");
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private Visibility _isSelectedItemVisible = Visibility.Hidden;

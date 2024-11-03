@@ -21,7 +21,7 @@
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/icon/title.png"
-    ResizeMode="CanResizeWithGrip"
+    ResizeMode="CanResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
@@ -77,64 +77,47 @@
                 <DataGrid
                     x:Name="dataGridView"
                     Margin="0,5,0,0"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
                     AutoGenerateColumns="False"
-                    BorderBrush="#FF0F0D0A"
                     CanUserAddRows="False"
                     ColumnWidth="Auto"
                     EnableColumnVirtualization="True"
                     EnableRowVirtualization="True"
-                    FontFamily="{StaticResource ArialUnicodeMS}"
-                    FontSize="12"
                     HeadersVisibility="Column"
-                    HorizontalGridLinesBrush="White"
                     HorizontalScrollBarVisibility="Disabled"
                     ItemsSource="{Binding SanctionData}"
                     SelectedItem="{Binding SelectedSanction, Mode=TwoWay}"
                     SelectionMode="Single"
-                    Template="{StaticResource lb_datagrid}"
-                    VerticalGridLinesBrush="White">
-                    <DataGrid.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkBlue" />
-                    </DataGrid.Resources>
-                    <DataGrid.Foreground>
-                        <ImageBrush />
-                    </DataGrid.Foreground>
-                    <DataGrid.Background>
-                        <ImageBrush />
-                    </DataGrid.Background>
+                    Template="{StaticResource lb_datagrid}">
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding StartDate}"
-                            Header="Start Date"
+                            Header="{x:Static rs:Resources.StartDate}"
                             IsReadOnly="True" />
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding ReleaseDate}"
-                            Header="Release Date"
+                            Header="{x:Static rs:Resources.ReleaseDate}"
                             IsReadOnly="True" />
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding Reason}"
-                            Header="Reason"
+                            Header="{x:Static rs:Resources.Reason}"
                             IsReadOnly="True" />
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding AddedBy}"
-                            Header="Added By"
+                            Header="{x:Static rs:Resources.AddedBy}"
                             IsReadOnly="True" />
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding RemovedBy}"
-                            Header="Removed By"
+                            Header="{x:Static rs:Resources.RemovedBy}"
                             IsReadOnly="True" />
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding Comment}"
-                            Header="Comment"
+                            Header="{x:Static rs:Resources.Comment}"
                             IsReadOnly="True" />
                     </DataGrid.Columns>
                 </DataGrid>
@@ -143,18 +126,17 @@
             <StackPanel
                 Grid.Row="3"
                 Grid.Column="0"
-                Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
-                Orientation="Horizontal">
+                Orientation="Vertical">
                 <Label
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
-                    Content="Sanction Type"
+                    Content="{x:Static rs:Resources.SanctionType}"
                     Style="{StaticResource ArialMSWhite}" />
                 <ComboBox
-                    Width="200"
+                    Width="250"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -164,14 +146,21 @@
                     SelectedValuePath="ID"
                     Style="{StaticResource ComboBoxStyle}"
                     Template="{StaticResource lb_combobox}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="3"
+                Grid.Column="1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Orientation="Vertical">
                 <Label
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
-                    Content="Count"
+                    Content="{x:Static rs:Resources.SanctionCount}"
                     Style="{StaticResource ArialMSWhite}" />
                 <ComboBox
-                    Width="200"
+                    Width="250"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -181,14 +170,21 @@
                     SelectedValuePath="ID"
                     Style="{StaticResource ComboBoxStyle}"
                     Template="{StaticResource lb_combobox}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Row="3"
+                Grid.Column="2"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Orientation="Vertical">
                 <Label
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
-                    Content="Period"
+                    Content="{x:Static rs:Resources.Period}"
                     Style="{StaticResource ArialMSWhite}" />
                 <ComboBox
-                    Width="200"
+                    Width="250"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -205,22 +201,21 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
-                VerticalAlignment="Center"
+                VerticalAlignment="Bottom"
                 Orientation="Horizontal">
                 <Button
                     x:Name="btnEquipTitle"
-                    Width="150"
+                    Width="200"
                     Margin="20,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding AddSanctionCommand}"
-                    Content="Add Sanction"
+                    Content="{x:Static rs:Resources.AddSanction}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"
                     ToolTip="{x:Static rs:Resources.MailSendHelp}" />
-
             </StackPanel>
             <StackPanel
                 Grid.Row="4"
@@ -233,7 +228,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
-                    Content="Remove Sanction"
+                    Content="{x:Static rs:Resources.RemoveSanction}"
                     Style="{StaticResource ArialMSWhite}" />
                 <TextBox
                     Width="600"
@@ -250,13 +245,13 @@
                     Text="{Binding SanctionComment, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     TextWrapping="Wrap" />
                 <Button
-                    Width="150"
+                    Width="200"
                     Margin="0,10"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding ReleaseSanctionCommand}"
-                    Content="Remove Sanction"
+                    Content="{x:Static rs:Resources.RemoveSanction}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"

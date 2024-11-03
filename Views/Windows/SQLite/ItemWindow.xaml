@@ -21,7 +21,7 @@
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/icon/icon_cash_optionchange.png"
-    ResizeMode="CanResizeWithGrip"
+    ResizeMode="CanResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
@@ -661,7 +661,7 @@
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top">
-                    <Label Content="Selected Item" Foreground="Gold" />
+                    <Label Content="{x:Static rs:Resources.SelectedItem}" Foreground="Gold" />
                     <control:ItemSlot ItemDataViewModel="{Binding ItemDataManager.ItemDataViewModel}" ItemNameVisibility="Visible" />
                 </StackPanel>
                 <Button

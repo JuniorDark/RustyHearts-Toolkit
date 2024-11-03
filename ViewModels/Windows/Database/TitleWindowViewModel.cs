@@ -1,7 +1,6 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Utilities;
 using System.Data;
@@ -39,7 +38,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
             CharacterData = null;
             CharacterData = characterData;
 
-            Title = $"Character Title ({CharacterData.CharacterName})";
+            Title = string.Format(Resources.EditorTitleFileName, Resources.CharacterTitle, CharacterData.CharacterName);
 
             await ReadTitle(CharacterData.CharacterID);
         }
@@ -65,7 +64,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
         }
         else
         {
-            CurrentTitleText = $"No Title";
+            CurrentTitleText =  Resources.NoTitle;
         }
 
     }
@@ -76,24 +75,24 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
         {
             (int titleCategory, int remainTime, int nAddEffectID00, int nAddEffectID01, int nAddEffectID02, int nAddEffectID03, int nAddEffectID04, int nAddEffectID05, string titleDesc) = _gmDatabaseService.GetTitleInfo(titleId);
 
-            string formattedtitleCategory = titleCategory == 0 ? "Normal" : "Special";
+            string formattedtitleCategory = titleCategory == 0 ? Resources.TitleNormal : Resources.TitleSpecial;
             string formattedRemainTime = DateTimeFormatter.FormatRemainTime(remainTime);
 
             StringBuilder description = new();
 
             if (includeCategoryAndDuration)
             {
-                description.AppendLine($"Title Category: {formattedtitleCategory}");
-                description.AppendLine($"Title Duration: {formattedRemainTime}");
+                description.AppendLine($"{Resources.TitleCategory}: {formattedtitleCategory}");
+                description.AppendLine($"{Resources.TitleDuration}: {formattedRemainTime}");
             }
 
             if (nAddEffectID00 == 0)
             {
-                description.Append("Title Effect: None");
+                description.Append($"{Resources.TitleEffect}: {Resources.None}");
             }
             else
             {
-                description.Append("Title Effect:");
+                description.Append($"{Resources.TitleEffect}:");
 
                 if (!string.IsNullOrEmpty(_gmDatabaseService.GetAddEffectName(nAddEffectID00)))
                     description.AppendLine().Append(_gmDatabaseService.GetAddEffectName(nAddEffectID00));
@@ -113,7 +112,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage("Error: " + ex.Message);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             return string.Empty;
         }
     }
@@ -138,12 +137,12 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
             int selectedTitleExpireTime;
             string titleName = _gmDatabaseService.GetTitleName(selectedTitleID);
 
-            if (RHMessageBoxHelper.ConfirmMessage($"Add the title '{titleName}' to this character?"))
+            if (RHMessageBoxHelper.ConfirmMessage(string.Format(Resources.TitleEditAddTitleMessage, titleName)))
             {
                 // Check if the character already has the same title
                 if (await _databaseService.CharacterHasTitle(CharacterData.CharacterID, selectedTitleID))
                 {
-                    RHMessageBoxHelper.ShowOKMessage($"This character already has '{titleName}' title.", "Duplicate Title");
+                    RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.TitleEditSameTitleMessage, titleName), Resources.TitleEditDuplicateTitle);
                     return;
                 }
 
@@ -160,14 +159,14 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
                 await _databaseService.AddCharacterTitleAsync(CharacterData, selectedTitleID, selectedTitleRemainTime, selectedTitleExpireTime);
                 await _databaseService.GMAuditAsync(CharacterData, "Add Title", $"Title: {selectedTitleID}");
-                RHMessageBoxHelper.ShowOKMessage($"Title '{titleName}' added successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage(Resources.TitleEditAddSuccessMessage, Resources.Success);
 
                 await ReadTitle(CharacterData.CharacterID);
             }
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error} : {ex.Message}");
         }
     }
 
@@ -205,15 +204,15 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
                 if (expireTime != 0 && DateTimeFormatter.ConvertFromEpoch(expireTime) < DateTime.Now)
                 {
-                    RHMessageBoxHelper.ShowOKMessage($"The title '{SelectedTitleName}' has expired.", "Expirated Title");
+                    RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.TitleEditExpiredTitleMessage, SelectedTitleName), Resources.TitleEditExpiratedTitle);
                     return;
                 }
 
-                if (RHMessageBoxHelper.ConfirmMessage($"Equip the title '{SelectedTitleName}' to this character?"))
+                if (RHMessageBoxHelper.ConfirmMessage(string.Format(Resources.TitleEditEquipTitleMessage, SelectedTitleName)))
                 {
                     await _databaseService.EquipCharacterTitleAsync(CharacterData, SelectedTitleUid);
                     await _databaseService.GMAuditAsync(CharacterData, "Change Equip Title", $"Title: {SelectedTitleUid}");
-                    RHMessageBoxHelper.ShowOKMessage("Title equiped successfully!", "Success");
+                    RHMessageBoxHelper.ShowOKMessage(Resources.SaveSuccessMessage, Resources.Success);
 
                     await ReadTitle(CharacterData.CharacterID);
                 }
@@ -222,7 +221,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error} : {ex.Message}");
         }
     }
 
@@ -249,23 +248,18 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
             if (EquippedTitle != null)
             {
-                if (RHMessageBoxHelper.ConfirmMessage($"Unequip the title '{EquippedTitleName}' from this character?"))
+                if (RHMessageBoxHelper.ConfirmMessage(string.Format(Resources.TitleEditUnequipTitleMessage, EquippedTitleName)))
                 {
                     await _databaseService.UnequipCharacterTitleAsync(CharacterData, EquippedTitleUid);
                     await _databaseService.GMAuditAsync(CharacterData, "Change Equip Title", $"Title: {EquippedTitleUid}");
-                    RHMessageBoxHelper.ShowOKMessage("Title unequiped successfully!", "Success");
+                    RHMessageBoxHelper.ShowOKMessage(Resources.SaveSuccessMessage, Resources.Success);
                     await ReadTitle(CharacterData.CharacterID);
                 }
-            }
-            else
-            {
-                RHMessageBoxHelper.ShowOKMessage("This character dont have a title equipped.", "No Title");
-                return;
             }
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error} : {ex.Message}");
         }
     }
 
@@ -291,12 +285,12 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
 
             if (SelectedTitle != null)
             {
-                if (RHMessageBoxHelper.ConfirmMessage($"Delete the '{SelectedTitleName}' title from this character?"))
+                if (RHMessageBoxHelper.ConfirmMessage(string.Format(Resources.TitleEditDeleteTitleMessage, SelectedTitleName)))
                 {
                     await _databaseService.UnequipCharacterTitleAsync(CharacterData, SelectedTitleUid);
                     await _databaseService.DeleteCharacterTitleAsync(CharacterData, SelectedTitleUid);
                     await _databaseService.GMAuditAsync(CharacterData, "Character Title Deletion", $"Deleted: {SelectedTitleUid}");
-                    RHMessageBoxHelper.ShowOKMessage($"Title '{SelectedTitleName}' deleted successfully!", "Success");
+                    RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.TitleEditDeleteTitleSuccessMessage, SelectedTitleName), Resources.Success);
 
                     SelectedTitle = null;
 
@@ -306,7 +300,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error removing title: {ex.Message}");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error} : {ex.Message}");
         }
     }
     #endregion
@@ -340,7 +334,7 @@ public partial class TitleWindowViewModel : ObservableObject, IRecipient<Charact
     private Guid? _token = Guid.Empty;
 
     [ObservableProperty]
-    private string _title = "Character Title";
+    private string _title = Resources.CharacterTitle;
 
     [ObservableProperty]
     private CharacterData? _characterData;

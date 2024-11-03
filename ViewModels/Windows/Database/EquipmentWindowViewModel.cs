@@ -2,7 +2,6 @@
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Windows.Database.VM;
 using static RHToolkit.Models.EnumService;
@@ -45,11 +44,11 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
                 return;
             }
 
-            if (RHMessageBoxHelper.ConfirmMessage($"Save equipment changes?"))
+            if (RHMessageBoxHelper.ConfirmMessage(Resources.EquipmentEditSaveMessage))
             {
                 
                 await _databaseService.SaveInventoryItem(CharacterData, EquipmentItemDatabaseList, EquipmentDeletedItemDatabaseList, "N_EquipItem");
-                RHMessageBoxHelper.ShowOKMessage("Equipment saved successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage(Resources.EquipmentEditSaveSuccessMessage, Resources.Success);
                 await LoadCharacterData(CharacterData.CharacterName!);
 
                 WeakReferenceMessenger.Default.Send(new CharacterDataMessage(CharacterData, "CharacterWindow", CharacterData.CharacterID));
@@ -58,7 +57,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error saving equipment changes: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -116,19 +115,19 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
             }
             else
             {
-                RHMessageBoxHelper.ShowOKMessage($"The character '{characterName}' does not exist.", "Invalid Character");
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.InexistentCharacterMessage, characterName), Resources.InvalidCharacter);
                 return;
             }
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
     private void LoadCharacterData(CharacterData characterData)
     {
-        Title = $"Character Equipment ({characterData.CharacterName})";
+        Title = string.Format(Resources.WindowTitle, Resources.CharacterEquipment, characterData.CharacterName);
         CharacterName = characterData.CharacterName;
         Class = characterData.Class;
         Job = characterData.Job;
@@ -207,7 +206,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
         {
             if (existingItem.ItemId != newItemData.ItemId && !existingItem.IsNewItem)
             {
-                RHMessageBoxHelper.ShowOKMessage($"The '{(EquipCategory)newItemData.SlotIndex}' slot is already in use.", "Cant Add Equipment Item");
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.EquipmentEditorSlotInUseMessage, (EquipCategory)newItemData.SlotIndex), Resources.Error);
                 return;
             }
             else if (existingItem.IsNewItem)
@@ -309,7 +308,7 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
     #region Properties
 
     [ObservableProperty]
-    private string _title = "Equipment Editor";
+    private string _title = string.Format(Resources.EditorTitle, Resources.Equipment);
 
     [ObservableProperty]
     private Guid? _token = Guid.Empty;
@@ -329,9 +328,9 @@ public partial class EquipmentWindowViewModel : ObservableObject, IRecipient<Cha
     [NotifyPropertyChangedFor(nameof(CharacterClassText))]
     private string? _jobName = Resources.Basic;
 
-    public string? CharacterNameText => $"Lv.{Level} {CharacterName}";
+    public string? CharacterNameText => string.Format(Resources.CharacterLevelNameText, Level, CharacterName);
 
-    public string? CharacterClassText => $"<{ClassName} - {JobName} Focus> ";
+    public string? CharacterClassText => string.Format(Resources.CharacterClassFocusText, ClassName, JobName);
 
     [ObservableProperty]
     private string _charSilhouetteImage = "/Assets/images/char/ui_silhouette_frantz01.png";

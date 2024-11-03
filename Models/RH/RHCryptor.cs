@@ -42,7 +42,7 @@ public class RHCryptor
         }
         catch (Exception ex)
         {
-            throw new Exception("Error: " + ex.Message, ex);
+            throw new Exception($"{Resources.Error}: " + ex.Message, ex);
         }
     }
 
@@ -80,7 +80,7 @@ public class RHCryptor
         }
         catch (Exception ex)
         {
-            throw new Exception("Error: " + ex.Message, ex);
+            throw new Exception($"{Resources.Error}: " + ex.Message, ex);
         }
     }
 

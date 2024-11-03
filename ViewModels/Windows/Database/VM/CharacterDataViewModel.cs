@@ -1,7 +1,6 @@
 ﻿using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using static RHToolkit.Models.EnumService;
 

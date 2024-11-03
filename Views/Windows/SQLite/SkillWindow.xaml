@@ -97,7 +97,7 @@
                     Grid.ColumnSpan="2"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top">
-                    <Label Content="Selected Skill" Foreground="Gold" />
+                    <Label Content="{x:Static rs:Resources.SelectedSkill}" Foreground="Gold" />
                     <control:SkillSlot SkillDataViewModel="{Binding SkillDataManager.SkillDataViewModel}" SkillType="{Binding SkillDataManager.SkillDataViewModel.SkillType}" />
                 </StackPanel>
                 <Button
@@ -109,7 +109,7 @@
                     VerticalAlignment="Center"
                     d:Content="Add Selected Skill"
                     Command="{Binding AddSkillCommand}"
-                    Content="Add Selected Skill"
+                    Content="{x:Static rs:Resources.AddSelectedSkill}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"
@@ -253,7 +253,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Class"
+                        Content="{x:Static rs:Resources.Class}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         Width="200"
@@ -278,7 +278,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Focus"
+                        Content="{x:Static rs:Resources.Focus}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         Width="200"
@@ -302,7 +302,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Skill Type"
+                        Content="{x:Static rs:Resources.SkillType}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         Width="200"

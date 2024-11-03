@@ -4,7 +4,6 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Utilities;
 using RHToolkit.ViewModels.Windows.Tools.VM;
@@ -33,7 +32,7 @@ namespace RHToolkit.ViewModels.Windows
             };
             _filterUpdateTimer = new()
             {
-                Interval = 400,
+                Interval = 500,
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
@@ -74,7 +73,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -85,7 +84,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 await CloseFile();
 
-                string filter = "UnionPackage Files|" +
+                string filter = "Package Files|" +
                                 "unionpackage.rh;unionpackage_local.rh;conditionselectitem.rh|" +
                                 "All Files (*.*)|*.*";
 
@@ -97,20 +96,19 @@ namespace RHToolkit.ViewModels.Windows
 
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    string selectedFileName = Path.GetFileName(openFileDialog.FileName);
+                    string fileName = Path.GetFileName(openFileDialog.FileName);
+                    int fileType = GetFileTypeFromFileName(fileName);
 
-                    int unionPackageType = selectedFileName switch
+                    if (fileType == -1)
                     {
-                        "unionpackage.rh" => 1,
-                        "unionpackage_local.rh" => 2,
-                        "conditionselectitem.rh" => 3,
-                        _ => throw new Exception($"The file '{selectedFileName}' is not a valid package file."),
-                    };
+                        string message = string.Format(Resources.InvalidTableFileDesc, fileName, "Package");
+                        RHMessageBoxHelper.ShowOKMessage(message, Resources.Error);
+                        return;
+                    }
 
-                    string fileName = GetFileName(unionPackageType);
-                    string? stringFileName = GetStringFileName(unionPackageType);
+                    string? stringFileName = GetStringFileName(fileType);
                     string? columnName = GetColumnName(fileName);
-                    PackageTeplateType = unionPackageType;
+                    PackageTeplateType = fileType;
                     bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, stringFileName, columnName, "Package");
 
                     if (isLoaded)
@@ -121,7 +119,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -157,9 +155,20 @@ namespace RHToolkit.ViewModels.Windows
             };
         }
 
+        private static int GetFileTypeFromFileName(string fileName)
+        {
+            return fileName switch
+            {
+                "unionpackage.rh" => 1,
+                "unionpackage_local.rh" => 2,
+                "conditionselectitem.rh" => 3,
+                _ => -1,
+            };
+        }
+
         private void IsLoaded()
         {
-            Title = $"Package Editor ({DataTableManager.CurrentFileName})";
+            Title = string.Format(Resources.EditorTitleFileName, "Package", DataTableManager.CurrentFileName);
             OpenMessage = "";
             IsVisible = Visibility.Visible;
             OnCanExecuteFileCommandChanged();
@@ -170,14 +179,14 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? shopEditorWindow = Application.Current.Windows.OfType<PackageEditorWindow>().FirstOrDefault();
-                Window owner = shopEditorWindow ?? Application.Current.MainWindow;
+                Window? window = Application.Current.Windows.OfType<PackageEditorWindow>().FirstOrDefault();
+                Window owner = window ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
 
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
             
         }
@@ -198,8 +207,8 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            Title = $"Package Editor";
-            OpenMessage = "Open a file";
+            Title = string.Format(Resources.EditorTitle, "Package");
+            OpenMessage = Resources.OpenFile;
             PackageTeplateType = 0;
             PackageItems?.Clear();
             PackageEffects?.Clear();
@@ -257,7 +266,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -312,7 +321,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -332,7 +341,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -620,37 +629,37 @@ namespace RHToolkit.ViewModels.Windows
         {
             PackageTypeItems =
                 [
-                    new NameID { ID = 0, Name = "Effect Package" },
-                    new NameID { ID = 2, Name = "Item Package" }
+                    new NameID { ID = 0, Name = Resources.EffectPackage },
+                    new NameID { ID = 2, Name = Resources.ItemPackage }
                 ];
 
             PackageEffectItems =
                 [
-                    new NameID { ID = 0, Name = "None" },
-                    new NameID { ID = 1, Name = "EXP Bonus" },
-                    new NameID { ID = 2, Name = "Extra Auction Slots" },
-                    new NameID { ID = 3, Name = "Repurchase Cost Decrease" },
-                    new NameID { ID = 4, Name = "Guild EXP Bonus" },
-                    new NameID { ID = 5, Name = "Exclusive Items available at the shops" },
-                    new NameID { ID = 6, Name = "Can Use High Level Items" },
-                    new NameID { ID = 7, Name = "Increases Gold Card Drop Rate" },
-                    new NameID { ID = 8, Name = "Bonus Card Selection" },
-                    new NameID { ID = 9, Name = "Repair Cost Reduction" },
+                    new NameID { ID = 0, Name = Resources.None },
+                    new NameID { ID = 1, Name = Resources.PackageEffectEXPBonus },
+                    new NameID { ID = 2, Name = Resources.PackageEffectAuctionSlot },
+                    new NameID { ID = 3, Name = Resources.PackageEffectRepurchaseCostDecrease },
+                    new NameID { ID = 4, Name = Resources.PackageEffectGuildEXPBonus },
+                    new NameID { ID = 5, Name = Resources.PackageEffectShopItem },
+                    new NameID { ID = 6, Name = Resources.PackageEffectItemLevel },
+                    new NameID { ID = 7, Name = Resources.PackageEffectGoldCard },
+                    new NameID { ID = 8, Name = Resources.PackageEffectBonusCardSelection },
+                    new NameID { ID = 9, Name = Resources.PackageEffectRepairCostReduction },
                     //new NameID { ID = 10, Name = "Increases PvP experience points ?" },
                     //new NameID { ID = 11, Name = "Maximizes package effects ?" },
-                    new NameID { ID = 12, Name = "Unlimited Inventory Weight" },
-                    new NameID { ID = 13, Name = "Unlimited Inventory Weight /Extra Inventory Slots" },
-                    new NameID { ID = 14, Name = "Increases Weapon Upgrade Effect" },
-                    new NameID { ID = 15, Name = "Can use Twin Pet" },
+                    new NameID { ID = 12, Name = Resources.PackageEffectUnlimitedWeight },
+                    new NameID { ID = 13, Name = Resources.PackageEffectWeightExtraInventory },
+                    new NameID { ID = 14, Name = Resources.PackageEffectWeaponUpgrade },
+                    new NameID { ID = 15, Name = Resources.PackageEffectTwinPet },
                     //new NameID { ID = 16, Name = "Unknown" },
-                    new NameID { ID = 17, Name = "Can Reset Skills" }
+                    new NameID { ID = 17, Name = Resources.PackageEffectResetSkills }
                 ];
             JobItems =
                 [
-                    new NameID { ID = 0, Name = "Basic Focus" },
-                    new NameID { ID = 1, Name = "Focus 1" },
-                    new NameID { ID = 2, Name = "Focus 2" },
-                    new NameID { ID = 3, Name = "Focus 3" }
+                    new NameID { ID = 0, Name = Resources.BaseSkill },
+                    new NameID { ID = 1, Name = Resources.Focus1 },
+                    new NameID { ID = 2, Name = Resources.Focus2 },
+                    new NameID { ID = 3, Name = Resources.Focus3 }
                 ];
         }
 
@@ -658,10 +667,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"Package Editor";
+        private string _title = string.Format(Resources.EditorTitle, "Package");
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private Visibility _isSelectedItemVisible = Visibility.Hidden;
@@ -761,7 +770,7 @@ namespace RHToolkit.ViewModels.Windows
         {
             string effectRemainTime = DateTimeFormatter.FormatMinutesToDate(EffectRemainTime);
             bool hasEffect = false;
-            StringBuilder packageEffect = new("Package Effect\n");
+            StringBuilder packageEffect = new($"{Resources.PackageEffect}\n");
 
             for (int i = 0; i < PackageEffects.Count; i++)
             {
@@ -769,17 +778,17 @@ namespace RHToolkit.ViewModels.Windows
                 {
                     hasEffect = true;
                     string packageEffectStr = _frameService.GetString(GetPackageStringId(PackageEffects[i].EffectCode));
-                    packageEffect.AppendLine($"Effect: {packageEffectStr} ({FormatEffectValue(PackageEffects[i].EffectCode, PackageEffects[i].EffectValue)})");
+                    packageEffect.AppendLine($"{Resources.Effect}: {packageEffectStr} ({FormatEffectValue(PackageEffects[i].EffectCode, PackageEffects[i].EffectValue)})");
                 }
             }
 
             if (!hasEffect)
             {
-                packageEffect.AppendLine("No Effect");
+                packageEffect.AppendLine(Resources.NoEffect);
             }
             else if (EffectRemainTime != 0)
             {
-                packageEffect.AppendLine($"Duration: {effectRemainTime}");
+                packageEffect.AppendLine($"{Resources.Duration}: {effectRemainTime}");
             }
 
             PackageEffectText = packageEffect.ToString();

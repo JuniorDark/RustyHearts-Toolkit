@@ -1,5 +1,4 @@
 ﻿using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Utilities;
 using static RHToolkit.Models.EnumService;
 
@@ -116,9 +115,9 @@ namespace RHToolkit.Services
                     double percentage = basePercentage + armorPlus;
 
                     mainStat = $"{Resources.PhysicalDefense} +{physicalStat}\n" +
-                               $"Reduce Physical Damage +{percentage:0.00}%\n" +
+                               $"{Resources.ReducePhysicalDamage} +{percentage:0.00}%\n" +
                                $"{Resources.MagicDefense} +{magicStat}\n" +
-                               $"Reduce Magic Damage +{percentage:0.00}%";
+                               $"{Resources.ReduceMagicDamage} +{percentage:0.00}%";
 
                 }
                 else
@@ -134,7 +133,7 @@ namespace RHToolkit.Services
                 if (enhanceLevel > 0)
                 {
                     (var weaponValue, var weaponPlus) = _gmDatabaseService.GetWeaponEnhanceValue(enhanceLevel);
-                    mainStat = $"{Resources.PhysicalDamage} +{physicalAttackMin}~{physicalAttackMax}\nAdd {Resources.PhysicalDamage} +{Math.Round(physicalAttackMin * weaponValue + weaponPlus)}\n{Resources.MagicDamage} +{magicAttackMin}~{magicAttackMax}\nAdd {Resources.MagicDamage} +{Math.Round(magicAttackMin * weaponValue + weaponPlus)}";
+                    mainStat = $"{Resources.PhysicalDamage} +{physicalAttackMin}~{physicalAttackMax}\n{Resources.Add} {Resources.PhysicalDamage} +{Math.Round(physicalAttackMin * weaponValue + weaponPlus)}\n{Resources.MagicDamage} +{magicAttackMin}~{magicAttackMax}\n{Resources.Add} {Resources.MagicDamage} +{Math.Round(magicAttackMin * weaponValue + weaponPlus)}";
                 }
                 else
                 {
@@ -175,7 +174,7 @@ namespace RHToolkit.Services
 
         public static string FormatSellValue(int sellPrice)
         {
-            return sellPrice > 0 ? $"Sell Value: {sellPrice:N0} {Resources.Gold}" : string.Empty;
+            return sellPrice > 0 ? $"{Resources.SellValue}: {sellPrice:N0} {Resources.Gold}" : string.Empty;
         }
 
         public static string FormatRequiredLevel(int levelLimit)
@@ -231,12 +230,12 @@ namespace RHToolkit.Services
 
         public static string FormatAugmentStoneLevel(int value)
         {
-            return value > 0 ? $"Augment Level +{value}" : string.Empty;
+            return value > 0 ? $"{Resources.AugmentLevel} +{value}" : string.Empty;
         }
 
         public static string FormatCooldown(float value)
         {
-            return value > 0 ? $"Cooldown: {value:F2} second{(value > 1 ? "s" : string.Empty)}" : string.Empty;
+            return value > 0 ? string.Format(Resources.CooldownText, $"{value:F2}") : string.Empty;
         }
 
         private const string ColorTagStart = "<COLOR:";
@@ -296,7 +295,7 @@ namespace RHToolkit.Services
                     optionName = FormatPercentage(optionName, valuePlaceholder01, replacement01);
                     optionName = FormatPercentage(optionName, valuePlaceholder02, replacement03);
                 }
-                else if (optionName.Contains("Skill Damage +") || optionName.Contains("Skill Cooldown -"))
+                else if (optionName.Contains(Resources.OptionSkillDamagePlus) || optionName.Contains(Resources.OptionSkillCooldownLess))
                 {
                     string skillName = GetOptionSkillName(optionID);
 
@@ -347,25 +346,25 @@ namespace RHToolkit.Services
         {
             return optionID switch
             {
-                5002 or 5014 or 5017 or 5029 or 5038 or 5043 => "NotFound",
-                5003 or 5018 => "Weapon",
-                5004 or 5019 => "Curse",
-                5005 or 5020 => "Black Sorcery",
-                5006 or 5021 => "Summon",
-                5007 or 5022 => "Wind",
-                5008 or 5023 => "Water",
-                5009 or 5024 => "Fire",
-                5010 or 5025 => "Light",
-                5011 or 5026 => "Earth",
-                5012 or 5027 => "Ki Gong",
-                5013 or 5028 => "Savage",
-                5015 or 5030 or 5041 or 5046 => "Special",
-                5016 or 5031 => "Fighting",
-                5032 or 5033 or 5034 or 5035 or 5036 or 5037 or 5048 or 5049 => "Unknown Skill Name",
-                5039 or 5044 => "Tactical",
-                5040 or 5045 => "Heavy Weapon",
-                5042 or 5047 => "Firearm",
-                _ => "Unknown Skill Name",
+                5002 or 5014 or 5017 or 5029 or 5038 or 5043 => Resources.OptionSkillNotFound,
+                5003 or 5018 => Resources.OptionSkillWeapon,
+                5004 or 5019 => Resources.OptionSkillCurse,
+                5005 or 5020 => Resources.OptionSkillBlackSorcery,
+                5006 or 5021 => Resources.OptionSkillSummon,
+                5007 or 5022 => Resources.OptionSkillWind,
+                5008 or 5023 => Resources.OptionSkillWater,
+                5009 or 5024 => Resources.OptionSkillFire,
+                5010 or 5025 => Resources.OptionSkillLight,
+                5011 or 5026 => Resources.OptionSkillEarth,
+                5012 or 5027 => Resources.OptionSkillKiGong,
+                5013 or 5028 => Resources.OptionSkillSavage,
+                5015 or 5030 or 5041 or 5046 => Resources.OptionSkillSpecial,
+                5016 or 5031 => Resources.OptionSkillFighting,
+                5032 or 5033 or 5034 or 5035 or 5036 or 5037 or 5048 or 5049 => Resources.OptionSkillUnknown,
+                5039 or 5044 => Resources.OptionSkillTactical,
+                5040 or 5045 => Resources.OptionSkillHeavyWeapon,
+                5042 or 5047 => Resources.OptionSkillFirearm,
+                _ => Resources.OptionSkillUnknown,
             };
         }
 
@@ -430,7 +429,7 @@ namespace RHToolkit.Services
                 }
                 else
                 {
-                    description.Append("[Title Effect]");
+                    description.Append($"[{Resources.TitleEffect}]");
 
                     if (!string.IsNullOrEmpty(_gmDatabaseService.GetAddEffectName(nAddEffectID00)))
                         description.AppendLine().Append(_gmDatabaseService.GetAddEffectName(nAddEffectID00));
@@ -445,14 +444,14 @@ namespace RHToolkit.Services
                     if (!string.IsNullOrEmpty(_gmDatabaseService.GetAddEffectName(nAddEffectID05)))
                         description.AppendLine().Append(_gmDatabaseService.GetAddEffectName(nAddEffectID05));
 
-                    description.AppendLine($"\n\nValid For: {formattedRemainTime}");
+                    description.AppendLine($"\n\n{Resources.ValidFor}: {formattedRemainTime}");
                 }
 
                 return description.ToString();
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage("Error: " + ex.Message);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: " + ex.Message);
                 return string.Empty;
             }
         }

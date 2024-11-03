@@ -55,17 +55,17 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
                 return;
             }
 
-            if (RHMessageBoxHelper.ConfirmMessage($"Save storage changes?"))
+            if (RHMessageBoxHelper.ConfirmMessage(Resources.StorageEditStorageSaveMessage))
             {
                 await _databaseService.SaveInventoryItem(CharacterData, StorageItemDatabaseList, DeletedStorageItemDatabaseList, "N_InventoryItem");
-                RHMessageBoxHelper.ShowOKMessage("Storage saved successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage(Resources.StorageEditStorageSaveSuccessMessage, Resources.Success);
                 await ReadStorageData();
             }
 
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error saving storage changes: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -154,17 +154,17 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
                 return;
             }
 
-            if (RHMessageBoxHelper.ConfirmMessage($"Save account storage changes?"))
+            if (RHMessageBoxHelper.ConfirmMessage(Resources.StorageEditAccountStorageSaveMessage))
             {
                 await _databaseService.SaveInventoryItem(CharacterData, AccountStorageItemDatabaseList, DeletedAccountStorageItemDatabaseList, "tbl_Account_Storage");
-                RHMessageBoxHelper.ShowOKMessage("Account Storage saved successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage(Resources.StorageEditAccountStorageSaveSuccessMessage, Resources.Success);
                 await ReadAccountStorageData();
             }
 
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error saving storage changes: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -266,7 +266,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
             {
                 ClearData();
                 CharacterData = characterData;
-                Title = $"Character Storage ({characterData.CharacterName})";
+                Title = string.Format(Resources.EditorTitle, Resources.CharacterStorage);
                 UniAccountInfo = await _databaseService.GetUniAccountInfoAsync(characterData.AuthID);
 
                 await ReadStorageData();
@@ -274,13 +274,13 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
             }
             else
             {
-                RHMessageBoxHelper.ShowOKMessage($"The character '{characterName}' does not exist.", "Invalid Character");
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.InexistentCharacterMessage, characterName), Resources.InvalidCharacter);
                 return;
             }
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -360,7 +360,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error adding storage item: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -379,7 +379,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error adding account storage item: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -396,7 +396,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
 
         if (IsSlotLocked(newItemData.SlotIndex, storageType))
         {
-            RHMessageBoxHelper.ShowOKMessage($"The slot '{newItemData.SlotIndex}' is locked.", "Cant Add Storage Item");
+            RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.StorageEditSlotLockedMessage, newItemData.SlotIndex), Resources.Error);
             return;
         }
 
@@ -410,7 +410,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
         {
             if (existingItem.ItemId != newItemData.ItemId && !existingItem.IsNewItem)
             {
-                RHMessageBoxHelper.ShowOKMessage($"The slot '{newItemData.SlotIndex}' is already in use.", "Cant Add Storage Item");
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.EquipmentEditorSlotInUseMessage, newItemData.SlotIndex), Resources.Error);
                 return;
             }
             else if (existingItem.IsNewItem)
@@ -589,7 +589,7 @@ public partial class StorageWindowViewModel : ObservableObject, IRecipient<Chara
     private bool _isButtonEnabled = true;
 
     [ObservableProperty]
-    private string _title = "Warehouse";
+    private string _title = Resources.CharacterStorage;
 
     #endregion
 

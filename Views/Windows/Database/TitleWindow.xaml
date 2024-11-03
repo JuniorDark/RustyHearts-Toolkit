@@ -21,7 +21,7 @@
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/icon/title.png"
-    ResizeMode="CanResizeWithGrip"
+    ResizeMode="CanResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
@@ -72,7 +72,7 @@
                 <Label
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Content="Current Title:"
+                    Content="{x:Static rs:Resources.CurrentTitle}"
                     Foreground="White" />
                 <TextBlock
                     Margin="5,0"
@@ -97,7 +97,7 @@
                     Margin="0,10"
                     Background="Transparent"
                     Command="{Binding UnequipTitleCommand}"
-                    Content="Unequip Title"
+                    Content="{x:Static rs:Resources.UnequipTitle}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"
@@ -119,54 +119,37 @@
                 <DataGrid
                     x:Name="dataGridView"
                     Margin="0,5,0,0"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
                     AutoGenerateColumns="False"
-                    BorderBrush="#FF0F0D0A"
                     CanUserAddRows="False"
                     ColumnWidth="Auto"
                     EnableColumnVirtualization="True"
                     EnableRowVirtualization="True"
-                    FontFamily="{StaticResource ArialUnicodeMS}"
-                    FontSize="12"
                     HeadersVisibility="Column"
-                    HorizontalGridLinesBrush="White"
                     HorizontalScrollBarVisibility="Disabled"
                     ItemsSource="{Binding TitleData}"
                     SelectedItem="{Binding SelectedTitle, Mode=TwoWay}"
                     SelectionMode="Single"
-                    Template="{StaticResource lb_datagrid}"
-                    VerticalGridLinesBrush="White">
-                    <DataGrid.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
-                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkBlue" />
-                    </DataGrid.Resources>
-                    <DataGrid.Foreground>
-                        <ImageBrush />
-                    </DataGrid.Foreground>
-                    <DataGrid.Background>
-                        <ImageBrush />
-                    </DataGrid.Background>
+                    Template="{StaticResource lb_datagrid}">
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding TitleName}"
-                            Header="Title Name (ID)"
+                            Header="{x:Static rs:Resources.TitleName}"
                             IsReadOnly="True" />
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding TitleType}"
-                            Header="Title Type"
+                            Header="{x:Static rs:Resources.TitleType}"
                             IsReadOnly="True" />
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding FormattedRemainTime}"
-                            Header="Remain Time"
+                            Header="{x:Static rs:Resources.RemainTime}"
                             IsReadOnly="True" />
                         <DataGridTextColumn
                             Width="*"
                             Binding="{Binding FormattedExpireTime}"
-                            Header="Expire Time"
+                            Header="{x:Static rs:Resources.ExpireTime}"
                             IsReadOnly="True" />
                     </DataGrid.Columns>
                 </DataGrid>
@@ -187,7 +170,7 @@
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding EquipTitleCommand}"
-                    Content="Equip Title"
+                    Content="{x:Static rs:Resources.EquipTitle}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"
@@ -199,12 +182,11 @@
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding DeleteTitleCommand}"
-                    Content="Delete Title"
+                    Content="{x:Static rs:Resources.DeleteTitle}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"
                     ToolTip="{x:Static rs:Resources.MailSendHelp}" />
-
             </StackPanel>
             <StackPanel
                 Grid.Row="3"
@@ -230,12 +212,11 @@
                 VerticalAlignment="Top"
                 Orientation="Horizontal">
                 <Label
-                    x:Name="lbClass"
                     Margin="10,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
-                    Content="Title List"
+                    Content="{x:Static rs:Resources.TitleList}"
                     Style="{StaticResource ArialMSWhite}" />
                 <ComboBox
                     x:Name="cmbTitle"
@@ -258,7 +239,7 @@
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding AddTitleCommand}"
-                    Content="Add Title"
+                    Content="{x:Static rs:Resources.AddTitle}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"

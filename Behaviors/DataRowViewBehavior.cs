@@ -175,7 +175,6 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         _isUpdating = false;
     }
 
-
     private void UpdateSelectedItems()
     {
         if (AssociatedObject is not ListView listView || listView.ItemsSource == null || _isUpdating)
@@ -212,6 +211,15 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
                     }
                 }
             }
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                if (listView.SelectedItems.Count > 0)
+                {
+                    var firstSelectedItem = listView.SelectedItems[0];
+                    listView.ScrollIntoView(firstSelectedItem);
+                }
+            });
         }
 
         _isUpdating = false;

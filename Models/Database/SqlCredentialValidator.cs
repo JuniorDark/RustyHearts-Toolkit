@@ -10,7 +10,7 @@ namespace RHToolkit.Models.Database
                 string.IsNullOrWhiteSpace(SqlCredentials.SQLUser) ||
                 string.IsNullOrWhiteSpace(SqlCredentials.SQLPwd))
             {
-                RHMessageBoxHelper.ShowOKMessage("SQL server credentials not set.\nSet the credentials in the Settings page.", "Empty SQL Server Credentials");
+                RHMessageBoxHelper.ShowOKMessage(Resources.SQLServerCredentialsMessage, Resources.SQLServerCredentialsTitle);
                 return false;
             }
 

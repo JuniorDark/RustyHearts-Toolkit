@@ -22,7 +22,7 @@
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/ico/icon_mail.png"
-    ResizeMode="CanResizeWithGrip"
+    ResizeMode="CanResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
@@ -122,13 +122,13 @@
                 <CheckBox
                     Command="{Binding SingleCheckedCommand, Mode=OneWay}"
                     CommandParameter="1"
-                    Content="Online"
+                    Content="{x:Static rs:Resources.Online}"
                     IsChecked="{Binding OnlineCheckBoxChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}" />
                 <CheckBox
                     Command="{Binding SingleCheckedCommand, Mode=OneWay}"
                     CommandParameter="2"
-                    Content="Offline"
+                    Content="{x:Static rs:Resources.Offline}"
                     IsChecked="{Binding OfflineCheckBoxChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}" />
             </StackPanel>

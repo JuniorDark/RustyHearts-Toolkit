@@ -19,7 +19,7 @@
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/icon/lb_main_quick_system05_02.png"
-    ResizeMode="CanResizeWithGrip"
+    ResizeMode="CanResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
@@ -76,7 +76,8 @@
             <control:EditorIconMenu Grid.Row="2" />
 
             <StackPanel
-                Grid.Row="3"
+                Grid.Row="1"
+                Grid.RowSpan="2"
                 Grid.Column="1"
                 Margin="10,0,0,0"
                 HorizontalAlignment="Center"
@@ -107,12 +108,11 @@
                     ShopDescription="{Binding ShopDescription, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
 
-            <ui:TabView
-                x:Name="tabView"
+            <TabControl
                 Grid.Row="3"
                 Grid.RowSpan="2"
                 Grid.Column="1"
-                Margin="0,110,0,0"
+                Margin="0,0,0,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 Background="Transparent"
@@ -581,8 +581,7 @@
                         </StackPanel>
                     </Grid>
                 </TabItem>
-
-            </ui:TabView>
+            </TabControl>
 
             <DataGrid
                 x:Name="dataGridView"
@@ -597,22 +596,16 @@
                 bh:DataGridBehavior.EnableScrollIntoView="True"
                 bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
                 AutoGenerateColumns="False"
-                Background="Transparent"
-                BorderBrush="#FF0F0D0A"
                 CanUserAddRows="False"
                 ColumnWidth="*"
                 EnableRowVirtualization="True"
-                FontFamily="{StaticResource ArialUnicodeMS}"
-                FontSize="12"
                 HeadersVisibility="Column"
-                HorizontalGridLinesBrush="White"
                 HorizontalScrollBarVisibility="Auto"
                 ItemsSource="{Binding DataTableManager.DataTable}"
                 SelectedItem="{Binding DataTableManager.SelectedItem}"
                 SelectionMode="Single"
                 SelectionUnit="FullRow"
                 Template="{StaticResource lb_datagrid}"
-                VerticalGridLinesBrush="White"
                 Visibility="{Binding IsVisible}">
                 <DataGrid.ContextMenu>
                     <ContextMenu>
@@ -740,7 +733,7 @@
                         Grid.Column="0"
                         Margin="10,0,0,0"
                         VerticalAlignment="Top"
-                        Content="Match Case"
+                        Content="{x:Static rs:Resources.MatchCase}"
                         IsChecked="{Binding MatchCase}"
                         Template="{StaticResource lb_checkbox}" />
                 </StackPanel>
@@ -761,7 +754,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemCategory"
-                        Width="145"
+                        Width="200"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -782,7 +775,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbSubCategory"
-                        Width="145"
+                        Width="200"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -813,7 +806,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbJobClass"
-                        Width="145"
+                        Width="200"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -826,17 +819,16 @@
                         SelectedValuePath="ID"
                         Style="{StaticResource ComboBoxStyle}"
                         Template="{StaticResource lb_combobox}" />
-
                     <Label
                         x:Name="lbItemState"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Item State"
+                        Content="{x:Static rs:Resources.ItemState}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbItemTrade"
-                        Width="145"
+                        Width="200"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"

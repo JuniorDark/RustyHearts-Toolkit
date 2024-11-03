@@ -53,11 +53,11 @@ namespace RHToolkit.Models.Database
                 {
                     if (messageType == "audit")
                     {
-                        message += $"[<font color=blue>{property} Change</font>]<br><font color=red>Old -> {oldValue}, New ->  {newValue}<br></font>";
+                        message += $"[<font color=blue>{property} Change</font>]<br><font color=red>{Resources.OldValue} -> {oldValue}, {Resources.NewValue} -> {newValue}<br></font>";
                     }
                     else if (messageType == "changes")
                     {
-                        message += $"{property}: Old -> {oldValue}, New -> {newValue}\n";
+                        message += $"{property}: {Resources.OldValue} -> {oldValue}, {Resources.NewValue} -> {newValue}\n";
                     }
                 }
             }
@@ -66,7 +66,7 @@ namespace RHToolkit.Models.Database
             AppendChange("Experience", oldData.Experience, newData.Experience);
             AppendChange("Skill Points", oldData.SP, newData.SP);
             AppendChange("Total Skill Points", oldData.TotalSP, newData.TotalSP);
-            AppendChange("Lobby", oldData.LobbyID, newData.LobbyID);
+            AppendChange("Lobby ID", oldData.LobbyID, newData.LobbyID);
             AppendChange("Gold", oldData.Gold, newData.Gold);
             AppendChange("Hearts", oldData.Hearts, newData.Hearts);
             AppendChange("Storage Gold", oldData.StorageGold, newData.StorageGold);

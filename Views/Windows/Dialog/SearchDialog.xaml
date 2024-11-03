@@ -56,7 +56,7 @@
                 <TabItem
                     Width="350"
                     Foreground="White"
-                    Header="Find"
+                    Header="{x:Static rs:Resources.Find}"
                     IsSelected="True"
                     Style="{StaticResource lb_tab}">
                     <Grid
@@ -87,7 +87,7 @@
                                 Background="Transparent"
                                 FontSize="12"
                                 Foreground="White"
-                                Text="Find what:" />
+                                Text="{x:Static rs:Resources.SearchFindText}" />
                             <TextBox
                                 x:Name="FindTextBox"
                                 Width="400"
@@ -114,7 +114,7 @@
                                 VerticalAlignment="Center"
                                 Background="Transparent"
                                 Click="FindNext_Click"
-                                Content="Find Next"
+                                Content="{x:Static rs:Resources.FindNext}"
                                 Cursor="Hand"
                                 Foreground="White"
                                 Style="{StaticResource lb_def_button02}" />
@@ -126,7 +126,7 @@
                                 VerticalAlignment="Center"
                                 Background="Transparent"
                                 Click="Count_Click"
-                                Content="Count"
+                                Content="{x:Static rs:Resources.Count}"
                                 Cursor="Hand"
                                 Foreground="White"
                                 Style="{StaticResource lb_def_button02}" />
@@ -138,7 +138,7 @@
                                 VerticalAlignment="Center"
                                 Background="Transparent"
                                 Click="Cancel_Click"
-                                Content="Close"
+                                Content="{x:Static rs:Resources.Close}"
                                 Cursor="Hand"
                                 Foreground="White"
                                 Style="{StaticResource lb_def_button02}" />
@@ -148,7 +148,7 @@
                 <TabItem
                     Width="350"
                     Foreground="White"
-                    Header="Replace"
+                    Header="{x:Static rs:Resources.Replace}"
                     IsSelected="True"
                     Style="{StaticResource lb_tab}">
                     <Grid
@@ -180,7 +180,7 @@
                                 Background="Transparent"
                                 FontSize="12"
                                 Foreground="White"
-                                Text="Find what:" />
+                                Text="{x:Static rs:Resources.SearchFindText}" />
                             <TextBox
                                 x:Name="ReplaceFindTextBox"
                                 Width="400"
@@ -207,7 +207,7 @@
                                 Background="Transparent"
                                 FontSize="12"
                                 Foreground="White"
-                                Text="Replace with:" />
+                                Text="{x:Static rs:Resources.SearchReplaceText}" />
                             <TextBox
                                 x:Name="ReplaceTextBox"
                                 Width="400"
@@ -234,7 +234,7 @@
                                 VerticalAlignment="Center"
                                 Background="Transparent"
                                 Click="ReplaceFindNext_Click"
-                                Content="Find Next"
+                                Content="{x:Static rs:Resources.FindNext}"
                                 Cursor="Hand"
                                 Foreground="White"
                                 Style="{StaticResource lb_def_button02}" />
@@ -246,7 +246,7 @@
                                 VerticalAlignment="Center"
                                 Background="Transparent"
                                 Click="Replace_Click"
-                                Content="Replace"
+                                Content="{x:Static rs:Resources.Replace}"
                                 Cursor="Hand"
                                 Foreground="White"
                                 Style="{StaticResource lb_def_button02}" />
@@ -258,7 +258,7 @@
                                 VerticalAlignment="Center"
                                 Background="Transparent"
                                 Click="ReplaceAll_Click"
-                                Content="Replace All"
+                                Content="{x:Static rs:Resources.ReplaceAll}"
                                 Cursor="Hand"
                                 Foreground="White"
                                 Style="{StaticResource lb_def_button02}" />
@@ -270,7 +270,7 @@
                                 VerticalAlignment="Center"
                                 Background="Transparent"
                                 Click="Cancel_Click"
-                                Content="Close"
+                                Content="{x:Static rs:Resources.Close}"
                                 Cursor="Hand"
                                 Foreground="White"
                                 Style="{StaticResource lb_def_button02}" />
@@ -295,7 +295,7 @@
                 Grid.Column="0"
                 Margin="10,10"
                 VerticalAlignment="Top"
-                Content="Match Case"
+                Content="{x:Static rs:Resources.MatchCase}"
                 Template="{StaticResource lb_checkbox}" />
         </Grid>
 

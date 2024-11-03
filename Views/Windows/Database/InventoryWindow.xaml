@@ -221,7 +221,7 @@
                     x:Name="EquipmentTab"
                     Width="150"
                     Foreground="White"
-                    Header="Equipment"
+                    Header="{x:Static rs:Resources.Equipment}"
                     IsSelected="True"
                     Style="{StaticResource lb_tab13}">
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
@@ -258,7 +258,7 @@
                     x:Name="ConsumeTab"
                     Width="150"
                     Foreground="White"
-                    Header="Consume"
+                    Header="{x:Static rs:Resources.Consume}"
                     IsSelected="True"
                     Style="{StaticResource lb_tab13}">
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
@@ -295,7 +295,7 @@
                     x:Name="OtherTab"
                     Width="150"
                     Foreground="White"
-                    Header="Other"
+                    Header="{x:Static rs:Resources.Other}"
                     IsSelected="True"
                     Style="{StaticResource lb_tab13}">
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
@@ -332,7 +332,7 @@
                     x:Name="QuestTab"
                     Width="150"
                     Foreground="White"
-                    Header="Quest"
+                    Header="{x:Static rs:Resources.Quest}"
                     IsSelected="True"
                     Style="{StaticResource lb_tab13}">
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
@@ -369,7 +369,7 @@
                     x:Name="CostumeTab"
                     Width="150"
                     Foreground="White"
-                    Header="Costume"
+                    Header="{x:Static rs:Resources.Costume}"
                     Style="{StaticResource lb_tab13}"
                     Tag="Page">
                     <ContentControl Content="{Binding CurrentPage}" ContentTemplateSelector="{StaticResource PageTemplateSelector}" />
@@ -378,7 +378,7 @@
                     x:Name="HiddenTab"
                     Width="150"
                     Foreground="White"
-                    Header="(Hidden) Trigger Items"
+                    Header="{x:Static rs:Resources.TriggerItems}"
                     IsSelected="True"
                     Style="{StaticResource lb_tab13}">
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Top">
@@ -478,7 +478,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Foreground="White"
-                    Text="Gold In Possession" />
+                    Text="{x:Static rs:Resources.Gold}" />
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="0"
@@ -486,7 +486,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Foreground="White"
-                    Text="Current Zen" />
+                    Text="{x:Static rs:Resources.Zen}" />
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="0"
@@ -494,7 +494,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Foreground="White"
-                    Text="Bonus Cash" />
+                    Text="{x:Static rs:Resources.BonusCash}" />
                 <TextBlock
                     Grid.Row="3"
                     Grid.Column="0"
@@ -502,7 +502,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     Foreground="White"
-                    Text="Ressurection Scroll" />
+                    Text="{x:Static rs:Resources.RessurectionScrolls}" />
             </StackPanel>
             <StackPanel
                 Grid.Row="3"
@@ -567,7 +567,7 @@
                 VerticalAlignment="Bottom"
                 Background="Transparent"
                 Command="{Binding SaveInventoryCommand}"
-                Content="Save"
+                Content="{x:Static rs:Resources.Save}"
                 Cursor="Hand"
                 Foreground="White"
                 IsEnabled="{Binding IsButtonEnabled}"

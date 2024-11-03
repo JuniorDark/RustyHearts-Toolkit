@@ -4,7 +4,6 @@ using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Windows.Database.VM;
 using System.Data;
@@ -49,7 +48,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
         
     }
@@ -403,7 +402,7 @@ public partial class MailWindowViewModel : ObservableValidator, IRecipient<ItemD
 
     #region Properties
     [ObservableProperty]
-    private string _title = "Send Mail";
+    private string _title = Resources.SendMail;
 
     [ObservableProperty]
     private List<ItemData>? _itemDataList;

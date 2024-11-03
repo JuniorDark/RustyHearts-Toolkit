@@ -1,5 +1,4 @@
-﻿using RHToolkit.Properties;
-using RHToolkit.Views.Pages;
+﻿using RHToolkit.Views.Pages;
 using Wpf.Ui.Controls;
 
 namespace RHToolkit.ViewModels.Windows;

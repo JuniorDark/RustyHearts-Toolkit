@@ -79,11 +79,83 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string Account {
+            get {
+                return ResourceManager.GetString("Account", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account Storage.
+        /// </summary>
+        public static string AccountStorage {
+            get {
+                return ResourceManager.GetString("AccountStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account Warehouse.
+        /// </summary>
+        public static string AccountWarehouse {
+            get {
+                return ResourceManager.GetString("AccountWarehouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Add {
             get {
                 return ResourceManager.GetString("Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Coupon.
+        /// </summary>
+        public static string AddCoupon {
+            get {
+                return ResourceManager.GetString("AddCoupon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Added By.
+        /// </summary>
+        public static string AddedBy {
+            get {
+                return ResourceManager.GetString("AddedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit addeffect .rh table file.
+        /// </summary>
+        public static string AddEffectEditorDesc {
+            get {
+                return ResourceManager.GetString("AddEffectEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Effect Editor.
+        /// </summary>
+        public static string AddEffectEditorTitle {
+            get {
+                return ResourceManager.GetString("AddEffectEditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adding.
+        /// </summary>
+        public static string Adding {
+            get {
+                return ResourceManager.GetString("Adding", resourceCulture);
             }
         }
         
@@ -106,11 +178,56 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Sanction.
+        /// </summary>
+        public static string AddSanction {
+            get {
+                return ResourceManager.GetString("AddSanction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Selected Item.
+        /// </summary>
+        public static string AddSelectedItem {
+            get {
+                return ResourceManager.GetString("AddSelectedItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Selected Item(s).
+        /// </summary>
+        public static string AddSelectedItems {
+            get {
+                return ResourceManager.GetString("AddSelectedItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Selected Skill.
+        /// </summary>
+        public static string AddSelectedSkill {
+            get {
+                return ResourceManager.GetString("AddSelectedSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click on a skill to add/edit, Right click to remove..
         /// </summary>
         public static string AddSkillHelp {
             get {
                 return ResourceManager.GetString("AddSkillHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Title.
+        /// </summary>
+        public static string AddTitle {
+            get {
+                return ResourceManager.GetString("AddTitle", resourceCulture);
             }
         }
         
@@ -138,6 +255,15 @@ namespace RHToolkit.Properties {
         public static string Angela {
             get {
                 return ResourceManager.GetString("Angela", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A comprehensive toolkit for editing Rusty Hearts database and table files..
+        /// </summary>
+        public static string AppDesc {
+            get {
+                return ResourceManager.GetString("AppDesc", resourceCulture);
             }
         }
         
@@ -250,6 +376,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Augment Level.
+        /// </summary>
+        public static string AugmentLevel {
+            get {
+                return ResourceManager.GetString("AugmentLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Augment Stone.
         /// </summary>
         public static string AugmentStone {
@@ -304,11 +439,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Block Movement.
+        /// </summary>
+        public static string BlockMovement {
+            get {
+                return ResourceManager.GetString("BlockMovement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bonus.
         /// </summary>
         public static string Bonus {
             get {
                 return ResourceManager.GetString("Bonus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bonus Cash.
+        /// </summary>
+        public static string BonusCash {
+            get {
+                return ResourceManager.GetString("BonusCash", resourceCulture);
             }
         }
         
@@ -349,11 +502,65 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can Trade.
+        /// </summary>
+        public static string CanTrade {
+            get {
+                return ResourceManager.GetString("CanTrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cash.
         /// </summary>
         public static string Cash {
             get {
                 return ResourceManager.GetString("Cash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cash Shop.
+        /// </summary>
+        public static string CashShop {
+            get {
+                return ResourceManager.GetString("CashShop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Purchased with Bonus.
+        /// </summary>
+        public static string CashShopBonusDesc {
+            get {
+                return ResourceManager.GetString("CashShopBonusDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}% of the price goes to Bonus.
+        /// </summary>
+        public static string CashShopBonusEarnDesc {
+            get {
+                return ResourceManager.GetString("CashShopBonusEarnDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit cash shop list .rh table file.
+        /// </summary>
+        public static string CashShopEditorDesc {
+            get {
+                return ResourceManager.GetString("CashShopEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cash Shop Editor.
+        /// </summary>
+        public static string CashShopEditorTitle {
+            get {
+                return ResourceManager.GetString("CashShopEditorTitle", resourceCulture);
             }
         }
         
@@ -367,11 +574,74 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Character.
+        /// </summary>
+        public static string Character {
+            get {
+                return ResourceManager.GetString("Character", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;{0} - {1} Focus&gt;.
+        /// </summary>
+        public static string CharacterClassFocusText {
+            get {
+                return ResourceManager.GetString("CharacterClassFocusText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Character Edit.
         /// </summary>
         public static string CharacterEdit {
             get {
                 return ResourceManager.GetString("CharacterEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The character name &apos;{0}&apos; already exists..
+        /// </summary>
+        public static string CharacterEditAlreadyUsedNameMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditAlreadyUsedNameMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete the character &apos;{0}&apos;?.
+        /// </summary>
+        public static string CharacterEditDeleteCharacterMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditDeleteCharacterMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character &apos;{0}&apos; deleted..
+        /// </summary>
+        public static string CharacterEditDeleteSuccessMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditDeleteSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid character name. The name musthave between 3 and 16 characters..
+        /// </summary>
+        public static string CharacterEditInvalidNameMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditInvalidNameMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The character name &apos;{0}&apos; its not allowed. This name is on the nick filter..
+        /// </summary>
+        public static string CharacterEditNameNotAllowedMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditNameNotAllowedMessage", resourceCulture);
             }
         }
         
@@ -394,11 +664,164 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EXPERIMENTAL FEATURE\n\nThis will reset all character skills and unequip the character weapon/costumes and send via mail.\n\nAre you sure you want to change character &apos;{0}&apos; class from &apos;{1}&apos; to &apos;{2}&apos;?.
+        /// </summary>
+        public static string CharacterEditorSaveClassMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditorSaveClassMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character class changed successfully!.
+        /// </summary>
+        public static string CharacterEditorSaveClassSuccessMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditorSaveClassSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changing focus will reset all character skills. Are you sure you want to change character &apos;{0}&apos; focus?.
+        /// </summary>
+        public static string CharacterEditorSaveFocusMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditorSaveFocusMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character focus changed successfully!.
+        /// </summary>
+        public static string CharacterEditorSaveFocusSuccessMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditorSaveFocusSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore the character &apos;{0}&apos;?.
+        /// </summary>
+        public static string CharacterEditRestoreCharacterMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditRestoreCharacterMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character &apos;{0}&apos; restored..
+        /// </summary>
+        public static string CharacterEditRestoreSuccessMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditRestoreSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change the character name from &apos;{0}&apos; to &apos;{1}&apos;?.
+        /// </summary>
+        public static string CharacterEditSaveNameMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditSaveNameMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character name updated successfully.
+        /// </summary>
+        public static string CharacterEditSaveNameSuccessMessage {
+            get {
+                return ResourceManager.GetString("CharacterEditSaveNameSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character Equipment.
+        /// </summary>
+        public static string CharacterEquipment {
+            get {
+                return ResourceManager.GetString("CharacterEquipment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character Fortune.
+        /// </summary>
+        public static string CharacterFortune {
+            get {
+                return ResourceManager.GetString("CharacterFortune", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character ID.
+        /// </summary>
+        public static string CharacterID {
+            get {
+                return ResourceManager.GetString("CharacterID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character Inventory.
+        /// </summary>
+        public static string CharacterInventory {
+            get {
+                return ResourceManager.GetString("CharacterInventory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lv.{0} {1}.
+        /// </summary>
+        public static string CharacterLevelNameText {
+            get {
+                return ResourceManager.GetString("CharacterLevelNameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character Name.
+        /// </summary>
+        public static string CharacterName {
+            get {
+                return ResourceManager.GetString("CharacterName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Character Restore.
         /// </summary>
         public static string CharacterRestore {
             get {
                 return ResourceManager.GetString("CharacterRestore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character Sanction.
+        /// </summary>
+        public static string CharacterSanction {
+            get {
+                return ResourceManager.GetString("CharacterSanction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character Storage.
+        /// </summary>
+        public static string CharacterStorage {
+            get {
+                return ResourceManager.GetString("CharacterStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character Title.
+        /// </summary>
+        public static string CharacterTitle {
+            get {
+                return ResourceManager.GetString("CharacterTitle", resourceCulture);
             }
         }
         
@@ -417,6 +840,33 @@ namespace RHToolkit.Properties {
         public static string Claw {
             get {
                 return ResourceManager.GetString("Claw", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string Close {
+            get {
+                return ResourceManager.GetString("Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string Comment {
+            get {
+                return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirmation.
+        /// </summary>
+        public static string Confirmation {
+            get {
+                return ResourceManager.GetString("Confirmation", resourceCulture);
             }
         }
         
@@ -448,6 +898,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cooldown: {0} Seconds.
+        /// </summary>
+        public static string CooldownText {
+            get {
+                return ResourceManager.GetString("CooldownText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Costume.
         /// </summary>
         public static string Costume {
@@ -466,6 +925,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Count.
+        /// </summary>
+        public static string Count {
+            get {
+                return ResourceManager.GetString("Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Coupon.
         /// </summary>
         public static string Coupon {
@@ -475,11 +943,200 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add the coupon &apos;{0}&apos; ?.
+        /// </summary>
+        public static string CouponAddMessage {
+            get {
+                return ResourceManager.GetString("CouponAddMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coupon added successfully!.
+        /// </summary>
+        public static string CouponAddSuccessMessage {
+            get {
+                return ResourceManager.GetString("CouponAddSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coupon Code:.
+        /// </summary>
+        public static string CouponCode {
+            get {
+                return ResourceManager.GetString("CouponCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete the coupon &apos;{0}&apos; ?.
+        /// </summary>
+        public static string CouponDeleteMessage {
+            get {
+                return ResourceManager.GetString("CouponDeleteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coupon deleted successfully!.
+        /// </summary>
+        public static string CouponDeleteSuccessMessage {
+            get {
+                return ResourceManager.GetString("CouponDeleteSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The coupon &apos;{0}&apos; already exists..
+        /// </summary>
+        public static string CouponDuplicateMessage {
+            get {
+                return ResourceManager.GetString("CouponDuplicateMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The coupon code is invalid. It must have 20 characters and contain only letters and numbers..
+        /// </summary>
+        public static string CouponInvalidMessage {
+            get {
+                return ResourceManager.GetString("CouponInvalidMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coupon Status.
+        /// </summary>
+        public static string CouponStatus {
+            get {
+                return ResourceManager.GetString("CouponStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Craft Cost.
+        /// </summary>
+        public static string CraftCost {
+            get {
+                return ResourceManager.GetString("CraftCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Craft Groups.
+        /// </summary>
+        public static string CraftGroups {
+            get {
+                return ResourceManager.GetString("CraftGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Craft List.
+        /// </summary>
+        public static string CraftList {
+            get {
+                return ResourceManager.GetString("CraftList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Craft Materials.
+        /// </summary>
+        public static string CraftMaterials {
+            get {
+                return ResourceManager.GetString("CraftMaterials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Created.
+        /// </summary>
+        public static string Created {
+            get {
+                return ResourceManager.GetString("Created", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Database.
+        /// </summary>
+        public static string CreateDatabase {
+            get {
+                return ResourceManager.GetString("CreateDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Date.
+        /// </summary>
+        public static string CreateDate {
+            get {
+                return ResourceManager.GetString("CreateDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation was cancelled..
+        /// </summary>
+        public static string CreateSQLiteDatabaseCancelMessage {
+            get {
+                return ResourceManager.GetString("CreateSQLiteDatabaseCancelMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create a new database?.
+        /// </summary>
+        public static string CreateSQLiteDatabaseMessage {
+            get {
+                return ResourceManager.GetString("CreateSQLiteDatabaseMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Database created successfully!.
+        /// </summary>
+        public static string CreateSQLiteDatabaseSuccessMessage {
+            get {
+                return ResourceManager.GetString("CreateSQLiteDatabaseSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to convert DataTable to {0}.
+        /// </summary>
+        public static string CryptorDataTableFileErrorMessage {
+            get {
+                return ResourceManager.GetString("CryptorDataTableFileErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The rh file data format is incorrect..
+        /// </summary>
+        public static string CryptorInvalidRHFileMessage {
+            get {
+                return ResourceManager.GetString("CryptorInvalidRHFileMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current Attribute.
         /// </summary>
         public static string CurrentAttribute {
             get {
                 return ResourceManager.GetString("CurrentAttribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current Title:.
+        /// </summary>
+        public static string CurrentTitle {
+            get {
+                return ResourceManager.GetString("CurrentTitle", resourceCulture);
             }
         }
         
@@ -502,6 +1159,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Database Editors.
+        /// </summary>
+        public static string DatabaseEditors {
+            get {
+                return ResourceManager.GetString("DatabaseEditors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Database Tools.
         /// </summary>
         public static string DatabaseTools {
@@ -520,6 +1186,141 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Count: {0} matches in entire table..
+        /// </summary>
+        public static string DataTableManagerCountMessage {
+            get {
+                return ResourceManager.GetString("DataTableManagerCountMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table folder has been set to &apos;{0}&apos;.
+        /// </summary>
+        public static string DataTableManagerFolderSetMessage {
+            get {
+                return ResourceManager.GetString("DataTableManagerFolderSetMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error loading rh file.
+        /// </summary>
+        public static string DataTableManagerLoadFileError {
+            get {
+                return ResourceManager.GetString("DataTableManagerLoadFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file &apos;{0}&apos; does not exist in the folder &apos;{1}&apos; or its subdirectories..
+        /// </summary>
+        public static string DataTableManagerMissingFileError {
+            get {
+                return ResourceManager.GetString("DataTableManagerMissingFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file &apos;{0}&apos; does not exist in the same directory as {1}..
+        /// </summary>
+        public static string DataTableManagerMissingStringFileError {
+            get {
+                return ResourceManager.GetString("DataTableManagerMissingStringFileError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replaced {0} occurrences..
+        /// </summary>
+        public static string DataTableManagerReplaceCountMessage {
+            get {
+                return ResourceManager.GetString("DataTableManagerReplaceCountMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error saving file.
+        /// </summary>
+        public static string DataTableManagerSaveFileErrorMessage {
+            get {
+                return ResourceManager.GetString("DataTableManagerSaveFileErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save changes to file.
+        /// </summary>
+        public static string DataTableManagerSaveFileMessage {
+            get {
+                return ResourceManager.GetString("DataTableManagerSaveFileMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End of data reached..
+        /// </summary>
+        public static string DataTableManagerSearchEndMessage {
+            get {
+                return ResourceManager.GetString("DataTableManagerSearchEndMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found the 1st occurrence from the top. The end of the table has been reached..
+        /// </summary>
+        public static string DataTableManagerSearchMessage {
+            get {
+                return ResourceManager.GetString("DataTableManagerSearchMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search text &apos;{0}&apos; not found..
+        /// </summary>
+        public static string DataTableManagerSearchNotFoundMessage {
+            get {
+                return ResourceManager.GetString("DataTableManagerSearchNotFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replaced text on row {0}, column {1}..
+        /// </summary>
+        public static string DataTableManagerSearchReplaceMessage {
+            get {
+                return ResourceManager.GetString("DataTableManagerSearchReplaceMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Character.
+        /// </summary>
+        public static string DeleteCharacter {
+            get {
+                return ResourceManager.GetString("DeleteCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Coupon.
+        /// </summary>
+        public static string DeleteCoupon {
+            get {
+                return ResourceManager.GetString("DeleteCoupon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Title.
+        /// </summary>
+        public static string DeleteTitle {
+            get {
+                return ResourceManager.GetString("DeleteTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Demon Hands.
         /// </summary>
         public static string DemonHands {
@@ -534,6 +1335,96 @@ namespace RHToolkit.Properties {
         public static string DeviceSkill {
             get {
                 return ResourceManager.GetString("DeviceSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Blood.
+        /// </summary>
+        public static string DifficultyBlood {
+            get {
+                return ResourceManager.GetString("DifficultyBlood", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hard.
+        /// </summary>
+        public static string DifficultyHard {
+            get {
+                return ResourceManager.GetString("DifficultyHard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal.
+        /// </summary>
+        public static string DifficultyNormal {
+            get {
+                return ResourceManager.GetString("DifficultyNormal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Very Hard.
+        /// </summary>
+        public static string DifficultyVeryHard {
+            get {
+                return ResourceManager.GetString("DifficultyVeryHard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dismantle Item.
+        /// </summary>
+        public static string DismantleItem {
+            get {
+                return ResourceManager.GetString("DismantleItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop Group.
+        /// </summary>
+        public static string DropGroup {
+            get {
+                return ResourceManager.GetString("DropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit dropgroup .rh table files.
+        /// </summary>
+        public static string DropGroupEditorDesc {
+            get {
+                return ResourceManager.GetString("DropGroupEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop Group Editor.
+        /// </summary>
+        public static string DropGroupEditorTitle {
+            get {
+                return ResourceManager.GetString("DropGroupEditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop Group Item List.
+        /// </summary>
+        public static string DropGroupItemListDatabaseDesc {
+            get {
+                return ResourceManager.GetString("DropGroupItemListDatabaseDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drop Groups Database.
+        /// </summary>
+        public static string DropGroupsDatabase {
+            get {
+                return ResourceManager.GetString("DropGroupsDatabase", resourceCulture);
             }
         }
         
@@ -565,11 +1456,56 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duration.
+        /// </summary>
+        public static string Duration {
+            get {
+                return ResourceManager.GetString("Duration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edgar.
         /// </summary>
         public static string Edgar {
             get {
                 return ResourceManager.GetString("Edgar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Character.
+        /// </summary>
+        public static string EditCharacter {
+            get {
+                return ResourceManager.GetString("EditCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error saving character changes.
+        /// </summary>
+        public static string EditCharacterErrorMessage {
+            get {
+                return ResourceManager.GetString("EditCharacterErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save the following changes to the character &apos;{0}&apos; ?.
+        /// </summary>
+        public static string EditCharacterSaveMessage {
+            get {
+                return ResourceManager.GetString("EditCharacterSaveMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Character changes saved..
+        /// </summary>
+        public static string EditCharacterSaveSuccessMessage {
+            get {
+                return ResourceManager.GetString("EditCharacterSaveSuccessMessage", resourceCulture);
             }
         }
         
@@ -583,11 +1519,47 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} Editor.
+        /// </summary>
+        public static string EditorTitle {
+            get {
+                return ResourceManager.GetString("EditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Editor ({1}).
+        /// </summary>
+        public static string EditorTitleFileName {
+            get {
+                return ResourceManager.GetString("EditorTitleFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Tools.
         /// </summary>
         public static string EditTools {
             get {
                 return ResourceManager.GetString("EditTools", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Effect.
+        /// </summary>
+        public static string Effect {
+            get {
+                return ResourceManager.GetString("Effect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Effect Package.
+        /// </summary>
+        public static string EffectPackage {
+            get {
+                return ResourceManager.GetString("EffectPackage", resourceCulture);
             }
         }
         
@@ -633,6 +1605,24 @@ namespace RHToolkit.Properties {
         public static string EnchantLevel {
             get {
                 return ResourceManager.GetString("EnchantLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit enemy .rh table files.
+        /// </summary>
+        public static string EnemyEditorDesc {
+            get {
+                return ResourceManager.GetString("EnemyEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enemy Editor.
+        /// </summary>
+        public static string EnemyEditorTitle {
+            get {
+                return ResourceManager.GetString("EnemyEditorTitle", resourceCulture);
             }
         }
         
@@ -835,11 +1825,65 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;{0}&apos; slot is already in use..
+        /// </summary>
+        public static string EquipmentEditorSlotInUseMessage {
+            get {
+                return ResourceManager.GetString("EquipmentEditorSlotInUseMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save equipment changes?.
+        /// </summary>
+        public static string EquipmentEditSaveMessage {
+            get {
+                return ResourceManager.GetString("EquipmentEditSaveMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equipment saved successfully!.
+        /// </summary>
+        public static string EquipmentEditSaveSuccessMessage {
+            get {
+                return ResourceManager.GetString("EquipmentEditSaveSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equip Title.
+        /// </summary>
+        public static string EquipTitle {
+            get {
+                return ResourceManager.GetString("EquipTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         public static string Error {
             get {
                 return ResourceManager.GetString("Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Experience.
+        /// </summary>
+        public static string Experience {
+            get {
+                return ResourceManager.GetString("Experience", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expire Time.
+        /// </summary>
+        public static string ExpireTime {
+            get {
+                return ResourceManager.GetString("ExpireTime", resourceCulture);
             }
         }
         
@@ -880,6 +1924,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Find.
+        /// </summary>
+        public static string Find {
+            get {
+                return ResourceManager.GetString("Find", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find Next.
+        /// </summary>
+        public static string FindNext {
+            get {
+                return ResourceManager.GetString("FindNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Firearm.
         /// </summary>
         public static string FirearmSkill {
@@ -916,6 +1978,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Focus.
+        /// </summary>
+        public static string Focus {
+            get {
+                return ResourceManager.GetString("Focus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Focus 1.
         /// </summary>
         public static string Focus1 {
@@ -943,6 +2014,60 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fortune.
+        /// </summary>
+        public static string Fortune {
+            get {
+                return ResourceManager.GetString("Fortune", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update &apos;{0}&apos; fortune?.
+        /// </summary>
+        public static string FortuneEditRemoveMessage {
+            get {
+                return ResourceManager.GetString("FortuneEditRemoveMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove &apos;{0}&apos; fortune?.
+        /// </summary>
+        public static string FortuneEditUpdateMessage {
+            get {
+                return ResourceManager.GetString("FortuneEditUpdateMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fortune Effect.
+        /// </summary>
+        public static string FortuneEffect {
+            get {
+                return ResourceManager.GetString("FortuneEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fortune Line 1.
+        /// </summary>
+        public static string FortuneLine1 {
+            get {
+                return ResourceManager.GetString("FortuneLine1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fortune Line 2.
+        /// </summary>
+        public static string FortuneLine2 {
+            get {
+                return ResourceManager.GetString("FortuneLine2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Frantz.
         /// </summary>
         public static string Frantz {
@@ -966,6 +2091,15 @@ namespace RHToolkit.Properties {
         public static string Gauntlet {
             get {
                 return ResourceManager.GetString("Gauntlet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate.
+        /// </summary>
+        public static string Generate {
+            get {
+                return ResourceManager.GetString("Generate", resourceCulture);
             }
         }
         
@@ -1015,6 +2149,69 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating database....
+        /// </summary>
+        public static string GMDatabaseCreatingDatabaseMessage {
+            get {
+                return ResourceManager.GetString("GMDatabaseCreatingDatabaseMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existing database file deleted..
+        /// </summary>
+        public static string GMDatabaseDatabaseDeleteMessage {
+            get {
+                return ResourceManager.GetString("GMDatabaseDatabaseDeleteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected folder does not contain the required &apos;.rh&apos; files..
+        /// </summary>
+        public static string GMDatabaseInvalidFolderMessage {
+            get {
+                return ResourceManager.GetString("GMDatabaseInvalidFolderMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required .rh table files are missing. The following required files are missing.
+        /// </summary>
+        public static string GMDatabaseMissingFilesMessage {
+            get {
+                return ResourceManager.GetString("GMDatabaseMissingFilesMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation canceled..
+        /// </summary>
+        public static string GMDatabaseOperationCanceledMessage {
+            get {
+                return ResourceManager.GetString("GMDatabaseOperationCanceledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operation complete..
+        /// </summary>
+        public static string GMDatabaseOperationCompleteMessage {
+            get {
+                return ResourceManager.GetString("GMDatabaseOperationCompleteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing {0}....
+        /// </summary>
+        public static string GMDatabaseProcessingMessage {
+            get {
+                return ResourceManager.GetString("GMDatabaseProcessingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gold.
         /// </summary>
         public static string Gold {
@@ -1024,11 +2221,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gold Stored.
+        /// </summary>
+        public static string GoldStored {
+            get {
+                return ResourceManager.GetString("GoldStored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Guild.
         /// </summary>
         public static string Guild {
             get {
                 return ResourceManager.GetString("Guild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guild Exp.
+        /// </summary>
+        public static string GuildExp {
+            get {
+                return ResourceManager.GetString("GuildExp", resourceCulture);
             }
         }
         
@@ -1087,6 +2302,42 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The character &apos;{0}&apos; does not exist..
+        /// </summary>
+        public static string InexistentCharacterMessage {
+            get {
+                return ResourceManager.GetString("InexistentCharacterMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Info.
+        /// </summary>
+        public static string Info {
+            get {
+                return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Information.
+        /// </summary>
+        public static string Information {
+            get {
+                return ResourceManager.GetString("Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Character.
+        /// </summary>
+        public static string InvalidCharacter {
+            get {
+                return ResourceManager.GetString("InvalidCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid Recipient.
         /// </summary>
         public static string InvalidRecipient {
@@ -1123,11 +2374,38 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file &apos;{0}&apos; is not a valid &apos;{1}&apos; file..
+        /// </summary>
+        public static string InvalidTableFileDesc {
+            get {
+                return ResourceManager.GetString("InvalidTableFileDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid template file..
         /// </summary>
         public static string InvalidTemplate {
             get {
                 return ResourceManager.GetString("InvalidTemplate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inventory.
+        /// </summary>
+        public static string Inventory {
+            get {
+                return ResourceManager.GetString("Inventory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Admin.
+        /// </summary>
+        public static string IsAdmin {
+            get {
+                return ResourceManager.GetString("IsAdmin", resourceCulture);
             }
         }
         
@@ -1141,6 +2419,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Item Amount/Duration (Minutes).
+        /// </summary>
+        public static string ItemAmountDuration {
+            get {
+                return ResourceManager.GetString("ItemAmountDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item Charge.
         /// </summary>
         public static string ItemCharge {
@@ -1150,7 +2437,43 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Item Database.
+        ///   Looks up a localized string similar to Item Count.
+        /// </summary>
+        public static string ItemCount {
+            get {
+                return ResourceManager.GetString("ItemCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Craft.
+        /// </summary>
+        public static string ItemCraft {
+            get {
+                return ResourceManager.GetString("ItemCraft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Craft Database.
+        /// </summary>
+        public static string ItemCraftDatabase {
+            get {
+                return ResourceManager.GetString("ItemCraftDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Craft List.
+        /// </summary>
+        public static string ItemCraftListDatabaseDesc {
+            get {
+                return ResourceManager.GetString("ItemCraftListDatabaseDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items Database.
         /// </summary>
         public static string ItemDatabase {
             get {
@@ -1168,11 +2491,74 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit item lists .rh table files.
+        /// </summary>
+        public static string ItemEditorDesc {
+            get {
+                return ResourceManager.GetString("ItemEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Editor.
+        /// </summary>
+        public static string ItemEditorTitle {
+            get {
+                return ResourceManager.GetString("ItemEditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item ID.
+        /// </summary>
+        public static string ItemID {
+            get {
+                return ResourceManager.GetString("ItemID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item List.
+        /// </summary>
+        public static string ItemList {
+            get {
+                return ResourceManager.GetString("ItemList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item List.
+        /// </summary>
+        public static string ItemListDatabaseDesc {
+            get {
+                return ResourceManager.GetString("ItemListDatabaseDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Package.
+        /// </summary>
+        public static string ItemPackage {
+            get {
+                return ResourceManager.GetString("ItemPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item Quality.
         /// </summary>
         public static string ItemQuality {
             get {
                 return ResourceManager.GetString("ItemQuality", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item State.
+        /// </summary>
+        public static string ItemState {
+            get {
+                return ResourceManager.GetString("ItemState", resourceCulture);
             }
         }
         
@@ -1240,6 +2626,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add {0} Item.
+        /// </summary>
+        public static string ItemWindowTitle {
+            get {
+                return ResourceManager.GetString("ItemWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add {0} Item ({1}).
+        /// </summary>
+        public static string ItemWindowTitleName {
+            get {
+                return ResourceManager.GetString("ItemWindowTitleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Kg.
         /// </summary>
         public static string Kg {
@@ -1294,11 +2698,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Last Login.
+        /// </summary>
+        public static string LastLogin {
+            get {
+                return ResourceManager.GetString("LastLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Leila.
         /// </summary>
         public static string Leila {
             get {
                 return ResourceManager.GetString("Leila", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        public static string Level {
+            get {
+                return ResourceManager.GetString("Level", resourceCulture);
             }
         }
         
@@ -1344,6 +2766,33 @@ namespace RHToolkit.Properties {
         public static string LoadTemplateJsonError {
             get {
                 return ResourceManager.GetString("LoadTemplateJsonError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Lobby.
+        /// </summary>
+        public static string Lobby {
+            get {
+                return ResourceManager.GetString("Lobby", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Local Databases.
+        /// </summary>
+        public static string LocalDatabases {
+            get {
+                return ResourceManager.GetString("LocalDatabases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View and manage local databases.
+        /// </summary>
+        public static string LocalDatabasesDesc {
+            get {
+                return ResourceManager.GetString("LocalDatabasesDesc", resourceCulture);
             }
         }
         
@@ -1447,6 +2896,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Match Case.
+        /// </summary>
+        public static string MatchCase {
+            get {
+                return ResourceManager.GetString("MatchCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max Durability.
         /// </summary>
         public static string MaxDurability {
@@ -1461,6 +2919,249 @@ namespace RHToolkit.Properties {
         public static string Meilin {
             get {
                 return ResourceManager.GetString("Meilin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add New Row.
+        /// </summary>
+        public static string MenuAddRow {
+            get {
+                return ResourceManager.GetString("MenuAddRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close File.
+        /// </summary>
+        public static string MenuCloseFile {
+            get {
+                return ResourceManager.GetString("MenuCloseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Selected Row.
+        /// </summary>
+        public static string MenuDeleteRow {
+            get {
+                return ResourceManager.GetString("MenuDeleteRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate Selected Row.
+        /// </summary>
+        public static string MenuDuplicateRow {
+            get {
+                return ResourceManager.GetString("MenuDuplicateRow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string MenuEdit {
+            get {
+                return ResourceManager.GetString("MenuEdit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string MenuExit {
+            get {
+                return ResourceManager.GetString("MenuExit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export As....
+        /// </summary>
+        public static string MenuExportAs {
+            get {
+                return ResourceManager.GetString("MenuExportAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export as Client Patch File (MIP).
+        /// </summary>
+        public static string MenuExportMIP {
+            get {
+                return ResourceManager.GetString("MenuExportMIP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export as XLSX.
+        /// </summary>
+        public static string MenuExportXLSX {
+            get {
+                return ResourceManager.GetString("MenuExportXLSX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export as XML.
+        /// </summary>
+        public static string MenuExportXML {
+            get {
+                return ResourceManager.GetString("MenuExportXML", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string MenuFile {
+            get {
+                return ResourceManager.GetString("MenuFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find....
+        /// </summary>
+        public static string MenuFind {
+            get {
+                return ResourceManager.GetString("MenuFind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open File.
+        /// </summary>
+        public static string MenuOpenFile {
+            get {
+                return ResourceManager.GetString("MenuOpenFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open ....
+        /// </summary>
+        public static string MenuOpenList {
+            get {
+                return ResourceManager.GetString("MenuOpenList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Skill File....
+        /// </summary>
+        public static string MenuOpenSkillFile {
+            get {
+                return ResourceManager.GetString("MenuOpenSkillFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redo.
+        /// </summary>
+        public static string MenuRedo {
+            get {
+                return ResourceManager.GetString("MenuRedo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace.
+        /// </summary>
+        public static string MenuReplace {
+            get {
+                return ResourceManager.GetString("MenuReplace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string MenuSave {
+            get {
+                return ResourceManager.GetString("MenuSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save As ....
+        /// </summary>
+        public static string MenuSaveAs {
+            get {
+                return ResourceManager.GetString("MenuSaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Table Folder.
+        /// </summary>
+        public static string MenuSetTableFolder {
+            get {
+                return ResourceManager.GetString("MenuSetTableFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string MenuSettings {
+            get {
+                return ResourceManager.GetString("MenuSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undo.
+        /// </summary>
+        public static string MenuUndo {
+            get {
+                return ResourceManager.GetString("MenuUndo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table Database not found. Be sure to create the database first on SQLite Database Manager page..
+        /// </summary>
+        public static string MissingDatabaseMessage {
+            get {
+                return ResourceManager.GetString("MissingDatabaseMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SQlite Database Not Found.
+        /// </summary>
+        public static string MissingDatabaseTitle {
+            get {
+                return ResourceManager.GetString("MissingDatabaseTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The database file ({0}) is missing tables. The following required tables are missing in the database:.
+        /// </summary>
+        public static string MissingTableMessage {
+            get {
+                return ResourceManager.GetString("MissingTableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please ensure you have created the database with the required tables..
+        /// </summary>
+        public static string MissingTableMessage2 {
+            get {
+                return ResourceManager.GetString("MissingTableMessage2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MP Cost: {0}.
+        /// </summary>
+        public static string MPCostText {
+            get {
+                return ResourceManager.GetString("MPCostText", resourceCulture);
             }
         }
         
@@ -1483,6 +3184,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Character Name/Account.
+        /// </summary>
+        public static string NameAccount {
+            get {
+                return ResourceManager.GetString("NameAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Natasha.
         /// </summary>
         public static string Natasha {
@@ -1501,6 +3211,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Value.
+        /// </summary>
+        public static string NewValue {
+            get {
+                return ResourceManager.GetString("NewValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
@@ -1515,6 +3234,51 @@ namespace RHToolkit.Properties {
         public static string NoBuff {
             get {
                 return ResourceManager.GetString("NoBuff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no changes to save..
+        /// </summary>
+        public static string NoChangesMessage {
+            get {
+                return ResourceManager.GetString("NoChangesMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No data found.
+        /// </summary>
+        public static string NoDataFoundMessage {
+            get {
+                return ResourceManager.GetString("NoDataFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Date Set.
+        /// </summary>
+        public static string NoDateSet {
+            get {
+                return ResourceManager.GetString("NoDateSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Effect.
+        /// </summary>
+        public static string NoEffect {
+            get {
+                return ResourceManager.GetString("NoEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Fortune.
+        /// </summary>
+        public static string NoFortune {
+            get {
+                return ResourceManager.GetString("NoFortune", resourceCulture);
             }
         }
         
@@ -1555,11 +3319,263 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Sale Date.
+        /// </summary>
+        public static string NoSaleDate {
+            get {
+                return ResourceManager.GetString("NoSaleDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Selling Date.
+        /// </summary>
+        public static string NoSellingDate {
+            get {
+                return ResourceManager.GetString("NoSellingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Title.
+        /// </summary>
+        public static string NoTitle {
+            get {
+                return ResourceManager.GetString("NoTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Used.
         /// </summary>
         public static string NotUsed {
             get {
                 return ResourceManager.GetString("NotUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit npc .rh table files.
+        /// </summary>
+        public static string NPCEditorDesc {
+            get {
+                return ResourceManager.GetString("NPCEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Editor.
+        /// </summary>
+        public static string NPCEditorTitle {
+            get {
+                return ResourceManager.GetString("NPCEditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Guild EXP.
+        /// </summary>
+        public static string NpcMenuAddGuildEXP {
+            get {
+                return ResourceManager.GetString("NpcMenuAddGuildEXP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change Hair Style.
+        /// </summary>
+        public static string NpcMenuChangeHairStyle {
+            get {
+                return ResourceManager.GetString("NpcMenuChangeHairStyle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Costume Craft.
+        /// </summary>
+        public static string NpcMenuCostumeCraft {
+            get {
+                return ResourceManager.GetString("NpcMenuCostumeCraft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dismantle.
+        /// </summary>
+        public static string NpcMenuDismantle {
+            get {
+                return ResourceManager.GetString("NpcMenuDismantle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dye Hair.
+        /// </summary>
+        public static string NpcMenuDyeHair {
+            get {
+                return ResourceManager.GetString("NpcMenuDyeHair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guild.
+        /// </summary>
+        public static string NpcMenuGuild {
+            get {
+                return ResourceManager.GetString("NpcMenuGuild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guild EXP History.
+        /// </summary>
+        public static string NpcMenuGuildEXPHistory {
+            get {
+                return ResourceManager.GetString("NpcMenuGuildEXPHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guild Skill.
+        /// </summary>
+        public static string NpcMenuGuildSkill {
+            get {
+                return ResourceManager.GetString("NpcMenuGuildSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guild Warehouse.
+        /// </summary>
+        public static string NpcMenuGuildWarehouse {
+            get {
+                return ResourceManager.GetString("NpcMenuGuildWarehouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Craft.
+        /// </summary>
+        public static string NpcMenuItemCraft {
+            get {
+                return ResourceManager.GetString("NpcMenuItemCraft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Upgrade.
+        /// </summary>
+        public static string NpcMenuItemUpgrade {
+            get {
+                return ResourceManager.GetString("NpcMenuItemUpgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to See How Lucky You Will Be.
+        /// </summary>
+        public static string NpcMenuLuck {
+            get {
+                return ResourceManager.GetString("NpcMenuLuck", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move To Village.
+        /// </summary>
+        public static string NpcMenuMoveToVillage {
+            get {
+                return ResourceManager.GetString("NpcMenuMoveToVillage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resurrect Pet.
+        /// </summary>
+        public static string NpcMenuResurrectPet {
+            get {
+                return ResourceManager.GetString("NpcMenuResurrectPet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shop.
+        /// </summary>
+        public static string NpcMenuShop {
+            get {
+                return ResourceManager.GetString("NpcMenuShop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trade Shop.
+        /// </summary>
+        public static string NpcMenuTradeShop {
+            get {
+                return ResourceManager.GetString("NpcMenuTradeShop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zen Menu.
+        /// </summary>
+        public static string NpcMenuZen {
+            get {
+                return ResourceManager.GetString("NpcMenuZen", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Shop.
+        /// </summary>
+        public static string NPCShop {
+            get {
+                return ResourceManager.GetString("NPCShop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Shop Database.
+        /// </summary>
+        public static string NPCShopDatabase {
+            get {
+                return ResourceManager.GetString("NPCShopDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit npc shops .rh table files.
+        /// </summary>
+        public static string NPCShopEditorDesc {
+            get {
+                return ResourceManager.GetString("NPCShopEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Shops Editor.
+        /// </summary>
+        public static string NPCShopEditorTitle {
+            get {
+                return ResourceManager.GetString("NPCShopEditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Shops List.
+        /// </summary>
+        public static string NPCShopListDatabaseDesc {
+            get {
+                return ResourceManager.GetString("NPCShopListDatabaseDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Shop Preview.
+        /// </summary>
+        public static string NPCShopPreview {
+            get {
+                return ResourceManager.GetString("NPCShopPreview", resourceCulture);
             }
         }
         
@@ -1591,11 +3607,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Old Value.
+        /// </summary>
+        public static string OldValue {
+            get {
+                return ResourceManager.GetString("OldValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Online.
         /// </summary>
         public static string Online {
             get {
                 return ResourceManager.GetString("Online", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open a file.
+        /// </summary>
+        public static string OpenFile {
+            get {
+                return ResourceManager.GetString("OpenFile", resourceCulture);
             }
         }
         
@@ -1672,6 +3706,186 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Black Sorcery.
+        /// </summary>
+        public static string OptionSkillBlackSorcery {
+            get {
+                return ResourceManager.GetString("OptionSkillBlackSorcery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Cooldown -.
+        /// </summary>
+        public static string OptionSkillCooldownLess {
+            get {
+                return ResourceManager.GetString("OptionSkillCooldownLess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Curse.
+        /// </summary>
+        public static string OptionSkillCurse {
+            get {
+                return ResourceManager.GetString("OptionSkillCurse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Damage +.
+        /// </summary>
+        public static string OptionSkillDamagePlus {
+            get {
+                return ResourceManager.GetString("OptionSkillDamagePlus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Earth.
+        /// </summary>
+        public static string OptionSkillEarth {
+            get {
+                return ResourceManager.GetString("OptionSkillEarth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fighting.
+        /// </summary>
+        public static string OptionSkillFighting {
+            get {
+                return ResourceManager.GetString("OptionSkillFighting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fire.
+        /// </summary>
+        public static string OptionSkillFire {
+            get {
+                return ResourceManager.GetString("OptionSkillFire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Firearm.
+        /// </summary>
+        public static string OptionSkillFirearm {
+            get {
+                return ResourceManager.GetString("OptionSkillFirearm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Heavy Weapon.
+        /// </summary>
+        public static string OptionSkillHeavyWeapon {
+            get {
+                return ResourceManager.GetString("OptionSkillHeavyWeapon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ki Gong.
+        /// </summary>
+        public static string OptionSkillKiGong {
+            get {
+                return ResourceManager.GetString("OptionSkillKiGong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        public static string OptionSkillLight {
+            get {
+                return ResourceManager.GetString("OptionSkillLight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NotFound.
+        /// </summary>
+        public static string OptionSkillNotFound {
+            get {
+                return ResourceManager.GetString("OptionSkillNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Savage.
+        /// </summary>
+        public static string OptionSkillSavage {
+            get {
+                return ResourceManager.GetString("OptionSkillSavage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special.
+        /// </summary>
+        public static string OptionSkillSpecial {
+            get {
+                return ResourceManager.GetString("OptionSkillSpecial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Summon.
+        /// </summary>
+        public static string OptionSkillSummon {
+            get {
+                return ResourceManager.GetString("OptionSkillSummon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tactical.
+        /// </summary>
+        public static string OptionSkillTactical {
+            get {
+                return ResourceManager.GetString("OptionSkillTactical", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown Skill Name.
+        /// </summary>
+        public static string OptionSkillUnknown {
+            get {
+                return ResourceManager.GetString("OptionSkillUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Water.
+        /// </summary>
+        public static string OptionSkillWater {
+            get {
+                return ResourceManager.GetString("OptionSkillWater", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weapon.
+        /// </summary>
+        public static string OptionSkillWeapon {
+            get {
+                return ResourceManager.GetString("OptionSkillWeapon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wind.
+        /// </summary>
+        public static string OptionSkillWind {
+            get {
+                return ResourceManager.GetString("OptionSkillWind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to When hit.
         /// </summary>
         public static string OptionWhenHit {
@@ -1708,11 +3922,218 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit package .rh table files.
+        /// </summary>
+        public static string PackageEditorDesc {
+            get {
+                return ResourceManager.GetString("PackageEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Editor.
+        /// </summary>
+        public static string PackageEditorTitle {
+            get {
+                return ResourceManager.GetString("PackageEditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Effect.
+        /// </summary>
+        public static string PackageEffect {
+            get {
+                return ResourceManager.GetString("PackageEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extra Auction Slots.
+        /// </summary>
+        public static string PackageEffectAuctionSlot {
+            get {
+                return ResourceManager.GetString("PackageEffectAuctionSlot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bonus Card Selection.
+        /// </summary>
+        public static string PackageEffectBonusCardSelection {
+            get {
+                return ResourceManager.GetString("PackageEffectBonusCardSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to EXP Bonus.
+        /// </summary>
+        public static string PackageEffectEXPBonus {
+            get {
+                return ResourceManager.GetString("PackageEffectEXPBonus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Increases Gold Card Drop Rate.
+        /// </summary>
+        public static string PackageEffectGoldCard {
+            get {
+                return ResourceManager.GetString("PackageEffectGoldCard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guild EXP Bonus.
+        /// </summary>
+        public static string PackageEffectGuildEXPBonus {
+            get {
+                return ResourceManager.GetString("PackageEffectGuildEXPBonus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can Use High Level Items.
+        /// </summary>
+        public static string PackageEffectItemLevel {
+            get {
+                return ResourceManager.GetString("PackageEffectItemLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repair Cost Reduction.
+        /// </summary>
+        public static string PackageEffectRepairCostReduction {
+            get {
+                return ResourceManager.GetString("PackageEffectRepairCostReduction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Repurchase Cost Decrease.
+        /// </summary>
+        public static string PackageEffectRepurchaseCostDecrease {
+            get {
+                return ResourceManager.GetString("PackageEffectRepurchaseCostDecrease", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can Reset Skills.
+        /// </summary>
+        public static string PackageEffectResetSkills {
+            get {
+                return ResourceManager.GetString("PackageEffectResetSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclusive Items available at the shops.
+        /// </summary>
+        public static string PackageEffectShopItem {
+            get {
+                return ResourceManager.GetString("PackageEffectShopItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can use Twin Pet.
+        /// </summary>
+        public static string PackageEffectTwinPet {
+            get {
+                return ResourceManager.GetString("PackageEffectTwinPet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlimited Inventory Weight.
+        /// </summary>
+        public static string PackageEffectUnlimitedWeight {
+            get {
+                return ResourceManager.GetString("PackageEffectUnlimitedWeight", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Increases Weapon Upgrade Effect.
+        /// </summary>
+        public static string PackageEffectWeaponUpgrade {
+            get {
+                return ResourceManager.GetString("PackageEffectWeaponUpgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unlimited Inventory Weight /Extra Inventory Slots.
+        /// </summary>
+        public static string PackageEffectWeightExtraInventory {
+            get {
+                return ResourceManager.GetString("PackageEffectWeightExtraInventory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Party Mission.
+        /// </summary>
+        public static string PartyMission {
+            get {
+                return ResourceManager.GetString("PartyMission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Period.
+        /// </summary>
+        public static string Period {
+            get {
+                return ResourceManager.GetString("Period", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Personal Warehouse.
+        /// </summary>
+        public static string PersonalWarehouse {
+            get {
+                return ResourceManager.GetString("PersonalWarehouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pet.
         /// </summary>
         public static string Pet {
             get {
                 return ResourceManager.GetString("Pet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pet Death Drop.
+        /// </summary>
+        public static string PetDeathDrop {
+            get {
+                return ResourceManager.GetString("PetDeathDrop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit pet .rh table files.
+        /// </summary>
+        public static string PetEditorDesc {
+            get {
+                return ResourceManager.GetString("PetEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pet Editor.
+        /// </summary>
+        public static string PetEditorTitle {
+            get {
+                return ResourceManager.GetString("PetEditorTitle", resourceCulture);
             }
         }
         
@@ -1789,6 +4210,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit quest .rh table files.
+        /// </summary>
+        public static string QuestEditorDesc {
+            get {
+                return ResourceManager.GetString("QuestEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quest Editor.
+        /// </summary>
+        public static string QuestEditorTitle {
+            get {
+                return ResourceManager.GetString("QuestEditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Quick Slot.
         /// </summary>
         public static string QuickSlot {
@@ -1812,6 +4251,33 @@ namespace RHToolkit.Properties {
         public static string RandomOption {
             get {
                 return ResourceManager.GetString("RandomOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random Rune.
+        /// </summary>
+        public static string RandomRune {
+            get {
+                return ResourceManager.GetString("RandomRune", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit randomrune .rh table file.
+        /// </summary>
+        public static string RandomRuneEditorDesc {
+            get {
+                return ResourceManager.GetString("RandomRuneEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random Box Editor.
+        /// </summary>
+        public static string RandomRuneEditorTitle {
+            get {
+                return ResourceManager.GetString("RandomRuneEditorTitle", resourceCulture);
             }
         }
         
@@ -1879,6 +4345,60 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rare Card Group.
+        /// </summary>
+        public static string RareCardGroup {
+            get {
+                return ResourceManager.GetString("RareCardGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rare Card Reward.
+        /// </summary>
+        public static string RareCardReward {
+            get {
+                return ResourceManager.GetString("RareCardReward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rare Card Reward Database.
+        /// </summary>
+        public static string RareCardRewardDatabase {
+            get {
+                return ResourceManager.GetString("RareCardRewardDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rare Card Reward List.
+        /// </summary>
+        public static string RareCardRewardListDatabaseDesc {
+            get {
+                return ResourceManager.GetString("RareCardRewardListDatabaseDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Read.
+        /// </summary>
+        public static string Read {
+            get {
+                return ResourceManager.GetString("Read", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reason.
+        /// </summary>
+        public static string Reason {
+            get {
+                return ResourceManager.GetString("Reason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recipient.
         /// </summary>
         public static string Recipient {
@@ -1906,11 +4426,119 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reduce Magic Damage.
+        /// </summary>
+        public static string ReduceMagicDamage {
+            get {
+                return ResourceManager.GetString("ReduceMagicDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reduce Physical Damage.
+        /// </summary>
+        public static string ReducePhysicalDamage {
+            get {
+                return ResourceManager.GetString("ReducePhysicalDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release Date.
+        /// </summary>
+        public static string ReleaseDate {
+            get {
+                return ResourceManager.GetString("ReleaseDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remain Time.
+        /// </summary>
+        public static string RemainTime {
+            get {
+                return ResourceManager.GetString("RemainTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removed By.
+        /// </summary>
+        public static string RemovedBy {
+            get {
+                return ResourceManager.GetString("RemovedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Sanction.
+        /// </summary>
+        public static string RemoveSanction {
+            get {
+                return ResourceManager.GetString("RemoveSanction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing.
+        /// </summary>
+        public static string Removing {
+            get {
+                return ResourceManager.GetString("Removing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace.
+        /// </summary>
+        public static string Replace {
+            get {
+                return ResourceManager.GetString("Replace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace All.
+        /// </summary>
+        public static string ReplaceAll {
+            get {
+                return ResourceManager.GetString("ReplaceAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Required Level.
         /// </summary>
         public static string RequiredLevel {
             get {
                 return ResourceManager.GetString("RequiredLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ressurection Scrolls.
+        /// </summary>
+        public static string RessurectionScrolls {
+            get {
+                return ResourceManager.GetString("RessurectionScrolls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restore Character.
+        /// </summary>
+        public static string RestoreCharacter {
+            get {
+                return ResourceManager.GetString("RestoreCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restrict Character.
+        /// </summary>
+        public static string RestrictCharacter {
+            get {
+                return ResourceManager.GetString("RestrictCharacter", resourceCulture);
             }
         }
         
@@ -2023,6 +4651,96 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sanction Count.
+        /// </summary>
+        public static string SanctionCount {
+            get {
+                return ResourceManager.GetString("SanctionCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sanction this character for.
+        /// </summary>
+        public static string SanctionEditAddMessage {
+            get {
+                return ResourceManager.GetString("SanctionEditAddMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sanction added successfully..
+        /// </summary>
+        public static string SanctionEditAddSuccessMessage {
+            get {
+                return ResourceManager.GetString("SanctionEditAddSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected sanction was already removed..
+        /// </summary>
+        public static string SanctionEditAlreadyRemovedSanctionMessage {
+            get {
+                return ResourceManager.GetString("SanctionEditAlreadyRemovedSanctionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This character is already sanctioned. Remove the current sanction before adding other..
+        /// </summary>
+        public static string SanctionEditAlreadySanctionedMessage {
+            get {
+                return ResourceManager.GetString("SanctionEditAlreadySanctionedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a comment for the sanction removal..
+        /// </summary>
+        public static string SanctionEditCommentMessage {
+            get {
+                return ResourceManager.GetString("SanctionEditCommentMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error {0} sanction.
+        /// </summary>
+        public static string SanctionEditErrorMessage {
+            get {
+                return ResourceManager.GetString("SanctionEditErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This character has no active sanctions..
+        /// </summary>
+        public static string SanctionEditNoSanctionedMessage {
+            get {
+                return ResourceManager.GetString("SanctionEditNoSanctionedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove the sanction from this character for.
+        /// </summary>
+        public static string SanctionEditRemoveMessage {
+            get {
+                return ResourceManager.GetString("SanctionEditRemoveMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sanction released successfully..
+        /// </summary>
+        public static string SanctionEditRemoveSuccessMessage {
+            get {
+                return ResourceManager.GetString("SanctionEditRemoveSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to False Report.
         /// </summary>
         public static string SanctionFalseReport {
@@ -2086,6 +4804,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sanctions.
+        /// </summary>
+        public static string Sanctions {
+            get {
+                return ResourceManager.GetString("Sanctions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scam.
         /// </summary>
         public static string SanctionScam {
@@ -2113,6 +4840,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sanction Type.
+        /// </summary>
+        public static string SanctionType {
+            get {
+                return ResourceManager.GetString("SanctionType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Savage &amp; Grab.
         /// </summary>
         public static string SavageGrabSkills {
@@ -2127,6 +4863,78 @@ namespace RHToolkit.Properties {
         public static string SavageSkill {
             get {
                 return ResourceManager.GetString("SavageSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Account Storage.
+        /// </summary>
+        public static string SaveAccountStorage {
+            get {
+                return ResourceManager.GetString("SaveAccountStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save changes?.
+        /// </summary>
+        public static string SaveChangesMessage {
+            get {
+                return ResourceManager.GetString("SaveChangesMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Class.
+        /// </summary>
+        public static string SaveClass {
+            get {
+                return ResourceManager.GetString("SaveClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Equipment.
+        /// </summary>
+        public static string SaveEquipment {
+            get {
+                return ResourceManager.GetString("SaveEquipment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Focus.
+        /// </summary>
+        public static string SaveFocus {
+            get {
+                return ResourceManager.GetString("SaveFocus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save Storage.
+        /// </summary>
+        public static string SaveStorage {
+            get {
+                return ResourceManager.GetString("SaveStorage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Changes saved successfully!.
+        /// </summary>
+        public static string SaveSuccessMessage {
+            get {
+                return ResourceManager.GetString("SaveSuccessMessage", resourceCulture);
             }
         }
         
@@ -2185,11 +4993,101 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search for a character.
+        /// </summary>
+        public static string SearchCharacterMessage {
+            get {
+                return ResourceManager.GetString("SearchCharacterMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for a deleted character.
+        /// </summary>
+        public static string SearchDeletedCharacterMessage {
+            get {
+                return ResourceManager.GetString("SearchDeletedCharacterMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find what:.
+        /// </summary>
+        public static string SearchFindText {
+            get {
+                return ResourceManager.GetString("SearchFindText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search Name/ID.
         /// </summary>
         public static string SearchNameID {
             get {
                 return ResourceManager.GetString("SearchNameID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace with:.
+        /// </summary>
+        public static string SearchReplaceText {
+            get {
+                return ResourceManager.GetString("SearchReplaceText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected Item.
+        /// </summary>
+        public static string SelectedItem {
+            get {
+                return ResourceManager.GetString("SelectedItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected Skill.
+        /// </summary>
+        public static string SelectedSkill {
+            get {
+                return ResourceManager.GetString("SelectedSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Folder.
+        /// </summary>
+        public static string SelectFolder {
+            get {
+                return ResourceManager.GetString("SelectFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a Item.
+        /// </summary>
+        public static string SelectItem {
+            get {
+                return ResourceManager.GetString("SelectItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select table folder.
+        /// </summary>
+        public static string SelectTableFolder {
+            get {
+                return ResourceManager.GetString("SelectTableFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sell Value.
+        /// </summary>
+        public static string SellValue {
+            get {
+                return ResourceManager.GetString("SellValue", resourceCulture);
             }
         }
         
@@ -2293,6 +5191,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please ensure you have created the database with the required tables..
+        /// </summary>
+        public static string ServiceMissingTableMessage {
+            get {
+                return ResourceManager.GetString("ServiceMissingTableMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set.
+        /// </summary>
+        public static string Set {
+            get {
+                return ResourceManager.GetString("Set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 2Set.
         /// </summary>
         public static string Set2 {
@@ -2347,6 +5263,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit setitem .rh table file.
+        /// </summary>
+        public static string SetItemEditorDesc {
+            get {
+                return ResourceManager.GetString("SetItemEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Item Editor.
+        /// </summary>
+        public static string SetItemEditorTitle {
+            get {
+                return ResourceManager.GetString("SetItemEditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string Settings {
@@ -2365,11 +5299,155 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit skills .rh table files.
+        /// </summary>
+        public static string SkillEditorDesc {
+            get {
+                return ResourceManager.GetString("SkillEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Editor.
+        /// </summary>
+        public static string SkillEditorTitle {
+            get {
+                return ResourceManager.GetString("SkillEditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill File.
+        /// </summary>
+        public static string SkillFile {
+            get {
+                return ResourceManager.GetString("SkillFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill List.
+        /// </summary>
+        public static string SkillList {
+            get {
+                return ResourceManager.GetString("SkillList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill List.
+        /// </summary>
+        public static string SkillListDatabaseDesc {
+            get {
+                return ResourceManager.GetString("SkillListDatabaseDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Point: {0}.
+        /// </summary>
+        public static string SkillPointText {
+            get {
+                return ResourceManager.GetString("SkillPointText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skills Database.
+        /// </summary>
+        public static string SkillsDatabase {
+            get {
+                return ResourceManager.GetString("SkillsDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Tree Editor.
+        /// </summary>
+        public static string SkillTreeEditor {
+            get {
+                return ResourceManager.GetString("SkillTreeEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Tree File.
+        /// </summary>
+        public static string SkillTreeFile {
+            get {
+                return ResourceManager.GetString("SkillTreeFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Tree Skill.
+        /// </summary>
+        public static string SkillTreeSkill {
+            get {
+                return ResourceManager.GetString("SkillTreeSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Tree UI Editor.
+        /// </summary>
+        public static string SkillTreeUIEditor {
+            get {
+                return ResourceManager.GetString("SkillTreeUIEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Tree UI File.
+        /// </summary>
+        public static string SkillTreeUIFile {
+            get {
+                return ResourceManager.GetString("SkillTreeUIFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Tree UI Skill.
+        /// </summary>
+        public static string SkillTreeUISkill {
+            get {
+                return ResourceManager.GetString("SkillTreeUISkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Type.
+        /// </summary>
+        public static string SkillType {
+            get {
+                return ResourceManager.GetString("SkillType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add &apos;{0}&apos;  {1}.
+        /// </summary>
+        public static string SkillWindowTitle {
+            get {
+                return ResourceManager.GetString("SkillWindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Slot.
         /// </summary>
         public static string Slot {
             get {
                 return ResourceManager.GetString("Slot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Slots Used.
+        /// </summary>
+        public static string SlotsUsed {
+            get {
+                return ResourceManager.GetString("SlotsUsed", resourceCulture);
             }
         }
         
@@ -2626,6 +5704,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SQL server credentials not set. Please set the credentials in the Settings page..
+        /// </summary>
+        public static string SQLServerCredentialsMessage {
+            get {
+                return ResourceManager.GetString("SQLServerCredentialsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Empty SQL Server Credentials.
+        /// </summary>
+        public static string SQLServerCredentialsTitle {
+            get {
+                return ResourceManager.GetString("SQLServerCredentialsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SQL Settings.
         /// </summary>
         public static string SQLSettings {
@@ -2644,11 +5740,74 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start Date.
+        /// </summary>
+        public static string StartDate {
+            get {
+                return ResourceManager.GetString("StartDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State.
+        /// </summary>
+        public static string State {
+            get {
+                return ResourceManager.GetString("State", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Storage.
         /// </summary>
         public static string Storage {
             get {
                 return ResourceManager.GetString("Storage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save account storage changes?.
+        /// </summary>
+        public static string StorageEditAccountStorageSaveMessage {
+            get {
+                return ResourceManager.GetString("StorageEditAccountStorageSaveMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account Storage saved successfully!.
+        /// </summary>
+        public static string StorageEditAccountStorageSaveSuccessMessage {
+            get {
+                return ResourceManager.GetString("StorageEditAccountStorageSaveSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The slot &apos;{0}&apos; is locked..
+        /// </summary>
+        public static string StorageEditSlotLockedMessage {
+            get {
+                return ResourceManager.GetString("StorageEditSlotLockedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save character storage changes?.
+        /// </summary>
+        public static string StorageEditStorageSaveMessage {
+            get {
+                return ResourceManager.GetString("StorageEditStorageSaveMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account Storage saved successfully!.
+        /// </summary>
+        public static string StorageEditStorageSaveSuccessMessage {
+            get {
+                return ResourceManager.GetString("StorageEditStorageSaveSuccessMessage", resourceCulture);
             }
         }
         
@@ -2685,6 +5844,42 @@ namespace RHToolkit.Properties {
         public static string Sword {
             get {
                 return ResourceManager.GetString("Sword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit .rh table files.
+        /// </summary>
+        public static string TableEditorDesc {
+            get {
+                return ResourceManager.GetString("TableEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Table Editors.
+        /// </summary>
+        public static string TableEditors {
+            get {
+                return ResourceManager.GetString("TableEditors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dedicated Table Editors.
+        /// </summary>
+        public static string TableEditorsDedicated {
+            get {
+                return ResourceManager.GetString("TableEditorsDedicated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RH Table Editor.
+        /// </summary>
+        public static string TableEditorTitle {
+            get {
+                return ResourceManager.GetString("TableEditorTitle", resourceCulture);
             }
         }
         
@@ -2743,6 +5938,204 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Animated.
+        /// </summary>
+        public static string TitleAnimated {
+            get {
+                return ResourceManager.GetString("TitleAnimated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title Category.
+        /// </summary>
+        public static string TitleCategory {
+            get {
+                return ResourceManager.GetString("TitleCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title Duration.
+        /// </summary>
+        public static string TitleDuration {
+            get {
+                return ResourceManager.GetString("TitleDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title &apos;{0}&apos; added successfully!.
+        /// </summary>
+        public static string TitleEditAddSuccessMessage {
+            get {
+                return ResourceManager.GetString("TitleEditAddSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add the title &apos;{0}&apos; to this character?.
+        /// </summary>
+        public static string TitleEditAddTitleMessage {
+            get {
+                return ResourceManager.GetString("TitleEditAddTitleMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete the title &apos;{0}&apos; from this character?.
+        /// </summary>
+        public static string TitleEditDeleteTitleMessage {
+            get {
+                return ResourceManager.GetString("TitleEditDeleteTitleMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title &apos;{0}&apos; deleted successfully!.
+        /// </summary>
+        public static string TitleEditDeleteTitleSuccessMessage {
+            get {
+                return ResourceManager.GetString("TitleEditDeleteTitleSuccessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate Title.
+        /// </summary>
+        public static string TitleEditDuplicateTitle {
+            get {
+                return ResourceManager.GetString("TitleEditDuplicateTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equip the title &apos;{0}&apos; to this character?.
+        /// </summary>
+        public static string TitleEditEquipTitleMessage {
+            get {
+                return ResourceManager.GetString("TitleEditEquipTitleMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expirated Title.
+        /// </summary>
+        public static string TitleEditExpiratedTitle {
+            get {
+                return ResourceManager.GetString("TitleEditExpiratedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The title &apos;{0}&apos; has expired..
+        /// </summary>
+        public static string TitleEditExpiredTitleMessage {
+            get {
+                return ResourceManager.GetString("TitleEditExpiredTitleMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit title .rh table file.
+        /// </summary>
+        public static string TitleEditorDesc {
+            get {
+                return ResourceManager.GetString("TitleEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title Editor.
+        /// </summary>
+        public static string TitleEditorTitle {
+            get {
+                return ResourceManager.GetString("TitleEditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This character already has &apos;{0}&apos; title..
+        /// </summary>
+        public static string TitleEditSameTitleMessage {
+            get {
+                return ResourceManager.GetString("TitleEditSameTitleMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unequip the title &apos;{0}&apos; from this character?.
+        /// </summary>
+        public static string TitleEditUnequipTitleMessage {
+            get {
+                return ResourceManager.GetString("TitleEditUnequipTitleMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title Effect.
+        /// </summary>
+        public static string TitleEffect {
+            get {
+                return ResourceManager.GetString("TitleEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title List.
+        /// </summary>
+        public static string TitleList {
+            get {
+                return ResourceManager.GetString("TitleList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title Name.
+        /// </summary>
+        public static string TitleName {
+            get {
+                return ResourceManager.GetString("TitleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal.
+        /// </summary>
+        public static string TitleNormal {
+            get {
+                return ResourceManager.GetString("TitleNormal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special.
+        /// </summary>
+        public static string TitleSpecial {
+            get {
+                return ResourceManager.GetString("TitleSpecial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title Type.
+        /// </summary>
+        public static string TitleType {
+            get {
+                return ResourceManager.GetString("TitleType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tools.
         /// </summary>
         public static string Tools {
@@ -2761,11 +6154,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total Skill Points.
+        /// </summary>
+        public static string TotalSkillPoints {
+            get {
+                return ResourceManager.GetString("TotalSkillPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tradeable.
         /// </summary>
         public static string Tradeable {
             get {
                 return ResourceManager.GetString("Tradeable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trade Shop.
+        /// </summary>
+        public static string TradeShop {
+            get {
+                return ResourceManager.GetString("TradeShop", resourceCulture);
             }
         }
         
@@ -2788,6 +6199,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Hidden) Trigger Items.
+        /// </summary>
+        public static string TriggerItems {
+            get {
+                return ResourceManager.GetString("TriggerItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tude.
         /// </summary>
         public static string Tude {
@@ -2802,6 +6222,15 @@ namespace RHToolkit.Properties {
         public static string TwinSwords {
             get {
                 return ResourceManager.GetString("TwinSwords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unequip Title.
+        /// </summary>
+        public static string UnequipTitle {
+            get {
+                return ResourceManager.GetString("UnequipTitle", resourceCulture);
             }
         }
         
@@ -2824,6 +6253,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unused Skill Points.
+        /// </summary>
+        public static string UnusedSkillPoints {
+            get {
+                return ResourceManager.GetString("UnusedSkillPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Upgrade.
         /// </summary>
         public static string Upgrade {
@@ -2833,11 +6271,83 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Date.
+        /// </summary>
+        public static string UseDate {
+            get {
+                return ResourceManager.GetString("UseDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used By: Account Name.
+        /// </summary>
+        public static string UsedByAccount {
+            get {
+                return ResourceManager.GetString("UsedByAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used By: Character.
+        /// </summary>
+        public static string UsedByCharacter {
+            get {
+                return ResourceManager.GetString("UsedByCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid Date.
+        /// </summary>
+        public static string ValidDate {
+            get {
+                return ResourceManager.GetString("ValidDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid For.
+        /// </summary>
+        public static string ValidFor {
+            get {
+                return ResourceManager.GetString("ValidFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Valid Until.
+        /// </summary>
+        public static string ValidUntil {
+            get {
+                return ResourceManager.GetString("ValidUntil", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Value.
         /// </summary>
         public static string Value {
             get {
                 return ResourceManager.GetString("Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warehouse Gold.
+        /// </summary>
+        public static string WarehouseGold {
+            get {
+                return ResourceManager.GetString("WarehouseGold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warehouse Slots.
+        /// </summary>
+        public static string WarehouseSlots {
+            get {
+                return ResourceManager.GetString("WarehouseSlots", resourceCulture);
             }
         }
         
@@ -2878,6 +6388,33 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The window class should be derived from {0}.
+        /// </summary>
+        public static string WindowsServiceErrorMessage {
+            get {
+                return ResourceManager.GetString("WindowsServiceErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Window is not registered as service..
+        /// </summary>
+        public static string WindowsServiceServiceErrorMessage {
+            get {
+                return ResourceManager.GetString("WindowsServiceServiceErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} {1}.
+        /// </summary>
+        public static string WindowTitle {
+            get {
+                return ResourceManager.GetString("WindowTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Wind.
         /// </summary>
         public static string WindSkill {
@@ -2896,11 +6433,38 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit world .rh table files.
+        /// </summary>
+        public static string WorldEditorDesc {
+            get {
+                return ResourceManager.GetString("WorldEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to World Editor.
+        /// </summary>
+        public static string WorldEditorTitle {
+            get {
+                return ResourceManager.GetString("WorldEditorTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zen.
+        /// </summary>
+        public static string Zen {
+            get {
+                return ResourceManager.GetString("Zen", resourceCulture);
             }
         }
     }

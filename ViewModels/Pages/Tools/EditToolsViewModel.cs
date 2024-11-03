@@ -13,27 +13,27 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
     [ObservableProperty]
     private WindowCard[] _windowCards =
     [
-        new("RH Table Editor", "Edit .rh table files", SymbolRegular.DocumentEdit24, "rheditor"),
+        new(Resources.TableEditorTitle, Resources.TableEditorDesc, SymbolRegular.DocumentEdit24, "rheditor"),
     ];
 
     [ObservableProperty]
     private WindowCard[] _windowCardsTools =
     [
-        new("Add Effect Editor", "Edit addeffect .rh table files", SymbolRegular.DocumentEdit24, "addeffecteditor"),
-        new("Cash Shop Editor", "Edit cash shop .rh table file", SymbolRegular.DocumentEdit24, "cashshopeditor"),
-        new("Drop Group Editor", "Edit dropgroup .rh table files", SymbolRegular.DocumentEdit24, "dropgroupeditor"),
-        new("Enemy Editor", "Edit enemy .rh table files", SymbolRegular.DocumentEdit24, "enemyeditor"),
-        new("Item Editor", "Edit items .rh table files", SymbolRegular.DocumentEdit24, "itemeditor"),
-        new("NPC Editor", "Edit npc .rh table files", SymbolRegular.DocumentEdit24, "npceditor"),
-        new("NPC Shop Editor", "Edit npcshops .rh table files", SymbolRegular.DocumentEdit24, "npcshopeditor"),
-        new("Package Editor", "Edit package .rh table files", SymbolRegular.DocumentEdit24, "packageeditor"),
-        new("Pet Editor", "Edit pet .rh table file", SymbolRegular.DocumentEdit24, "peteditor"),
-        new("Quest Editor", "Edit quest .rh table files", SymbolRegular.DocumentEdit24, "questeditor"),
-        new("Random Box Editor", "Edit randomrune .rh table file", SymbolRegular.DocumentEdit24, "randomruneeditor"),
-        new("Skill Editor", "Edit skills .rh table files", SymbolRegular.DocumentEdit24, "skilleditor"),
-        new("Set Item Editor", "Edit setitem .rh table file", SymbolRegular.DocumentEdit24, "setitemeditor"),
-        new("Title Editor", "Edit title .rh table file", SymbolRegular.DocumentEdit24, "titleeditor"),
-        new("World Editor", "Edit world .rh table files", SymbolRegular.DocumentEdit24, "worldeditor"),
+        new(Resources.AddEffectEditorTitle, Resources.AddEffectEditorDesc, SymbolRegular.DocumentEdit24, "addeffecteditor"),
+        new(Resources.CashShopEditorTitle, Resources.CashShopEditorDesc, SymbolRegular.DocumentEdit24, "cashshopeditor"),
+        new(Resources.DropGroupEditorTitle, Resources.DropGroupEditorDesc, SymbolRegular.DocumentEdit24, "dropgroupeditor"),
+        new(Resources.EnemyEditorTitle, Resources.EnemyEditorDesc, SymbolRegular.DocumentEdit24, "enemyeditor"),
+        new(Resources.ItemEditorTitle, Resources.ItemEditorDesc, SymbolRegular.DocumentEdit24, "itemeditor"),
+        new(Resources.NPCEditorTitle, Resources.NPCEditorDesc, SymbolRegular.DocumentEdit24, "npceditor"),
+        new(Resources.NPCShopEditorTitle, Resources.NPCShopEditorDesc, SymbolRegular.DocumentEdit24, "npcshopeditor"),
+        new(Resources.PackageEditorTitle, Resources.PackageEditorDesc, SymbolRegular.DocumentEdit24, "packageeditor"),
+        new(Resources.PetEditorTitle, Resources.PetEditorDesc, SymbolRegular.DocumentEdit24, "peteditor"),
+        new(Resources.QuestEditorTitle, Resources.QuestEditorDesc, SymbolRegular.DocumentEdit24, "questeditor"),
+        new(Resources.RandomRuneEditorTitle, Resources.RandomRuneEditorDesc, SymbolRegular.DocumentEdit24, "randomruneeditor"),
+        new(Resources.SkillEditorTitle, Resources.SkillEditorDesc, SymbolRegular.DocumentEdit24, "skilleditor"),
+        new(Resources.SetItemEditorTitle, Resources.SetItemEditorDesc, SymbolRegular.DocumentEdit24, "setitemeditor"),
+        new(Resources.TitleEditorTitle, Resources.TitleEditorDesc, SymbolRegular.DocumentEdit24, "titleeditor"),
+        new(Resources.WorldEditorTitle, Resources.WorldEditorDesc, SymbolRegular.DocumentEdit24, "worldeditor"),
 
     ];
 
@@ -106,7 +106,7 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
 
     }

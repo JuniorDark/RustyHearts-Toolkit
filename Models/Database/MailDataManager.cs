@@ -1,5 +1,4 @@
 ﻿using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 
 namespace RHToolkit.Models.Database

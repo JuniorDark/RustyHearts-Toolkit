@@ -1,6 +1,5 @@
 ﻿using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Views.Windows;
 using System.Windows.Controls;
 
@@ -8,9 +7,15 @@ namespace RHToolkit.ViewModels.Windows
 {
     public partial class RHEditorViewModel : ObservableObject
     {
+        private readonly Guid _token;
+
         public RHEditorViewModel()
         {
-            DataTableManager = new DataTableManager();
+            _token = Guid.NewGuid();
+            DataTableManager = new()
+            {
+                Token = _token
+            };
         }
 
         #region Commands 
@@ -34,7 +39,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -55,13 +60,13 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
         private void IsLoaded()
         {
-            Title = $"RH Table Editor ({DataTableManager.CurrentFileName})";
+            Title = string.Format(Resources.EditorTitleFileName, "RH Table", DataTableManager.CurrentFileName);
             OpenMessage = "";
             OnCanExecuteFileCommandChanged();
             IsVisible = Visibility.Visible;
@@ -72,14 +77,14 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? rhEditorWindow = Application.Current.Windows.OfType<RHEditorWindow>().FirstOrDefault();
-                Window owner = rhEditorWindow ?? Application.Current.MainWindow;
+                Window? window = Application.Current.Windows.OfType<RHEditorWindow>().FirstOrDefault();
+                Window owner = window ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.CellOrRowHeader);
 
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
 
         }
@@ -100,8 +105,8 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            Title = $"RH Table Editor";
-            OpenMessage = "Open a file";
+            Title = string.Format(Resources.EditorTitle, "RH Table");
+            OpenMessage = Resources.OpenFile;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
         }
@@ -131,7 +136,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -140,10 +145,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"RH Table Editor";
+        private string _title = string.Format(Resources.EditorTitle, "RH Table");
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private Visibility _isVisible = Visibility.Hidden;

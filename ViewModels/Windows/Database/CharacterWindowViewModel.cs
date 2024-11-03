@@ -50,20 +50,20 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
             if (characterData != null)
             {
                 CharacterData = null;
-                Title = $"Character Editor ({characterData.CharacterName})";
+                Title = string.Format(Resources.EditorTitleFileName, Resources.Character, characterData.CharacterName);
                 CharacterData = characterData;
                 CharacterDataViewModel.LoadCharacterData(characterData);
                 await EquipmentWindowViewModel.LoadCharacterData(characterData.CharacterName!);
             }
             else
             {
-                RHMessageBoxHelper.ShowOKMessage($"The character '{characterName}' does not exist.", "Invalid Character");
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.InexistentCharacterMessage, characterName), Resources.InvalidCharacter);
                 return;
             }
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -95,25 +95,25 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
             if (!CharacterDataManager.HasCharacterDataChanges(CharacterData, newCharacterData))
             {
-                RHMessageBoxHelper.ShowOKMessage("There are no changes to save.", "Info");
+                RHMessageBoxHelper.ShowOKMessage(Resources.NoChangesMessage, Resources.Info);
                 return;
             }
 
             string changes = CharacterDataManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "changes");
 
-            if (RHMessageBoxHelper.ConfirmMessage($"Save the following changes to the character {CharacterData.CharacterName}?\n\n{changes}"))
+            if (RHMessageBoxHelper.ConfirmMessage($"{string.Format(Resources.EditCharacterSaveMessage, CharacterData.CharacterName)}\n\n{changes}"))
             {
                 string auditMessage = CharacterDataManager.GenerateCharacterDataMessage(CharacterData, newCharacterData, "audit");
                 newCharacterData.CharacterID = CharacterData.CharacterID;
                 await _databaseService.UpdateCharacterDataAsync(newCharacterData);
                 await _databaseService.GMAuditAsync(CharacterData, "Character Information Change", auditMessage);
-                RHMessageBoxHelper.ShowOKMessage("Character changes saved.", "Success");
+                RHMessageBoxHelper.ShowOKMessage(Resources.EditCharacterSaveSuccessMessage, Resources.Success);
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error saving character changes: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.EditCharacterErrorMessage}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -155,17 +155,17 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
         if (CharacterDataViewModel.IsNameNotAllowed(newCharacterName))
         {
-            RHMessageBoxHelper.ShowOKMessage($"The character name '{newCharacterName}' is on the nick filter and its not allowed.", "Error");
+            RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.CharacterEditNameNotAllowedMessage, newCharacterName), Resources.Error);
             return;
         }
 
         if (!ValidateCharacterName(newCharacterName))
         {
-            RHMessageBoxHelper.ShowOKMessage("Invalid character name.", "Error");
+            RHMessageBoxHelper.ShowOKMessage(Resources.CharacterEditInvalidNameMessage, Resources.Error);
             return;
         }
 
-        if (RHMessageBoxHelper.ConfirmMessage($"Change the character name from '{CharacterData.CharacterName}' to '{newCharacterName}'?"))
+        if (RHMessageBoxHelper.ConfirmMessage(string.Format(Resources.CharacterEditSaveNameMessage, CharacterData.CharacterName, newCharacterName)))
         {
             try
             {
@@ -178,18 +178,18 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
 
                 if (result == -1)
                 {
-                    RHMessageBoxHelper.ShowOKMessage($"The character name '{newCharacterName}' already exists.", "Error");
+                    RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.CharacterEditAlreadyUsedNameMessage, newCharacterName), Resources.Error);
                     return;
                 }
 
                 await _databaseService.GMAuditAsync(CharacterData, "Character Name Change", $"Old Name:{CharacterData.CharacterName}, New Name: {newCharacterName}");
 
-                RHMessageBoxHelper.ShowOKMessage("Character name updated successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage(Resources.CharacterEditSaveNameSuccessMessage, Resources.Success);
                 CharacterData.CharacterName = newCharacterName;
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error updating character name: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -219,17 +219,17 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
                 return;
             }
 
-            if (RHMessageBoxHelper.ConfirmMessage($"EXPERIMENTAL FEATURE\n\nThis will reset all character skills and unequip the character weapon/costumes and send via mail.\n\nAre you sure you want to change character '{CharacterData.CharacterName}' class from '{GetEnumDescription((CharClass)CharacterData.Class)}' to '{GetEnumDescription((CharClass)CharacterDataViewModel.Class)}'?"))
+            if (RHMessageBoxHelper.ConfirmMessage(string.Format(Resources.CharacterEditorSaveClassMessage, CharacterData.CharacterName, GetEnumDescription((CharClass)CharacterData.Class), GetEnumDescription((CharClass)CharacterDataViewModel.Class))))
             {
                 await _databaseService.UpdateCharacterClassAsync(CharacterData, CharacterDataViewModel.Class);
                 await _databaseService.GMAuditAsync(CharacterData, "Character Class Change", $"Old Class: {CharacterData.Class} => New Class: {CharacterDataViewModel.Class}");
-                RHMessageBoxHelper.ShowOKMessage("Character class changed successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage(Resources.CharacterEditorSaveClassSuccessMessage, Resources.Success);
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error changing character class: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -250,17 +250,17 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
                 return;
             }
 
-            if (RHMessageBoxHelper.ConfirmMessage($"This will reset all character skills.\nAre you sure you want to change character '{CharacterData.CharacterName}' focus?"))
+            if (RHMessageBoxHelper.ConfirmMessage(string.Format(Resources.CharacterEditorSaveFocusMessage, CharacterData.CharacterName)))
             {
                 await _databaseService.UpdateCharacterJobAsync(CharacterData, CharacterDataViewModel.Job);
                 await _databaseService.GMAuditAsync(CharacterData, "Character Job Change", $"Old Job: {CharacterData.Job} => New Job: {CharacterDataViewModel.Job}");
-                RHMessageBoxHelper.ShowOKMessage("Character focus changed successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage(Resources.CharacterEditorSaveFocusSuccessMessage, Resources.Success);
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error changing character focus: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
     #endregion
@@ -276,7 +276,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error reading Character {errorMessage}: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {errorMessage}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -347,7 +347,7 @@ public partial class CharacterWindowViewModel : ObservableObject, IRecipient<Cha
     #region Properties
 
     [ObservableProperty]
-    private string _title = "Character Editor";
+    private string _title = string.Format(Resources.EditorTitle, Resources.Character);
 
     [ObservableProperty]
     private Guid? _token = Guid.Empty;

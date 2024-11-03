@@ -3,7 +3,6 @@ using RHToolkit.Messages;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.RH;
 using RHToolkit.Models.UISettings;
-using RHToolkit.Properties;
 using RHToolkit.Views.Windows;
 using System.Data;
 using System.Windows.Controls;
@@ -70,7 +69,7 @@ public partial class DataTableManager : ObservableObject
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error creating table: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             return false;
         }
     }
@@ -104,7 +103,7 @@ public partial class DataTableManager : ObservableObject
 
         if (string.IsNullOrEmpty(filePath))
         {
-            RHMessageBoxHelper.ShowOKMessage($"The file '{fileName}' does not exist in the folder '{tableFolder}' or its subdirectories.", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.DataTableManagerMissingFileError, fileName, tableFolder), Resources.Error);
             return false;
         }
 
@@ -142,7 +141,7 @@ public partial class DataTableManager : ObservableObject
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error loading rh file: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.DataTableManagerLoadFileError}: {ex.Message}", Resources.Error);
             return false;
         }
     }
@@ -162,7 +161,6 @@ public partial class DataTableManager : ObservableObject
             }
             else
             {
-                RHMessageBoxHelper.ShowOKMessage("No folder selected. Operation cancelled.", Resources.Error);
                 return string.Empty;
             }
         }
@@ -174,7 +172,8 @@ public partial class DataTableManager : ObservableObject
     {
         if (table != null && tableColumnName != null && !table.Columns.Contains(tableColumnName))
         {
-            RHMessageBoxHelper.ShowOKMessage($"The file '{fileName}' is not a valid {fileType} file.", Resources.Error);
+            string message = string.Format(Resources.InvalidTableFileDesc, fileName, fileType);
+            RHMessageBoxHelper.ShowOKMessage(message, Resources.Error);
             return false;
         }
         return true;
@@ -196,7 +195,7 @@ public partial class DataTableManager : ObservableObject
 
             if (!File.Exists(stringFilePath))
             {
-                RHMessageBoxHelper.ShowOKMessage($"The file '{stringTableName}' does not exist in the same directory as {Path.GetFileName(file)}.", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.DataTableManagerMissingStringFileError, stringTableName, Path.GetFileName(file)), Resources.Error);
                 return null;
             }
 
@@ -243,12 +242,12 @@ public partial class DataTableManager : ObservableObject
                 string newFolderPath = openFolderDialog.FolderName;
                 RegistrySettingsHelper.SetTableFolder(newFolderPath);
 
-                RHMessageBoxHelper.ShowOKMessage($"Table folder has been set to '{newFolderPath}'.", Resources.Success);
+                RHMessageBoxHelper.ShowOKMessage(Resources.DataTableManagerFolderSetMessage, Resources.Success);
             }
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -307,7 +306,7 @@ public partial class DataTableManager : ObservableObject
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving backup file: {ex.Message}", "Save File Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.DataTableManagerSaveFileErrorMessage}: {ex.Message}", Resources.Error);
             }
         }
     }
@@ -320,8 +319,8 @@ public partial class DataTableManager : ObservableObject
         if (HasChanges)
         {
             string message = CurrentStringFileName != null
-            ? $"Save changes to files '{CurrentFileName}' | '{CurrentStringFileName}' ?"
-            : $"Save changes to file '{CurrentFileName}' ?";
+            ? $"{Resources.DataTableManagerSaveFileMessage} '{CurrentFileName}' | '{CurrentStringFileName}' ?"
+            : $"{Resources.DataTableManagerSaveFileMessage} '{CurrentFileName}' ?";
 
             var result = RHMessageBoxHelper.ConfirmMessageYesNoCancel(message);
 
@@ -424,7 +423,7 @@ public partial class DataTableManager : ObservableObject
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.DataTableManagerSaveFileErrorMessage}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -461,7 +460,7 @@ public partial class DataTableManager : ObservableObject
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.DataTableManagerSaveFileErrorMessage}: {ex.Message}", Resources.Error);
             }
         }
     }
@@ -495,7 +494,7 @@ public partial class DataTableManager : ObservableObject
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.DataTableManagerSaveFileErrorMessage}: {ex.Message}", Resources.Error);
             }
         }
     }
@@ -529,7 +528,7 @@ public partial class DataTableManager : ObservableObject
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.DataTableManagerSaveFileErrorMessage}: {ex.Message}", Resources.Error);
             }
         }
     }
@@ -563,12 +562,14 @@ public partial class DataTableManager : ObservableObject
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error saving file: {ex.Message}", "Save File Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.DataTableManagerSaveFileErrorMessage}: {ex.Message}", Resources.Error);
             }
         }
     }
 
     #endregion
+
+    #region Close
 
     [RelayCommand]
     public static void CloseWindow(Window window)
@@ -579,9 +580,11 @@ public partial class DataTableManager : ObservableObject
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
+    #endregion
+
     #endregion
 
     #region Search
@@ -675,7 +678,7 @@ public partial class DataTableManager : ObservableObject
                     // Show message if wrapped around
                     if (wrappedAround)
                     {
-                        _searchDialog?.ShowMessage($"Found the 1st occurrence from the top. The end of the table has been reached.", Brushes.Green);
+                        _searchDialog?.ShowMessage(Resources.DataTableManagerSearchMessage, Brushes.Green);
                     }
 
                     break;
@@ -696,11 +699,11 @@ public partial class DataTableManager : ObservableObject
         {
             if (wrappedAround)
             {
-                _searchDialog?.ShowMessage($"End of data reached. Search text '{searchText}' not found.", Brushes.Red);
+                _searchDialog?.ShowMessage($"{Resources.DataTableManagerSearchEndMessage} {string.Format(Resources.DataTableManagerSearchNotFoundMessage, searchText)}", Brushes.Red);
             }
             else
             {
-                _searchDialog?.ShowMessage($"Search text '{searchText}' not found.", Brushes.Red);
+                _searchDialog?.ShowMessage(string.Format(Resources.DataTableManagerSearchNotFoundMessage, searchText), Brushes.Red);
             }
             lastFoundCell = null;
         }
@@ -735,8 +738,8 @@ public partial class DataTableManager : ObservableObject
                 });
                 _redoStack.Clear();
                 OnCanExecuteChangesChanged();
-
-                _searchDialog?.ShowMessage($"Replaced text in row {rowIndex + 1}, column {colIndex + 1}.", Brushes.Green);
+                
+                _searchDialog?.ShowMessage(string.Format(Resources.DataTableManagerSearchReplaceMessage, rowIndex + 1, colIndex + 1), Brushes.Green);
                 lastFoundCell = null;
                 return;
             }
@@ -795,7 +798,7 @@ public partial class DataTableManager : ObservableObject
             OnCanExecuteChangesChanged();
         }
 
-        _searchDialog?.ShowMessage($"Replaced {replaceCount} occurrences.", Brushes.Green);
+        _searchDialog?.ShowMessage(Resources.DataTableManagerReplaceCountMessage, Brushes.Green);
     }
 
 
@@ -808,7 +811,7 @@ public partial class DataTableManager : ObservableObject
 
         int count = DataTable.Rows.Cast<DataRow>().Sum(row => row.ItemArray.Count(item => item != null && item.ToString()?.Contains(searchText, comparison) == true));
 
-        _searchDialog?.ShowMessage($"Count: {count} matches in entire table", Brushes.LightBlue);
+        _searchDialog?.ShowMessage(Resources.DataTableManagerCountMessage, Brushes.LightBlue);
     }
 
     #endregion
@@ -824,7 +827,7 @@ public partial class DataTableManager : ObservableObject
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -839,7 +842,7 @@ public partial class DataTableManager : ObservableObject
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -856,7 +859,7 @@ public partial class DataTableManager : ObservableObject
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -1239,7 +1242,7 @@ public partial class DataTableManager : ObservableObject
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -1487,7 +1490,7 @@ public partial class DataTableManager : ObservableObject
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
         
     }

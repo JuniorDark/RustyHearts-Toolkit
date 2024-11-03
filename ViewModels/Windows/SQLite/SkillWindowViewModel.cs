@@ -197,9 +197,9 @@ public partial class SkillWindowViewModel : ObservableObject, IRecipient<Charact
     {
         return (messageType ?? string.Empty) switch
         {
-            "SkillTree" or "SkillTreeTarget" => $"Add {GetEnumDescription(skillData.CharacterSkillType)} Skill Tree Skill",
-            "SkillTreeUI" => $"Add {GetEnumDescription(skillData.CharacterSkillType)} Skill Tree UI Skill",
-            _ => "Skill List",
+            "SkillTree" or "SkillTreeTarget" => string.Format(Resources.SkillWindowTitle, GetEnumDescription(skillData.CharacterSkillType), Resources.SkillTreeSkill),
+            "SkillTreeUI" => string.Format(Resources.SkillWindowTitle, GetEnumDescription(skillData.CharacterSkillType), Resources.SkillTreeUISkill),
+            _ => Resources.SkillList,
         };
     }
 
@@ -227,10 +227,10 @@ public partial class SkillWindowViewModel : ObservableObject, IRecipient<Charact
     #region Properties
 
     [ObservableProperty]
-    private string _title = "Skill List";
+    private string _title = Resources.SkillList;
 
     [ObservableProperty]
-    private string _addItemText = "Add Selected Skill";
+    private string _addItemText = Resources.AddSelectedSkill;
 
     [ObservableProperty]
     private Visibility _isSlotVisible = Visibility.Collapsed;

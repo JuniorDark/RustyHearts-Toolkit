@@ -4,7 +4,6 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
 using System.ComponentModel;
@@ -35,13 +34,13 @@ namespace RHToolkit.ViewModels.Windows
 
             _filterUpdateTimer = new()
             {
-                Interval = 400,
+                Interval = 500,
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
             _addEffectFilterUpdateTimer = new()
             {
-                Interval = 400,
+                Interval = 500,
                 AutoReset = false
             };
             _addEffectFilterUpdateTimer.Elapsed += AddEffectFilterUpdateTimerElapsed;
@@ -79,7 +78,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -102,20 +101,18 @@ namespace RHToolkit.ViewModels.Windows
 
                 if (openFileDialog.ShowDialog() == true)
                 {
-                    string selectedFileName = Path.GetFileName(openFileDialog.FileName);
+                    string fileName = Path.GetFileName(openFileDialog.FileName);
+                    int fileType = GetFileTypeFromFileName(fileName);
 
-                    int itemType = selectedFileName switch
+                    if (fileType == -1)
                     {
-                        "itemlist.rh" => 1,
-                        "itemlist_costume.rh" => 2,
-                        "itemlist_armor.rh" => 3,
-                        "itemlist_weapon.rh" => 4,
-                        _ => throw new Exception($"The file '{selectedFileName}' is not a valid itemlist file."),
-                    };
+                        string message = string.Format(Resources.InvalidTableFileDesc, fileName, "Item");
+                        RHMessageBoxHelper.ShowOKMessage(message, Resources.Error);
+                        return;
+                    }
 
-                    string? fileName = GetFileName(itemType);
-                    string? stringFileName = GetStringFileName(itemType);
-                    ItemType = itemType;
+                    string? stringFileName = GetStringFileName(fileType);
+                    ItemType = fileType;
 
                     bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, stringFileName, "nItemTrade", "Item");
 
@@ -127,7 +124,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -155,9 +152,21 @@ namespace RHToolkit.ViewModels.Windows
             };
         }
 
+        private static int GetFileTypeFromFileName(string fileName)
+        {
+            return fileName switch
+            {
+                "itemlist.rh" => 1,
+                "itemlist_costume.rh" => 2,
+                "itemlist_armor.rh" => 3,
+                "itemlist_weapon.rh" => 4,
+                _ => -1,
+            };
+        }
+
         private void IsLoaded()
         {
-            Title = $"Item Editor ({DataTableManager.CurrentFileName})";
+            Title = string.Format(Resources.EditorTitleFileName, "Item", DataTableManager.CurrentFileName);
             OpenMessage = "";
             IsVisible = Visibility.Visible;
             OnCanExecuteFileCommandChanged();
@@ -168,14 +177,14 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? shopEditorWindow = Application.Current.Windows.OfType<ItemEditorWindow>().FirstOrDefault();
-                Window owner = shopEditorWindow ?? Application.Current.MainWindow;
+                Window? window = Application.Current.Windows.OfType<ItemEditorWindow>().FirstOrDefault();
+                Window owner = window ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
 
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
 
         }
@@ -196,8 +205,8 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            Title = $"Item Editor";
-            OpenMessage = "Open a file";
+            Title = string.Format(Resources.EditorTitle, "Item");
+            OpenMessage = Resources.OpenFile;
             SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             ItemType = 0;
@@ -237,7 +246,7 @@ namespace RHToolkit.ViewModels.Windows
                     DataTableManager.SelectedItem["wszDesc"] = "New Item";
                 }
 
-                if (DataTableManager.SelectedItemString != null)
+                if (DataTableManager.SelectedItemString != null)    
                 {
                     DataTableManager.SelectedItemString["wszDesc"] = "New Item";
                     DataTableManager.SelectedItemString["wszItemDescription"] = "New Item";
@@ -246,7 +255,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -565,7 +574,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
             
         }
@@ -573,10 +582,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"Item Editor";
+        private string _title = string.Format(Resources.EditorTitle, "Item");
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private Visibility _isSelectedItemVisible = Visibility.Hidden;

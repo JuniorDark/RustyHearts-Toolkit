@@ -1,6 +1,5 @@
 ﻿using RHToolkit.Models;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
 using Wpf.Ui.Controls;
@@ -14,12 +13,12 @@ namespace RHToolkit.ViewModels.Pages
         [ObservableProperty]
         private WindowCard[] _windowCards =
         [
-            new(Resources.ItemDatabase, "Item List", SymbolRegular.BookDatabase24, "item"),
-            new("Skill Database", "Skill List", SymbolRegular.BookDatabase24, "skill"),
-            new("Item Craft Database", "Item Craft List", SymbolRegular.BookDatabase24, "itemmix"),
-            new("NPC Shop Database", "NPC Shop List", SymbolRegular.BookDatabase24, "npcshop"),
-            new("Rare Card Reward Database", "Rare Card Reward List", SymbolRegular.BookDatabase24, "rarecardreward"),
-            new("Drop Group Database", "Drop Group Item List", SymbolRegular.BookDatabase24, "dropgroup"),
+            new(Resources.ItemDatabase, Resources.ItemListDatabaseDesc, SymbolRegular.BookDatabase24, "item"),
+            new(Resources.SkillsDatabase, Resources.SkillListDatabaseDesc, SymbolRegular.BookDatabase24, "skill"),
+            new(Resources.ItemCraftDatabase, Resources.ItemCraftListDatabaseDesc, SymbolRegular.BookDatabase24, "itemmix"),
+            new(Resources.NPCShopDatabase, Resources.NPCShopListDatabaseDesc, SymbolRegular.BookDatabase24, "npcshop"),
+            new(Resources.RareCardRewardDatabase, Resources.RareCardRewardListDatabaseDesc, SymbolRegular.BookDatabase24, "rarecardreward"),
+            new(Resources.DropGroupsDatabase, Resources.DropGroupItemListDatabaseDesc, SymbolRegular.BookDatabase24, "dropgroup"),
     ];
 
         [RelayCommand]
@@ -61,7 +60,7 @@ namespace RHToolkit.ViewModels.Pages
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
     }

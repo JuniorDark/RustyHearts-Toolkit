@@ -1,5 +1,4 @@
 ﻿using RHToolkit.Models.UISettings;
-using RHToolkit.Properties;
 using System.Resources;
 
 namespace RHToolkit.Models.Localization;

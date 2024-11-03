@@ -4,7 +4,6 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
 using System.Data;
@@ -33,7 +32,7 @@ namespace RHToolkit.ViewModels.Windows
 
             _filterUpdateTimer = new()
             {
-                Interval = 400,
+                Interval = 500,
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
@@ -61,7 +60,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -96,13 +95,13 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
         private void IsLoaded()
         {
-            Title = $"NPC Editor ({DataTableManager.CurrentFileName})";
+            Title = string.Format(Resources.EditorTitle, "NPC");
             OpenMessage = "";
             IsVisible = Visibility.Visible;
             OnCanExecuteFileCommandChanged();
@@ -113,14 +112,14 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? shopEditorWindow = Application.Current.Windows.OfType<NpcEditorWindow>().FirstOrDefault();
-                Window owner = shopEditorWindow ?? Application.Current.MainWindow;
+                Window? window = Application.Current.Windows.OfType<NpcEditorWindow>().FirstOrDefault();
+                Window owner = window ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
 
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
 
         }
@@ -141,8 +140,8 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            Title = $"NPC Editor";
-            OpenMessage = "Open a file";
+            Title = string.Format(Resources.EditorTitle, "NPC");
+            OpenMessage = Resources.OpenFile;
             SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
@@ -183,7 +182,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -202,7 +201,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -218,7 +217,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -246,7 +245,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -461,37 +460,37 @@ namespace RHToolkit.ViewModels.Windows
 
                 NpcMenuItems =
                 [
-                    new NameID { ID = 0, Name = "None" },
-                    new NameID { ID = 1, Name = "Shop" },
+                    new NameID { ID = 0, Name = Resources.None },
+                    new NameID { ID = 1, Name = Resources.NpcMenuShop },
                     new NameID { ID = 2, Name = "x" },
-                    new NameID { ID = 3, Name = "Item Upgrade" },
-                    new NameID { ID = 4, Name = "Item Craft" },
-                    new NameID { ID = 5, Name = "Zen Menu" },
-                    new NameID { ID = 6, Name = "Guild Menu" },
-                    new NameID { ID = 7, Name = "Dismantle" },
-                    new NameID { ID = 8, Name = "Costume Craft" },
-                    new NameID { ID = 9, Name = "Trade Shop" },
+                    new NameID { ID = 3, Name = Resources.NpcMenuItemUpgrade },
+                    new NameID { ID = 4, Name = Resources.NpcMenuItemCraft },
+                    new NameID { ID = 5, Name = Resources.NpcMenuZen },
+                    new NameID { ID = 6, Name = Resources.NpcMenuGuild },
+                    new NameID { ID = 7, Name = Resources.NpcMenuDismantle },
+                    new NameID { ID = 8, Name = Resources.NpcMenuCostumeCraft },
+                    new NameID { ID = 9, Name = Resources.NpcMenuTradeShop },
                     new NameID { ID = 10, Name = "x" },
                     new NameID { ID = 11, Name = "x" },
-                    new NameID { ID = 12, Name = "Guild Warehouse" },
-                    new NameID { ID = 13, Name = "Guild Skill" },
-                    new NameID { ID = 14, Name = "Add Guild EXP" },
+                    new NameID { ID = 12, Name = Resources.NpcMenuGuildWarehouse },
+                    new NameID { ID = 13, Name = Resources.NpcMenuGuildSkill },
+                    new NameID { ID = 14, Name = Resources.NpcMenuAddGuildEXP },
                     new NameID { ID = 15, Name = "x" },
-                    new NameID { ID = 16, Name = "Guild EXP History" },
+                    new NameID { ID = 16, Name = Resources.NpcMenuGuildEXPHistory },
                     new NameID { ID = 17, Name = "x" },
                     new NameID { ID = 18, Name = "x" },
-                    new NameID { ID = 19, Name = "Change Hair Style" },
-                    new NameID { ID = 20, Name = "Dye Hair" },
-                    new NameID { ID = 21, Name = "See How Lucky You Will Be" },
-                    new NameID { ID = 22, Name = "Resurrect Pet" },
+                    new NameID { ID = 19, Name = Resources.NpcMenuChangeHairStyle },
+                    new NameID { ID = 20, Name = Resources.NpcMenuDyeHair },
+                    new NameID { ID = 21, Name = Resources.NpcMenuLuck },
+                    new NameID { ID = 22, Name = Resources.NpcMenuResurrectPet },
                     new NameID { ID = 23, Name = "x" },
-                    new NameID { ID = 24, Name = "Move To Village" }
+                    new NameID { ID = 24, Name = Resources.NpcMenuMoveToVillage }
                 ];
 
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
             
         }
@@ -500,10 +499,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"NPC Editor";
+        private string _title = string.Format(Resources.EditorTitle, "NPC");
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private string? _titleEffectText;

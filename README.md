@@ -32,10 +32,10 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
   - **Item Editor**: Edit item lists, including armor, costumes, and weapons (itemlist.rh, itemlist_armor.rh, itemlist_costume.rh, itemlist_weapon.rh).
   - **Item Drop Group Editor**: Edit item drop rates and groups across multiple files (itemdropgrouplist_f.rh, itemdropgrouplist.rh, championitemdropgrouplist.rh, eventworlditemdropgrouplist.rh, instanceitemdropgrouplist.rh, questitemdropgrouplist.rh, worldinstanceitemdropgrouplist.rh, worlditemdropgrouplist.rh, worlditemdropgrouplist_fatigue.rh, riddleboxdropgrouplist.rh, rarecarddropgrouplist.rh, rarecardrewarditemlist.rh).
   - **NPC Editor**: Edit NPC data (npcinstance.rh).
-  - **NPC Shop Editor**: Edit NPC and trade shop inventories, item crafting lists (itemmix.rh, costumemix.rh), shop visibility filters, and item dismantling rules (itembroken.rh).
+  - **NPC Shop Editor**: Edit NPC shop inventories, item crafting lists (itemmix.rh, costumemix.rh), shop visibility filters, and item dismantling rules (itembroken.rh).
   - **Package Editor**: Edit item packages and define package-specific effects (unionpackage.rh, conditionselectitem.rh).
-  - **Pet Editor**: Edit pet characteristics and behaviors (pet.rh).
-  - **Quest Editor**: Edit quest requirements, rewards, and objectives.
+  - **Pet Editor**: Edit pet characteristics (pet.rh).
+  - **Quest Editor**: Edit quests requirements, rewards, and objectives.
   - **Random Rune Editor**: Edit 'gacha' style items pools (randomrune.rh).
   - **Set Editor**: Edit item sets and their effects (setitem.rh).
   - **Skill Editor**: Edit and configure character skills.
@@ -63,8 +63,10 @@ To set up the toolkit and generate the necessary SQLite database:
 1. Navigate to the `SQLite Database Manager` page.
 2. Select the `table` folder containing the `.rh` table files.
 3. Click `Create Database` to generate the `gmdb_(Lang).db` database in the `Resources` folder.
-4. Place the extracted game sprites `\ui\sprite\1024` in the `Resources` folder. A prebuild database and sprites are avaliable on [`Resources.rar`](Resources.rar)
+4. Place the extracted game sprites `\ui\sprite\1024` in the `Resources` folder.
 5. Navigate to the `Settings` page and set the `SQL Server` credentials.
+
+A prebuild database and sprites are avaliable on [`Resources.rar`](Resources.rar)
 
 ## Prerequisites for Development
 * Visual Studio 2022 (Any Edition - 17.9 or later)

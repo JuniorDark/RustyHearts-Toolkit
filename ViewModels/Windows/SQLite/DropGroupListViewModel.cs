@@ -21,7 +21,7 @@ namespace RHToolkit.ViewModels.Windows
             _itemDataManager = itemDataManager;
             _dropGroupItemFilterUpdateTimer = new()
             {
-                Interval = 400,
+                Interval = 500,
                 AutoReset = false
             };
             _dropGroupItemFilterUpdateTimer.Elapsed += DropGroupItemFilterUpdateTimerElapsed;
@@ -43,7 +43,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion

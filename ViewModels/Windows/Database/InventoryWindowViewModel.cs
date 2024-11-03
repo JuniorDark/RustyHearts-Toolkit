@@ -45,17 +45,17 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
                 return;
             }
 
-            if (RHMessageBoxHelper.ConfirmMessage($"Save inventory changes?"))
+            if (RHMessageBoxHelper.ConfirmMessage(Resources.SaveChangesMessage))
             {
                 await _databaseService.SaveInventoryItem(CharacterData, ItemDatabaseList, DeletedItemDatabaseList, "N_InventoryItem");
-                RHMessageBoxHelper.ShowOKMessage("Inventory saved successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage(Resources.SaveSuccessMessage, Resources.Success);
                 await ReadCharacterData(CharacterData.CharacterName!);
             }
 
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error saving inventory changes: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -140,7 +140,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
             {
                 ClearInventoryData();
                 CharacterData = characterData;
-                Title = $"Character Inventory ({characterData.CharacterName})";
+                Title = string.Format(Resources.EditorTitleFileName,Resources.CharacterInventory, characterData.CharacterName);
                 ObservableCollection<ItemData> inventoryItems = await _databaseService.GetItemList(characterData.CharacterID, "N_InventoryItem");
                 LoadInventoryItems(inventoryItems);
                 ItemDatabaseList = inventoryItems;
@@ -154,13 +154,13 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
             }
             else
             {
-                RHMessageBoxHelper.ShowOKMessage($"The character '{characterName}' does not exist.", "Invalid Character");
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.InexistentCharacterMessage, characterName), Resources.InvalidCharacter);
                 return;
             }
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error reading Character Data: {ex.Message}", "Error");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -245,7 +245,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
         {
             if (existingItem.ItemId != newItemData.ItemId && !existingItem.IsNewItem)
             {
-                RHMessageBoxHelper.ShowOKMessage($"The slot '{newItemData.SlotIndex}' is already in use.", "Cant Add Inventory Item");
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.EquipmentEditorSlotInUseMessage, newItemData.SlotIndex, Resources.Error));
                 return;
             }
             else if (existingItem.IsNewItem)
@@ -361,7 +361,7 @@ public partial class InventoryWindowViewModel : ObservableObject, IRecipient<Cha
     private bool _isButtonEnabled = true;
 
     [ObservableProperty]
-    private string _title = "Character Inventory";
+    private string _title = Resources.CharacterInventory;
 
     [ObservableProperty]
     private long _cashValue;

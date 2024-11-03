@@ -113,7 +113,7 @@ public class GMDatabaseManager
 
             if (files.Count == 0)
             {
-                RHMessageBoxHelper.ShowOKMessage("The selected folder does not contain required .rh files.", "No Files");
+                RHMessageBoxHelper.ShowOKMessage(Resources.GMDatabaseInvalidFolderMessage, Resources.Error);
                 return;
             }
 
@@ -128,8 +128,8 @@ public class GMDatabaseManager
 
             if (missingFiles.Count != 0)
             {
-                string missingFilesMessage = "Required table files are missing. The following required files are missing:\n" + string.Join("\n", missingFiles.Select(f => $"{f}.rh"));
-                RHMessageBoxHelper.ShowOKMessage(missingFilesMessage, "Missing Files");
+                string missingFilesMessage = $"{Resources.GMDatabaseMissingFilesMessage}:\n" + string.Join("\n", missingFiles.Select(f => $"{f}.rh"));
+                RHMessageBoxHelper.ShowOKMessage(missingFilesMessage, Resources.Error);
                 return;
             }
 
@@ -138,12 +138,12 @@ public class GMDatabaseManager
                 Directory.CreateDirectory(resourcesFolder);
             }
 
-            reportProgress("Creating database...");
+            reportProgress(Resources.GMDatabaseCreatingDatabaseMessage);
 
             if (File.Exists(database))
             {
                 File.Delete(database);
-                reportProgress("Existing database file deleted.");
+                reportProgress(Resources.GMDatabaseDatabaseDeleteMessage);
             }
 
             foreach (var file in files)
@@ -151,7 +151,7 @@ public class GMDatabaseManager
                 cancellationToken.ThrowIfCancellationRequested();
 
                 string tableName = Path.GetFileNameWithoutExtension(file);
-                reportProgress($"Processing {tableName}...");
+                reportProgress(string.Format(Resources.GMDatabaseProcessingMessage, tableName));
 
                 DataTable? dataTable = await _fileManager.RHFileToDataTableAsync(file);
 
@@ -161,11 +161,11 @@ public class GMDatabaseManager
                 }
             }
 
-            reportProgress("Operation complete.");
+            reportProgress(Resources.GMDatabaseOperationCompleteMessage);
         }
         catch (OperationCanceledException)
         {
-            reportProgress("Operation canceled.");
+            reportProgress(Resources.GMDatabaseOperationCanceledMessage);
 
             if (File.Exists(database))
             {
@@ -175,8 +175,8 @@ public class GMDatabaseManager
         }
         catch (Exception ex)
         {
-            reportProgress("Error: " + ex.Message);
-            throw new Exception("Error: " + ex.Message, ex);
+            reportProgress($"{Resources.Error}: " + ex.Message);
+            throw new Exception($"{Resources.Error}: " + ex.Message, ex);
         }
     }
 
@@ -237,7 +237,6 @@ public class GMDatabaseManager
         }
 
         transaction.Commit();
-        reportProgress($"Data inserted into {tableName} table successfully.");
     }
 
     private static string MapDataColumnTypeToSqlite(Type dataType)

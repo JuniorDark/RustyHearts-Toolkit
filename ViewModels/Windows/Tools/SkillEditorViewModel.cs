@@ -4,7 +4,6 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
 using RHToolkit.ViewModels.Windows.Tools.VM;
@@ -77,7 +76,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -93,7 +92,7 @@ namespace RHToolkit.ViewModels.Windows
                                 "angelaskilltree.rh;frantzskilltree.rh;natashaskilltree.rh;tudeskilltree.rh;" +
                                 "angelaavatar01skilltree.rh;frantzavatar01skilltree.rh;frantzavatar02skilltree.rh;natashaavatar01skilltree.rh;tudeavatar01skilltree.rh;" +
                                 "angelamyskillui.rh;frantzmyskillui.rh;natashamyskillui.rh;tudemyskillui.rh;" +
-                                "angelaavatar01myskillui.rh;frantzavatar01myskillui.rh;frantzavatar02myskillui.rh;natashaavatar01myskillui.rh;tudeavatar01myskillui.rh|" +
+                                "angelaavatar01myskillui.rh;frantzavatar01myskillui.rh;frantzavatar02myskillui.rh;natasha_avatar01_myskillui.rh;tudeavatar01myskillui.rh|" +
                                 "All Files (*.*)|*.*";
 
                 OpenFileDialog openFileDialog = new()
@@ -109,7 +108,8 @@ namespace RHToolkit.ViewModels.Windows
 
                     if (fileType == -1)
                     {
-                        RHMessageBoxHelper.ShowOKMessage($"The file '{fileName}' is not a valid Skill file.", Resources.Error);
+                        string message = string.Format(Resources.InvalidTableFileDesc, fileName, "Skill");
+                        RHMessageBoxHelper.ShowOKMessage(message, Resources.Error);
                         return;
                     }
 
@@ -129,7 +129,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -155,7 +155,7 @@ namespace RHToolkit.ViewModels.Windows
                 "frantzmyskillui.rh" or "frantzavatar01myskillui.rh" or "frantzavatar02myskillui.rh" => 9,
                 "angelamyskillui.rh" or "angelaavatar01myskillui.rh" => 10,
                 "tudemyskillui.rh" or "tudeavatar01myskillui.rh" => 11,
-                "natashamyskillui.rh" or "natashaavatar01myskillui.rh" => 12,
+                "natashamyskillui.rh" or "natasha_avatar01_myskillui.rh" => 12,
                 _ => -1,
             };
         }
@@ -166,7 +166,7 @@ namespace RHToolkit.ViewModels.Windows
             {
                 "frantzskill.rh" or "angelaskill.rh" or "tudeskill.rh" or "natashaskill.rh" => "nSkillLevel",
                 "frantzskilltree.rh" or "angelaskilltree.rh" or "tudeskilltree.rh" or "natashaskilltree.rh" or "frantzavatar01skilltree.rh" or "frantzavatar02skilltree.rh" or "angelaavatar01skilltree.rh" or "tudeavatar01skilltree.rh" or "natashaavatar01skilltree.rh" => "nBeforeSkillID00",
-                "frantzmyskillui.rh" or "angelamyskillui.rh" or "tudemyskillui.rh" or "natashamyskillui.rh" or "frantzavatar01myskillui.rh" or "frantzavatar02myskillui.rh" or "angelaavatar01myskillui.rh" or "tudeavatar01myskillui.rh" or "natashaavatar01myskillui.rh" => "nTier",
+                "frantzmyskillui.rh" or "angelamyskillui.rh" or "tudemyskillui.rh" or "natashamyskillui.rh" or "frantzavatar01myskillui.rh" or "frantzavatar02myskillui.rh" or "angelaavatar01myskillui.rh" or "tudeavatar01myskillui.rh" or "natasha_avatar01_myskillui.rh" => "nTier",
                 _ => "",
             };
         }
@@ -185,11 +185,15 @@ namespace RHToolkit.ViewModels.Windows
 
         private string GetTitle(string fileName)
         {
+            string skill = string.Format(Resources.EditorTitleFileName, "Skill", DataTableManager.CurrentFileName);
+            string skillTree = string.Format(Resources.EditorTitleFileName, Resources.SkillTreeEditor, DataTableManager.CurrentFileName);
+            string skillTreeUI = string.Format(Resources.EditorTitleFileName, Resources.SkillTreeUIEditor, DataTableManager.CurrentFileName);
+
             return fileName switch
             {
-                "frantzskill.rh" or "angelaskill.rh" or "tudeskill.rh" or "natashaskill.rh" => $"Skill Editor ({DataTableManager.CurrentFileName})",
-                "frantzskilltree.rh" or "angelaskilltree.rh" or "tudeskilltree.rh" or "natashaskilltree.rh" or "frantzavatar01skilltree.rh" or "frantzavatar02skilltree.rh" or "angelaavatar01skilltree.rh" or "tudeavatar01skilltree.rh" or "natashaavatar01skilltree.rh" => $"Skill Tree Editor ({DataTableManager.CurrentFileName})",
-                "frantzmyskillui.rh" or "angelamyskillui.rh" or "tudemyskillui.rh" or "natashamyskillui.rh" or "frantzavatar01myskillui.rh" or "frantzavatar02myskillui.rh" or "angelaavatar01myskillui.rh" or "tudeavatar01myskillui.rh" or "natashaavatar01myskillui.rh" => $"Skill Tree UI Editor ({DataTableManager.CurrentFileName})",
+                "frantzskill.rh" or "angelaskill.rh" or "tudeskill.rh" or "natashaskill.rh" => skill,
+                "frantzskilltree.rh" or "angelaskilltree.rh" or "tudeskilltree.rh" or "natashaskilltree.rh" or "frantzavatar01skilltree.rh" or "frantzavatar02skilltree.rh" or "angelaavatar01skilltree.rh" or "tudeavatar01skilltree.rh" or "natashaavatar01skilltree.rh" => skillTree,
+                "frantzmyskillui.rh" or "angelamyskillui.rh" or "tudemyskillui.rh" or "natashamyskillui.rh" or "frantzavatar01myskillui.rh" or "frantzavatar02myskillui.rh" or "angelaavatar01myskillui.rh" or "tudeavatar01myskillui.rh" or "natasha_avatar01_myskillui.rh" => skillTreeUI,
                 _ => "",
             };
         }
@@ -199,13 +203,13 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? skillEditorWindow = Application.Current.Windows.OfType<SkillEditorWindow>().FirstOrDefault();
-                Window owner = skillEditorWindow ?? Application.Current.MainWindow;
+                Window? window = Application.Current.Windows.OfType<SkillEditorWindow>().FirstOrDefault();
+                Window owner = window ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -225,8 +229,8 @@ namespace RHToolkit.ViewModels.Windows
 
         private void ClearFile()
         {
-            Title = $"Skill Editor";
-            OpenMessage = "Open a file";
+            Title = string.Format(Resources.EditorTitle, "Skill");
+            OpenMessage = Resources.OpenFile;
             SkillItems?.Clear();
             SkillMotion?.Clear();
             SkillParam?.Clear();
@@ -264,7 +268,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -294,7 +298,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -321,7 +325,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -348,7 +352,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -439,7 +443,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -465,7 +469,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -487,7 +491,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -1085,10 +1089,10 @@ namespace RHToolkit.ViewModels.Windows
         #region Properties
 
         [ObservableProperty]
-        private string _title = $"Skill Editor";
+        private string _title = string.Format(Resources.EditorTitle, "Skill");
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private Visibility _isSelectedItemVisible = Visibility.Hidden;

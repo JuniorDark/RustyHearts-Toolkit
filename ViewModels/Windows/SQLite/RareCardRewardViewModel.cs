@@ -20,7 +20,7 @@ namespace RHToolkit.ViewModels.Windows
             _itemDataManager = itemDataManager;
             _rareCardItemFilterUpdateTimer = new()
             {
-                Interval = 400,
+                Interval = 500,
                 AutoReset = false
             };
             _rareCardItemFilterUpdateTimer.Elapsed += RareCardItemFilterUpdateTimerElapsed;
@@ -42,7 +42,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -192,7 +192,7 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"Rare Card Reward";
+        private string _title = Resources.RareCardReward;
 
         [ObservableProperty]
         private ItemDataManager _itemDataManager;

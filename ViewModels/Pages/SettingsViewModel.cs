@@ -1,7 +1,6 @@
 ﻿using RHToolkit.Models;
 using RHToolkit.Models.Localization;
 using RHToolkit.Models.UISettings;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using Wpf.Ui;
 using Wpf.Ui.Appearance;

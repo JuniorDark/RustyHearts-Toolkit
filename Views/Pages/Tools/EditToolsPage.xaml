@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:RHToolkit.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:models="clr-namespace:RHToolkit.Models"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     Title="Tools"
     d:DataContext="{d:DesignInstance local:EditToolsPage,
@@ -22,7 +23,7 @@
         <StackPanel Grid.Row="0" Margin="0,0,0,0">
             <ui:TextBlock
                 FontTypography="Title"
-                Text="Table Editor"
+                Text="{x:Static rs:Resources.TableEditors}"
                 TextWrapping="WrapWithOverflow" />
             <Border
                 Margin="0,12,0,0"
@@ -71,7 +72,7 @@
         <StackPanel Grid.Row="1" Margin="0,0,0,0">
             <ui:TextBlock
                 FontTypography="Title"
-                Text="Specialized Table Editors"
+                Text="{x:Static rs:Resources.TableEditorsDedicated}"
                 TextWrapping="WrapWithOverflow" />
             <Border
                 Margin="0,12,0,0"

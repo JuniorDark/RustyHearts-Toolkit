@@ -6,13 +6,13 @@ namespace RHToolkit.Models.MessageBox
     {
         public static bool ConfirmMessage(string message)
         {
-            MessageBoxResult result = RHMessageBox.Show("Confirmation", message, RHMessageBox.MessageBoxType.ConfirmationWithYesNo);
+            MessageBoxResult result = RHMessageBox.Show(Resources.Confirmation, message, RHMessageBox.MessageBoxType.ConfirmationWithYesNo);
             return result == MessageBoxResult.Yes;
         }
 
         public static MessageBoxResult ConfirmMessageYesNoCancel(string message)
         {
-            return RHMessageBox.Show("Confirmation", message, RHMessageBox.MessageBoxType.ConfirmationWithYesNoCancel);
+            return RHMessageBox.Show(Resources.Confirmation, message, RHMessageBox.MessageBoxType.ConfirmationWithYesNoCancel);
         }
 
         public static void ShowOKMessage(string message, string caption = "Information")

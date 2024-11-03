@@ -49,7 +49,7 @@ namespace RHToolkit.Models.RH
 
                 if (numCol <= 0)
                 {
-                    throw new Exception("The rh file data format is incorrect.");
+                    throw new Exception(Resources.CryptorInvalidRHFileMessage);
                 }
 
                 List<string> listTitles = new(numCol);
@@ -268,10 +268,9 @@ namespace RHToolkit.Models.RH
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to convert DataTable to XML: {ex.Message}", ex);
+                throw new Exception($"{string.Format(Resources.CryptorDataTableFileErrorMessage, "XML")}: {ex.Message}", ex);
             }
         }
-
 
         public static byte[] DataTableToXLSX(DataTable dataTable)
         {
@@ -287,7 +286,7 @@ namespace RHToolkit.Models.RH
 
                 if (numCol <= 0)
                 {
-                    throw new Exception("The DataTable has no columns");
+                    throw new Exception("The DataTable has no columns.");
                 }
 
                 List<string> listTitles = new(numCol);
@@ -344,7 +343,7 @@ namespace RHToolkit.Models.RH
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to convert DataTable to XLSX: {ex.Message}", ex);
+                throw new Exception($"{string.Format(Resources.CryptorDataTableFileErrorMessage, "XLSX")}: {ex.Message}", ex);
             }
         }
 

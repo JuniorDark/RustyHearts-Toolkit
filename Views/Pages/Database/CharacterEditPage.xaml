@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:RHToolkit.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:RHToolkit.ViewModels.Pages"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
     d:DataContext="{d:DesignInstance local:CharacterEditPage,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="600"
@@ -33,20 +34,20 @@
             <CheckBox
                 Command="{Binding ViewModel.SelectAllCheckedCommand, Mode=OneWay}"
                 CommandParameter="{Binding RelativeSource={RelativeSource Self}, Mode=OneWay}"
-                Content="All"
+                Content="{x:Static rs:Resources.All}"
                 IsChecked="{Binding ViewModel.SelectAllCheckBoxChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 IsThreeState="True"
                 Template="{StaticResource lb_checkbox}" />
             <CheckBox
                 Command="{Binding ViewModel.SingleCheckedCommand, Mode=OneWay}"
                 CommandParameter="1"
-                Content="Online"
+                Content="{x:Static rs:Resources.Online}"
                 IsChecked="{Binding ViewModel.OnlineCheckBoxChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Template="{StaticResource lb_checkbox}" />
             <CheckBox
                 Command="{Binding ViewModel.SingleCheckedCommand, Mode=OneWay}"
                 CommandParameter="2"
-                Content="Offline"
+                Content="{x:Static rs:Resources.Offline}"
                 IsChecked="{Binding ViewModel.OfflineCheckBoxChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 Template="{StaticResource lb_checkbox}" />
             <TextBox
@@ -58,7 +59,7 @@
                 Background="Black"
                 BorderThickness="0"
                 Foreground="White"
-                Tag="Character Name/Account"
+                Tag="{x:Static rs:Resources.NameAccount}"
                 Template="{StaticResource lb_textbox}"
                 Text="{Binding ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button
@@ -68,7 +69,7 @@
                 VerticalAlignment="Center"
                 Background="Transparent"
                 Command="{Binding ViewModel.ReadCharacterDataCommand}"
-                Content="Search"
+                Content="{x:Static rs:Resources.Search}"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
@@ -89,53 +90,36 @@
                 x:Name="dataGridView"
                 Height="250"
                 Margin="0,5,0,0"
-                HorizontalContentAlignment="Center"
-                VerticalContentAlignment="Center"
                 AutoGenerateColumns="False"
-                BorderBrush="#FF0F0D0A"
                 CanUserAddRows="False"
                 ColumnWidth="Auto"
                 EnableColumnVirtualization="True"
                 EnableRowVirtualization="True"
-                FontFamily="{StaticResource ArialUnicodeMS}"
-                FontSize="12"
                 HeadersVisibility="Column"
-                HorizontalGridLinesBrush="White"
                 HorizontalScrollBarVisibility="Disabled"
                 ItemsSource="{Binding ViewModel.CharacterDataList}"
                 SelectedItem="{Binding ViewModel.CharacterData, Mode=TwoWay}"
                 SelectionMode="Single"
-                Template="{StaticResource lb_datagrid}"
-                VerticalGridLinesBrush="White">
-                <DataGrid.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Blue" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkBlue" />
-                </DataGrid.Resources>
-                <DataGrid.Foreground>
-                    <ImageBrush />
-                </DataGrid.Foreground>
-                <DataGrid.Background>
-                    <ImageBrush />
-                </DataGrid.Background>
+                Template="{StaticResource lb_datagrid}">
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Width="80*"
                         Binding="{Binding AccountName}"
-                        Header="Account"
+                        Header="{x:Static rs:Resources.Account}"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="100*"
                         Binding="{Binding CharacterName}"
-                        Header="Character Name"
+                        Header="{x:Static rs:Resources.CharacterName}"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="140*"
                         Binding="{Binding CreateTime}"
-                        Header="Create Date"
+                        Header="{x:Static rs:Resources.CreateDate}"
                         IsReadOnly="True" />
                     <DataGridTemplateColumn
                         Width="50*"
-                        Header="Class"
+                        Header="{x:Static rs:Resources.Class}"
                         IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -145,7 +129,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn
                         Width="70*"
-                        Header="Focus"
+                        Header="{x:Static rs:Resources.Focus}"
                         IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -163,16 +147,16 @@
                     <DataGridTextColumn
                         Width="50*"
                         Binding="{Binding Level}"
-                        Header="Level"
+                        Header="{x:Static rs:Resources.Level}"
                         IsReadOnly="True" />
                     <DataGridTextColumn
                         Width="90*"
                         Binding="{Binding Gold}"
-                        Header="Gold"
+                        Header="{x:Static rs:Resources.Gold}"
                         IsReadOnly="True" />
                     <DataGridTemplateColumn
                         Width="60*"
-                        Header="State"
+                        Header="{x:Static rs:Resources.State}"
                         IsReadOnly="True">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -220,7 +204,7 @@
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding ViewModel.EditCharacterCommand}"
-                    Content="Edit Character"
+                    Content="{x:Static rs:Resources.EditCharacter}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -231,7 +215,7 @@
                     VerticalAlignment="Center"
                     Background="Transparent"
                     Command="{Binding ViewModel.DeleteCharacterCommand}"
-                    Content="Delete Character"
+                    Content="{x:Static rs:Resources.DeleteCharacter}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -251,7 +235,7 @@
                 Margin="5,5"
                 Background="Transparent"
                 Command="{Binding ViewModel.OpenInventoryWindowCommand}"
-                Content="Inventory"
+                Content="{x:Static rs:Resources.Inventory}"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
@@ -261,7 +245,7 @@
                 Margin="5,5"
                 Background="Transparent"
                 Command="{Binding ViewModel.OpenEquipmentWindowCommand}"
-                Content="Equipment"
+                Content="{x:Static rs:Resources.Equipment}"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
@@ -271,7 +255,7 @@
                 Margin="5,5"
                 Background="Transparent"
                 Command="{Binding ViewModel.OpenStorageWindowCommand}"
-                Content="Storage"
+                Content="{x:Static rs:Resources.Storage}"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
@@ -290,7 +274,7 @@
                 Margin="5,5"
                 Background="Transparent"
                 Command="{Binding ViewModel.OpenFortuneWindowCommand}"
-                Content="Fortune"
+                Content="{x:Static rs:Resources.Fortune}"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
@@ -300,7 +284,7 @@
                 Margin="5,5"
                 Background="Transparent"
                 Command="{Binding ViewModel.OpenTitleWindowCommand}"
-                Content="Title"
+                Content="{x:Static rs:Resources.Title}"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
@@ -310,7 +294,7 @@
                 Margin="5,5"
                 Background="Transparent"
                 Command="{Binding ViewModel.OpenSanctionWindowCommand}"
-                Content="Sanctions"
+                Content="{x:Static rs:Resources.Sanctions}"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />

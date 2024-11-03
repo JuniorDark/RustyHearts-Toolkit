@@ -1,5 +1,4 @@
-﻿using RHToolkit.Properties;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace RHToolkit.Models.Localization
 {

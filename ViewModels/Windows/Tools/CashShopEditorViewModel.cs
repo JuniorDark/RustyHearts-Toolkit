@@ -4,7 +4,6 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.Utilities;
 using RHToolkit.ViewModels.Controls;
@@ -32,7 +31,7 @@ namespace RHToolkit.ViewModels.Windows
             };
             _filterUpdateTimer = new()
             {
-                Interval = 400,
+                Interval = 500,
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
@@ -50,20 +49,6 @@ namespace RHToolkit.ViewModels.Windows
         }
 
         #region Commands 
-
-        [RelayCommand]
-        private void ResetSellingDate()
-        {
-            StartSellingDate = null;
-            EndSellingDate = null;
-        }
-
-        [RelayCommand]
-        private void ResetSaleDate()
-        {
-            SaleStartSellingDate = null;
-            SaleEndSellingDate = null;
-        }
 
         #region File
 
@@ -120,7 +105,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -140,7 +125,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -175,13 +160,13 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
         private void IsLoaded()
         {
-            Title = $"Cash Shop Editor ({DataTableManager.CurrentFileName})";
+            Title = string.Format(Resources.EditorTitleFileName, "Cash Shop", DataTableManager.CurrentFileName);
             OpenMessage = "";
             ApplyFilter();
             OnCanExecuteFileCommandChanged();
@@ -195,15 +180,15 @@ namespace RHToolkit.ViewModels.Windows
             {
                 if (DataTableManager != null)
                 {
-                    Window? shopEditorWindow = Application.Current.Windows.OfType<CashShopEditorWindow>().FirstOrDefault();
-                    Window owner = shopEditorWindow ?? Application.Current.MainWindow;
+                    Window? window = Application.Current.Windows.OfType<CashShopEditorWindow>().FirstOrDefault();
+                    Window owner = window ?? Application.Current.MainWindow;
                     DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
                 }
 
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
             
         }
@@ -227,8 +212,8 @@ namespace RHToolkit.ViewModels.Windows
         private void ClearFile()
         {
             ItemDataViewModel = null;
-            Title = $"Cash Shop Editor";
-            OpenMessage = "Open a file";
+            Title = string.Format(Resources.EditorTitle, "Cash Shop");
+            OpenMessage = Resources.OpenFile;
             SearchText = string.Empty;
             IsVisible = Visibility.Hidden;
             OnCanExecuteFileCommandChanged();
@@ -277,7 +262,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -301,7 +286,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
 
@@ -402,6 +387,23 @@ namespace RHToolkit.ViewModels.Windows
                 38 or 53 => 0,
                 _ => 0
             };
+        }
+
+        #endregion
+
+        #region Date
+        [RelayCommand]
+        private void ResetSellingDate()
+        {
+            StartSellingDate = null;
+            EndSellingDate = null;
+        }
+
+        [RelayCommand]
+        private void ResetSaleDate()
+        {
+            SaleStartSellingDate = null;
+            SaleEndSellingDate = null;
         }
 
         #endregion
@@ -721,10 +723,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"Cash Shop Editor";
+        private string _title = string.Format(Resources.EditorTitle, "Cash Shop");
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private Visibility _isSelectedItemVisible = Visibility.Hidden;
@@ -838,7 +840,7 @@ namespace RHToolkit.ViewModels.Windows
         private int _itemAmountMax;
 
         [ObservableProperty]
-        private string _itemAmountText = "Item Amount/Duration (Minutes)";
+        private string _itemAmountText = Resources.ItemAmountDuration;
 
         partial void OnItemAmountChanged(int value)
         {
@@ -859,7 +861,7 @@ namespace RHToolkit.ViewModels.Windows
                 {
                     CashMileage = value == 1 ? 0 : CashCost * BonusRate / 100;
                 }
-                ShopDescription = value == 0 ? $"{BonusRate}% of the price goes to Bonus" : "Purchased with Bonus";
+                ShopDescription = value == 0 ? string.Format(Resources.CashShopBonusEarnDesc, BonusRate) : Resources.CashShopBonusDesc;
             }
         }
 
@@ -881,7 +883,7 @@ namespace RHToolkit.ViewModels.Windows
             if (newValue != 0 && PaymentType == 0)
             {
                 CashMileage = CashCost * newValue / 100;
-                ShopDescription = $"{BonusRate}% of the price goes to Bonus";
+                ShopDescription = string.Format(Resources.CashShopBonusEarnDesc, BonusRate);
             }
             else if (newValue == 0 && PaymentType == 0)
             {
@@ -891,7 +893,7 @@ namespace RHToolkit.ViewModels.Windows
             else
             {
                 CashMileage = 0;
-                ShopDescription = "Purchased with Bonus";
+                ShopDescription = Resources.CashShopBonusDesc;
             }
         }
 
@@ -962,43 +964,42 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private DateTime? _startSellingDate;
-        partial void OnStartSellingDateChanged(DateTime? value) => OnDateChanged(value, "StartSellingDate");
+        partial void OnStartSellingDateChanged(DateTime? value) => OnDateChanged(value, "nStartSellingDate");
 
         [ObservableProperty]
-        private string _startSellingDateValue = "No Selling Date";
+        private string _startSellingDateValue = Resources.NoSellingDate;
 
         [ObservableProperty]
         private DateTime? _endSellingDate;
-        partial void OnEndSellingDateChanged(DateTime? value) => OnDateChanged(value, "EndSellingDate");
+        partial void OnEndSellingDateChanged(DateTime? value) => OnDateChanged(value, "nEndSellingDate");
 
         [ObservableProperty]
-        private string _endSellingDateValue = "No Selling Date";
+        private string _endSellingDateValue = Resources.NoSellingDate;
 
         [ObservableProperty]
         private DateTime? _saleStartSellingDate;
-        partial void OnSaleStartSellingDateChanged(DateTime? value) => OnDateChanged(value, "SaleStartSellingDate");
+        partial void OnSaleStartSellingDateChanged(DateTime? value) => OnDateChanged(value, "nSaleStartSellingDate");
 
         [ObservableProperty]
-        private string _saleStartSellingDateValue = "No Sale Date";
+        private string _saleStartSellingDateValue = Resources.NoSaleDate;
 
         [ObservableProperty]
         private DateTime? _saleEndSellingDate;
-        partial void OnSaleEndSellingDateChanged(DateTime? value) => OnDateChanged(value, "SaleEndSellingDate");
+        partial void OnSaleEndSellingDateChanged(DateTime? value) => OnDateChanged(value, "nSaleEndSellingDate");
 
         [ObservableProperty]
-        private string _saleEndSellingDateValue = "No Sale Date";
+        private string _saleEndSellingDateValue = Resources.NoSaleDate;
 
         private void OnDateChanged(DateTime? value, string dateType)
         {
             string dateValueProperty = $"{dateType}Value";
-            string dataTableKey = $"n{dateType}";
 
-            var formattedDate = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : "No Date Set";
+            var formattedDate = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : Resources.NoDateSet;
 
             GetType().GetProperty(dateValueProperty)?.SetValue(this, formattedDate);
             int dateIntValue = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
 
-            UpdateSelectedItemValue(dateIntValue, dataTableKey);
+            UpdateSelectedItemValue(dateIntValue, dateType);
         }
 
         #endregion

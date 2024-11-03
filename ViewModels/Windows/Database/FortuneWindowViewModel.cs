@@ -1,7 +1,6 @@
 ﻿using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using System.Data;
 
@@ -39,7 +38,7 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
             CharacterData = null;
             CharacterData = characterData;
 
-            Title = $"Character Fortune ({characterData.CharacterName})";
+            Title = string.Format(Resources.EditorTitleFileName, "Character Fortune", characterData.CharacterName);
 
             await ReadFortune();
         }
@@ -56,23 +55,23 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}");
-        }
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error} : {ex.Message}");
+        }   
     }
 
     private void UpdateFortuneTextBox(int fortuneID1, int fortuneID2, int fortuneID3)
     {
         if (fortuneID1 == 0)
         {
-            FortuneDescription = "No Fortune";
-            FortuneTitle = "No Fortune";
+            FortuneDescription = Resources.NoFortune;
+            FortuneTitle = Resources.NoFortune;
         }
         else
         {
             (string fortuneName, string addEffectDesc00, string addEffectDesc01, string addEffectDesc02, string fortuneDesc1) = _gmDatabaseService.GetFortuneValues(fortuneID1);
             string fortuneDesc2 = _gmDatabaseService.GetFortuneDesc(fortuneID2);
             string fortuneDesc3 = _gmDatabaseService.GetFortuneDesc(fortuneID3);
-            FortuneDescription = $"{fortuneDesc1}\r\n{fortuneDesc2}\r\n{fortuneDesc3}\r\n\r\nFortune Effect:\r\n{addEffectDesc00}\r\n{addEffectDesc01}\r\n{addEffectDesc02}";
+            FortuneDescription = $"{fortuneDesc1}\r\n{fortuneDesc2}\r\n{fortuneDesc3}\r\n\r\n{Resources.FortuneEffect}:\r\n{addEffectDesc00}\r\n{addEffectDesc01}\r\n{addEffectDesc02}";
             FortuneTitle = fortuneName;
         }
     }
@@ -96,13 +95,13 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
             bool fortuneChanged = HandleFortuneUpdate(SelectedFortuneID1, SelectedFortuneID2, SelectedFortuneID3);
             if (fortuneChanged)
             {
-                RHMessageBoxHelper.ShowOKMessage("Fortune updated successfully!", "Success");
+                RHMessageBoxHelper.ShowOKMessage(Resources.SaveSuccessMessage, Resources.Success);
                 await ReadFortune();
             }
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"Error updating fortune: {ex.Message}");
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -113,7 +112,7 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
 
         if (selectedFortuneID1 != 0 && selectedFortuneID1 != FortuneID1 || selectedFortuneID2 != FortuneID2 || selectedFortuneID3 != FortuneID3)
         {
-            if (RHMessageBoxHelper.ConfirmMessage($"Update {CharacterData!.CharacterName} fortune?"))
+            if (RHMessageBoxHelper.ConfirmMessage(string.Format(Resources.FortuneEditUpdateMessage, CharacterData!.CharacterName)))
             {
                 _databaseService.UpdateFortuneAsync(CharacterData, ActiveFortune, selectedFortuneID1, selectedFortuneID2, selectedFortuneID3);
                 _databaseService.GMAuditAsync(CharacterData, "Character Fortune Change", $"{selectedFortuneID1}, {selectedFortuneID2}, {selectedFortuneID3}");
@@ -122,7 +121,7 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
         }
         else if (selectedFortuneID1 != FortuneID1)
         {
-            if (RHMessageBoxHelper.ConfirmMessage($"Remove {CharacterData!.CharacterName} fortune?"))
+            if (RHMessageBoxHelper.ConfirmMessage(string.Format(Resources.FortuneEditRemoveMessage, CharacterData!.CharacterName)))
             {
                 _databaseService.RemoveFortuneAsync(CharacterData, NoFortune, FortuneID1, FortuneID2, FortuneID3);
                 _databaseService.GMAuditAsync(CharacterData, "Character Fortune Remove", $"{FortuneID1}, {FortuneID2}, {FortuneID3}");
@@ -190,13 +189,13 @@ public partial class FortuneWindowViewModel : ObservableObject, IRecipient<Chara
     private Guid? _token = Guid.Empty;
 
     [ObservableProperty]
-    private string _title = "Character Fortune";
+    private string _title = string.Format(Resources.EditorTitle, Resources.CharacterFortune);
 
     [ObservableProperty]
-    private string _fortuneTitle = "No Fortune";
+    private string _fortuneTitle = Resources.NoFortune;
 
     [ObservableProperty]
-    private string _fortuneDescription = "No Fortune";
+    private string _fortuneDescription = Resources.NoFortune;
 
     [ObservableProperty]
     private CharacterData? _characterData;

@@ -25,14 +25,14 @@ public partial class ItemDataManager : ObservableObject
         _itemDataViewModel = itemDataViewModel;
         _itemFilterUpdateTimer = new()
         {
-            Interval = 400,
+            Interval = 500,
             AutoReset = false
         };
         _itemFilterUpdateTimer.Elapsed += ItemFilterUpdateTimerElapsed;
 
         _optionFilterUpdateTimer = new()
         {
-            Interval = 400,
+            Interval = 500,
             AutoReset = false
         };
         _optionFilterUpdateTimer.Elapsed += OptionFilterUpdateTimerElapsed;

@@ -34,7 +34,7 @@ namespace RHToolkit.ViewModels.Pages
 
             try
             {
-                if (RHMessageBoxHelper.ConfirmMessage("Create a new gmdb database?"))
+                if (RHMessageBoxHelper.ConfirmMessage(Resources.CreateSQLiteDatabaseMessage))
                 {
                     _cancellationTokenSource = new CancellationTokenSource();
 
@@ -46,16 +46,16 @@ namespace RHToolkit.ViewModels.Pages
 
                     _cachedDataManager.InitializeCachedLists();
 
-                    RHMessageBoxHelper.ShowOKMessage("Database created successfully!", "Success");
+                    RHMessageBoxHelper.ShowOKMessage(Resources.CreateSQLiteDatabaseSuccessMessage, Resources.Success);
                 }
             }
             catch (OperationCanceledException)
             {
-                RHMessageBoxHelper.ShowOKMessage("Operation was canceled.", "Canceled");
+                RHMessageBoxHelper.ShowOKMessage(Resources.CreateSQLiteDatabaseCancelMessage, Resources.Info);
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error creating database file: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
             finally
             {

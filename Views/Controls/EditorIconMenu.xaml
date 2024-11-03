@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:RHToolkit.Views.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
     xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -18,33 +19,33 @@
                 Command="{Binding LoadFileAsCommand}"
                 Icon="{ui:SymbolIcon DocumentAdd24,
                                      Filled=True}"
-                ToolTip="Open File" />
+                ToolTip="{x:Static rs:Resources.MenuOpenFile}" />
             <MenuItem
                 Command="{Binding DataTableManager.SaveFileCommand}"
                 Icon="{ui:SymbolIcon Save24,
                                      Filled=True}"
-                ToolTip="Save" />
+                ToolTip="{x:Static rs:Resources.MenuSave}" />
             <MenuItem
                 Command="{Binding DataTableManager.SaveFileAsCommand}"
                 Icon="{ui:SymbolIcon DocumentSave24,
                                      Filled=True}"
-                ToolTip="Save As" />
+                ToolTip="{x:Static rs:Resources.MenuSaveAs}" />
             <MenuItem
                 Command="{Binding CloseFileCommand}"
                 Icon="{ui:SymbolIcon DocumentDismiss24,
                                      Filled=True}"
-                ToolTip="Close" />
+                ToolTip="{x:Static rs:Resources.MenuCloseFile}" />
             <Separator />
             <MenuItem
                 Command="{Binding DataTableManager.UndoChangesCommand}"
                 Icon="{ui:SymbolIcon ArrowUndo24,
                                      Filled=True}"
-                ToolTip="Undo" />
+                ToolTip="{x:Static rs:Resources.MenuUndo}" />
             <MenuItem
                 Command="{Binding DataTableManager.RedoChangesCommand}"
                 Icon="{ui:SymbolIcon ArrowRedo24,
                                      Filled=True}"
-                ToolTip="Redo" />
+                ToolTip="{x:Static rs:Resources.MenuRedo}" />
             <Separator />
             <MenuItem
                 Command="{Binding AddRowCommand}"
@@ -53,22 +54,22 @@
             <MenuItem
                 Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
                 Icon="{ui:SymbolIcon Copy24}"
-                ToolTip="Duplicate Selected Row" />
+                ToolTip="{x:Static rs:Resources.MenuDuplicateRow}" />
             <MenuItem
                 Command="{Binding DataTableManager.DeleteSelectedRowCommand}"
                 Icon="{ui:SymbolIcon Delete24}"
-                ToolTip="Delete Selected Row" />
+                ToolTip="{x:Static rs:Resources.MenuDeleteRow}" />
             <Separator />
             <MenuItem
                 Command="{Binding OpenSearchDialogCommand}"
                 CommandParameter="Find"
                 Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                ToolTip="Find" />
+                ToolTip="{x:Static rs:Resources.MenuFind}" />
             <MenuItem
                 Command="{Binding OpenSearchDialogCommand}"
                 CommandParameter="Replace"
                 Icon="{ui:SymbolIcon DocumentTableSearch24}"
-                ToolTip="Replace" />
+                ToolTip="{x:Static rs:Resources.MenuReplace}" />
         </Menu>
     </Grid>
 </UserControl>

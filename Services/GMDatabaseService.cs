@@ -1,6 +1,5 @@
 ﻿using RHToolkit.Models;
 using RHToolkit.Models.UISettings;
-using RHToolkit.Properties;
 using System.Data.SQLite;
 using static RHToolkit.Models.EnumService;
 
@@ -234,7 +233,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Error retrieving option items from the database.", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return optionItems;
@@ -280,7 +279,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
@@ -391,6 +390,16 @@ namespace RHToolkit.Services
             return GetItemsFromQuery("SELECT nID, wszNameUI FROM world_string");
         }
 
+        public List<NameID> GetMissionItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszTitle FROM missionstring");
+        }
+
+        public List<NameID> GetAuctionCategoryItems()
+        {
+            return GetItemsFromQuery("SELECT nID, wszName00 FROM auctioncategory WHERE wszName00 <> ''");
+        }
+
         public List<string> GetEnemyNameItems()
         {
             List<string> items = [];
@@ -409,20 +418,10 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
-        }
-
-        public List<NameID> GetMissionItems()
-        {
-            return GetItemsFromQuery("SELECT nID, wszTitle FROM missionstring");
-        }
-
-        public List<NameID> GetAuctionCategoryItems()
-        {
-            return GetItemsFromQuery("SELECT nID, wszName00 FROM auctioncategory WHERE wszName00 <> ''");
         }
 
         public List<NameID> GetCostumePartItems(int jobClass)
@@ -487,7 +486,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
@@ -522,7 +521,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
@@ -553,7 +552,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
@@ -588,7 +587,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
@@ -616,7 +615,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving npcshop items from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
@@ -640,7 +639,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving tradeshop items from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
@@ -666,7 +665,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving itemmix items from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
@@ -692,7 +691,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving costumemix items from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
@@ -800,7 +799,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving item mix data from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
@@ -844,7 +843,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error populating the {(isSubCategory ? "subcategory" : "category")} combobox for {itemType}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return categoryItems;
@@ -939,7 +938,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
             return items;
@@ -983,7 +982,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1057,7 +1056,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1085,7 +1084,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1114,7 +1113,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
         }
@@ -1136,7 +1135,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1154,7 +1153,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1170,7 +1169,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1196,7 +1195,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1223,7 +1222,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1242,7 +1241,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1261,7 +1260,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
         }
 
@@ -1292,7 +1291,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
             
         }
@@ -1325,7 +1324,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
         }
@@ -1355,7 +1354,7 @@ namespace RHToolkit.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving values from the database: {ex.Message}", ex);
+                throw new Exception(ex.Message, ex);
             }
 
         }

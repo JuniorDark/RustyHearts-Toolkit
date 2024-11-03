@@ -9,12 +9,12 @@ public class WindowsProviderService(IServiceProvider serviceProvider)
     {
         if (!typeof(Window).IsAssignableFrom(typeof(T)))
         {
-            throw new InvalidOperationException($"The window class should be derived from {typeof(Window)}.");
+            throw new InvalidOperationException(string.Format(Resources.WindowsServiceErrorMessage, typeof(Window)));
         }
 
         Window windowInstance =
             _serviceProvider.GetService<T>() as Window
-            ?? throw new InvalidOperationException("Window is not registered as service.");
+            ?? throw new InvalidOperationException(Resources.WindowsServiceServiceErrorMessage);
 
         if (setOwner)
         {
@@ -33,12 +33,12 @@ public class WindowsProviderService(IServiceProvider serviceProvider)
     {
         if (!typeof(Window).IsAssignableFrom(typeof(T)))
         {
-            throw new InvalidOperationException($"The window class should be derived from {typeof(Window)}.");
+            throw new InvalidOperationException(string.Format(Resources.WindowsServiceErrorMessage, typeof(Window)));
         }
 
         if (_serviceProvider.GetService<T>() is not Window windowInstance)
         {
-            throw new InvalidOperationException("Window is not registered as service.");
+            throw new InvalidOperationException(Resources.WindowsServiceServiceErrorMessage);
         }
 
         if (setOwner)

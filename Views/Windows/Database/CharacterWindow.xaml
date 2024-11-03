@@ -21,7 +21,7 @@
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/icon/lb_main_quick_system_01character.png"
-    ResizeMode="CanResizeWithGrip"
+    ResizeMode="CanResize"
     WindowStartupLocation="CenterScreen"
     WindowStyle="None"
     mc:Ignorable="d">
@@ -72,7 +72,7 @@
                     Margin="5,5"
                     Background="Transparent"
                     Command="{Binding OpenInventoryWindowCommand}"
-                    Content="Inventory"
+                    Content="{x:Static rs:Resources.Inventory}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -82,7 +82,7 @@
                     Margin="5,5"
                     Background="Transparent"
                     Command="{Binding OpenEquipmentWindowCommand}"
-                    Content="Equipment"
+                    Content="{x:Static rs:Resources.Equipment}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -92,7 +92,7 @@
                     Margin="5,5"
                     Background="Transparent"
                     Command="{Binding OpenStorageWindowCommand}"
-                    Content="Storage"
+                    Content="{x:Static rs:Resources.Storage}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -110,7 +110,7 @@
                     Margin="5,5"
                     Background="Transparent"
                     Command="{Binding OpenFortuneWindowCommand}"
-                    Content="Fortune"
+                    Content="{x:Static rs:Resources.Fortune}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -120,7 +120,7 @@
                     Margin="5,5"
                     Background="Transparent"
                     Command="{Binding OpenTitleWindowCommand}"
-                    Content="Title"
+                    Content="{x:Static rs:Resources.Title}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -130,7 +130,7 @@
                     Margin="5,5"
                     Background="Transparent"
                     Command="{Binding OpenSanctionWindowCommand}"
-                    Content="Sanctions"
+                    Content="{x:Static rs:Resources.Sanctions}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
@@ -165,11 +165,11 @@
                     Orientation="Horizontal">
                     <Label
                         VerticalAlignment="Center"
-                        Content="Character Name"
+                        Content="{x:Static rs:Resources.CharacterName}"
                         Foreground="White" />
                     <TextBox
                         x:Name="txtCharacterName"
-                        Width="200"
+                        Width="250"
                         Height="35"
                         Margin="10,0,0,0"
                         HorizontalAlignment="Center"
@@ -186,11 +186,11 @@
                         VerticalAlignment="Center"
                         Background="Transparent"
                         Command="{Binding SaveCharacterNameCommand}"
-                        Content="Save Name"
+                        Content="{x:Static rs:Resources.Save}"
                         Cursor="Hand"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}"
-                        ToolTip="Save" />
+                        ToolTip="{x:Static rs:Resources.MenuSave}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -227,11 +227,11 @@
                         VerticalAlignment="Center"
                         Background="Transparent"
                         Command="{Binding SaveCharacterClassCommand}"
-                        Content="Save Class"
+                        Content="{x:Static rs:Resources.SaveClass}"
                         Cursor="Hand"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}"
-                        ToolTip="Save Class" />
+                        ToolTip="{x:Static rs:Resources.SaveClass}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
@@ -246,7 +246,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         HorizontalContentAlignment="Center"
-                        Content="Focus"
+                        Content="{x:Static rs:Resources.Focus}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbJob"
@@ -269,11 +269,11 @@
                         VerticalAlignment="Center"
                         Background="Transparent"
                         Command="{Binding SaveCharacterJobCommand}"
-                        Content="Save Focus"
+                        Content="{x:Static rs:Resources.SaveFocus}"
                         Cursor="Hand"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}"
-                        ToolTip="Save Focus" />
+                        ToolTip="{x:Static rs:Resources.SaveFocus}" />
                 </StackPanel>
                 <StackPanel
                     Grid.Row="3"
@@ -284,7 +284,7 @@
                         x:Name="lbLevel"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Level"
+                        Content="{x:Static rs:Resources.Level}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intLevel"
@@ -298,7 +298,7 @@
                         x:Name="lbScrolls"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Ressurection Scrolls"
+                        Content="{x:Static rs:Resources.RessurectionScrolls}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intRessurectionScrolls"
@@ -310,7 +310,7 @@
                         x:Name="lbWHSlot"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Warehouse Slots"
+                        Content="{x:Static rs:Resources.WarehouseSlots}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intWarehouseSlots"
@@ -331,7 +331,7 @@
                         x:Name="lbExp"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="EXP"
+                        Content="{x:Static rs:Resources.Experience}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intExp"
@@ -346,7 +346,7 @@
                         x:Name="lbSkillPoints"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Unused Skill Points"
+                        Content="{x:Static rs:Resources.UnusedSkillPoints}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intSkillPoints"
@@ -358,7 +358,7 @@
                         x:Name="lbWarehouseGold"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Warehouse Gold"
+                        Content="{x:Static rs:Resources.WarehouseGold}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intWHGold"
@@ -378,7 +378,7 @@
                         x:Name="lbInventoryGold"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Inventory Gold"
+                        Content="{x:Static rs:Resources.Gold}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intInventoryGold"
@@ -390,7 +390,7 @@
                         x:Name="lbTotalSkillPoints"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Total Skill Points"
+                        Content="{x:Static rs:Resources.TotalSkillPoints}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intTotalSkillPoints"
@@ -402,7 +402,7 @@
                         x:Name="lbGuildExp"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Guild Exp"
+                        Content="{x:Static rs:Resources.GuildExp}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ui:NumberBox
                         x:Name="intGuildExp"
@@ -424,28 +424,28 @@
                     <CheckBox
                         Margin="5,0"
                         VerticalAlignment="Top"
-                        Content="Restrict Character"
+                        Content="{x:Static rs:Resources.RestrictCharacter}"
                         Foreground="White"
                         IsChecked="{Binding CharacterDataViewModel.RestrictCharacter}"
                         Template="{StaticResource lb_checkbox}" />
                     <CheckBox
                         Margin="5,0"
                         VerticalAlignment="Top"
-                        Content="Block Movement"
+                        Content="{x:Static rs:Resources.BlockMovement}"
                         Foreground="White"
                         IsChecked="{Binding CharacterDataViewModel.IsMoveEnable}"
                         Template="{StaticResource lb_checkbox}" />
                     <CheckBox
                         Margin="5,0"
                         VerticalAlignment="Top"
-                        Content="Can Trade"
+                        Content="{x:Static rs:Resources.CanTrade}"
                         Foreground="White"
                         IsChecked="{Binding CharacterDataViewModel.IsTradeEnable}"
                         Template="{StaticResource lb_checkbox}" />
                     <CheckBox
                         Margin="5,0"
                         VerticalAlignment="Top"
-                        Content="Is Admin"
+                        Content="{x:Static rs:Resources.IsAdmin}"
                         Foreground="White"
                         IsChecked="{Binding CharacterDataViewModel.IsAdmin}"
                         Template="{StaticResource lb_checkbox}" />
@@ -462,7 +462,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Lobby"
+                        Content="{x:Static rs:Resources.Lobby}"
                         Style="{StaticResource ArialMSWhite}" />
                     <ComboBox
                         x:Name="cmbLobby"
@@ -487,11 +487,11 @@
                     VerticalAlignment="Bottom"
                     Background="Transparent"
                     Command="{Binding SaveCharacterCommand}"
-                    Content="Save"
+                    Content="{x:Static rs:Resources.Save}"
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"
-                    ToolTip="Save Character Changes" />
+                    ToolTip="{x:Static rs:Resources.Save}" />
             </Grid>
 
             <!--  Profile  -->

@@ -34,7 +34,7 @@
             <TabItem
                 Width="192"
                 Foreground="White"
-                Header="Equipment"
+                Header="{x:Static rs:Resources.Equipment}"
                 IsSelected="True"
                 Style="{StaticResource lb_tab}">
                 <Grid
@@ -183,7 +183,7 @@
             <TabItem
                 Width="192"
                 Foreground="White"
-                Header="Costume"
+                Header="{x:Static rs:Resources.Costume}"
                 Style="{StaticResource lb_tab}">
                 <Grid
                     Width="384"
@@ -354,7 +354,7 @@
                     Margin="10,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Content="Account:"
+                    Content="{x:Static rs:Resources.Account}"
                     Foreground="White" />
                 <TextBlock
                     HorizontalAlignment="Center"
@@ -371,7 +371,8 @@
                     Margin="10,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Content="Character ID:"
+                    d:Content="Character ID:"
+                    Content="{x:Static rs:Resources.CharacterID}"
                     Foreground="White" />
                 <TextBlock
                     VerticalAlignment="Center"
@@ -387,7 +388,8 @@
                     Margin="10,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Content="Created:"
+                    d:Content="Created:"
+                    Content="{x:Static rs:Resources.Created}"
                     Foreground="White" />
                 <TextBlock
                     HorizontalAlignment="Center"
@@ -404,7 +406,8 @@
                     Margin="10,5"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Content="Last Login:"
+                    d:Content="Last Login:"
+                    Content="{x:Static rs:Resources.LastLogin}"
                     Foreground="White" />
                 <TextBlock
                     HorizontalAlignment="Center"
@@ -414,7 +417,6 @@
                     Foreground="Gold"
                     Style="{StaticResource ArialMS}"
                     Text="{Binding CharacterData.LastLogin}" />
-
             </StackPanel>
 
         </Grid>
@@ -436,13 +438,14 @@
             Margin="0,20"
             HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
+            d:Content="Save Equipment"
             Background="Transparent"
             Command="{Binding SaveEquipmentCommand}"
-            Content="Save Equipment"
+            Content="{x:Static rs:Resources.SaveEquipment}"
             Cursor="Hand"
             Foreground="White"
             IsEnabled="{Binding IsButtonEnabled}"
             Style="{StaticResource lb_def_button02}"
-            ToolTip="Save Equipment" />
+            ToolTip="{x:Static rs:Resources.SaveEquipment}" />
     </Grid>
 </UserControl>

@@ -427,7 +427,7 @@
     <value>Item Charge</value>
   </data>
   <data name="ItemDatabase" xml:space="preserve">
-    <value>Item Database</value>
+    <value>Items Database</value>
   </data>
   <data name="ItemDatabaseDesc" xml:space="preserve">
     <value>Open a Item Database</value>
@@ -1064,5 +1064,1193 @@
   </data>
   <data name="AddSkillHelp" xml:space="preserve">
     <value>Click on a skill to add/edit, Right click to remove.</value>
+  </data>
+  <data name="OpenFile" xml:space="preserve">
+    <value>Open a file</value>
+  </data>
+  <data name="MatchCase" xml:space="preserve">
+    <value>Match Case</value>
+  </data>
+  <data name="MenuFile" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="MenuOpenFile" xml:space="preserve">
+    <value>Open File</value>
+  </data>
+  <data name="MenuOpenList" xml:space="preserve">
+    <value>Open ...</value>
+  </data>
+  <data name="MenuSave" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="MenuSaveAs" xml:space="preserve">
+    <value>Save As ...</value>
+  </data>
+  <data name="MenuExportAs" xml:space="preserve">
+    <value>Export As...</value>
+  </data>
+  <data name="MenuExportMIP" xml:space="preserve">
+    <value>Export as Client Patch File (MIP)</value>
+  </data>
+  <data name="MenuExportXML" xml:space="preserve">
+    <value>Export as XML</value>
+  </data>
+  <data name="MenuExportXLSX" xml:space="preserve">
+    <value>Export as XLSX</value>
+  </data>
+  <data name="MenuCloseFile" xml:space="preserve">
+    <value>Close File</value>
+  </data>
+  <data name="MenuExit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="MenuEdit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="MenuUndo" xml:space="preserve">
+    <value>Undo</value>
+  </data>
+  <data name="MenuRedo" xml:space="preserve">
+    <value>Redo</value>
+  </data>
+  <data name="MenuAddRow" xml:space="preserve">
+    <value>Add New Row</value>
+  </data>
+  <data name="MenuDuplicateRow" xml:space="preserve">
+    <value>Duplicate Selected Row</value>
+  </data>
+  <data name="MenuDeleteRow" xml:space="preserve">
+    <value>Delete Selected Row</value>
+  </data>
+  <data name="MenuFind" xml:space="preserve">
+    <value>Find...</value>
+  </data>
+  <data name="MenuReplace" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="MenuSettings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="MenuSetTableFolder" xml:space="preserve">
+    <value>Set Table Folder</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="CharacterID" xml:space="preserve">
+    <value>Character ID</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created</value>
+  </data>
+  <data name="LastLogin" xml:space="preserve">
+    <value>Last Login</value>
+  </data>
+  <data name="SaveEquipment" xml:space="preserve">
+    <value>Save Equipment</value>
+  </data>
+  <data name="AppDesc" xml:space="preserve">
+    <value>A comprehensive toolkit for editing Rusty Hearts database and table files.</value>
+  </data>
+  <data name="DatabaseEditors" xml:space="preserve">
+    <value>Database Editors</value>
+  </data>
+  <data name="LocalDatabases" xml:space="preserve">
+    <value>Local Databases</value>
+  </data>
+  <data name="LocalDatabasesDesc" xml:space="preserve">
+    <value>View and manage local databases</value>
+  </data>
+  <data name="TableEditors" xml:space="preserve">
+    <value>Table Editors</value>
+  </data>
+  <data name="NameAccount" xml:space="preserve">
+    <value>Character Name/Account</value>
+  </data>
+  <data name="CharacterName" xml:space="preserve">
+    <value>Character Name</value>
+  </data>
+  <data name="CreateDate" xml:space="preserve">
+    <value>Create Date</value>
+  </data>
+  <data name="Focus" xml:space="preserve">
+    <value>Focus</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="EditCharacter" xml:space="preserve">
+    <value>Edit Character</value>
+  </data>
+  <data name="DeleteCharacter" xml:space="preserve">
+    <value>Delete Character</value>
+  </data>
+  <data name="Inventory" xml:space="preserve">
+    <value>Inventory</value>
+  </data>
+  <data name="Fortune" xml:space="preserve">
+    <value>Fortune</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="Sanctions" xml:space="preserve">
+    <value>Sanctions</value>
+  </data>
+  <data name="RestoreCharacter" xml:space="preserve">
+    <value>Restore Character</value>
+  </data>
+  <data name="CouponCode" xml:space="preserve">
+    <value>Coupon Code:</value>
+  </data>
+  <data name="CouponStatus" xml:space="preserve">
+    <value>Coupon Status</value>
+  </data>
+  <data name="ValidUntil" xml:space="preserve">
+    <value>Valid Until</value>
+  </data>
+  <data name="ItemID" xml:space="preserve">
+    <value>Item ID</value>
+  </data>
+  <data name="ItemCount" xml:space="preserve">
+    <value>Item Count</value>
+  </data>
+  <data name="UseDate" xml:space="preserve">
+    <value>Use Date</value>
+  </data>
+  <data name="UsedByAccount" xml:space="preserve">
+    <value>Used By: Account Name</value>
+  </data>
+  <data name="UsedByCharacter" xml:space="preserve">
+    <value>Used By: Character</value>
+  </data>
+  <data name="Read" xml:space="preserve">
+    <value>Read</value>
+  </data>
+  <data name="DeleteCoupon" xml:space="preserve">
+    <value>Delete Coupon</value>
+  </data>
+  <data name="Generate" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="ValidDate" xml:space="preserve">
+    <value>Valid Date</value>
+  </data>
+  <data name="AddCoupon" xml:space="preserve">
+    <value>Add Coupon</value>
+  </data>
+  <data name="SelectFolder" xml:space="preserve">
+    <value>Select Folder</value>
+  </data>
+  <data name="CreateDatabase" xml:space="preserve">
+    <value>Create Database</value>
+  </data>
+  <data name="SelectTableFolder" xml:space="preserve">
+    <value>Select table folder</value>
+  </data>
+  <data name="MenuOpenSkillFile" xml:space="preserve">
+    <value>Open Skill File...</value>
+  </data>
+  <data name="SkillFile" xml:space="preserve">
+    <value>Skill File</value>
+  </data>
+  <data name="SkillTreeFile" xml:space="preserve">
+    <value>Skill Tree File</value>
+  </data>
+  <data name="SkillTreeUIFile" xml:space="preserve">
+    <value>Skill Tree UI File</value>
+  </data>
+  <data name="InvalidTableFileDesc" xml:space="preserve">
+    <value>The file '{0}' is not a valid '{1}' file.</value>
+  </data>
+  <data name="EditorTitle" xml:space="preserve">
+    <value>{0} Editor</value>
+  </data>
+  <data name="SkillTreeEditor" xml:space="preserve">
+    <value>Skill Tree Editor</value>
+  </data>
+  <data name="SkillTreeUIEditor" xml:space="preserve">
+    <value>Skill Tree UI Editor</value>
+  </data>
+  <data name="EditorTitleFileName" xml:space="preserve">
+    <value>{0} Editor ({1})</value>
+  </data>
+  <data name="ItemAmountDuration" xml:space="preserve">
+    <value>Item Amount/Duration (Minutes)</value>
+  </data>
+  <data name="CashShopBonusEarnDesc" xml:space="preserve">
+    <value>{0}% of the price goes to Bonus</value>
+  </data>
+  <data name="CashShopBonusDesc" xml:space="preserve">
+    <value>Purchased with Bonus</value>
+  </data>
+  <data name="NoSellingDate" xml:space="preserve">
+    <value>No Selling Date</value>
+  </data>
+  <data name="NoSaleDate" xml:space="preserve">
+    <value>No Sale Date</value>
+  </data>
+  <data name="NoDateSet" xml:space="preserve">
+    <value>No Date Set</value>
+  </data>
+  <data name="NpcMenuShop" xml:space="preserve">
+    <value>Shop</value>
+  </data>
+  <data name="NpcMenuItemUpgrade" xml:space="preserve">
+    <value>Item Upgrade</value>
+  </data>
+  <data name="NpcMenuItemCraft" xml:space="preserve">
+    <value>Item Craft</value>
+  </data>
+  <data name="NpcMenuZen" xml:space="preserve">
+    <value>Zen Menu</value>
+  </data>
+  <data name="NpcMenuGuild" xml:space="preserve">
+    <value>Guild</value>
+  </data>
+  <data name="NpcMenuDismantle" xml:space="preserve">
+    <value>Dismantle</value>
+  </data>
+  <data name="NpcMenuCostumeCraft" xml:space="preserve">
+    <value>Costume Craft</value>
+  </data>
+  <data name="NpcMenuTradeShop" xml:space="preserve">
+    <value>Trade Shop</value>
+  </data>
+  <data name="NpcMenuGuildWarehouse" xml:space="preserve">
+    <value>Guild Warehouse</value>
+  </data>
+  <data name="NpcMenuGuildSkill" xml:space="preserve">
+    <value>Guild Skill</value>
+  </data>
+  <data name="NpcMenuAddGuildEXP" xml:space="preserve">
+    <value>Add Guild EXP</value>
+  </data>
+  <data name="NpcMenuGuildEXPHistory" xml:space="preserve">
+    <value>Guild EXP History</value>
+  </data>
+  <data name="NpcMenuChangeHairStyle" xml:space="preserve">
+    <value>Change Hair Style</value>
+  </data>
+  <data name="NpcMenuDyeHair" xml:space="preserve">
+    <value>Dye Hair</value>
+  </data>
+  <data name="NpcMenuLuck" xml:space="preserve">
+    <value>See How Lucky You Will Be</value>
+  </data>
+  <data name="NpcMenuResurrectPet" xml:space="preserve">
+    <value>Resurrect Pet</value>
+  </data>
+  <data name="NpcMenuMoveToVillage" xml:space="preserve">
+    <value>Move To Village</value>
+  </data>
+  <data name="EffectPackage" xml:space="preserve">
+    <value>Effect Package</value>
+  </data>
+  <data name="ItemPackage" xml:space="preserve">
+    <value>Item Package</value>
+  </data>
+  <data name="PackageEffectEXPBonus" xml:space="preserve">
+    <value>EXP Bonus</value>
+  </data>
+  <data name="PackageEffectAuctionSlot" xml:space="preserve">
+    <value>Extra Auction Slots</value>
+  </data>
+  <data name="PackageEffectRepurchaseCostDecrease" xml:space="preserve">
+    <value>Repurchase Cost Decrease</value>
+  </data>
+  <data name="PackageEffectGuildEXPBonus" xml:space="preserve">
+    <value>Guild EXP Bonus</value>
+  </data>
+  <data name="PackageEffectShopItem" xml:space="preserve">
+    <value>Exclusive Items available at the shops</value>
+  </data>
+  <data name="PackageEffectItemLevel" xml:space="preserve">
+    <value>Can Use High Level Items</value>
+  </data>
+  <data name="PackageEffectGoldCard" xml:space="preserve">
+    <value>Increases Gold Card Drop Rate</value>
+  </data>
+  <data name="PackageEffectBonusCardSelection" xml:space="preserve">
+    <value>Bonus Card Selection</value>
+  </data>
+  <data name="PackageEffectRepairCostReduction" xml:space="preserve">
+    <value>Repair Cost Reduction</value>
+  </data>
+  <data name="PackageEffectUnlimitedWeight" xml:space="preserve">
+    <value>Unlimited Inventory Weight</value>
+  </data>
+  <data name="PackageEffectWeightExtraInventory" xml:space="preserve">
+    <value>Unlimited Inventory Weight /Extra Inventory Slots</value>
+  </data>
+  <data name="PackageEffectWeaponUpgrade" xml:space="preserve">
+    <value>Increases Weapon Upgrade Effect</value>
+  </data>
+  <data name="PackageEffectTwinPet" xml:space="preserve">
+    <value>Can use Twin Pet</value>
+  </data>
+  <data name="PackageEffectResetSkills" xml:space="preserve">
+    <value>Can Reset Skills</value>
+  </data>
+  <data name="PackageEffect" xml:space="preserve">
+    <value>Package Effect</value>
+  </data>
+  <data name="Effect" xml:space="preserve">
+    <value>Effect</value>
+  </data>
+  <data name="NoEffect" xml:space="preserve">
+    <value>No Effect</value>
+  </data>
+  <data name="Duration" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="TitleNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="TitleAnimated" xml:space="preserve">
+    <value>Animated</value>
+  </data>
+  <data name="TitleSpecial" xml:space="preserve">
+    <value>Special</value>
+  </data>
+  <data name="TitleEffect" xml:space="preserve">
+    <value>Title Effect</value>
+  </data>
+  <data name="TitleDuration" xml:space="preserve">
+    <value>Title Duration</value>
+  </data>
+  <data name="DifficultyNormal" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="DifficultyHard" xml:space="preserve">
+    <value>Hard</value>
+  </data>
+  <data name="DifficultyVeryHard" xml:space="preserve">
+    <value>Very Hard</value>
+  </data>
+  <data name="DifficultyBlood" xml:space="preserve">
+    <value>Blood</value>
+  </data>
+  <data name="AddSelectedItems" xml:space="preserve">
+    <value>Add Selected Item(s)</value>
+  </data>
+  <data name="ItemWindowTitle" xml:space="preserve">
+    <value>Add {0} Item</value>
+  </data>
+  <data name="ItemWindowTitleName" xml:space="preserve">
+    <value>Add {0} Item ({1})</value>
+  </data>
+  <data name="AccountStorage" xml:space="preserve">
+    <value>Account Storage</value>
+  </data>
+  <data name="CashShop" xml:space="preserve">
+    <value>Cash Shop</value>
+  </data>
+  <data name="DropGroup" xml:space="preserve">
+    <value>Drop Group</value>
+  </data>
+  <data name="DismantleItem" xml:space="preserve">
+    <value>Dismantle Item</value>
+  </data>
+  <data name="ItemCraft" xml:space="preserve">
+    <value>Item Craft</value>
+  </data>
+  <data name="NPCShopPreview" xml:space="preserve">
+    <value>NPC Shop Preview</value>
+  </data>
+  <data name="NPCShop" xml:space="preserve">
+    <value>NPC Shop</value>
+  </data>
+  <data name="PartyMission" xml:space="preserve">
+    <value>Party Mission</value>
+  </data>
+  <data name="PetDeathDrop" xml:space="preserve">
+    <value>Pet Death Drop</value>
+  </data>
+  <data name="RandomRune" xml:space="preserve">
+    <value>Random Rune</value>
+  </data>
+  <data name="RareCardGroup" xml:space="preserve">
+    <value>Rare Card Group</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="TradeShop" xml:space="preserve">
+    <value>Trade Shop</value>
+  </data>
+  <data name="ItemList" xml:space="preserve">
+    <value>Item List</value>
+  </data>
+  <data name="AddSelectedItem" xml:space="preserve">
+    <value>Add Selected Item</value>
+  </data>
+  <data name="SkillList" xml:space="preserve">
+    <value>Skill List</value>
+  </data>
+  <data name="AddSelectedSkill" xml:space="preserve">
+    <value>Add Selected Skill</value>
+  </data>
+  <data name="SkillWindowTitle" xml:space="preserve">
+    <value>Add '{0}'  {1}</value>
+  </data>
+  <data name="SkillTreeSkill" xml:space="preserve">
+    <value>Skill Tree Skill</value>
+  </data>
+  <data name="SkillTreeUISkill" xml:space="preserve">
+    <value>Skill Tree UI Skill</value>
+  </data>
+  <data name="RareCardReward" xml:space="preserve">
+    <value>Rare Card Reward</value>
+  </data>
+  <data name="WindowTitle" xml:space="preserve">
+    <value>{0} {1}</value>
+  </data>
+  <data name="Character" xml:space="preserve">
+    <value>Character</value>
+  </data>
+  <data name="InexistentCharacterMessage" xml:space="preserve">
+    <value>The character '{0}' does not exist.</value>
+  </data>
+  <data name="InvalidCharacter" xml:space="preserve">
+    <value>Invalid Character</value>
+  </data>
+  <data name="NoChangesMessage" xml:space="preserve">
+    <value>There are no changes to save.</value>
+  </data>
+  <data name="Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="EditCharacterSaveMessage" xml:space="preserve">
+    <value>Save the following changes to the character '{0}' ?</value>
+  </data>
+  <data name="EditCharacterErrorMessage" xml:space="preserve">
+    <value>Error saving character changes</value>
+  </data>
+  <data name="EditCharacterSaveSuccessMessage" xml:space="preserve">
+    <value>Character changes saved.</value>
+  </data>
+  <data name="CharacterEditNameNotAllowedMessage" xml:space="preserve">
+    <value>The character name '{0}' its not allowed. This name is on the nick filter.</value>
+  </data>
+  <data name="CharacterEditInvalidNameMessage" xml:space="preserve">
+    <value>Invalid character name. The name musthave between 3 and 16 characters.</value>
+  </data>
+  <data name="CharacterEditSaveNameMessage" xml:space="preserve">
+    <value>Change the character name from '{0}' to '{1}'?</value>
+  </data>
+  <data name="CharacterEditAlreadyUsedNameMessage" xml:space="preserve">
+    <value>The character name '{0}' already exists.</value>
+  </data>
+  <data name="CharacterEditSaveNameSuccessMessage" xml:space="preserve">
+    <value>Character name updated successfully</value>
+  </data>
+  <data name="CharacterEditorSaveClassMessage" xml:space="preserve">
+    <value>EXPERIMENTAL FEATURE\n\nThis will reset all character skills and unequip the character weapon/costumes and send via mail.\n\nAre you sure you want to change character '{0}' class from '{1}' to '{2}'?</value>
+  </data>
+  <data name="CharacterEditorSaveFocusMessage" xml:space="preserve">
+    <value>Changing focus will reset all character skills. Are you sure you want to change character '{0}' focus?</value>
+  </data>
+  <data name="CharacterEditorSaveClassSuccessMessage" xml:space="preserve">
+    <value>Character class changed successfully!</value>
+  </data>
+  <data name="CharacterEditorSaveFocusSuccessMessage" xml:space="preserve">
+    <value>Character focus changed successfully!</value>
+  </data>
+  <data name="EquipmentEditSaveMessage" xml:space="preserve">
+    <value>Save equipment changes?</value>
+  </data>
+  <data name="EquipmentEditSaveSuccessMessage" xml:space="preserve">
+    <value>Equipment saved successfully!</value>
+  </data>
+  <data name="CharacterEquipment" xml:space="preserve">
+    <value>Character Equipment</value>
+  </data>
+  <data name="EquipmentEditorSlotInUseMessage" xml:space="preserve">
+    <value>The '{0}' slot is already in use.</value>
+  </data>
+  <data name="CharacterLevelNameText" xml:space="preserve">
+    <value>Lv.{0} {1}</value>
+  </data>
+  <data name="CharacterClassFocusText" xml:space="preserve">
+    <value>&lt;{0} - {1} Focus&gt;</value>
+  </data>
+  <data name="FortuneEffect" xml:space="preserve">
+    <value>Fortune Effect</value>
+  </data>
+  <data name="NoFortune" xml:space="preserve">
+    <value>No Fortune</value>
+  </data>
+  <data name="SaveSuccessMessage" xml:space="preserve">
+    <value>Changes saved successfully!</value>
+  </data>
+  <data name="SaveChangesMessage" xml:space="preserve">
+    <value>Save changes?</value>
+  </data>
+  <data name="FortuneEditUpdateMessage" xml:space="preserve">
+    <value>Remove '{0}' fortune?</value>
+  </data>
+  <data name="FortuneEditRemoveMessage" xml:space="preserve">
+    <value>Update '{0}' fortune?</value>
+  </data>
+  <data name="CharacterFortune" xml:space="preserve">
+    <value>Character Fortune</value>
+  </data>
+  <data name="CharacterInventory" xml:space="preserve">
+    <value>Character Inventory</value>
+  </data>
+  <data name="CharacterSanction" xml:space="preserve">
+    <value>Character Sanction</value>
+  </data>
+  <data name="SanctionEditCommentMessage" xml:space="preserve">
+    <value>Please enter a comment for the sanction removal.</value>
+  </data>
+  <data name="SanctionEditErrorMessage" xml:space="preserve">
+    <value>Error {0} sanction</value>
+  </data>
+  <data name="SanctionEditAlreadySanctionedMessage" xml:space="preserve">
+    <value>This character is already sanctioned. Remove the current sanction before adding other.</value>
+  </data>
+  <data name="SanctionEditAlreadyRemovedSanctionMessage" xml:space="preserve">
+    <value>Selected sanction was already removed.</value>
+  </data>
+  <data name="SanctionEditNoSanctionedMessage" xml:space="preserve">
+    <value>This character has no active sanctions.</value>
+  </data>
+  <data name="Adding" xml:space="preserve">
+    <value>Adding</value>
+  </data>
+  <data name="Removing" xml:space="preserve">
+    <value>Removing</value>
+  </data>
+  <data name="SanctionEditAddMessage" xml:space="preserve">
+    <value>Sanction this character for</value>
+  </data>
+  <data name="SanctionEditRemoveMessage" xml:space="preserve">
+    <value>Remove the sanction from this character for</value>
+  </data>
+  <data name="SanctionEditAddSuccessMessage" xml:space="preserve">
+    <value>Sanction added successfully.</value>
+  </data>
+  <data name="SanctionEditRemoveSuccessMessage" xml:space="preserve">
+    <value>Sanction released successfully.</value>
+  </data>
+  <data name="StorageEditStorageSaveMessage" xml:space="preserve">
+    <value>Save character storage changes?</value>
+  </data>
+  <data name="StorageEditAccountStorageSaveSuccessMessage" xml:space="preserve">
+    <value>Account Storage saved successfully!</value>
+  </data>
+  <data name="StorageEditStorageSaveSuccessMessage" xml:space="preserve">
+    <value>Account Storage saved successfully!</value>
+  </data>
+  <data name="StorageEditAccountStorageSaveMessage" xml:space="preserve">
+    <value>Save account storage changes?</value>
+  </data>
+  <data name="CharacterStorage" xml:space="preserve">
+    <value>Character Storage</value>
+  </data>
+  <data name="StorageEditSlotLockedMessage" xml:space="preserve">
+    <value>The slot '{0}' is locked.</value>
+  </data>
+  <data name="CharacterTitle" xml:space="preserve">
+    <value>Character Title</value>
+  </data>
+  <data name="NoTitle" xml:space="preserve">
+    <value>No Title</value>
+  </data>
+  <data name="TitleCategory" xml:space="preserve">
+    <value>Title Category</value>
+  </data>
+  <data name="TitleEditAddTitleMessage" xml:space="preserve">
+    <value>Add the title '{0}' to this character?</value>
+  </data>
+  <data name="TitleEditUnequipTitleMessage" xml:space="preserve">
+    <value>Unequip the title '{0}' from this character?</value>
+  </data>
+  <data name="TitleEditSameTitleMessage" xml:space="preserve">
+    <value>This character already has '{0}' title.</value>
+  </data>
+  <data name="TitleEditDuplicateTitle" xml:space="preserve">
+    <value>Duplicate Title</value>
+  </data>
+  <data name="TitleEditExpiratedTitle" xml:space="preserve">
+    <value>Expirated Title</value>
+  </data>
+  <data name="TitleEditAddSuccessMessage" xml:space="preserve">
+    <value>Title '{0}' added successfully!</value>
+  </data>
+  <data name="TitleEditExpiredTitleMessage" xml:space="preserve">
+    <value>The title '{0}' has expired.</value>
+  </data>
+  <data name="TitleEditEquipTitleMessage" xml:space="preserve">
+    <value>Equip the title '{0}' to this character?</value>
+  </data>
+  <data name="TitleEditDeleteTitleMessage" xml:space="preserve">
+    <value>Delete the title '{0}' from this character?</value>
+  </data>
+  <data name="TitleEditDeleteTitleSuccessMessage" xml:space="preserve">
+    <value>Title '{0}' deleted successfully!</value>
+  </data>
+  <data name="CooldownText" xml:space="preserve">
+    <value>Cooldown: {0} Seconds</value>
+  </data>
+  <data name="SkillPointText" xml:space="preserve">
+    <value>Skill Point: {0}</value>
+  </data>
+  <data name="MPCostText" xml:space="preserve">
+    <value>MP Cost: {0}</value>
+  </data>
+  <data name="SkillsDatabase" xml:space="preserve">
+    <value>Skills Database</value>
+  </data>
+  <data name="ItemCraftDatabase" xml:space="preserve">
+    <value>Item Craft Database</value>
+  </data>
+  <data name="NPCShopDatabase" xml:space="preserve">
+    <value>NPC Shop Database</value>
+  </data>
+  <data name="RareCardRewardDatabase" xml:space="preserve">
+    <value>Rare Card Reward Database</value>
+  </data>
+  <data name="DropGroupsDatabase" xml:space="preserve">
+    <value>Drop Groups Database</value>
+  </data>
+  <data name="TableEditorTitle" xml:space="preserve">
+    <value>RH Table Editor</value>
+  </data>
+  <data name="TableEditorDesc" xml:space="preserve">
+    <value>Edit .rh table files</value>
+  </data>
+  <data name="AddEffectEditorTitle" xml:space="preserve">
+    <value>Add Effect Editor</value>
+  </data>
+  <data name="AddEffectEditorDesc" xml:space="preserve">
+    <value>Edit addeffect .rh table file</value>
+  </data>
+  <data name="CashShopEditorTitle" xml:space="preserve">
+    <value>Cash Shop Editor</value>
+  </data>
+  <data name="CashShopEditorDesc" xml:space="preserve">
+    <value>Edit cash shop list .rh table file</value>
+  </data>
+  <data name="DropGroupEditorTitle" xml:space="preserve">
+    <value>Drop Group Editor</value>
+  </data>
+  <data name="DropGroupEditorDesc" xml:space="preserve">
+    <value>Edit dropgroup .rh table files</value>
+  </data>
+  <data name="EnemyEditorTitle" xml:space="preserve">
+    <value>Enemy Editor</value>
+  </data>
+  <data name="EnemyEditorDesc" xml:space="preserve">
+    <value>Edit enemy .rh table files</value>
+  </data>
+  <data name="ItemEditorTitle" xml:space="preserve">
+    <value>Item Editor</value>
+  </data>
+  <data name="ItemEditorDesc" xml:space="preserve">
+    <value>Edit item lists .rh table files</value>
+  </data>
+  <data name="NPCEditorTitle" xml:space="preserve">
+    <value>NPC Editor</value>
+  </data>
+  <data name="NPCEditorDesc" xml:space="preserve">
+    <value>Edit npc .rh table files</value>
+  </data>
+  <data name="NPCShopEditorTitle" xml:space="preserve">
+    <value>NPC Shops Editor</value>
+  </data>
+  <data name="NPCShopEditorDesc" xml:space="preserve">
+    <value>Edit npc shops .rh table files</value>
+  </data>
+  <data name="PackageEditorTitle" xml:space="preserve">
+    <value>Package Editor</value>
+  </data>
+  <data name="PackageEditorDesc" xml:space="preserve">
+    <value>Edit package .rh table files</value>
+  </data>
+  <data name="PetEditorTitle" xml:space="preserve">
+    <value>Pet Editor</value>
+  </data>
+  <data name="PetEditorDesc" xml:space="preserve">
+    <value>Edit pet .rh table files</value>
+  </data>
+  <data name="QuestEditorTitle" xml:space="preserve">
+    <value>Quest Editor</value>
+  </data>
+  <data name="QuestEditorDesc" xml:space="preserve">
+    <value>Edit quest .rh table files</value>
+  </data>
+  <data name="RandomRuneEditorTitle" xml:space="preserve">
+    <value>Random Box Editor</value>
+  </data>
+  <data name="RandomRuneEditorDesc" xml:space="preserve">
+    <value>Edit randomrune .rh table file</value>
+  </data>
+  <data name="SkillEditorTitle" xml:space="preserve">
+    <value>Skill Editor</value>
+  </data>
+  <data name="SkillEditorDesc" xml:space="preserve">
+    <value>Edit skills .rh table files</value>
+  </data>
+  <data name="SetItemEditorTitle" xml:space="preserve">
+    <value>Set Item Editor</value>
+  </data>
+  <data name="SetItemEditorDesc" xml:space="preserve">
+    <value>Edit setitem .rh table file</value>
+  </data>
+  <data name="TitleEditorTitle" xml:space="preserve">
+    <value>Title Editor</value>
+  </data>
+  <data name="TitleEditorDesc" xml:space="preserve">
+    <value>Edit title .rh table file</value>
+  </data>
+  <data name="WorldEditorTitle" xml:space="preserve">
+    <value>World Editor</value>
+  </data>
+  <data name="WorldEditorDesc" xml:space="preserve">
+    <value>Edit world .rh table files</value>
+  </data>
+  <data name="ItemListDatabaseDesc" xml:space="preserve">
+    <value>Item List</value>
+  </data>
+  <data name="ItemCraftListDatabaseDesc" xml:space="preserve">
+    <value>Item Craft List</value>
+  </data>
+  <data name="SkillListDatabaseDesc" xml:space="preserve">
+    <value>Skill List</value>
+  </data>
+  <data name="NPCShopListDatabaseDesc" xml:space="preserve">
+    <value>NPC Shops List</value>
+  </data>
+  <data name="RareCardRewardListDatabaseDesc" xml:space="preserve">
+    <value>Rare Card Reward List</value>
+  </data>
+  <data name="DropGroupItemListDatabaseDesc" xml:space="preserve">
+    <value>Drop Group Item List</value>
+  </data>
+  <data name="CreateSQLiteDatabaseMessage" xml:space="preserve">
+    <value>Create a new database?</value>
+  </data>
+  <data name="CreateSQLiteDatabaseSuccessMessage" xml:space="preserve">
+    <value>Database created successfully!</value>
+  </data>
+  <data name="CreateSQLiteDatabaseCancelMessage" xml:space="preserve">
+    <value>Operation was cancelled.</value>
+  </data>
+  <data name="OldValue" xml:space="preserve">
+    <value>Old Value</value>
+  </data>
+  <data name="NewValue" xml:space="preserve">
+    <value>New Value</value>
+  </data>
+  <data name="SQLServerCredentialsMessage" xml:space="preserve">
+    <value>SQL server credentials not set. Please set the credentials in the Settings page.</value>
+  </data>
+  <data name="SQLServerCredentialsTitle" xml:space="preserve">
+    <value>Empty SQL Server Credentials</value>
+  </data>
+  <data name="Confirmation" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="Information" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="CryptorInvalidRHFileMessage" xml:space="preserve">
+    <value>The rh file data format is incorrect.</value>
+  </data>
+  <data name="CryptorDataTableFileErrorMessage" xml:space="preserve">
+    <value>Failed to convert DataTable to {0}</value>
+  </data>
+  <data name="GMDatabaseInvalidFolderMessage" xml:space="preserve">
+    <value>The selected folder does not contain the required '.rh' files.</value>
+  </data>
+  <data name="GMDatabaseMissingFilesMessage" xml:space="preserve">
+    <value>Required .rh table files are missing. The following required files are missing</value>
+  </data>
+  <data name="GMDatabaseCreatingDatabaseMessage" xml:space="preserve">
+    <value>Creating database...</value>
+  </data>
+  <data name="GMDatabaseProcessingMessage" xml:space="preserve">
+    <value>Processing {0}...</value>
+  </data>
+  <data name="GMDatabaseOperationCompleteMessage" xml:space="preserve">
+    <value>Operation complete.</value>
+  </data>
+  <data name="GMDatabaseOperationCanceledMessage" xml:space="preserve">
+    <value>Operation canceled.</value>
+  </data>
+  <data name="GMDatabaseDatabaseDeleteMessage" xml:space="preserve">
+    <value>Existing database file deleted.</value>
+  </data>
+  <data name="DataTableManagerLoadFileError" xml:space="preserve">
+    <value>Error loading rh file</value>
+  </data>
+  <data name="DataTableManagerMissingFileError" xml:space="preserve">
+    <value>The file '{0}' does not exist in the folder '{1}' or its subdirectories.</value>
+  </data>
+  <data name="DataTableManagerSaveFileErrorMessage" xml:space="preserve">
+    <value>Error saving file</value>
+  </data>
+  <data name="DataTableManagerSaveFileMessage" xml:space="preserve">
+    <value>Save changes to file</value>
+  </data>
+  <data name="DataTableManagerSearchMessage" xml:space="preserve">
+    <value>Found the 1st occurrence from the top. The end of the table has been reached.</value>
+  </data>
+  <data name="DataTableManagerSearchReplaceMessage" xml:space="preserve">
+    <value>Replaced text on row {0}, column {1}.</value>
+  </data>
+  <data name="DataTableManagerReplaceCountMessage" xml:space="preserve">
+    <value>Replaced {0} occurrences.</value>
+  </data>
+  <data name="DataTableManagerCountMessage" xml:space="preserve">
+    <value>Count: {0} matches in entire table.</value>
+  </data>
+  <data name="DataTableManagerSearchNotFoundMessage" xml:space="preserve">
+    <value>Search text '{0}' not found.</value>
+  </data>
+  <data name="DataTableManagerSearchEndMessage" xml:space="preserve">
+    <value>End of data reached.</value>
+  </data>
+  <data name="DataTableManagerMissingStringFileError" xml:space="preserve">
+    <value>The file '{0}' does not exist in the same directory as {1}.</value>
+  </data>
+  <data name="DataTableManagerFolderSetMessage" xml:space="preserve">
+    <value>Table folder has been set to '{0}'</value>
+  </data>
+  <data name="ReducePhysicalDamage" xml:space="preserve">
+    <value>Reduce Physical Damage</value>
+  </data>
+  <data name="ReduceMagicDamage" xml:space="preserve">
+    <value>Reduce Magic Damage</value>
+  </data>
+  <data name="SellValue" xml:space="preserve">
+    <value>Sell Value</value>
+  </data>
+  <data name="AugmentLevel" xml:space="preserve">
+    <value>Augment Level</value>
+  </data>
+  <data name="OptionSkillDamagePlus" xml:space="preserve">
+    <value>Skill Damage +</value>
+  </data>
+  <data name="OptionSkillCooldownLess" xml:space="preserve">
+    <value>Skill Cooldown -</value>
+  </data>
+  <data name="OptionSkillNotFound" xml:space="preserve">
+    <value>NotFound</value>
+  </data>
+  <data name="OptionSkillWeapon" xml:space="preserve">
+    <value>Weapon</value>
+  </data>
+  <data name="OptionSkillCurse" xml:space="preserve">
+    <value>Curse</value>
+  </data>
+  <data name="OptionSkillBlackSorcery" xml:space="preserve">
+    <value>Black Sorcery</value>
+  </data>
+  <data name="OptionSkillSummon" xml:space="preserve">
+    <value>Summon</value>
+  </data>
+  <data name="OptionSkillTactical" xml:space="preserve">
+    <value>Tactical</value>
+  </data>
+  <data name="OptionSkillHeavyWeapon" xml:space="preserve">
+    <value>Heavy Weapon</value>
+  </data>
+  <data name="OptionSkillFirearm" xml:space="preserve">
+    <value>Firearm</value>
+  </data>
+  <data name="OptionSkillWind" xml:space="preserve">
+    <value>Wind</value>
+  </data>
+  <data name="OptionSkillWater" xml:space="preserve">
+    <value>Water</value>
+  </data>
+  <data name="OptionSkillFire" xml:space="preserve">
+    <value>Fire</value>
+  </data>
+  <data name="OptionSkillLight" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="OptionSkillEarth" xml:space="preserve">
+    <value>Earth</value>
+  </data>
+  <data name="OptionSkillKiGong" xml:space="preserve">
+    <value>Ki Gong</value>
+  </data>
+  <data name="OptionSkillSavage" xml:space="preserve">
+    <value>Savage</value>
+  </data>
+  <data name="OptionSkillSpecial" xml:space="preserve">
+    <value>Special</value>
+  </data>
+  <data name="OptionSkillFighting" xml:space="preserve">
+    <value>Fighting</value>
+  </data>
+  <data name="OptionSkillUnknown" xml:space="preserve">
+    <value>Unknown Skill Name</value>
+  </data>
+  <data name="ValidFor" xml:space="preserve">
+    <value>Valid For</value>
+  </data>
+  <data name="MissingDatabaseMessage" xml:space="preserve">
+    <value>Table Database not found. Be sure to create the database first on SQLite Database Manager page.</value>
+  </data>
+  <data name="MissingDatabaseTitle" xml:space="preserve">
+    <value>SQlite Database Not Found</value>
+  </data>
+  <data name="MissingTableMessage" xml:space="preserve">
+    <value>The database file ({0}) is missing tables. The following required tables are missing in the database:</value>
+  </data>
+  <data name="ServiceMissingTableMessage" xml:space="preserve">
+    <value>Please ensure you have created the database with the required tables.</value>
+  </data>
+  <data name="MissingTableMessage2" xml:space="preserve">
+    <value>Please ensure you have created the database with the required tables.</value>
+  </data>
+  <data name="WindowsServiceErrorMessage" xml:space="preserve">
+    <value>The window class should be derived from {0}</value>
+  </data>
+  <data name="WindowsServiceServiceErrorMessage" xml:space="preserve">
+    <value>Window is not registered as service.</value>
+  </data>
+  <data name="TableEditorsDedicated" xml:space="preserve">
+    <value>Dedicated Table Editors</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Lobby" xml:space="preserve">
+    <value>Lobby</value>
+  </data>
+  <data name="SaveClass" xml:space="preserve">
+    <value>Save Class</value>
+  </data>
+  <data name="SaveFocus" xml:space="preserve">
+    <value>Save Focus</value>
+  </data>
+  <data name="Experience" xml:space="preserve">
+    <value>Experience</value>
+  </data>
+  <data name="UnusedSkillPoints" xml:space="preserve">
+    <value>Unused Skill Points</value>
+  </data>
+  <data name="RessurectionScrolls" xml:space="preserve">
+    <value>Ressurection Scrolls</value>
+  </data>
+  <data name="WarehouseSlots" xml:space="preserve">
+    <value>Warehouse Slots</value>
+  </data>
+  <data name="TotalSkillPoints" xml:space="preserve">
+    <value>Total Skill Points</value>
+  </data>
+  <data name="GuildExp" xml:space="preserve">
+    <value>Guild Exp</value>
+  </data>
+  <data name="RestrictCharacter" xml:space="preserve">
+    <value>Restrict Character</value>
+  </data>
+  <data name="BlockMovement" xml:space="preserve">
+    <value>Block Movement</value>
+  </data>
+  <data name="CanTrade" xml:space="preserve">
+    <value>Can Trade</value>
+  </data>
+  <data name="IsAdmin" xml:space="preserve">
+    <value>Is Admin</value>
+  </data>
+  <data name="WarehouseGold" xml:space="preserve">
+    <value>Warehouse Gold</value>
+  </data>
+  <data name="FortuneLine1" xml:space="preserve">
+    <value>Fortune Line 1</value>
+  </data>
+  <data name="FortuneLine2" xml:space="preserve">
+    <value>Fortune Line 2</value>
+  </data>
+  <data name="Zen" xml:space="preserve">
+    <value>Zen</value>
+  </data>
+  <data name="BonusCash" xml:space="preserve">
+    <value>Bonus Cash</value>
+  </data>
+  <data name="TriggerItems" xml:space="preserve">
+    <value>(Hidden) Trigger Items</value>
+  </data>
+  <data name="SanctionType" xml:space="preserve">
+    <value>Sanction Type</value>
+  </data>
+  <data name="SanctionCount" xml:space="preserve">
+    <value>Sanction Count</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="AddSanction" xml:space="preserve">
+    <value>Add Sanction</value>
+  </data>
+  <data name="RemoveSanction" xml:space="preserve">
+    <value>Remove Sanction</value>
+  </data>
+  <data name="PersonalWarehouse" xml:space="preserve">
+    <value>Personal Warehouse</value>
+  </data>
+  <data name="AccountWarehouse" xml:space="preserve">
+    <value>Account Warehouse</value>
+  </data>
+  <data name="SlotsUsed" xml:space="preserve">
+    <value>Slots Used</value>
+  </data>
+  <data name="GoldStored" xml:space="preserve">
+    <value>Gold Stored</value>
+  </data>
+  <data name="SaveStorage" xml:space="preserve">
+    <value>Save Storage</value>
+  </data>
+  <data name="SaveAccountStorage" xml:space="preserve">
+    <value>Save Account Storage</value>
+  </data>
+  <data name="CurrentTitle" xml:space="preserve">
+    <value>Current Title:</value>
+  </data>
+  <data name="UnequipTitle" xml:space="preserve">
+    <value>Unequip Title</value>
+  </data>
+  <data name="EquipTitle" xml:space="preserve">
+    <value>Equip Title</value>
+  </data>
+  <data name="DeleteTitle" xml:space="preserve">
+    <value>Delete Title</value>
+  </data>
+  <data name="AddTitle" xml:space="preserve">
+    <value>Add Title</value>
+  </data>
+  <data name="TitleList" xml:space="preserve">
+    <value>Title List</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="ReleaseDate" xml:space="preserve">
+    <value>Release Date</value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>Reason</value>
+  </data>
+  <data name="AddedBy" xml:space="preserve">
+    <value>Added By</value>
+  </data>
+  <data name="RemovedBy" xml:space="preserve">
+    <value>Removed By</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="TitleName" xml:space="preserve">
+    <value>Title Name</value>
+  </data>
+  <data name="TitleType" xml:space="preserve">
+    <value>Title Type</value>
+  </data>
+  <data name="RemainTime" xml:space="preserve">
+    <value>Remain Time</value>
+  </data>
+  <data name="ExpireTime" xml:space="preserve">
+    <value>Expire Time</value>
+  </data>
+  <data name="SearchFindText" xml:space="preserve">
+    <value>Find what:</value>
+  </data>
+  <data name="Find" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="Replace" xml:space="preserve">
+    <value>Replace</value>
+  </data>
+  <data name="FindNext" xml:space="preserve">
+    <value>Find Next</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Count</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ReplaceAll" xml:space="preserve">
+    <value>Replace All</value>
+  </data>
+  <data name="SearchReplaceText" xml:space="preserve">
+    <value>Replace with:</value>
+  </data>
+  <data name="CraftList" xml:space="preserve">
+    <value>Craft List</value>
+  </data>
+  <data name="SelectedItem" xml:space="preserve">
+    <value>Selected Item</value>
+  </data>
+  <data name="CraftMaterials" xml:space="preserve">
+    <value>Craft Materials</value>
+  </data>
+  <data name="CraftCost" xml:space="preserve">
+    <value>Craft Cost</value>
+  </data>
+  <data name="CraftGroups" xml:space="preserve">
+    <value>Craft Groups</value>
+  </data>
+  <data name="SelectedSkill" xml:space="preserve">
+    <value>Selected Skill</value>
+  </data>
+  <data name="SkillType" xml:space="preserve">
+    <value>Skill Type</value>
+  </data>
+  <data name="SearchCharacterMessage" xml:space="preserve">
+    <value>Search for a character</value>
+  </data>
+  <data name="SearchDeletedCharacterMessage" xml:space="preserve">
+    <value>Search for a deleted character</value>
+  </data>
+  <data name="NoDataFoundMessage" xml:space="preserve">
+    <value>No data found</value>
+  </data>
+  <data name="CharacterEditDeleteCharacterMessage" xml:space="preserve">
+    <value>Delete the character '{0}'?</value>
+  </data>
+  <data name="CharacterEditRestoreCharacterMessage" xml:space="preserve">
+    <value>Restore the character '{0}'?</value>
+  </data>
+  <data name="CharacterEditDeleteSuccessMessage" xml:space="preserve">
+    <value>Character '{0}' deleted.</value>
+  </data>
+  <data name="CharacterEditRestoreSuccessMessage" xml:space="preserve">
+    <value>Character '{0}' restored.</value>
+  </data>
+  <data name="CouponInvalidMessage" xml:space="preserve">
+    <value>The coupon code is invalid. It must have 20 characters and contain only letters and numbers.</value>
+  </data>
+  <data name="CouponAddMessage" xml:space="preserve">
+    <value>Add the coupon '{0}' ?</value>
+  </data>
+  <data name="CouponDeleteMessage" xml:space="preserve">
+    <value>Delete the coupon '{0}' ?</value>
+  </data>
+  <data name="CouponDuplicateMessage" xml:space="preserve">
+    <value>The coupon '{0}' already exists.</value>
+  </data>
+  <data name="CouponAddSuccessMessage" xml:space="preserve">
+    <value>Coupon added successfully!</value>
+  </data>
+  <data name="CouponDeleteSuccessMessage" xml:space="preserve">
+    <value>Coupon deleted successfully!</value>
+  </data>
+  <data name="SelectItem" xml:space="preserve">
+    <value>Select a Item</value>
+  </data>
+  <data name="ItemState" xml:space="preserve">
+    <value>Item State</value>
   </data>
 </root>

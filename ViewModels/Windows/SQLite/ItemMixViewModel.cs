@@ -19,7 +19,7 @@ namespace RHToolkit.ViewModels.Windows
             _itemDataManager = itemDataManager;
             _itemMixFilterUpdateTimer = new()
             {
-                Interval = 400,
+                Interval = 500,
                 AutoReset = false
             };
             _itemMixFilterUpdateTimer.Elapsed += ItemMixFilterUpdateTimerElapsed;
@@ -41,7 +41,7 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error: {ex.Message}", "Error");
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
             }
         }
         #endregion
@@ -140,7 +140,6 @@ namespace RHToolkit.ViewModels.Windows
             return false;
         }
 
-
         private void RefreshView()
         {
             Application.Current.Dispatcher.Invoke(ItemMixDataView.Refresh);
@@ -180,10 +179,10 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"Item Craft";
+        private string _title = $"Item Craft List";
 
         [ObservableProperty]
-        private string? _openMessage = "Open a file";
+        private string? _openMessage = Resources.OpenFile;
 
         [ObservableProperty]
         private ItemDataManager _itemDataManager;

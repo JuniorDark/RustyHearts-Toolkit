@@ -46,8 +46,8 @@
                             <control:ItemSlot
                                 AddItemCommand="{Binding DataContext.AddStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding SlotIndex}"
-                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 InventorySize="{Binding DataContext.CharacterData.StorageCount, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 RemoveItemCommand="{Binding DataContext.RemoveStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -72,8 +72,8 @@
                             <control:ItemSlot
                                 AddItemCommand="{Binding DataContext.AddStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding SlotIndex}"
-                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 InventorySize="{Binding DataContext.CharacterData.StorageCount, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 RemoveItemCommand="{Binding DataContext.RemoveStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -98,8 +98,8 @@
                             <control:ItemSlot
                                 AddItemCommand="{Binding DataContext.AddStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding SlotIndex}"
-                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 InventorySize="{Binding DataContext.CharacterData.StorageCount, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 RemoveItemCommand="{Binding DataContext.RemoveStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -124,8 +124,8 @@
                             <control:ItemSlot
                                 AddItemCommand="{Binding DataContext.AddStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding SlotIndex}"
-                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 InventorySize="{Binding DataContext.CharacterData.StorageCount, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 RemoveItemCommand="{Binding DataContext.RemoveStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -150,8 +150,8 @@
                             <control:ItemSlot
                                 AddItemCommand="{Binding DataContext.AddStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding SlotIndex}"
-                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 InventorySize="{Binding DataContext.CharacterData.StorageCount, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 RemoveItemCommand="{Binding DataContext.RemoveStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -178,8 +178,8 @@
                             <control:ItemSlot
                                 AddItemCommand="{Binding DataContext.AddAccountStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding SlotIndex}"
-                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 InventorySize="{Binding DataContext.AccountStorageCount, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 RemoveItemCommand="{Binding DataContext.RemoveAccountStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -204,8 +204,8 @@
                             <control:ItemSlot
                                 AddItemCommand="{Binding DataContext.AddAccountStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding SlotIndex}"
-                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 InventorySize="{Binding DataContext.AccountStorageCount, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 RemoveItemCommand="{Binding DataContext.RemoveAccountStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -230,8 +230,8 @@
                             <control:ItemSlot
                                 AddItemCommand="{Binding DataContext.AddAccountStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding SlotIndex}"
-                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 InventorySize="{Binding DataContext.AccountStorageCount, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 RemoveItemCommand="{Binding DataContext.RemoveAccountStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -256,8 +256,8 @@
                             <control:ItemSlot
                                 AddItemCommand="{Binding DataContext.AddAccountStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding SlotIndex}"
-                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 InventorySize="{Binding DataContext.AccountStorageCount, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 RemoveItemCommand="{Binding DataContext.RemoveAccountStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -282,8 +282,8 @@
                             <control:ItemSlot
                                 AddItemCommand="{Binding DataContext.AddAccountStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                 CommandParameter="{Binding SlotIndex}"
-                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 InventorySize="{Binding DataContext.AccountStorageCount, RelativeSource={RelativeSource AncestorType=Window}}"
+                                ItemDataViewModel="{Binding ItemDataViewModel}"
                                 RemoveItemCommand="{Binding DataContext.RemoveAccountStorageItemCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -332,10 +332,14 @@
                     x:Name="PersonalTab"
                     Width="150"
                     Foreground="White"
-                    Header="Personal Warehouse"
+                    Header="{x:Static rs:Resources.PersonalWarehouse}"
                     Style="{StaticResource lb_tab}"
                     Tag="Page">
                     <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="196*" />
+                            <ColumnDefinition Width="103*" />
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -346,13 +350,14 @@
 
                         <StackPanel
                             Grid.Row="0"
-                            Margin="0,5"
-                            HorizontalAlignment="Center"
+                            Grid.ColumnSpan="2"
+                            Margin="57,5,0,5"
+                            HorizontalAlignment="Left"
                             Orientation="Horizontal">
                             <TextBlock
                                 VerticalAlignment="Center"
                                 Foreground="White"
-                                Text="Slots Used" />
+                                Text="{x:Static rs:Resources.SlotsUsed}" />
                             <TextBox
                                 Width="100"
                                 Height="30"
@@ -365,13 +370,17 @@
 
                         <ContentControl
                             Grid.Row="1"
+                            Grid.RowSpan="2"
+                            Grid.ColumnSpan="2"
+                            Margin="0,0,0,26"
                             Content="{Binding CurrentStoragePage}"
                             ContentTemplateSelector="{StaticResource StoragePageTemplateSelector}" />
                         <StackPanel
                             Grid.Row="2"
                             Grid.Column="0"
-                            Margin="24,5"
-                            VerticalAlignment="Top"
+                            Grid.ColumnSpan="2"
+                            Margin="24,0,24,0"
+                            VerticalAlignment="Center"
                             Orientation="Horizontal">
                             <Image
                                 Cursor="Help"
@@ -381,8 +390,8 @@
                         </StackPanel>
                         <StackPanel
                             Grid.Row="2"
-                            Grid.Column="1"
-                            HorizontalAlignment="Center"
+                            Margin="118,0,0,0"
+                            HorizontalAlignment="Left"
                             Orientation="Horizontal">
                             <StackPanel.Background>
                                 <ImageBrush ImageSource="/Assets/images/window/lb_box/lb_def_box10.png" />
@@ -404,14 +413,14 @@
                         </StackPanel>
                         <StackPanel
                             Grid.Row="3"
-                            Grid.Column="1"
-                            Margin="0,5"
-                            HorizontalAlignment="Center"
+                            Grid.ColumnSpan="2"
+                            Margin="27,5,0,5"
+                            HorizontalAlignment="Left"
                             Orientation="Horizontal">
                             <TextBlock
                                 VerticalAlignment="Center"
                                 Foreground="White"
-                                Text="Gold Stored" />
+                                Text="{x:Static rs:Resources.GoldStored}" />
                             <TextBox
                                 Width="150"
                                 Height="30"
@@ -424,14 +433,14 @@
                         <Button
                             x:Name="btnSave"
                             Grid.Row="4"
-                            Grid.ColumnSpan="3"
+                            Grid.ColumnSpan="2"
                             Width="150"
-                            Margin="0,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Bottom"
+                            Margin="74,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
                             Background="Transparent"
                             Command="{Binding SaveStorageCommand}"
-                            Content="Save Storage"
+                            Content="{x:Static rs:Resources.SaveStorage}"
                             Cursor="Hand"
                             Foreground="White"
                             IsEnabled="{Binding IsButtonEnabled}"
@@ -444,7 +453,7 @@
                     x:Name="AccountTab"
                     Width="150"
                     Foreground="White"
-                    Header="Account Warehouse"
+                    Header="{x:Static rs:Resources.AccountWarehouse}"
                     Style="{StaticResource lb_tab}"
                     Tag="Page">
                     <Grid>
@@ -464,7 +473,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 Foreground="White"
-                                Text="Account Slots Used" />
+                                Text="{x:Static rs:Resources.SlotsUsed}" />
                             <TextBox
                                 Width="100"
                                 Height="30"
@@ -523,7 +532,7 @@
                             <TextBlock
                                 VerticalAlignment="Center"
                                 Foreground="White"
-                                Text="Account Gold Stored" />
+                                Text="{x:Static rs:Resources.GoldStored}" />
                             <TextBox
                                 Width="150"
                                 Height="30"
@@ -543,7 +552,7 @@
                             VerticalAlignment="Bottom"
                             Background="Transparent"
                             Command="{Binding SaveAccountStorageCommand}"
-                            Content="Save Account Storage"
+                            Content="{x:Static rs:Resources.SaveAccountStorage}"
                             Cursor="Hand"
                             Foreground="White"
                             IsEnabled="{Binding IsButtonEnabled}"
