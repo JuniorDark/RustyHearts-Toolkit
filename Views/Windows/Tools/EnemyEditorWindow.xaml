@@ -96,7 +96,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -138,7 +138,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Group}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -182,7 +182,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Name}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2829,7 +2829,7 @@
                                     VerticalAlignment="Bottom"
                                     Command="{Binding DataContext.OpenQuestItemDropGroupItemListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nQuestItemDropGroup], RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Content="Preview"
+                                    Content="{x:Static rs:Resources.Preview}"
                                     Cursor="Hand"
                                     Foreground="White"
                                     Style="{StaticResource lb_def_button02}" />
@@ -2872,7 +2872,7 @@
                                     VerticalAlignment="Bottom"
                                     Command="{Binding DataContext.OpenQuestItemDropGroupItemListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nHiddenQuestItemDropGroup00], RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Content="Preview"
+                                    Content="{x:Static rs:Resources.Preview}"
                                     Cursor="Hand"
                                     Foreground="White"
                                     Style="{StaticResource lb_def_button02}" />
@@ -2915,7 +2915,7 @@
                                     VerticalAlignment="Bottom"
                                     Command="{Binding DataContext.OpenChampionItemDropGroupItemListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nChampionItemDropGroup], RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Content="Preview"
+                                    Content="{x:Static rs:Resources.Preview}"
                                     Cursor="Hand"
                                     Foreground="White"
                                     Style="{StaticResource lb_def_button02}" />
@@ -2958,7 +2958,7 @@
                                     VerticalAlignment="Bottom"
                                     Command="{Binding DataContext.OpenInstanceItemDropGroupItemListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nInstanceItemDropGroup], RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Content="Preview"
+                                    Content="{x:Static rs:Resources.Preview}"
                                     Cursor="Hand"
                                     Foreground="White"
                                     Style="{StaticResource lb_def_button02}" />
@@ -3001,7 +3001,7 @@
                                     VerticalAlignment="Bottom"
                                     Command="{Binding DataContext.OpenRareCardItemDropGroupItemListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nRareCardItemDropGroup], RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Content="Preview"
+                                    Content="{x:Static rs:Resources.Preview}"
                                     Cursor="Hand"
                                     Foreground="White"
                                     Style="{StaticResource lb_def_button02}" />
@@ -3090,7 +3090,7 @@
                                                     VerticalAlignment="Bottom"
                                                     Command="{Binding DataContext.OpenItemDropGroupItemListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                     CommandParameter="{Binding ItemDropGroup}"
-                                                    Content="Preview"
+                                                    Content="{x:Static rs:Resources.Preview}"
                                                     Cursor="Hand"
                                                     Foreground="White"
                                                     Style="{StaticResource lb_def_button02}" />
@@ -3153,7 +3153,7 @@
                                                     VerticalAlignment="Bottom"
                                                     Command="{Binding DataContext.OpenItemDropGroupItemListFCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                     CommandParameter="{Binding ItemDropGroupF}"
-                                                    Content="Preview"
+                                                    Content="{x:Static rs:Resources.Preview}"
                                                     Cursor="Hand"
                                                     Foreground="White"
                                                     Style="{StaticResource lb_def_button02}" />
@@ -3216,7 +3216,7 @@
                                                     VerticalAlignment="Bottom"
                                                     Command="{Binding DataContext.OpenItemDropGroupItemListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                     CommandParameter="{Binding FatigueItemDropGroup}"
-                                                    Content="Preview"
+                                                    Content="{x:Static rs:Resources.Preview}"
                                                     Cursor="Hand"
                                                     Foreground="White"
                                                     Style="{StaticResource lb_def_button02}" />
@@ -3279,7 +3279,7 @@
                                                     VerticalAlignment="Bottom"
                                                     Command="{Binding DataContext.OpenItemDropGroupItemListFCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                     CommandParameter="{Binding FatigueItemDropGroupF}"
-                                                    Content="Preview"
+                                                    Content="{x:Static rs:Resources.Preview}"
                                                     Cursor="Hand"
                                                     Foreground="White"
                                                     Style="{StaticResource lb_def_button02}" />
@@ -3342,7 +3342,7 @@
                                                     VerticalAlignment="Bottom"
                                                     Command="{Binding DataContext.OpenItemDropGroupItemListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                     CommandParameter="{Binding HiddenItemDropGroup}"
-                                                    Content="Preview"
+                                                    Content="{x:Static rs:Resources.Preview}"
                                                     Cursor="Hand"
                                                     Foreground="White"
                                                     Style="{StaticResource lb_def_button02}" />
@@ -3403,7 +3403,7 @@
                                                     VerticalAlignment="Bottom"
                                                     Command="{Binding DataContext.OpenItemDropGroupItemListFCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                     CommandParameter="{Binding HiddenItemDropGroupF}"
-                                                    Content="Preview"
+                                                    Content="{x:Static rs:Resources.Preview}"
                                                     Cursor="Hand"
                                                     Foreground="White"
                                                     Style="{StaticResource lb_def_button02}" />

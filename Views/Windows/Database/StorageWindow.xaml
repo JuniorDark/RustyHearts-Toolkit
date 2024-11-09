@@ -319,7 +319,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <ui:TabView
+            <TabControl
                 x:Name="tabView"
                 Grid.Row="2"
                 Grid.ColumnSpan="2"
@@ -336,10 +336,6 @@
                     Style="{StaticResource lb_tab}"
                     Tag="Page">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="196*" />
-                            <ColumnDefinition Width="103*" />
-                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -347,51 +343,40 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-
                         <StackPanel
                             Grid.Row="0"
-                            Grid.ColumnSpan="2"
-                            Margin="57,5,0,5"
-                            HorizontalAlignment="Left"
+                            Margin="0,5,0,5"
+                            HorizontalAlignment="Center"
                             Orientation="Horizontal">
                             <TextBlock
                                 VerticalAlignment="Center"
                                 Foreground="White"
                                 Text="{x:Static rs:Resources.SlotsUsed}" />
                             <TextBox
-                                Width="100"
+                                Width="150"
                                 Height="30"
-                                Margin="10,0"
+                                Margin="10,0,0,0"
                                 d:Text="180"
                                 IsReadOnly="True"
                                 Template="{StaticResource lb_textbox11}"
                                 Text="{Binding CharacterData.StorageCount}" />
                         </StackPanel>
-
                         <ContentControl
                             Grid.Row="1"
-                            Grid.RowSpan="2"
-                            Grid.ColumnSpan="2"
-                            Margin="0,0,0,26"
+                            Margin="0,0,0,0"
                             Content="{Binding CurrentStoragePage}"
                             ContentTemplateSelector="{StaticResource StoragePageTemplateSelector}" />
-                        <StackPanel
+                        <Image
                             Grid.Row="2"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="2"
-                            Margin="24,0,24,0"
-                            VerticalAlignment="Center"
-                            Orientation="Horizontal">
-                            <Image
-                                Cursor="Help"
-                                Source="/Assets/icon/icon_help_tip.png"
-                                Stretch="None"
-                                ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="2"
-                            Margin="118,0,0,0"
+                            Margin="20,0,0,0"
                             HorizontalAlignment="Left"
+                            Cursor="Help"
+                            Source="/Assets/icon/icon_help_tip.png"
+                            Stretch="None"
+                            ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
+                        <StackPanel
+                            Grid.Row="2"
+                            HorizontalAlignment="Center"
                             Orientation="Horizontal">
                             <StackPanel.Background>
                                 <ImageBrush ImageSource="/Assets/images/window/lb_box/lb_def_box10.png" />
@@ -401,7 +386,7 @@
                                 Foreground="White"
                                 Template="{StaticResource lb_arrow_left}" />
                             <TextBlock
-                                Margin="10,0"
+                                Margin="10,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Foreground="White"
@@ -413,9 +398,8 @@
                         </StackPanel>
                         <StackPanel
                             Grid.Row="3"
-                            Grid.ColumnSpan="2"
-                            Margin="27,5,0,5"
-                            HorizontalAlignment="Left"
+                            Margin="0,5,0,5"
+                            HorizontalAlignment="Center"
                             Orientation="Horizontal">
                             <TextBlock
                                 VerticalAlignment="Center"
@@ -424,19 +408,17 @@
                             <TextBox
                                 Width="150"
                                 Height="30"
-                                Margin="10,0"
+                                Margin="10,0,0,0"
                                 d:Text="100"
                                 IsReadOnly="True"
                                 Template="{StaticResource lb_textbox11}"
                                 Text="{Binding CharacterData.StorageGold, StringFormat={}{0:N0}}" />
                         </StackPanel>
                         <Button
-                            x:Name="btnSave"
                             Grid.Row="4"
-                            Grid.ColumnSpan="2"
                             Width="150"
-                            Margin="74,0,0,0"
-                            HorizontalAlignment="Left"
+                            Margin="0,10,0,0"
+                            HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Background="Transparent"
                             Command="{Binding SaveStorageCommand}"
@@ -445,10 +427,9 @@
                             Foreground="White"
                             IsEnabled="{Binding IsButtonEnabled}"
                             Style="{StaticResource lb_def_button02}"
-                            ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                            ToolTip="{x:Static rs:Resources.SaveStorage}" />
                     </Grid>
                 </TabItem>
-
                 <TabItem
                     x:Name="AccountTab"
                     Width="150"
@@ -464,10 +445,9 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-
                         <StackPanel
                             Grid.Row="0"
-                            Margin="0,5"
+                            Margin="0,5,0,5"
                             HorizontalAlignment="Center"
                             Orientation="Horizontal">
                             <TextBlock
@@ -475,34 +455,29 @@
                                 Foreground="White"
                                 Text="{x:Static rs:Resources.SlotsUsed}" />
                             <TextBox
-                                Width="100"
+                                Width="150"
                                 Height="30"
-                                Margin="10,0"
+                                Margin="10,0,0,0"
                                 d:Text="180"
                                 IsReadOnly="True"
                                 Template="{StaticResource lb_textbox11}"
                                 Text="{Binding AccountStorageCount}" />
                         </StackPanel>
-
                         <ContentControl
                             Grid.Row="1"
+                            Margin="0,0,0,0"
                             Content="{Binding CurrentAccountStoragePage}"
                             ContentTemplateSelector="{StaticResource AccountStoragePageTemplateSelector}" />
+                        <Image
+                            Grid.Row="2"
+                            Margin="20,0,0,0"
+                            HorizontalAlignment="Left"
+                            Cursor="Help"
+                            Source="/Assets/icon/icon_help_tip.png"
+                            Stretch="None"
+                            ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
                         <StackPanel
                             Grid.Row="2"
-                            Grid.Column="0"
-                            Margin="24,5"
-                            VerticalAlignment="Top"
-                            Orientation="Horizontal">
-                            <Image
-                                Cursor="Help"
-                                Source="/Assets/icon/icon_help_tip.png"
-                                Stretch="None"
-                                ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
-                        </StackPanel>
-                        <StackPanel
-                            Grid.Row="2"
-                            Grid.Column="1"
                             HorizontalAlignment="Center"
                             Orientation="Horizontal">
                             <StackPanel.Background>
@@ -513,7 +488,7 @@
                                 Foreground="White"
                                 Template="{StaticResource lb_arrow_left}" />
                             <TextBlock
-                                Margin="10,0"
+                                Margin="10,0,0,0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Foreground="White"
@@ -525,8 +500,7 @@
                         </StackPanel>
                         <StackPanel
                             Grid.Row="3"
-                            Grid.Column="1"
-                            Margin="0,5"
+                            Margin="0,5,0,5"
                             HorizontalAlignment="Center"
                             Orientation="Horizontal">
                             <TextBlock
@@ -536,20 +510,18 @@
                             <TextBox
                                 Width="150"
                                 Height="30"
-                                Margin="10,0"
+                                Margin="10,0,0,0"
                                 d:Text="100"
                                 IsReadOnly="True"
                                 Template="{StaticResource lb_textbox11}"
                                 Text="{Binding AccountStorageGold, StringFormat={}{0:N0}}" />
                         </StackPanel>
                         <Button
-                            x:Name="btnSaveAccountStorage"
                             Grid.Row="4"
-                            Grid.ColumnSpan="3"
                             Width="150"
-                            Margin="0,0"
+                            Margin="0,10,0,0"
                             HorizontalAlignment="Center"
-                            VerticalAlignment="Bottom"
+                            VerticalAlignment="Center"
                             Background="Transparent"
                             Command="{Binding SaveAccountStorageCommand}"
                             Content="{x:Static rs:Resources.SaveAccountStorage}"
@@ -557,10 +529,10 @@
                             Foreground="White"
                             IsEnabled="{Binding IsButtonEnabled}"
                             Style="{StaticResource lb_def_button02}"
-                            ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                            ToolTip="{x:Static rs:Resources.SaveAccountStorage}" />
                     </Grid>
                 </TabItem>
-            </ui:TabView>
+            </TabControl>
             <!--  Close Button  -->
             <Button
                 x:Name="btnClose"

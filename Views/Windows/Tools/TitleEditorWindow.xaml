@@ -17,6 +17,8 @@
     MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
     bh:WindowBehaviors.EnableDragMove="True"
     d:DataContext="{d:DesignInstance Type=windows:TitleEditorViewModel}"
+    d:MaxHeight="720"
+    d:MaxWidth="1280"
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/icon/icon_cashtitle.png"
@@ -43,13 +45,11 @@
     <ContentControl Template="{StaticResource box_violet02}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -76,571 +76,592 @@
 
             <control:EditorMenu Grid.Row="1" />
 
-            <Grid
+            <UniformGrid
                 Grid.Row="1"
-                Grid.RowSpan="4"
                 Grid.Column="1"
+                Columns="3">
+                <FrameworkElement x:Name="c3" />
+            </UniformGrid>
+
+            <TabControl
+                Grid.Row="1"
+                Grid.RowSpan="2"
+                Grid.Column="1"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
                 Visibility="{Binding IsSelectedItemVisible}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <ui:TabView
-                    x:Name="tabView"
-                    Grid.Row="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Background="Transparent"
-                    BorderBrush="Transparent"
-                    Visibility="{Binding IsSelectedItemVisible}">
-                    <TabItem
-                        x:Name="tab1"
-                        Width="200"
-                        Height="Auto"
-                        Foreground="White"
-                        Header="Title Details"
-                        Style="{StaticResource lb_tab}">
+                <TabItem
+                    x:Name="tab1"
+                    Width="{Binding ElementName=c3, Path=ActualWidth}"
+                    Height="Auto"
+                    Foreground="White"
+                    Header="{x:Static rs:Resources.Details}"
+                    Style="{StaticResource lb_tab}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
+                            <ui:NumberBox
+                                Width="Auto"
+                                Margin="0,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Maximum="2147483647"
+                                Minimum="0"
+                                Value="{Binding DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                <i:Interaction.Behaviors>
+                                    <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                </i:Interaction.Behaviors>
+                            </ui:NumberBox>
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.Type}" />
+                            <ComboBox
+                                Width="Auto"
+                                Height="24"
+                                Margin="0,0,0,0"
+                                IsReadOnly="True"
+                                ItemsSource="{Binding TitleTypeItems}"
+                                SelectedValue="{Binding DataTableManager.SelectedItem[nTitleType], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                SelectedValuePath="ID"
+                                Style="{StaticResource ComboBoxStyle}"
+                                Template="{StaticResource lb_combobox}">
+                                <i:Interaction.Behaviors>
+                                    <bh:DataRowViewBehavior Column="nTitleType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                </i:Interaction.Behaviors>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.Category}" />
+                            <ComboBox
+                                Width="Auto"
+                                Height="24"
+                                Margin="0,0,0,0"
+                                IsReadOnly="True"
+                                ItemsSource="{Binding TitleCategoryItems}"
+                                SelectedValue="{Binding DataTableManager.SelectedItem[nTitleCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                SelectedValuePath="ID"
+                                Style="{StaticResource ComboBoxStyle}"
+                                Template="{StaticResource lb_combobox}">
+                                <i:Interaction.Behaviors>
+                                    <bh:DataRowViewBehavior Column="nTitleCategory" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                </i:Interaction.Behaviors>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.RemainTimeMinutes}" />
+                            <ui:NumberBox
+                                Width="Auto"
+                                Margin="0,0,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Maximum="525960"
+                                Minimum="-1"
+                                Value="{Binding DataTableManager.SelectedItem[nRemainTime], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                <i:Interaction.Behaviors>
+                                    <bh:DataRowViewBehavior Column="nRemainTime" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                </i:Interaction.Behaviors>
+                            </ui:NumberBox>
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Margin="5,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <CheckBox
+                                Margin="0,0,0,0"
+                                Content="{x:Static rs:Resources.TitleEditor_Rechargeable}"
+                                Foreground="White"
+                                IsChecked="{Binding DataTableManager.SelectedItem[nRechargeAble], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                Template="{StaticResource lb_checkbox}">
+                                <i:Interaction.Behaviors>
+                                    <bh:DataRowViewBehavior Column="nRechargeAble" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                </i:Interaction.Behaviors>
+                            </CheckBox>
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Grid.ColumnSpan="3"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCEditor_SpriteName}" />
+                            <TextBox
+                                Width="Auto"
+                                Height="30"
+                                Margin="0,0"
+                                d:Text="{x:Static rs:Resources.Name}"
+                                FontSize="12"
+                                Template="{StaticResource lb_textbox11}"
+                                Text="{Binding DataTableManager.SelectedItem[szTitleSpriteName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                <i:Interaction.Behaviors>
+                                    <bh:DataRowViewBehavior Column="szTitleSpriteName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                </i:Interaction.Behaviors>
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="34"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_Name}" />
+                            <TextBox
+                                Width="Auto"
+                                Height="30"
+                                Margin="0,0"
+                                d:Text="{x:Static rs:Resources.Name}"
+                                FontSize="12"
+                                Template="{StaticResource lb_textbox11}"
+                                Text="{Binding DataTableManager.SelectedItemString[wszTitleName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                <i:Interaction.Behaviors>
+                                    <bh:DataRowViewBehavior Column="wszTitleName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
+                                </i:Interaction.Behaviors>
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_Description}" />
+                            <TextBox
+                                Width="Auto"
+                                Height="60"
+                                Margin="0,0"
+                                d:Text="{x:Static rs:Resources.Name}"
+                                FontSize="12"
+                                Template="{StaticResource lb_textbox11}"
+                                Text="{Binding DataTableManager.SelectedItemString[wszTitleDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                TextWrapping="Wrap">
+                                <i:Interaction.Behaviors>
+                                    <bh:DataRowViewBehavior Column="wszTitleDesc" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
+                                </i:Interaction.Behaviors>
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalName}" />
+                            <TextBox
+                                Width="Auto"
+                                Height="30"
+                                Margin="0,0"
+                                d:Text="{x:Static rs:Resources.Name}"
+                                FontSize="12"
+                                Template="{StaticResource lb_textbox11}"
+                                Text="{Binding DataTableManager.SelectedItem[wszTitleName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
+                                <i:Interaction.Behaviors>
+                                    <bh:DataRowViewBehavior Column="wszTitleName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                </i:Interaction.Behaviors>
+                            </TextBox>
+                        </StackPanel>
+                        <StackPanel
+                            Grid.Row="5"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalDescription}" />
+                            <TextBox
+                                Width="Auto"
+                                Height="60"
+                                Margin="0,0"
+                                d:Text="Title Description"
+                                FontSize="12"
+                                Template="{StaticResource lb_textbox11}"
+                                Text="{Binding DataTableManager.SelectedItem[wszTitleDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                TextWrapping="Wrap">
+                                <i:Interaction.Behaviors>
+                                    <bh:DataRowViewBehavior Column="wszTitleDesc" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                </i:Interaction.Behaviors>
+                            </TextBox>
+                        </StackPanel>
+                    </Grid>
+                </TabItem>
+                <TabItem
+                    x:Name="tab2"
+                    Width="{Binding ElementName=c3, Path=ActualWidth}"
+                    Foreground="White"
+                    Header="{x:Static rs:Resources.Effect}"
+                    Style="{StaticResource lb_tab}">
+                    <ScrollViewer
+                        Grid.Row="1"
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Center"
+                        HorizontalScrollBarVisibility="Auto"
+                        Style="{StaticResource lb_scrollviewer}"
+                        VerticalScrollBarVisibility="Auto"
+                        Visibility="{Binding IsSelectedItemVisible}">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <StackPanel
                                 Grid.Row="0"
-                                Grid.Column="0"
-                                Margin="5,0,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
+                                Margin="0,0,0,10"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Title ID" />
-                                <ui:NumberBox
-                                    Width="150"
-                                    Margin="0,0,0,0"
+                                <Label
+                                    x:Name="lbOptionSearch"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    Maximum="2147483647"
-                                    Minimum="0"
-                                    Value="{Binding DataTableManager.SelectedItem[nID], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                    </i:Interaction.Behaviors>
-                                </ui:NumberBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                Margin="5,0,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Title Type" />
-                                <ComboBox
-                                    Width="150"
-                                    Height="24"
-                                    Margin="0,0,0,0"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding TitleTypeItems}"
-                                    SelectedValue="{Binding DataTableManager.SelectedItem[nTitleType], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nTitleType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                    </i:Interaction.Behaviors>
-                                </ComboBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="0"
-                                Grid.Column="2"
-                                Margin="5,0,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Title Category" />
-                                <ComboBox
-                                    Width="150"
-                                    Height="24"
-                                    Margin="0,0,0,0"
-                                    IsReadOnly="True"
-                                    ItemsSource="{Binding TitleCategoryItems}"
-                                    SelectedValue="{Binding DataTableManager.SelectedItem[nTitleCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                    SelectedValuePath="ID"
-                                    Style="{StaticResource ComboBoxStyle}"
-                                    Template="{StaticResource lb_combobox}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nTitleCategory" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                    </i:Interaction.Behaviors>
-                                </ComboBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="0"
-                                Grid.Column="3"
-                                Margin="5,0,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Remain Time (Minutes)" />
-                                <ui:NumberBox
-                                    Width="120"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Maximum="525960"
-                                    Minimum="-1"
-                                    Value="{Binding DataTableManager.SelectedItem[nRemainTime], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nRemainTime" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                    </i:Interaction.Behaviors>
-                                </ui:NumberBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="1"
-                                Grid.Column="0"
-                                Margin="5,0,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <CheckBox
-                                    Margin="0,0,0,0"
-                                    Content="Rechargeable"
-                                    Foreground="White"
-                                    IsChecked="{Binding DataTableManager.SelectedItem[nRechargeAble], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                    Template="{StaticResource lb_checkbox}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nRechargeAble" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                    </i:Interaction.Behaviors>
-                                </CheckBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Grid.ColumnSpan="3"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Title Sprite Name" />
+                                    HorizontalContentAlignment="Center"
+                                    Content="{x:Static rs:Resources.Filter}"
+                                    Style="{StaticResource ArialMSWhite}" />
                                 <TextBox
+                                    x:Name="tbOptionSearch"
                                     Width="300"
-                                    Height="30"
-                                    Margin="0,0"
-                                    d:Text="Name"
+                                    Height="35"
+                                    CaretBrush="White"
+                                    FontFamily="{StaticResource ArialUnicodeMS}"
                                     FontSize="12"
-                                    Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataTableManager.SelectedItem[szTitleSpriteName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="szTitleSpriteName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="2"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="34"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Title Name" />
-                                <TextBox
-                                    Width="600"
-                                    Height="30"
-                                    Margin="0,0"
-                                    d:Text="Name"
-                                    FontSize="12"
-                                    Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataTableManager.SelectedItemString[wszTitleName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="wszTitleName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="3"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="4"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Title Description" />
-                                <TextBox
-                                    Width="600"
-                                    Height="30"
-                                    Margin="0,0"
-                                    d:Text="Name"
-                                    FontSize="12"
-                                    Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataTableManager.SelectedItemString[wszTitleDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                    TextWrapping="Wrap">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="wszTitleDesc" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="4"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="4"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Title Name (Internal)" />
-                                <TextBox
-                                    Width="600"
-                                    Height="30"
-                                    Margin="0,0"
-                                    d:Text="Name"
-                                    FontSize="12"
-                                    Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataTableManager.SelectedItem[wszTitleName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="wszTitleName" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="5"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="4"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Title Description (Internal)" />
-                                <TextBox
-                                    Width="600"
-                                    Height="30"
-                                    Margin="0,0"
-                                    d:Text="Title Description"
-                                    FontSize="12"
-                                    Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataTableManager.SelectedItem[wszTitleDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                    TextWrapping="Wrap">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="wszTitleDesc" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                    </i:Interaction.Behaviors>
-                                </TextBox>
-                            </StackPanel>
-                        </Grid>
-                    </TabItem>
-                    <TabItem
-                        x:Name="tab2"
-                        Width="200"
-                        Foreground="White"
-                        Header="Title Effect"
-                        Style="{StaticResource lb_tab}">
-                        <ScrollViewer
-                            Grid.Row="1"
-                            Grid.ColumnSpan="3"
-                            Margin="0,0,0,0"
-                            HorizontalScrollBarVisibility="Auto"
-                            Style="{StaticResource lb_scrollviewer}"
-                            VerticalScrollBarVisibility="Auto"
-                            Visibility="{Binding IsSelectedItemVisible}">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <TextBlock
-                                    Grid.Row="2"
-                                    Margin="0,20,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    d:Text="Ttile Effect"
-                                    Background="Transparent"
-                                    FontSize="14"
                                     Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="{Binding TitleEffectText}" />
+                                    Tag="{x:Static rs:Resources.OptionNameID}"
+                                    Template="{StaticResource lb_textbox}"
+                                    Text="{Binding AddEffectSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </StackPanel>
+                            <ItemsControl
+                                Grid.Row="1"
+                                AlternationCount="{Binding TitleEffects.Count}"
+                                ItemsSource="{Binding TitleEffects}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel
+                                            Margin="0,10,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            Orientation="Vertical">
+                                            <TextBlock Foreground="White">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} {1}">
+                                                        <Binding
+                                                            Converter="{StaticResource IndexToNumberConverter}"
+                                                            Path="(ItemsControl.AlternationIndex)"
+                                                            RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                        <Binding Source="{x:Static rs:Resources.TitleEffect}" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                            <ComboBox
+                                                x:Name="cbAddEffect"
+                                                Width="600"
+                                                Height="24"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                DisplayMemberPath="Name"
+                                                IsReadOnly="True"
+                                                ItemsSource="{Binding DataContext.ItemDataManager.AddEffectItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                SelectedValue="{Binding AddEffectID}"
+                                                SelectedValuePath="ID"
+                                                Style="{StaticResource ComboBoxStyle}"
+                                                Template="{StaticResource lb_combobox}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <TextBlock
+                                Grid.Row="2"
+                                Margin="0,20,0,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                d:Text="Ttile Effect"
+                                Background="Transparent"
+                                FontSize="14"
+                                Foreground="Gold"
+                                Style="{StaticResource ArialMS}"
+                                Text="{Binding TitleEffectText}" />
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem
+                    x:Name="tab3"
+                    Width="{Binding ElementName=c3, Path=ActualWidth}"
+                    Foreground="White"
+                    Header="{x:Static rs:Resources.Data}"
+                    Style="{StaticResource lb_tab}">
+                    <ItemsControl AlternationCount="{Binding TitleOptions.Count}" ItemsSource="{Binding TitleOptions}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
                                 <StackPanel
-                                    Grid.Row="0"
-                                    Grid.ColumnSpan="2"
-                                    Margin="0,0,0,10"
-                                    HorizontalAlignment="Center"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <Label
-                                        x:Name="lbOptionSearch"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        HorizontalContentAlignment="Center"
-                                        Content="Filter"
-                                        Style="{StaticResource ArialMSWhite}" />
+                                    <TextBlock Foreground="White">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.TitleEditor_DummyName}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <TextBox
-                                        x:Name="tbOptionSearch"
-                                        Width="300"
-                                        Height="35"
-                                        CaretBrush="White"
-                                        FontFamily="{StaticResource ArialUnicodeMS}"
-                                        FontSize="12"
-                                        Foreground="Gold"
-                                        Tag="{x:Static rs:Resources.OptionNameID}"
-                                        Template="{StaticResource lb_textbox}"
-                                        Text="{Binding AddEffectSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                                <ItemsControl
-                                    Grid.Row="1"
-                                    AlternationCount="{Binding TitleEffects.Count}"
-                                    ItemsSource="{Binding TitleEffects}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel
-                                                Margin="0,10,0,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
-                                                Orientation="Vertical">
-                                                <TextBlock
-                                                    HorizontalAlignment="Center"
-                                                    Foreground="White"
-                                                    Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Title Effect {0}'}" />
-                                                <ComboBox
-                                                    x:Name="cbAddEffect"
-                                                    Width="600"
-                                                    Height="24"
-                                                    HorizontalAlignment="Left"
-                                                    VerticalAlignment="Top"
-                                                    DisplayMemberPath="Name"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding DataContext.ItemDataManager.AddEffectItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                                    SelectedValue="{Binding AddEffectID}"
-                                                    SelectedValuePath="ID"
-                                                    Style="{StaticResource ComboBoxStyle}"
-                                                    Template="{StaticResource lb_combobox}" />
-                                                <TextBlock
-                                                    x:Name="lbTotalItem"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    d:Text="Showing {0}/{1} Items"
-                                                    Foreground="Gold"
-                                                    Style="{StaticResource ArialMS}">
-                                                    <TextBlock.Text>
-                                                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
-                                                            <Binding ElementName="cbAddEffect" Path="Items.Count" />
-                                                            <Binding Path="DataContext.ItemDataManager.AddEffectItems.Count" RelativeSource="{RelativeSource AncestorType=ItemsControl}" />
-                                                        </MultiBinding>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-
-                            </Grid>
-                        </ScrollViewer>
-
-                    </TabItem>
-                    <TabItem
-                        x:Name="tab3"
-                        Width="200"
-                        Foreground="White"
-                        Header="Title Data"
-                        Style="{StaticResource lb_tab}">
-                        <ItemsControl AlternationCount="{Binding TitleOptions.Count}" ItemsSource="{Binding TitleOptions}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel
+                                        Width="Auto"
+                                        Height="30"
                                         Margin="0,0,0,0"
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Top"
-                                        Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat=' Dummy Name {0}'}" />
-                                        <TextBox
-                                            Width="600"
-                                            Height="30"
-                                            Margin="0,0,0,0"
-                                            d:Text="Name"
-                                            FontSize="12"
-                                            Template="{StaticResource lb_textbox11}"
-                                            Text="{Binding DummyName, UpdateSourceTrigger=PropertyChanged}" />
-                                        <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat=' Mdata Name {0}'}" />
-                                        <TextBox
-                                            Width="600"
-                                            Height="30"
-                                            Margin="0,0,0,0"
-                                            d:Text="Name"
-                                            FontSize="12"
-                                            Template="{StaticResource lb_textbox11}"
-                                            Text="{Binding MdataName, UpdateSourceTrigger=PropertyChanged}" />
-                                        <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat=' Motion Name {0}'}" />
-                                        <TextBox
-                                            Width="600"
-                                            Height="30"
-                                            Margin="0,0,0,0"
-                                            d:Text="Name"
-                                            FontSize="12"
-                                            Template="{StaticResource lb_textbox11}"
-                                            Text="{Binding MotionName, UpdateSourceTrigger=PropertyChanged}" />
-                                        <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat=' OffSet {0}'}" />
-                                        <TextBox
-                                            Width="600"
-                                            Height="30"
-                                            Margin="0,0,0,0"
-                                            d:Text="Name"
-                                            FontSize="12"
-                                            Template="{StaticResource lb_textbox11}"
-                                            Text="{Binding OffSet, UpdateSourceTrigger=PropertyChanged}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </TabItem>
-                </ui:TabView>
-            </Grid>
-
-            <DataGrid
-                x:Name="dataGridView"
-                Grid.Row="3"
-                Grid.Column="0"
-                Height="450"
-                MinWidth="550"
-                Margin="5,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                bh:DataGridBehavior.EnableScrollIntoView="True"
-                bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
-                AutoGenerateColumns="False"
-                Background="Transparent"
-                BorderBrush="#FF0F0D0A"
-                CanUserAddRows="False"
-                ColumnWidth="*"
-                EnableRowVirtualization="True"
-                FontFamily="{StaticResource ArialUnicodeMS}"
-                FontSize="12"
-                HeadersVisibility="Column"
-                HorizontalGridLinesBrush="White"
-                HorizontalScrollBarVisibility="Auto"
-                ItemsSource="{Binding DataTableManager.DataTable}"
-                SelectedItem="{Binding DataTableManager.SelectedItem}"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
-                Template="{StaticResource lb_datagrid}"
-                VerticalGridLinesBrush="White"
-                Visibility="{Binding IsVisible}">
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-                <DataGrid.InputBindings>
-                    <KeyBinding
-                        Key="I"
-                        Command="{Binding DataTableManager.AddNewRowCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="D"
-                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                        Modifiers="Control" />
-                    <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.UndoChangesCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.RedoChangesCommand}"
-                        Modifiers="Ctrl+Shift" />
-                    <KeyBinding
-                        Key="F"
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Find"
-                        Modifiers="Ctrl" />
-                </DataGrid.InputBindings>
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="Auto"
-                        Binding="{Binding nID}"
-                        Header="ID"
-                        IsReadOnly="True" />
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding wszTitleName}"
-                        Header="{x:Static rs:Resources.Name}"
-                        IsReadOnly="True" />
-                </DataGrid.Columns>
-            </DataGrid>
+                                        d:Text="{x:Static rs:Resources.Name}"
+                                        FontSize="12"
+                                        Template="{StaticResource lb_textbox11}"
+                                        Text="{Binding DummyName, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Foreground="White">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.TitleEditor_MdataName}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBox
+                                        Width="Auto"
+                                        Height="30"
+                                        Margin="0,0,0,0"
+                                        d:Text="{x:Static rs:Resources.Name}"
+                                        FontSize="12"
+                                        Template="{StaticResource lb_textbox11}"
+                                        Text="{Binding MdataName, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Foreground="White">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.TitleEditor_MotionName}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBox
+                                        Width="Auto"
+                                        Height="30"
+                                        Margin="0,0,0,0"
+                                        d:Text="{x:Static rs:Resources.Name}"
+                                        FontSize="12"
+                                        Template="{StaticResource lb_textbox11}"
+                                        Text="{Binding MotionName, UpdateSourceTrigger=PropertyChanged}" />
+                                    <TextBlock Foreground="White">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.TitleEditor_OffSet}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
+                                    <TextBox
+                                        Width="Auto"
+                                        Height="30"
+                                        Margin="0,0,0,0"
+                                        d:Text="{x:Static rs:Resources.Name}"
+                                        FontSize="12"
+                                        Template="{StaticResource lb_textbox11}"
+                                        Text="{Binding OffSet, UpdateSourceTrigger=PropertyChanged}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </TabItem>
+            </TabControl>
 
             <Grid
-                Grid.Row="4"
+                Grid.Row="2"
                 Grid.Column="0"
                 Visibility="{Binding IsVisible}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <TextBlock
+                <DataGrid
+                    x:Name="dataGridView"
                     Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
+                    Width="500"
+                    Height="450"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    d:Text="Showing {0}/{1} Items"
-                    Foreground="Gold"
-                    Style="{StaticResource ArialMS}">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
-                            <Binding ElementName="dataGridView" Path="Items.Count" />
-                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+                    bh:DataGridBehavior.EnableScrollIntoView="True"
+                    bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ColumnWidth="*"
+                    EnableRowVirtualization="True"
+                    HeadersVisibility="Column"
+                    HorizontalScrollBarVisibility="Auto"
+                    ItemsSource="{Binding DataTableManager.DataTable}"
+                    SelectedItem="{Binding DataTableManager.SelectedItem}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    Template="{StaticResource lb_datagrid}"
+                    Visibility="{Binding IsVisible}">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
+                            <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.InputBindings>
+                        <KeyBinding
+                            Key="I"
+                            Command="{Binding DataTableManager.AddNewRowCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="D"
+                            Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                            Modifiers="Control" />
+                        <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.UndoChangesCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.RedoChangesCommand}"
+                            Modifiers="Ctrl+Shift" />
+                        <KeyBinding
+                            Key="F"
+                            Command="{Binding OpenSearchDialogCommand}"
+                            CommandParameter="Find"
+                            Modifiers="Ctrl" />
+                    </DataGrid.InputBindings>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding nID}"
+                            Header="ID"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding wszTitleName}"
+                            Header="{x:Static rs:Resources.Name}"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    Margin="0,10,0,0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Orientation="Horizontal">
-                    <Label
-                        x:Name="lbSearch"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.Search}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <TextBox
-                        x:Name="tbSearch"
-                        Width="250"
-                        Height="34"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        CaretBrush="White"
-                        Foreground="Gold"
-                        Tag="{x:Static rs:Resources.SearchNameID}"
-                        Template="{StaticResource lb_textbox}"
-                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox
-                        x:Name="MatchCaseCheckBox"
-                        Grid.Row="3"
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        Grid.Row="0"
                         Grid.Column="0"
-                        Margin="10,0,0,0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.MatchCase}"
-                        IsChecked="{Binding MatchCase}"
-                        Template="{StaticResource lb_checkbox}" />
-                </StackPanel>
+                        d:Text="Showing {0}/{1} Items"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                                <Binding ElementName="dataGridView" Path="Items.Count" />
+                                <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                        <Label
+                            x:Name="lbSearch"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.Search}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <TextBox
+                            x:Name="tbSearch"
+                            Width="300"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            CaretBrush="White"
+                            Foreground="Gold"
+                            Tag="{x:Static rs:Resources.SearchNameID}"
+                            Template="{StaticResource lb_textbox}"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <CheckBox
+                            x:Name="MatchCaseCheckBox"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.MatchCase}"
+                            IsChecked="{Binding MatchCase}"
+                            Template="{StaticResource lb_checkbox}" />
+                    </StackPanel>
+                </Grid>
             </Grid>
+
             <TextBlock
                 Grid.Row="3"
                 Grid.ColumnSpan="3"

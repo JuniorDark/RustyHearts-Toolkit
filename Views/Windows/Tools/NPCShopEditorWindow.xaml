@@ -93,7 +93,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -117,7 +117,7 @@
                     Orientation="Vertical">
                     <CheckBox
                         Margin="0,0,0,0"
-                        Content="Preview"
+                        Content="{x:Static rs:Resources.Preview}"
                         Foreground="White"
                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nPreView], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Template="{StaticResource lb_checkbox}">
@@ -140,7 +140,7 @@
                         Width="400"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[wszNpcName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -157,12 +157,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Description" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
                         Width="400"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[wszEct], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -241,7 +241,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -263,12 +263,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Description" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
                         Width="400"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -531,12 +531,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Description" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
                         Width="500"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -604,12 +604,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Group" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Group}" />
                     <TextBox
                         Width="500"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[szGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -961,12 +961,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Description" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
                         Width="600"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -983,7 +983,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Group" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Group}" />
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
@@ -1010,7 +1010,7 @@
                         Width="300"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[szCharacterNum], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -1352,7 +1352,7 @@
                         Width="300"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[wszItemName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -1527,7 +1527,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
@@ -1603,7 +1603,7 @@
                         Width="300"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[wszNote00], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -1624,7 +1624,7 @@
                         Width="300"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[wszNote02], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -1692,7 +1692,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -1714,12 +1714,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Name" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Name}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">

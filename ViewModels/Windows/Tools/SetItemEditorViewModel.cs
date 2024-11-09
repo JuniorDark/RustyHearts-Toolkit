@@ -7,6 +7,7 @@ using RHToolkit.Models.MessageBox;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Windows.Tools.VM;
 using RHToolkit.Views.Windows;
+using System.ComponentModel;
 using System.Data;
 using System.Windows.Controls;
 
@@ -18,6 +19,7 @@ namespace RHToolkit.ViewModels.Windows
         private readonly IWindowsService _windowsService;
         private readonly IFrameService _frameService;
         private readonly System.Timers.Timer _filterUpdateTimer;
+        private readonly System.Timers.Timer _optionFilterUpdateTimer;
 
         public SetItemEditorViewModel(IWindowsService windowsService, IFrameService frameService, ItemDataManager itemDataManager)
         {
@@ -36,6 +38,17 @@ namespace RHToolkit.ViewModels.Windows
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
+
+            _optionFilterUpdateTimer = new()
+            {
+                Interval = 500,
+                AutoReset = false
+            };
+            _optionFilterUpdateTimer.Elapsed += OptionFilterUpdateTimerElapsed;
+
+            _optionView = CollectionViewSource.GetDefaultView(ItemDataManager.OptionItems);
+            _optionView.Filter = FilterOption;
+
             WeakReferenceMessenger.Default.Register<ItemDataMessage>(this);
             WeakReferenceMessenger.Default.Register<DataRowViewMessage>(this);
         }
@@ -444,6 +457,70 @@ namespace RHToolkit.ViewModels.Windows
         {
             ApplyFilter();
         }
+
+        #region Option Filter
+        [ObservableProperty]
+        private ICollectionView _optionView;
+
+        private readonly List<int> selectedOptions = [];
+        private bool FilterOption(object obj)
+        {
+            if (obj is NameID option)
+            {
+                if (option.ID == 0)
+                    return true;
+
+                if (DataTableManager.SelectedItem != null)
+                {
+                    var nSetOption00 = (int)DataTableManager.SelectedItem["nSetOption00"];
+                    var nSetOption01 = (int)DataTableManager.SelectedItem["nSetOption01"];
+                    var nSetOption02 = (int)DataTableManager.SelectedItem["nSetOption02"];
+                    var nSetOption03 = (int)DataTableManager.SelectedItem["nSetOption03"];
+                    var nSetOption04 = (int)DataTableManager.SelectedItem["nSetOption04"];
+
+                    selectedOptions.Add(nSetOption00);
+                    selectedOptions.Add(nSetOption01);
+                    selectedOptions.Add(nSetOption02);
+                    selectedOptions.Add(nSetOption03);
+                    selectedOptions.Add(nSetOption04);
+
+                    if (selectedOptions.Contains(option.ID))
+                        return true;
+                }
+
+                // text search filter
+                if (!string.IsNullOrEmpty(OptionSearch))
+                {
+                    string searchText = OptionSearch.ToLower();
+
+                    // Check if either option ID or option Name contains the search text
+                    if (!string.IsNullOrEmpty(option.ID.ToString()) && option.ID.ToString().Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+
+                    if (!string.IsNullOrEmpty(option.Name) && option.Name.Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        [ObservableProperty]
+        private string? _optionSearch;
+        partial void OnOptionSearchChanged(string? value)
+        {
+            _optionFilterUpdateTimer.Stop();
+            _optionFilterUpdateTimer.Start();
+        }
+
+        private void OptionFilterUpdateTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(OptionView.Refresh);
+        }
+        #endregion
         #endregion
 
         #region Properties

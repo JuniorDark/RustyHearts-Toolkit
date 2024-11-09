@@ -24,47 +24,47 @@
             FontSize="14"
             Foreground="White">
             <ui:MenuItem Header="{x:Static rs:Resources.MenuFile}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                <MenuItem Header="Open File..." Icon="{ui:SymbolIcon DocumentAdd24}">
+                <MenuItem Header="{x:Static rs:Resources.MenuOpenFile}" Icon="{ui:SymbolIcon DocumentAdd24}">
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="1"
-                        Header="Open npcshop.rh"
+                        Header="npcshop.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+1" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="2"
-                        Header="Open tradeshop.rh"
+                        Header="tradeshop.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+2" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="3"
-                        Header="Open itemmix.rh"
+                        Header="itemmix.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+3" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="4"
-                        Header="Open costumemix.rh"
+                        Header="costumemix.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+4" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="5"
-                        Header="Open shopitemvisiblefilter.rh"
+                        Header="shopitemvisiblefilter.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+5" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="6"
-                        Header="Open itempreview.rh"
+                        Header="itempreview.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+6" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="7"
-                        Header="Open itembroken.rh"
+                        Header="itembroken.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+7" />
                 </MenuItem>

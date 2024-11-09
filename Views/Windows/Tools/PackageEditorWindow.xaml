@@ -79,7 +79,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         MinWidth="140"
                         Margin="0,0,0,0"
@@ -101,12 +101,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Description" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Name"
+                        d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[szName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -122,7 +122,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Level Min" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_LevelMin}" />
                     <ui:NumberBox
                         MinWidth="140"
                         Margin="0,0,0,0"
@@ -143,7 +143,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Level Max" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_LevelMax}" />
                     <ui:NumberBox
                         MinWidth="140"
                         Margin="0,0,0,0"
@@ -164,7 +164,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Group" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Group}" />
                     <ui:NumberBox
                         MinWidth="140"
                         Margin="0,0,0,0"
@@ -185,7 +185,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Random Group" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_RandomGroup}" />
                     <ui:NumberBox
                         MinWidth="140"
                         Margin="0,0,0,0"
@@ -208,7 +208,7 @@
                     Orientation="Vertical">
                     <CheckBox
                         Margin="0,0,0,0"
-                        Content="Select Item Type"
+                        Content="{x:Static rs:Resources.PackageEditor_SelectItemType}"
                         Foreground="White"
                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nSelectItemType], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Template="{StaticResource lb_checkbox}">
@@ -226,7 +226,7 @@
                     Orientation="Vertical">
                     <CheckBox
                         Margin="0,0,0,0"
-                        Content="Take Item Type"
+                        Content="{x:Static rs:Resources.PackageEditor_TakeItemType}"
                         Foreground="White"
                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nTakeItemType], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Template="{StaticResource lb_checkbox}">
@@ -235,7 +235,6 @@
                         </i:Interaction.Behaviors>
                     </CheckBox>
                 </StackPanel>
-
                 <StackPanel
                     Grid.Row="3"
                     Grid.Column="0"
@@ -244,7 +243,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Class" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Class}" />
                     <ListView
                         Width="250"
                         Height="120"
@@ -268,7 +267,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Focus" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Focus}" />
                     <ListView
                         Width="250"
                         Height="120"
@@ -284,7 +283,6 @@
                         </i:Interaction.Behaviors>
                     </ListView>
                 </StackPanel>
-
                 <ScrollViewer
                     Grid.Row="4"
                     Grid.ColumnSpan="3"
@@ -307,8 +305,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.Item}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -340,7 +347,7 @@
                         x:Name="tab1"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Package Details"
+                        Header="{x:Static rs:Resources.PackageEditor_PackageDetails}"
                         Style="{StaticResource lb_tab}"
                         Tag="Page">
                         <Grid>
@@ -367,7 +374,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Package ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_PackageID}" />
                                 <ui:NumberBox
                                     Width="Auto"
                                     Margin="0,0,0,0"
@@ -384,11 +391,12 @@
                             <StackPanel
                                 Grid.Row="0"
                                 Grid.Column="1"
+                                Grid.ColumnSpan="2"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Package Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_PackageType}" />
                                 <ComboBox
                                     Width="Auto"
                                     Height="24"
@@ -402,7 +410,6 @@
                                     Style="{StaticResource ComboBoxStyle}"
                                     Template="{StaticResource lb_combobox}" />
                             </StackPanel>
-
                             <StackPanel
                                 Grid.Row="1"
                                 Grid.Column="0"
@@ -410,7 +417,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Rune Group 01" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_RuneGroup01}" />
                                 <ui:NumberBox
                                     Width="Auto"
                                     Margin="0,0,0,0"
@@ -431,7 +438,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Rune Group 02" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_RuneGroup02}" />
                                 <ui:NumberBox
                                     Width="Auto"
                                     Margin="0,0,0,0"
@@ -452,7 +459,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Rune Group 03" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_RuneGroup03}" />
                                 <ui:NumberBox
                                     Width="Auto"
                                     Margin="0,0,0,0"
@@ -475,12 +482,12 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Package Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_PackageName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItemString[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -497,7 +504,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Package Icon" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_PackageIcon}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -519,12 +526,12 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Package Description" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_PackageDescription}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="150"
                                     Margin="0,0"
-                                    d:Text="Description"
+                                    d:Text="{x:Static rs:Resources.Description}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItemString[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
@@ -542,12 +549,12 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Name (Internal)" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItem[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -564,12 +571,12 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Description (Internal)" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalDescription}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="150"
                                     Margin="0,0"
-                                    d:Text="Description"
+                                    d:Text="{x:Static rs:Resources.Description}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItem[wszDesc], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
@@ -585,7 +592,7 @@
                         x:Name="tab2"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Package Effect"
+                        Header="{x:Static rs:Resources.PackageEditor_PackageEffect}"
                         IsEnabled="{Binding DataContext.IsPackageEffectEnabled, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
@@ -617,9 +624,9 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Package Duration (Minutes)" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PackageEditor_PackageDuration}" />
                                 <ui:NumberBox
-                                    Width="150"
+                                    Width="220"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
@@ -638,7 +645,17 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Margin="0,10,0,0" Orientation="Vertical">
-                                                <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Effect {0}'}" />
+                                                <TextBlock Foreground="White">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} {1}">
+                                                            <Binding
+                                                                Converter="{StaticResource IndexToNumberConverter}"
+                                                                Path="(ItemsControl.AlternationIndex)"
+                                                                RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                            <Binding Source="{x:Static rs:Resources.Effect}" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
                                                 <ComboBox
                                                     Width="Auto"
                                                     Height="24"
@@ -666,7 +683,17 @@
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Margin="0,10,0,0" Orientation="Vertical">
-                                                <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Effect {0} Value'}" />
+                                                <TextBlock Foreground="White">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} {1}">
+                                                            <Binding
+                                                                Converter="{StaticResource IndexToNumberConverter}"
+                                                                Path="(ItemsControl.AlternationIndex)"
+                                                                RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                            <Binding Source="{x:Static rs:Resources.PackageEditor_EffectValue}" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
                                                 <ui:NumberBox
                                                     Width="Auto"
                                                     MinWidth="120"
@@ -688,19 +715,24 @@
                         x:Name="tab3"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Package Items"
+                        Header="{x:Static rs:Resources.PackageEditor_PackageItems}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <StackPanel
+                            <Image
                                 Grid.Row="0"
-                                Grid.ColumnSpan="2"
+                                Margin="0,5,0,5"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Cursor="Help"
+                                Source="/Assets/icon/icon_help_tip.png"
+                                Stretch="None"
+                                ToolTip="{x:Static rs:Resources.AttachItemHelp}" />
+                            <StackPanel
+                                Grid.Row="1"
                                 Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 Orientation="Horizontal">
@@ -766,7 +798,6 @@
                     SelectionMode="Single"
                     SelectionUnit="FullRow"
                     Template="{StaticResource lb_datagrid}">
-
                     <DataGrid.InputBindings>
                         <KeyBinding
                             Key="I"
@@ -981,12 +1012,11 @@
                 Visibility="{Binding IsSelectedItemVisible}">
                 <ContentControl.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
+                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDeleteRow}" />
                     </ContextMenu>
                 </ContentControl.ContextMenu>
             </ContentControl>
-
             <Grid
                 Grid.Row="3"
                 Grid.Column="0"
@@ -1014,8 +1044,8 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbSearch"
-                        Width="250"
-                        Height="34"
+                        Width="350"
+                        Height="40"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         CaretBrush="White"
@@ -1035,7 +1065,7 @@
                 </StackPanel>
             </Grid>
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

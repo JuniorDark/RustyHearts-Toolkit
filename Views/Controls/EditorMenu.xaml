@@ -122,6 +122,7 @@
         </Menu>
         <Menu
             Grid.Row="1"
+            HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontSize="14"
             Foreground="White">

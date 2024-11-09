@@ -24,23 +24,23 @@
             FontSize="14"
             Foreground="White">
             <ui:MenuItem Header="{x:Static rs:Resources.MenuFile}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                <MenuItem Header="Open Package File..." Icon="{ui:SymbolIcon DocumentAdd24}">
+                <MenuItem Header="{x:Static rs:Resources.MenuOpenFile}" Icon="{ui:SymbolIcon DocumentAdd24}">
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="1"
-                        Header="Open unionpackage.rh"
+                        Header="unionpackage.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+1" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="2"
-                        Header="Open unionpackage_local.rh"
+                        Header="unionpackage_local.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+2" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="3"
-                        Header="Open conditionselectitem.rh"
+                        Header="conditionselectitem.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+3" />
                 </MenuItem>

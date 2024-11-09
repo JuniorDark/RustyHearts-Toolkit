@@ -24,11 +24,11 @@
             FontSize="14"
             Foreground="White">
             <ui:MenuItem Header="{x:Static rs:Resources.MenuFile}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                <MenuItem Header="Open Enemy File..." Icon="{ui:SymbolIcon DocumentAdd24}">
+                <MenuItem Header="{x:Static rs:Resources.MenuOpenFile}" Icon="{ui:SymbolIcon DocumentAdd24}">
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="1"
-                        Header="Open enemy.rh"
+                        Header="enemy.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+1" />
                 </MenuItem>

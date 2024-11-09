@@ -112,7 +112,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -133,7 +133,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Max Range" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.MaxRange}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -154,7 +154,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Seed" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Seed}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -175,13 +175,20 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F3}%'}" />
+                    <TextBlock Foreground="Gold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{1}: {0:F3}%">
+                                <Binding Path="DataContext.DropItemCountTotal" RelativeSource="{RelativeSource AncestorType=ContentControl}" />
+                                <Binding Source="{x:Static rs:Resources.TotalDropRate}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Minimum="0"
                         Value="{Binding DataContext.DropItemCountTotalValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, RelativeSource={RelativeSource AncestorType=ContentControl}}" />
                 </StackPanel>
@@ -207,7 +214,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -228,7 +235,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Max Range" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.MaxRange}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -249,7 +256,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Max Count" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.MaxCount}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -270,13 +277,19 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
+                    <TextBlock Foreground="Gold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{1}: {0:F2}%">
+                                <Binding Path="DataContext.DropItemCountTotal" RelativeSource="{RelativeSource AncestorType=ContentControl}" />
+                                <Binding Source="{x:Static rs:Resources.TotalDropRate}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         LargeChange="0.01"
                         Minimum="0"
                         SmallChange="0.001"
@@ -305,7 +318,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -327,12 +340,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Note" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Note}" />
                     <TextBox
                         Width="300"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Note"
+                        d:Text="{x:Static rs:Resources.Note}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[wszNote], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -348,13 +361,19 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="Gold" Text="{Binding DataContext.DropItemCountTotal, RelativeSource={RelativeSource AncestorType=ContentControl}, StringFormat=' Total Drop Rate: {0:F2}%'}" />
+                    <TextBlock Foreground="Gold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{1}: {0:F2}%">
+                                <Binding Path="DataContext.DropItemCountTotal" RelativeSource="{RelativeSource AncestorType=ContentControl}" />
+                                <Binding Source="{x:Static rs:Resources.TotalDropRate}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         LargeChange="0.01"
                         Minimum="0"
                         SmallChange="0.001"
@@ -375,7 +394,6 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-
                 <StackPanel
                     Grid.Row="0"
                     Grid.Column="0"
@@ -383,7 +401,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -404,7 +422,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Max Range" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.MaxRange}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -425,7 +443,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Group" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Group}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -462,7 +480,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -491,7 +509,6 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-
                 <StackPanel
                     Grid.Row="0"
                     Grid.Column="0"
@@ -499,7 +516,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -521,12 +538,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Name" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Name}" />
                     <TextBox
                         Width="300"
                         Height="30"
                         Margin="0,0"
-                        d:Text="Note"
+                        d:Text="{x:Static rs:Resources.Note}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataContext.DataTableManager.SelectedItem[wszName], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}">
@@ -557,7 +574,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
@@ -578,7 +595,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Map" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.DropGroupEditor_Map}" />
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
@@ -599,7 +616,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="RiddleBox Group" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.DropGroupEditor_RiddleBoxGroup}" />
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
@@ -621,7 +638,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="Gold" Text="Description" />
+                    <TextBlock Foreground="Gold" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
                         Width="500"
                         Height="30"
@@ -657,7 +674,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -678,7 +695,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Remaining Probability" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.DropGroupEditor_RemainingProbability}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -701,7 +718,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="140"
                         Margin="0,0,0,0"
@@ -753,10 +770,16 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="Gold" Text="{Binding NDropItemCount, Converter={StaticResource DropItemCountConverter}, StringFormat=' Item Drop Rate: {0:F2}%'}" />
+                    <TextBlock Foreground="Gold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{1}: {0:F2}%">
+                                <Binding Converter="{StaticResource DropItemCountConverter}" Path="NDropItemCount" />
+                                <Binding Source="{x:Static rs:Resources.ItemDropRate}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                     <ui:NumberBox
                         Width="150"
-                        ClearButtonEnabled="False"
                         IsEnabled="{Binding DropItemCode, Converter={StaticResource ZeroToIsEnabledConverter}}"
                         LargeChange="100"
                         Maximum="100000"
@@ -769,7 +792,7 @@
                     Margin="10,10,-60,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Content="Link"
+                    Content="{x:Static rs:Resources.DropGroupEditor_Link}"
                     IsChecked="{Binding Link, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}" />
             </Grid>
@@ -808,16 +831,19 @@
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     Orientation="Vertical">
-                    <TextBlock
-                        FontSize="12"
-                        Foreground="Gold"
-                        Text="{Binding FDropItemCount, Converter={StaticResource DropItemCountConverter}, StringFormat=' Item Drop Rate: {0:F2}%'}" />
+                    <TextBlock Foreground="Gold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{1}: {0:F2}%">
+                                <Binding Converter="{StaticResource DropItemCountConverter}" Path="FDropItemCount" />
+                                <Binding Source="{x:Static rs:Resources.ItemDropRate}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         IsEnabled="{Binding DropItemCode, Converter={StaticResource ZeroToIsEnabledConverter}}"
                         LargeChange="0.01"
                         MaxDecimalPlaces="4"
@@ -831,7 +857,7 @@
                     Margin="10,10,-60,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Content="Link"
+                    Content="{x:Static rs:Resources.DropGroupEditor_Link}"
                     IsChecked="{Binding Link, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}" />
             </Grid>
@@ -868,14 +894,17 @@
                     Grid.Column="1"
                     Margin="0,0,10,0"
                     Orientation="Vertical">
-                    <TextBlock
-                        FontSize="12"
-                        Foreground="Gold"
-                        Text="{Binding FDropItemCount, Converter={StaticResource DropItemCountConverter}, StringFormat=' Item Drop Rate: {0:F2}%'}" />
+                    <TextBlock Foreground="Gold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{1}: {0:F2}%">
+                                <Binding Converter="{StaticResource DropItemCountConverter}" Path="FDropItemCount" />
+                                <Binding Source="{x:Static rs:Resources.ItemDropRate}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
-                        ClearButtonEnabled="False"
                         IsEnabled="{Binding DropItemCode, Converter={StaticResource ZeroToIsEnabledConverter}}"
                         LargeChange="0.01"
                         MaxDecimalPlaces="4"
@@ -921,16 +950,19 @@
                     Margin="0,0,0,0"
                     HorizontalAlignment="Left"
                     Orientation="Vertical">
-                    <TextBlock
-                        FontSize="12"
-                        Foreground="Gold"
-                        Text="{Binding FDropItemCount, Converter={StaticResource DropItemCountConverter}, StringFormat=' Item Drop Rate: {0:F2}%'}" />
+                    <TextBlock Foreground="Gold">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{1}: {0:F2}%">
+                                <Binding Converter="{StaticResource DropItemCountConverter}" Path="FDropItemCount" />
+                                <Binding Source="{x:Static rs:Resources.ItemDropRate}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         IsEnabled="{Binding DropItemCode, Converter={StaticResource ZeroToIsEnabledConverter}}"
                         LargeChange="0.01"
                         MaxDecimalPlaces="4"
@@ -945,13 +977,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Start" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.DropGroupEditor_Start}" />
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="{Binding DataContext.DataTableManager.SelectedItem[nMaxRange], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Minimum="0"
                         Value="{Binding Start, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -962,13 +993,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="End" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.DropGroupEditor_End}" />
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="{Binding DataContext.DataTableManager.SelectedItem[nMaxRange], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Minimum="0"
                         Value="{Binding End, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1027,7 +1057,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding SectionStart00, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1044,7 +1073,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding SectionEnd00, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1061,7 +1089,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding Probability00, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1078,7 +1105,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding SectionStart01, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1095,7 +1121,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding SectionEnd01, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1112,7 +1137,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding Probability01, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1129,7 +1153,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding SectionStart02, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1146,7 +1169,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding SectionEnd02, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1163,7 +1185,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding Probability02, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1180,7 +1201,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding SectionStart03, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1197,7 +1217,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding SectionEnd03, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1214,7 +1233,6 @@
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         Maximum="2147483647"
                         Minimum="0"
                         Value="{Binding Probability03, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1247,7 +1265,7 @@
                         FontSize="12"
                         Foreground="Gold"
                         Style="{StaticResource ArialMS}"
-                        Text="Bronze Card" />
+                        Text="{x:Static rs:Resources.BronzeCard}" />
                     <control:ItemSlot
                         AddItemCommand="{Binding DataContext.AddRareCardItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                         CommandParameter="0"
@@ -1260,7 +1278,7 @@
                         VerticalAlignment="Center"
                         Command="{Binding DataContext.OpenRareCardRewardItemListCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                         CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nBronzeCardID], RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                        Content="Preview"
+                        Content="{x:Static rs:Resources.Preview}"
                         Cursor="Hand"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}" />
@@ -1272,13 +1290,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Probability" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Probability}" />
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         LargeChange="0.01"
                         MaxDecimalPlaces="4"
                         Maximum="1"
@@ -1300,7 +1317,7 @@
                         FontSize="12"
                         Foreground="Gold"
                         Style="{StaticResource ArialMS}"
-                        Text="Silver Card" />
+                        Text="{x:Static rs:Resources.SilverCard}" />
                     <control:ItemSlot
                         AddItemCommand="{Binding DataContext.AddRareCardItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                         CommandParameter="1"
@@ -1313,7 +1330,7 @@
                         VerticalAlignment="Center"
                         Command="{Binding DataContext.OpenRareCardRewardItemListCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                         CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nSilverCardID], RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                        Content="Preview"
+                        Content="{x:Static rs:Resources.Preview}"
                         Cursor="Hand"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}" />
@@ -1325,13 +1342,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Probability" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Probability}" />
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         LargeChange="0.01"
                         MaxDecimalPlaces="4"
                         Maximum="1"
@@ -1353,7 +1369,7 @@
                         FontSize="12"
                         Foreground="Gold"
                         Style="{StaticResource ArialMS}"
-                        Text="Gold Card" />
+                        Text="{x:Static rs:Resources.GoldCard}" />
                     <control:ItemSlot
                         AddItemCommand="{Binding DataContext.AddRareCardItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                         CommandParameter="2"
@@ -1366,7 +1382,7 @@
                         VerticalAlignment="Center"
                         Command="{Binding DataContext.OpenRareCardRewardItemListCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                         CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nGoldCardID], RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                        Content="Preview"
+                        Content="{x:Static rs:Resources.Preview}"
                         Cursor="Hand"
                         Foreground="White"
                         Style="{StaticResource lb_def_button02}" />
@@ -1378,13 +1394,12 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Probability" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Probability}" />
                     <ui:NumberBox
                         Width="150"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        ClearButtonEnabled="False"
                         LargeChange="0.01"
                         MaxDecimalPlaces="4"
                         Maximum="1"
@@ -1445,9 +1460,7 @@
             RareCardRewardItemListItems="{StaticResource RareCardRewardItemListItems}"
             RiddleBoxDropGroupListItems="{StaticResource RiddleBoxDropGroupListItems}"
             WorldItemDropGroupListItems="{StaticResource WorldItemDropGroupListItems}" />
-
     </Window.Resources>
-
     <ContentControl Template="{StaticResource box_green02}">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -1520,12 +1533,10 @@
                         </ItemsControl>
                     </ScrollViewer>
                 </Grid>
-
             </Grid>
-
             <DataGrid
                 x:Name="dataGridView"
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="0"
                 Height="400"
                 MinWidth="550"
@@ -1584,9 +1595,8 @@
                         Modifiers="Ctrl" />
                 </DataGrid.InputBindings>
             </DataGrid>
-
             <Grid
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="0"
                 Visibility="{Binding IsVisible}">
                 <Grid.ColumnDefinitions>
@@ -1616,7 +1626,6 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-
                 <StackPanel
                     Grid.Row="1"
                     Grid.ColumnSpan="2"
@@ -1632,7 +1641,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbSearch"
-                        Width="250"
+                        Width="300"
                         Height="34"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1652,14 +1661,13 @@
                 </StackPanel>
             </Grid>
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="15"
                 Foreground="White"
                 Text="{Binding OpenMessage}" />
-
         </Grid>
     </ContentControl>
 </Window>

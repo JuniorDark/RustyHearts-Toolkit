@@ -104,7 +104,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -203,7 +203,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Name}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1580,7 +1580,7 @@
                                     VerticalAlignment="Bottom"
                                     Command="{Binding DataContext.OpenEventWorldItemDropGroupListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nEventWorldItemDropGroupList], RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Content="Preview"
+                                    Content="{x:Static rs:Resources.Preview}"
                                     Cursor="Hand"
                                     Foreground="White"
                                     Style="{StaticResource lb_def_button02}" />
@@ -1624,7 +1624,7 @@
                                     VerticalAlignment="Bottom"
                                     Command="{Binding DataContext.OpenWorldItemDropGroupListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nWorldItemDropGroupList], RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Content="Preview"
+                                    Content="{x:Static rs:Resources.Preview}"
                                     Cursor="Hand"
                                     Foreground="White"
                                     Style="{StaticResource lb_def_button02}" />
@@ -1668,7 +1668,7 @@
                                     VerticalAlignment="Bottom"
                                     Command="{Binding DataContext.OpenWorldInstanceItemDropGroupListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nWorldInstanceItemDropGroupList], RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Content="Preview"
+                                    Content="{x:Static rs:Resources.Preview}"
                                     Cursor="Hand"
                                     Foreground="White"
                                     Style="{StaticResource lb_def_button02}" />
@@ -2442,7 +2442,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -2615,7 +2615,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -2725,7 +2725,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Description" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
                         Width="Auto"
                         Height="30"

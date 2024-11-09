@@ -50,7 +50,7 @@
             <MenuItem
                 Command="{Binding AddRowCommand}"
                 Icon="{ui:SymbolIcon AddCircle24}"
-                ToolTip="Add Row" />
+                ToolTip="{x:Static rs:Resources.MenuAddRow}" />
             <MenuItem
                 Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
                 Icon="{ui:SymbolIcon Copy24}"

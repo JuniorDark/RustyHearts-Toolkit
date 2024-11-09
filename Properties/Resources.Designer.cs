@@ -133,6 +133,78 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Block Group.
+        /// </summary>
+        public static string AddEffectEditor_BlockGroup {
+            get {
+                return ResourceManager.GetString("AddEffectEditor_BlockGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Group.
+        /// </summary>
+        public static string AddEffectEditor_ClearGroup {
+            get {
+                return ResourceManager.GetString("AddEffectEditor_ClearGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group Level.
+        /// </summary>
+        public static string AddEffectEditor_GroupLevel {
+            get {
+                return ResourceManager.GetString("AddEffectEditor_GroupLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pet Passive.
+        /// </summary>
+        public static string AddEffectEditor_PetPassive {
+            get {
+                return ResourceManager.GetString("AddEffectEditor_PetPassive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Print.
+        /// </summary>
+        public static string AddEffectEditor_Print {
+            get {
+                return ResourceManager.GetString("AddEffectEditor_Print", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scroll Desc.
+        /// </summary>
+        public static string AddEffectEditor_ScrollDesc {
+            get {
+                return ResourceManager.GetString("AddEffectEditor_ScrollDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stack Option.
+        /// </summary>
+        public static string AddEffectEditor_StackOption {
+            get {
+                return ResourceManager.GetString("AddEffectEditor_StackOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub AddEffect ID.
+        /// </summary>
+        public static string AddEffectEditor_SubAddEffectID {
+            get {
+                return ResourceManager.GetString("AddEffectEditor_SubAddEffectID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit addeffect .rh table file.
         /// </summary>
         public static string AddEffectEditorDesc {
@@ -466,6 +538,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bonus Cash Earned.
+        /// </summary>
+        public static string BonusCashEarned {
+            get {
+                return ResourceManager.GetString("BonusCashEarned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bonus % Rate.
+        /// </summary>
+        public static string BonusRate {
+            get {
+                return ResourceManager.GetString("BonusRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bottoms.
         /// </summary>
         public static string Bottoms {
@@ -480,6 +570,15 @@ namespace RHToolkit.Properties {
         public static string BoundItem {
             get {
                 return ResourceManager.GetString("BoundItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bronze Card.
+        /// </summary>
+        public static string BronzeCard {
+            get {
+                return ResourceManager.GetString("BronzeCard", resourceCulture);
             }
         }
         
@@ -516,6 +615,15 @@ namespace RHToolkit.Properties {
         public static string Cash {
             get {
                 return ResourceManager.GetString("Cash", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cash Cost.
+        /// </summary>
+        public static string CashCost {
+            get {
+                return ResourceManager.GetString("CashCost", resourceCulture);
             }
         }
         
@@ -1150,6 +1258,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data.
+        /// </summary>
+        public static string Data {
+            get {
+                return ResourceManager.GetString("Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Database.
         /// </summary>
         public static string Database {
@@ -1330,6 +1447,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string Details {
+            get {
+                return ResourceManager.GetString("Details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Device.
         /// </summary>
         public static string DeviceSkill {
@@ -1389,6 +1524,60 @@ namespace RHToolkit.Properties {
         public static string DropGroup {
             get {
                 return ResourceManager.GetString("DropGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End.
+        /// </summary>
+        public static string DropGroupEditor_End {
+            get {
+                return ResourceManager.GetString("DropGroupEditor_End", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link.
+        /// </summary>
+        public static string DropGroupEditor_Link {
+            get {
+                return ResourceManager.GetString("DropGroupEditor_Link", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map.
+        /// </summary>
+        public static string DropGroupEditor_Map {
+            get {
+                return ResourceManager.GetString("DropGroupEditor_Map", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remaining Probability.
+        /// </summary>
+        public static string DropGroupEditor_RemainingProbability {
+            get {
+                return ResourceManager.GetString("DropGroupEditor_RemainingProbability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RiddleBox Group.
+        /// </summary>
+        public static string DropGroupEditor_RiddleBoxGroup {
+            get {
+                return ResourceManager.GetString("DropGroupEditor_RiddleBoxGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start.
+        /// </summary>
+        public static string DropGroupEditor_Start {
+            get {
+                return ResourceManager.GetString("DropGroupEditor_Start", resourceCulture);
             }
         }
         
@@ -1519,6 +1708,42 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Editor_Description {
+            get {
+                return ResourceManager.GetString("Editor_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal Description.
+        /// </summary>
+        public static string Editor_InternalDescription {
+            get {
+                return ResourceManager.GetString("Editor_InternalDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Internal Name.
+        /// </summary>
+        public static string Editor_InternalName {
+            get {
+                return ResourceManager.GetString("Editor_InternalName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string Editor_Name {
+            get {
+                return ResourceManager.GetString("Editor_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} Editor.
         /// </summary>
         public static string EditorTitle {
@@ -1605,6 +1830,24 @@ namespace RHToolkit.Properties {
         public static string EnchantLevel {
             get {
                 return ResourceManager.GetString("EnchantLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End Sale Selling Date.
+        /// </summary>
+        public static string EndSaleSellingDate {
+            get {
+                return ResourceManager.GetString("EndSaleSellingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to End Selling Date.
+        /// </summary>
+        public static string EndSellingDate {
+            get {
+                return ResourceManager.GetString("EndSellingDate", resourceCulture);
             }
         }
         
@@ -1924,6 +2167,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        public static string Filter {
+            get {
+                return ResourceManager.GetString("Filter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Find.
         /// </summary>
         public static string Find {
@@ -2010,6 +2262,33 @@ namespace RHToolkit.Properties {
         public static string Focus3 {
             get {
                 return ResourceManager.GetString("Focus3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Day(s).
+        /// </summary>
+        public static string FormattedDays {
+            get {
+                return ResourceManager.GetString("FormattedDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Hour(s).
+        /// </summary>
+        public static string FormattedHours {
+            get {
+                return ResourceManager.GetString("FormattedHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Minute(s).
+        /// </summary>
+        public static string FormattedMinutes {
+            get {
+                return ResourceManager.GetString("FormattedMinutes", resourceCulture);
             }
         }
         
@@ -2221,11 +2500,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Gold Card.
+        /// </summary>
+        public static string GoldCard {
+            get {
+                return ResourceManager.GetString("GoldCard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gold Stored.
         /// </summary>
         public static string GoldStored {
             get {
                 return ResourceManager.GetString("GoldStored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Groups.
+        /// </summary>
+        public static string Group {
+            get {
+                return ResourceManager.GetString("Group", resourceCulture);
             }
         }
         
@@ -2262,6 +2559,15 @@ namespace RHToolkit.Properties {
         public static string HeavyWeaponSkill {
             get {
                 return ResourceManager.GetString("HeavyWeaponSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hidden.
+        /// </summary>
+        public static string Hidden {
+            get {
+                return ResourceManager.GetString("Hidden", resourceCulture);
             }
         }
         
@@ -2410,6 +2716,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The character &apos;{0}&apos; is currently online. You can&apos;t edit an online character..
+        /// </summary>
+        public static string IsOnlineMessage {
+            get {
+                return ResourceManager.GetString("IsOnlineMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item.
         /// </summary>
         public static string Item {
@@ -2491,6 +2806,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Item Drop Rate.
+        /// </summary>
+        public static string ItemDropRate {
+            get {
+                return ResourceManager.GetString("ItemDropRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit item lists .rh table files.
         /// </summary>
         public static string ItemEditorDesc {
@@ -2532,6 +2856,15 @@ namespace RHToolkit.Properties {
         public static string ItemListDatabaseDesc {
             get {
                 return ResourceManager.GetString("ItemListDatabaseDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Craft List.
+        /// </summary>
+        public static string ItemMixWindowTitle {
+            get {
+                return ResourceManager.GetString("ItemMixWindowTitle", resourceCulture);
             }
         }
         
@@ -2842,6 +3175,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Due to class change, skills were reset; weapon/costumes unequipped..
+        /// </summary>
+        public static string MailClassChangeMessage {
+            get {
+                return ResourceManager.GetString("MailClassChangeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
         public static string MailClear {
@@ -2869,11 +3211,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Due to focus change your skills have been reset..
+        /// </summary>
+        public static string MailFocusChangeMessage {
+            get {
+                return ResourceManager.GetString("MailFocusChangeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Send.
         /// </summary>
         public static string MailSend {
             get {
                 return ResourceManager.GetString("MailSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GM.
+        /// </summary>
+        public static string MailSenderGM {
+            get {
+                return ResourceManager.GetString("MailSenderGM", resourceCulture);
             }
         }
         
@@ -2905,11 +3265,38 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click on a material to add to the filter.
+        /// </summary>
+        public static string MaterialFilterHelp {
+            get {
+                return ResourceManager.GetString("MaterialFilterHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max Count.
+        /// </summary>
+        public static string MaxCount {
+            get {
+                return ResourceManager.GetString("MaxCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max Durability.
         /// </summary>
         public static string MaxDurability {
             get {
                 return ResourceManager.GetString("MaxDurability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Max Range.
+        /// </summary>
+        public static string MaxRange {
+            get {
+                return ResourceManager.GetString("MaxRange", resourceCulture);
             }
         }
         
@@ -2937,6 +3324,15 @@ namespace RHToolkit.Properties {
         public static string MenuCloseFile {
             get {
                 return ResourceManager.GetString("MenuCloseFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create New.
+        /// </summary>
+        public static string MenuCreateNew {
+            get {
+                return ResourceManager.GetString("MenuCreateNew", resourceCulture);
             }
         }
         
@@ -3031,7 +3427,16 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open File.
+        ///   Looks up a localized string similar to Open Drop Group File....
+        /// </summary>
+        public static string MenuOpenDropGroupFile {
+            get {
+                return ResourceManager.GetString("MenuOpenDropGroupFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open File....
         /// </summary>
         public static string MenuOpenFile {
             get {
@@ -3211,6 +3616,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Never.
+        /// </summary>
+        public static string Never {
+            get {
+                return ResourceManager.GetString("Never", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Value.
         /// </summary>
         public static string NewValue {
@@ -3283,6 +3697,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No Gift.
+        /// </summary>
+        public static string NoGift {
+            get {
+                return ResourceManager.GetString("NoGift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Guild.
         /// </summary>
         public static string NoGuild {
@@ -3337,6 +3760,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Note.
+        /// </summary>
+        public static string Note {
+            get {
+                return ResourceManager.GetString("Note", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Title.
         /// </summary>
         public static string NoTitle {
@@ -3351,6 +3783,519 @@ namespace RHToolkit.Properties {
         public static string NotUsed {
             get {
                 return ResourceManager.GetString("NotUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angela Skill.
+        /// </summary>
+        public static string NPCEditor_AngelaSkill {
+            get {
+                return ResourceManager.GetString("NPCEditor_AngelaSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angela Skill Group.
+        /// </summary>
+        public static string NPCEditor_AngelaSkillGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_AngelaSkillGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Context Menu.
+        /// </summary>
+        public static string NPCEditor_ContextMenu {
+            get {
+                return ResourceManager.GetString("NPCEditor_ContextMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Costume Craft Groups.
+        /// </summary>
+        public static string NPCEditor_CostumeCraftGroups {
+            get {
+                return ResourceManager.GetString("NPCEditor_CostumeCraftGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dialog Group 01.
+        /// </summary>
+        public static string NPCEditor_DialogGroup01 {
+            get {
+                return ResourceManager.GetString("NPCEditor_DialogGroup01", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dialog Group 02.
+        /// </summary>
+        public static string NPCEditor_DialogGroup02 {
+            get {
+                return ResourceManager.GetString("NPCEditor_DialogGroup02", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fortune Group.
+        /// </summary>
+        public static string NPCEditor_FortuneGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_FortuneGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frantz Skill.
+        /// </summary>
+        public static string NPCEditor_FrantzSkill {
+            get {
+                return ResourceManager.GetString("NPCEditor_FrantzSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frantz Skill Group.
+        /// </summary>
+        public static string NPCEditor_FrantzSkillGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_FrantzSkillGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group.
+        /// </summary>
+        public static string NPCEditor_Group {
+            get {
+                return ResourceManager.GetString("NPCEditor_Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guild Skill Group.
+        /// </summary>
+        public static string NPCEditor_GuildSkillGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_GuildSkillGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hair Cut Shop Group.
+        /// </summary>
+        public static string NPCEditor_HairCutShopGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_HairCutShopGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hair Cut Shop Title.
+        /// </summary>
+        public static string NPCEditor_HairCutShopTitle {
+            get {
+                return ResourceManager.GetString("NPCEditor_HairCutShopTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hair Dyeing Shop Group.
+        /// </summary>
+        public static string NPCEditor_HairDyeingShopGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_HairDyeingShopGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hair Dyeing Shop Title.
+        /// </summary>
+        public static string NPCEditor_HairDyeingShopTitle {
+            get {
+                return ResourceManager.GetString("NPCEditor_HairDyeingShopTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HP Class.
+        /// </summary>
+        public static string NPCEditor_HPClass {
+            get {
+                return ResourceManager.GetString("NPCEditor_HPClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HP Revision.
+        /// </summary>
+        public static string NPCEditor_HPRevision {
+            get {
+                return ResourceManager.GetString("NPCEditor_HPRevision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Craft Categories.
+        /// </summary>
+        public static string NPCEditor_ItemCraftCategories {
+            get {
+                return ResourceManager.GetString("NPCEditor_ItemCraftCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Craft Groups.
+        /// </summary>
+        public static string NPCEditor_ItemCraftGroups {
+            get {
+                return ResourceManager.GetString("NPCEditor_ItemCraftGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Craft Sub Categories.
+        /// </summary>
+        public static string NPCEditor_ItemCraftSubCategories {
+            get {
+                return ResourceManager.GetString("NPCEditor_ItemCraftSubCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Level.
+        /// </summary>
+        public static string NPCEditor_Level {
+            get {
+                return ResourceManager.GetString("NPCEditor_Level", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Look At Range.
+        /// </summary>
+        public static string NPCEditor_LookAtRange {
+            get {
+                return ResourceManager.GetString("NPCEditor_LookAtRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Look At Type.
+        /// </summary>
+        public static string NPCEditor_LookAtType {
+            get {
+                return ResourceManager.GetString("NPCEditor_LookAtType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mission Group.
+        /// </summary>
+        public static string NPCEditor_MissionGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_MissionGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Speed 01.
+        /// </summary>
+        public static string NPCEditor_MoveSpeed01 {
+            get {
+                return ResourceManager.GetString("NPCEditor_MoveSpeed01", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Speed 02.
+        /// </summary>
+        public static string NPCEditor_MoveSpeed02 {
+            get {
+                return ResourceManager.GetString("NPCEditor_MoveSpeed02", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MP Class.
+        /// </summary>
+        public static string NPCEditor_MPClass {
+            get {
+                return ResourceManager.GetString("NPCEditor_MPClass", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MP Revision.
+        /// </summary>
+        public static string NPCEditor_MPRevision {
+            get {
+                return ResourceManager.GetString("NPCEditor_MPRevision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Natasha Skill.
+        /// </summary>
+        public static string NPCEditor_NatashaSkill {
+            get {
+                return ResourceManager.GetString("NPCEditor_NatashaSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Natasha Skill Group.
+        /// </summary>
+        public static string NPCEditor_NatashaSkillGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_NatashaSkillGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Data.
+        /// </summary>
+        public static string NPCEditor_NPCData {
+            get {
+                return ResourceManager.GetString("NPCEditor_NPCData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC ID.
+        /// </summary>
+        public static string NPCEditor_NPCID {
+            get {
+                return ResourceManager.GetString("NPCEditor_NPCID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Info.
+        /// </summary>
+        public static string NPCEditor_NPCInfo {
+            get {
+                return ResourceManager.GetString("NPCEditor_NPCInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Instance ID.
+        /// </summary>
+        public static string NPCEditor_NPCInstanceID {
+            get {
+                return ResourceManager.GetString("NPCEditor_NPCInstanceID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to NPC Role.
+        /// </summary>
+        public static string NPCEditor_NPCRole {
+            get {
+                return ResourceManager.GetString("NPCEditor_NPCRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quest.
+        /// </summary>
+        public static string NPCEditor_Quest {
+            get {
+                return ResourceManager.GetString("NPCEditor_Quest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quest Data.
+        /// </summary>
+        public static string NPCEditor_QuestData {
+            get {
+                return ResourceManager.GetString("NPCEditor_QuestData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Quest Group.
+        /// </summary>
+        public static string NPCEditor_QuestGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_QuestGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random Quest.
+        /// </summary>
+        public static string NPCEditor_RandomQuest {
+            get {
+                return ResourceManager.GetString("NPCEditor_RandomQuest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random Quest Group.
+        /// </summary>
+        public static string NPCEditor_RandomQuestGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_RandomQuestGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random Quest Probability.
+        /// </summary>
+        public static string NPCEditor_RandomQuestProbability {
+            get {
+                return ResourceManager.GetString("NPCEditor_RandomQuestProbability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rune Machine Group.
+        /// </summary>
+        public static string NPCEditor_RuneMachineGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_RuneMachineGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shop Categories.
+        /// </summary>
+        public static string NPCEditor_ShopCategories {
+            get {
+                return ResourceManager.GetString("NPCEditor_ShopCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shop Data.
+        /// </summary>
+        public static string NPCEditor_ShopData {
+            get {
+                return ResourceManager.GetString("NPCEditor_ShopData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shop ID.
+        /// </summary>
+        public static string NPCEditor_ShopID {
+            get {
+                return ResourceManager.GetString("NPCEditor_ShopID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shops.
+        /// </summary>
+        public static string NPCEditor_Shops {
+            get {
+                return ResourceManager.GetString("NPCEditor_Shops", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shop Sub Categories.
+        /// </summary>
+        public static string NPCEditor_ShopSubCategories {
+            get {
+                return ResourceManager.GetString("NPCEditor_ShopSubCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shop Sub Type.
+        /// </summary>
+        public static string NPCEditor_ShopSubType {
+            get {
+                return ResourceManager.GetString("NPCEditor_ShopSubType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shop Title.
+        /// </summary>
+        public static string NPCEditor_ShopTitle {
+            get {
+                return ResourceManager.GetString("NPCEditor_ShopTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shop Type.
+        /// </summary>
+        public static string NPCEditor_ShopType {
+            get {
+                return ResourceManager.GetString("NPCEditor_ShopType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Data.
+        /// </summary>
+        public static string NPCEditor_SkillData {
+            get {
+                return ResourceManager.GetString("NPCEditor_SkillData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sprite Name.
+        /// </summary>
+        public static string NPCEditor_SpriteName {
+            get {
+                return ResourceManager.GetString("NPCEditor_SpriteName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trade Shop Categories.
+        /// </summary>
+        public static string NPCEditor_TradeShopCategories {
+            get {
+                return ResourceManager.GetString("NPCEditor_TradeShopCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trade Shop Title.
+        /// </summary>
+        public static string NPCEditor_TradeShopTitle {
+            get {
+                return ResourceManager.GetString("NPCEditor_TradeShopTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trade Window Type.
+        /// </summary>
+        public static string NPCEditor_TradeWindowType {
+            get {
+                return ResourceManager.GetString("NPCEditor_TradeWindowType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tude Skill.
+        /// </summary>
+        public static string NPCEditor_TudeSkill {
+            get {
+                return ResourceManager.GetString("NPCEditor_TudeSkill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tude Skill Group.
+        /// </summary>
+        public static string NPCEditor_TudeSkillGroup {
+            get {
+                return ResourceManager.GetString("NPCEditor_TudeSkillGroup", resourceCulture);
             }
         }
         
@@ -3922,6 +4867,168 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Effect Value.
+        /// </summary>
+        public static string PackageEditor_EffectValue {
+            get {
+                return ResourceManager.GetString("PackageEditor_EffectValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Level Max.
+        /// </summary>
+        public static string PackageEditor_LevelMax {
+            get {
+                return ResourceManager.GetString("PackageEditor_LevelMax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Level Min.
+        /// </summary>
+        public static string PackageEditor_LevelMin {
+            get {
+                return ResourceManager.GetString("PackageEditor_LevelMin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Description.
+        /// </summary>
+        public static string PackageEditor_PackageDescription {
+            get {
+                return ResourceManager.GetString("PackageEditor_PackageDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Details.
+        /// </summary>
+        public static string PackageEditor_PackageDetails {
+            get {
+                return ResourceManager.GetString("PackageEditor_PackageDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Duration (Minutes).
+        /// </summary>
+        public static string PackageEditor_PackageDuration {
+            get {
+                return ResourceManager.GetString("PackageEditor_PackageDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Effect.
+        /// </summary>
+        public static string PackageEditor_PackageEffect {
+            get {
+                return ResourceManager.GetString("PackageEditor_PackageEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Icon.
+        /// </summary>
+        public static string PackageEditor_PackageIcon {
+            get {
+                return ResourceManager.GetString("PackageEditor_PackageIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package ID.
+        /// </summary>
+        public static string PackageEditor_PackageID {
+            get {
+                return ResourceManager.GetString("PackageEditor_PackageID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Items.
+        /// </summary>
+        public static string PackageEditor_PackageItems {
+            get {
+                return ResourceManager.GetString("PackageEditor_PackageItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Name.
+        /// </summary>
+        public static string PackageEditor_PackageName {
+            get {
+                return ResourceManager.GetString("PackageEditor_PackageName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Package Type.
+        /// </summary>
+        public static string PackageEditor_PackageType {
+            get {
+                return ResourceManager.GetString("PackageEditor_PackageType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Random Group.
+        /// </summary>
+        public static string PackageEditor_RandomGroup {
+            get {
+                return ResourceManager.GetString("PackageEditor_RandomGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rune Group 01.
+        /// </summary>
+        public static string PackageEditor_RuneGroup01 {
+            get {
+                return ResourceManager.GetString("PackageEditor_RuneGroup01", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rune Group 02.
+        /// </summary>
+        public static string PackageEditor_RuneGroup02 {
+            get {
+                return ResourceManager.GetString("PackageEditor_RuneGroup02", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rune Group 03.
+        /// </summary>
+        public static string PackageEditor_RuneGroup03 {
+            get {
+                return ResourceManager.GetString("PackageEditor_RuneGroup03", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Item Type.
+        /// </summary>
+        public static string PackageEditor_SelectItemType {
+            get {
+                return ResourceManager.GetString("PackageEditor_SelectItemType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Take Item Type.
+        /// </summary>
+        public static string PackageEditor_TakeItemType {
+            get {
+                return ResourceManager.GetString("PackageEditor_TakeItemType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit package .rh table files.
         /// </summary>
         public static string PackageEditorDesc {
@@ -4084,6 +5191,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Payment.
+        /// </summary>
+        public static string Payment {
+            get {
+                return ResourceManager.GetString("Payment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Payment Type.
+        /// </summary>
+        public static string PaymentType {
+            get {
+                return ResourceManager.GetString("PaymentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Period.
         /// </summary>
         public static string Period {
@@ -4188,6 +5313,24 @@ namespace RHToolkit.Properties {
         public static string PhysicalMagicDamage {
             get {
                 return ResourceManager.GetString("PhysicalMagicDamage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview.
+        /// </summary>
+        public static string Preview {
+            get {
+                return ResourceManager.GetString("Preview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Probability.
+        /// </summary>
+        public static string Probability {
+            get {
+                return ResourceManager.GetString("Probability", resourceCulture);
             }
         }
         
@@ -4462,6 +5605,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remain Time (Minutes).
+        /// </summary>
+        public static string RemainTimeMinutes {
+            get {
+                return ResourceManager.GetString("RemainTimeMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Removed By.
         /// </summary>
         public static string RemovedBy {
@@ -4516,6 +5668,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset Sale Date.
+        /// </summary>
+        public static string ResetSaleDate {
+            get {
+                return ResourceManager.GetString("ResetSaleDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Selling Date.
+        /// </summary>
+        public static string ResetSellingDate {
+            get {
+                return ResourceManager.GetString("ResetSellingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ressurection Scrolls.
         /// </summary>
         public static string RessurectionScrolls {
@@ -4566,6 +5736,69 @@ namespace RHToolkit.Properties {
         public static string Roselle {
             get {
                 return ResourceManager.GetString("Roselle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change Type.
+        /// </summary>
+        public static string RuneEditor_ChangeType {
+            get {
+                return ResourceManager.GetString("RuneEditor_ChangeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group.
+        /// </summary>
+        public static string RuneEditor_Group {
+            get {
+                return ResourceManager.GetString("RuneEditor_Group", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group Probability.
+        /// </summary>
+        public static string RuneEditor_GroupProbability {
+            get {
+                return ResourceManager.GetString("RuneEditor_GroupProbability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Amount.
+        /// </summary>
+        public static string RuneEditor_ItemAmount {
+            get {
+                return ResourceManager.GetString("RuneEditor_ItemAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Count.
+        /// </summary>
+        public static string RuneEditor_ItemCount {
+            get {
+                return ResourceManager.GetString("RuneEditor_ItemCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rune Grade.
+        /// </summary>
+        public static string RuneEditor_RuneGrade {
+            get {
+                return ResourceManager.GetString("RuneEditor_RuneGrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sale Cash Cost.
+        /// </summary>
+        public static string SaleCashCost {
+            get {
+                return ResourceManager.GetString("SaleCashCost", resourceCulture);
             }
         }
         
@@ -5038,6 +6271,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seed.
+        /// </summary>
+        public static string Seed {
+            get {
+                return ResourceManager.GetString("Seed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected Item.
         /// </summary>
         public static string SelectedItem {
@@ -5254,6 +6496,96 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 2 Pieces Effect.
+        /// </summary>
+        public static string SetEditor_2PiecesEffect {
+            get {
+                return ResourceManager.GetString("SetEditor_2PiecesEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3 Pieces Effect.
+        /// </summary>
+        public static string SetEditor_3PiecesEffect {
+            get {
+                return ResourceManager.GetString("SetEditor_3PiecesEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4 Pieces Effect.
+        /// </summary>
+        public static string SetEditor_4PiecesEffect {
+            get {
+                return ResourceManager.GetString("SetEditor_4PiecesEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5 Pieces Effect.
+        /// </summary>
+        public static string SetEditor_5PiecesEffect {
+            get {
+                return ResourceManager.GetString("SetEditor_5PiecesEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 6 Pieces Effect.
+        /// </summary>
+        public static string SetEditor_6PiecesEffect {
+            get {
+                return ResourceManager.GetString("SetEditor_6PiecesEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Details.
+        /// </summary>
+        public static string SetEditor_SetDetails {
+            get {
+                return ResourceManager.GetString("SetEditor_SetDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Effect.
+        /// </summary>
+        public static string SetEditor_SetEffect {
+            get {
+                return ResourceManager.GetString("SetEditor_SetEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set ID.
+        /// </summary>
+        public static string SetEditor_SetID {
+            get {
+                return ResourceManager.GetString("SetEditor_SetID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Name.
+        /// </summary>
+        public static string SetEditor_SetName {
+            get {
+                return ResourceManager.GetString("SetEditor_SetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Pieces.
+        /// </summary>
+        public static string SetEditor_SetPieces {
+            get {
+                return ResourceManager.GetString("SetEditor_SetPieces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set Effect.
         /// </summary>
         public static string SetEffect {
@@ -5295,6 +6627,78 @@ namespace RHToolkit.Properties {
         public static string Shoes {
             get {
                 return ResourceManager.GetString("Shoes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shop Description.
+        /// </summary>
+        public static string ShopDescription {
+            get {
+                return ResourceManager.GetString("ShopDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shop Icon.
+        /// </summary>
+        public static string ShopIcon {
+            get {
+                return ResourceManager.GetString("ShopIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shop ID.
+        /// </summary>
+        public static string ShopID {
+            get {
+                return ResourceManager.GetString("ShopID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Item(s).
+        /// </summary>
+        public static string ShopItemAmountDesc {
+            get {
+                return ResourceManager.GetString("ShopItemAmountDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Item(s).
+        /// </summary>
+        public static string ShopItemItemAmount {
+            get {
+                return ResourceManager.GetString("ShopItemItemAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Item(s) / {0} Day(s).
+        /// </summary>
+        public static string ShopItemItemAmountDays {
+            get {
+                return ResourceManager.GetString("ShopItemItemAmountDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 Item(s) / Unlimited.
+        /// </summary>
+        public static string ShopItemUnlimited {
+            get {
+                return ResourceManager.GetString("ShopItemUnlimited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Silver Card.
+        /// </summary>
+        public static string SilverCard {
+            get {
+                return ResourceManager.GetString("SilverCard", resourceCulture);
             }
         }
         
@@ -5749,6 +7153,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start Sale Selling Date.
+        /// </summary>
+        public static string StartSaleSellingDate {
+            get {
+                return ResourceManager.GetString("StartSaleSellingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Selling Date.
+        /// </summary>
+        public static string StartSellingDate {
+            get {
+                return ResourceManager.GetString("StartSellingDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to State.
         /// </summary>
         public static string State {
@@ -5812,11 +7234,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to String Filter.
+        /// </summary>
+        public static string StringFilter {
+            get {
+                return ResourceManager.GetString("StringFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sub Category.
         /// </summary>
         public static string SubCategory {
             get {
                 return ResourceManager.GetString("SubCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub Type.
+        /// </summary>
+        public static string SubType {
+            get {
+                return ResourceManager.GetString("SubType", resourceCulture);
             }
         }
         
@@ -6046,6 +7486,51 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dummy Name.
+        /// </summary>
+        public static string TitleEditor_DummyName {
+            get {
+                return ResourceManager.GetString("TitleEditor_DummyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mdata Name.
+        /// </summary>
+        public static string TitleEditor_MdataName {
+            get {
+                return ResourceManager.GetString("TitleEditor_MdataName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Motion Name.
+        /// </summary>
+        public static string TitleEditor_MotionName {
+            get {
+                return ResourceManager.GetString("TitleEditor_MotionName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OffSet.
+        /// </summary>
+        public static string TitleEditor_OffSet {
+            get {
+                return ResourceManager.GetString("TitleEditor_OffSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rechargeable.
+        /// </summary>
+        public static string TitleEditor_Rechargeable {
+            get {
+                return ResourceManager.GetString("TitleEditor_Rechargeable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit title .rh table file.
         /// </summary>
         public static string TitleEditorDesc {
@@ -6154,6 +7639,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total Drop Rate.
+        /// </summary>
+        public static string TotalDropRate {
+            get {
+                return ResourceManager.GetString("TotalDropRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total Skill Points.
         /// </summary>
         public static string TotalSkillPoints {
@@ -6226,6 +7720,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unequip Title.
         /// </summary>
         public static string UnequipTitle {
@@ -6244,11 +7747,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unlimited.
+        /// </summary>
+        public static string Unlimited {
+            get {
+                return ResourceManager.GetString("Unlimited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Untradeable.
         /// </summary>
         public static string Untradeable {
             get {
                 return ResourceManager.GetString("Untradeable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unused.
+        /// </summary>
+        public static string Unused {
+            get {
+                return ResourceManager.GetString("Unused", resourceCulture);
             }
         }
         
@@ -6267,6 +7788,15 @@ namespace RHToolkit.Properties {
         public static string Upgrade {
             get {
                 return ResourceManager.GetString("Upgrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Used.
+        /// </summary>
+        public static string Used {
+            get {
+                return ResourceManager.GetString("Used", resourceCulture);
             }
         }
         
@@ -6294,6 +7824,15 @@ namespace RHToolkit.Properties {
         public static string UsedByCharacter {
             get {
                 return ResourceManager.GetString("UsedByCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Shop Icon.
+        /// </summary>
+        public static string UseShopIcon {
+            get {
+                return ResourceManager.GetString("UseShopIcon", resourceCulture);
             }
         }
         
@@ -6330,6 +7869,15 @@ namespace RHToolkit.Properties {
         public static string Value {
             get {
                 return ResourceManager.GetString("Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Values.
+        /// </summary>
+        public static string Values {
+            get {
+                return ResourceManager.GetString("Values", resourceCulture);
             }
         }
         

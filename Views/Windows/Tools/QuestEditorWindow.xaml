@@ -120,7 +120,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -164,7 +164,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Note" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Note}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -477,7 +477,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -500,7 +500,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Description" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -747,7 +747,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -842,7 +842,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -998,7 +998,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -1202,7 +1202,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -1380,7 +1380,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -1690,7 +1690,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -1975,7 +1975,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2403,7 +2403,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Class" />
+                                <TextBlock Foreground="White"  Text="{x:Static rs:Resources.Class}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3552,7 +3552,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3980,7 +3980,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Class" />
+                                <TextBlock Foreground="White"  Text="{x:Static rs:Resources.Class}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"

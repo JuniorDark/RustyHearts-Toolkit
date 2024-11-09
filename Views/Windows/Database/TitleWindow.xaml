@@ -174,7 +174,7 @@
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"
-                    ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                    ToolTip="{x:Static rs:Resources.EquipTitle}" />
                 <Button
                     x:Name="btnDeleteTitle"
                     Width="150"
@@ -186,7 +186,7 @@
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"
-                    ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                    ToolTip="{x:Static rs:Resources.DeleteTitle}" />
             </StackPanel>
             <StackPanel
                 Grid.Row="3"
@@ -212,7 +212,7 @@
                 VerticalAlignment="Top"
                 Orientation="Horizontal">
                 <Label
-                    Margin="10,0"
+                    Margin="10,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     HorizontalContentAlignment="Center"
@@ -243,7 +243,7 @@
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}"
-                    ToolTip="{x:Static rs:Resources.MailSendHelp}" />
+                    ToolTip="{x:Static rs:Resources.AddTitle}" />
             </StackPanel>
             <StackPanel
                 Grid.Row="4"

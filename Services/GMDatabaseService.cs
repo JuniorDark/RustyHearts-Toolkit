@@ -1105,7 +1105,6 @@ namespace RHToolkit.Services
                     string query = $"SELECT nPhysicalAttackMin, nPhysicalAttackMax, nMagicAttackMin, nMagicAttackMax FROM {tableName} WHERE nID = @WeaponID";
                     using var command = _sqLiteDatabaseService.ExecuteReader(query, connection, ("@WeaponID", weaponID));
 
-
                     return command.Read() ? (command.GetInt32(0), command.GetInt32(1), command.GetInt32(2), command.GetInt32(3)) : (0, 0, 0, 0);
                 }
 

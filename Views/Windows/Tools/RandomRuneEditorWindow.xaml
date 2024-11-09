@@ -17,6 +17,8 @@
     MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
     bh:WindowBehaviors.EnableDragMove="True"
     d:DataContext="{d:DesignInstance Type=windows:RandomRuneEditorViewModel}"
+    d:MaxHeight="720"
+    d:MaxWidth="1280"
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/icon/icon_colorrunebox.png"
@@ -43,13 +45,11 @@
     <ContentControl Template="{StaticResource box_violet02}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -57,6 +57,7 @@
             <ui:TitleBar
                 x:Name="TitleBar"
                 Title="{Binding Title}"
+                Grid.Row="0"
                 Grid.ColumnSpan="3"
                 Height="30"
                 Margin="30,0,0,0"
@@ -80,13 +81,15 @@
                 Grid.RowSpan="3"
                 Grid.Column="1"
                 Margin="10,0,0,0"
+                HorizontalAlignment="Left"
                 Visibility="{Binding IsSelectedItemVisible}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -98,9 +101,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -119,9 +122,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Group" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.RuneEditor_Group}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -142,7 +145,7 @@
                     Orientation="Vertical">
                     <CheckBox
                         Margin="0,10,0,0"
-                        Content="Change Type"
+                        Content="{x:Static rs:Resources.RuneEditor_ChangeType}"
                         IsChecked="{Binding DataTableManager.SelectedItem[nChangeType], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                         Template="{StaticResource lb_checkbox}">
                         <i:Interaction.Behaviors>
@@ -150,7 +153,6 @@
                         </i:Interaction.Behaviors>
                     </CheckBox>
                 </StackPanel>
-
                 <StackPanel
                     Grid.Row="1"
                     Grid.Column="1"
@@ -158,9 +160,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Rune Grade" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.RuneEditor_RuneGrade}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -179,9 +181,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Group Probability" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.RuneEditor_GroupProbability}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -196,17 +198,16 @@
                 <StackPanel
                     Grid.Row="1"
                     Grid.Column="0"
-                    Grid.ColumnSpan="2"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Description" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
-                        Width="300"
+                        Width="Auto"
                         Height="30"
-                        Margin="0,0"
-                        d:Text="Description"
+                        Margin="0,0,10,0"
+                        d:Text="{x:Static rs:Resources.Description}"
                         FontSize="12"
                         Template="{StaticResource lb_textbox11}"
                         Text="{Binding DataTableManager.SelectedItem[wszDisc], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -215,25 +216,8 @@
                         </i:Interaction.Behaviors>
                     </TextBox>
                 </StackPanel>
-            </Grid>
-            <Grid
-                Grid.Row="3"
-                Grid.RowSpan="3"
-                Grid.Column="1"
-                Margin="10,0,0,0"
-                Visibility="{Binding IsSelectedItemVisible}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
                 <StackPanel
-                    Grid.Row="0"
+                    Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
                     Margin="0,10,0,0"
@@ -243,9 +227,9 @@
                     <TextBlock
                         HorizontalAlignment="Center"
                         Foreground="Gold"
-                        Text="Max Count" />
+                        Text="{x:Static rs:Resources.MaxCount}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="200"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -258,288 +242,312 @@
                     </ui:NumberBox>
                 </StackPanel>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Left"
-                    Orientation="Horizontal">
-                    <ItemsControl AlternationCount="{Binding RuneItems.Count}" ItemsSource="{Binding RuneItems}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel
-                                    Grid.Column="0"
-                                    Margin="0,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    Orientation="Horizontal">
-                                    <TextBlock
-                                        Margin="0,0,10,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Background="Transparent"
-                                        FontSize="12"
-                                        Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}}" />
-                                    <control:ItemSlot
-                                        AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                        CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
-                                        ItemDataViewModel="{Binding ItemDataViewModel}"
-                                        ItemNameVisibility="Visible"
-                                        RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
-                    Orientation="Vertical">
-                    <ItemsControl AlternationCount="{Binding RuneItems.Count}" ItemsSource="{Binding RuneItems}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel
-                                    Grid.Column="0"
-                                    Margin="0,4,0,0"
-                                    HorizontalAlignment="Left"
-                                    Orientation="Vertical">
-                                    <TextBlock
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Foreground="Gold"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item {0} Amount '}" />
-                                    <ui:NumberBox
-                                        Width="120"
+                <Grid
+                    Grid.Row="3"
+                    Grid.ColumnSpan="3"
+                    Margin="10,10,0,0"
+                    HorizontalAlignment="Left">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" MinWidth="400" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel
+                        Grid.Column="0"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Left"
+                        Orientation="Horizontal">
+                        <ItemsControl AlternationCount="{Binding RuneItems.Count}" ItemsSource="{Binding RuneItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel
+                                        Grid.Column="0"
                                         Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        IsEnabled="{Binding IsEnabled}"
-                                        Maximum="{Binding ItemDataViewModel.OverlapCnt}"
-                                        Minimum="0"
-                                        Value="{Binding ItemCodeCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="2"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
-                    Orientation="Vertical">
-                    <ItemsControl AlternationCount="{Binding RuneItems.Count}" ItemsSource="{Binding RuneItems}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel
-                                    Grid.Column="0"
-                                    Margin="0,4,0,0"
-                                    HorizontalAlignment="Left"
-                                    Orientation="Vertical">
-                                    <TextBlock
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        FontSize="12"
-                                        Foreground="Gold"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item {0} Count'}" />
-                                    <ui:NumberBox
-                                        Width="120"
-                                        Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        IsEnabled="{Binding IsEnabled}"
-                                        Value="{Binding ItemCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
+                                        HorizontalAlignment="Left"
+                                        Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="0,0,10,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Background="Transparent"
+                                            FontSize="12"
+                                            Foreground="Gold"
+                                            Style="{StaticResource ArialMS}"
+                                            Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}}" />
+                                        <control:ItemSlot
+                                            AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
+                                            ItemDataViewModel="{Binding ItemDataViewModel}"
+                                            ItemNameVisibility="Visible"
+                                            RemoveItemCommand="{Binding DataContext.RemoveItemCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Column="1"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Orientation="Vertical">
+                        <ItemsControl AlternationCount="{Binding RuneItems.Count}" ItemsSource="{Binding RuneItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel
+                                        Grid.Column="0"
+                                        Margin="0,4,0,0"
+                                        HorizontalAlignment="Left"
+                                        Orientation="Vertical">
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="12"
+                                            Foreground="Gold">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding
+                                                        Converter="{StaticResource IndexToNumberConverter}"
+                                                        Path="(ItemsControl.AlternationIndex)"
+                                                        RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                    <Binding Source="{x:Static rs:Resources.RuneEditor_ItemAmount}" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <ui:NumberBox
+                                            Width="150"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top"
+                                            IsEnabled="{Binding IsEnabled}"
+                                            Maximum="{Binding ItemDataViewModel.OverlapCnt}"
+                                            Minimum="0"
+                                            Value="{Binding ItemCodeCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Column="2"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Vertical">
+                        <ItemsControl AlternationCount="{Binding RuneItems.Count}" ItemsSource="{Binding RuneItems}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel
+                                        Grid.Column="0"
+                                        Margin="0,4,0,0"
+                                        HorizontalAlignment="Left"
+                                        Orientation="Vertical">
+                                        <TextBlock
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            FontSize="12"
+                                            Foreground="Gold">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding
+                                                        Converter="{StaticResource IndexToNumberConverter}"
+                                                        Path="(ItemsControl.AlternationIndex)"
+                                                        RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                    <Binding Source="{x:Static rs:Resources.RuneEditor_ItemCount}" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                        <ui:NumberBox
+                                            Width="150"
+                                            Margin="0,0,0,0"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Top"
+                                            IsEnabled="{Binding IsEnabled}"
+                                            Value="{Binding ItemCount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Grid>
             </Grid>
 
-            <DataGrid
-                x:Name="dataGridView"
-                Grid.Row="3"
-                Grid.Column="0"
-                Height="400"
-                MinWidth="500"
-                Margin="0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                bh:DataGridBehavior.EnableScrollIntoView="True"
-                bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
-                AutoGenerateColumns="False"
-                Background="Transparent"
-                BorderBrush="#FF0F0D0A"
-                CanUserAddRows="False"
-                ColumnWidth="*"
-                EnableRowVirtualization="True"
-                FontFamily="{StaticResource ArialUnicodeMS}"
-                FontSize="12"
-                HeadersVisibility="Column"
-                HorizontalGridLinesBrush="White"
-                HorizontalScrollBarVisibility="Auto"
-                ItemsSource="{Binding DataTableManager.DataTable}"
-                SelectedItem="{Binding DataTableManager.SelectedItem}"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
-                Template="{StaticResource lb_datagrid}"
-                VerticalGridLinesBrush="White"
-                Visibility="{Binding IsVisible}">
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-                <DataGrid.InputBindings>
-                    <KeyBinding
-                        Key="I"
-                        Command="{Binding DataTableManager.AddNewRowCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="D"
-                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                        Modifiers="Control" />
-                    <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.UndoChangesCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.RedoChangesCommand}"
-                        Modifiers="Ctrl+Shift" />
-                    <KeyBinding
-                        Key="F"
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Find"
-                        Modifiers="Ctrl" />
-                </DataGrid.InputBindings>
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="Auto"
-                        Binding="{Binding nid}"
-                        Header="ID"
-                        IsReadOnly="True" />
-                    <DataGridTextColumn
-                        Width="Auto"
-                        Binding="{Binding nRandomRuneGroup}"
-                        Header="Group"
-                        IsReadOnly="True" />
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding wszDisc}"
-                        Header="{x:Static rs:Resources.Name}"
-                        IsReadOnly="True" />
-
-                </DataGrid.Columns>
-            </DataGrid>
-
             <Grid
-                Grid.Row="4"
+                Grid.Row="2"
                 Grid.Column="0"
+                Margin="10,0,0,0"
+                HorizontalAlignment="Left"
                 Visibility="{Binding IsVisible}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <TextBlock
-                    x:Name="lbTotalItem"
+                <DataGrid
+                    x:Name="dataGridView"
                     Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
+                    Width="500"
+                    Height="400"
+                    Margin="0,0"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    d:Text="Showing {0}/{1} Items"
-                    Foreground="Gold"
-                    Style="{StaticResource ArialMS}">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
-                            <Binding ElementName="dataGridView" Path="Items.Count" />
-                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-
-                <StackPanel
-                    Grid.Row="2"
-                    Grid.ColumnSpan="2"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Orientation="Vertical">
-                    <Label
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
-                        Content="Change Type"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <ComboBox
-                        x:Name="cmbItemCategory"
-                        Width="200"
-                        Height="24"
-                        Margin="0,0,0,0"
-                        HorizontalAlignment="Left"
-                        HorizontalContentAlignment="Left"
-                        VerticalContentAlignment="Center"
-                        IsReadOnly="True"
-                        ItemsSource="{Binding ChangeTypeItemsFilter}"
-                        SelectedValue="{Binding ChangeTypeFilter, Mode=TwoWay}"
-                        SelectedValuePath="ID"
-                        Style="{StaticResource ComboBoxStyle}"
-                        Template="{StaticResource lb_combobox}" />
-                </StackPanel>
-
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    Margin="0,10,0,0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Orientation="Horizontal">
-                    <Label
-                        x:Name="lbSearch"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.Search}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <TextBox
-                        x:Name="tbSearch"
-                        Width="250"
-                        Height="34"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        CaretBrush="White"
-                        Foreground="Gold"
-                        Tag="{x:Static rs:Resources.SearchNameID}"
-                        Template="{StaticResource lb_textbox}"
-                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox
-                        x:Name="MatchCaseCheckBox"
-                        Grid.Row="3"
+                    bh:DataGridBehavior.EnableScrollIntoView="True"
+                    bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ColumnWidth="*"
+                    EnableRowVirtualization="True"
+                    HeadersVisibility="Column"
+                    HorizontalScrollBarVisibility="Auto"
+                    ItemsSource="{Binding DataTableManager.DataTable}"
+                    SelectedItem="{Binding DataTableManager.SelectedItem}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    Template="{StaticResource lb_datagrid}">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
+                            <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.InputBindings>
+                        <KeyBinding
+                            Key="I"
+                            Command="{Binding DataTableManager.AddNewRowCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="D"
+                            Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                            Modifiers="Control" />
+                        <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.UndoChangesCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.RedoChangesCommand}"
+                            Modifiers="Ctrl+Shift" />
+                        <KeyBinding
+                            Key="F"
+                            Command="{Binding OpenSearchDialogCommand}"
+                            CommandParameter="Find"
+                            Modifiers="Ctrl" />
+                    </DataGrid.InputBindings>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding nid}"
+                            Header="ID"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="Auto"
+                            Binding="{Binding nRandomRuneGroup}"
+                            Header="Group"
+                            IsReadOnly="True" />
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding wszDisc}"
+                            Header="{x:Static rs:Resources.Name}"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        x:Name="lbTotalItem"
+                        Grid.Row="0"
                         Grid.Column="0"
-                        Margin="10,0,0,0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.MatchCase}"
-                        IsChecked="{Binding MatchCase}"
-                        Template="{StaticResource lb_checkbox}" />
-                </StackPanel>
+                        d:Text="Showing {0}/{1} Items"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                                <Binding ElementName="dataGridView" Path="Items.Count" />
+                                <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+
+                    <StackPanel
+                        Grid.Row="2"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Orientation="Vertical">
+                        <Label
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Center"
+                            Content="{x:Static rs:Resources.RuneEditor_ChangeType}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <ComboBox
+                            x:Name="cmbItemCategory"
+                            Width="200"
+                            Height="24"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            HorizontalContentAlignment="Left"
+                            VerticalContentAlignment="Center"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ChangeTypeItemsFilter}"
+                            SelectedValue="{Binding ChangeTypeFilter, Mode=TwoWay}"
+                            SelectedValuePath="ID"
+                            Style="{StaticResource ComboBoxStyle}"
+                            Template="{StaticResource lb_combobox}" />
+                    </StackPanel>
+
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                        <Label
+                            x:Name="lbSearch"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.Search}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <TextBox
+                            x:Name="tbSearch"
+                            Width="300"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            CaretBrush="White"
+                            Foreground="Gold"
+                            Tag="{x:Static rs:Resources.SearchNameID}"
+                            Template="{StaticResource lb_textbox}"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <CheckBox
+                            x:Name="MatchCaseCheckBox"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.MatchCase}"
+                            IsChecked="{Binding MatchCase}"
+                            Template="{StaticResource lb_checkbox}" />
+                    </StackPanel>
+                </Grid>
             </Grid>
+
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

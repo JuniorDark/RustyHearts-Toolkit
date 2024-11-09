@@ -6,6 +6,7 @@ using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
+using System.ComponentModel;
 using System.Data;
 using System.Windows.Controls;
 
@@ -17,6 +18,7 @@ namespace RHToolkit.ViewModels.Windows
         private readonly IWindowsService _windowsService;
         private readonly IGMDatabaseService _gmDatabaseService;
         private readonly System.Timers.Timer _filterUpdateTimer;
+        private readonly System.Timers.Timer _stringFilterUpdateTimer;
 
         public NpcEditorViewModel(IWindowsService windowsService, IGMDatabaseService gmDatabaseService, ItemDataManager itemDataManager)
         {
@@ -36,8 +38,19 @@ namespace RHToolkit.ViewModels.Windows
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
+
+            _stringFilterUpdateTimer = new()
+            {
+                Interval = 500,
+                AutoReset = false
+            };
+            _stringFilterUpdateTimer.Elapsed += StringFilterUpdateTimerElapsed;
+
             PopulateListItems();
             WeakReferenceMessenger.Default.Register(this);
+
+            _stringView = CollectionViewSource.GetDefaultView(StringItems);
+            _stringView.Filter = FilterString;
         }
 
         #region Commands 
@@ -414,6 +427,70 @@ namespace RHToolkit.ViewModels.Windows
         {
             ApplyFilter();
         }
+
+        #region String Filter
+        [ObservableProperty]
+        private ICollectionView _stringView;
+
+        private readonly List<int> selectedString = [];
+        private bool FilterString(object obj)
+        {
+            if (obj is NameID str)
+            {
+                if (str.ID == 0)
+                    return true;
+
+                if (DataTableManager.SelectedItem != null)
+                {
+                    var nNPCRole = (int)DataTableManager.SelectedItem["nNPCRole"];
+                    var nHairCutShopTitle = (int)DataTableManager.SelectedItem["nHairCutShopTitle"];
+                    var nHairDyeingShopTitle = (int)DataTableManager.SelectedItem["nHairDyeingShopTitle"];
+                    var nTradeShopTitle = (int)DataTableManager.SelectedItem["nTradeShopTitle"];
+                    var nShopTitleStringID = (int)DataTableManager.SelectedItem["nShopTitleStringID"];
+
+                    selectedString.Add(nNPCRole);
+                    selectedString.Add(nHairCutShopTitle);
+                    selectedString.Add(nHairDyeingShopTitle);
+                    selectedString.Add(nTradeShopTitle);
+                    selectedString.Add(nShopTitleStringID);
+
+                    if (selectedString.Contains(str.ID))
+                        return true;
+                }
+
+                // text search filter
+                if (!string.IsNullOrEmpty(StringSearch))
+                {
+                    string searchText = StringSearch.ToLower();
+
+                    // Check if either ID or Name contains the search text
+                    if (!string.IsNullOrEmpty(str.ID.ToString()) && str.ID.ToString().Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+
+                    if (!string.IsNullOrEmpty(str.Name) && str.Name.Contains(searchText, StringComparison.CurrentCultureIgnoreCase))
+                        return true;
+
+                    return false;
+                }
+
+                return true;
+            }
+            return false;
+        }
+
+        [ObservableProperty]
+        private string? _stringSearch;
+        partial void OnStringSearchChanged(string? value)
+        {
+            _stringFilterUpdateTimer.Stop();
+            _stringFilterUpdateTimer.Start();
+        }
+
+        private void StringFilterUpdateTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(StringView.Refresh);
+        }
+        #endregion
         #endregion
 
         #region Comboboxes

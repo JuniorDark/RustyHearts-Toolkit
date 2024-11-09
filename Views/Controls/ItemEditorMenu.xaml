@@ -24,29 +24,29 @@
             FontSize="14"
             Foreground="White">
             <ui:MenuItem Header="{x:Static rs:Resources.MenuFile}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                <MenuItem Header="Open ItemList File..." Icon="{ui:SymbolIcon DocumentAdd24}">
+                <MenuItem Header="{x:Static rs:Resources.MenuOpenFile}" Icon="{ui:SymbolIcon DocumentAdd24}">
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="1"
-                        Header="Open itemlist.rh"
+                        Header="itemlist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+1" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="2"
-                        Header="Open itemlist_costume.rh"
+                        Header="itemlist_costume.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+2" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="3"
-                        Header="Open itemlist_armor.rh"
+                        Header="itemlist_armor.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+3" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="4"
-                        Header="Open itemlist_weapon.rh"
+                        Header="itemlist_weapon.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+4" />
                 </MenuItem>

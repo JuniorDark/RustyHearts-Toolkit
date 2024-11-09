@@ -179,7 +179,7 @@ namespace RHToolkit.ViewModels.Windows
 
         #region Properties
         [ObservableProperty]
-        private string _title = $"Item Craft List";
+        private string _title = Resources.ItemMixWindowTitle;
 
         [ObservableProperty]
         private string? _openMessage = Resources.OpenFile;

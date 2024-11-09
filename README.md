@@ -25,7 +25,7 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
 ### Table Editor Tools
 - **Table Editor**: Edit `.rh` table files directly, with options to export into various formats like XML, XLSX, and MIP.
   
-- **Specialized Table Editors**:
+- **Dedicated Table Editors**:
   - **AddEffect Editor**: Edit buffs and effects (addeffect.rh).
   - **Cash Shop Editor**: Edit in-game cash shop items (cashshoplist.rh).
   - **Enemy Editor**: Edit enemy stats, attributes, and more (enemy.rh).
@@ -54,7 +54,7 @@ The toolkit curently supports 2 languages. You can change the language in the `S
 
 #### Available Languages
 - **English (en-US)** - Default language
-- **Korean (ko-KR)** - Machine translated - WIP
+- **Korean (ko-KR)** - Machine translated
 
 ## Setup Guide
 
@@ -65,6 +65,8 @@ To set up the toolkit and generate the necessary SQLite database:
 3. Click `Create Database` to generate the `gmdb_(Lang).db` database in the `Resources` folder.
 4. Place the extracted game sprites `\ui\sprite\1024` in the `Resources` folder.
 5. Navigate to the `Settings` page and set the `SQL Server` credentials.
+
+Note: After editing tables remember to rebuild the database.
 
 A prebuild database and sprites are avaliable on [`Resources.rar`](Resources.rar)
 

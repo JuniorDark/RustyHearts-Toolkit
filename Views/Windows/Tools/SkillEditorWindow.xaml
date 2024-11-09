@@ -206,7 +206,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -290,7 +290,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Name}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1277,7 +1277,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -1371,7 +1371,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
                         Width="300"
                         Margin="0,0,0,0"
@@ -1392,7 +1392,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Focus" />
+                    <TextBlock Foreground="White"  Text="{x:Static rs:Resources.Focus}" />
                     <ComboBox
                         Width="Auto"
                         Height="24"

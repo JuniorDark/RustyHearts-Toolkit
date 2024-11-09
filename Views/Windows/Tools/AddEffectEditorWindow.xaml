@@ -52,7 +52,6 @@
                 <RowDefinition Height="40" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -98,7 +97,7 @@
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Height="Auto"
                         Foreground="White"
-                        Header="Details"
+                        Header="{x:Static rs:Resources.Details}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -127,9 +126,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                                 <ui:NumberBox
-                                    Width="150"
+                                    Width="Auto"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
@@ -148,9 +147,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Type}" />
                                 <ui:NumberBox
-                                    Width="150"
+                                    Width="Auto"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
@@ -169,9 +168,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SubType}" />
                                 <ui:NumberBox
-                                    Width="150"
+                                    Width="Auto"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
@@ -191,9 +190,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub AddEffect ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.AddEffectEditor_SubAddEffectID}" />
                                 <ui:NumberBox
-                                    Width="150"
+                                    Width="Auto"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
@@ -212,9 +211,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Group}" />
                                 <ui:NumberBox
-                                    Width="150"
+                                    Width="Auto"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
@@ -233,9 +232,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Group Level" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.AddEffectEditor_GroupLevel}" />
                                 <ui:NumberBox
-                                    Width="150"
+                                    Width="Auto"
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
@@ -257,7 +256,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Print"
+                                    Content="{x:Static rs:Resources.AddEffectEditor_Print}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nPrint], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -275,7 +274,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Pet Passive"
+                                    Content="{x:Static rs:Resources.AddEffectEditor_PetPassive}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nPetPassive], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -293,7 +292,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Stack Option"
+                                    Content="{x:Static rs:Resources.AddEffectEditor_StackOption}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nStackOption], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -310,9 +309,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Icon" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Icon}" />
                                 <TextBox
-                                    Width="500"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="szIcon"
@@ -352,9 +351,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_Name}" />
                                 <TextBox
-                                    Width="600"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="wszName"
@@ -373,9 +372,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Description" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_Description}" />
                                 <TextBox
-                                    Width="600"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="wszDescription"
@@ -395,9 +394,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Desc" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_Description}" />
                                 <TextBox
-                                    Width="600"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="wszDesc"
@@ -417,9 +416,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Name (Internal)" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalName}" />
                                 <TextBox
-                                    Width="600"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="wszName"
@@ -438,9 +437,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Description (Internal)" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalDescription}" />
                                 <TextBox
-                                    Width="600"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="wszDescription"
@@ -460,9 +459,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Desc (Internal)" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalDescription}" />
                                 <TextBox
-                                    Width="600"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="wszDesc"
@@ -482,9 +481,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Note" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Note}" />
                                 <TextBox
-                                    Width="600"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="wszNote"
@@ -504,9 +503,9 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Scroll Desc" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.AddEffectEditor_ScrollDesc}" />
                                 <TextBox
-                                    Width="600"
+                                    Width="Auto"
                                     Height="30"
                                     Margin="0,0"
                                     d:Text="wszScrollDesc"
@@ -525,7 +524,7 @@
                         x:Name="tab2"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Data"
+                        Header="{x:Static rs:Resources.Data}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -557,7 +556,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szClearGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -577,7 +576,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szBlockGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -598,7 +597,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szMdataName00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -619,7 +618,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szDummyName00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -639,7 +638,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szDummyName01], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -660,7 +659,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szMdataName01], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -680,7 +679,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szMdataName02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -701,7 +700,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szMotionName00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -721,7 +720,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szMotionName01], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -742,7 +741,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szStartMotionName02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -762,7 +761,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szStayMotionName02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -783,7 +782,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szEndMotionName02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -803,7 +802,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[fMdtaScale02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -824,7 +823,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szTarget], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -844,7 +843,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szPetTarget], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -865,7 +864,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szWildCardParam], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -885,7 +884,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szWildCardValue], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -906,7 +905,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szTypeName], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -926,7 +925,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szT_Target], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -947,7 +946,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szT_PetTarget], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -967,7 +966,7 @@
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="Name"
+                                    d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szT_Target], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -983,7 +982,7 @@
                         x:Name="tab3"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Values"
+                        Header="{x:Static rs:Resources.Values}"
                         Style="{StaticResource lb_tab}">
                         <ItemsControl AlternationCount="{Binding AddEffectValues.Count}" ItemsSource="{Binding AddEffectValues}">
                             <ItemsControl.ItemTemplate>
@@ -992,22 +991,36 @@
                                         Margin="0,0,0,0"
                                         VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock
-                                            HorizontalAlignment="Center"
-                                            Foreground="White"
-                                            Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat=' Description {0}'}" />
+                                        <TextBlock Foreground="White">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding
+                                                        Converter="{StaticResource IndexToNumberConverter}"
+                                                        Path="(ItemsControl.AlternationIndex)"
+                                                        RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                    <Binding Source="{x:Static rs:Resources.Editor_Description}" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
                                         <TextBox
                                             Width="Auto"
                                             Height="30"
                                             Margin="0,0,0,0"
-                                            d:Text="Name"
+                                            d:Text="{x:Static rs:Resources.Name}"
                                             FontSize="12"
                                             Template="{StaticResource lb_textbox11}"
                                             Text="{Binding Description, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                        <TextBlock
-                                            HorizontalAlignment="Center"
-                                            Foreground="White"
-                                            Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat=' Value {0}'}" />
+                                        <TextBlock Foreground="White">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding
+                                                        Converter="{StaticResource IndexToNumberConverter}"
+                                                        Path="(ItemsControl.AlternationIndex)"
+                                                        RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                    <Binding Source="{x:Static rs:Resources.Value}" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
                                         <ui:NumberBox
                                             Width="200"
                                             Margin="0,0,0,0"
@@ -1026,11 +1039,11 @@
 
             <DataGrid
                 x:Name="dataGridView"
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.Column="0"
                 Height="450"
-                MinWidth="550"
-                Margin="5,0"
+                MinWidth="500"
+                Margin="5,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 bh:DataGridBehavior.EnableScrollIntoView="True"
@@ -1092,7 +1105,7 @@
             </DataGrid>
 
             <Grid
-                Grid.Row="4"
+                Grid.Row="3"
                 Grid.Column="0"
                 Visibility="{Binding IsVisible}">
                 <Grid.ColumnDefinitions>
@@ -1158,7 +1171,7 @@
                 </StackPanel>
             </Grid>
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

@@ -9,19 +9,19 @@ public class ShopItemAmountConverter : IMultiValueConverter
             if (shopCategory == 0)
             {
                 if (itemAmount == 0)
-                    return "1 Item(s) / Unlimited";
+                    return Resources.ShopItemUnlimited;
                 else
-                    return $"1 Item(s) / {itemAmount / 1440} Day(s)";
+                    return string.Format(Resources.ShopItemItemAmountDays, itemAmount / 1440);
             }
             else
             {
                 if (itemAmount == 0)
-                    return "1 Item(s)";
+                    return Resources.ShopItemAmountDesc;
                 else
-                    return $"{itemAmount} Item(s)";
+                    return string.Format(Resources.ShopItemItemAmount, itemAmount);
             }
         }
-        return "1 Item(s)";
+        return Resources.ShopItemAmountDesc;
     }
 
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

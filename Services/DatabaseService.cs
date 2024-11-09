@@ -181,7 +181,7 @@ namespace RHToolkit.Services
                     .ToList();
 
                 Guid senderId = Guid.Empty; // GM Guid
-                string message = $"Due to class change, skills were reset; weapon/costumes unequipped.<br><br><right>{DateTime.Now:yyyy-MM-dd HH:mm}";
+                string message = $"{Resources.MailClassChangeMessage}<br><br><right>{DateTime.Now:yyyy-MM-dd HH:mm}";
 
                 // Check if there are items to process
                 if (filteredItems.Count == 0)
@@ -190,13 +190,13 @@ namespace RHToolkit.Services
                     try
                     {
                         Guid mailId = Guid.NewGuid();
-                        await InsertMailAsync(connection, mailTransaction, senderId, senderId, "GM", characterData.CharacterName!, message, 0, 7, 0, mailId, 0);
+                        await InsertMailAsync(connection, mailTransaction, senderId, senderId, Resources.MailSenderGM, characterData.CharacterName!, message, 0, 7, 0, mailId, 0);
                         mailTransaction.Commit();
                     }
                     catch (Exception ex)
                     {
                         mailTransaction.Rollback();
-                        throw new Exception($"Error sending mail: {ex.Message}", ex);
+                        throw new Exception(ex.Message, ex);
                     }
                 }
                 else
@@ -209,7 +209,7 @@ namespace RHToolkit.Services
                         try
                         {
                             Guid mailId = Guid.NewGuid();
-                            await InsertMailAsync(connection, itemTransaction, senderId, senderId, "GM", characterData.CharacterName!, message, 0, 7, 0, mailId, 0);
+                            await InsertMailAsync(connection, itemTransaction, senderId, senderId, Resources.MailSenderGM, characterData.CharacterName!, message, 0, 7, 0, mailId, 0);
 
                             for (int j = 0; j < 3 && i + j < filteredItems.Count; j++)
                             {
@@ -282,9 +282,9 @@ namespace RHToolkit.Services
                 // Prepare mail message
                 Guid senderId = Guid.Empty;
 
-                string message = $"Due to focus change your skills have been reset.<br><br><right>{DateTime.Now:yyyy-MM-dd HH:mm}";
+                string message = $"{Resources.MailFocusChangeMessage}<br><br><right>{DateTime.Now:yyyy-MM-dd HH:mm}";
 
-                await InsertMailAsync(connection, transaction, senderId, senderId, "GM", characterData.CharacterName!, message, 0, 7, 0, Guid.NewGuid(), 0);
+                await InsertMailAsync(connection, transaction, senderId, senderId, Resources.MailSenderGM, characterData.CharacterName!, message, 0, 7, 0, Guid.NewGuid(), 0);
 
                 transaction.Commit();
             }
@@ -455,7 +455,7 @@ namespace RHToolkit.Services
         {
             if (await GetCharacterOnlineAsync(characterName))
             {
-                RHMessageBoxHelper.ShowOKMessage($"The character '{characterName}' is currently online. You can't edit an online character.", "Info");
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.IsOnlineMessage, characterName), Resources.Information);
                 return true;
             }
 
@@ -1133,7 +1133,7 @@ namespace RHToolkit.Services
                     int expireTime = (int)row["expire_time"];
 
                     int titleCategory = _gmDatabaseService.GetTitleCategory(titleId);
-                    string formattedtitleCategory = titleCategory == 0 ? "Normal" : "Special";
+                    string formattedtitleCategory = titleCategory == 0 ? Resources.TitleNormal : Resources.TitleSpecial;
                     string titleName = _gmDatabaseService.GetTitleName(titleId);
                     string formattedTitleName = $"{titleName} ({titleId})";
                     string formattedRemainTime = DateTimeFormatter.FormatRemainTime(remainTime);
@@ -1498,7 +1498,7 @@ namespace RHToolkit.Services
             var parameters = new (string, object)[] { ("@guildId", guildId) };
 
             object? result = await _sqlDatabaseService.ExecuteScalarAsync(selectQuery, connection, parameters);
-            return result != null ? result.ToString() : "No Guild";
+            return result != null ? result.ToString() : Resources.NoGuild;
         }
         #endregion
 
@@ -1726,7 +1726,7 @@ namespace RHToolkit.Services
                              int itemCode = reader.GetInt32(11);
                              short itemCount = reader.GetInt16(12);
 
-                             string couponStatus = use == 0 ? "Unused" : "Used";
+                             string couponStatus = use == 0 ? Resources.Unused : Resources.Used;
 
                              dataTable.Rows.Add(no, use, useDate, accountName, characterName, couponType, couponCode, validDate, itemCode, itemCount, couponStatus);
                          }

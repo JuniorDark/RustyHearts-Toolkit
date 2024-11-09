@@ -24,17 +24,17 @@
             FontSize="14"
             Foreground="White">
             <ui:MenuItem Header="{x:Static rs:Resources.MenuFile}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                <MenuItem Header="Open World File..." Icon="{ui:SymbolIcon DocumentAdd24}">
+                <MenuItem Header="{x:Static rs:Resources.MenuOpenFile}" Icon="{ui:SymbolIcon DocumentAdd24}">
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="1"
-                        Header="Open world.rh"
+                        Header="world.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+1" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="2"
-                        Header="Open mapselect_curtis.rh"
+                        Header="mapselect_curtis.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+2" />
                     <MenuItem

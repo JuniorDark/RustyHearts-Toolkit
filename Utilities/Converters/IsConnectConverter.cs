@@ -6,9 +6,9 @@ public class IsConnectConverter : IValueConverter
     {
         string? isConnect = value as string;
         if (isConnect == "Y")
-            return "Online";
+            return Resources.Online;
         else if (isConnect == "N")
-            return "Offline";
+            return Resources.Offline;
         else
             return value;
     }

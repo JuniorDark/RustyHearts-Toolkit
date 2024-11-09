@@ -6,7 +6,7 @@
         {
             if (remainTime == -1)
             {
-                return "Unlimited";
+                return Resources.Unlimited;
             }
             else
             {
@@ -14,7 +14,7 @@
                 //int hours = remainTime % (24 * 60) / 60;
                 //int minutes = remainTime % 60;
 
-                return $"{days} Days";
+                return string.Format(Resources.FormattedDays, days);
             }
         }
 
@@ -22,7 +22,7 @@
         {
             if (expireTime == 0)
             {
-                return "Never";
+                return Resources.Never;
             }
             else
             {
@@ -64,11 +64,11 @@
 
             string formattedTime = string.Empty;
             if (days > 0)
-                formattedTime += $"{days:F1} Day(s) ";
+                formattedTime += string.Format(Resources.FormattedDays, $"{days:F1}");
             if (hours > 0)
-                formattedTime += $"{hours:F1} Hour(s) ";
+                formattedTime += string.Format(Resources.FormattedHours, $"{hours:F1}");
             if (minutes > 0 || formattedTime == string.Empty)
-                formattedTime += $"{minutes:F1} Minute(s)";
+                formattedTime += string.Format(Resources.FormattedMinutes, $"{minutes:F1}");
 
             return formattedTime.Trim();
         }

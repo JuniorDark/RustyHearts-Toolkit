@@ -1,6 +1,5 @@
 ﻿using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.SQLite;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
 using RHToolkit.ViewModels.Windows.Database.VM;

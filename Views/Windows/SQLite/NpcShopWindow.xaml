@@ -60,7 +60,7 @@
             <ui:TabView
                 x:Name="tabView"
                 Grid.Row="2"
-                Margin="-5,10,0,0"
+                Margin="0,10,0,0"
                 HorizontalAlignment="Left"
                 Background="Transparent"
                 BorderBrush="Transparent"
@@ -92,7 +92,6 @@
                             </ItemsControl>
                         </Grid>
                     </ScrollViewer>
-
                 </TabItem>
             </ui:TabView>
             <!--  Close Button  -->

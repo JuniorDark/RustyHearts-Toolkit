@@ -181,7 +181,7 @@
                         Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbSearch"
-                        Width="250"
+                        Width="300"
                         Height="40"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -266,7 +266,7 @@
                         Cursor="Help"
                         Source="/Assets/icon/icon_help_tip.png"
                         Stretch="None"
-                        ToolTip="Click on a material to filter" />
+                        ToolTip="{x:Static rs:Resources.MaterialFilterHelp}" />
                 </StackPanel>
                 <ItemsControl
                     Grid.Row="2"

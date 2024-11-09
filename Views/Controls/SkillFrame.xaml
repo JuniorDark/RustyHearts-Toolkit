@@ -39,7 +39,7 @@
                 Style="{StaticResource ArialMS}">
                 <Run
                     d:Foreground="White"
-                    d:Text="Name"
+                    d:Text="{x:Static rs:Resources.Name}"
                     FontSize="14"
                     Foreground="White"
                     Text="{Binding SkillName}" />

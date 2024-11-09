@@ -964,28 +964,28 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private DateTime? _startSellingDate;
-        partial void OnStartSellingDateChanged(DateTime? value) => OnDateChanged(value, "nStartSellingDate");
+        partial void OnStartSellingDateChanged(DateTime? value) => OnDateChanged(value, "StartSellingDate");
 
         [ObservableProperty]
         private string _startSellingDateValue = Resources.NoSellingDate;
 
         [ObservableProperty]
         private DateTime? _endSellingDate;
-        partial void OnEndSellingDateChanged(DateTime? value) => OnDateChanged(value, "nEndSellingDate");
+        partial void OnEndSellingDateChanged(DateTime? value) => OnDateChanged(value, "EndSellingDate");
 
         [ObservableProperty]
         private string _endSellingDateValue = Resources.NoSellingDate;
 
         [ObservableProperty]
         private DateTime? _saleStartSellingDate;
-        partial void OnSaleStartSellingDateChanged(DateTime? value) => OnDateChanged(value, "nSaleStartSellingDate");
+        partial void OnSaleStartSellingDateChanged(DateTime? value) => OnDateChanged(value, "SaleStartSellingDate");
 
         [ObservableProperty]
         private string _saleStartSellingDateValue = Resources.NoSaleDate;
 
         [ObservableProperty]
         private DateTime? _saleEndSellingDate;
-        partial void OnSaleEndSellingDateChanged(DateTime? value) => OnDateChanged(value, "nSaleEndSellingDate");
+        partial void OnSaleEndSellingDateChanged(DateTime? value) => OnDateChanged(value, "SaleEndSellingDate");
 
         [ObservableProperty]
         private string _saleEndSellingDateValue = Resources.NoSaleDate;
@@ -993,13 +993,14 @@ namespace RHToolkit.ViewModels.Windows
         private void OnDateChanged(DateTime? value, string dateType)
         {
             string dateValueProperty = $"{dateType}Value";
+            string dataTableKey = $"n{dateType}";
 
             var formattedDate = value.HasValue ? value.Value.ToString("yyyy/MM/dd") : Resources.NoDateSet;
 
             GetType().GetProperty(dateValueProperty)?.SetValue(this, formattedDate);
             int dateIntValue = value == null ? 0 : DateTimeFormatter.ConvertDateToInt((DateTime)value);
 
-            UpdateSelectedItemValue(dateIntValue, dateType);
+            UpdateSelectedItemValue(dateIntValue, dataTableKey);
         }
 
         #endregion

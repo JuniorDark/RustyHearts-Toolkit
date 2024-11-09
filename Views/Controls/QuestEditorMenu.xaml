@@ -24,83 +24,83 @@
             FontSize="14"
             Foreground="White">
             <ui:MenuItem Header="{x:Static rs:Resources.MenuFile}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                <MenuItem Header="Open Quest File..." Icon="{ui:SymbolIcon DocumentAdd24}">
+                <MenuItem Header="{x:Static rs:Resources.MenuOpenFile}" Icon="{ui:SymbolIcon DocumentAdd24}">
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="1"
-                        Header="Open mission.rh"
+                        Header="mission.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+1" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="2"
-                        Header="Open missionreward.rh"
+                        Header="missionreward.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+2" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="3"
-                        Header="Open party_mission.rh"
+                        Header="party_mission.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+3" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="4"
-                        Header="Open quest.rh"
+                        Header="quest.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+4" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="5"
-                        Header="Open queststring.rh"
+                        Header="queststring.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+5" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="6"
-                        Header="Open questcomplete.rh"
+                        Header="questcomplete.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+6" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="7"
-                        Header="Open questgroup.rh"
+                        Header="questgroup.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+7" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="8"
-                        Header="Open questgroupstring.rh"
+                        Header="questgroupstring.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+8" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="9"
-                        Header="Open questgroupcomplete.rh"
+                        Header="questgroupcomplete.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+9" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="10"
-                        Header="Open questgrouprequest.rh"
+                        Header="questgrouprequest.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+1" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="11"
-                        Header="Open questrequest.rh"
+                        Header="questrequest.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+2" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="12"
-                        Header="Open quest_acquire.rh"
+                        Header="quest_acquire.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+3" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="13"
-                        Header="Open quest_acquire_string.rh"
+                        Header="quest_acquire_string.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+4" />
                 </MenuItem>

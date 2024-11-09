@@ -2,9 +2,9 @@
 
 namespace RHToolkit.Views.Controls;
 
-public partial class EditorMenuNew : UserControl
+public partial class CashShopEditorMenu : UserControl
 {
-    public EditorMenuNew()
+    public CashShopEditorMenu()
     {
         InitializeComponent();
     }

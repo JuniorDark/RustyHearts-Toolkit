@@ -24,77 +24,77 @@
             FontSize="14"
             Foreground="White">
             <ui:MenuItem Header="{x:Static rs:Resources.MenuFile}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                <MenuItem Header="Open Drop Group File..." Icon="{ui:SymbolIcon DocumentAdd24}">
+                <MenuItem Header="{x:Static rs:Resources.MenuOpenDropGroupFile}" Icon="{ui:SymbolIcon DocumentAdd24}">
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="1"
-                        Header="Open itemdropgrouplist_f.rh"
+                        Header="itemdropgrouplist_f.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+1" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="2"
-                        Header="Open itemdropgrouplist.rh"
+                        Header="itemdropgrouplist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+2" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="3"
-                        Header="Open championitemdropgrouplist.rh"
+                        Header="championitemdropgrouplist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+3" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="4"
-                        Header="Open eventworlditemdropgrouplist.rh"
+                        Header="eventworlditemdropgrouplist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+4" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="5"
-                        Header="Open instanceitemdropgrouplist.rh"
+                        Header="instanceitemdropgrouplist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+5" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="6"
-                        Header="Open questitemdropgrouplist.rh"
+                        Header="questitemdropgrouplist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+6" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="7"
-                        Header="Open worldinstanceitemdropgrouplist.rh"
+                        Header="worldinstanceitemdropgrouplist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+7" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="8"
-                        Header="Open worlditemdropgrouplist.rh"
+                        Header="worlditemdropgrouplist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+8" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="9"
-                        Header="Open worlditemdropgrouplist_fatigue.rh"
+                        Header="worlditemdropgrouplist_fatigue.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+9" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="10"
-                        Header="Open riddleboxdropgrouplist.rh"
+                        Header="riddleboxdropgrouplist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+1" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="11"
-                        Header="Open rarecarddropgrouplist.rh"
+                        Header="rarecarddropgrouplist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+2" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="12"
-                        Header="Open rarecardrewarditemlist.rh"
+                        Header="rarecardrewarditemlist.rh"
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+3" />
                 </MenuItem>

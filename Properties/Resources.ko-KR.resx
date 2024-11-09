@@ -1074,9 +1074,6 @@
   <data name="MenuFile" xml:space="preserve">
     <value>파일</value>
   </data>
-  <data name="MenuOpenFile" xml:space="preserve">
-    <value>파일 열기</value>
-  </data>
   <data name="MenuOpenList" xml:space="preserve">
     <value>열려 있는 ...</value>
   </data>
@@ -2160,6 +2157,9 @@
   <data name="RemainTime" xml:space="preserve">
     <value>남은 시간</value>
   </data>
+  <data name="RemainTimeMinutes" xml:space="preserve">
+    <value>남은 시간</value>
+  </data>
   <data name="ExpireTime" xml:space="preserve">
     <value>만료 시간</value>
   </data>
@@ -2252,5 +2252,521 @@
   </data>
   <data name="ItemState" xml:space="preserve">
     <value>아이템 상태</value>
+  </data>
+  <data name="MenuCreateNew" xml:space="preserve">
+    <value>새로 만들기</value>
+  </data>
+  <data name="ResetSellingDate" xml:space="preserve">
+    <value>판매 판매 날짜 재설정</value>
+  </data>
+  <data name="ResetSaleDate" xml:space="preserve">
+    <value>판매 날짜 재설정</value>
+  </data>
+  <data name="ShopID" xml:space="preserve">
+    <value>매장 ID</value>
+  </data>
+  <data name="ShopDescription" xml:space="preserve">
+    <value>매장 설명</value>
+  </data>
+  <data name="Hidden" xml:space="preserve">
+    <value>숨겨진</value>
+  </data>
+  <data name="NoGift" xml:space="preserve">
+    <value>선물 없음</value>
+  </data>
+  <data name="ShopIcon" xml:space="preserve">
+    <value>상점 아이콘</value>
+  </data>
+  <data name="UseShopIcon" xml:space="preserve">
+    <value>상점 아이콘 사용</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>세부</value>
+  </data>
+  <data name="Payment" xml:space="preserve">
+    <value>지불 금액</value>
+  </data>
+  <data name="PaymentType" xml:space="preserve">
+    <value>결제 유형</value>
+  </data>
+  <data name="CashCost" xml:space="preserve">
+    <value>현금 가격</value>
+  </data>
+  <data name="SaleCashCost" xml:space="preserve">
+    <value>판매 현금 비용</value>
+  </data>
+  <data name="BonusCashEarned" xml:space="preserve">
+    <value>보너스 현금 획득</value>
+  </data>
+  <data name="BonusRate" xml:space="preserve">
+    <value>보너스 % 비율</value>
+  </data>
+  <data name="StartSellingDate" xml:space="preserve">
+    <value>판매 시작 날짜</value>
+  </data>
+  <data name="EndSellingDate" xml:space="preserve">
+    <value>판매 종료 날짜</value>
+  </data>
+  <data name="StartSaleSellingDate" xml:space="preserve">
+    <value>판매 시작 판매 날짜</value>
+  </data>
+  <data name="EndSaleSellingDate" xml:space="preserve">
+    <value>판매 종료 판매 날짜</value>
+  </data>
+  <data name="ShopItemUnlimited" xml:space="preserve">
+    <value>1개 항목 / 무제한</value>
+  </data>
+  <data name="ShopItemAmountDesc" xml:space="preserve">
+    <value>1개 항목</value>
+  </data>
+  <data name="ShopItemItemAmount" xml:space="preserve">
+    <value>{0}개 ​​항목</value>
+  </data>
+  <data name="ShopItemItemAmountDays" xml:space="preserve">
+    <value>1개 항목 / {0}일</value>
+  </data>
+  <data name="NPCEditor_NPCData" xml:space="preserve">
+    <value>NPC 데이터</value>
+  </data>
+  <data name="NPCEditor_LookAtType" xml:space="preserve">
+    <value>보세요: 유형</value>
+  </data>
+  <data name="NPCEditor_HPClass" xml:space="preserve">
+    <value>HP 클래스</value>
+  </data>
+  <data name="NPCEditor_MPClass" xml:space="preserve">
+    <value>MP 클래스</value>
+  </data>
+  <data name="NPCEditor_HPRevision" xml:space="preserve">
+    <value>HP 개정판</value>
+  </data>
+  <data name="NPCEditor_MPRevision" xml:space="preserve">
+    <value>MP 개정</value>
+  </data>
+  <data name="NPCEditor_NPCID" xml:space="preserve">
+    <value>NPC ID</value>
+  </data>
+  <data name="NPCEditor_NPCInstanceID" xml:space="preserve">
+    <value>NPC Instance ID</value>
+  </data>
+  <data name="NPCEditor_FrantzSkill" xml:space="preserve">
+    <value>프란츠 스킬</value>
+  </data>
+  <data name="NPCEditor_FrantzSkillGroup" xml:space="preserve">
+    <value>프란츠 스킬 그룹</value>
+  </data>
+  <data name="NPCEditor_AngelaSkill" xml:space="preserve">
+    <value>앤젤라 스킬</value>
+  </data>
+  <data name="NPCEditor_TudeSkill" xml:space="preserve">
+    <value>튜드 스킬</value>
+  </data>
+  <data name="NPCEditor_NatashaSkill" xml:space="preserve">
+    <value>나타샤 스킬</value>
+  </data>
+  <data name="NPCEditor_NatashaSkillGroup" xml:space="preserve">
+    <value>나타샤 스킬 그룹</value>
+  </data>
+  <data name="NPCEditor_GuildSkillGroup" xml:space="preserve">
+    <value>길드 스킬 그룹</value>
+  </data>
+  <data name="NPCEditor_TudeSkillGroup" xml:space="preserve">
+    <value>튜드 스킬 그룹</value>
+  </data>
+  <data name="NPCEditor_AngelaSkillGroup" xml:space="preserve">
+    <value>앤젤라 스킬 그룹</value>
+  </data>
+  <data name="NPCEditor_LookAtRange" xml:space="preserve">
+    <value>보기 : 범위</value>
+  </data>
+  <data name="NPCEditor_Group" xml:space="preserve">
+    <value>그룹</value>
+  </data>
+  <data name="NPCEditor_Level" xml:space="preserve">
+    <value>수준기</value>
+  </data>
+  <data name="NPCEditor_MoveSpeed01" xml:space="preserve">
+    <value>이동 속도 01</value>
+  </data>
+  <data name="NPCEditor_MoveSpeed02" xml:space="preserve">
+    <value>이동 속도 02</value>
+  </data>
+  <data name="NPCEditor_ShopData" xml:space="preserve">
+    <value>상점 데이터</value>
+  </data>
+  <data name="NPCEditor_Quest" xml:space="preserve">
+    <value>탐구</value>
+  </data>
+  <data name="NPCEditor_NPCRole" xml:space="preserve">
+    <value>NPC 역할</value>
+  </data>
+  <data name="NPCEditor_SkillData" xml:space="preserve">
+    <value>스킬 데이터</value>
+  </data>
+  <data name="NPCEditor_ContextMenu" xml:space="preserve">
+    <value>NPC 컨텍스트 메뉴</value>
+  </data>
+  <data name="NPCEditor_TradeShopCategories" xml:space="preserve">
+    <value>무역 상점 카테고리</value>
+  </data>
+  <data name="NPCEditor_ItemCraftCategories" xml:space="preserve">
+    <value>아이템 제작 카테고리</value>
+  </data>
+  <data name="NPCEditor_ItemCraftSubCategories" xml:space="preserve">
+    <value>아이템 제작 하위 카테고리</value>
+  </data>
+  <data name="NPCEditor_ShopCategories" xml:space="preserve">
+    <value>상점 카테고리</value>
+  </data>
+  <data name="NPCEditor_ShopSubCategories" xml:space="preserve">
+    <value>상점 하위 카테고리</value>
+  </data>
+  <data name="NPCEditor_FortuneGroup" xml:space="preserve">
+    <value>포춘그룹</value>
+  </data>
+  <data name="NPCEditor_ItemCraftGroups" xml:space="preserve">
+    <value>아이템 제작 그룹</value>
+  </data>
+  <data name="NPCEditor_HairCutShopTitle" xml:space="preserve">
+    <value>헤어컷샵 타이틀</value>
+  </data>
+  <data name="NPCEditor_HairDyeingShopTitle" xml:space="preserve">
+    <value>헤어 염색 가게 타이틀</value>
+  </data>
+  <data name="NPCEditor_TradeShopTitle" xml:space="preserve">
+    <value>무역 상점 제목</value>
+  </data>
+  <data name="NPCEditor_ShopTitle" xml:space="preserve">
+    <value>가게 제목</value>
+  </data>
+  <data name="NPCEditor_ShopSubType" xml:space="preserve">
+    <value>상점 하위 유형</value>
+  </data>
+  <data name="NPCEditor_TradeWindowType" xml:space="preserve">
+    <value>거래 창 유형</value>
+  </data>
+  <data name="NPCEditor_DialogGroup01" xml:space="preserve">
+    <value>다이얼로그 그룹 01</value>
+  </data>
+  <data name="NPCEditor_DialogGroup02" xml:space="preserve">
+    <value>다이얼로그 그룹 02</value>
+  </data>
+  <data name="NPCEditor_QuestGroup" xml:space="preserve">
+    <value>퀘스트 그룹</value>
+  </data>
+  <data name="NPCEditor_MissionGroup" xml:space="preserve">
+    <value>미션 그룹</value>
+  </data>
+  <data name="NPCEditor_RandomQuestGroup" xml:space="preserve">
+    <value>랜덤 퀘스트 그룹</value>
+  </data>
+  <data name="NPCEditor_RandomQuestProbability" xml:space="preserve">
+    <value>랜덤 퀘스트 확률</value>
+  </data>
+  <data name="NPCEditor_SpriteName" xml:space="preserve">
+    <value>스프라이트 이름</value>
+  </data>
+  <data name="NPCEditor_HairDyeingShopGroup" xml:space="preserve">
+    <value>헤어다잉샵그룹</value>
+  </data>
+  <data name="NPCEditor_HairCutShopGroup" xml:space="preserve">
+    <value>헤어컷샵그룹</value>
+  </data>
+  <data name="NPCEditor_RuneMachineGroup" xml:space="preserve">
+    <value>룬 머신 그룹</value>
+  </data>
+  <data name="NPCEditor_ShopType" xml:space="preserve">
+    <value>상점 유형</value>
+  </data>
+  <data name="NPCEditor_CostumeCraftGroups" xml:space="preserve">
+    <value>의상 공예 그룹</value>
+  </data>
+  <data name="NPCEditor_Shops" xml:space="preserve">
+    <value>상점</value>
+  </data>
+  <data name="NPCEditor_RandomQuest" xml:space="preserve">
+    <value>랜덤 퀘스트</value>
+  </data>
+  <data name="NPCEditor_NPCInfo" xml:space="preserve">
+    <value>NPC 정보</value>
+  </data>
+  <data name="Editor_Name" xml:space="preserve">
+    <value>이름</value>
+  </data>
+  <data name="Editor_InternalName" xml:space="preserve">
+    <value>내부 이름</value>
+  </data>
+  <data name="Editor_InternalDescription" xml:space="preserve">
+    <value>내부 설명</value>
+  </data>
+  <data name="Editor_Description" xml:space="preserve">
+    <value>설명</value>
+  </data>
+  <data name="NPCEditor_QuestData" xml:space="preserve">
+    <value>퀘스트 데이터</value>
+  </data>
+  <data name="Preview" xml:space="preserve">
+    <value>시사</value>
+  </data>
+  <data name="NPCEditor_ShopID" xml:space="preserve">
+    <value>매장 ID</value>
+  </data>
+  <data name="MaterialFilterHelp" xml:space="preserve">
+    <value>필터에 추가할 재료를 클릭하세요</value>
+  </data>
+  <data name="ItemMixWindowTitle" xml:space="preserve">
+    <value>아이템 제작 목록</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>제한 없는</value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>절대로</value>
+  </data>
+  <data name="FormattedDays" xml:space="preserve">
+    <value>{0}일</value>
+  </data>
+  <data name="FormattedHours" xml:space="preserve">
+    <value>{0} 시간</value>
+  </data>
+  <data name="FormattedMinutes" xml:space="preserve">
+    <value>{0}분</value>
+  </data>
+  <data name="IsOnlineMessage" xml:space="preserve">
+    <value>캐릭터 '{0}'은 현재 온라인 상태입니다. 온라인 캐릭터는 편집할 수 없습니다.</value>
+  </data>
+  <data name="Unused" xml:space="preserve">
+    <value>미사용</value>
+  </data>
+  <data name="Used" xml:space="preserve">
+    <value>사용된</value>
+  </data>
+  <data name="MailFocusChangeMessage" xml:space="preserve">
+    <value>초점 변경으로 인해 스킬이 재설정되었습니다.</value>
+  </data>
+  <data name="MailClassChangeMessage" xml:space="preserve">
+    <value>클래스 변경으로 인해 스킬이 초기화되었습니다. 무기/의상이 장착되지 않았습니다.</value>
+  </data>
+  <data name="MailSenderGM" xml:space="preserve">
+    <value>지엠</value>
+  </data>
+  <data name="StringFilter" xml:space="preserve">
+    <value>문자열 필터</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>전형</value>
+  </data>
+  <data name="SubType" xml:space="preserve">
+    <value>하위 유형</value>
+  </data>
+  <data name="Group" xml:space="preserve">
+    <value>여러 떼</value>
+  </data>
+  <data name="AddEffectEditor_GroupLevel" xml:space="preserve">
+    <value>그룹 레벨</value>
+  </data>
+  <data name="AddEffectEditor_SubAddEffectID" xml:space="preserve">
+    <value>하위 AddEffect ID</value>
+  </data>
+  <data name="AddEffectEditor_PetPassive" xml:space="preserve">
+    <value>애완동물 패시브</value>
+  </data>
+  <data name="AddEffectEditor_StackOption" xml:space="preserve">
+    <value>스택 옵션</value>
+  </data>
+  <data name="AddEffectEditor_ScrollDesc" xml:space="preserve">
+    <value>스크롤 설명</value>
+  </data>
+  <data name="AddEffectEditor_ClearGroup" xml:space="preserve">
+    <value>그룹 지우기</value>
+  </data>
+  <data name="AddEffectEditor_BlockGroup" xml:space="preserve">
+    <value>블록 그룹</value>
+  </data>
+  <data name="AddEffectEditor_Print" xml:space="preserve">
+    <value>인쇄</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>메모</value>
+  </data>
+  <data name="Data" xml:space="preserve">
+    <value>데이터</value>
+  </data>
+  <data name="Values" xml:space="preserve">
+    <value>가치</value>
+  </data>
+  <data name="MaxRange" xml:space="preserve">
+    <value>최대 범위</value>
+  </data>
+  <data name="Seed" xml:space="preserve">
+    <value>씨앗</value>
+  </data>
+  <data name="TotalDropRate" xml:space="preserve">
+    <value>총 드랍율</value>
+  </data>
+  <data name="MaxCount" xml:space="preserve">
+    <value>최대 카운트</value>
+  </data>
+  <data name="DropGroupEditor_RiddleBoxGroup" xml:space="preserve">
+    <value>리들박스 그룹</value>
+  </data>
+  <data name="DropGroupEditor_Link" xml:space="preserve">
+    <value>링크</value>
+  </data>
+  <data name="DropGroupEditor_Start" xml:space="preserve">
+    <value>시작</value>
+  </data>
+  <data name="DropGroupEditor_End" xml:space="preserve">
+    <value>끝</value>
+  </data>
+  <data name="DropGroupEditor_Map" xml:space="preserve">
+    <value>지도</value>
+  </data>
+  <data name="DropGroupEditor_RemainingProbability" xml:space="preserve">
+    <value>남은 확률</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>서술</value>
+  </data>
+  <data name="ItemDropRate" xml:space="preserve">
+    <value>아이템 드랍율</value>
+  </data>
+  <data name="BronzeCard" xml:space="preserve">
+    <value>청동 카드</value>
+  </data>
+  <data name="Probability" xml:space="preserve">
+    <value>개연성</value>
+  </data>
+  <data name="SilverCard" xml:space="preserve">
+    <value>실버 카드</value>
+  </data>
+  <data name="GoldCard" xml:space="preserve">
+    <value>골드 카드</value>
+  </data>
+  <data name="MenuOpenDropGroupFile" xml:space="preserve">
+    <value>드롭 그룹 파일 열기...</value>
+  </data>
+  <data name="MenuOpenFile" xml:space="preserve">
+    <value>파일 열기...</value>
+  </data>
+  <data name="PackageEditor_LevelMax" xml:space="preserve">
+    <value>레벨 최대</value>
+  </data>
+  <data name="PackageEditor_PackageDetails" xml:space="preserve">
+    <value>패키지 세부 정보</value>
+  </data>
+  <data name="PackageEditor_PackageID" xml:space="preserve">
+    <value>패키지 ID</value>
+  </data>
+  <data name="PackageEditor_PackageType" xml:space="preserve">
+    <value>패키지 유형</value>
+  </data>
+  <data name="PackageEditor_RuneGroup01" xml:space="preserve">
+    <value>룬 그룹 01</value>
+  </data>
+  <data name="PackageEditor_RuneGroup02" xml:space="preserve">
+    <value>룬 그룹 02</value>
+  </data>
+  <data name="PackageEditor_RuneGroup03" xml:space="preserve">
+    <value>룬 그룹 03</value>
+  </data>
+  <data name="PackageEditor_RandomGroup" xml:space="preserve">
+    <value>랜덤 그룹</value>
+  </data>
+  <data name="PackageEditor_PackageName" xml:space="preserve">
+    <value>패키지 이름</value>
+  </data>
+  <data name="PackageEditor_PackageIcon" xml:space="preserve">
+    <value>패키지 아이콘</value>
+  </data>
+  <data name="PackageEditor_PackageDescription" xml:space="preserve">
+    <value>패키지 설명</value>
+  </data>
+  <data name="PackageEditor_PackageEffect" xml:space="preserve">
+    <value>패키지 효과</value>
+  </data>
+  <data name="PackageEditor_PackageItems" xml:space="preserve">
+    <value>패키지 품목</value>
+  </data>
+  <data name="PackageEditor_EffectValue" xml:space="preserve">
+    <value>효과 가치</value>
+  </data>
+  <data name="PackageEditor_PackageDuration" xml:space="preserve">
+    <value>패키지 기간(분)</value>
+  </data>
+  <data name="PackageEditor_SelectItemType" xml:space="preserve">
+    <value>항목 유형 선택</value>
+  </data>
+  <data name="PackageEditor_TakeItemType" xml:space="preserve">
+    <value>아이템 유형 가져오기</value>
+  </data>
+  <data name="PackageEditor_LevelMin" xml:space="preserve">
+    <value>최소 레벨</value>
+  </data>
+  <data name="RuneEditor_GroupProbability" xml:space="preserve">
+    <value>그룹 확률</value>
+  </data>
+  <data name="RuneEditor_Group" xml:space="preserve">
+    <value>그룹</value>
+  </data>
+  <data name="RuneEditor_RuneGrade" xml:space="preserve">
+    <value>룬 등급</value>
+  </data>
+  <data name="RuneEditor_ChangeType" xml:space="preserve">
+    <value>변경 유형</value>
+  </data>
+  <data name="RuneEditor_ItemAmount" xml:space="preserve">
+    <value>품목 금액</value>
+  </data>
+  <data name="RuneEditor_ItemCount" xml:space="preserve">
+    <value>항목 수</value>
+  </data>
+  <data name="SetEditor_SetDetails" xml:space="preserve">
+    <value>세부 정보 설정</value>
+  </data>
+  <data name="SetEditor_SetID" xml:space="preserve">
+    <value>세트 ID</value>
+  </data>
+  <data name="SetEditor_SetName" xml:space="preserve">
+    <value>이름 설정</value>
+  </data>
+  <data name="SetEditor_SetPieces" xml:space="preserve">
+    <value>세트 피스</value>
+  </data>
+  <data name="SetEditor_SetEffect" xml:space="preserve">
+    <value>세트 효과</value>
+  </data>
+  <data name="SetEditor_2PiecesEffect" xml:space="preserve">
+    <value>2개 조각 효과</value>
+  </data>
+  <data name="SetEditor_3PiecesEffect" xml:space="preserve">
+    <value>3개 조각 효과</value>
+  </data>
+  <data name="SetEditor_4PiecesEffect" xml:space="preserve">
+    <value>4개 조각 효과</value>
+  </data>
+  <data name="SetEditor_5PiecesEffect" xml:space="preserve">
+    <value>5개 조각 효과</value>
+  </data>
+  <data name="SetEditor_6PiecesEffect" xml:space="preserve">
+    <value>6개 조각 효과</value>
+  </data>
+  <data name="Filter" xml:space="preserve">
+    <value>필터</value>
+  </data>
+  <data name="TitleEditor_Rechargeable" xml:space="preserve">
+    <value>충전식</value>
+  </data>
+  <data name="TitleEditor_DummyName" xml:space="preserve">
+    <value>더미 이름</value>
+  </data>
+  <data name="TitleEditor_MdataName" xml:space="preserve">
+    <value>Mdata 이름</value>
+  </data>
+  <data name="TitleEditor_OffSet" xml:space="preserve">
+    <value>오프셋</value>
+  </data>
+  <data name="TitleEditor_MotionName" xml:space="preserve">
+    <value>모션 이름</value>
   </data>
 </root>
