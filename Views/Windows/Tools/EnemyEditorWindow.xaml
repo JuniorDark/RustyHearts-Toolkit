@@ -62,7 +62,7 @@
                         x:Name="tab1"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Enemy Info"
+                        Header="{x:Static rs:Resources.EnemyEditor_EnemyInfo}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -117,7 +117,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Name Text ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_NameTextID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -159,7 +159,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_SubGroup}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -204,7 +204,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_SubName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -227,7 +227,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Internal Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -250,7 +250,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Group Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.GroupName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -272,7 +272,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub Group Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_SubGroupName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -295,7 +295,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Face Sprite" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_FaceSprite}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -330,14 +330,13 @@
                                     </Image.LayoutTransform>
                                 </Image>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab2"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Enemy Stats"
+                        Header="{x:Static rs:Resources.EnemyEditor_EnemyStats}"
                         Style="{StaticResource lb_tab}">
                         <ScrollViewer
                             Margin="0,0,0,0"
@@ -380,7 +379,7 @@
                                     Orientation="Vertical">
                                     <CheckBox
                                         Margin="0,10,0,0"
-                                        Content="Solo Boss"
+                                        Content="{x:Static rs:Resources.EnemyEditor_SoloBoss}"
                                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nSolo_boss], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                         Template="{StaticResource lb_checkbox}">
                                         <i:Interaction.Behaviors>
@@ -397,7 +396,7 @@
                                     Orientation="Vertical">
                                     <CheckBox
                                         Margin="0,10,0,0"
-                                        Content="Can Be Grabbed"
+                                        Content="{x:Static rs:Resources.EnemyEditor_CanBeGrabbed}"
                                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nCaught], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                         Template="{StaticResource lb_checkbox}">
                                         <i:Interaction.Behaviors>
@@ -414,7 +413,7 @@
                                     Orientation="Vertical">
                                     <CheckBox
                                         Margin="0,10,0,0"
-                                        Content="No Drop"
+                                        Content="{x:Static rs:Resources.EnemyEditor_NoDrop}"
                                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nNoDrop], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                         Template="{StaticResource lb_checkbox}">
                                         <i:Interaction.Behaviors>
@@ -431,7 +430,7 @@
                                     Orientation="Vertical">
                                     <CheckBox
                                         Margin="0,10,0,0"
-                                        Content="Respawn Invencible"
+                                        Content="{x:Static rs:Resources.EnemyEditor_RespawnInvencible}"
                                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nRespawnGod], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                         Template="{StaticResource lb_checkbox}">
                                         <i:Interaction.Behaviors>
@@ -447,7 +446,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Mode" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Mode}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -468,7 +467,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Enemy Exp" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_EnemyExp}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -489,7 +488,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Enemy Gold" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_EnemyGold}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -510,7 +509,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Gold Probability" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_GoldProbability}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -532,7 +531,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Level" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Level}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -553,7 +552,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="HP" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_HP}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -574,7 +573,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="MP" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_MP}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -595,7 +594,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="SP" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_SP}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -617,7 +616,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Luck" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Luck}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -638,7 +637,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Gender" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Gender}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -659,7 +658,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="HP Correction" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_HPCorrection}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -680,7 +679,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Combo Type" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ComboType}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -702,7 +701,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Min Physical Attack" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_MinPhysicalAttack}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -723,7 +722,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Physical Attack" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_PhysicalAttack}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -744,7 +743,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Min Magic Attack" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_MinMagicAttack}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -765,7 +764,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Magic Attack" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_MagicAttack}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -787,7 +786,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Min Attribute Attack" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_MinAttributeAttack}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -808,7 +807,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Attribute Attack" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_AttributeAttack}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -829,7 +828,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Defense" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Defense}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -850,7 +849,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Magic Defense" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_MagicDefense}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -872,7 +871,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Critical" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Critical}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -893,7 +892,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Critical Resistance" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_CriticalResistance}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -914,7 +913,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Magic Resistance" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_MagicResistance}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -936,7 +935,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Physical Guard" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_PhysicalGuard}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -957,7 +956,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Magic Guard" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_MagicGuard}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -978,7 +977,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Counter Offensive" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_CounterOffensive}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -999,7 +998,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Down Damage" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_DownDamage}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1021,7 +1020,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Move Speed Old" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_MoveSpeedOld}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1042,7 +1041,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Move Speed" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_MoveSpeed}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1063,7 +1062,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Attack Speed" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_AttackSpeed}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1084,7 +1083,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Stature" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Stature}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1106,7 +1105,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Jump Height" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_JumpHeight}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1127,7 +1126,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Move Height" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_MoveHeight}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1148,7 +1147,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Weight" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Weight}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1169,7 +1168,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Wide Radius" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_WideRadius}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1191,7 +1190,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Keep Distance" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_KeepDistance}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1212,7 +1211,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Attack Range" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_AttackRange}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1233,7 +1232,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Long Attack Range" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_LongAttackRange}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1254,7 +1253,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Chase Range" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ChaseRange}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1276,7 +1275,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Investigation Range" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_InvestigationRange}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1297,7 +1296,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Patrol Range" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_PatrolRange}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1318,7 +1317,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Attack Delay" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_AttackDelay}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1339,7 +1338,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Head Position" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_HeadPosition}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1361,7 +1360,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Rising Damage Weight" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_RisingDamageWeight}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1382,7 +1381,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Guard Break Damage" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_GuardBreakDamage}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1403,7 +1402,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Guard Damage" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_GuardDamage}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1424,7 +1423,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Weakness DMG Percent" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_WeaknessDMGPercent}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1446,7 +1445,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Weapon Dur. Decrease" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_WeaponDurDecrease}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1467,7 +1466,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Armor Dur. Decrease" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ArmorDurDecrease}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1488,7 +1487,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Event Part ID" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_EventPartID}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1509,7 +1508,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Hidden Effect ID" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_HiddenEffectID}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1531,7 +1530,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Effect ID" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_EffectID}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1552,7 +1551,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Costume ID" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_CostumeID}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1573,7 +1572,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Scale Min" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ScaleMin}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1594,7 +1593,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Scale Max" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ScaleMin}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1616,7 +1615,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Corpse Weapon" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_CorpseWeapon}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1637,7 +1636,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="No Damage Motion" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_NoDamageMotion}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1658,7 +1657,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Glow Speed" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_GlowSpeed}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1679,7 +1678,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Hidden Dummy" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_HiddenDummy}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1701,7 +1700,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Type" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Type}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1722,7 +1721,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Item Box" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ItemBox}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1743,7 +1742,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Item Box Close Time Max" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ItemBoxCloseTimeMax}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1764,7 +1763,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="Item Box Close Time Min" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ItemBoxCloseTimeMin}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1772,13 +1771,12 @@
                                         VerticalAlignment="Top"
                                         Maximum="2147483647"
                                         Minimum="0"
-                                        Value="{Binding DataContext.DataTableManager.SelectedItem[nItemBox], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        Value="{Binding DataContext.DataTableManager.SelectedItem[fItemBoxCloseTimeMin], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
                                         <i:Interaction.Behaviors>
-                                            <bh:DataRowViewBehavior Column="nItemBox" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                            <bh:DataRowViewBehavior Column="fItemBoxCloseTimeMin" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </i:Interaction.Behaviors>
                                     </ui:NumberBox>
                                 </StackPanel>
-
                             </Grid>
                         </ScrollViewer>
                     </TabItem>
@@ -1786,7 +1784,7 @@
                         x:Name="tab3"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Resistances"
+                        Header="{x:Static rs:Resources.EnemyEditor_Resistances}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -1808,7 +1806,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Fire Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.FireResistance}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1829,7 +1827,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Water Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WaterResistance}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1850,7 +1848,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Light Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.LightResistance}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1871,7 +1869,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Darkness Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.DarknessResistance}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1892,7 +1890,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Earth Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EarthResistance}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1913,7 +1911,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Wind Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WindResistance}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1934,7 +1932,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Poison Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PoisonResistance}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1955,7 +1953,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Lightning Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.LightningResistance}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1997,12 +1995,12 @@
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Top"
                                                 Orientation="Vertical">
-                                                <TextBlock Foreground="White" Text="Condition Resistance" />
+                                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ConditionResistance}" />
                                                 <TextBox
                                                     Width="Auto"
                                                     Height="30"
                                                     Margin="0,0"
-                                                    d:Text="ConditionResistance"
+                                                    d:Text="Condition Resistance"
                                                     FontSize="12"
                                                     Template="{StaticResource lb_textbox11}"
                                                     Text="{Binding ConditionResistance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -2013,7 +2011,7 @@
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Top"
                                                 Orientation="Vertical">
-                                                <TextBlock Foreground="White" Text="Condition Resistance Value" />
+                                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ConditionResistanceValue}" />
                                                 <ui:NumberBox
                                                     MinWidth="150"
                                                     Margin="0,0,0,0"
@@ -2033,9 +2031,8 @@
                         x:Name="tab4"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Enemy Data"
+                        Header="{x:Static rs:Resources.EnemyEditor_EnemyData}"
                         Style="{StaticResource lb_tab}">
-
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -2071,7 +2068,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Model File" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ModelFile}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2093,7 +2090,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub Model File" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_SubModelFile}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2115,7 +2112,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub Model Dummy" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_SubModelDummy}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2137,7 +2134,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub Model Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_SubModelGroup}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2159,7 +2156,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skin" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Skin}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2181,7 +2178,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Character" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Character}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2204,7 +2201,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="AI" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_AI}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2226,7 +2223,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="AI Script" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_AIScript}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2248,7 +2245,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Left Hand Dummy Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_LeftHandDummyName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2270,7 +2267,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Right Hand Dummy Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_RightHandDummyName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2292,7 +2289,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Death Release Equip Dummy" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_DeathReleaseEquipDummy}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2314,7 +2311,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Material" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Material}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2336,7 +2333,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Corpse Piece" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_CorpsePiece}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2358,7 +2355,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Back Step Motion" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_BackStepMotion}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2381,7 +2378,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Color" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Color}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2403,7 +2400,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Glow Color" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_GlowColor}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2425,7 +2422,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_Condition}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2447,7 +2444,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Death Motion" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_DeathMotion}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2469,7 +2466,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Item Box Respawn Motion" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ItemBoxRespawnMotion}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2489,9 +2486,8 @@
                         x:Name="tab5"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Table Data"
+                        Header="{x:Static rs:Resources.EnemyEditor_TableData}"
                         Style="{StaticResource lb_tab}">
-
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -2516,7 +2512,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Combo Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ComboTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2538,7 +2534,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Null Motion Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_NullMotionTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2560,7 +2556,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Attack Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_AttackTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2582,7 +2578,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Down Motion Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_DownMotionTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2604,7 +2600,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Damage Sound Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_DamageSoundTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2626,7 +2622,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Basic Motion Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_BasicMotionTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2648,7 +2644,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Soul Red Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_SoulRedTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2670,7 +2666,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Soul Blue Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_SoulBlueTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2692,7 +2688,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skill Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_SkillTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2714,7 +2710,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Special Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_SpecialTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2736,7 +2732,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Weakness Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_WeaknessTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2758,7 +2754,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Catch Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_CatchTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2772,14 +2768,13 @@
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab6"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Drop Groups"
+                        Header="{x:Static rs:Resources.EnemyEditor_DropGroups}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -2808,7 +2803,7 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Quest Item Drop Group" />
+                                        Text="{x:Static rs:Resources.EnemyEditor_QuestItemDropGroup}" />
                                     <ui:NumberBox
                                         Width="200"
                                         Margin="0,0,0,0"
@@ -2851,7 +2846,7 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Hidden Quest Item Drop Group" />
+                                        Text="{x:Static rs:Resources.EnemyEditor_HiddenQuestItemDropGroup}" />
                                     <ui:NumberBox
                                         Width="200"
                                         Margin="0,0,0,0"
@@ -2894,7 +2889,7 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Champion Item Drop Group" />
+                                        Text="{x:Static rs:Resources.EnemyEditor_ChampionItemDropGroup}" />
                                     <ui:NumberBox
                                         Width="200"
                                         Margin="0,0,0,0"
@@ -2937,7 +2932,7 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Instance Item Drop Group" />
+                                        Text="{x:Static rs:Resources.EnemyEditor_InstanceItemDropGroup}" />
                                     <ui:NumberBox
                                         Width="200"
                                         Margin="0,0,0,0"
@@ -2980,7 +2975,7 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Rare Card Item Drop Group" />
+                                        Text="{x:Static rs:Resources.EnemyEditor_RareCardItemDropGroup}" />
                                     <ui:NumberBox
                                         Width="200"
                                         Margin="0,0,0,0"
@@ -3049,8 +3044,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item Drop Group {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_ItemDropGroup}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3072,8 +3076,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item Drop Group Count {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_ItemDropGroupCount}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3112,8 +3125,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item Drop Group F {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_ItemDropGroupF}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3135,8 +3157,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item Drop Group F Count {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_ItemDropGroupFCount}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3175,8 +3206,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Fatigue Item Drop Group {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_FatigueItemDropGroup}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3198,8 +3238,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Fatigue Item Drop Group Count {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_FatigueItemDropGroupCount}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3238,8 +3287,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Fatigue Drop Group F {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_FatigueDropGroupF}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3261,8 +3319,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Fatigue Drop Group F Count {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_FatigueDropGroupFCount}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3301,8 +3368,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Hidden Item Drop Group {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_HiddenItemDropGroup}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3324,8 +3400,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Hidden Item Drop Group Count {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_HiddenItemDropGroupCount}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3363,8 +3448,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Hidden Item Drop Group F {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_HiddenItemDropGroupF}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3385,8 +3479,17 @@
                                                         Background="Transparent"
                                                         FontSize="12"
                                                         Foreground="Gold"
-                                                        Style="{StaticResource ArialMS}"
-                                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Hidden Item Drop Group F Count {0}'}" />
+                                                        Style="{StaticResource ArialMS}">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.EnemyEditor_HiddenItemDropGroupFCount}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -3425,13 +3528,11 @@
     <ContentControl Template="{StaticResource box_red02}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -3467,136 +3568,138 @@
                 ContentTemplateSelector="{StaticResource EnemyTemplateSelector}"
                 Visibility="{Binding IsSelectedItemVisible}" />
 
-            <DataGrid
-                x:Name="dataGridView"
-                Grid.Row="3"
-                Grid.Column="0"
-                Height="400"
-                MinWidth="550"
-                Margin="5,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                bh:DataGridBehavior.EnableScrollIntoView="True"
-                bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
-                AutoGenerateColumns="False"
-                CanUserAddRows="False"
-                ColumnWidth="*"
-                EnableRowVirtualization="True"
-                HeadersVisibility="Column"
-                HorizontalScrollBarVisibility="Auto"
-                ItemsSource="{Binding DataTableManager.DataTable}"
-                SelectedItem="{Binding DataTableManager.SelectedItem}"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
-                Template="{StaticResource lb_datagrid}"
-                Visibility="{Binding IsVisible}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding nID}"
-                        Header="ID"
-                        IsReadOnly="True" />
-                </DataGrid.Columns>
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-                <DataGrid.InputBindings>
-                    <KeyBinding
-                        Key="I"
-                        Command="{Binding DataTableManager.AddNewRowCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="D"
-                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                        Modifiers="Control" />
-                    <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.UndoChangesCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.RedoChangesCommand}"
-                        Modifiers="Ctrl+Shift" />
-                    <KeyBinding
-                        Key="F"
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Find"
-                        Modifiers="Ctrl" />
-                </DataGrid.InputBindings>
-            </DataGrid>
-
-            <Grid
-                Grid.Row="4"
-                Grid.Column="0"
-                Visibility="{Binding IsVisible}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+            <Grid Grid.Row="2" Visibility="{Binding IsVisible}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <TextBlock
-                    x:Name="lbTotalItem"
+                <DataGrid
+                    x:Name="dataGridView"
                     Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
+                    Width="550"
+                    Height="400"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    d:Text="Showing {0}/{1} Items"
-                    Foreground="Gold"
-                    Style="{StaticResource ArialMS}">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
-                            <Binding ElementName="dataGridView" Path="Items.Count" />
-                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+                    bh:DataGridBehavior.EnableScrollIntoView="True"
+                    bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ColumnWidth="*"
+                    EnableRowVirtualization="True"
+                    HeadersVisibility="Column"
+                    HorizontalScrollBarVisibility="Auto"
+                    ItemsSource="{Binding DataTableManager.DataTable}"
+                    SelectedItem="{Binding DataTableManager.SelectedItem}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    Template="{StaticResource lb_datagrid}"
+                    Visibility="{Binding IsVisible}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding nID}"
+                            Header="ID"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+                            <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDeleteRow}" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.InputBindings>
+                        <KeyBinding
+                            Key="I"
+                            Command="{Binding DataTableManager.AddNewRowCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="D"
+                            Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                            Modifiers="Control" />
+                        <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.UndoChangesCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.RedoChangesCommand}"
+                            Modifiers="Ctrl+Shift" />
+                        <KeyBinding
+                            Key="F"
+                            Command="{Binding OpenSearchDialogCommand}"
+                            CommandParameter="Find"
+                            Modifiers="Ctrl" />
+                    </DataGrid.InputBindings>
+                </DataGrid>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    Margin="0,10,0,0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Orientation="Horizontal">
-                    <Label
-                        x:Name="lbSearch"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.Search}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <TextBox
-                        x:Name="tbSearch"
-                        Width="350"
-                        Height="40"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        CaretBrush="White"
-                        Foreground="Gold"
-                        Tag="{x:Static rs:Resources.SearchNameID}"
-                        Template="{StaticResource lb_textbox}"
-                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox
-                        Grid.Row="3"
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        x:Name="lbTotalItem"
+                        Grid.Row="0"
                         Grid.Column="0"
-                        Margin="10,0,0,0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.MatchCase}"
-                        IsChecked="{Binding MatchCase}"
-                        Template="{StaticResource lb_checkbox}" />
-                </StackPanel>
+                        d:Text="Showing {0}/{1} Items"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                                <Binding ElementName="dataGridView" Path="Items.Count" />
+                                <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                        <Label
+                            x:Name="lbSearch"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.Search}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <TextBox
+                            x:Name="tbSearch"
+                            Width="350"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            CaretBrush="White"
+                            Foreground="Gold"
+                            Tag="{x:Static rs:Resources.SearchNameID}"
+                            Template="{StaticResource lb_textbox}"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <CheckBox
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.MatchCase}"
+                            IsChecked="{Binding MatchCase}"
+                            Template="{StaticResource lb_checkbox}" />
+                    </StackPanel>
+                </Grid>
             </Grid>
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

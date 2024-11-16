@@ -2560,7 +2560,7 @@
     <value>Sub Type</value>
   </data>
   <data name="Group" xml:space="preserve">
-    <value>Groups</value>
+    <value>Group</value>
   </data>
   <data name="AddEffectEditor_GroupLevel" xml:space="preserve">
     <value>Group Level</value>
@@ -2585,6 +2585,42 @@
   </data>
   <data name="AddEffectEditor_Print" xml:space="preserve">
     <value>Print</value>
+  </data>
+  <data name="AddEffectEditor_MdataName" xml:space="preserve">
+    <value>Mdata Name</value>
+  </data>
+  <data name="AddEffectEditor_PetTarget" xml:space="preserve">
+    <value>Pet Target</value>
+  </data>
+  <data name="AddEffectEditor_DummyName" xml:space="preserve">
+    <value>Dummy Name</value>
+  </data>
+  <data name="AddEffectEditor_StartMotionName" xml:space="preserve">
+    <value>Start Motion Name</value>
+  </data>
+  <data name="AddEffectEditor_MdataScale" xml:space="preserve">
+    <value>Mdata Scale</value>
+  </data>
+  <data name="AddEffectEditor_MotionName" xml:space="preserve">
+    <value>Motion Name</value>
+  </data>
+  <data name="AddEffectEditor_Target" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="AddEffectEditor_TypeName" xml:space="preserve">
+    <value>Type Name</value>
+  </data>
+  <data name="AddEffectEditor_StayMotionName" xml:space="preserve">
+    <value>Stay Motion Name</value>
+  </data>
+  <data name="AddEffectEditor_EndMotionName" xml:space="preserve">
+    <value>End Motion Name</value>
+  </data>
+  <data name="AddEffectEditor_WildCardParam" xml:space="preserve">
+    <value>Wild Card Param</value>
+  </data>
+  <data name="AddEffectEditor_WildCardValue" xml:space="preserve">
+    <value>Wild Card Value</value>
   </data>
   <data name="Note" xml:space="preserve">
     <value>Note</value>
@@ -2642,6 +2678,15 @@
   </data>
   <data name="GoldCard" xml:space="preserve">
     <value>Gold Card</value>
+  </data>
+  <data name="GoldCardProbability" xml:space="preserve">
+    <value>Gold Card Probability</value>
+  </data>
+  <data name="SilverCardProbability" xml:space="preserve">
+    <value>Silver Card Probability</value>
+  </data>
+  <data name="BronzeCardProbability" xml:space="preserve">
+    <value>Bronze Card Probability</value>
   </data>
   <data name="MenuOpenDropGroupFile" xml:space="preserve">
     <value>Open Drop Group File...</value>
@@ -2768,5 +2813,1709 @@
   </data>
   <data name="TitleEditor_MotionName" xml:space="preserve">
     <value>Motion Name</value>
+  </data>
+  <data name="NPCShopEditor_NPCName" xml:space="preserve">
+    <value>NPC Name</value>
+  </data>
+  <data name="NPCShopEditor_SortNumber" xml:space="preserve">
+    <value>Sort Number</value>
+  </data>
+  <data name="NPCShopEditor_Token" xml:space="preserve">
+    <value>Token</value>
+  </data>
+  <data name="NPCShopEditor_CraftItemID" xml:space="preserve">
+    <value>Craft Item ID</value>
+  </data>
+  <data name="NPCShopEditor_Craftable" xml:space="preserve">
+    <value>Craftable</value>
+  </data>
+  <data name="NPCShopEditor_ItemCraft" xml:space="preserve">
+    <value>Item Craft</value>
+  </data>
+  <data name="NPCShopEditor_ItemCraftCount" xml:space="preserve">
+    <value>Item Craft Count</value>
+  </data>
+  <data name="NPCShopEditor_ItemCraftCost" xml:space="preserve">
+    <value>Item Craft Cost</value>
+  </data>
+  <data name="NPCShopEditor_CraftMaterial" xml:space="preserve">
+    <value>Craft Material</value>
+  </data>
+  <data name="NPCShopEditor_ShopItemID" xml:space="preserve">
+    <value>Shop Item ID</value>
+  </data>
+  <data name="NPCShopEditor_PackageEffectCode" xml:space="preserve">
+    <value>Package Effect Code</value>
+  </data>
+  <data name="NPCShopEditor_QuestType" xml:space="preserve">
+    <value>Quest Type</value>
+  </data>
+  <data name="NPCShopEditor_ItemName" xml:space="preserve">
+    <value>Item Name</value>
+  </data>
+  <data name="NPCShopEditor_ItemType" xml:space="preserve">
+    <value>Item Type</value>
+  </data>
+  <data name="NPCShopEditor_FilterItem" xml:space="preserve">
+    <value>Filter Item</value>
+  </data>
+  <data name="NPCShopEditor_QuestCondition" xml:space="preserve">
+    <value>Quest Condition</value>
+  </data>
+  <data name="NPCShopEditor_Quest" xml:space="preserve">
+    <value>Quest</value>
+  </data>
+  <data name="NPCShopEditor_PreviewClass" xml:space="preserve">
+    <value>Preview Class</value>
+  </data>
+  <data name="NPCShopEditor_PreviewItem" xml:space="preserve">
+    <value>Preview Item</value>
+  </data>
+  <data name="NPCShopEditor_ItemMinLevel" xml:space="preserve">
+    <value>Item Min Level</value>
+  </data>
+  <data name="NPCShopEditor_ItemMaxLevel" xml:space="preserve">
+    <value>Item Max Level</value>
+  </data>
+  <data name="NPCShopEditor_ItemCategory" xml:space="preserve">
+    <value>Item Category</value>
+  </data>
+  <data name="NPCShopEditor_ItemSubCategory" xml:space="preserve">
+    <value>Item Sub Category</value>
+  </data>
+  <data name="NPCShopEditor_DismantledItem" xml:space="preserve">
+    <value>Dismantled Item</value>
+  </data>
+  <data name="NPCShopEditor_DismantleItem" xml:space="preserve">
+    <value>Dismantle Item</value>
+  </data>
+  <data name="NPCShopEditor_DismantleProbability" xml:space="preserve">
+    <value>Dismantle Probability</value>
+  </data>
+  <data name="NPCShopEditor_ItemDismantleMinCount" xml:space="preserve">
+    <value>Item Dismantle Min Count</value>
+  </data>
+  <data name="NPCShopEditor_ItemDismantleMaxCount" xml:space="preserve">
+    <value>Item Dismantle Max Count</value>
+  </data>
+  <data name="NPCShopEditor_ItemQuality" xml:space="preserve">
+    <value>Item Quality</value>
+  </data>
+  <data name="NPCShopEditor_PreviewClasses" xml:space="preserve">
+    <value>Preview Classes</value>
+  </data>
+  <data name="NPCShopEditor_Note01" xml:space="preserve">
+    <value>Note 01</value>
+  </data>
+  <data name="NPCShopEditor_Note02" xml:space="preserve">
+    <value>Note 02</value>
+  </data>
+  <data name="NPCShopEditor_ItemCraftProbability" xml:space="preserve">
+    <value>Item Craft Probability</value>
+  </data>
+  <data name="NPCShopEditor_CraftCost" xml:space="preserve">
+    <value>Craft Cost</value>
+  </data>
+  <data name="NPCShopEditor_CraftType" xml:space="preserve">
+    <value>Craft Type</value>
+  </data>
+  <data name="NPCShopEditor_CraftCategory" xml:space="preserve">
+    <value>Craft Category</value>
+  </data>
+  <data name="NPCShopEditor_CraftSubCategory" xml:space="preserve">
+    <value>Craft Sub Category</value>
+  </data>
+  <data name="NPCShopEditor_Category01" xml:space="preserve">
+    <value>Category 01</value>
+  </data>
+  <data name="NPCShopEditor_Category02" xml:space="preserve">
+    <value>Category 02</value>
+  </data>
+  <data name="NPCShopEditor_Category03" xml:space="preserve">
+    <value>Category 03</value>
+  </data>
+  <data name="NPCShopEditor_DuelPointCost" xml:space="preserve">
+    <value>Duel Point Cost</value>
+  </data>
+  <data name="NPCShopEditor_Visible" xml:space="preserve">
+    <value>Visible</value>
+  </data>
+  <data name="EnemyEditor_EnemyInfo" xml:space="preserve">
+    <value>Enemy Info</value>
+  </data>
+  <data name="ItemEditor_ItemData" xml:space="preserve">
+    <value>Item Data</value>
+  </data>
+  <data name="ItemEditor_UnionPackageID" xml:space="preserve">
+    <value>Union Package ID</value>
+  </data>
+  <data name="ItemEditor_TitleID" xml:space="preserve">
+    <value>Title ID</value>
+  </data>
+  <data name="ItemEditor_ArmorQualityMin" xml:space="preserve">
+    <value>Armor Quality Min</value>
+  </data>
+  <data name="ItemEditor_AddEffectID01" xml:space="preserve">
+    <value>AddEffect ID 01</value>
+  </data>
+  <data name="ItemEditor_AddEffectID02" xml:space="preserve">
+    <value>AddEffect ID 02</value>
+  </data>
+  <data name="ItemEditor_CostumePackID" xml:space="preserve">
+    <value>Costume Pack ID</value>
+  </data>
+  <data name="ItemEditor_ItemInfo" xml:space="preserve">
+    <value>Item Info</value>
+  </data>
+  <data name="ItemEditor_FieldMeshItemID" xml:space="preserve">
+    <value>Field Mesh Item ID</value>
+  </data>
+  <data name="ItemEditor_Dismantleable" xml:space="preserve">
+    <value>Dismantleable</value>
+  </data>
+  <data name="ItemEditor_AuctionCategory" xml:space="preserve">
+    <value>Auction Category</value>
+  </data>
+  <data name="ItemEditor_RiddleGroup" xml:space="preserve">
+    <value>Riddle Group</value>
+  </data>
+  <data name="ItemEditor_PetEatGroup" xml:space="preserve">
+    <value>Pet Eat Group</value>
+  </data>
+  <data name="ItemEditor_LevelLimit" xml:space="preserve">
+    <value>Level Limit</value>
+  </data>
+  <data name="ItemEditor_ShareRule" xml:space="preserve">
+    <value>Share Rule</value>
+  </data>
+  <data name="ItemEditor_DurationSeconds" xml:space="preserve">
+    <value>Duration (Seconds)</value>
+  </data>
+  <data name="ItemEditor_Quest" xml:space="preserve">
+    <value>Quest</value>
+  </data>
+  <data name="ItemEditor_AccountStorage" xml:space="preserve">
+    <value>Account Storage</value>
+  </data>
+  <data name="ItemEditor_Deleteable" xml:space="preserve">
+    <value>Deleteable</value>
+  </data>
+  <data name="ItemEditor_UseLimit" xml:space="preserve">
+    <value>Use Limit</value>
+  </data>
+  <data name="ItemEditor_OptionCountMax" xml:space="preserve">
+    <value>Option Count Max</value>
+  </data>
+  <data name="ItemEditor_EnchantCost" xml:space="preserve">
+    <value>Enchant Cost</value>
+  </data>
+  <data name="ItemEditor_Luck" xml:space="preserve">
+    <value>Luck</value>
+  </data>
+  <data name="ItemEditor_NPCTradeable" xml:space="preserve">
+    <value>NPC Tradeable</value>
+  </data>
+  <data name="ItemEditor_FishingChair" xml:space="preserve">
+    <value>Fishing Chair</value>
+  </data>
+  <data name="ItemEditor_ActivityValue" xml:space="preserve">
+    <value>Activity Value</value>
+  </data>
+  <data name="ItemEditor_Weight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+  <data name="ItemEditor_OptionCountMin" xml:space="preserve">
+    <value>Option Count Min</value>
+  </data>
+  <data name="ItemEditor_Option Group_b" xml:space="preserve">
+    <value>Option Group Blood</value>
+  </data>
+  <data name="ItemEditor_OptionGroup_vh" xml:space="preserve">
+    <value>Option Group Very Hard</value>
+  </data>
+  <data name="ItemEditor_Option Group_h" xml:space="preserve">
+    <value>Option Group Hard</value>
+  </data>
+  <data name="ItemEditor_OptionGroup" xml:space="preserve">
+    <value>Option Group</value>
+  </data>
+  <data name="ItemEditor_Option" xml:space="preserve">
+    <value>Option</value>
+  </data>
+  <data name="ItemEditor_MagicDefense_b" xml:space="preserve">
+    <value>Magic Defense_b</value>
+  </data>
+  <data name="ItemEditor_Defense_b" xml:space="preserve">
+    <value>Defense_b</value>
+  </data>
+  <data name="ItemEditor_MagicDefense" xml:space="preserve">
+    <value>Magic Defense</value>
+  </data>
+  <data name="ItemEditor_Defense" xml:space="preserve">
+    <value>Defense</value>
+  </data>
+  <data name="ItemEditor_Armor" xml:space="preserve">
+    <value>Armor</value>
+  </data>
+  <data name="ItemEditor_SkillID" xml:space="preserve">
+    <value>Skill ID</value>
+  </data>
+  <data name="ItemEditor_PartID" xml:space="preserve">
+    <value>Part ID</value>
+  </data>
+  <data name="ItemEditor_ReconstructionMax" xml:space="preserve">
+    <value>Reconstruction Max</value>
+  </data>
+  <data name="ItemEditor_Reconstruction" xml:space="preserve">
+    <value>Reconstruction</value>
+  </data>
+  <data name="ItemEditor_ItemBindingOff" xml:space="preserve">
+    <value>Item Binding Off</value>
+  </data>
+  <data name="ItemEditor_ReconstructionItemID" xml:space="preserve">
+    <value>Reconstruction Item ID</value>
+  </data>
+  <data name="ItemEditor_RestraintType" xml:space="preserve">
+    <value>Restraint Type</value>
+  </data>
+  <data name="ItemEditor_SocketCountMax" xml:space="preserve">
+    <value>Socket Count Max</value>
+  </data>
+  <data name="ItemEditor_Durability" xml:space="preserve">
+    <value>Durability</value>
+  </data>
+  <data name="ItemEditor_MaxStackCount" xml:space="preserve">
+    <value>Max Stack Count</value>
+  </data>
+  <data name="ItemEditor_MaxCarryCount" xml:space="preserve">
+    <value>Max Carry Count</value>
+  </data>
+  <data name="ItemEditor_SellPrice" xml:space="preserve">
+    <value>Sell Price</value>
+  </data>
+  <data name="ItemEditor_RuneType" xml:space="preserve">
+    <value>Gem Type</value>
+  </data>
+  <data name="ItemEditor_PetCostume" xml:space="preserve">
+    <value>Pet Costume</value>
+  </data>
+  <data name="ItemEditor_FishingRod" xml:space="preserve">
+    <value>Fishing Rod</value>
+  </data>
+  <data name="ItemEditor_GroupID" xml:space="preserve">
+    <value>Group ID</value>
+  </data>
+  <data name="ItemEditor_Invade" xml:space="preserve">
+    <value>Invade</value>
+  </data>
+  <data name="ItemEditor_EquipGroup" xml:space="preserve">
+    <value>Equip Group</value>
+  </data>
+  <data name="ItemEditor_Kind" xml:space="preserve">
+    <value>Kind</value>
+  </data>
+  <data name="ItemEditor_BuyPrice" xml:space="preserve">
+    <value>Buy Price</value>
+  </data>
+  <data name="ItemEditor_Cooldown" xml:space="preserve">
+    <value>Cooldown</value>
+  </data>
+  <data name="ItemEditor_WeaponID01" xml:space="preserve">
+    <value>Weapon ID 01</value>
+  </data>
+  <data name="ItemEditor_WeaponID02" xml:space="preserve">
+    <value>Weapon ID 02</value>
+  </data>
+  <data name="ItemEditor_WeaponID03" xml:space="preserve">
+    <value>Weapon ID 03</value>
+  </data>
+  <data name="ItemEditor_MagicResistance" xml:space="preserve">
+    <value>Magic Resistance</value>
+  </data>
+  <data name="ItemEditor_Enchantable" xml:space="preserve">
+    <value>Enchantable</value>
+  </data>
+  <data name="ItemEditor_SocketCountMin" xml:space="preserve">
+    <value>Socket Count Min</value>
+  </data>
+  <data name="ItemEditor_EquipClass" xml:space="preserve">
+    <value>Equip Class</value>
+  </data>
+  <data name="ItemEditor_ItemRules" xml:space="preserve">
+    <value>Item Rules</value>
+  </data>
+  <data name="ItemEditor_Tradeable" xml:space="preserve">
+    <value>Tradeable</value>
+  </data>
+  <data name="ItemEditor_ArmorQualityMax" xml:space="preserve">
+    <value>Armor Quality Max</value>
+  </data>
+  <data name="ItemEditor_GroupName" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="ItemEditor_Useable" xml:space="preserve">
+    <value>Useable</value>
+  </data>
+  <data name="ItemEditor_FixedOption01" xml:space="preserve">
+    <value>Fixed Option 01</value>
+  </data>
+  <data name="ItemEditor_FixedOption02" xml:space="preserve">
+    <value>Fixed Option 02</value>
+  </data>
+  <data name="ItemEditor_UseableValue" xml:space="preserve">
+    <value>Useable Value</value>
+  </data>
+  <data name="ItemEditor_SetID" xml:space="preserve">
+    <value>Set ID</value>
+  </data>
+  <data name="ItemEditor_UseableValue01" xml:space="preserve">
+    <value>Useable Value 01</value>
+  </data>
+  <data name="ItemEditor_CashItem" xml:space="preserve">
+    <value>Cash Item</value>
+  </data>
+  <data name="ItemEditor_GearData" xml:space="preserve">
+    <value>Equipment Data</value>
+  </data>
+  <data name="ItemEditor_FishingBucket" xml:space="preserve">
+    <value>Fishing Bucket</value>
+  </data>
+  <data name="ItemEditor_UseableValue02" xml:space="preserve">
+    <value>Useable Value 02</value>
+  </data>
+  <data name="ItemEditor_DismantleItemCount" xml:space="preserve">
+    <value>Dismantle Item Count</value>
+  </data>
+  <data name="ItemEditor_RuneRank" xml:space="preserve">
+    <value>Gem Rank</value>
+  </data>
+  <data name="ItemEditor_RandomRuneGroup" xml:space="preserve">
+    <value>Random Rune Group</value>
+  </data>
+  <data name="ItemEditor_InventoryType" xml:space="preserve">
+    <value>Inventory Type</value>
+  </data>
+  <data name="AddEffectFilter" xml:space="preserve">
+    <value>AddEffect Filter</value>
+  </data>
+  <data name="PetEditor_PetName" xml:space="preserve">
+    <value>Pet Name</value>
+  </data>
+  <data name="PetEditor_JumpHeight01" xml:space="preserve">
+    <value>Jump Height 01</value>
+  </data>
+  <data name="PetEditor_JumpHeight02" xml:space="preserve">
+    <value>Jump Height 02</value>
+  </data>
+  <data name="PetEditor_WideRadius" xml:space="preserve">
+    <value>Wide Radius</value>
+  </data>
+  <data name="PetEditor_ModelFile" xml:space="preserve">
+    <value>Model File</value>
+  </data>
+  <data name="PetEditor_SubModelFile" xml:space="preserve">
+    <value>Sub Model File</value>
+  </data>
+  <data name="PetEditor_ModelTable Data" xml:space="preserve">
+    <value>Model/Table Data</value>
+  </data>
+  <data name="PetEditor_SubModelDummy" xml:space="preserve">
+    <value>Sub Model Dummy</value>
+  </data>
+  <data name="PetEditor_ExpFactor" xml:space="preserve">
+    <value>Exp Factor</value>
+  </data>
+  <data name="PetEditor_DeathName" xml:space="preserve">
+    <value>Death Name</value>
+  </data>
+  <data name="PetEditor_Rebirth" xml:space="preserve">
+    <value>Rebirth</value>
+  </data>
+  <data name="PetEditor_DeathMessage" xml:space="preserve">
+    <value>Death Message</value>
+  </data>
+  <data name="PetEditor_GrowingLimit" xml:space="preserve">
+    <value>Growing Limit</value>
+  </data>
+  <data name="PetEditor_CanAttackEnemy" xml:space="preserve">
+    <value>Can Attack Enemy</value>
+  </data>
+  <data name="PetEditor_Chase" xml:space="preserve">
+    <value>Chase</value>
+  </data>
+  <data name="PetEditor_PetEatItemTable" xml:space="preserve">
+    <value>Pet Eat Item Table</value>
+  </data>
+  <data name="PetEditor_TimeLimited" xml:space="preserve">
+    <value>Time Limited</value>
+  </data>
+  <data name="PetEditor_CashCharmGrowth" xml:space="preserve">
+    <value>Cash Charm Growth</value>
+  </data>
+  <data name="PetEditor_ItemPickUp" xml:space="preserve">
+    <value>Item Pick Up</value>
+  </data>
+  <data name="PetEditor_RebirthCooldown" xml:space="preserve">
+    <value>Rebirth Cooldown</value>
+  </data>
+  <data name="PetEditor_PetLevel" xml:space="preserve">
+    <value>Pet Level</value>
+  </data>
+  <data name="PetEditor_PetLevelMin" xml:space="preserve">
+    <value>Pet Level Min</value>
+  </data>
+  <data name="PetEditor_MoveHeight" xml:space="preserve">
+    <value>Move Height</value>
+  </data>
+  <data name="PetEditor_PetLevelMax" xml:space="preserve">
+    <value>Pet Level Max</value>
+  </data>
+  <data name="PetEditor_InventoryCount" xml:space="preserve">
+    <value>Inventory Count</value>
+  </data>
+  <data name="PetEditor_RisingDamageWeight" xml:space="preserve">
+    <value>Rising Damage Weight</value>
+  </data>
+  <data name="PetEditor_AttackDelay" xml:space="preserve">
+    <value>Attack Delay</value>
+  </data>
+  <data name="PetEditor_PetData" xml:space="preserve">
+    <value>Pet Data</value>
+  </data>
+  <data name="PetEditor_Deleteable" xml:space="preserve">
+    <value>Deletable</value>
+  </data>
+  <data name="GroupName" xml:space="preserve">
+    <value>Group Name</value>
+  </data>
+  <data name="InternalGroupName" xml:space="preserve">
+    <value>Internal Group Name</value>
+  </data>
+  <data name="BigIcon" xml:space="preserve">
+    <value>Big Icon</value>
+  </data>
+  <data name="PetEditor_BetrayalIcon" xml:space="preserve">
+    <value>Betrayal Icon</value>
+  </data>
+  <data name="PetEditor_PetEatIcon" xml:space="preserve">
+    <value>Pet Eat Icon</value>
+  </data>
+  <data name="PetEditor_PetType" xml:space="preserve">
+    <value>Pet Type</value>
+  </data>
+  <data name="PetEditor_KeepDistance" xml:space="preserve">
+    <value>Keep Distance</value>
+  </data>
+  <data name="PetEditor_Scale" xml:space="preserve">
+    <value>Scale</value>
+  </data>
+  <data name="PetEditor_HeadPosition" xml:space="preserve">
+    <value>Head Position</value>
+  </data>
+  <data name="PetEditor_BetrayalTime" xml:space="preserve">
+    <value>Betrayal Time</value>
+  </data>
+  <data name="PetEditor_DeadIcon" xml:space="preserve">
+    <value>Dead Icon</value>
+  </data>
+  <data name="PetEditor_BasicMotionTable" xml:space="preserve">
+    <value>Basic Motion Table</value>
+  </data>
+  <data name="PetEditor_DeathDropItem" xml:space="preserve">
+    <value>Death Drop Item</value>
+  </data>
+  <data name="PetEditor_RebirthID" xml:space="preserve">
+    <value>Rebirth ID</value>
+  </data>
+  <data name="PetEditor_PetRules" xml:space="preserve">
+    <value>Pet Rules</value>
+  </data>
+  <data name="PetEditor_InvestigationRange" xml:space="preserve">
+    <value>Investigation Range</value>
+  </data>
+  <data name="PetEditor_PickUpRange" xml:space="preserve">
+    <value>Pick Up Range</value>
+  </data>
+  <data name="PetEditor_ChaseRange" xml:space="preserve">
+    <value>Chase Range</value>
+  </data>
+  <data name="PetEditor_Skin" xml:space="preserve">
+    <value>Skin</value>
+  </data>
+  <data name="PetEditor_LongAttackRange" xml:space="preserve">
+    <value>Long Attack Range</value>
+  </data>
+  <data name="PetEditor_AttackRange" xml:space="preserve">
+    <value>Attack Range</value>
+  </data>
+  <data name="PetEditor_MoveSpeed" xml:space="preserve">
+    <value>Move Speed</value>
+  </data>
+  <data name="PetEditor_DeadDummy" xml:space="preserve">
+    <value>Dead Dummy</value>
+  </data>
+  <data name="PetEditor_CameraPosition" xml:space="preserve">
+    <value>Camera Position</value>
+  </data>
+  <data name="PetEditor_PetExpTable" xml:space="preserve">
+    <value>Pet Exp Table</value>
+  </data>
+  <data name="PetEditor_LeftHandDummyName" xml:space="preserve">
+    <value>Left Hand Dummy Name</value>
+  </data>
+  <data name="PetEditor_SubModelGroup" xml:space="preserve">
+    <value>Sub Model Group</value>
+  </data>
+  <data name="PetEditor_PetEatGold" xml:space="preserve">
+    <value>Pet Eat Gold</value>
+  </data>
+  <data name="PetEditor_PetGroup" xml:space="preserve">
+    <value>Pet Group</value>
+  </data>
+  <data name="PetEditor_TransferID" xml:space="preserve">
+    <value>Transfer ID</value>
+  </data>
+  <data name="PetEditor_CashVitalityGrowth" xml:space="preserve">
+    <value>Cash Vitality Growth</value>
+  </data>
+  <data name="PetEditor_WeightGrowth" xml:space="preserve">
+    <value>Weight Growth</value>
+  </data>
+  <data name="PetEditor_NextPetID" xml:space="preserve">
+    <value>Next Pet ID</value>
+  </data>
+  <data name="PetEditor_DeadEffectMotion" xml:space="preserve">
+    <value>Dead Effect Motion</value>
+  </data>
+  <data name="PetEditor_CostumeGroup" xml:space="preserve">
+    <value>Costume Group</value>
+  </data>
+  <data name="PetEditor_CameraDirection" xml:space="preserve">
+    <value>Camera Direction</value>
+  </data>
+  <data name="PetEditor_PetSkillAiTable" xml:space="preserve">
+    <value>Pet Skill Ai Table</value>
+  </data>
+  <data name="PetEditor_DeadFX" xml:space="preserve">
+    <value>Dead FX</value>
+  </data>
+  <data name="PetEditor_SkillTable" xml:space="preserve">
+    <value>Skill Table</value>
+  </data>
+  <data name="PetEditor_CatchDummyName" xml:space="preserve">
+    <value>Catch Dummy Name</value>
+  </data>
+  <data name="PetEditor_DownMotionTable" xml:space="preserve">
+    <value>Down Motion Table</value>
+  </data>
+  <data name="PetEditor_SimpleModelFile" xml:space="preserve">
+    <value>Simple Model File</value>
+  </data>
+  <data name="PetEditor_RightHandDummyName" xml:space="preserve">
+    <value>Right Hand Dummy Name</value>
+  </data>
+  <data name="PetEditor_PetGrade" xml:space="preserve">
+    <value>Pet Grade</value>
+  </data>
+  <data name="PetEditor_Weight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+  <data name="PetEditor_StrengthGrowth" xml:space="preserve">
+    <value>Strength Growth</value>
+  </data>
+  <data name="PetEditor_IntelligenceGrowth" xml:space="preserve">
+    <value>Intelligence Growth</value>
+  </data>
+  <data name="PetEditor_VitalityGrowth" xml:space="preserve">
+    <value>Vitality Growth</value>
+  </data>
+  <data name="PetEditor_CashResilientGrowth" xml:space="preserve">
+    <value>Cash Resilient Growth</value>
+  </data>
+  <data name="PetEditor_CashStrengthGrowth" xml:space="preserve">
+    <value>Cash Strength Growth</value>
+  </data>
+  <data name="PetEditor_CashEloquenceGrowth" xml:space="preserve">
+    <value>Cash Eloquence Growth</value>
+  </data>
+  <data name="PetEditor_CashIntelligenceGrowth" xml:space="preserve">
+    <value>Cash Intelligence Growth</value>
+  </data>
+  <data name="PetEditor_HeightGrowth" xml:space="preserve">
+    <value>Height Growth</value>
+  </data>
+  <data name="PetEditor_TemperGrowth" xml:space="preserve">
+    <value>Temper Growth</value>
+  </data>
+  <data name="PetEditor_CashWeightGrowth" xml:space="preserve">
+    <value>Cash Weight Growth</value>
+  </data>
+  <data name="PetEditor_CashHeightGrowth" xml:space="preserve">
+    <value>Cash Height Growth</value>
+  </data>
+  <data name="PetEditor_CashTemperGrowth" xml:space="preserve">
+    <value>Cash Temper Growth</value>
+  </data>
+  <data name="PetEditor_CharmGrowth" xml:space="preserve">
+    <value>Charm Growth</value>
+  </data>
+  <data name="PetEditor_AttackTable" xml:space="preserve">
+    <value>Attack Table</value>
+  </data>
+  <data name="PetEditor_NullMotionTable" xml:space="preserve">
+    <value>Null Motion Table</value>
+  </data>
+  <data name="PetEditor_ComboTable" xml:space="preserve">
+    <value>Combo Table</value>
+  </data>
+  <data name="PetEditor_EloquenceGrowth" xml:space="preserve">
+    <value>Eloquence Growth</value>
+  </data>
+  <data name="PetEditor_ResilientGrowth" xml:space="preserve">
+    <value>Resilient Growth</value>
+  </data>
+  <data name="PetEditor_PetStats" xml:space="preserve">
+    <value>Pet Stats</value>
+  </data>
+  <data name="PetEditor_GroupID" xml:space="preserve">
+    <value>Group ID</value>
+  </data>
+  <data name="PetEditor_CanBeAttacked" xml:space="preserve">
+    <value>Can Be Attacked</value>
+  </data>
+  <data name="PetEditor_Suicide" xml:space="preserve">
+    <value>Suicide</value>
+  </data>
+  <data name="FireResistance" xml:space="preserve">
+    <value>Fire Resistance</value>
+  </data>
+  <data name="WaterResistance" xml:space="preserve">
+    <value>Water Resistance</value>
+  </data>
+  <data name="LightResistance" xml:space="preserve">
+    <value>Light Resistance</value>
+  </data>
+  <data name="DarknessResistance" xml:space="preserve">
+    <value>Darkness Resistance</value>
+  </data>
+  <data name="EarthResistance" xml:space="preserve">
+    <value>Earth Resistance</value>
+  </data>
+  <data name="WindResistance" xml:space="preserve">
+    <value>Wind Resistance</value>
+  </data>
+  <data name="PoisonResistance" xml:space="preserve">
+    <value>Poison Resistance</value>
+  </data>
+  <data name="LightningResistance" xml:space="preserve">
+    <value>Lightning Resistance</value>
+  </data>
+  <data name="EnemyEditor_NameTextID" xml:space="preserve">
+    <value>Name Text ID</value>
+  </data>
+  <data name="EnemyEditor_SubGroup" xml:space="preserve">
+    <value>Sub Group</value>
+  </data>
+  <data name="EnemyEditor_SpecialTable" xml:space="preserve">
+    <value>Special Table</value>
+  </data>
+  <data name="EnemyEditor_SoulBlueTable" xml:space="preserve">
+    <value>Soul Blue Table</value>
+  </data>
+  <data name="EnemyEditor_CatchTable" xml:space="preserve">
+    <value>Catch Table</value>
+  </data>
+  <data name="EnemyEditor_SoulRedTable" xml:space="preserve">
+    <value>Soul Red Table</value>
+  </data>
+  <data name="EnemyEditor_BasicMotionTable" xml:space="preserve">
+    <value>Basic Motion Table</value>
+  </data>
+  <data name="EnemyEditor_DamageSoundTable" xml:space="preserve">
+    <value>Damage Sound Table</value>
+  </data>
+  <data name="EnemyEditor_DownMotionTable" xml:space="preserve">
+    <value>Down Motion Table</value>
+  </data>
+  <data name="EnemyEditor_AttackTable" xml:space="preserve">
+    <value>Attack Table</value>
+  </data>
+  <data name="EnemyEditor_TableData" xml:space="preserve">
+    <value>Table Data</value>
+  </data>
+  <data name="EnemyEditor_ComboType" xml:space="preserve">
+    <value>Combo Type</value>
+  </data>
+  <data name="EnemyEditor_EnemyData" xml:space="preserve">
+    <value>Enemy Data</value>
+  </data>
+  <data name="EnemyEditor_Character" xml:space="preserve">
+    <value>Character</value>
+  </data>
+  <data name="EnemyEditor_HPCorrection" xml:space="preserve">
+    <value>HP Correction</value>
+  </data>
+  <data name="EnemyEditor_GoldProbability" xml:space="preserve">
+    <value>Gold Probability</value>
+  </data>
+  <data name="EnemyEditor_Mode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="EnemyEditor_NoDrop" xml:space="preserve">
+    <value>No Drop</value>
+  </data>
+  <data name="EnemyEditor_CanBeGrabbed" xml:space="preserve">
+    <value>Can Be Grabbed</value>
+  </data>
+  <data name="EnemyEditor_SubGroupName" xml:space="preserve">
+    <value>Sub Group Name</value>
+  </data>
+  <data name="EnemyEditor_Gender" xml:space="preserve">
+    <value>Gender</value>
+  </data>
+  <data name="EnemyEditor_MoveSpeedOld" xml:space="preserve">
+    <value>Move Speed Old</value>
+  </data>
+  <data name="EnemyEditor_DownDamage" xml:space="preserve">
+    <value>Down Damage</value>
+  </data>
+  <data name="EnemyEditor_GuardBreakDamage" xml:space="preserve">
+    <value>Guard Break Damage</value>
+  </data>
+  <data name="EnemyEditor_ItemDropGroup" xml:space="preserve">
+    <value>Item Drop Group</value>
+  </data>
+  <data name="EnemyEditor_HiddenItemDropGroupF" xml:space="preserve">
+    <value>Hidden Item Drop Group F</value>
+  </data>
+  <data name="EnemyEditor_ItemDropGroupF" xml:space="preserve">
+    <value>Item Drop Group F</value>
+  </data>
+  <data name="EnemyEditor_ItemDropGroupCount" xml:space="preserve">
+    <value>Item Drop Group Count</value>
+  </data>
+  <data name="EnemyEditor_HiddenItemDropGroupCount" xml:space="preserve">
+    <value>Hidden Item Drop Group Count</value>
+  </data>
+  <data name="EnemyEditor_FatigueItemDropGroup" xml:space="preserve">
+    <value>Fatigue Item Drop Group</value>
+  </data>
+  <data name="EnemyEditor_ItemDropGroupFCount" xml:space="preserve">
+    <value>Item Drop Group F Count</value>
+  </data>
+  <data name="EnemyEditor_RisingDamageWeight" xml:space="preserve">
+    <value>Rising Damage Weight</value>
+  </data>
+  <data name="EnemyEditor_SP" xml:space="preserve">
+    <value>SP</value>
+  </data>
+  <data name="EnemyEditor_MinMagicAttack" xml:space="preserve">
+    <value>Min Magic Attack</value>
+  </data>
+  <data name="EnemyEditor_Critical" xml:space="preserve">
+    <value>Critical</value>
+  </data>
+  <data name="EnemyEditor_QuestItemDropGroup" xml:space="preserve">
+    <value>Quest Item Drop Group</value>
+  </data>
+  <data name="EnemyEditor_ItemBoxCloseTimeMax" xml:space="preserve">
+    <value>Item Box Close Time Max</value>
+  </data>
+  <data name="EnemyEditor_HiddenItemDropGroupFCount" xml:space="preserve">
+    <value>Hidden Item Drop Group F Count</value>
+  </data>
+  <data name="EnemyEditor_ItemBox" xml:space="preserve">
+    <value>Item Box</value>
+  </data>
+  <data name="EnemyEditor_DeathMotion" xml:space="preserve">
+    <value>Death Motion</value>
+  </data>
+  <data name="EnemyEditor_Condition" xml:space="preserve">
+    <value>Condition</value>
+  </data>
+  <data name="EnemyEditor_Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="EnemyEditor_HiddenDummy" xml:space="preserve">
+    <value>Hidden Dummy</value>
+  </data>
+  <data name="EnemyEditor_GlowSpeed" xml:space="preserve">
+    <value>Glow Speed</value>
+  </data>
+  <data name="EnemyEditor_NoDamageMotion" xml:space="preserve">
+    <value>No Damage Motion</value>
+  </data>
+  <data name="EnemyEditor_CostumeID" xml:space="preserve">
+    <value>Costume ID</value>
+  </data>
+  <data name="EnemyEditor_MoveHeight" xml:space="preserve">
+    <value>Move Height</value>
+  </data>
+  <data name="EnemyEditor_ItemBoxCloseTimeMin" xml:space="preserve">
+    <value>Item Box Close Time Min</value>
+  </data>
+  <data name="EnemyEditor_EffectID" xml:space="preserve">
+    <value>Effect ID</value>
+  </data>
+  <data name="EnemyEditor_Skin" xml:space="preserve">
+    <value>Skin</value>
+  </data>
+  <data name="EnemyEditor_DropGroups" xml:space="preserve">
+    <value>Drop Groups</value>
+  </data>
+  <data name="EnemyEditor_SubModelGroup" xml:space="preserve">
+    <value>Sub Model Group</value>
+  </data>
+  <data name="EnemyEditor_SubModelFile" xml:space="preserve">
+    <value>Sub Model File</value>
+  </data>
+  <data name="EnemyEditor_HiddenEffectID" xml:space="preserve">
+    <value>Hidden Effect ID</value>
+  </data>
+  <data name="EnemyEditor_InstanceItemDropGroup" xml:space="preserve">
+    <value>Instance Item Drop Group</value>
+  </data>
+  <data name="EnemyEditor_ArmorDurDecrease" xml:space="preserve">
+    <value>Armor Dur. Decrease</value>
+  </data>
+  <data name="EnemyEditor_WeaponDurDecrease" xml:space="preserve">
+    <value>Weapon Dur. Decrease</value>
+  </data>
+  <data name="EnemyEditor_MagicDefense" xml:space="preserve">
+    <value>Magic Defense</value>
+  </data>
+  <data name="EnemyEditor_MagicResistance" xml:space="preserve">
+    <value>Magic Resistance</value>
+  </data>
+  <data name="EnemyEditor_MagicAttack" xml:space="preserve">
+    <value>Magic Attack</value>
+  </data>
+  <data name="EnemyEditor_FatigueItemDropGroupCount" xml:space="preserve">
+    <value>Fatigue Item Drop Group Count</value>
+  </data>
+  <data name="EnemyEditor_CounterOffensive" xml:space="preserve">
+    <value>Counter Offensive</value>
+  </data>
+  <data name="EnemyEditor_HiddenQuestItemDropGroup" xml:space="preserve">
+    <value>Hidden Quest Item Drop Group</value>
+  </data>
+  <data name="EnemyEditor_ChampionItemDropGroup" xml:space="preserve">
+    <value>Champion Item Drop Group</value>
+  </data>
+  <data name="EnemyEditor_CorpseWeapon" xml:space="preserve">
+    <value>Corpse Weapon</value>
+  </data>
+  <data name="EnemyEditor_ScaleMin" xml:space="preserve">
+    <value>Scale Min</value>
+  </data>
+  <data name="EnemyEditor_PhysicalAttack" xml:space="preserve">
+    <value>Physical Attack</value>
+  </data>
+  <data name="EnemyEditor_MinPhysicalAttack" xml:space="preserve">
+    <value>Min Physical Attack</value>
+  </data>
+  <data name="EnemyEditor_Defense" xml:space="preserve">
+    <value>Defense</value>
+  </data>
+  <data name="EnemyEditor_AIScript" xml:space="preserve">
+    <value>AI Script</value>
+  </data>
+  <data name="EnemyEditor_AI" xml:space="preserve">
+    <value>AI</value>
+  </data>
+  <data name="EnemyEditor_LeftHandDummyName" xml:space="preserve">
+    <value>Left Hand Dummy Name</value>
+  </data>
+  <data name="EnemyEditor_HiddenItemDropGroup" xml:space="preserve">
+    <value>Hidden Item Drop Group</value>
+  </data>
+  <data name="EnemyEditor_DeathReleaseEquipDummy" xml:space="preserve">
+    <value>Death Release Equip Dummy</value>
+  </data>
+  <data name="EnemyEditor_RightHandDummyName" xml:space="preserve">
+    <value>Right Hand Dummy Name</value>
+  </data>
+  <data name="EnemyEditor_HeadPosition" xml:space="preserve">
+    <value>Head Position</value>
+  </data>
+  <data name="EnemyEditor_RareCardItemDropGroup" xml:space="preserve">
+    <value>Rare Card Item Drop Group</value>
+  </data>
+  <data name="EnemyEditor_AttackDelay" xml:space="preserve">
+    <value>Attack Delay</value>
+  </data>
+  <data name="EnemyEditor_AttributeAttack" xml:space="preserve">
+    <value>Attribute Attack</value>
+  </data>
+  <data name="EnemyEditor_MinAttributeAttack" xml:space="preserve">
+    <value>Min Attribute Attack</value>
+  </data>
+  <data name="EnemyEditor_CriticalResistance" xml:space="preserve">
+    <value>Critical Resistance</value>
+  </data>
+  <data name="EnemyEditor_EventPartID" xml:space="preserve">
+    <value>Event Part ID</value>
+  </data>
+  <data name="EnemyEditor_WeaknessDMGPercent" xml:space="preserve">
+    <value>Weakness DMG Percent</value>
+  </data>
+  <data name="EnemyEditor_GuardDamage" xml:space="preserve">
+    <value>Guard Damage</value>
+  </data>
+  <data name="EnemyEditor_EnemyGold" xml:space="preserve">
+    <value>Enemy Gold</value>
+  </data>
+  <data name="EnemyEditor_JumpHeight" xml:space="preserve">
+    <value>Jump Height</value>
+  </data>
+  <data name="EnemyEditor_GlowColor" xml:space="preserve">
+    <value>Glow Color</value>
+  </data>
+  <data name="EnemyEditor_Color" xml:space="preserve">
+    <value>Color</value>
+  </data>
+  <data name="EnemyEditor_BackStepMotion" xml:space="preserve">
+    <value>Back Step Motion</value>
+  </data>
+  <data name="EnemyEditor_CorpsePiece" xml:space="preserve">
+    <value>Corpse Piece</value>
+  </data>
+  <data name="EnemyEditor_Material" xml:space="preserve">
+    <value>Material</value>
+  </data>
+  <data name="EnemyEditor_Stature" xml:space="preserve">
+    <value>Stature</value>
+  </data>
+  <data name="EnemyEditor_WeaknessTable" xml:space="preserve">
+    <value>Weakness Table</value>
+  </data>
+  <data name="EnemyEditor_SkillTable" xml:space="preserve">
+    <value>Skill Table</value>
+  </data>
+  <data name="EnemyEditor_NullMotionTable" xml:space="preserve">
+    <value>Null Motion Table</value>
+  </data>
+  <data name="EnemyEditor_ComboTable" xml:space="preserve">
+    <value>Combo Table</value>
+  </data>
+  <data name="EnemyEditor_AttackSpeed" xml:space="preserve">
+    <value>Attack Speed</value>
+  </data>
+  <data name="EnemyEditor_ConditionResistance" xml:space="preserve">
+    <value>Condition Resistance</value>
+  </data>
+  <data name="EnemyEditor_ConditionResistanceValue" xml:space="preserve">
+    <value>Condition Resistance Value</value>
+  </data>
+  <data name="EnemyEditor_Resistances" xml:space="preserve">
+    <value>Resistances</value>
+  </data>
+  <data name="EnemyEditor_SoloBoss" xml:space="preserve">
+    <value>Solo Boss</value>
+  </data>
+  <data name="EnemyEditor_Luck" xml:space="preserve">
+    <value>Luck</value>
+  </data>
+  <data name="EnemyEditor_Level" xml:space="preserve">
+    <value>Level</value>
+  </data>
+  <data name="EnemyEditor_MagicGuard" xml:space="preserve">
+    <value>Magic Guard</value>
+  </data>
+  <data name="EnemyEditor_PhysicalGuard" xml:space="preserve">
+    <value>Physical Guard</value>
+  </data>
+  <data name="EnemyEditor_RespawnInvencible" xml:space="preserve">
+    <value>Respawn Invencible</value>
+  </data>
+  <data name="EnemyEditor_HP" xml:space="preserve">
+    <value>HP</value>
+  </data>
+  <data name="EnemyEditor_EnemyStats" xml:space="preserve">
+    <value>Enemy Stats</value>
+  </data>
+  <data name="EnemyEditor_SubName" xml:space="preserve">
+    <value>Sub Name</value>
+  </data>
+  <data name="EnemyEditor_MP" xml:space="preserve">
+    <value>MP</value>
+  </data>
+  <data name="EnemyEditor_EnemyExp" xml:space="preserve">
+    <value>Enemy Exp</value>
+  </data>
+  <data name="EnemyEditor_SubModelDummy" xml:space="preserve">
+    <value>Sub Model Dummy</value>
+  </data>
+  <data name="EnemyEditor_ModelFile" xml:space="preserve">
+    <value>Model File</value>
+  </data>
+  <data name="EnemyEditor_ChaseRange" xml:space="preserve">
+    <value>Chase Range</value>
+  </data>
+  <data name="EnemyEditor_PatrolRange" xml:space="preserve">
+    <value>Patrol Range</value>
+  </data>
+  <data name="EnemyEditor_InvestigationRange" xml:space="preserve">
+    <value>Investigation Range</value>
+  </data>
+  <data name="EnemyEditor_ItemBoxRespawnMotion" xml:space="preserve">
+    <value>Item Box Respawn Motion</value>
+  </data>
+  <data name="EnemyEditor_LongAttackRange" xml:space="preserve">
+    <value>Long Attack Range</value>
+  </data>
+  <data name="EnemyEditor_FatigueDropGroupFCount" xml:space="preserve">
+    <value>Fatigue Drop Group F Count</value>
+  </data>
+  <data name="EnemyEditor_FatigueDropGroupF" xml:space="preserve">
+    <value>Fatigue Drop Group F</value>
+  </data>
+  <data name="EnemyEditor_AttackRange" xml:space="preserve">
+    <value>Attack Range</value>
+  </data>
+  <data name="EnemyEditor_KeepDistance" xml:space="preserve">
+    <value>Keep Distance</value>
+  </data>
+  <data name="EnemyEditor_WideRadius" xml:space="preserve">
+    <value>Wide Radius</value>
+  </data>
+  <data name="EnemyEditor_Weight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+  <data name="EnemyEditor_FaceSprite" xml:space="preserve">
+    <value>Face Sprite</value>
+  </data>
+  <data name="EnemyEditor_MoveSpeed" xml:space="preserve">
+    <value>Move Speed</value>
+  </data>
+  <data name="SkillEditor_SkillInfo" xml:space="preserve">
+    <value>Skill Info</value>
+  </data>
+  <data name="SkillEditor_SkillType" xml:space="preserve">
+    <value>Skill Type</value>
+  </data>
+  <data name="SkillEditor_ParamName" xml:space="preserve">
+    <value>Param Name</value>
+  </data>
+  <data name="SkillEditor_Column" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="SkillEditor_SkillTreeType" xml:space="preserve">
+    <value>Skill Tree Type</value>
+  </data>
+  <data name="SkillEditor_ParamNameDesc" xml:space="preserve">
+    <value>Param Name Desc</value>
+  </data>
+  <data name="SkillEditor_Row" xml:space="preserve">
+    <value>Row</value>
+  </data>
+  <data name="SkillEditor_CatchType" xml:space="preserve">
+    <value>Catch Type</value>
+  </data>
+  <data name="SkillEditor_StateFalse" xml:space="preserve">
+    <value>State False</value>
+  </data>
+  <data name="SkillEditor_Target" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="SkillEditor_AutoEquipSlot ID" xml:space="preserve">
+    <value>Auto Equip Slot ID</value>
+  </data>
+  <data name="SkillEditor_Invincibility" xml:space="preserve">
+    <value>Invincibility</value>
+  </data>
+  <data name="SkillEditor_SkillID" xml:space="preserve">
+    <value>Skill ID</value>
+  </data>
+  <data name="SkillEditor_StateTrue" xml:space="preserve">
+    <value>State True</value>
+  </data>
+  <data name="SkillEditor_AttributeGroup" xml:space="preserve">
+    <value>Attribute Group</value>
+  </data>
+  <data name="SkillEditor_CharacterType" xml:space="preserve">
+    <value>Character Type</value>
+  </data>
+  <data name="SkillEditor_Correction" xml:space="preserve">
+    <value>Correction</value>
+  </data>
+  <data name="SkillEditor_UIPage" xml:space="preserve">
+    <value>UI Page</value>
+  </data>
+  <data name="SkillEditor_AwakeningMode" xml:space="preserve">
+    <value>Awakening Mode</value>
+  </data>
+  <data name="SkillEditor_SkillActiveType" xml:space="preserve">
+    <value>Skill Active Type</value>
+  </data>
+  <data name="SkillEditor_Attribute" xml:space="preserve">
+    <value>Attribute</value>
+  </data>
+  <data name="SkillEditor_SkillStats" xml:space="preserve">
+    <value>Skill Stats</value>
+  </data>
+  <data name="SkillEditor_LearnLevel" xml:space="preserve">
+    <value>Learn Level</value>
+  </data>
+  <data name="SkillEditor_SkillLevel" xml:space="preserve">
+    <value>Skill Level</value>
+  </data>
+  <data name="SkillEditor_SkillMotionSG" xml:space="preserve">
+    <value>Skill Motion SG</value>
+  </data>
+  <data name="SkillEditor_HPPercentCost" xml:space="preserve">
+    <value>HP Percent Cost</value>
+  </data>
+  <data name="SkillEditor_SkillCooldown" xml:space="preserve">
+    <value>Skill Cooldown</value>
+  </data>
+  <data name="SkillEditor_SkillMotion" xml:space="preserve">
+    <value>Skill Motion</value>
+  </data>
+  <data name="SkillEditor_MotionCategory" xml:space="preserve">
+    <value>Motion Category</value>
+  </data>
+  <data name="SkillEditor_ParameterName" xml:space="preserve">
+    <value>Parameter Name</value>
+  </data>
+  <data name="SkillEditor_WeaponDamageSkill" xml:space="preserve">
+    <value>Weapon Damage Skill</value>
+  </data>
+  <data name="SkillEditor_TotalDamage" xml:space="preserve">
+    <value>Total Damage</value>
+  </data>
+  <data name="SkillEditor_SkillPointCost" xml:space="preserve">
+    <value>Skill Point Cost</value>
+  </data>
+  <data name="SkillEditor_MotionCategorySG" xml:space="preserve">
+    <value>Motion Category SG</value>
+  </data>
+  <data name="SkillEditor_APCost" xml:space="preserve">
+    <value>AP Cost</value>
+  </data>
+  <data name="SkillEditor_SkillData" xml:space="preserve">
+    <value>Skill Data</value>
+  </data>
+  <data name="SkillEditor_Skill" xml:space="preserve">
+    <value>Skill</value>
+  </data>
+  <data name="SkillEditor_RequiredSkill" xml:space="preserve">
+    <value>Required Skill</value>
+  </data>
+  <data name="SkillEditor_HPCost" xml:space="preserve">
+    <value>HP Cost</value>
+  </data>
+  <data name="SkillEditor_MPCost" xml:space="preserve">
+    <value>MP Cost</value>
+  </data>
+  <data name="SkillEditor_ParameterValue" xml:space="preserve">
+    <value>Parameter Value</value>
+  </data>
+  <data name="SkillEditor_Movie" xml:space="preserve">
+    <value>Movie</value>
+  </data>
+  <data name="QuestEditor_Memo" xml:space="preserve">
+    <value>Memo</value>
+  </data>
+  <data name="QuestEditor_Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="QuestEditor_Ratio" xml:space="preserve">
+    <value>Ratio</value>
+  </data>
+  <data name="QuestEditor_ClassGroupLimit" xml:space="preserve">
+    <value>Class Group Limit</value>
+  </data>
+  <data name="QuestEditor_SelectRewardItem" xml:space="preserve">
+    <value>Select Reward Item</value>
+  </data>
+  <data name="QuestEditor_RewardItem" xml:space="preserve">
+    <value>Reward Item</value>
+  </data>
+  <data name="QuestEditor_GetRewardItem" xml:space="preserve">
+    <value>Get Reward Item</value>
+  </data>
+  <data name="QuestEditor_NoReject" xml:space="preserve">
+    <value>No Reject</value>
+  </data>
+  <data name="QuestEditor_QuestRule" xml:space="preserve">
+    <value>Quest Rule</value>
+  </data>
+  <data name="QuestEditor_WorldID" xml:space="preserve">
+    <value>World ID</value>
+  </data>
+  <data name="QuestEditor_NumberMin" xml:space="preserve">
+    <value>Number Min</value>
+  </data>
+  <data name="QuestEditor_DifficultMax" xml:space="preserve">
+    <value>Difficult Max</value>
+  </data>
+  <data name="QuestEditor_QuestData" xml:space="preserve">
+    <value>Quest Data</value>
+  </data>
+  <data name="QuestEditor_DifficultMin" xml:space="preserve">
+    <value>Difficult Min</value>
+  </data>
+  <data name="QuestEditor_Gold" xml:space="preserve">
+    <value>Gold</value>
+  </data>
+  <data name="QuestEditor_Hint" xml:space="preserve">
+    <value>Hint</value>
+  </data>
+  <data name="QuestEditor_Reject" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="QuestEditor_ClassLimit" xml:space="preserve">
+    <value>Class Limit</value>
+  </data>
+  <data name="QuestEditor_QuestItemData" xml:space="preserve">
+    <value>Quest Item Data</value>
+  </data>
+  <data name="QuestEditor_IsStatusReset" xml:space="preserve">
+    <value>Is Status Reset</value>
+  </data>
+  <data name="QuestEditor_CannotSkip" xml:space="preserve">
+    <value>Cannot Skip</value>
+  </data>
+  <data name="QuestEditor_NPCID" xml:space="preserve">
+    <value>NPC ID</value>
+  </data>
+  <data name="QuestEditor_AllLevelShow" xml:space="preserve">
+    <value>All Level Show</value>
+  </data>
+  <data name="QuestEditor_ExclusiveQuest" xml:space="preserve">
+    <value>Exclusive Quest</value>
+  </data>
+  <data name="QuestEditor_MissionWorldID" xml:space="preserve">
+    <value>Mission World ID</value>
+  </data>
+  <data name="QuestEditor_MoveNPC" xml:space="preserve">
+    <value>Move NPC</value>
+  </data>
+  <data name="QuestEditor_UseLoop" xml:space="preserve">
+    <value>Use Loop</value>
+  </data>
+  <data name="QuestEditor_QuestTitle" xml:space="preserve">
+    <value>Quest Title</value>
+  </data>
+  <data name="QuestEditor_NpcNameTitle" xml:space="preserve">
+    <value>NPC Name Title</value>
+  </data>
+  <data name="QuestEditor_QuestItemGroupCount" xml:space="preserve">
+    <value>Quest Item Group Count</value>
+  </data>
+  <data name="QuestEditor_QuestItemGroup" xml:space="preserve">
+    <value>Quest Item Group</value>
+  </data>
+  <data name="QuestEditor_QuestGroupComplete" xml:space="preserve">
+    <value>Quest Group Complete</value>
+  </data>
+  <data name="QuestEditor_QuestGroupRequest" xml:space="preserve">
+    <value>Quest Group Request</value>
+  </data>
+  <data name="QuestEditor_QuestString" xml:space="preserve">
+    <value>Quest String</value>
+  </data>
+  <data name="QuestEditor_PartyGold" xml:space="preserve">
+    <value>Party Gold</value>
+  </data>
+  <data name="QuestEditor_NPCName" xml:space="preserve">
+    <value>NPC Name</value>
+  </data>
+  <data name="QuestEditor_AutoNextQuest" xml:space="preserve">
+    <value>Auto Next Quest</value>
+  </data>
+  <data name="QuestEditor_World" xml:space="preserve">
+    <value>World</value>
+  </data>
+  <data name="QuestEditor_ContactActiveWorld" xml:space="preserve">
+    <value>Contact Active World</value>
+  </data>
+  <data name="QuestEditor_QuestGroupString" xml:space="preserve">
+    <value>Quest Group String</value>
+  </data>
+  <data name="QuestEditor_LevelLimit" xml:space="preserve">
+    <value>Level Limit</value>
+  </data>
+  <data name="QuestEditor_Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="QuestEditor_ConditionID" xml:space="preserve">
+    <value>Condition ID</value>
+  </data>
+  <data name="QuestEditor_QuestCondition" xml:space="preserve">
+    <value>Quest Condition</value>
+  </data>
+  <data name="QuestEditor_Sprite" xml:space="preserve">
+    <value>Sprite</value>
+  </data>
+  <data name="QuestEditor_PlayPoint" xml:space="preserve">
+    <value>Play Point</value>
+  </data>
+  <data name="QuestEditor_BonusCash" xml:space="preserve">
+    <value>Bonus Cash</value>
+  </data>
+  <data name="QuestEditor_QuestRewardItem" xml:space="preserve">
+    <value>Quest Reward Item</value>
+  </data>
+  <data name="QuestEditor_QuestItem" xml:space="preserve">
+    <value>Quest Item</value>
+  </data>
+  <data name="QuestEditor_Experience" xml:space="preserve">
+    <value>Experience</value>
+  </data>
+  <data name="QuestEditor_NPCInstanceID" xml:space="preserve">
+    <value>NPC Instance ID</value>
+  </data>
+  <data name="QuestEditor_ConditionType" xml:space="preserve">
+    <value>Condition Type</value>
+  </data>
+  <data name="QuestEditor_ConditionValue" xml:space="preserve">
+    <value>Condition Value</value>
+  </data>
+  <data name="QuestEditor_AutoComplete" xml:space="preserve">
+    <value>Auto Complete</value>
+  </data>
+  <data name="QuestEditor_ActiveWorld" xml:space="preserve">
+    <value>Active World</value>
+  </data>
+  <data name="QuestEditor_StoryGroup" xml:space="preserve">
+    <value>Story Group</value>
+  </data>
+  <data name="QuestEditor_ChangeFocus" xml:space="preserve">
+    <value>Change Focus</value>
+  </data>
+  <data name="QuestEditor_EquipItemConditionType" xml:space="preserve">
+    <value>Equip Item Condition Type</value>
+  </data>
+  <data name="QuestEditor_Summary" xml:space="preserve">
+    <value>Summary</value>
+  </data>
+  <data name="QuestEditor_ShowLevel" xml:space="preserve">
+    <value>Show Level</value>
+  </data>
+  <data name="QuestEditor_NumberMax" xml:space="preserve">
+    <value>Number Max</value>
+  </data>
+  <data name="QuestEditor_DailyMission" xml:space="preserve">
+    <value>Daily Mission</value>
+  </data>
+  <data name="QuestEditor_MissionID" xml:space="preserve">
+    <value>Mission ID</value>
+  </data>
+  <data name="QuestEditor_SkipItemValue" xml:space="preserve">
+    <value>Skip Item Value</value>
+  </data>
+  <data name="QuestEditor_ClassID" xml:space="preserve">
+    <value>Class ID</value>
+  </data>
+  <data name="QuestEditor_QuestShowConditonItem" xml:space="preserve">
+    <value>Quest Show Condition Item</value>
+  </data>
+  <data name="QuestEditor_GroupID" xml:space="preserve">
+    <value>Group ID</value>
+  </data>
+  <data name="QuestEditor_SubTitle" xml:space="preserve">
+    <value>Sub Title</value>
+  </data>
+  <data name="QuestEditor_MaxLevelLimit" xml:space="preserve">
+    <value>Max Level Limit</value>
+  </data>
+  <data name="QuestEditor_QuestID" xml:space="preserve">
+    <value>Quest ID</value>
+  </data>
+  <data name="QuestEditor_Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="QuestEditor_RewardCode" xml:space="preserve">
+    <value>Reward Code</value>
+  </data>
+  <data name="QuestEditor_ClientComplete" xml:space="preserve">
+    <value>Client Complete</value>
+  </data>
+  <data name="QuestEditor_Event" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="QuestEditor_ItemDelete" xml:space="preserve">
+    <value>Item Delete</value>
+  </data>
+  <data name="QuestEditor_TimeLimit" xml:space="preserve">
+    <value>Time Limit</value>
+  </data>
+  <data name="QuestEditor_Difficult" xml:space="preserve">
+    <value>Difficult</value>
+  </data>
+  <data name="QuestEditor_MissionStringID" xml:space="preserve">
+    <value>Mission String ID</value>
+  </data>
+  <data name="QuestEditor_CompleteDeleteAll01" xml:space="preserve">
+    <value>Complete Delete All 01</value>
+  </data>
+  <data name="QuestEditor_CompleteDeleteAll02" xml:space="preserve">
+    <value>Complete Delete All 02</value>
+  </data>
+  <data name="QuestEditor_CompleteDeleteAll03" xml:space="preserve">
+    <value>Complete Delete All 03</value>
+  </data>
+  <data name="QuestEditor_UseRandom" xml:space="preserve">
+    <value>Use Random</value>
+  </data>
+  <data name="WorldEditor_WorldInfo" xml:space="preserve">
+    <value>World Info</value>
+  </data>
+  <data name="WorldEditor_RootVillageID" xml:space="preserve">
+    <value>Root Village ID</value>
+  </data>
+  <data name="WorldEditor_InternalNameUI" xml:space="preserve">
+    <value>Internal Name UI</value>
+  </data>
+  <data name="WorldEditor_RouletteConditionID" xml:space="preserve">
+    <value>Roulette Condition ID</value>
+  </data>
+  <data name="WorldEditor_PartySummon" xml:space="preserve">
+    <value>Party Summon</value>
+  </data>
+  <data name="WorldEditor_Uniqueness" xml:space="preserve">
+    <value>Uniqueness</value>
+  </data>
+  <data name="WorldEditor_RebirthLimit" xml:space="preserve">
+    <value>Ressurect Limit</value>
+  </data>
+  <data name="WorldEditor_InDungeonType" xml:space="preserve">
+    <value>In Dungeon Type</value>
+  </data>
+  <data name="WorldEditor_LoadingImageGroup" xml:space="preserve">
+    <value>Loading Image Group</value>
+  </data>
+  <data name="WorldEditor_StagePlayPoint" xml:space="preserve">
+    <value>Stage Play Point</value>
+  </data>
+  <data name="WorldEditor_StageClearPoint" xml:space="preserve">
+    <value>Stage Clear Point</value>
+  </data>
+  <data name="WorldEditor_DungeonMaxTime" xml:space="preserve">
+    <value>Dungeon Max Time</value>
+  </data>
+  <data name="WorldEditor_WorldLevel" xml:space="preserve">
+    <value>World Level</value>
+  </data>
+  <data name="WorldEditor_NoFatigueType" xml:space="preserve">
+    <value>No Fatigue Type</value>
+  </data>
+  <data name="WorldEditor_NoPenality" xml:space="preserve">
+    <value>No Penality</value>
+  </data>
+  <data name="WorldEditor_Entrance" xml:space="preserve">
+    <value>Entrance</value>
+  </data>
+  <data name="WorldEditor_NotShow" xml:space="preserve">
+    <value>Not Show</value>
+  </data>
+  <data name="WorldEditor_BloodRebirthLimit" xml:space="preserve">
+    <value>Blood Rebirth Limit</value>
+  </data>
+  <data name="WorldEditor_WorldData" xml:space="preserve">
+    <value>World Data</value>
+  </data>
+  <data name="WorldEditor_ClearReward" xml:space="preserve">
+    <value>Clear/Reward</value>
+  </data>
+  <data name="WorldEditor_DifficultyExp" xml:space="preserve">
+    <value>Difficulty Exp</value>
+  </data>
+  <data name="WorldEditor_PreloadShoot" xml:space="preserve">
+    <value>Preload Shoot </value>
+  </data>
+  <data name="WorldEditor_NotifyPortal" xml:space="preserve">
+    <value>Notify Portal</value>
+  </data>
+  <data name="WorldEditor_Sky" xml:space="preserve">
+    <value>Sky</value>
+  </data>
+  <data name="WorldEditor_StageRewardGoldMax" xml:space="preserve">
+    <value>Stage Reward Gold Max</value>
+  </data>
+  <data name="WorldEditor_StageClearTime" xml:space="preserve">
+    <value>Stage Clear Time</value>
+  </data>
+  <data name="WorldEditor_ChangeCardGoldCost" xml:space="preserve">
+    <value>Change Card Gold Cost</value>
+  </data>
+  <data name="WorldEditor_RareCardAdditionProb" xml:space="preserve">
+    <value>Rare Card Addition Prob</value>
+  </data>
+  <data name="WorldEditor_RareCardAdditionID" xml:space="preserve">
+    <value>Rare Card Addition ID</value>
+  </data>
+  <data name="WorldEditor_StageRewardItemMin" xml:space="preserve">
+    <value>Stage Reward Item Min</value>
+  </data>
+  <data name="WorldEditor_UnlockConditionBlood" xml:space="preserve">
+    <value>Unlock Condition Blood</value>
+  </data>
+  <data name="WorldEditor_HasBloodMode" xml:space="preserve">
+    <value>Has Blood Mode</value>
+  </data>
+  <data name="WorldEditor_DifficultyAttack" xml:space="preserve">
+    <value>Difficulty Attack</value>
+  </data>
+  <data name="WorldEditor_Difficulty" xml:space="preserve">
+    <value>Difficulty</value>
+  </data>
+  <data name="WorldEditor_ShadowLightFile" xml:space="preserve">
+    <value>Shadow Light File</value>
+  </data>
+  <data name="WorldEditor_UnlockConditionHard" xml:space="preserve">
+    <value>Unlock Condition Hard</value>
+  </data>
+  <data name="WorldEditor_UnlockConditionNormal" xml:space="preserve">
+    <value>Unlock Condition Normal</value>
+  </data>
+  <data name="WorldEditor_LoadingTipGroup" xml:space="preserve">
+    <value>Loading Tip Group</value>
+  </data>
+  <data name="WorldEditor_PlayLevelBlood" xml:space="preserve">
+    <value>Play Level Blood Mode</value>
+  </data>
+  <data name="WorldEditor_MinimapStartZ" xml:space="preserve">
+    <value>Minimap Start Z</value>
+  </data>
+  <data name="WorldEditor_MinimapEndZ" xml:space="preserve">
+    <value>Minimap End Z</value>
+  </data>
+  <data name="WorldEditor_MinimapEndX" xml:space="preserve">
+    <value>Minimap End X</value>
+  </data>
+  <data name="WorldEditor_MapTitle" xml:space="preserve">
+    <value>Map Title</value>
+  </data>
+  <data name="WorldEditor_MinimapStartX" xml:space="preserve">
+    <value>Minimap Start X</value>
+  </data>
+  <data name="WorldEditor_Condition" xml:space="preserve">
+    <value>Condition</value>
+  </data>
+  <data name="WorldEditor_MapTitleR" xml:space="preserve">
+    <value>Map Title R</value>
+  </data>
+  <data name="WorldEditor_MapPreview" xml:space="preserve">
+    <value>Map Preview</value>
+  </data>
+  <data name="WorldEditor_MapTitleB" xml:space="preserve">
+    <value>Map Title B</value>
+  </data>
+  <data name="WorldEditor_MapTitleG" xml:space="preserve">
+    <value>Map Title G</value>
+  </data>
+  <data name="WorldEditor_Map" xml:space="preserve">
+    <value>Map</value>
+  </data>
+  <data name="WorldEditor_CharLightFile" xml:space="preserve">
+    <value>Character Light File</value>
+  </data>
+  <data name="WorldEditor_StageRewardItemLevel" xml:space="preserve">
+    <value>Stage Reward Item Level</value>
+  </data>
+  <data name="WorldEditor_BonusExp" xml:space="preserve">
+    <value>Bonus Exp</value>
+  </data>
+  <data name="WorldEditor_WorldLightFile" xml:space="preserve">
+    <value>World Light File</value>
+  </data>
+  <data name="WorldEditor_WorldFile" xml:space="preserve">
+    <value>World File</value>
+  </data>
+  <data name="WorldEditor_BigSprite" xml:space="preserve">
+    <value>Big Sprite</value>
+  </data>
+  <data name="WorldEditor_MenuCommand" xml:space="preserve">
+    <value>Menu Command</value>
+  </data>
+  <data name="WorldEditor_SkipDungeonInfo" xml:space="preserve">
+    <value>Skip Dungeon Info</value>
+  </data>
+  <data name="WorldEditor_DungeonShop" xml:space="preserve">
+    <value>Dungeon Shop</value>
+  </data>
+  <data name="WorldEditor_DungeonID" xml:space="preserve">
+    <value>Dungeon ID</value>
+  </data>
+  <data name="WorldEditor_Fishing" xml:space="preserve">
+    <value>Fishing</value>
+  </data>
+  <data name="WorldEditor_FreeCamera" xml:space="preserve">
+    <value>Free Camera</value>
+  </data>
+  <data name="WorldEditor_DifficultyGold" xml:space="preserve">
+    <value>Difficulty Gold</value>
+  </data>
+  <data name="WorldEditor_StageRewardGoldMin" xml:space="preserve">
+    <value>Stage Reward Gold Min</value>
+  </data>
+  <data name="WorldEditor_StageRewardItemMax" xml:space="preserve">
+    <value>Stage Reward Item Max</value>
+  </data>
+  <data name="WorldEditor_DifficultyHP" xml:space="preserve">
+    <value>Difficulty HP</value>
+  </data>
+  <data name="WorldEditor_UnlockConditionNoFatigue" xml:space="preserve">
+    <value>Unlock Condition No Fatigue</value>
+  </data>
+  <data name="WorldEditor_UnlockConditionVeryHard" xml:space="preserve">
+    <value>Unlock Condition Very Hard</value>
+  </data>
+  <data name="WorldEditor_InfoSprite" xml:space="preserve">
+    <value>Info Sprite</value>
+  </data>
+  <data name="WorldEditor_TeenRouletteConditionID" xml:space="preserve">
+    <value>Teen Roulette Condition ID</value>
+  </data>
+  <data name="WorldEditor_Raid" xml:space="preserve">
+    <value>Raid</value>
+  </data>
+  <data name="WorldEditor_MiniMapMode" xml:space="preserve">
+    <value>Mini Map Mode</value>
+  </data>
+  <data name="WorldEditor_MapPreviewImg" xml:space="preserve">
+    <value>Map Preview Image</value>
+  </data>
+  <data name="WorldEditor_MapTitleBottom" xml:space="preserve">
+    <value>Map Title Bottom</value>
+  </data>
+  <data name="WorldEditor_MapTitleTop" xml:space="preserve">
+    <value>Map Title Top</value>
+  </data>
+  <data name="WorldEditor_MapData" xml:space="preserve">
+    <value>Map Data</value>
+  </data>
+  <data name="WorldEditor_PlayLevel" xml:space="preserve">
+    <value>Play Level</value>
+  </data>
+  <data name="WorldEditor_Minimap" xml:space="preserve">
+    <value>Minimap</value>
+  </data>
+  <data name="WorldEditor_WorldID" xml:space="preserve">
+    <value>World ID</value>
+  </data>
+  <data name="WorldEditor_SelectType" xml:space="preserve">
+    <value>Select Type</value>
+  </data>
+  <data name="WorldEditor_MapSwfData" xml:space="preserve">
+    <value>Map Swf Data</value>
+  </data>
+  <data name="WorldEditor_PreloadEnemy" xml:space="preserve">
+    <value>Preload Enemy</value>
+  </data>
+  <data name="Memo" xml:space="preserve">
+    <value>Memo</value>
+  </data>
+  <data name="EventWorldItemDropGroupList" xml:space="preserve">
+    <value>Event World Item Drop Group List</value>
+  </data>
+  <data name="WorldItemDropGroupList" xml:space="preserve">
+    <value>World Item Drop Group List</value>
+  </data>
+  <data name="WorldInstanceItemDropGroupList" xml:space="preserve">
+    <value>World Instance Item Drop Group List</value>
   </data>
 </root>

@@ -1594,8 +1594,8 @@
                 Visibility="{Binding IsVisible}">
                 <DataGrid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
+                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDeleteRow}" />
                     </ContextMenu>
                 </DataGrid.ContextMenu>
                 <DataGrid.InputBindings>

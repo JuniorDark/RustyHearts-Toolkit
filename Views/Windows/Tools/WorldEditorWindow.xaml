@@ -70,7 +70,7 @@
                         x:Name="tab1"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="World Info"
+                        Header="{x:Static rs:Resources.WorldEditor_WorldInfo}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -125,7 +125,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Dungeon Shop" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_DungeonShop}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -148,7 +148,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Root Village ID 01" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 01">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_RootVillageID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -175,7 +181,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Root Village ID 02" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 02">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_RootVillageID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -225,7 +237,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Internal Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -248,7 +260,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Internal Name UI" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_InternalNameUI}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -270,7 +282,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Memo" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Memo}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -293,7 +305,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Play Level" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_PlayLevel}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -315,7 +327,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Play Level Blood" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_PlayLevelBlood}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -338,7 +350,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Info Sprite" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_InfoSprite}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -369,14 +381,13 @@
                                     Source="{Binding DataContext.DataTableManager.SelectedItem[szInfoSprite], RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource IconNameToImageSourceConverter}}"
                                     Stretch="Fill" />
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab2"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Condition"
+                        Header="{x:Static rs:Resources.WorldEditor_Condition}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -414,7 +425,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Skip Dungeon Info"
+                                    Content="{x:Static rs:Resources.WorldEditor_SkipDungeonInfo}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nSkipDungeonInfo], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -431,7 +442,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Fishing"
+                                    Content="{x:Static rs:Resources.WorldEditor_Fishing}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nFishingGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -448,7 +459,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Raid"
+                                    Content="{x:Static rs:Resources.WorldEditor_Raid}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nRaid], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -465,7 +476,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Has Blood Mode"
+                                    Content="{x:Static rs:Resources.WorldEditor_HasBloodMode}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nBloodMode], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -483,7 +494,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Entrance"
+                                    Content="{x:Static rs:Resources.WorldEditor_Entrance}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nEntrance], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -500,7 +511,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Free Camera"
+                                    Content="{x:Static rs:Resources.WorldEditor_FreeCamera}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nFreeCamera], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -517,7 +528,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="No Penality"
+                                    Content="{x:Static rs:Resources.WorldEditor_NoPenality}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nNoPenalty], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -534,7 +545,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="No Fatigue Type"
+                                    Content="{x:Static rs:Resources.WorldEditor_NoFatigueType}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nNoFatigueType], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -550,7 +561,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="World Level" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_WorldLevel}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -571,7 +582,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Dungeon Max Time" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_DungeonMaxTime}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -592,7 +603,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Stage Play Point" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_StagePlayPoint}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -613,7 +624,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="In Dungeon Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_InDungeonType}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -635,7 +646,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Rebirth Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_RebirthLimit}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -656,7 +667,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Blood Rebirth Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_BloodRebirthLimit}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -677,7 +688,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Uniqueness" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_Uniqueness}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -698,7 +709,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Party Summon" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_PartySummon}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -720,7 +731,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Roulette Condition ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_RouletteConditionID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -741,7 +752,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Teen Roulette Condition ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_TeenRouletteConditionID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -762,7 +773,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Loading Image Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_LoadingImageGroup}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -783,7 +794,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Loading Tip Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_LoadingTipGroup}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -806,7 +817,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Unlock Condition Normal" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_UnlockConditionNormal}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -828,7 +839,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Unlock Condition Hard" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_UnlockConditionHard}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -850,7 +861,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Unlock Condition Very Hard" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_UnlockConditionVeryHard}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -872,7 +883,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Unlock Condition Blood" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_UnlockConditionBlood}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -894,7 +905,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Unlock Condition No Fatigue" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_UnlockConditionNoFatigue}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -917,7 +928,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Difficulty HP" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_DifficultyHP}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -939,7 +950,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Difficulty Attack" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_DifficultyAttack}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -961,7 +972,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Difficulty Gold" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_DifficultyGold}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -983,7 +994,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Difficulty Exp" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_DifficultyExp}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1006,7 +1017,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Difficulty HP 01" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 01">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_DifficultyHP}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1028,7 +1045,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Difficulty Attack 01" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 01">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_DifficultyAttack}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1051,7 +1074,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Difficulty HP 02" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 02">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_DifficultyHP}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1073,7 +1102,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Difficulty Attack 02" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 02">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_DifficultyAttack}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1096,7 +1131,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Difficulty HP 03" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 03">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_DifficultyHP}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1118,7 +1159,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Difficulty Attack 03" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 03">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_DifficultyAttack}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1132,14 +1179,13 @@
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab3"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Clear/Reward"
+                        Header="{x:Static rs:Resources.WorldEditor_ClearReward}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -1169,7 +1215,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Bonus Exp" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_BonusExp}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1190,7 +1236,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Stage Reward Item Level" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_StageRewardItemLevel}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1212,7 +1258,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Stage Reward Item Min" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_StageRewardItemMin}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1233,7 +1279,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Stage Reward Item Max" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_StageRewardItemMax}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1255,7 +1301,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Stage Reward Gold Min" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_StageRewardGoldMin}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1276,7 +1322,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Stage Reward Gold Max" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_StageRewardGoldMax}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1317,7 +1363,17 @@
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Top"
                                                 Orientation="Vertical">
-                                                <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Stage Clear Time {0}'}" />
+                                                <TextBlock Foreground="White">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} {1}">
+                                                            <Binding
+                                                                Converter="{StaticResource IndexToNumberConverter}"
+                                                                Path="(ItemsControl.AlternationIndex)"
+                                                                RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                            <Binding Source="{x:Static rs:Resources.WorldEditor_StageClearTime}" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
                                                 <ui:NumberBox
                                                     MinWidth="150"
                                                     Margin="0,0,0,0"
@@ -1333,7 +1389,17 @@
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Top"
                                                 Orientation="Vertical">
-                                                <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Stage Clear Point {0}'}" />
+                                                <TextBlock Foreground="White">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} {1}">
+                                                            <Binding
+                                                                Converter="{StaticResource IndexToNumberConverter}"
+                                                                Path="(ItemsControl.AlternationIndex)"
+                                                                RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                            <Binding Source="{x:Static rs:Resources.WorldEditor_StageClearPoint}" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
                                                 <ui:NumberBox
                                                     MinWidth="150"
                                                     Margin="0,0,0,0"
@@ -1355,7 +1421,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Rare Card Addition ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_RareCardAdditionID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1376,7 +1442,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Rare Card Addition Prob" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_RareCardAdditionProb}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1398,7 +1464,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Change Card Gold Cost" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_ChangeCardGoldCost}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1420,7 +1486,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Gold Card" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.GoldCard}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1441,7 +1507,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Gold Card Probability" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.GoldCardProbability}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1462,7 +1528,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Silver Card" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SilverCard}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1483,7 +1549,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Silver Card Probability" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SilverCardProbability}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1504,7 +1570,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Bronze Card" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.BronzeCard}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1525,7 +1591,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Bronze Card Probability" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.BronzeCardProbability}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -1559,7 +1625,7 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Event World Item Drop Group List" />
+                                        Text="{x:Static rs:Resources.EventWorldItemDropGroupList}" />
                                     <ui:NumberBox
                                         Width="200"
                                         Margin="0,0,0,0"
@@ -1603,7 +1669,7 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="World Item Drop Group List" />
+                                        Text="{x:Static rs:Resources.WorldItemDropGroupList}" />
                                     <ui:NumberBox
                                         Width="200"
                                         Margin="0,0,0,0"
@@ -1647,7 +1713,7 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="World Instance Item Drop Group List" />
+                                        Text="{x:Static rs:Resources.WorldInstanceItemDropGroupList}" />
                                     <ui:NumberBox
                                         Width="200"
                                         Margin="0,0,0,0"
@@ -1673,14 +1739,13 @@
                                     Foreground="White"
                                     Style="{StaticResource lb_def_button02}" />
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab4"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="World Data"
+                        Header="{x:Static rs:Resources.WorldEditor_WorldData}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -1717,7 +1782,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="World File" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_WorldFile}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1739,7 +1804,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="World Light File" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_WorldLightFile}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1761,7 +1826,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Char Light File" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_CharLightFile}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1783,7 +1848,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Shadow Light File" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_ShadowLightFile}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1805,7 +1870,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Category" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Category}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1827,7 +1892,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub Category" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SubCategory}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1850,7 +1915,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sky" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_Sky}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1872,7 +1937,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Notify Portal" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_NotifyPortal}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1894,7 +1959,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Category" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Category}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1936,7 +2001,17 @@
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Top"
                                                 Orientation="Vertical">
-                                                <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Preload Shoot {0}'}" />
+                                                <TextBlock Foreground="White">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} {1}">
+                                                            <Binding
+                                                                Converter="{StaticResource IndexToNumberConverter}"
+                                                                Path="(ItemsControl.AlternationIndex)"
+                                                                RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                            <Binding Source="{x:Static rs:Resources.WorldEditor_PreloadShoot}" />
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
                                                 <TextBox
                                                     Width="Auto"
                                                     Height="50"
@@ -1950,14 +2025,13 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab5"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Map Data"
+                        Header="{x:Static rs:Resources.WorldEditor_MapData}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -1984,7 +2058,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Mini Map Mode" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MiniMapMode}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2005,7 +2079,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Map Title R" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MapTitleR}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2026,7 +2100,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Map Title G" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MapTitleG}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2047,7 +2121,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Map Title B" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MapTitleB}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2069,7 +2143,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Map Preview" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MapPreview}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2092,7 +2166,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Map" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_Map}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2114,7 +2188,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Minimap" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_Minimap}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2137,7 +2211,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Minimap Start X" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MinimapStartX}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2159,7 +2233,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Minimap End X" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MinimapEndX}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2182,7 +2256,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Minimap Start Z" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MinimapStartZ}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2204,7 +2278,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Minimap End Z" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MinimapEndZ}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2227,7 +2301,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Map Title Top" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MapTitleTop}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2249,7 +2323,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Map Title Bottom" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MapTitleBottom}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2272,7 +2346,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Map Preview Img" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MapPreviewImg}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2294,7 +2368,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Map Title" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MapTitle}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2308,14 +2382,13 @@
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab6"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Preload Enemy"
+                        Header="{x:Static rs:Resources.WorldEditor_PreloadEnemy}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -2333,7 +2406,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Preload Enemy 1" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 01">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_PreloadEnemy}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ListView
                                     Height="300"
                                     MinWidth="300"
@@ -2355,7 +2434,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Preload Enemy 2" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 02">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_PreloadEnemy}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ListView
                                     Height="300"
                                     MinWidth="300"
@@ -2377,7 +2462,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Preload Enemy 3" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 03">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_PreloadEnemy}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ListView
                                     Height="300"
                                     MinWidth="300"
@@ -2399,7 +2490,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Preload Enemy 4" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 04">
+                                            <Binding Source="{x:Static rs:Resources.WorldEditor_PreloadEnemy}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ListView
                                     Height="300"
                                     MinWidth="300"
@@ -2414,7 +2511,6 @@
                                     </i:Interaction.Behaviors>
                                 </ListView>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                 </TabControl>
@@ -2464,7 +2560,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Map Swf Data" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MapSwfData}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -2506,7 +2602,17 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='World ID {0}'}" />
+                                        <TextBlock Foreground="White">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding
+                                                        Converter="{StaticResource IndexToNumberConverter}"
+                                                        Path="(ItemsControl.AlternationIndex)"
+                                                        RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                    <Binding Source="{x:Static rs:Resources.WorldEditor_WorldID}" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
                                         <ComboBox
                                             Height="24"
                                             MinWidth="200"
@@ -2538,7 +2644,17 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Menu Command {0}'}" />
+                                        <TextBlock Foreground="White">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding
+                                                        Converter="{StaticResource IndexToNumberConverter}"
+                                                        Path="(ItemsControl.AlternationIndex)"
+                                                        RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                    <Binding Source="{x:Static rs:Resources.WorldEditor_MenuCommand}" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
                                         <TextBox
                                             Width="Auto"
                                             Height="30"
@@ -2553,7 +2669,17 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Top"
                                         Orientation="Vertical">
-                                        <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Big Sprite {0}'}" />
+                                        <TextBlock Foreground="White">
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} {1}">
+                                                    <Binding
+                                                        Converter="{StaticResource IndexToNumberConverter}"
+                                                        Path="(ItemsControl.AlternationIndex)"
+                                                        RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                    <Binding Source="{x:Static rs:Resources.WorldEditor_BigSprite}" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
                                         <TextBox
                                             Width="Auto"
                                             Height="30"
@@ -2637,7 +2763,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Dungeon ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_DungeonID}" />
                     <ComboBox
                         Height="24"
                         MinWidth="200"
@@ -2665,7 +2791,7 @@
                     Orientation="Vertical">
                     <CheckBox
                         Margin="0,10,0,0"
-                        Content="Not Show"
+                        Content="{x:Static rs:Resources.WorldEditor_NotShow}"
                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nNotShow], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                         Template="{StaticResource lb_checkbox}">
                         <i:Interaction.Behaviors>
@@ -2681,7 +2807,13 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Category 01" />
+                    <TextBlock Foreground="White">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} 01">
+                                <Binding Source="{x:Static rs:Resources.Category}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -2703,7 +2835,13 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Category 02" />
+                    <TextBlock Foreground="White">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} 02">
+                                <Binding Source="{x:Static rs:Resources.Category}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -2747,7 +2885,13 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Category 01" />
+                    <TextBlock Foreground="White">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} 01">
+                                <Binding Source="{x:Static rs:Resources.Category}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -2769,7 +2913,13 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Category 02" />
+                    <TextBlock Foreground="White">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} 02">
+                                <Binding Source="{x:Static rs:Resources.Category}" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -2790,7 +2940,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Difficulty" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_Difficulty}" />
                     <ListView
                         Width="Auto"
                         Height="100"
@@ -2806,7 +2956,6 @@
                         </i:Interaction.Behaviors>
                     </ListView>
                 </StackPanel>
-
             </Grid>
         </DataTemplate>
 
@@ -2821,13 +2970,11 @@
     <ContentControl Template="{StaticResource box_red02}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -2856,143 +3003,147 @@
 
             <ContentControl
                 Grid.Row="1"
-                Grid.RowSpan="4"
+                Grid.RowSpan="2"
                 Grid.Column="1"
-                Margin="10,0,0,0"
+                Margin="0,0,0,0"
                 Content="{Binding WorldType}"
                 ContentTemplateSelector="{StaticResource WorldTemplateSelector}"
                 Visibility="{Binding IsSelectedItemVisible}" />
 
-            <DataGrid
-                x:Name="dataGridView"
-                Grid.Row="3"
-                Grid.Column="0"
-                Height="400"
-                MinWidth="550"
-                Margin="5,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                bh:DataGridBehavior.EnableScrollIntoView="True"
-                bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
-                AutoGenerateColumns="False"
-                CanUserAddRows="False"
-                ColumnWidth="*"
-                EnableRowVirtualization="True"
-                HeadersVisibility="Column"
-                HorizontalScrollBarVisibility="Auto"
-                ItemsSource="{Binding DataTableManager.DataTable}"
-                SelectedItem="{Binding DataTableManager.SelectedItem}"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
-                Template="{StaticResource lb_datagrid}"
-                Visibility="{Binding IsVisible}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding nID}"
-                        Header="ID"
-                        IsReadOnly="True" />
-                </DataGrid.Columns>
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-                <DataGrid.InputBindings>
-                    <KeyBinding
-                        Key="I"
-                        Command="{Binding DataTableManager.AddNewRowCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="D"
-                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                        Modifiers="Control" />
-                    <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.UndoChangesCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.RedoChangesCommand}"
-                        Modifiers="Ctrl+Shift" />
-                    <KeyBinding
-                        Key="F"
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Find"
-                        Modifiers="Ctrl" />
-                </DataGrid.InputBindings>
-            </DataGrid>
-
             <Grid
-                Grid.Row="4"
+                Grid.Row="2"
                 Grid.Column="0"
                 Visibility="{Binding IsVisible}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <TextBlock
-                    x:Name="lbTotalItem"
+                <DataGrid
+                    x:Name="dataGridView"
                     Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
+                    Width="450"
+                    Height="450"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    d:Text="Showing {0}/{1} Items"
-                    Foreground="Gold"
-                    Style="{StaticResource ArialMS}">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
-                            <Binding ElementName="dataGridView" Path="Items.Count" />
-                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+                    bh:DataGridBehavior.EnableScrollIntoView="True"
+                    bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ColumnWidth="*"
+                    EnableRowVirtualization="True"
+                    HeadersVisibility="Column"
+                    HorizontalScrollBarVisibility="Auto"
+                    ItemsSource="{Binding DataTableManager.DataTable}"
+                    SelectedItem="{Binding DataTableManager.SelectedItem}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    Template="{StaticResource lb_datagrid}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding nID}"
+                            Header="ID"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+                            <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDeleteRow}" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.InputBindings>
+                        <KeyBinding
+                            Key="I"
+                            Command="{Binding DataTableManager.AddNewRowCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="D"
+                            Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                            Modifiers="Control" />
+                        <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.UndoChangesCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.RedoChangesCommand}"
+                            Modifiers="Ctrl+Shift" />
+                        <KeyBinding
+                            Key="F"
+                            Command="{Binding OpenSearchDialogCommand}"
+                            CommandParameter="Find"
+                            Modifiers="Ctrl" />
+                    </DataGrid.InputBindings>
+                </DataGrid>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    Margin="0,10,0,0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Orientation="Horizontal">
-                    <Label
-                        x:Name="lbSearch"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.Search}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <TextBox
-                        x:Name="tbSearch"
-                        Width="350"
-                        Height="40"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        CaretBrush="White"
-                        Foreground="Gold"
-                        Tag="{x:Static rs:Resources.SearchNameID}"
-                        Template="{StaticResource lb_textbox}"
-                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox
-                        Grid.Row="3"
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        x:Name="lbTotalItem"
+                        Grid.Row="0"
                         Grid.Column="0"
-                        Margin="10,0,0,0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.MatchCase}"
-                        IsChecked="{Binding MatchCase}"
-                        Template="{StaticResource lb_checkbox}" />
-                </StackPanel>
+                        d:Text="Showing {0}/{1} Items"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                                <Binding ElementName="dataGridView" Path="Items.Count" />
+                                <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                        <Label
+                            x:Name="lbSearch"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.Search}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <TextBox
+                            x:Name="tbSearch"
+                            Width="300"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            CaretBrush="White"
+                            Foreground="Gold"
+                            Tag="{x:Static rs:Resources.SearchNameID}"
+                            Template="{StaticResource lb_textbox}"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <CheckBox
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.MatchCase}"
+                            IsChecked="{Binding MatchCase}"
+                            Template="{StaticResource lb_checkbox}" />
+                    </StackPanel>
+                </Grid>
             </Grid>
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

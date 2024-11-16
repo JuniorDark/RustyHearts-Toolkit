@@ -159,7 +159,7 @@
                     <control:SkillFrame
                         Width="300"
                         Height="Auto"
-                        Margin="-30,0,10,0"
+                        Margin="0,0,10,0"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         DataContext="{Binding DataContext.SkillDataViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />
@@ -177,7 +177,7 @@
                         x:Name="tab1"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Skill Info"
+                        Header="{x:Static rs:Resources.SkillEditor_SkillInfo}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -228,7 +228,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skill ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_SkillID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -251,7 +251,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Icon" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Icon}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -281,7 +281,6 @@
                                     Source="{Binding DataContext.DataTableManager.SelectedItem[szIcon], RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource IconNameToImageSourceConverter}}"
                                     Stretch="Fill" />
                             </StackPanel>
-
                             <StackPanel
                                 Grid.Row="2"
                                 Grid.Column="0"
@@ -312,7 +311,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Attribute" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_Attribute}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -335,7 +334,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Description 01" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 01">
+                                            <Binding Source="{x:Static rs:Resources.Description}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="70"
@@ -358,7 +363,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Description 02" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 02">
+                                            <Binding Source="{x:Static rs:Resources.Description}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="70"
@@ -381,7 +392,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Description 03" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 03">
+                                            <Binding Source="{x:Static rs:Resources.Description}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="70"
@@ -404,7 +421,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Description 04" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 04">
+                                            <Binding Source="{x:Static rs:Resources.Description}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="70"
@@ -427,7 +450,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Description 05" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 05">
+                                            <Binding Source="{x:Static rs:Resources.Description}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="70"
@@ -442,14 +471,13 @@
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab2"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Skill Stats"
+                        Header="{x:Static rs:Resources.SkillEditor_SkillStats}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -477,7 +505,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Awakening Mode"
+                                    Content="{x:Static rs:Resources.SkillEditor_AwakeningMode}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nAwakeningMode], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -495,7 +523,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Invincibility"
+                                    Content="{x:Static rs:Resources.SkillEditor_Invincibility}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nInvincibility], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -510,7 +538,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skill Point Cost" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_SkillPointCost}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -531,7 +559,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skill Cooldown" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_SkillCooldown}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -553,7 +581,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skill Level" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_SkillLevel}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -574,7 +602,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Learn Level" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_LearnLevel}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -596,7 +624,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="MP Cost" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_MPCost}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -617,7 +645,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="HP Cost" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_HPCost}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -638,7 +666,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="AP Cost" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_APCost}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -659,7 +687,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="HP Percent Cost" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_HPPercentCost}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -681,7 +709,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Auto Equip Slot ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_AutoEquipSlot_ID}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -702,7 +730,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="UI Page" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_UIPage}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -723,7 +751,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Correction" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_Correction}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -744,7 +772,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Attribute Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_AttributeGroup}" />
                                 <ui:NumberBox
                                     MinWidth="120"
                                     Margin="0,0,0,0"
@@ -767,7 +795,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Total Damage" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_TotalDamage}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -785,7 +813,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Weapon Damage Skill" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_WeaponDamageSkill}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -823,7 +851,17 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Top"
                                                     Orientation="Vertical">
-                                                    <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Parameter Name {0}'}" />
+                                                    <TextBlock Foreground="White">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.SkillEditor_ParameterName}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ComboBox
                                                         Height="24"
                                                         MinWidth="200"
@@ -842,7 +880,17 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Top"
                                                     Orientation="Vertical">
-                                                    <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Parameter Value {0}'}" />
+                                                    <TextBlock Foreground="White">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.SkillEditor_ParameterValue}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -856,14 +904,13 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab3"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Skill Data"
+                        Header="{x:Static rs:Resources.SkillEditor_SkillData}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -891,7 +938,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Character Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_CharacterType}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -917,7 +964,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skill Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_SkillType}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -944,7 +991,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skill Active Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_SkillActiveType}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -970,7 +1017,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Target" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_Target}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -997,7 +1044,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="State True" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_StateTrue}" />
                                 <ListView
                                     Width="Auto"
                                     Height="200"
@@ -1021,7 +1068,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="State False" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_StateFalse}" />
                                 <ListView
                                     Width="Auto"
                                     Height="200"
@@ -1046,7 +1093,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Catch Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_CatchType}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1069,7 +1116,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skill Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_SkillType}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1091,7 +1138,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skill Active Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_SkillActiveType}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1113,7 +1160,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Param Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_ParamName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1135,7 +1182,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Param Name Desc" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_ParamNameDesc}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1149,14 +1196,13 @@
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab4"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Skill Motion"
+                        Header="{x:Static rs:Resources.SkillEditor_SkillMotion}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -1168,7 +1214,6 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-
                             <ItemsControl
                                 Grid.Row="0"
                                 Grid.ColumnSpan="4"
@@ -1196,7 +1241,17 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Top"
                                                     Orientation="Vertical">
-                                                    <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Skill Motion {0}'}" />
+                                                    <TextBlock Foreground="White">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.SkillEditor_SkillMotion}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <TextBox
                                                         Width="Auto"
                                                         Height="30"
@@ -1211,7 +1266,17 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Top"
                                                     Orientation="Vertical">
-                                                    <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Motion Category {0}'}" />
+                                                    <TextBlock Foreground="White">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.SkillEditor_MotionCategory}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -1226,7 +1291,17 @@
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Top"
                                                     Orientation="Vertical">
-                                                    <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Skill Motion SG {0}'}" />
+                                                    <TextBlock Foreground="White">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.SkillEditor_SkillMotionSG}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <TextBox
                                                         Width="Auto"
                                                         Height="30"
@@ -1241,7 +1316,17 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Top"
                                                     Orientation="Vertical">
-                                                    <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Motion Category SG {0}'}" />
+                                                    <TextBlock Foreground="White">
+                                                        <TextBlock.Text>
+                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                                <Binding
+                                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                                    Path="(ItemsControl.AlternationIndex)"
+                                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                                <Binding Source="{x:Static rs:Resources.SkillEditor_MotionCategorySG}" />
+                                                            </MultiBinding>
+                                                        </TextBlock.Text>
+                                                    </TextBlock>
                                                     <ui:NumberBox
                                                         Width="200"
                                                         Margin="0,0,0,0"
@@ -1256,7 +1341,6 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-
                         </Grid>
                     </TabItem>
                 </TabControl>
@@ -1270,7 +1354,6 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-
                 <StackPanel
                     Grid.Row="0"
                     Margin="0,0,0,0"
@@ -1306,7 +1389,7 @@
                         Source="/Assets/icon/icon_help_tip.png"
                         Stretch="None"
                         ToolTip="{x:Static rs:Resources.AddSkillHelp}" />
-                    <TextBlock Foreground="White" Text="Skill" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_Skill}" />
                     <control:SkillSlot
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
@@ -1332,7 +1415,17 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Required Skill {0}'}" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding
+                                                Converter="{StaticResource IndexToNumberConverter}"
+                                                Path="(ItemsControl.AlternationIndex)"
+                                                RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                            <Binding Source="{x:Static rs:Resources.SkillEditor_RequiredSkill}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <control:SkillSlot
                                     Margin="0,0,0,0"
                                     HorizontalAlignment="Center"
@@ -1363,7 +1456,6 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-
                 <StackPanel
                     Grid.Row="0"
                     Grid.ColumnSpan="2"
@@ -1392,7 +1484,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White"  Text="{x:Static rs:Resources.Focus}" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Focus}" />
                     <ComboBox
                         Width="Auto"
                         Height="24"
@@ -1414,7 +1506,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Skill Tree Type" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_SkillTreeType}" />
                     <ComboBox
                         Width="Auto"
                         Height="24"
@@ -1437,7 +1529,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Column" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_Column}" />
                     <ui:NumberBox
                         Width="Auto"
                         Margin="0,0,0,0"
@@ -1454,7 +1546,7 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Row" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_Row}" />
                     <ui:NumberBox
                         Width="Auto"
                         Margin="0,0,0,0"
@@ -1472,7 +1564,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Movie" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.SkillEditor_Movie}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1604,10 +1696,135 @@
                 ContentTemplateSelector="{StaticResource SkillTemplateSelector}"
                 Visibility="{Binding IsSelectedItemVisible}" />
 
-            <control:Datagrid
+            <Grid
                 Grid.Row="2"
                 Grid.Column="0"
-                Visibility="{Binding IsVisible}" />
+                Visibility="{Binding IsVisible}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <DataGrid
+                    x:Name="dataGridView"
+                    Grid.Row="0"
+                    Width="450"
+                    Height="450"
+                    Margin="0,0,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    bh:DataGridBehavior.EnableScrollIntoView="True"
+                    bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ColumnWidth="*"
+                    EnableRowVirtualization="True"
+                    HeadersVisibility="Column"
+                    HorizontalScrollBarVisibility="Auto"
+                    ItemsSource="{Binding DataTableManager.DataTable}"
+                    SelectedItem="{Binding DataTableManager.SelectedItem}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    Template="{StaticResource lb_datagrid}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding nID}"
+                            Header="ID"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+                            <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDeleteRow}" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.InputBindings>
+                        <KeyBinding
+                            Key="I"
+                            Command="{Binding DataTableManager.AddNewRowCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="D"
+                            Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                            Modifiers="Control" />
+                        <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.UndoChangesCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.RedoChangesCommand}"
+                            Modifiers="Ctrl+Shift" />
+                        <KeyBinding
+                            Key="F"
+                            Command="{Binding OpenSearchDialogCommand}"
+                            CommandParameter="Find"
+                            Modifiers="Ctrl" />
+                    </DataGrid.InputBindings>
+                </DataGrid>
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="0,5,0,5"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    d:Text="Showing {0}/{1} Items"
+                    Foreground="Gold"
+                    Style="{StaticResource ArialMS}">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                            <Binding ElementName="dataGridView" Path="Items.Count" />
+                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+
+                <Grid
+                    x:Name="searchGrid"
+                    Grid.Row="2"
+                    Margin="0,0,0,30"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel
+                        Grid.Column="0"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                        <Label
+                            x:Name="lbSearch"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.Search}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <TextBox
+                            x:Name="tbSearch"
+                            Width="300"
+                            Height="40"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            CaretBrush="White"
+                            Foreground="Gold"
+                            Tag="{x:Static rs:Resources.SearchNameID}"
+                            Template="{StaticResource lb_textbox}"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <CheckBox
+                        Grid.Column="1"
+                        Margin="10,0,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Content="{x:Static rs:Resources.MatchCase}"
+                        IsChecked="{Binding MatchCase}"
+                        Template="{StaticResource lb_checkbox}" />
+                </Grid>
+            </Grid>
 
             <TextBlock
                 Grid.Row="2"

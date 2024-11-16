@@ -143,7 +143,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Memo" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Memo}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -186,7 +186,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="World ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_WorldID}" />
                     <ComboBox
                         Height="24"
                         MinWidth="200"
@@ -213,7 +213,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Mission ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_MissionID}" />
                     <ComboBox
                         Height="24"
                         MinWidth="200"
@@ -241,7 +241,7 @@
                     Orientation="Vertical">
                     <CheckBox
                         Margin="0,10,0,0"
-                        Content="Daily Mission"
+                        Content="{x:Static rs:Resources.QuestEditor_DailyMission}"
                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nDayMission], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Template="{StaticResource lb_checkbox}">
                         <i:Interaction.Behaviors>
@@ -257,7 +257,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Difficult Min" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_DifficultMin}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -278,7 +278,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Difficult Max" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_DifficultMax}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -299,7 +299,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Number Min" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_NumberMin}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -320,7 +320,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Number Max" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_NumberMax}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -342,7 +342,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Gold" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Gold}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -363,7 +363,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="EXP" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Experience}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -384,7 +384,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Bonus" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_BonusCash}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -405,7 +405,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="PlayPoint" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_PlayPoint}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -439,8 +439,17 @@
                                     Background="Transparent"
                                     FontSize="12"
                                     Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item {0}'}" />
+                                    Style="{StaticResource ArialMS}">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding
+                                                Converter="{StaticResource IndexToNumberConverter}"
+                                                Path="(ItemsControl.AlternationIndex)"
+                                                RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                            <Binding Source="{x:Static rs:Resources.Item}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <control:ItemSlot
                                     AddItemCommand="{Binding DataContext.AddQuestItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                     CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -523,7 +532,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Mission String ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_MissionStringID}" />
                     <ComboBox
                         Height="24"
                         MinWidth="200"
@@ -550,7 +559,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Difficult" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Difficult}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -571,7 +580,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Time Limit" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_TimeLimit}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -592,7 +601,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Number Min" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_NumberMin}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -613,7 +622,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Number Max" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_NumberMax}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -635,7 +644,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Type" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Type}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -656,7 +665,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Reward Code" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_RewardCode}" />
                     <ui:NumberBox
                         MinWidth="150"
                         Margin="0,0,0,0"
@@ -679,7 +688,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Value00" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Value}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -713,8 +722,17 @@
                                     Background="Transparent"
                                     FontSize="12"
                                     Foreground="Gold"
-                                    Style="{StaticResource ArialMS}"
-                                    Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Value {0}'}" />
+                                    Style="{StaticResource ArialMS}">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} {1}">
+                                            <Binding
+                                                Converter="{StaticResource IndexToNumberConverter}"
+                                                Path="(ItemsControl.AlternationIndex)"
+                                                RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                            <Binding Source="{x:Static rs:Resources.Value}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -781,12 +799,22 @@
                                     Orientation="Horizontal">
                                     <TextBlock
                                         Margin="0,0,10,0"
+                                        HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.Item}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -801,12 +829,22 @@
                                     Orientation="Horizontal">
                                     <TextBlock
                                         Margin="0,0,10,0"
+                                        HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Ratio {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.QuestEditor_Ratio}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -863,7 +901,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Level Limit" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_LevelLimit}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -912,8 +950,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Npc ID {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.QuestEditor_NPCID}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <ComboBox
                                         Height="24"
                                         MinWidth="600"
@@ -937,8 +984,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Sprite {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.QuestEditor_Sprite}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <TextBox
                                         Height="30"
                                         MinWidth="600"
@@ -960,8 +1016,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Text {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.QuestEditor_Text}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <TextBox
                                         Height="100"
                                         MinWidth="600"
@@ -1019,7 +1084,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Level Limit" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_LevelLimit}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -1040,7 +1105,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Group ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_GroupID}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -1061,7 +1126,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Class ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ClassID}" />
                     <ComboBox
                         Height="24"
                         MinWidth="200"
@@ -1115,8 +1180,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Npc ID {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.QuestEditor_NPCID}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <ComboBox
                                         Height="24"
                                         MinWidth="600"
@@ -1140,8 +1214,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Sprite {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.QuestEditor_Sprite}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <TextBox
                                         Height="30"
                                         MinWidth="600"
@@ -1163,8 +1246,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Text {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.QuestEditor_Text}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <TextBox
                                         Height="100"
                                         MinWidth="600"
@@ -1224,7 +1316,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Memo" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Memo}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1245,7 +1337,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Npc Name" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_NPCName}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1266,7 +1358,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Npc Name Title" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_NpcNameTitle}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1291,7 +1383,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Filter"
+                        Content="{x:Static rs:Resources.Filter}"
                         Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         Width="300"
@@ -1333,8 +1425,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Quest ID {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.QuestEditor_QuestID}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <ComboBox
                                         Height="24"
                                         MinWidth="600"
@@ -1401,7 +1502,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Level Limit" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_LevelLimit}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -1422,7 +1523,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Group ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_GroupID}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -1443,7 +1544,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Class ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ClassID}" />
                     <ComboBox
                         Height="24"
                         MinWidth="200"
@@ -1469,7 +1570,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="NPC ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_NPCID}" />
                     <ComboBox
                         Height="24"
                         MinWidth="200"
@@ -1495,7 +1596,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Title" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Title}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1516,7 +1617,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Sub Title" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_SubTitle}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1537,7 +1638,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Desc" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
                         Width="Auto"
                         Height="100"
@@ -1559,7 +1660,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Sprite Name" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Sprite}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1580,7 +1681,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Accept" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Accept}" />
                     <TextBox
                         Width="Auto"
                         Height="50"
@@ -1602,7 +1703,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Reject" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Reject}" />
                     <TextBox
                         Width="Auto"
                         Height="50"
@@ -1624,7 +1725,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Hint" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Hint}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1645,7 +1746,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Summary" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Summary}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1659,7 +1760,6 @@
                         </i:Interaction.Behaviors>
                     </TextBox>
                 </StackPanel>
-
             </Grid>
         </DataTemplate>
         <!--  Template for QuestString  -->
@@ -1711,7 +1811,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Level Limit" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_LevelLimit}" />
                     <ui:NumberBox
                         Width="200"
                         Margin="0,0,0,0"
@@ -1732,7 +1832,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="NPC ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_NPCID}" />
                     <ComboBox
                         Height="24"
                         MinWidth="200"
@@ -1758,7 +1858,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Title" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Title}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1779,7 +1879,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Sub Title" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_SubTitle}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1800,7 +1900,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Desc" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
                         Width="Auto"
                         Height="100"
@@ -1822,7 +1922,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Sprite Name" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Sprite}" />
                     <TextBox
                         Width="Auto"
                         Height="30"
@@ -1843,7 +1943,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Accept" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Accept}" />
                     <TextBox
                         Width="Auto"
                         Height="50"
@@ -1865,7 +1965,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Reject" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Reject}" />
                     <TextBox
                         Width="Auto"
                         Height="50"
@@ -1887,7 +1987,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Hint" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Hint}" />
                     <TextBox
                         Width="Auto"
                         Height="50"
@@ -1909,7 +2009,7 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Summary" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Summary}" />
                     <TextBox
                         Width="Auto"
                         Height="50"
@@ -1924,7 +2024,6 @@
                         </i:Interaction.Behaviors>
                     </TextBox>
                 </StackPanel>
-
             </Grid>
         </DataTemplate>
         <!--  Template for Quest  -->
@@ -1941,7 +2040,7 @@
                         x:Name="tab1"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Quest Data"
+                        Header="{x:Static rs:Resources.QuestEditor_QuestData}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -1997,7 +2096,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Desc" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2020,7 +2119,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Title" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestTitle}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2042,7 +2141,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Level Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_LevelLimit}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2063,7 +2162,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Show Level" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ShowLevel}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2084,7 +2183,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Max Level Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_MaxLevelLimit}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2105,7 +2204,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Type}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2127,7 +2226,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Party Gold" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_PartyGold}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2148,7 +2247,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Gold" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Gold}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2169,7 +2268,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Exp" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Experience}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2190,7 +2289,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Bonus" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_BonusCash}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2212,7 +2311,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest String" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestString}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2233,7 +2332,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Group String" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestGroupString}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2254,7 +2353,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Group Request" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestGroupRequest}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2275,7 +2374,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Group Complete" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestGroupComplete}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2297,7 +2396,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Item Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestItemGroup}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2318,7 +2417,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Item Group Count" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestItemGroupCount}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2339,7 +2438,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Equip Item Condition Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_EquipItemConditionType}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2360,7 +2459,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text=" Change Focus" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ChangeFocus}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2382,7 +2481,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Npc Instance ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_NPCInstanceID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2403,7 +2502,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White"  Text="{x:Static rs:Resources.Class}" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Class}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2424,7 +2523,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Story Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_StoryGroup}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2438,14 +2537,13 @@
                                     </i:Interaction.Behaviors>
                                 </ui:NumberBox>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab2"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Quest Rule"
+                        Header="{x:Static rs:Resources.QuestEditor_QuestRule}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -2482,7 +2580,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Cannot Skip"
+                                    Content="{x:Static rs:Resources.QuestEditor_CannotSkip}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nNotSkip], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2499,7 +2597,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Is Status Reset"
+                                    Content="{x:Static rs:Resources.QuestEditor_IsStatusReset}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nIsStatusReset], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2516,7 +2614,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Item Delete"
+                                    Content="{x:Static rs:Resources.QuestEditor_ItemDelete}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nItemDelete], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2533,7 +2631,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="No Reject"
+                                    Content="{x:Static rs:Resources.QuestEditor_NoReject}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nNoReject], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2550,7 +2648,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Move NPC" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_MoveNPC}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -2572,7 +2670,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Active World" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ActiveWorld}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -2599,7 +2697,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Contact Active World" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ContactActiveWorld}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -2626,7 +2724,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="World" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_World}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -2653,7 +2751,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Auto Next Quest" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_AutoNextQuest}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -2680,7 +2778,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Mission World ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_MissionWorldID}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -2709,7 +2807,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Auto Complete"
+                                    Content="{x:Static rs:Resources.QuestEditor_AutoComplete}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nAutoComplete], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2726,7 +2824,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Exclusive Quest"
+                                    Content="{x:Static rs:Resources.QuestEditor_ExclusiveQuest}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nExclusiveQuest], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2743,7 +2841,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="All Level Show"
+                                    Content="{x:Static rs:Resources.QuestEditor_AllLevelShow}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nAllLevelShow], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2760,7 +2858,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Use Loop"
+                                    Content="{x:Static rs:Resources.QuestEditor_UseLoop}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nUseLoop], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2777,7 +2875,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Use Random"
+                                    Content="{x:Static rs:Resources.QuestEditor_UseRandom}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nUseRandom], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2794,7 +2892,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Complete Delete All 01"
+                                    Content="{x:Static rs:Resources.QuestEditor_CompleteDeleteAll01}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nCompleteDeleteAll00], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2811,7 +2909,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Complete Delete All 02"
+                                    Content="{x:Static rs:Resources.QuestEditor_CompleteDeleteAll02}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nCompleteDeleteAll01], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2828,7 +2926,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Complete Delete All 03"
+                                    Content="{x:Static rs:Resources.QuestEditor_CompleteDeleteAll03}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nCompleteDeleteAll02], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2845,7 +2943,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Skip Item Value"
+                                    Content="{x:Static rs:Resources.QuestEditor_SkipItemValue}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nSkipItemValue00], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2862,7 +2960,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Event"
+                                    Content="{x:Static rs:Resources.QuestEditor_Event}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nEvent], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2879,7 +2977,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Client Complete"
+                                    Content="{x:Static rs:Resources.QuestEditor_ClientComplete}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nClientComplete], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -2896,7 +2994,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Class Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ClassLimit}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -2923,7 +3021,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Class Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ClassLimit}" />
                                 <ListView
                                     Height="120"
                                     MinWidth="250"
@@ -2947,7 +3045,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Class Group Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ClassGroupLimit}" />
                                 <ListView
                                     Height="120"
                                     MinWidth="250"
@@ -2963,14 +3061,13 @@
                                     </i:Interaction.Behaviors>
                                 </ListView>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab3"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Quest Condition"
+                        Header="{x:Static rs:Resources.QuestEditor_QuestCondition}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -3005,7 +3102,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ConditionType}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3026,7 +3123,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition ID 01" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 01">
+                                            <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3047,7 +3150,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition ID 02" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 02">
+                                            <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3068,7 +3177,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition ID 03" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 03">
+                                            <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3089,7 +3204,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition ID 04" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 04">
+                                            <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3110,7 +3231,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition ID 05" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 05">
+                                            <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3151,8 +3278,17 @@
                                                 Background="Transparent"
                                                 FontSize="12"
                                                 Foreground="Gold"
-                                                Style="{StaticResource ArialMS}"
-                                                Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Condition Value {0}'}" />
+                                                Style="{StaticResource ArialMS}">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} {1}">
+                                                        <Binding
+                                                            Converter="{StaticResource IndexToNumberConverter}"
+                                                            Path="(ItemsControl.AlternationIndex)"
+                                                            RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                        <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionValue}" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
                                             <ui:NumberBox
                                                 MinWidth="150"
                                                 Margin="0,0,0,0"
@@ -3162,7 +3298,6 @@
                                                 Minimum="0"
                                                 Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                         </StackPanel>
-
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -3175,7 +3310,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Value 01" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 01">
+                                            <Binding Source="{x:Static rs:Resources.Value}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -3197,12 +3338,18 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Value 02" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 02">
+                                            <Binding Source="{x:Static rs:Resources.Value}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="szValue00"
+                                    d:Text="szValue01"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItem[szValue01], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -3219,12 +3366,18 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Value 03" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 03">
+                                            <Binding Source="{x:Static rs:Resources.Value}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="szValue00"
+                                    d:Text="szValue02"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItem[szValue02], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -3241,12 +3394,18 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Value 04" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 04">
+                                            <Binding Source="{x:Static rs:Resources.Value}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="szValue00"
+                                    d:Text="szValue03"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItem[szValue03], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -3263,12 +3422,18 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Value 05" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 05">
+                                            <Binding Source="{x:Static rs:Resources.Value}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="szValue00"
+                                    d:Text="szValue04"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItem[szValue04], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -3286,7 +3451,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Note 01" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 01">
+                                            <Binding Source="{x:Static rs:Resources.Note}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -3308,7 +3479,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Note 02" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 02">
+                                            <Binding Source="{x:Static rs:Resources.Note}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -3330,12 +3507,18 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Note 03" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 03">
+                                            <Binding Source="{x:Static rs:Resources.Note}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="wszNote2"
+                                    d:Text="wszNote3"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItem[wszNote3], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -3344,14 +3527,13 @@
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab4"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Quest Item Data"
+                        Header="{x:Static rs:Resources.QuestEditor_QuestItemData}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -3394,7 +3576,7 @@
                                                 FontSize="12"
                                                 Foreground="Gold"
                                                 Style="{StaticResource ArialMS}"
-                                                Text="Quest Show Conditon Item" />
+                                                Text="{x:Static rs:Resources.QuestEditor_QuestShowConditonItem}" />
                                             <control:ItemSlot
                                                 AddItemCommand="{Binding DataContext.AddQuestItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -3425,7 +3607,7 @@
                                                 FontSize="12"
                                                 Foreground="Gold"
                                                 Style="{StaticResource ArialMS}"
-                                                Text="Get Reward Item" />
+                                                Text="{x:Static rs:Resources.QuestEditor_GetRewardItem}" />
                                             <control:ItemSlot
                                                 AddItemCommand="{Binding DataContext.AddQuestGetItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -3456,7 +3638,7 @@
                                                 FontSize="12"
                                                 Foreground="Gold"
                                                 Style="{StaticResource ArialMS}"
-                                                Text="Reward Item" />
+                                                Text="{x:Static rs:Resources.QuestEditor_RewardItem}" />
                                             <control:ItemSlot
                                                 AddItemCommand="{Binding DataContext.AddQuestRewardItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -3487,7 +3669,7 @@
                                                 FontSize="12"
                                                 Foreground="Gold"
                                                 Style="{StaticResource ArialMS}"
-                                                Text="Select Reward Item" />
+                                                Text="{x:Static rs:Resources.QuestEditor_SelectRewardItem}" />
                                             <control:ItemSlot
                                                 AddItemCommand="{Binding DataContext.AddQuestSelectRewardItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -3498,7 +3680,6 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-
                         </Grid>
                     </TabItem>
                 </TabControl>
@@ -3518,7 +3699,7 @@
                         x:Name="tab1"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Quest Data"
+                        Header="{x:Static rs:Resources.QuestEditor_QuestData}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -3574,7 +3755,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Desc" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -3597,7 +3778,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Title" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestTitle}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -3619,7 +3800,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Level Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_LevelLimit}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3640,7 +3821,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Show Level" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ShowLevel}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3661,7 +3842,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Max Level Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_MaxLevelLimit}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3682,7 +3863,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Type}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3704,7 +3885,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Party Gold" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_PartyGold}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3725,7 +3906,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Gold" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Gold}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3746,7 +3927,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Exp" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_Experience}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3767,7 +3948,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Bonus" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_BonusCash}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3789,7 +3970,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest String" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestString}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3810,7 +3991,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Group String" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestGroupString}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3831,7 +4012,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Group Request" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestGroupRequest}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3852,7 +4033,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Group Complete" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestGroupComplete}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3874,7 +4055,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Item Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestItemGroup}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3895,7 +4076,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Quest Item Group Count" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_QuestItemGroupCount}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3916,7 +4097,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Equip Item Condition Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_EquipItemConditionType}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3937,7 +4118,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text=" Change Focus" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ChangeFocus}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3959,7 +4140,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Npc Instance ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_NPCInstanceID}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -3980,7 +4161,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White"  Text="{x:Static rs:Resources.Class}" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Class}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -4001,7 +4182,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Story Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_StoryGroup}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -4015,14 +4196,13 @@
                                     </i:Interaction.Behaviors>
                                 </ui:NumberBox>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab2"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Quest Rule"
+                        Header="{x:Static rs:Resources.QuestEditor_QuestRule}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -4059,7 +4239,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Cannot Skip"
+                                    Content="{x:Static rs:Resources.QuestEditor_CannotSkip}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nNotSkip], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4076,7 +4256,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Is Status Reset"
+                                    Content="{x:Static rs:Resources.QuestEditor_IsStatusReset}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nIsStatusReset], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4093,7 +4273,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Item Delete"
+                                    Content="{x:Static rs:Resources.QuestEditor_ItemDelete}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nItemDelete], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4110,7 +4290,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="No Reject"
+                                    Content="{x:Static rs:Resources.QuestEditor_NoReject}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nNoReject], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4127,7 +4307,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Active World" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ActiveWorld}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -4154,7 +4334,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Contact Active World" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ContactActiveWorld}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -4181,7 +4361,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="World" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_World}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -4208,7 +4388,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Auto Next Quest" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_AutoNextQuest}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -4235,7 +4415,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Mission World ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_MissionWorldID}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -4264,7 +4444,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Auto Complete"
+                                    Content="{x:Static rs:Resources.QuestEditor_AutoComplete}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nAutoComplete], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4281,7 +4461,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Exclusive Quest"
+                                    Content="{x:Static rs:Resources.QuestEditor_ExclusiveQuest}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nExclusiveQuest], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4298,7 +4478,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="All Level Show"
+                                    Content="{x:Static rs:Resources.QuestEditor_AllLevelShow}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nAllLevelShow], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4315,7 +4495,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Use Loop"
+                                    Content="{x:Static rs:Resources.QuestEditor_UseLoop}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nUseLoop], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4332,7 +4512,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Use Random"
+                                    Content="{x:Static rs:Resources.QuestEditor_UseRandom}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nUseRandom], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4349,7 +4529,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Complete Delete All 01"
+                                    Content="{x:Static rs:Resources.QuestEditor_CompleteDeleteAll01}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nCompleteDeleteAll00], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4366,7 +4546,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Complete Delete All 02"
+                                    Content="{x:Static rs:Resources.QuestEditor_CompleteDeleteAll02}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nCompleteDeleteAll01], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4383,7 +4563,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Complete Delete All 03"
+                                    Content="{x:Static rs:Resources.QuestEditor_CompleteDeleteAll03}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nCompleteDeleteAll02], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4400,7 +4580,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,10,0,0"
-                                    Content="Client Complete"
+                                    Content="{x:Static rs:Resources.QuestEditor_ClientComplete}"
                                     IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nClientComplete], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
                                     Template="{StaticResource lb_checkbox}">
                                     <i:Interaction.Behaviors>
@@ -4417,7 +4597,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Class Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ClassLimit}" />
                                 <ComboBox
                                     Height="24"
                                     MinWidth="200"
@@ -4444,7 +4624,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Class Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ClassLimit}" />
                                 <ListView
                                     Height="120"
                                     MinWidth="250"
@@ -4468,7 +4648,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Class Group Limit" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ClassGroupLimit}" />
                                 <ListView
                                     Height="120"
                                     MinWidth="250"
@@ -4484,14 +4664,13 @@
                                     </i:Interaction.Behaviors>
                                 </ListView>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab3"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Quest Condition"
+                        Header="{x:Static rs:Resources.QuestEditor_QuestCondition}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -4526,7 +4705,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.QuestEditor_ConditionType}" />
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -4547,7 +4726,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition ID 01" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 01">
+                                            <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -4568,7 +4753,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition ID 02" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 02">
+                                            <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -4589,7 +4780,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition ID 03" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 03">
+                                            <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -4610,7 +4807,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition ID 04" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 04">
+                                            <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -4631,7 +4834,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Condition ID 05" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 05">
+                                            <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionID}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <ui:NumberBox
                                     MinWidth="150"
                                     Margin="0,0,0,0"
@@ -4672,8 +4881,17 @@
                                                 Background="Transparent"
                                                 FontSize="12"
                                                 Foreground="Gold"
-                                                Style="{StaticResource ArialMS}"
-                                                Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Condition Value {0}'}" />
+                                                Style="{StaticResource ArialMS}">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} {1}">
+                                                        <Binding
+                                                            Converter="{StaticResource IndexToNumberConverter}"
+                                                            Path="(ItemsControl.AlternationIndex)"
+                                                            RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                        <Binding Source="{x:Static rs:Resources.QuestEditor_ConditionValue}" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
                                             <ui:NumberBox
                                                 MinWidth="150"
                                                 Margin="0,0,0,0"
@@ -4683,7 +4901,6 @@
                                                 Minimum="0"
                                                 Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                         </StackPanel>
-
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
@@ -4696,7 +4913,13 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Value 01" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 01">
+                                            <Binding Source="{x:Static rs:Resources.Value}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -4718,12 +4941,18 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Value 02" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 02">
+                                            <Binding Source="{x:Static rs:Resources.Value}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="szValue00"
+                                    d:Text="szValue01"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItem[szValue01], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -4740,12 +4969,18 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Value 03" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 03">
+                                            <Binding Source="{x:Static rs:Resources.Value}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="szValue00"
+                                    d:Text="szValue02"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItem[szValue02], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -4762,12 +4997,18 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Value 04" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 04">
+                                            <Binding Source="{x:Static rs:Resources.Value}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="szValue00"
+                                    d:Text="szValue03"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItem[szValue03], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -4784,12 +5025,18 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Value 05" />
+                                <TextBlock Foreground="White">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} 05">
+                                            <Binding Source="{x:Static rs:Resources.Value}" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0"
-                                    d:Text="szValue00"
+                                    d:Text="szValue04"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataContext.DataTableManager.SelectedItem[szValue04], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -4798,14 +5045,13 @@
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                     <TabItem
                         x:Name="tab4"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Quest Item Data"
+                        Header="{x:Static rs:Resources.QuestEditor_QuestItemData}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -4848,7 +5094,7 @@
                                                 FontSize="12"
                                                 Foreground="Gold"
                                                 Style="{StaticResource ArialMS}"
-                                                Text="Quest Item" />
+                                                Text="{x:Static rs:Resources.QuestEditor_QuestItem}" />
                                             <control:ItemSlot
                                                 AddItemCommand="{Binding DataContext.AddQuestItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -4879,7 +5125,7 @@
                                                 FontSize="12"
                                                 Foreground="Gold"
                                                 Style="{StaticResource ArialMS}"
-                                                Text="Quest Reward Item" />
+                                                Text="{x:Static rs:Resources.QuestEditor_QuestRewardItem}" />
                                             <control:ItemSlot
                                                 AddItemCommand="{Binding DataContext.AddQuestItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -4910,7 +5156,7 @@
                                                 FontSize="12"
                                                 Foreground="Gold"
                                                 Style="{StaticResource ArialMS}"
-                                                Text="Select Reward Item" />
+                                                Text="{x:Static rs:Resources.QuestEditor_SelectRewardItem}" />
                                             <control:ItemSlot
                                                 AddItemCommand="{Binding DataContext.AddQuestRewardItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                                 CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -4921,7 +5167,6 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-
                         </Grid>
                     </TabItem>
                 </TabControl>
@@ -4946,13 +5191,11 @@
     <ContentControl Template="{StaticResource box_green02}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -4981,150 +5224,154 @@
 
             <ContentControl
                 Grid.Row="1"
-                Grid.RowSpan="4"
+                Grid.RowSpan="2"
                 Grid.Column="1"
                 Margin="10,0,0,0"
                 Content="{Binding QuestType}"
                 ContentTemplateSelector="{StaticResource QuestTemplateSelector}"
                 Visibility="{Binding IsSelectedItemVisible}" />
 
-            <DataGrid
-                x:Name="dataGridView"
-                Grid.Row="3"
-                Grid.Column="0"
-                Height="400"
-                MinWidth="550"
-                Margin="5,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                bh:DataGridBehavior.EnableScrollIntoView="True"
-                bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
-                AutoGenerateColumns="False"
-                CanUserAddRows="False"
-                ColumnWidth="*"
-                EnableRowVirtualization="True"
-                HeadersVisibility="Column"
-                HorizontalScrollBarVisibility="Auto"
-                ItemsSource="{Binding DataTableManager.DataTable}"
-                SelectedItem="{Binding DataTableManager.SelectedItem}"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
-                Template="{StaticResource lb_datagrid}"
-                Visibility="{Binding IsVisible}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn
-                        Width="*"
-                        Binding="{Binding nID}"
-                        Header="ID"
-                        IsReadOnly="True" />
-                </DataGrid.Columns>
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-                <DataGrid.InputBindings>
-                    <KeyBinding
-                        Key="I"
-                        Command="{Binding DataTableManager.AddNewRowCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="D"
-                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                        Modifiers="Control" />
-                    <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.UndoChangesCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.RedoChangesCommand}"
-                        Modifiers="Ctrl+Shift" />
-                    <KeyBinding
-                        Key="F"
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Find"
-                        Modifiers="Ctrl" />
-                </DataGrid.InputBindings>
-            </DataGrid>
-
             <Grid
-                Grid.Row="4"
+                Grid.Row="2"
                 Grid.Column="0"
                 Visibility="{Binding IsVisible}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <TextBlock
-                    x:Name="lbTotalItem"
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    d:Text="Showing {0}/{1} Items"
-                    Foreground="Gold"
-                    Style="{StaticResource ArialMS}">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
-                            <Binding ElementName="dataGridView" Path="Items.Count" />
-                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    Margin="0,10,0,0"
-                    HorizontalAlignment="Center"
+                <DataGrid
+                    x:Name="dataGridView"
+                    Grid.Row="0"
+                    Width="450"
+                    Height="450"
+                    Margin="5,0,0,0"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    Orientation="Horizontal">
-                    <Label
-                        x:Name="lbSearch"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.Search}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <TextBox
-                        x:Name="tbSearch"
-                        Width="250"
-                        Height="34"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        CaretBrush="White"
-                        Foreground="Gold"
-                        Tag="{x:Static rs:Resources.SearchNameID}"
-                        Template="{StaticResource lb_textbox}"
-                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox
-                        Grid.Row="3"
+                    bh:DataGridBehavior.EnableScrollIntoView="True"
+                    bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    ColumnWidth="*"
+                    EnableRowVirtualization="True"
+                    HeadersVisibility="Column"
+                    HorizontalScrollBarVisibility="Auto"
+                    ItemsSource="{Binding DataTableManager.DataTable}"
+                    SelectedItem="{Binding DataTableManager.SelectedItem}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    Template="{StaticResource lb_datagrid}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn
+                            Width="*"
+                            Binding="{Binding nID}"
+                            Header="ID"
+                            IsReadOnly="True" />
+                    </DataGrid.Columns>
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+                            <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDeleteRow}" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.InputBindings>
+                        <KeyBinding
+                            Key="I"
+                            Command="{Binding DataTableManager.AddNewRowCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="D"
+                            Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                            Modifiers="Control" />
+                        <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.UndoChangesCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.RedoChangesCommand}"
+                            Modifiers="Ctrl+Shift" />
+                        <KeyBinding
+                            Key="F"
+                            Command="{Binding OpenSearchDialogCommand}"
+                            CommandParameter="Find"
+                            Modifiers="Ctrl" />
+                    </DataGrid.InputBindings>
+                </DataGrid>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        x:Name="lbTotalItem"
+                        Grid.Row="0"
                         Grid.Column="0"
-                        Margin="10,0,0,0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.MatchCase}"
-                        IsChecked="{Binding MatchCase}"
-                        Template="{StaticResource lb_checkbox}" />
-                </StackPanel>
+                        d:Text="Showing {0}/{1} Items"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                                <Binding ElementName="dataGridView" Path="Items.Count" />
+                                <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                        <Label
+                            x:Name="lbSearch"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.Search}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <TextBox
+                            x:Name="tbSearch"
+                            Width="250"
+                            Height="34"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            CaretBrush="White"
+                            Foreground="Gold"
+                            Tag="{x:Static rs:Resources.SearchNameID}"
+                            Template="{StaticResource lb_textbox}"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <CheckBox
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.MatchCase}"
+                            IsChecked="{Binding MatchCase}"
+                            Template="{StaticResource lb_checkbox}" />
+                    </StackPanel>
+                </Grid>
             </Grid>
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="15"
                 Foreground="White"
                 Text="{Binding OpenMessage}" />
-
         </Grid>
     </ContentControl>
 </Window>

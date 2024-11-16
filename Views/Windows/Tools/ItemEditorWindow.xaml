@@ -68,7 +68,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
@@ -92,14 +91,11 @@
                 </ui:TitleBar.Icon>
             </ui:TitleBar>
 
-            <control:ItemEditorMenu
-                Grid.Row="1"
-                Grid.Column="0"
-                Grid.ColumnSpan="2" />
+            <control:ItemEditorMenu Grid.Row="1" Grid.Column="0" />
 
             <!--  Frame Controls  -->
             <ScrollViewer
-                Grid.Row="2"
+                Grid.Row="1"
                 Grid.RowSpan="2"
                 Grid.Column="1"
                 Margin="0,0,0,0"
@@ -138,7 +134,7 @@
             <!--  Controls  -->
             <Grid
                 Grid.Row="1"
-                Grid.RowSpan="3"
+                Grid.RowSpan="2"
                 Grid.Column="2">
                 <UniformGrid Columns="2">
                     <FrameworkElement x:Name="c1" />
@@ -152,7 +148,7 @@
                         x:Name="tab1"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Item Data"
+                        Header="{x:Static rs:Resources.ItemEditor_ItemData}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <UniformGrid Columns="3">
@@ -162,7 +158,7 @@
                                 <TabItem
                                     Width="{Binding ElementName=c2, Path=ActualWidth}"
                                     Foreground="White"
-                                    Header="Item Info"
+                                    Header="{x:Static rs:Resources.ItemEditor_ItemInfo}"
                                     Style="{StaticResource lb_tab}">
                                     <Grid HorizontalAlignment="Center">
                                         <Grid.ColumnDefinitions>
@@ -188,9 +184,9 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Item ID" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                                             <ui:NumberBox
-                                                MinWidth="140"
+                                                Width="Auto"
                                                 Margin="0,0,0,0"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Top"
@@ -208,7 +204,7 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Top"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Icon Name" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.Icon}" />
                                             <TextBox
                                                 Width="Auto"
                                                 Height="30"
@@ -230,7 +226,7 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Item Name" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_Name}" />
                                             <TextBox
                                                 Width="Auto"
                                                 Height="30"
@@ -247,11 +243,34 @@
                                         <StackPanel
                                             Grid.Row="2"
                                             Grid.Column="0"
+                                            Grid.ColumnSpan="4"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Orientation="Vertical">
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_Description}" />
+                                            <TextBox
+                                                Width="Auto"
+                                                Height="150"
+                                                Margin="0,0,0,0"
+                                                d:Text="{x:Static rs:Resources.Description}"
+                                                FontSize="12"
+                                                Template="{StaticResource lb_textbox11}"
+                                                Text="{Binding DataTableManager.SelectedItemString[wszItemDescription], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                TextWrapping="Wrap">
+                                                <i:Interaction.Behaviors>
+                                                    <bh:DataRowViewBehavior Column="wszItemDescription" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
+                                                </i:Interaction.Behaviors>
+                                            </TextBox>
+                                        </StackPanel>
+
+                                        <StackPanel
+                                            Grid.Row="3"
+                                            Grid.Column="0"
                                             Grid.ColumnSpan="3"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Item Name (Internal)" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalName}" />
                                             <TextBox
                                                 Width="Auto"
                                                 Height="30"
@@ -266,38 +285,16 @@
                                             </TextBox>
                                         </StackPanel>
                                         <StackPanel
-                                            Grid.Row="3"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="4"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Center"
-                                            Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Item Description" />
-                                            <TextBox
-                                                Width="Auto"
-                                                Height="100"
-                                                Margin="0,0,0,0"
-                                                d:Text="{x:Static rs:Resources.Description}"
-                                                FontSize="12"
-                                                Template="{StaticResource lb_textbox11}"
-                                                Text="{Binding DataTableManager.SelectedItemString[wszItemDescription], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                                TextWrapping="Wrap">
-                                                <i:Interaction.Behaviors>
-                                                    <bh:DataRowViewBehavior Column="wszItemDescription" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemStringValueCommand}" />
-                                                </i:Interaction.Behaviors>
-                                            </TextBox>
-                                        </StackPanel>
-                                        <StackPanel
                                             Grid.Row="4"
                                             Grid.Column="0"
                                             Grid.ColumnSpan="3"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Item Description (Internal)" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalDescription}" />
                                             <TextBox
                                                 Width="Auto"
-                                                Height="100"
+                                                Height="150"
                                                 Margin="0,0,0,0"
                                                 d:Text="{x:Static rs:Resources.Description}"
                                                 FontSize="12"
@@ -312,7 +309,7 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Group Name" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_GroupName}" />
                                             <TextBox
                                                 Width="Auto"
                                                 Height="30"
@@ -331,7 +328,7 @@
                                 <TabItem
                                     Width="{Binding ElementName=c2, Path=ActualWidth}"
                                     Foreground="White"
-                                    Header="Item Data"
+                                    Header="{x:Static rs:Resources.ItemEditor_ItemData}"
                                     Style="{StaticResource lb_tab}">
                                     <ScrollViewer
                                         Margin="0,0,0,0"
@@ -355,329 +352,44 @@
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
+
                                             <StackPanel
                                                 Grid.Row="0"
-                                                Grid.Column="0"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
+                                                Grid.ColumnSpan="2"
+                                                Margin="0,0,0,10"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Top"
                                                 Orientation="Vertical">
                                                 <Label
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Top"
-                                                    Content="{x:Static rs:Resources.Category}"
+                                                    HorizontalContentAlignment="Center"
+                                                    Content="{x:Static rs:Resources.AddEffectFilter}"
                                                     Style="{StaticResource ArialMSWhite}" />
-                                                <ComboBox
-                                                    Height="24"
-                                                    MinWidth="250"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    HorizontalContentAlignment="Left"
-                                                    VerticalContentAlignment="Center"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding ItemDataManager.CategoryFilterItems}"
-                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                                    SelectedValuePath="ID"
-                                                    Style="{StaticResource ComboBoxStyle}"
-                                                    Template="{StaticResource lb_combobox}">
-                                                    <i:Interaction.Behaviors>
-                                                        <bh:DataRowViewBehavior Column="nCategory" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                                    </i:Interaction.Behaviors>
-                                                </ComboBox>
-                                            </StackPanel>
-                                            <StackPanel
-                                                Grid.Row="0"
-                                                Grid.Column="1"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
-                                                Orientation="Vertical">
-                                                <Label
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    Content="{x:Static rs:Resources.SubCategory}"
-                                                    Style="{StaticResource ArialMSWhite}" />
-                                                <ComboBox
-                                                    Height="24"
-                                                    MinWidth="250"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    HorizontalContentAlignment="Left"
-                                                    VerticalContentAlignment="Center"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding ItemDataManager.SubCategoryItemsFilter}"
-                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nSubCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                                    SelectedValuePath="ID"
-                                                    Style="{StaticResource ComboBoxStyle}"
-                                                    Template="{StaticResource lb_combobox}">
-                                                    <i:Interaction.Behaviors>
-                                                        <bh:DataRowViewBehavior Column="nSubCategory" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                                    </i:Interaction.Behaviors>
-                                                </ComboBox>
+                                                <TextBox
+                                                    Width="250"
+                                                    Height="35"
+                                                    CaretBrush="White"
+                                                    FontFamily="{StaticResource ArialUnicodeMS}"
+                                                    FontSize="12"
+                                                    Foreground="Gold"
+                                                    Tag="{x:Static rs:Resources.OptionNameID}"
+                                                    Template="{StaticResource lb_textbox}"
+                                                    Text="{Binding AddEffectSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                             </StackPanel>
                                             <StackPanel
                                                 Grid.Row="1"
                                                 Grid.Column="0"
                                                 Margin="5,0,0,0"
                                                 HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
-                                                Orientation="Vertical">
-                                                <Label
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalContentAlignment="Center"
-                                                    Content="{x:Static rs:Resources.ItemQuality}"
-                                                    Style="{StaticResource ArialMSWhite}" />
-                                                <ComboBox
-                                                    Height="24"
-                                                    MinWidth="250"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    HorizontalContentAlignment="Left"
-                                                    VerticalContentAlignment="Center"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding ItemDataManager.BranchItemsFilter}"
-                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nBranch], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                                    SelectedValuePath="ID"
-                                                    Style="{StaticResource ComboBoxStyle}"
-                                                    Template="{StaticResource lb_combobox}">
-                                                    <i:Interaction.Behaviors>
-                                                        <bh:DataRowViewBehavior Column="nBranch" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                                    </i:Interaction.Behaviors>
-                                                </ComboBox>
-                                            </StackPanel>
-                                            <StackPanel
-                                                Grid.Row="1"
-                                                Grid.Column="1"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Left"
                                                 VerticalAlignment="Top"
                                                 Orientation="Vertical">
                                                 <Label
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Top"
                                                     HorizontalContentAlignment="Center"
-                                                    Content="{x:Static rs:Resources.Class}"
-                                                    Style="{StaticResource ArialMSWhite}" />
-                                                <ComboBox
-                                                    Height="24"
-                                                    MinWidth="250"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    HorizontalContentAlignment="Left"
-                                                    VerticalContentAlignment="Center"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding ItemDataManager.ClassItemsFilter}"
-                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nJobClass], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                                    SelectedValuePath="ID"
-                                                    Style="{StaticResource ComboBoxStyle}"
-                                                    Template="{StaticResource lb_combobox}">
-                                                    <i:Interaction.Behaviors>
-                                                        <bh:DataRowViewBehavior Column="nJobClass" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                                    </i:Interaction.Behaviors>
-                                                </ComboBox>
-                                            </StackPanel>
-                                            <StackPanel
-                                                Grid.Row="2"
-                                                Grid.Column="0"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Top"
-                                                Orientation="Vertical">
-                                                <Label
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalContentAlignment="Center"
-                                                    Content="Inventory Type"
-                                                    Style="{StaticResource ArialMSWhite}" />
-                                                <ComboBox
-                                                    Height="24"
-                                                    MinWidth="250"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    HorizontalContentAlignment="Left"
-                                                    VerticalContentAlignment="Center"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding ItemDataManager.InventoryTypeItems}"
-                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nInventoryType], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                                    SelectedValuePath="ID"
-                                                    Style="{StaticResource ComboBoxStyle}"
-                                                    Template="{StaticResource lb_combobox}">
-                                                    <i:Interaction.Behaviors>
-                                                        <bh:DataRowViewBehavior Column="nInventoryType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                                    </i:Interaction.Behaviors>
-                                                </ComboBox>
-                                            </StackPanel>
-                                            <StackPanel
-                                                Grid.Row="2"
-                                                Grid.Column="1"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Top"
-                                                Orientation="Vertical">
-                                                <Label
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalContentAlignment="Center"
-                                                    Content="Auction Category"
-                                                    Style="{StaticResource ArialMSWhite}" />
-                                                <ComboBox
-                                                    Height="24"
-                                                    MinWidth="250"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    HorizontalContentAlignment="Left"
-                                                    VerticalContentAlignment="Center"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding AuctionCategoryItems}"
-                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nAuctionCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                                    SelectedValuePath="ID"
-                                                    Style="{StaticResource ComboBoxStyle}"
-                                                    Template="{StaticResource lb_combobox}">
-                                                    <i:Interaction.Behaviors>
-                                                        <bh:DataRowViewBehavior Column="nAuctionCategory" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                                    </i:Interaction.Behaviors>
-                                                </ComboBox>
-                                            </StackPanel>
-                                            <StackPanel
-                                                Grid.Row="4"
-                                                Grid.Column="1"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Top"
-                                                Orientation="Vertical">
-                                                <Label
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalContentAlignment="Center"
-                                                    Content="Field Mesh Item ID"
-                                                    Style="{StaticResource ArialMSWhite}" />
-                                                <ComboBox
-                                                    Height="24"
-                                                    MinWidth="250"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    HorizontalContentAlignment="Left"
-                                                    VerticalContentAlignment="Center"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding FielMeshItems}"
-                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nFieldItem], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                                    SelectedValuePath="ID"
-                                                    Style="{StaticResource ComboBoxStyle}"
-                                                    Template="{StaticResource lb_combobox}">
-                                                    <i:Interaction.Behaviors>
-                                                        <bh:DataRowViewBehavior Column="nFieldItem" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                                    </i:Interaction.Behaviors>
-                                                </ComboBox>
-                                            </StackPanel>
-                                            <StackPanel
-                                                Grid.Row="5"
-                                                Grid.Column="1"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Top"
-                                                Orientation="Vertical">
-                                                <Label
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalContentAlignment="Center"
-                                                    Content="Union Package ID"
-                                                    Style="{StaticResource ArialMSWhite}" />
-                                                <ComboBox
-                                                    Height="24"
-                                                    MinWidth="250"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    HorizontalContentAlignment="Left"
-                                                    VerticalContentAlignment="Center"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding UnionPackageItems}"
-                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nUnionPackageID], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                                    SelectedValuePath="ID"
-                                                    Style="{StaticResource ComboBoxStyle}"
-                                                    Template="{StaticResource lb_combobox}">
-                                                    <i:Interaction.Behaviors>
-                                                        <bh:DataRowViewBehavior Column="nUnionPackageID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                                    </i:Interaction.Behaviors>
-                                                </ComboBox>
-                                            </StackPanel>
-                                            <StackPanel
-                                                Grid.Row="4"
-                                                Grid.Column="0"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Top"
-                                                Orientation="Vertical">
-                                                <Label
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalContentAlignment="Center"
-                                                    Content="Costume Pack ID"
-                                                    Style="{StaticResource ArialMSWhite}" />
-                                                <ComboBox
-                                                    Height="24"
-                                                    MinWidth="250"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    HorizontalContentAlignment="Left"
-                                                    VerticalContentAlignment="Center"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding CostumePackItems}"
-                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nCostumePackID], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                                    SelectedValuePath="ID"
-                                                    Style="{StaticResource ComboBoxStyle}"
-                                                    Template="{StaticResource lb_combobox}">
-                                                    <i:Interaction.Behaviors>
-                                                        <bh:DataRowViewBehavior Column="nCostumePackID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                                    </i:Interaction.Behaviors>
-                                                </ComboBox>
-                                            </StackPanel>
-                                            <StackPanel
-                                                Grid.Row="5"
-                                                Grid.Column="0"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Top"
-                                                Orientation="Vertical">
-                                                <Label
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalContentAlignment="Center"
-                                                    Content="Title ID"
-                                                    Style="{StaticResource ArialMSWhite}" />
-                                                <ComboBox
-                                                    Height="24"
-                                                    MinWidth="250"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalAlignment="Left"
-                                                    HorizontalContentAlignment="Left"
-                                                    VerticalContentAlignment="Center"
-                                                    IsReadOnly="True"
-                                                    ItemsSource="{Binding TitleListItems}"
-                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nTitleList], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
-                                                    SelectedValuePath="ID"
-                                                    Style="{StaticResource ComboBoxStyle}"
-                                                    Template="{StaticResource lb_combobox}">
-                                                    <i:Interaction.Behaviors>
-                                                        <bh:DataRowViewBehavior Column="nTitleList" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                                    </i:Interaction.Behaviors>
-                                                </ComboBox>
-                                            </StackPanel>
-                                            <StackPanel
-                                                Grid.Row="3"
-                                                Grid.Column="0"
-                                                Margin="5,0,0,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Top"
-                                                Orientation="Vertical">
-                                                <Label
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalContentAlignment="Center"
-                                                    Content="AddEffect ID 01"
+                                                    Content="{x:Static rs:Resources.ItemEditor_AddEffectID01}"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
                                                     Width="250"
@@ -698,7 +410,7 @@
                                                 </ComboBox>
                                             </StackPanel>
                                             <StackPanel
-                                                Grid.Row="3"
+                                                Grid.Row="1"
                                                 Grid.Column="1"
                                                 Margin="5,0,0,0"
                                                 HorizontalAlignment="Left"
@@ -708,7 +420,7 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Top"
                                                     HorizontalContentAlignment="Center"
-                                                    Content="AddEffect ID 02"
+                                                    Content="{x:Static rs:Resources.ItemEditor_AddEffectID02}"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
                                                     Width="250"
@@ -728,6 +440,257 @@
                                                     </i:Interaction.Behaviors>
                                                 </ComboBox>
                                             </StackPanel>
+
+                                            <StackPanel
+                                                Grid.Row="2"
+                                                Grid.Column="0"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    Content="{x:Static rs:Resources.Category}"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <ComboBox
+                                                    Width="250"
+                                                    Height="24"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding ItemDataManager.CategoryFilterItems}"
+                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}">
+                                                    <i:Interaction.Behaviors>
+                                                        <bh:DataRowViewBehavior Column="nCategory" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                    </i:Interaction.Behaviors>
+                                                </ComboBox>
+                                            </StackPanel>
+                                            <StackPanel
+                                                Grid.Row="2"
+                                                Grid.Column="1"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    Content="{x:Static rs:Resources.SubCategory}"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <ComboBox
+                                                    Width="250"
+                                                    Height="24"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding ItemDataManager.SubCategoryItemsFilter}"
+                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nSubCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}">
+                                                    <i:Interaction.Behaviors>
+                                                        <bh:DataRowViewBehavior Column="nSubCategory" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                    </i:Interaction.Behaviors>
+                                                </ComboBox>
+                                            </StackPanel>
+
+                                            <StackPanel
+                                                Grid.Row="3"
+                                                Grid.Column="0"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    HorizontalContentAlignment="Center"
+                                                    Content="{x:Static rs:Resources.ItemQuality}"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <ComboBox
+                                                    Width="250"
+                                                    Height="24"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding ItemDataManager.BranchItemsFilter}"
+                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nBranch], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}">
+                                                    <i:Interaction.Behaviors>
+                                                        <bh:DataRowViewBehavior Column="nBranch" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                    </i:Interaction.Behaviors>
+                                                </ComboBox>
+                                            </StackPanel>
+                                            <StackPanel
+                                                Grid.Row="3"
+                                                Grid.Column="1"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    HorizontalContentAlignment="Center"
+                                                    Content="{x:Static rs:Resources.Class}"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <ComboBox
+                                                    Width="250"
+                                                    Height="24"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding ItemDataManager.ClassItemsFilter}"
+                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nJobClass], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}">
+                                                    <i:Interaction.Behaviors>
+                                                        <bh:DataRowViewBehavior Column="nJobClass" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                    </i:Interaction.Behaviors>
+                                                </ComboBox>
+                                            </StackPanel>
+
+                                            <StackPanel
+                                                Grid.Row="4"
+                                                Grid.Column="0"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    HorizontalContentAlignment="Center"
+                                                    Content="{x:Static rs:Resources.ItemEditor_InventoryType}"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <ComboBox
+                                                    Width="250"
+                                                    Height="24"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding ItemDataManager.InventoryTypeItems}"
+                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nInventoryType], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}">
+                                                    <i:Interaction.Behaviors>
+                                                        <bh:DataRowViewBehavior Column="nInventoryType" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                    </i:Interaction.Behaviors>
+                                                </ComboBox>
+                                            </StackPanel>
+                                            <StackPanel
+                                                Grid.Row="4"
+                                                Grid.Column="1"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    HorizontalContentAlignment="Center"
+                                                    Content="{x:Static rs:Resources.ItemEditor_AuctionCategory}"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <ComboBox
+                                                    Width="250"
+                                                    Height="24"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding AuctionCategoryItems}"
+                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nAuctionCategory], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}">
+                                                    <i:Interaction.Behaviors>
+                                                        <bh:DataRowViewBehavior Column="nAuctionCategory" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                    </i:Interaction.Behaviors>
+                                                </ComboBox>
+                                            </StackPanel>
+
+                                            <StackPanel
+                                                Grid.Row="5"
+                                                Grid.Column="0"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    HorizontalContentAlignment="Center"
+                                                    Content="{x:Static rs:Resources.ItemEditor_CostumePackID}"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <ComboBox
+                                                    Width="250"
+                                                    Height="24"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding CostumePackItems}"
+                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nCostumePackID], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}">
+                                                    <i:Interaction.Behaviors>
+                                                        <bh:DataRowViewBehavior Column="nCostumePackID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                    </i:Interaction.Behaviors>
+                                                </ComboBox>
+                                            </StackPanel>
+                                            <StackPanel
+                                                Grid.Row="5"
+                                                Grid.Column="1"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    HorizontalContentAlignment="Center"
+                                                    Content="{x:Static rs:Resources.ItemEditor_FieldMeshItemID}"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <ComboBox
+                                                    Width="250"
+                                                    Height="24"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding FielMeshItems}"
+                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nFieldItem], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}">
+                                                    <i:Interaction.Behaviors>
+                                                        <bh:DataRowViewBehavior Column="nFieldItem" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                    </i:Interaction.Behaviors>
+                                                </ComboBox>
+                                            </StackPanel>
+
                                             <StackPanel
                                                 Grid.Row="6"
                                                 Grid.Column="0"
@@ -739,11 +702,74 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Top"
                                                     HorizontalContentAlignment="Center"
-                                                    Content="Riddle Group"
+                                                    Content="{x:Static rs:Resources.ItemEditor_TitleID}"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
+                                                    Width="250"
                                                     Height="24"
-                                                    MinWidth="250"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding TitleListItems}"
+                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nTitleList], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}">
+                                                    <i:Interaction.Behaviors>
+                                                        <bh:DataRowViewBehavior Column="nTitleList" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                    </i:Interaction.Behaviors>
+                                                </ComboBox>
+                                            </StackPanel>
+                                            <StackPanel
+                                                Grid.Row="6"
+                                                Grid.Column="1"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    HorizontalContentAlignment="Center"
+                                                    Content="{x:Static rs:Resources.ItemEditor_UnionPackageID}"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <ComboBox
+                                                    Width="250"
+                                                    Height="24"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding UnionPackageItems}"
+                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nUnionPackageID], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}">
+                                                    <i:Interaction.Behaviors>
+                                                        <bh:DataRowViewBehavior Column="nUnionPackageID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                    </i:Interaction.Behaviors>
+                                                </ComboBox>
+                                            </StackPanel>
+
+                                            <StackPanel
+                                                Grid.Row="7"
+                                                Grid.Column="0"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    HorizontalContentAlignment="Center"
+                                                    Content="{x:Static rs:Resources.ItemEditor_RiddleGroup}"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <ComboBox
+                                                    Width="250"
+                                                    Height="24"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -760,7 +786,7 @@
                                                 </ComboBox>
                                             </StackPanel>
                                             <StackPanel
-                                                Grid.Row="6"
+                                                Grid.Row="7"
                                                 Grid.Column="1"
                                                 Margin="5,0,0,0"
                                                 HorizontalAlignment="Left"
@@ -770,11 +796,11 @@
                                                     HorizontalAlignment="Center"
                                                     VerticalAlignment="Top"
                                                     HorizontalContentAlignment="Center"
-                                                    Content="Pet Eat Group"
+                                                    Content="{x:Static rs:Resources.ItemEditor_PetEatGroup}"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
+                                                    Width="250"
                                                     Height="24"
-                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     HorizontalAlignment="Left"
                                                     HorizontalContentAlignment="Left"
@@ -790,6 +816,7 @@
                                                     </i:Interaction.Behaviors>
                                                 </ComboBox>
                                             </StackPanel>
+
                                             <StackPanel
                                                 Grid.Row="8"
                                                 Grid.Column="0"
@@ -798,10 +825,10 @@
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Top"
                                                 Orientation="Vertical">
-                                                <TextBlock Foreground="White" Text="Equip Class" />
+                                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_EquipClass}" />
                                                 <ListView
+                                                    Width="250"
                                                     Height="120"
-                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     DisplayMemberPath="Name"
                                                     ItemsSource="{Binding DataContext.ItemDataManager.ClassItemsFilter, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
@@ -821,10 +848,10 @@
                                                 HorizontalAlignment="Left"
                                                 VerticalAlignment="Top"
                                                 Orientation="Vertical">
-                                                <TextBlock Foreground="White" Text="Rune Rank" />
+                                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_RuneRank}" />
                                                 <ListView
+                                                    Width="250"
                                                     Height="120"
-                                                    MinWidth="250"
                                                     Margin="0,0,0,0"
                                                     DisplayMemberPath="Name"
                                                     ItemsSource="{Binding RuneBranchItems}"
@@ -838,43 +865,19 @@
                                                 </ListView>
                                             </StackPanel>
 
-                                            <StackPanel
-                                                Grid.Row="9"
-                                                Grid.ColumnSpan="2"
-                                                Margin="0,0,0,10"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Top"
-                                                Orientation="Vertical">
-                                                <Label
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalContentAlignment="Center"
-                                                    Content="AddEffect Filter"
-                                                    Style="{StaticResource ArialMSWhite}" />
-                                                <TextBox
-                                                    Width="250"
-                                                    Height="35"
-                                                    CaretBrush="White"
-                                                    FontFamily="{StaticResource ArialUnicodeMS}"
-                                                    FontSize="12"
-                                                    Foreground="Gold"
-                                                    Tag="{x:Static rs:Resources.OptionNameID}"
-                                                    Template="{StaticResource lb_textbox}"
-                                                    Text="{Binding AddEffectSearch, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                                            </StackPanel>
                                         </Grid>
                                     </ScrollViewer>
                                 </TabItem>
                                 <TabItem
                                     Width="{Binding ElementName=c2, Path=ActualWidth}"
                                     Foreground="White"
-                                    Header="Item Rules"
+                                    Header="{x:Static rs:Resources.ItemEditor_ItemRules}"
                                     Style="{StaticResource lb_tab}">
                                     <Grid HorizontalAlignment="Center">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
@@ -900,9 +903,9 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Level Limit" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_LevelLimit}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Margin="0,0,0,0"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Top"
@@ -920,9 +923,9 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Max Stack Count" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_MaxStackCount}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Margin="0,0,0,0"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Top"
@@ -941,9 +944,9 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Max Carry Count" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_MaxCarryCount}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Margin="0,0,0,0"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Top"
@@ -963,9 +966,9 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Cooltime" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_Cooldown}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Margin="0,0,0,0"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Top"
@@ -984,9 +987,9 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Buy Price" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_BuyPrice}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Margin="0,0,0,0"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Top"
@@ -1005,9 +1008,9 @@
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Sell Price" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_SellPrice}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Margin="0,0,0,0"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Top"
@@ -1023,9 +1026,9 @@
                                             Grid.Row="2"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Durability" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_Durability}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nDurability], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1038,9 +1041,9 @@
                                             Grid.Row="2"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Weight" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_Weight}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nWeight], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1053,9 +1056,9 @@
                                             Grid.Row="2"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Activity Value" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_ActivityValue}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[fActivityValue], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1074,7 +1077,7 @@
                                             Orientation="Vertical">
                                             <CheckBox
                                                 Margin="0,0,0,0"
-                                                Content="Tradeable"
+                                                Content="{x:Static rs:Resources.ItemEditor_Tradeable}"
                                                 Foreground="White"
                                                 IsChecked="{Binding DataTableManager.SelectedItem[nItemTrade], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                                 Template="{StaticResource lb_checkbox}">
@@ -1092,7 +1095,7 @@
                                             Orientation="Vertical">
                                             <CheckBox
                                                 Margin="0,0,0,0"
-                                                Content="Npc Tradeable"
+                                                Content="{x:Static rs:Resources.ItemEditor_NPCTradeable}"
                                                 Foreground="White"
                                                 IsChecked="{Binding DataTableManager.SelectedItem[nNpcTrade], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                                 Template="{StaticResource lb_checkbox}">
@@ -1110,7 +1113,7 @@
                                             Orientation="Vertical">
                                             <CheckBox
                                                 Margin="0,0,0,0"
-                                                Content="Deleteable"
+                                                Content="{x:Static rs:Resources.ItemEditor_Deleteable}"
                                                 Foreground="White"
                                                 IsChecked="{Binding DataTableManager.SelectedItem[nDelete], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                                 Template="{StaticResource lb_checkbox}">
@@ -1128,7 +1131,7 @@
                                             Orientation="Vertical">
                                             <CheckBox
                                                 Margin="0,0,0,0"
-                                                Content="Account Storage"
+                                                Content="{x:Static rs:Resources.ItemEditor_AccountStorage}"
                                                 Foreground="White"
                                                 IsChecked="{Binding DataTableManager.SelectedItem[nAccountStorage], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                                 Template="{StaticResource lb_checkbox}">
@@ -1146,7 +1149,7 @@
                                             Orientation="Vertical">
                                             <CheckBox
                                                 Margin="0,0,0,0"
-                                                Content="Share Rule"
+                                                Content="{x:Static rs:Resources.ItemEditor_ShareRule}"
                                                 Foreground="White"
                                                 IsChecked="{Binding DataTableManager.SelectedItem[nShareRule], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                                 Template="{StaticResource lb_checkbox}">
@@ -1164,7 +1167,7 @@
                                             Orientation="Vertical">
                                             <CheckBox
                                                 Margin="0,0,0,0"
-                                                Content="Quest"
+                                                Content="{x:Static rs:Resources.ItemEditor_Quest}"
                                                 Foreground="White"
                                                 IsChecked="{Binding DataTableManager.SelectedItem[nQuest], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                                 Template="{StaticResource lb_checkbox}">
@@ -1178,9 +1181,9 @@
                                             Grid.Row="5"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Group ID" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_GroupID}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nGroupID], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1193,9 +1196,9 @@
                                             Grid.Row="5"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Equip Group" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_EquipGroup}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nEquipGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1208,9 +1211,9 @@
                                             Grid.Row="5"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Kind" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_Kind}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nKind], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1228,7 +1231,7 @@
                                             Orientation="Vertical">
                                             <CheckBox
                                                 Margin="0,0,0,0"
-                                                Content="Dismantleable"
+                                                Content="{x:Static rs:Resources.ItemEditor_Dismantleable}"
                                                 Foreground="White"
                                                 IsChecked="{Binding DataTableManager.SelectedItem[nItemBrokenType], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                                 Template="{StaticResource lb_checkbox}">
@@ -1241,9 +1244,9 @@
                                             Grid.Row="6"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Dismantle Item Count" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_DismantleItemCount}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nItemBrokenCount], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1256,9 +1259,9 @@
                                             Grid.Row="6"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Invade" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_Invade}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[fInvade], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1271,9 +1274,9 @@
                                             Grid.Row="7"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Useable" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_Useable}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nUseable], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1286,9 +1289,9 @@
                                             Grid.Row="7"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Useable Value" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_UseableValue}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding UseableValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -1297,9 +1300,9 @@
                                             Grid.Row="8"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Useable Value 01" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_UseableValue01}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nUseableValue00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1312,9 +1315,9 @@
                                             Grid.Row="8"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Useable Value 02" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_UseableValue02}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nUseableValue01], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1327,9 +1330,9 @@
                                             Grid.Row="7"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Cash Item" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_CashItem}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nCashItem], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1342,9 +1345,9 @@
                                             Grid.Row="8"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Duration (Seconds)" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_DurationSeconds}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nRemainTime], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1357,9 +1360,9 @@
                                             Grid.Row="9"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Random Rune Group" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_RandomRuneGroup}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nRuneGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1372,9 +1375,9 @@
                                             Grid.Row="9"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Rune Type" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_RuneType}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nRuneType], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1387,9 +1390,9 @@
                                             Grid.Row="9"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Pet Costume" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_PetCostume}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nPetCostume], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1402,9 +1405,9 @@
                                             Grid.Row="10"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Fishing Rod" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_FishingRod}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nFishingRod], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1417,9 +1420,9 @@
                                             Grid.Row="10"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Fishing Chair" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_FishingChair}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nFishingChair], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1432,9 +1435,9 @@
                                             Grid.Row="10"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Fishing Bucket" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_FishingBucket}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nFishingBucket], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1446,13 +1449,13 @@
                                         <StackPanel
                                             Grid.Row="11"
                                             Grid.Column="0"
-                                            Grid.ColumnSpan="2"
+                                            Grid.ColumnSpan="3"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Center"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Use Limit" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_UseLimit}" />
                                             <TextBox
-                                                Width="250"
+                                                Width="Auto"
                                                 Height="30"
                                                 Margin="0,0,0,0"
                                                 d:Text="szUseLimit"
@@ -1464,7 +1467,6 @@
                                                 </i:Interaction.Behaviors>
                                             </TextBox>
                                         </StackPanel>
-
                                     </Grid>
                                 </TabItem>
                             </TabControl>
@@ -1474,7 +1476,7 @@
                         x:Name="tab2"
                         Width="{Binding ElementName=c1, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Gear Data"
+                        Header="{x:Static rs:Resources.ItemEditor_GearData}"
                         Style="{StaticResource lb_tab}">
                         <Grid>
                             <UniformGrid Columns="3">
@@ -1489,13 +1491,13 @@
                                 <TabItem
                                     Width="{Binding ElementName=c3, Path=ActualWidth}"
                                     Foreground="White"
-                                    Header="Gear Data"
+                                    Header="{x:Static rs:Resources.ItemEditor_GearData}"
                                     Style="{StaticResource lb_tab}">
                                     <Grid HorizontalAlignment="Center">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
@@ -1518,9 +1520,9 @@
                                             Grid.Row="0"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Weapon ID 01" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_WeaponID01}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nWeaponID00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1533,9 +1535,9 @@
                                             Grid.Row="0"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Weapon ID 02" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_WeaponID02}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nWeaponID01], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1548,9 +1550,9 @@
                                             Grid.Row="0"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Weapon ID 03" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_WeaponID03}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nWeaponID02], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1563,9 +1565,9 @@
                                             Grid.Row="1"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Socket Count Min" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_SocketCountMin}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="3"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nSocketCountMin], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1578,9 +1580,9 @@
                                             Grid.Row="1"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Socket Count Max" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_SocketCountMax}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="3"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nSocketCountMax], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1596,7 +1598,7 @@
                                             Orientation="Vertical">
                                             <CheckBox
                                                 Margin="0,0,0,0"
-                                                Content="Enchantable"
+                                                Content="{x:Static rs:Resources.ItemEditor_Enchantable}"
                                                 Foreground="White"
                                                 IsChecked="{Binding DataTableManager.SelectedItem[nEnchantType], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                                 Template="{StaticResource lb_checkbox}">
@@ -1609,9 +1611,9 @@
                                             Grid.Row="1"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Restraint Type" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_RestraintType}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nRestraintType], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1624,9 +1626,9 @@
                                             Grid.Row="3"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Reconstruction Item ID" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_ReconstructionItemID}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nReconItemId], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1642,7 +1644,7 @@
                                             Orientation="Vertical">
                                             <CheckBox
                                                 Margin="0,0,0,0"
-                                                Content="Item Binding Off"
+                                                Content="{x:Static rs:Resources.ItemEditor_ItemBindingOff}"
                                                 Foreground="White"
                                                 IsChecked="{Binding DataTableManager.SelectedItem[nBindingOff], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                                 Template="{StaticResource lb_checkbox}">
@@ -1658,7 +1660,7 @@
                                             Orientation="Vertical">
                                             <CheckBox
                                                 Margin="0,0,0,0"
-                                                Content="Reconstruction"
+                                                Content="{x:Static rs:Resources.ItemEditor_Reconstruction}"
                                                 Foreground="White"
                                                 IsChecked="{Binding DataTableManager.SelectedItem[nReconItemCount], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                                 Template="{StaticResource lb_checkbox}">
@@ -1671,9 +1673,9 @@
                                             Grid.Row="3"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Reconstruction Max" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_ReconstructionMax}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nReconstructionMax], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1686,9 +1688,9 @@
                                             Grid.Row="2"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Luck" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_Luck}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[fLuck], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1701,9 +1703,9 @@
                                             Grid.Row="2"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Enchant Cost" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_EnchantCost}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nEnchantCost], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1716,9 +1718,9 @@
                                             Grid.Row="4"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Skill ID" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_SkillID}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nSkillID], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1731,9 +1733,9 @@
                                             Grid.Row="4"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Part ID" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_PartID}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nPartID], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1754,7 +1756,7 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Top"
                                                 HorizontalContentAlignment="Center"
-                                                Content="Set ID"
+                                                Content="{x:Static rs:Resources.ItemEditor_SetID}"
                                                 Style="{StaticResource ArialMSWhite}" />
                                             <ComboBox
                                                 Width="400"
@@ -1774,19 +1776,18 @@
                                                 </i:Interaction.Behaviors>
                                             </ComboBox>
                                         </StackPanel>
-
                                     </Grid>
                                 </TabItem>
                                 <TabItem
                                     Width="{Binding ElementName=c3, Path=ActualWidth}"
                                     Foreground="White"
-                                    Header="Armor"
+                                    Header="{x:Static rs:Resources.ItemEditor_Armor}"
                                     Style="{StaticResource lb_tab}">
                                     <Grid HorizontalAlignment="Center">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
@@ -1798,14 +1799,13 @@
                                             <RowDefinition Height="Auto" />
                                             <RowDefinition Height="Auto" />
                                         </Grid.RowDefinitions>
-
                                         <StackPanel
                                             Grid.Row="0"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Defense" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_Defense}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nDefense], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1814,14 +1814,13 @@
                                                 </i:Interaction.Behaviors>
                                             </ui:NumberBox>
                                         </StackPanel>
-
                                         <StackPanel
                                             Grid.Row="0"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Magic Defense" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_MagicDefense}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nMagicDefense], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1830,14 +1829,13 @@
                                                 </i:Interaction.Behaviors>
                                             </ui:NumberBox>
                                         </StackPanel>
-
                                         <StackPanel
                                             Grid.Row="1"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Defense_b" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_Defense_b}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nDefense_b], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1846,14 +1844,13 @@
                                                 </i:Interaction.Behaviors>
                                             </ui:NumberBox>
                                         </StackPanel>
-
                                         <StackPanel
                                             Grid.Row="1"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Magic Defense_b" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_MagicDefense_b}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nMagicDefense_b], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1862,14 +1859,13 @@
                                                 </i:Interaction.Behaviors>
                                             </ui:NumberBox>
                                         </StackPanel>
-
                                         <StackPanel
                                             Grid.Row="0"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Magic Resistance" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_MagicResistance}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[fMagicResistance], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1878,14 +1874,13 @@
                                                 </i:Interaction.Behaviors>
                                             </ui:NumberBox>
                                         </StackPanel>
-
                                         <StackPanel
                                             Grid.Row="2"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Armor Quality Min" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_ArmorQualityMin}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[fArmorQualityMin], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1894,14 +1889,13 @@
                                                 </i:Interaction.Behaviors>
                                             </ui:NumberBox>
                                         </StackPanel>
-
                                         <StackPanel
                                             Grid.Row="2"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Armor Quality Max" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_ArmorQualityMax}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[fArmorQualityMax], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1915,13 +1909,13 @@
                                 <TabItem
                                     Width="{Binding ElementName=c3, Path=ActualWidth}"
                                     Foreground="White"
-                                    Header="Option"
+                                    Header="{x:Static rs:Resources.ItemEditor_Option}"
                                     Style="{StaticResource lb_tab}">
                                     <Grid HorizontalAlignment="Center">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
@@ -1938,9 +1932,9 @@
                                             Grid.Row="0"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Option Group" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_OptionGroup}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nOptionGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1953,9 +1947,9 @@
                                             Grid.Row="0"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Option Group_h" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_Option_Group_h}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nOptionGroup_h], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1968,9 +1962,9 @@
                                             Grid.Row="0"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Option Group_vh" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_OptionGroup_vh}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nOptionGroup_vh], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1983,9 +1977,9 @@
                                             Grid.Row="1"
                                             Grid.Column="0"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Option Group_b" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_Option_Group_b}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="2147483647"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nOptionGroup_b], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -1998,9 +1992,9 @@
                                             Grid.Row="1"
                                             Grid.Column="1"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Option Count Min" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_OptionCountMin}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="3"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nOptionCountMin], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -2013,9 +2007,9 @@
                                             Grid.Row="1"
                                             Grid.Column="2"
                                             Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="Option Count Max" />
+                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_OptionCountMax}" />
                                             <ui:NumberBox
-                                                Width="140"
+                                                Width="Auto"
                                                 Maximum="3"
                                                 Minimum="0"
                                                 Value="{Binding DataTableManager.SelectedItem[nOptionCountMax], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -2024,7 +2018,6 @@
                                                 </i:Interaction.Behaviors>
                                             </ui:NumberBox>
                                         </StackPanel>
-
                                         <!--  Fixed Option  -->
                                         <Grid
                                             Grid.Row="2"
@@ -2057,8 +2050,8 @@
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <TextBox
                                                     x:Name="tbOptionSearch"
-                                                    Width="250"
-                                                    Height="35"
+                                                    Width="300"
+                                                    Height="40"
                                                     CaretBrush="White"
                                                     FontFamily="{StaticResource ArialUnicodeMS}"
                                                     FontSize="12"
@@ -2079,10 +2072,10 @@
                                                     x:Name="lbFixedOption1"
                                                     VerticalAlignment="Top"
                                                     HorizontalContentAlignment="Center"
-                                                    Content="Fixed Option 01"
+                                                    Content="{x:Static rs:Resources.ItemEditor_FixedOption01}"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                    Width="300"
+                                                    Width="Auto"
                                                     Height="24"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Top"
@@ -2103,10 +2096,10 @@
                                                     x:Name="lbRandomOption2"
                                                     VerticalAlignment="Top"
                                                     HorizontalContentAlignment="Center"
-                                                    Content="Fixed Option 02"
+                                                    Content="{x:Static rs:Resources.ItemEditor_FixedOption02}"
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ComboBox
-                                                    Width="300"
+                                                    Width="Auto"
                                                     Height="24"
                                                     HorizontalAlignment="Left"
                                                     VerticalAlignment="Top"
@@ -2139,7 +2132,7 @@
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ui:NumberBox
                                                     x:Name="intOptionValue1"
-                                                    Width="120"
+                                                    Width="Auto"
                                                     Maximum="10000"
                                                     Minimum="0"
                                                     Value="{Binding DataTableManager.SelectedItem[nFixOptionValue00], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -2155,7 +2148,7 @@
                                                     Style="{StaticResource ArialMSWhite}" />
                                                 <ui:NumberBox
                                                     x:Name="intOptionValue2"
-                                                    Width="120"
+                                                    Width="Auto"
                                                     Maximum="10000"
                                                     Minimum="0"
                                                     Value="{Binding DataTableManager.SelectedItem[nFixOptionValue01], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -2173,7 +2166,6 @@
                 </TabControl>
             </Grid>
 
-
             <!--  Datagrid  -->
             <Grid
                 Grid.Row="2"
@@ -2183,15 +2175,15 @@
                 Visibility="{Binding IsVisible}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="20" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <DataGrid
                     x:Name="dataGridView"
                     Grid.Row="0"
-                    Grid.Column="0"
-                    Width="400"
-                    Height="350"
-                    Margin="5,0"
+                    Width="450"
+                    Height="400"
+                    Margin="5,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     bh:DataGridBehavior.EnableScrollIntoView="True"
@@ -2209,8 +2201,8 @@
                     Template="{StaticResource lb_datagrid}">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                            <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
+                            <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+                            <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDeleteRow}" />
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.InputBindings>
@@ -2311,221 +2303,220 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-            </Grid>
-
-            <!--  Datagrid filter  -->
-            <Grid
-                Grid.Row="3"
-                Grid.Column="0"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Visibility="{Binding IsVisible}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-                <StackPanel
-                    Grid.Row="0"
-                    Grid.ColumnSpan="3"
+                <!--  Datagrid filter  -->
+                <Grid
+                    Grid.Row="2"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Orientation="Vertical">
-                    <Label
-                        x:Name="lbSearch"
+                    Visibility="{Binding IsVisible}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel
+                        Grid.Row="0"
+                        Grid.ColumnSpan="3"
+                        Margin="0,10,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.Search}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <TextBox
-                        x:Name="tbSearch"
-                        Width="250"
-                        Height="40"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        CaretBrush="White"
-                        Foreground="Gold"
-                        Tag="{x:Static rs:Resources.SearchNameID}"
-                        Template="{StaticResource lb_textbox}"
-                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    HorizontalAlignment="Left"
-                    Orientation="Vertical">
-                    <Label
-                        x:Name="lbCategory"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
-                        Content="{x:Static rs:Resources.Category}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <ComboBox
-                        x:Name="cmbItemCategory"
-                        Width="145"
-                        Height="24"
-                        Margin="0,0,0,0"
+                        Orientation="Horizontal">
+                        <Label
+                            x:Name="lbSearch"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.Search}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <TextBox
+                            x:Name="tbSearch"
+                            Width="300"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            CaretBrush="White"
+                            Foreground="Gold"
+                            Tag="{x:Static rs:Resources.SearchNameID}"
+                            Template="{StaticResource lb_textbox}"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="0"
                         HorizontalAlignment="Left"
-                        HorizontalContentAlignment="Left"
-                        VerticalContentAlignment="Center"
-                        IsEnabled="{Binding ItemDataManager.ItemCategoryEnabled}"
-                        IsReadOnly="True"
-                        ItemsSource="{Binding ItemDataManager.CategoryFilterItems}"
-                        SelectedValue="{Binding ItemCategoryFilter}"
-                        SelectedValuePath="ID"
-                        Style="{StaticResource ComboBoxStyle}"
-                        Template="{StaticResource lb_combobox}" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    HorizontalAlignment="Left"
-                    Orientation="Vertical">
-                    <Label
-                        x:Name="lbSubCategory"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
-                        Content="{x:Static rs:Resources.SubCategory}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <ComboBox
-                        x:Name="cmbSubCategory"
-                        Width="145"
-                        Height="24"
-                        Margin="0,0,0,0"
+                        Orientation="Vertical">
+                        <Label
+                            x:Name="lbCategory"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Center"
+                            Content="{x:Static rs:Resources.Category}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <ComboBox
+                            x:Name="cmbItemCategory"
+                            Width="145"
+                            Height="24"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            HorizontalContentAlignment="Left"
+                            VerticalContentAlignment="Center"
+                            IsEnabled="{Binding ItemDataManager.ItemCategoryEnabled}"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ItemDataManager.CategoryFilterItems}"
+                            SelectedValue="{Binding ItemCategoryFilter}"
+                            SelectedValuePath="ID"
+                            Style="{StaticResource ComboBoxStyle}"
+                            Template="{StaticResource lb_combobox}" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="1"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Left"
-                        VerticalContentAlignment="Center"
-                        IsEnabled="{Binding ItemDataManager.ItemSubCategoryEnabled}"
-                        IsReadOnly="True"
-                        ItemsSource="{Binding ItemDataManager.SubCategoryItemsFilter}"
-                        SelectedValue="{Binding ItemSubCategoryFilter}"
-                        SelectedValuePath="ID"
-                        Style="{StaticResource ComboBoxStyle}"
-                        Template="{StaticResource lb_combobox}" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.Column="2"
-                    HorizontalAlignment="Left"
-                    Orientation="Vertical">
-                    <Label
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
-                        Content="Inventory Type"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <ComboBox
-                        Width="145"
-                        Height="24"
-                        Margin="0,0,0,0"
+                        Orientation="Vertical">
+                        <Label
+                            x:Name="lbSubCategory"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Center"
+                            Content="{x:Static rs:Resources.SubCategory}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <ComboBox
+                            x:Name="cmbSubCategory"
+                            Width="145"
+                            Height="24"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Left"
+                            VerticalContentAlignment="Center"
+                            IsEnabled="{Binding ItemDataManager.ItemSubCategoryEnabled}"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ItemDataManager.SubCategoryItemsFilter}"
+                            SelectedValue="{Binding ItemSubCategoryFilter}"
+                            SelectedValuePath="ID"
+                            Style="{StaticResource ComboBoxStyle}"
+                            Template="{StaticResource lb_combobox}" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.Column="2"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Left"
-                        VerticalContentAlignment="Center"
-                        IsReadOnly="True"
-                        ItemsSource="{Binding ItemDataManager.InventoryTypeItems}"
-                        SelectedValue="{Binding InventoryTypeFilter}"
-                        SelectedValuePath="ID"
-                        Style="{StaticResource ComboBoxStyle}"
-                        Template="{StaticResource lb_combobox}" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    HorizontalAlignment="Left"
-                    Orientation="Vertical">
-                    <Label
-                        x:Name="lbQuality"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
-                        Content="{x:Static rs:Resources.ItemQuality}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <ComboBox
-                        x:Name="cmbItemBranch"
-                        Width="145"
-                        Height="24"
-                        Margin="0,0,0,0"
+                        Orientation="Vertical">
+                        <Label
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Center"
+                            Content="{x:Static rs:Resources.ItemEditor_InventoryType}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <ComboBox
+                            Width="145"
+                            Height="24"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Left"
+                            VerticalContentAlignment="Center"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ItemDataManager.InventoryTypeItems}"
+                            SelectedValue="{Binding InventoryTypeFilter}"
+                            SelectedValuePath="ID"
+                            Style="{StaticResource ComboBoxStyle}"
+                            Template="{StaticResource lb_combobox}" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="2"
+                        Grid.Column="0"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Left"
-                        VerticalContentAlignment="Center"
-                        IsReadOnly="True"
-                        ItemsSource="{Binding ItemDataManager.BranchItemsFilter}"
-                        SelectedValue="{Binding ItemBranchFilter}"
-                        SelectedValuePath="ID"
-                        Style="{StaticResource ComboBoxStyle}"
-                        Template="{StaticResource lb_combobox}" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    HorizontalAlignment="Left"
-                    Orientation="Vertical">
-                    <Label
-                        x:Name="lbClass"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
-                        Content="{x:Static rs:Resources.Class}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <ComboBox
-                        x:Name="cmbJobClass"
-                        Width="145"
-                        Height="24"
-                        Margin="0,0,0,0"
+                        Orientation="Vertical">
+                        <Label
+                            x:Name="lbQuality"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Center"
+                            Content="{x:Static rs:Resources.ItemQuality}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <ComboBox
+                            x:Name="cmbItemBranch"
+                            Width="145"
+                            Height="24"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Left"
+                            VerticalContentAlignment="Center"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ItemDataManager.BranchItemsFilter}"
+                            SelectedValue="{Binding ItemBranchFilter}"
+                            SelectedValuePath="ID"
+                            Style="{StaticResource ComboBoxStyle}"
+                            Template="{StaticResource lb_combobox}" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="2"
+                        Grid.Column="1"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Left"
-                        VerticalContentAlignment="Center"
-                        IsEnabled="{Binding ItemDataManager.ItemClassEnabled}"
-                        IsReadOnly="True"
-                        ItemsSource="{Binding ItemDataManager.ClassItemsFilter}"
-                        SelectedValue="{Binding ItemClassFilter}"
-                        SelectedValuePath="ID"
-                        Style="{StaticResource ComboBoxStyle}"
-                        Template="{StaticResource lb_combobox}" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Row="2"
-                    Grid.Column="2"
-                    HorizontalAlignment="Left"
-                    Orientation="Vertical">
-                    <Label
-                        x:Name="lbItemTrade"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        HorizontalContentAlignment="Center"
-                        Content="{x:Static rs:Resources.ItemTrade}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <ComboBox
-                        x:Name="cmbItemTrade"
-                        Width="145"
-                        Height="24"
-                        Margin="0,0,0,0"
+                        Orientation="Vertical">
+                        <Label
+                            x:Name="lbClass"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Center"
+                            Content="{x:Static rs:Resources.Class}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <ComboBox
+                            x:Name="cmbJobClass"
+                            Width="145"
+                            Height="24"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Left"
+                            VerticalContentAlignment="Center"
+                            IsEnabled="{Binding ItemDataManager.ItemClassEnabled}"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ItemDataManager.ClassItemsFilter}"
+                            SelectedValue="{Binding ItemClassFilter}"
+                            SelectedValuePath="ID"
+                            Style="{StaticResource ComboBoxStyle}"
+                            Template="{StaticResource lb_combobox}" />
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="2"
+                        Grid.Column="2"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        IsReadOnly="True"
-                        ItemsSource="{Binding ItemDataManager.ItemTradeFilterItems}"
-                        SelectedValue="{Binding ItemTradeFilter}"
-                        SelectedValuePath="ID"
-                        Style="{StaticResource ComboBoxStyle}"
-                        Template="{StaticResource lb_combobox}" />
-                </StackPanel>
+                        Orientation="Vertical">
+                        <Label
+                            x:Name="lbItemTrade"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Center"
+                            Content="{x:Static rs:Resources.ItemTrade}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <ComboBox
+                            x:Name="cmbItemTrade"
+                            Width="145"
+                            Height="24"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding ItemDataManager.ItemTradeFilterItems}"
+                            SelectedValue="{Binding ItemTradeFilter}"
+                            SelectedValuePath="ID"
+                            Style="{StaticResource ComboBoxStyle}"
+                            Template="{StaticResource lb_combobox}" />
+                    </StackPanel>
+                </Grid>
             </Grid>
+
             <TextBlock
                 Grid.Row="2"
-                Grid.Column="1"
+                Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="15"

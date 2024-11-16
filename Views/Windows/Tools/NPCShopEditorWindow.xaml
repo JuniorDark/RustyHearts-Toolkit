@@ -78,7 +78,6 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -95,7 +94,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
-                        Width="140"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -107,10 +106,9 @@
                         </i:Interaction.Behaviors>
                     </ui:NumberBox>
                 </StackPanel>
-
                 <StackPanel
                     Grid.Row="0"
-                    Grid.Column="2"
+                    Grid.Column="1"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -130,14 +128,14 @@
                 <StackPanel
                     Grid.Row="1"
                     Grid.Column="0"
-                    Grid.ColumnSpan="3"
+                    Grid.ColumnSpan="2"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="NPC Name" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_NPCName}" />
                     <TextBox
-                        Width="400"
+                        Width="Auto"
                         Height="30"
                         Margin="0,0"
                         d:Text="{x:Static rs:Resources.Name}"
@@ -159,7 +157,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
-                        Width="400"
+                        Width="Auto"
                         Height="30"
                         Margin="0,0"
                         d:Text="{x:Static rs:Resources.Name}"
@@ -171,22 +169,19 @@
                         </i:Interaction.Behaviors>
                     </TextBox>
                 </StackPanel>
-
                 <ScrollViewer
                     Grid.Row="3"
-                    Grid.ColumnSpan="3"
+                    Grid.ColumnSpan="2"
                     Margin="0,10,0,0"
                     HorizontalScrollBarVisibility="Auto"
                     Style="{StaticResource lb_scrollviewer}"
                     VerticalScrollBarVisibility="Auto">
                     <ItemsControl AlternationCount="{Binding DataContext.NpcShopItems.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.NpcShopItems, RelativeSource={RelativeSource AncestorType=Window}}">
-
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <UniformGrid Columns="2" Rows="10" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
-
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel
@@ -210,13 +205,10 @@
                                         ItemNameVisibility="Visible"
                                         RemoveItemCommand="{Binding DataContext.RemoveItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                 </StackPanel>
-
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-
                 </ScrollViewer>
-
             </Grid>
         </DataTemplate>
         <!--  Template for TradeShop  -->
@@ -243,7 +235,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
-                        Width="140"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -265,7 +257,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
-                        Width="400"
+                        Width="Auto"
                         Height="30"
                         Margin="0,0"
                         d:Text="{x:Static rs:Resources.Name}"
@@ -284,9 +276,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Sort Number" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_SortNumber}" />
                     <ui:NumberBox
-                        Width="140"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -305,9 +297,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Group ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Group}" />
                     <ui:NumberBox
-                        Width="140"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -326,9 +318,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Type" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Type}" />
                     <ui:NumberBox
-                        Width="140"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -347,9 +339,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Duel Point Cost" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_DuelPointCost}" />
                     <ui:NumberBox
-                        Width="140"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -363,7 +355,7 @@
                 </StackPanel>
                 <StackPanel
                     Grid.Row="2"
-                    Grid.ColumnSpan="3"
+                    Grid.ColumnSpan="4"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Vertical">
@@ -398,7 +390,7 @@
                 </StackPanel>
                 <ScrollViewer
                     Grid.Row="3"
-                    Grid.ColumnSpan="3"
+                    Grid.ColumnSpan="4"
                     Margin="0,0,0,0"
                     HorizontalScrollBarVisibility="Auto"
                     Style="{StaticResource lb_scrollviewer}"
@@ -418,8 +410,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Token {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.NPCShopEditor_Token}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -459,9 +460,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Craft Item ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_CraftItemID}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -475,9 +476,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Sort Number" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_SortNumber}" />
                     <ui:NumberBox
-                        Width="140"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -498,7 +499,7 @@
                     Orientation="Vertical">
                     <CheckBox
                         Margin="0,10,0,0"
-                        Content="Visible"
+                        Content="{x:Static rs:Resources.NPCShopEditor_Visible}"
                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nVisible], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Template="{StaticResource lb_checkbox}">
                         <i:Interaction.Behaviors>
@@ -515,7 +516,7 @@
                     Orientation="Vertical">
                     <CheckBox
                         Margin="0,10,0,0"
-                        Content="Craftable"
+                        Content="{x:Static rs:Resources.NPCShopEditor_Craftable}"
                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nMixAble], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Template="{StaticResource lb_checkbox}">
                         <i:Interaction.Behaviors>
@@ -533,7 +534,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
-                        Width="500"
+                        Width="Auto"
                         Height="30"
                         Margin="0,0"
                         d:Text="{x:Static rs:Resources.Name}"
@@ -552,9 +553,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Craft Category" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_CraftCategory}" />
                     <ComboBox
-                        Width="150"
+                        Width="Auto"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -578,9 +579,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Craft Sub Category" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_CraftSubCategory}" />
                     <ComboBox
-                        Width="150"
+                        Width="Auto"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -600,13 +601,14 @@
                 <StackPanel
                     Grid.Row="1"
                     Grid.Column="2"
+                    Grid.ColumnSpan="2"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="{x:Static rs:Resources.Group}" />
                     <TextBox
-                        Width="500"
+                        Width="Auto"
                         Height="30"
                         Margin="0,0"
                         d:Text="{x:Static rs:Resources.Name}"
@@ -625,9 +627,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Category 01" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_Category01}" />
                     <ComboBox
-                        Width="150"
+                        Width="Auto"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -651,9 +653,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Category 02" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_Category02}" />
                     <ComboBox
-                        Width="150"
+                        Width="Auto"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -677,9 +679,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Category 03" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_Category03}" />
                     <ComboBox
-                        Width="150"
+                        Width="Auto"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -703,9 +705,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Craft Type" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_CraftType}" />
                     <ui:NumberBox
-                        Width="140"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -724,9 +726,9 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Craft Cost" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_CraftCost}" />
                     <ui:NumberBox
-                        Width="140"
+                        Width="200"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -757,10 +759,10 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
                                         Background="Transparent"
-                                        FontSize="12"
+                                        FontSize="15"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Item Craft" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_ItemCraft}" />
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -776,7 +778,7 @@
                     Grid.Row="6"
                     Grid.ColumnSpan="4"
                     Margin="0,0,0,0"
-                    HorizontalAlignment="Left"
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Vertical">
                     <ItemsControl AlternationCount="{Binding DataContext.ItemMix.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.ItemMix, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -794,9 +796,9 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Item Craft Probability" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_ItemCraftProbability}" />
                                     <ui:NumberBox
-                                        Width="150"
+                                        MinWidth="200"
                                         Margin="0,0,10,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
@@ -813,9 +815,9 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Item Craft Count" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_ItemCraftCost}" />
                                     <ui:NumberBox
-                                        Width="150"
+                                        MinWidth="200"
                                         Margin="0,0,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
@@ -848,8 +850,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Craft Material {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.NPCShopEditor_CraftMaterial}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -891,7 +902,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Craft Item ID" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -905,9 +916,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Sort Number" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_SortNumber}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -928,7 +939,7 @@
                     Orientation="Vertical">
                     <CheckBox
                         Margin="0,10,0,0"
-                        Content="Visible"
+                        Content="{x:Static rs:Resources.NPCShopEditor_Visible}"
                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nVisible], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Template="{StaticResource lb_checkbox}">
                         <i:Interaction.Behaviors>
@@ -945,7 +956,7 @@
                     Orientation="Vertical">
                     <CheckBox
                         Margin="0,10,0,0"
-                        Content="Craftable"
+                        Content="{x:Static rs:Resources.NPCShopEditor_Craftable}"
                         IsChecked="{Binding DataContext.DataTableManager.SelectedItem[nMixAble], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=ContentControl}}"
                         Template="{StaticResource lb_checkbox}">
                         <i:Interaction.Behaviors>
@@ -963,8 +974,8 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="{x:Static rs:Resources.Description}" />
                     <TextBox
-                        Width="600"
                         Height="30"
+                        MinWidth="200"
                         Margin="0,0"
                         d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
@@ -985,7 +996,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="{x:Static rs:Resources.Group}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1000,15 +1011,15 @@
                 <StackPanel
                     Grid.Row="1"
                     Grid.Column="0"
-                    Grid.ColumnSpan="4"
+                    Grid.ColumnSpan="2"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="Character Num" />
                     <TextBox
-                        Width="300"
                         Height="30"
+                        MinWidth="200"
                         Margin="0,0"
                         d:Text="{x:Static rs:Resources.Name}"
                         FontSize="12"
@@ -1026,9 +1037,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Category 01" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_Category01}" />
                     <ComboBox
-                        Width="150"
+                        Width="Auto"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -1052,9 +1063,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Category 02" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_Category02}" />
                     <ComboBox
-                        Width="150"
+                        Width="Auto"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -1078,9 +1089,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Category 03" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_Category03}" />
                     <ComboBox
-                        Width="150"
+                        Width="Auto"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -1104,9 +1115,12 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Craft Cost" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        Foreground="White"
+                        Text="{x:Static rs:Resources.NPCShopEditor_CraftCost}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="200"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1137,10 +1151,10 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Background="Transparent"
-                                        FontSize="12"
+                                        FontSize="15"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Item Craft" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_ItemCraft}" />
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -1156,7 +1170,7 @@
                     Grid.Row="6"
                     Grid.ColumnSpan="4"
                     Margin="0,0,0,0"
-                    HorizontalAlignment="Left"
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Vertical">
                     <ItemsControl AlternationCount="{Binding DataContext.ItemMix.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.ItemMix, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -1174,9 +1188,9 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Item Craft Probability" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_ItemCraftProbability}" />
                                     <ui:NumberBox
-                                        Width="150"
+                                        MinWidth="200"
                                         Margin="0,0,10,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
@@ -1193,9 +1207,9 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Item Craft Count" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_ItemCraftCount}" />
                                     <ui:NumberBox
-                                        Width="150"
+                                        MinWidth="200"
                                         Margin="0,0,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
@@ -1228,8 +1242,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Craft Material {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.NPCShopEditor_CraftMaterial}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -1267,9 +1290,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Shop Item ID" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_ShopItemID}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1283,9 +1306,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Package Effect Code" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_PackageEffectCode}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1304,9 +1327,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Level" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.Level}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1325,9 +1348,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Quest Type" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_QuestType}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1347,9 +1370,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Item Name" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_ItemName}" />
                     <TextBox
-                        Width="300"
+                        Width="Auto"
                         Height="30"
                         Margin="0,0"
                         d:Text="{x:Static rs:Resources.Name}"
@@ -1368,9 +1391,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Item Type" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_ItemType}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1398,13 +1421,13 @@
                                     Orientation="Vertical">
                                     <TextBlock
                                         Margin="0,0,10,0"
-                                        HorizontalAlignment="Left"
+                                        HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
                                         Background="Transparent"
-                                        FontSize="12"
+                                        FontSize="15"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Filter Item" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_FilterItem}" />
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -1420,7 +1443,7 @@
                     Grid.Row="3"
                     Grid.ColumnSpan="4"
                     Margin="0,0,0,0"
-                    HorizontalAlignment="Left"
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Orientation="Vertical">
                     <ItemsControl AlternationCount="{Binding DataContext.QuestItems.Count, RelativeSource={RelativeSource AncestorType=Window}}" ItemsSource="{Binding DataContext.QuestItems, RelativeSource={RelativeSource AncestorType=Window}}">
@@ -1437,9 +1460,9 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Quest" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_Quest}" />
                                     <ComboBox
-                                        Width="300"
+                                        Width="350"
                                         Height="24"
                                         Margin="0,0,0,0"
                                         IsReadOnly="True"
@@ -1455,9 +1478,9 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text=" Quest Condition" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_QuestCondition}" />
                                     <ComboBox
-                                        Width="150"
+                                        Width="250"
                                         Height="24"
                                         Margin="0,0,0,0"
                                         IsReadOnly="True"
@@ -1492,8 +1515,17 @@
                                         Background="Transparent"
                                         FontSize="12"
                                         Foreground="Gold"
-                                        Style="{StaticResource ArialMS}"
-                                        Text="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}, Converter={StaticResource IndexToNumberConverter}, StringFormat='Item {0}'}" />
+                                        Style="{StaticResource ArialMS}">
+                                        <TextBlock.Text>
+                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                <Binding
+                                                    Converter="{StaticResource IndexToNumberConverter}"
+                                                    Path="(ItemsControl.AlternationIndex)"
+                                                    RelativeSource="{RelativeSource AncestorType=ContentPresenter}" />
+                                                <Binding Source="{x:Static rs:Resources.Item}" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemsCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -1522,14 +1554,17 @@
                 </Grid.RowDefinitions>
                 <StackPanel
                     Grid.Row="0"
-                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
                     Margin="0,0,0,0"
-                    HorizontalAlignment="Left"
+                    HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        Foreground="White"
+                        Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="300"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1548,9 +1583,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Preview Class" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_PreviewClass}" />
                     <ComboBox
-                        Width="300"
+                        Width="Auto"
                         Height="24"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Left"
@@ -1575,10 +1610,10 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Preview Classes" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_PreviewClasses}" />
                     <ListView
-                        Width="300"
-                        Height="120"
+                        Width="350"
+                        Height="150"
                         Margin="0,0,0,0"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding DataContext.ItemDataManager.ClassItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
@@ -1598,9 +1633,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Note 01" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_Note01}" />
                     <TextBox
-                        Width="300"
+                        Width="Auto"
                         Height="30"
                         Margin="0,0"
                         d:Text="{x:Static rs:Resources.Name}"
@@ -1619,9 +1654,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Note 02" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_Note02}" />
                     <TextBox
-                        Width="300"
+                        Width="Auto"
                         Height="30"
                         Margin="0,0"
                         d:Text="{x:Static rs:Resources.Name}"
@@ -1652,10 +1687,10 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
                                         Background="Transparent"
-                                        FontSize="12"
+                                        FontSize="15"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Preview Item" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_PreviewItem}" />
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         CommandParameter="{Binding Path=(ItemsControl.AlternationIndex), RelativeSource={RelativeSource AncestorType=ContentPresenter}}"
@@ -1694,7 +1729,7 @@
                     Orientation="Vertical">
                     <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                     <ui:NumberBox
-                        MinWidth="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1728,7 +1763,6 @@
                         </i:Interaction.Behaviors>
                     </TextBox>
                 </StackPanel>
-
                 <StackPanel
                     Grid.Row="1"
                     Grid.Column="0"
@@ -1736,9 +1770,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Item Min Level" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_ItemMinLevel}" />
                     <ui:NumberBox
-                        MinWidth="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1752,14 +1786,14 @@
                 </StackPanel>
                 <StackPanel
                     Grid.Row="1"
-                    Grid.Column="1"
+                    Grid.Column="2"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Item Max Level" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_ItemMaxLevel}" />
                     <ui:NumberBox
-                        MinWidth="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1778,10 +1812,10 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Item Category" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_ItemCategory}" />
                     <ListView
                         Width="300"
-                        Height="120"
+                        Height="150"
                         Margin="0,0,0,0"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding DataContext.ItemDataManager.CategoryFilterItems, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
@@ -1801,10 +1835,10 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Item Sub Category" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_ItemSubCategory}" />
                     <ListView
                         Width="300"
-                        Height="120"
+                        Height="150"
                         Margin="0,0,0,0"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding DataContext.ItemDataManager.SubCategoryItemsFilter, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
@@ -1824,10 +1858,10 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Item Quality" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_ItemQuality}" />
                     <ListView
                         Width="300"
-                        Height="120"
+                        Height="150"
                         Margin="0,0,0,0"
                         DisplayMemberPath="Name"
                         ItemsSource="{Binding DataContext.ItemDataManager.BranchItemsFilter, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=ContentControl}}"
@@ -1859,10 +1893,10 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
                                         Background="Transparent"
-                                        FontSize="12"
+                                        FontSize="15"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Dismantled Item" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_DismantledItem}" />
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemBrokenTargetItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         ItemDataViewModel="{Binding ItemDataViewModel}"
@@ -1892,10 +1926,10 @@
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
                                         Background="Transparent"
-                                        FontSize="12"
+                                        FontSize="15"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="Dismantle Item" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_DismantleItem}" />
                                     <control:ItemSlot
                                         AddItemCommand="{Binding DataContext.AddItemBrokenItemCommand, RelativeSource={RelativeSource AncestorType=Window}}"
                                         ItemDataViewModel="{Binding ItemDataViewModel}"
@@ -1906,7 +1940,6 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
-
                 <StackPanel
                     Grid.Row="5"
                     Grid.Column="0"
@@ -1914,9 +1947,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Dismantle Probability" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_DismantleProbability}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1935,9 +1968,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Item Dismantle Min Count" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_ItemDismantleMinCount}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1956,9 +1989,9 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     Orientation="Vertical">
-                    <TextBlock Foreground="White" Text="Item Dismantle Max Count" />
+                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCShopEditor_ItemDismantleMaxCount}" />
                     <ui:NumberBox
-                        Width="150"
+                        Width="Auto"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
@@ -1986,13 +2019,11 @@
     <ContentControl Template="{StaticResource box_green02}">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -2020,138 +2051,145 @@
 
             <ContentControl
                 Grid.Row="1"
-                Grid.RowSpan="4"
+                Grid.RowSpan="2"
                 Grid.Column="1"
                 Margin="10,0,0,0"
                 Content="{Binding NpcShopType}"
                 ContentTemplateSelector="{StaticResource NpcShopTemplateSelector}"
                 Visibility="{Binding IsSelectedItemVisible}" />
 
-            <DataGrid
-                x:Name="dataGridView"
-                Grid.Row="3"
-                Grid.Column="0"
-                Height="400"
-                MinWidth="500"
-                Margin="0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                bh:DataGridBehavior.EnableScrollIntoView="True"
-                bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
-                AutoGenerateColumns="True"
-                CanUserAddRows="False"
-                ColumnWidth="Auto"
-                EnableRowVirtualization="True"
-                HeadersVisibility="Column"
-                HorizontalScrollBarVisibility="Auto"
-                IsReadOnly="True"
-                ItemsSource="{Binding DataTableManager.DataTable}"
-                SelectedItem="{Binding DataTableManager.SelectedItem}"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
-                Template="{StaticResource lb_datagrid}"
-                Visibility="{Binding IsVisible}">
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                        <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-                <DataGrid.InputBindings>
-                    <KeyBinding
-                        Key="I"
-                        Command="{Binding DataTableManager.AddNewRowCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="D"
-                        Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
-                        Modifiers="Control" />
-                    <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.UndoChangesCommand}"
-                        Modifiers="Ctrl" />
-                    <KeyBinding
-                        Key="Z"
-                        Command="{Binding DataTableManager.RedoChangesCommand}"
-                        Modifiers="Ctrl+Shift" />
-                    <KeyBinding
-                        Key="F"
-                        Command="{Binding OpenSearchDialogCommand}"
-                        CommandParameter="Find"
-                        Modifiers="Ctrl" />
-                </DataGrid.InputBindings>
-            </DataGrid>
-
             <Grid
-                Grid.Row="4"
+                Grid.Row="2"
                 Grid.Column="0"
                 Visibility="{Binding IsVisible}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <TextBlock
-                    x:Name="lbTotalItem"
+                <DataGrid
+                    x:Name="dataGridView"
                     Grid.Row="0"
                     Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,0,0,0"
-                    HorizontalAlignment="Center"
+                    Width="500"
+                    Height="450"
+                    Margin="0,0"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top"
-                    d:Text="Showing {0}/{1} Items"
-                    Foreground="Gold"
-                    Style="{StaticResource ArialMS}">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
-                            <Binding ElementName="dataGridView" Path="Items.Count" />
-                            <Binding Path="DataTableManager.DataTable.Rows.Count" />
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
+                    bh:DataGridBehavior.EnableScrollIntoView="True"
+                    bh:DataGridBehavior.SelectedRow="{Binding DataTableManager.SelectedRow}"
+                    AutoGenerateColumns="True"
+                    CanUserAddRows="False"
+                    ColumnWidth="Auto"
+                    EnableRowVirtualization="True"
+                    HeadersVisibility="Column"
+                    HorizontalScrollBarVisibility="Auto"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding DataTableManager.DataTable}"
+                    SelectedItem="{Binding DataTableManager.SelectedItem}"
+                    SelectionMode="Single"
+                    SelectionUnit="FullRow"
+                    Template="{StaticResource lb_datagrid}"
+                    Visibility="{Binding IsVisible}">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+                            <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDeleteRow}" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+                    <DataGrid.InputBindings>
+                        <KeyBinding
+                            Key="I"
+                            Command="{Binding DataTableManager.AddNewRowCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="D"
+                            Command="{Binding DataTableManager.DuplicateSelectedRowCommand}"
+                            Modifiers="Control" />
+                        <KeyBinding Key="Delete" Command="{Binding DataTableManager.DeleteSelectedRowCommand}" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.UndoChangesCommand}"
+                            Modifiers="Ctrl" />
+                        <KeyBinding
+                            Key="Z"
+                            Command="{Binding DataTableManager.RedoChangesCommand}"
+                            Modifiers="Ctrl+Shift" />
+                        <KeyBinding
+                            Key="F"
+                            Command="{Binding OpenSearchDialogCommand}"
+                            CommandParameter="Find"
+                            Modifiers="Ctrl" />
+                    </DataGrid.InputBindings>
+                </DataGrid>
 
-                <StackPanel
-                    Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    Margin="0,10,0,0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Orientation="Horizontal">
-                    <Label
-                        x:Name="lbSearch"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.Search}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <TextBox
-                        x:Name="tbSearch"
-                        Width="250"
-                        Height="34"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        CaretBrush="White"
-                        Foreground="Gold"
-                        Tag="{x:Static rs:Resources.SearchNameID}"
-                        Template="{StaticResource lb_textbox}"
-                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <CheckBox
-                        x:Name="MatchCaseCheckBox"
-                        Grid.Row="3"
+                <Grid Grid.Row="1" Visibility="{Binding IsVisible}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock
+                        x:Name="lbTotalItem"
+                        Grid.Row="0"
                         Grid.Column="0"
-                        Margin="10,0,0,0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.MatchCase}"
-                        IsChecked="{Binding MatchCase}"
-                        Template="{StaticResource lb_checkbox}" />
-                </StackPanel>
+                        d:Text="Showing {0}/{1} Items"
+                        Foreground="Gold"
+                        Style="{StaticResource ArialMS}">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{x:Static rs:Resources.DatagridTotalItems}">
+                                <Binding ElementName="dataGridView" Path="Items.Count" />
+                                <Binding Path="DataTableManager.DataTable.Rows.Count" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+
+                    <StackPanel
+                        Grid.Row="1"
+                        Grid.ColumnSpan="2"
+                        Margin="0,10,0,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Orientation="Horizontal">
+                        <Label
+                            x:Name="lbSearch"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.Search}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <TextBox
+                            x:Name="tbSearch"
+                            Width="300"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            CaretBrush="White"
+                            Foreground="Gold"
+                            Tag="{x:Static rs:Resources.SearchNameID}"
+                            Template="{StaticResource lb_textbox}"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <CheckBox
+                            x:Name="MatchCaseCheckBox"
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.MatchCase}"
+                            IsChecked="{Binding MatchCase}"
+                            Template="{StaticResource lb_checkbox}" />
+                    </StackPanel>
+                </Grid>
             </Grid>
+
             <TextBlock
-                Grid.Row="3"
+                Grid.Row="2"
                 Grid.ColumnSpan="3"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"

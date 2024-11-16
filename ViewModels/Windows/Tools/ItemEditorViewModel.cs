@@ -562,7 +562,7 @@ namespace RHToolkit.ViewModels.Windows
                 RiddleGroupItems = _gmDatabaseService.GetRiddleGroupItems();
                 RuneBranchItems =
                 [
-                    new NameID { ID = 0, Name = "None" },
+                    new NameID { ID = 0, Name = Resources.None },
                     new NameID { ID = 1, Name = "★" },
                     new NameID { ID = 2, Name = "★★" },
                     new NameID { ID = 3, Name = "★★★" },

@@ -1,5 +1,6 @@
 ﻿using RHToolkit.Models.Database;
 using RHToolkit.Models.Localization;
+using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.SQLite;
 using RHToolkit.Services;
 using RHToolkit.Services.Contracts;
@@ -173,6 +174,37 @@ public partial class App : Application
     /// </summary>
     private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
-        // For more info see https://learn.microsoft.com/en-us/dotnet/api/system.windows.application.dispatcherunhandledexception?view=windowsdesktop-8.0
+        // Log the exception details
+        LogException(e.Exception);
+
+        RHMessageBoxHelper.ShowOKMessage("An unexpected error occurred. Check the error log for more details.", "Error");
+
+        // Prevent default unhandled exception processing
+        e.Handled = true;
+    }
+
+    /// <summary>
+    /// Logs the exception details to a file.
+    /// </summary>
+    /// <param name="exception">The exception to log.</param>
+    private static void LogException(Exception exception)
+    {
+        try
+        {
+            string logDirectory = Path.Combine(AppContext.BaseDirectory, "log");
+            if (!Directory.Exists(logDirectory))
+            {
+                Directory.CreateDirectory(logDirectory);
+            }
+
+            string logFilePath = Path.Combine(logDirectory, "error.log");
+            string logMessage = $"{DateTime.Now}: {exception}\n";
+
+            File.AppendAllText(logFilePath, logMessage);
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"Failed to log exception: {ex.Message}", "Logging Error");
+        }
     }
 }

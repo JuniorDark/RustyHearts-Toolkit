@@ -192,10 +192,10 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 d:Foreground="White"
-                d:Text="Skill ID: "
+                d:Text="ID: "
                 Foreground="White"
                 Style="{StaticResource ArialMS}"
-                Text="{Binding SkillID, StringFormat=' Skill ID: {0}'}"
+                Text="{Binding SkillID, StringFormat=' ID: {0}'}"
                 Visibility="{Binding SkillID, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         </Grid>
     </ContentControl>

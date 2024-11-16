@@ -341,6 +341,7 @@ public partial class ItemWindowViewModel : ObservableObject, IRecipient<Characte
     {
         SlotIndexMin = settings.SlotIndexMin;
         SlotIndexMax = settings.SlotIndexMax;
+        IsButtonVisible = settings.IsButtonVisible;
         IsSlotVisible = settings.IsSlotVisible;
         IsOptionsVisible = settings.IsOptionsVisible;
         IsItemAmountVisible = settings.IsItemAmountVisible;

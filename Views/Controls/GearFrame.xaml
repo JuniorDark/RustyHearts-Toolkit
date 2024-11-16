@@ -411,10 +411,10 @@
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 d:Foreground="White"
-                d:Text="Item ID: "
+                d:Text="ID: "
                 Foreground="White"
                 Style="{StaticResource ArialMS}"
-                Text="{Binding ItemId, StringFormat=' Item ID: {0}'}"
+                Text="{Binding ItemId, StringFormat=' ID: {0}'}"
                 Visibility="{Binding ItemId, Converter={StaticResource GreaterOrEqualToVisibilityConverter}, ConverterParameter=1}" />
         </Grid>
     </ContentControl>

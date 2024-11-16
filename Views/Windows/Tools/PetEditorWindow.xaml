@@ -62,12 +62,10 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="50" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
-                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
@@ -92,17 +90,13 @@
                 </ui:TitleBar.Icon>
             </ui:TitleBar>
 
-            <control:EditorMenu
-                Grid.Row="1"
-                Grid.Column="0"
-                Grid.ColumnSpan="2" />
+            <control:EditorMenu Grid.Row="1" Grid.Column="0" />
 
             <!--  Controls  -->
             <Grid
                 Grid.Row="1"
-                Grid.RowSpan="3"
-                Grid.Column="2"
-                Grid.ColumnSpan="2"
+                Grid.RowSpan="2"
+                Grid.Column="1"
                 Visibility="{Binding IsVisible}">
                 <UniformGrid Columns="4">
                     <FrameworkElement x:Name="c2" />
@@ -111,13 +105,12 @@
                     <TabItem
                         Width="{Binding ElementName=c2, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Pet Data"
+                        Header="{x:Static rs:Resources.PetEditor_PetData}"
                         Style="{StaticResource lb_tab}">
-                        <Grid HorizontalAlignment="Center">
+                        <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="371*" />
-                                <ColumnDefinition Width="277*" />
-                                <ColumnDefinition Width="94*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -133,10 +126,12 @@
                             </Grid.RowDefinitions>
 
                             <StackPanel
+                                Grid.Row="0"
+                                Grid.Column="0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -151,16 +146,17 @@
                                 </TextBox>
                             </StackPanel>
                             <StackPanel
-                                Grid.ColumnSpan="3"
-                                Margin="370,0,0,0"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Name (Internal)" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Editor_InternalName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
-                                    Margin="10,0,0,0"
+                                    Margin="0,0,0,0"
                                     d:Text="{x:Static rs:Resources.Name}"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
@@ -171,11 +167,12 @@
                                 </TextBox>
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="2"
+                                Grid.Row="1"
+                                Grid.Column="0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Group Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_GroupName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -190,17 +187,17 @@
                                 </TextBox>
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="2"
-                                Grid.ColumnSpan="3"
-                                Margin="370,0,0,0"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Group Name (Internal)" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.InternalGroupName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
-                                    Margin="10,0,0,0"
+                                    Margin="0,0,0,0"
                                     d:Text="Group Name"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
@@ -210,12 +207,14 @@
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
+
                             <StackPanel
-                                Grid.Row="3"
+                                Grid.Row="2"
+                                Grid.Column="0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Icon" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.Icon}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -230,9 +229,9 @@
                                 </TextBox>
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="3"
-                                Grid.Column="2"
-                                Margin="58,0,0,0"
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
@@ -246,11 +245,12 @@
                                     Stretch="Fill" />
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="4"
+                                Grid.Row="3"
+                                Grid.Column="0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Big Icon" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.BigIcon}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -265,9 +265,9 @@
                                 </TextBox>
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="4"
-                                Grid.Column="2"
-                                Margin="34,0,0,0"
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
@@ -281,11 +281,12 @@
                                     Stretch="Fill" />
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="5"
+                                Grid.Row="4"
+                                Grid.Column="0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Betrayal Icon" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_BetrayalIcon}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -300,9 +301,9 @@
                                 </TextBox>
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="5"
-                                Grid.Column="2"
-                                Margin="58,0,0,0"
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
@@ -316,11 +317,12 @@
                                     Stretch="Fill" />
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="6"
+                                Grid.Row="5"
+                                Grid.Column="0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Eat Icon" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetEatIcon}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -335,9 +337,9 @@
                                 </TextBox>
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="6"
-                                Grid.Column="2"
-                                Margin="58,0,0,0"
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
@@ -351,11 +353,12 @@
                                     Stretch="Fill" />
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="7"
+                                Grid.Row="6"
+                                Grid.Column="0"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Dead Icon" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_DeadIcon}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -370,9 +373,9 @@
                                 </TextBox>
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="7"
-                                Grid.Column="2"
-                                Margin="58,0,0,0"
+                                Grid.Row="6"
+                                Grid.Column="1"
+                                Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
@@ -386,7 +389,8 @@
                                     Stretch="Fill" />
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="8"
+                                Grid.Row="7"
+                                Grid.ColumnSpan="2"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
@@ -409,7 +413,7 @@
                     <TabItem
                         Width="{Binding ElementName=c2, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Pet Rules"
+                        Header="{x:Static rs:Resources.PetEditor_PetRules}"
                         Style="{StaticResource lb_tab}">
                         <Grid HorizontalAlignment="Center">
                             <Grid.ColumnDefinitions>
@@ -440,11 +444,11 @@
                             <StackPanel
                                 Grid.Row="0"
                                 Grid.Column="0"
-                                Margin="5,0,0,0"
+                                Margin="0,0,0,0"
                                 HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
+                                VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.ID}" />
                                 <ui:NumberBox
                                     Width="Auto"
                                     MinWidth="140"
@@ -466,7 +470,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Type" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetType}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -486,7 +490,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetGroup}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -507,7 +511,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Inventory Count" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_InventoryCount}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -529,7 +533,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Group ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_GroupID}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -550,7 +554,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Head Position" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_HeadPosition}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -568,7 +572,7 @@
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Scale" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_Scale}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -583,7 +587,7 @@
                                 Grid.Row="2"
                                 Grid.Column="1"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Weight" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_Weight}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -599,7 +603,7 @@
                                 Grid.Row="3"
                                 Grid.Column="0"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Level" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetLevel}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="100"
@@ -614,7 +618,7 @@
                                 Grid.Row="3"
                                 Grid.Column="1"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Level Min" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetLevelMin}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="100"
@@ -629,7 +633,7 @@
                                 Grid.Row="3"
                                 Grid.Column="2"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Level Max" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetLevelMax}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="100"
@@ -644,7 +648,7 @@
                                 Grid.Row="3"
                                 Grid.Column="3"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Exp Factor" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_ExpFactor}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="1"
@@ -660,7 +664,7 @@
                                 Grid.Row="4"
                                 Grid.Column="0"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Grade" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetGrade}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -675,7 +679,7 @@
                                 Grid.Row="4"
                                 Grid.Column="1"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Next Pet ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_NextPetID}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -690,7 +694,7 @@
                                 Grid.Row="4"
                                 Grid.Column="2"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Transfer ID" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_TransferID}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -705,7 +709,7 @@
                                 Grid.Row="4"
                                 Grid.Column="3"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Eat Gold" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetEatGold}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -721,7 +725,7 @@
                                 Grid.Row="5"
                                 Grid.Column="0"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Move Speed" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_MoveSpeed}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -736,7 +740,7 @@
                                 Grid.Row="5"
                                 Grid.Column="1"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Move Height" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_MoveHeight}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -751,7 +755,7 @@
                                 Grid.Row="5"
                                 Grid.Column="2"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Jump Height 01" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_JumpHeight01}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -766,7 +770,7 @@
                                 Grid.Row="5"
                                 Grid.Column="3"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Jump Height 02" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_JumpHeight02}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -782,7 +786,7 @@
                                 Grid.Row="6"
                                 Grid.Column="0"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Wide Radius" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_WideRadius}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -797,7 +801,7 @@
                                 Grid.Row="6"
                                 Grid.Column="1"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Keep Distance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_KeepDistance}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -812,7 +816,7 @@
                                 Grid.Row="6"
                                 Grid.Column="2"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Attack Range" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_AttackRange}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -827,7 +831,7 @@
                                 Grid.Row="6"
                                 Grid.Column="3"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Long Attack Range" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_LongAttackRange}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -843,7 +847,7 @@
                                 Grid.Row="7"
                                 Grid.Column="0"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Chase Range" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_ChaseRange}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -858,7 +862,7 @@
                                 Grid.Row="7"
                                 Grid.Column="1"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Investigation Range" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_InvestigationRange}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -873,7 +877,7 @@
                                 Grid.Row="7"
                                 Grid.Column="2"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pick Up Range" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PickUpRange}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -888,7 +892,7 @@
                                 Grid.Row="7"
                                 Grid.Column="3"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Attack Delay" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_AttackDelay}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -904,7 +908,7 @@
                                 Grid.Row="8"
                                 Grid.Column="0"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Rising Damage Weight" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_RisingDamageWeight}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -919,7 +923,7 @@
                                 Grid.Row="8"
                                 Grid.Column="1"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Betrayal Time" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_BetrayalTime}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -942,7 +946,7 @@
                                 <Label
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    Content="Death Name"
+                                    Content="{x:Static rs:Resources.PetEditor_DeathName}"
                                     Style="{StaticResource ArialMSWhite}" />
                                 <ComboBox
                                     Height="24"
@@ -973,7 +977,7 @@
                                 <Label
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    Content="Death Message"
+                                    Content="{x:Static rs:Resources.PetEditor_DeathMessage}"
                                     Style="{StaticResource ArialMSWhite}" />
                                 <ComboBox
                                     Height="24"
@@ -1009,7 +1013,7 @@
                                     FontSize="12"
                                     Foreground="White"
                                     Style="{StaticResource ArialMS}"
-                                    Text="Death Drop Item" />
+                                    Text="{x:Static rs:Resources.PetEditor_DeathDropItem}" />
                                 <control:ItemSlot
                                     AddItemCommand="{Binding AddPetDeathDropItemCommand}"
                                     CommandParameter="0"
@@ -1029,7 +1033,7 @@
                                 <Label
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
-                                    Content="Rebirth ID"
+                                    Content="{x:Static rs:Resources.PetEditor_RebirthID}"
                                     Style="{StaticResource ArialMSWhite}" />
                                 <ComboBox
                                     Height="24"
@@ -1055,7 +1059,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Rebirth"
+                                    Content="{x:Static rs:Resources.PetEditor_Rebirth}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nRebirthValue], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -1069,7 +1073,7 @@
                                 Grid.Column="3"
                                 VerticalAlignment="Bottom"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Rebirth Cooldown" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_RebirthCooldown}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Maximum="2147483647"
@@ -1090,7 +1094,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Item Pick Up"
+                                    Content="{x:Static rs:Resources.PetEditor_ItemPickUp}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nItemPickUp], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -1108,7 +1112,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Time Limited"
+                                    Content="{x:Static rs:Resources.PetEditor_TimeLimited}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nUnlimit], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -1126,7 +1130,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Deleteable"
+                                    Content="{x:Static rs:Resources.PetEditor_Deleteable}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nIsDelete], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -1144,7 +1148,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Growing Limit"
+                                    Content="{x:Static rs:Resources.PetEditor_GrowingLimit}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nGrowingLimit], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -1162,7 +1166,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Suicide"
+                                    Content="{x:Static rs:Resources.PetEditor_Suicide}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nSuicide], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -1180,7 +1184,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Chase"
+                                    Content="{x:Static rs:Resources.PetEditor_Chase}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nChaseType], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -1198,7 +1202,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Can Attack Enemy"
+                                    Content="{x:Static rs:Resources.PetEditor_CanAttackEnemy}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nEnemyAttack], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -1216,7 +1220,7 @@
                                 Orientation="Vertical">
                                 <CheckBox
                                     Margin="0,0,0,0"
-                                    Content="Can be Attacked"
+                                    Content="{x:Static rs:Resources.PetEditor_CanBeAttacked}"
                                     Foreground="White"
                                     IsChecked="{Binding DataTableManager.SelectedItem[nEnemyUnderAttack], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                     Template="{StaticResource lb_checkbox}">
@@ -1231,7 +1235,7 @@
                     <TabItem
                         Width="{Binding ElementName=c2, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Pet Stats"
+                        Header="{x:Static rs:Resources.PetEditor_PetStats}"
                         Style="{StaticResource lb_tab}">
                         <Grid HorizontalAlignment="Center">
                             <Grid.ColumnDefinitions>
@@ -1266,7 +1270,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Vitality Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_VitalityGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1287,7 +1291,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Intelligence Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_IntelligenceGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1308,7 +1312,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Strength Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_StrengthGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1329,7 +1333,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Resilient Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_ResilientGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1350,7 +1354,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Eloquence Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_EloquenceGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1371,7 +1375,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Charm Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CharmGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1392,7 +1396,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Temper Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_TemperGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1413,7 +1417,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Height Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_HeightGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1434,7 +1438,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Weight Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_WeightGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1456,7 +1460,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Cash Vitality Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CashVitalityGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1477,7 +1481,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Cash Intelligence Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CashIntelligenceGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1498,7 +1502,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Cash Strength Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CashStrengthGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1519,7 +1523,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Cash Resilient Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CashResilientGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1540,7 +1544,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Cash Eloquence Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CashEloquenceGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1561,7 +1565,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Cash Charm Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CashCharmGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1582,7 +1586,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Cash Temper Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CashTemperGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1603,7 +1607,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Cash Height Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CashHeightGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1624,7 +1628,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Cash Weight Growth" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CashWeightGrowth}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1646,7 +1650,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Fire Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.FireResistance}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1667,7 +1671,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Water Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WaterResistance}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1688,7 +1692,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Light Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.LightResistance}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1709,7 +1713,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Darkness Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.DarknessResistance}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1731,7 +1735,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Earth Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.EarthResistance}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1752,7 +1756,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Wind Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.WindResistance}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1773,7 +1777,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Poison Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PoisonResistance}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1794,7 +1798,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Lightning Resistance" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.LightningResistance}" />
                                 <ui:NumberBox
                                     MinWidth="140"
                                     Margin="0,0,0,0"
@@ -1813,7 +1817,7 @@
                     <TabItem
                         Width="{Binding ElementName=c2, Path=ActualWidth}"
                         Foreground="White"
-                        Header="Model/Table Data"
+                        Header="{x:Static rs:Resources.PetEditor_ModelTable_Data}"
                         Style="{StaticResource lb_tab}">
                         <Grid HorizontalAlignment="Center">
                             <Grid.ColumnDefinitions>
@@ -1842,7 +1846,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Model File" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_ModelFile}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1862,7 +1866,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub Model File" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_SubModelFile}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1882,7 +1886,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub Model Dummy" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_SubModelDummy}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1902,7 +1906,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Sub Model Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_SubModelGroup}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1922,7 +1926,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Left Hand Dummy Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_LeftHandDummyName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1942,7 +1946,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Right Hand Dummy Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_RightHandDummyName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1962,7 +1966,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Simple Model File" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_SimpleModelFile}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -1982,7 +1986,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Catch Dummy Name" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CatchDummyName}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2002,7 +2006,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Dead FX" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_DeadFX}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2022,7 +2026,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Dead Effect Motion" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_DeadEffectMotion}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2042,7 +2046,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Dead Dummy" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_DeadDummy}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2062,7 +2066,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skin" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_Skin}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2083,7 +2087,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Exp Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetExpTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2103,7 +2107,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Eat Item Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetEatItemTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2123,7 +2127,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Combo Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_ComboTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2143,7 +2147,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Null Motion Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_NullMotionTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2163,7 +2167,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Attack Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_AttackTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2183,7 +2187,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Down Motion Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_DownMotionTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2203,7 +2207,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Basic Motion Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_BasicMotionTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2223,7 +2227,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Skill Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_SkillTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2243,7 +2247,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Pet Skill Ai Table" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_PetSkillAiTable}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2263,12 +2267,12 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Costume Group" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CostumeGroup}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
                                     Margin="0,0,0,0"
-                                    d:Text="szPetSkillAiTable"
+                                    d:Text="sszCostumeGroup"
                                     FontSize="12"
                                     Template="{StaticResource lb_textbox11}"
                                     Text="{Binding DataTableManager.SelectedItem[szCostumeGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
@@ -2283,7 +2287,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Camera Position" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CameraPosition}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2303,7 +2307,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="Camera Direction" />
+                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.PetEditor_CameraDirection}" />
                                 <TextBox
                                     Width="Auto"
                                     Height="30"
@@ -2317,30 +2321,27 @@
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
-
                         </Grid>
                     </TabItem>
                 </TabControl>
             </Grid>
 
-            <!--  Datagrid  -->
             <Grid
                 Grid.Row="2"
                 Grid.Column="0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
                 Visibility="{Binding IsVisible}">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="20" />
                 </Grid.RowDefinitions>
+                <!--  Datagrid  -->
                 <DataGrid
                     x:Name="dataGridView"
                     Grid.Row="0"
-                    Grid.Column="0"
                     Width="450"
                     Height="400"
-                    Margin="5,0"
+                    Margin="5,0,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     bh:DataGridBehavior.EnableScrollIntoView="True"
@@ -2358,8 +2359,8 @@
                     Template="{StaticResource lb_datagrid}">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="Duplicate Item" />
-                            <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="Delete Item" />
+                            <MenuItem Command="{Binding DataTableManager.DuplicateSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+                            <MenuItem Command="{Binding DataTableManager.DeleteSelectedRowCommand}" Header="{x:Static rs:Resources.MenuDeleteRow}" />
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.InputBindings>
@@ -2414,45 +2415,43 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-            </Grid>
 
-            <!--  Datagrid filter  -->
-            <Grid
-                Grid.Row="3"
-                Grid.Column="0"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Visibility="{Binding IsVisible}">
-                <StackPanel
+                <!--  Datagrid filter  -->
+                <Grid
+                    Grid.Row="2"
                     Margin="0,0,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
-                    Orientation="Vertical">
-                    <Label
-                        x:Name="lbSearch"
+                    Visibility="{Binding IsVisible}">
+                    <StackPanel
+                        Margin="0,10,0,0"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Content="{x:Static rs:Resources.Search}"
-                        Style="{StaticResource ArialMSWhite}" />
-                    <TextBox
-                        x:Name="tbSearch"
-                        Width="250"
-                        Height="40"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Top"
-                        CaretBrush="White"
-                        Foreground="Gold"
-                        Tag="{x:Static rs:Resources.SearchNameID}"
-                        Template="{StaticResource lb_textbox}"
-                        Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </StackPanel>
+                        Orientation="Horizontal">
+                        <Label
+                            x:Name="lbSearch"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Content="{x:Static rs:Resources.Search}"
+                            Style="{StaticResource ArialMSWhite}" />
+                        <TextBox
+                            x:Name="tbSearch"
+                            Width="300"
+                            Height="40"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            CaretBrush="White"
+                            Foreground="Gold"
+                            Tag="{x:Static rs:Resources.SearchNameID}"
+                            Template="{StaticResource lb_textbox}"
+                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </StackPanel>
+                </Grid>
             </Grid>
             <TextBlock
                 Grid.Row="2"
-                Grid.Column="1"
-                Grid.ColumnSpan="2"
-                HorizontalAlignment="Left"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 FontSize="15"
                 Foreground="White"

@@ -798,7 +798,7 @@ public partial class DataTableManager : ObservableObject
             OnCanExecuteChangesChanged();
         }
 
-        _searchDialog?.ShowMessage(Resources.DataTableManagerReplaceCountMessage, Brushes.Green);
+        _searchDialog?.ShowMessage(string.Format(Resources.DataTableManagerReplaceCountMessage, replaceCount), Brushes.Green);
     }
 
 
@@ -811,7 +811,7 @@ public partial class DataTableManager : ObservableObject
 
         int count = DataTable.Rows.Cast<DataRow>().Sum(row => row.ItemArray.Count(item => item != null && item.ToString()?.Contains(searchText, comparison) == true));
 
-        _searchDialog?.ShowMessage(Resources.DataTableManagerCountMessage, Brushes.LightBlue);
+        _searchDialog?.ShowMessage(string.Format(Resources.DataTableManagerCountMessage, count), Brushes.LightBlue);
     }
 
     #endregion
