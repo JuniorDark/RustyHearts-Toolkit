@@ -13,7 +13,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
 
       - name: Build Rusty Hearts Toolkit
         run: dotnet publish ./RHToolkit.sln --configuration Release --self-contained false --runtime win-x64 /p:PublishSingleFile=false /p:PublishDir=./publish/RHToolkit
