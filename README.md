@@ -8,19 +8,6 @@
 
 **Rusty Hearts Toolkit** is a comprehensive suite of graphical tools created for in-depth editing of *Rusty Hearts* game files and databases, enabling users to manage and customize various in-game elements efficiently.
 
-## Preview
-![image](preview/preview02.png)
-![image](preview/preview03.png)
-![image](preview/preview04.png)
-![image](preview/preview05.png)
-![image](preview/preview06.png)
-![image](preview/preview07.png)
-![image](preview/preview08.png)
-![image](preview/preview09.png)
-![image](preview/preview10.png)
-![image](preview/preview11.png)
-![image](preview/preview12.png)
-
 ## Getting Started
 
 To start using Rusty Hearts Toolkit, download the latest release from the [GitHub repository](https://github.com/JuniorDark/RustyHearts-Toolkit/releases/latest).
@@ -57,6 +44,25 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
 - **Item Craft Database**
 - **Item DropGroup Database**
 - **Skill Database** 
+
+## Preview
+
+<details>
+  <summary>Click to expand preview images</summary>
+  
+  ![image](preview/preview02.png)
+  ![image](preview/preview03.png)
+  ![image](preview/preview04.png)
+  ![image](preview/preview05.png)
+  ![image](preview/preview06.png)
+  ![image](preview/preview07.png)
+  ![image](preview/preview08.png)
+  ![image](preview/preview09.png)
+  ![image](preview/preview10.png)
+  ![image](preview/preview11.png)
+  ![image](preview/preview12.png)
+  
+</details>
 
 ### Language Settings
 
