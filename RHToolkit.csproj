@@ -20,8 +20,7 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
-    <PackageReference Include="DotNetZip" Version="1.16.0" />
-    <PackageReference Include="EPPlus" Version="7.4.2" />
+    <PackageReference Include="EPPlus" Version="7.5.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />

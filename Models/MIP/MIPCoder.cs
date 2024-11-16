@@ -1,4 +1,4 @@
-﻿using Ionic.Zlib;
+﻿using System.IO.Compression;
 
 namespace RHToolkit.Models.MIP;
 
@@ -27,9 +27,9 @@ public class MIPCoder
     private static byte[] CompressBytesZlib(byte[] toBytes)
     {
         using MemoryStream outputStream = new();
-        using (ZlibStream deflateStream = new(outputStream, CompressionMode.Compress))
+        using (ZLibStream zlibStream = new(outputStream, CompressionLevel.Optimal))
         {
-            deflateStream.Write(toBytes, 0, toBytes.Length);
+            zlibStream.Write(toBytes, 0, toBytes.Length);
         }
 
         return outputStream.ToArray();
@@ -38,9 +38,9 @@ public class MIPCoder
     private static byte[] DecompressBytesZlib(byte[] toBytes)
     {
         using MemoryStream inputStream = new(toBytes);
-        using ZlibStream inflateStream = new(inputStream, CompressionMode.Decompress);
+        using ZLibStream zlibStream = new(inputStream, CompressionMode.Decompress);
         using MemoryStream outputStream = new();
-        inflateStream.CopyTo(outputStream);
+        zlibStream.CopyTo(outputStream);
         return outputStream.ToArray();
     }
 }
