@@ -36,7 +36,7 @@ jobs:
         run: dotnet publish ./RHToolkit.sln --configuration Release --self-contained true --runtime win-x64 /p:PublishSingleFile=false /p:PublishDir=./publish/RustyHearts-Toolkit_self-contained
 
       - name: Unzip Resources.zip
-        run: 7z x Resources.zip -o"./publish/publish/RustyHearts-Toolkit_self-contained"
+        run: 7z x Resources.zip -o"./publish/RustyHearts-Toolkit_self-contained"
 
       - name: Zip output files (Self-Contained)
         run: Compress-Archive -Path "./publish/RustyHearts-Toolkit_self-contained" -DestinationPath RustyHearts-Toolkit-SelfContained.zip
