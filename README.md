@@ -6,16 +6,26 @@
 
 ## Overview
 
-**Rusty Hearts Toolkit** is a comprehensive suite of graphical tools created for in-depth editing of *Rusty Hearts* game files and databases, enabling users to manage and customize various in-game elements efficiently. This toolkit is designed to simplify the editing process for both casual users and developers, offering easy access to database modifications, in-game items, characters, and other game features.
+**Rusty Hearts Toolkit** is a comprehensive suite of graphical tools created for in-depth editing of *Rusty Hearts* game files and databases, enabling users to manage and customize various in-game elements efficiently.
 
 ## Preview
-<!-- Include screenshots here to give a visual overview of the toolkit’s layout and functionality. -->
+![image](preview/preview02.png)
+![image](preview/preview03.png)
+![image](preview/preview04.png)
+![image](preview/preview05.png)
+![image](preview/preview06.png)
+![image](preview/preview07.png)
+![image](preview/preview08.png)
+![image](preview/preview09.png)
+![image](preview/preview10.png)
+![image](preview/preview11.png)
+![image](preview/preview12.png)
 
 ## Getting Started
 
 To start using Rusty Hearts Toolkit, download the latest release from the [GitHub repository](https://github.com/JuniorDark/RustyHearts-Toolkit/releases/latest).
 
-## Current Features
+## Features
 
 ### Database Editing Tools
 - **Character Edit Tools**: Customize character attributes, including equipment, inventory, storage, fortune, sanctions, and titles.
@@ -63,17 +73,17 @@ To set up the toolkit and generate the necessary SQLite database:
 1. Navigate to the `SQLite Database Manager` page.
 2. Select the `table` folder containing the `.rh` table files.
 3. Click `Create Database` to generate the `gmdb_(Lang).db` database in the `Resources` folder.
-4. Place the extracted game sprites `\ui\sprite\1024` in the `Resources` folder.
+4. Place the extracted game sprites `\ui\sprite\` in the `Resources` folder (Included by default).
 5. Navigate to the `Settings` page and set the `SQL Server` credentials.
 
 Note: After editing tables remember to rebuild the database.
 
-A prebuild database and sprites are avaliable on [`Resources.rar`](Resources.rar)
+Sprites are avaliable on [`Resources.zip`](Resources.zip)
 
 ## Prerequisites for Development
 * Visual Studio 2022 (Any Edition - 17.9 or later)
 * Windows 10 SDK or Windows 11 SDK via Visual Studio Installer
-* .NET Core 8 SDK (8.0.107 or later)
+* .NET Core 9 SDK (9.0.100 or later)
 
 ## Building
 
@@ -81,7 +91,7 @@ If you wish to build the project yourself, follow these steps:
 
 ### Step 1
 
-Install the [.NET 8.0 (or higher) SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
+Install the [.NET 9.0 (or higher) SDK](https://dotnet.microsoft.com/download/dotnet/9.0).
 Make sure your SDK version is higher or equal to the required version specified. 
 
 ### Step 2
@@ -100,23 +110,11 @@ The built files will be found in the newly created `bin` build directory.
 
 This project is licensed under the BSD 2-Clause License. See the [`LICENSE`](LICENSE.txt) file for details.
 
-## Frequently Asked Questions
-
-**Q: How do I report a bug?**  
-A: Submit an issue on GitHub with a detailed description of the bug and steps to reproduce it.
-
-**Q: How do I request a new feature?**  
-A: Submit an issue on GitHub with a description of the feature and its potential benefits.
-
-**Q: How do I contribute?**  
-A: Fork the repository, make your changes, and submit a pull request.
-
 ## Credits
 
 This project is possible due to the following NuGet packages:
 
 - [CommunityToolkit.Mvvm](https://www.nuget.org/packages/CommunityToolkit.Mvvm)
-- [DotNetZip](https://www.nuget.org/packages/dotnetzip)
 - [EPPlus](https://www.nuget.org/packages/EPPlus)
 - [Microsoft.Data.SqlClient](https://www.nuget.org/packages/Microsoft.Data.SqlClient)
 - [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection)
