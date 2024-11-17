@@ -6,6 +6,9 @@ using System.Data.SQLite;
 
 namespace RHToolkit.Services
 {
+    /// <summary>
+    /// Provides methods to interact with a SQLite database.
+    /// </summary>
     public class SqLiteDatabaseService : ISqLiteDatabaseService
     {
         public static string? DbFilePath { get; set; }
@@ -15,6 +18,10 @@ namespace RHToolkit.Services
             DbFilePath = GetDatabaseFilePath();
         }
 
+        /// <summary>
+        /// Gets the file path of the SQLite database based on the current language.
+        /// </summary>
+        /// <returns>The file path of the SQLite database.</returns>
         public static string GetDatabaseFilePath()
         {
             string resourcesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
@@ -39,6 +46,10 @@ namespace RHToolkit.Services
             return string.Empty;
         }
 
+        /// <summary>
+        /// Validates the existence and structure of the SQLite database.
+        /// </summary>
+        /// <returns>True if the database is valid; otherwise, false.</returns>
         public bool ValidateDatabase()
         {
             string dbFilePath = GetDatabaseFilePath();
@@ -62,17 +73,20 @@ namespace RHToolkit.Services
                     RHMessageBoxHelper.ShowOKMessage(missingTablesMessage, Resources.Error);
                     return false;
                 }
-
             }
 
             return true;
         }
 
+        /// <summary>
+        /// Gets a list of missing tables in the SQLite database.
+        /// </summary>
+        /// <returns>A list of missing table names.</returns>
         public List<string> GetMissingTables()
         {
             List<string> requiredTables = GMDatabaseManager.RequiredTables;
 
-            List<string> missingTables = [];
+            List<string> missingTables = new();
 
             using var connection = OpenSQLiteConnection();
 
@@ -90,6 +104,10 @@ namespace RHToolkit.Services
             return missingTables;
         }
 
+        /// <summary>
+        /// Opens a connection to the SQLite database.
+        /// </summary>
+        /// <returns>The opened SQLiteConnection.</returns>
         public SQLiteConnection OpenSQLiteConnection()
         {
             if (!File.Exists(DbFilePath))
@@ -102,6 +120,13 @@ namespace RHToolkit.Services
             return connection;
         }
 
+        /// <summary>
+        /// Executes a query and returns a SQLiteDataReader to read the results.
+        /// </summary>
+        /// <param name="query">The SQL query to execute.</param>
+        /// <param name="connection">The SQLiteConnection to use.</param>
+        /// <param name="parameters">The parameters for the query.</param>
+        /// <returns>A SQLiteDataReader to read the results of the query.</returns>
         public SQLiteDataReader ExecuteReader(string query, SQLiteConnection connection, params (string, object)[] parameters)
         {
             if (connection.State != ConnectionState.Open)

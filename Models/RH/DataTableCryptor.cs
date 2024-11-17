@@ -7,6 +7,12 @@ namespace RHToolkit.Models.RH
     {
         private readonly RHCryptor _rhCryptor = new();
 
+        /// <summary>
+        /// Creates a DataTable with specified columns.
+        /// </summary>
+        /// <param name="columns">List of column names and their data types.</param>
+        /// <returns>A DataTable with the specified columns.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when columns list is null.</exception>
         public static DataTable CreateDataTable(List<KeyValuePair<string, int>> columns)
         {
             if (columns == null)
@@ -33,6 +39,12 @@ namespace RHToolkit.Models.RH
             return dataTable;
         }
 
+        /// <summary>
+        /// Converts encrypted RH data to a DataTable.
+        /// </summary>
+        /// <param name="encryptedData">The encrypted RH data.</param>
+        /// <returns>A DataTable containing the decrypted data.</returns>
+        /// <exception cref="Exception">Thrown when the RH file is invalid or an error occurs during decryption.</exception>
         public DataTable RhToDataTable(byte[] encryptedData)
         {
             try
@@ -107,6 +119,13 @@ namespace RHToolkit.Models.RH
             }
         }
 
+        /// <summary>
+        /// Converts a DataTable to encrypted RH data.
+        /// </summary>
+        /// <param name="dataTable">The DataTable to convert.</param>
+        /// <returns>The encrypted RH data.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when a column type is missing.</exception>
+        /// <exception cref="Exception">Thrown when an error occurs during encryption.</exception>
         public byte[] DataTableToRh(DataTable dataTable)
         {
             try
@@ -181,6 +200,12 @@ namespace RHToolkit.Models.RH
             }
         }
 
+        /// <summary>
+        /// Converts a DataTable to an XML byte array.
+        /// </summary>
+        /// <param name="dataTable">The DataTable to convert.</param>
+        /// <returns>The XML byte array representing the DataTable.</returns>
+        /// <exception cref="Exception">Thrown when a column does not have a valid 'ColumnType' property or an error occurs during conversion.</exception>
         public static byte[] DataTableToXML(DataTable dataTable)
         {
             try
@@ -272,6 +297,12 @@ namespace RHToolkit.Models.RH
             }
         }
 
+        /// <summary>
+        /// Converts a DataTable to an XLSX byte array.
+        /// </summary>
+        /// <param name="dataTable">The DataTable to convert.</param>
+        /// <returns>The XLSX byte array representing the DataTable.</returns>
+        /// <exception cref="Exception">Thrown when a column does not have a valid 'ColumnType' property or an error occurs during conversion.</exception>
         public static byte[] DataTableToXLSX(DataTable dataTable)
         {
             try

@@ -10,6 +10,9 @@ using static RHToolkit.Models.MIP.MIPCoder;
 
 namespace RHToolkit.Models.Editor;
 
+/// <summary>
+/// Manages DataTables operations including creating, loading, saving, searching, and editing.
+/// </summary>
 public partial class DataTableManager : ObservableObject
 {
     private SearchDialog? _searchDialog;
@@ -24,6 +27,14 @@ public partial class DataTableManager : ObservableObject
 
     #region File
 
+    /// <summary>
+    /// Creates a new DataTable with the specified columns and optional string table.
+    /// </summary>
+    /// <param name="tableName">The name of the table.</param>
+    /// <param name="columns">The columns for the table.</param>
+    /// <param name="stringTableName">The name of the string table (optional).</param>
+    /// <param name="stringColumns">The columns for the string table (optional).</param>
+    /// <returns>True if the table was created successfully, otherwise false.</returns>
     public bool CreateTable(string tableName, List<KeyValuePair<string, int>> columns, string? stringTableName = null, List<KeyValuePair<string, int>>? stringColumns = null)
     {
         try
@@ -64,7 +75,7 @@ public partial class DataTableManager : ObservableObject
                     return true;
                 }
             }
-            
+
             return false;
         }
         catch (Exception ex)
@@ -74,6 +85,14 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Opens a file dialog to load a file with the specified filter.
+    /// </summary>
+    /// <param name="filter">The filter for the file dialog.</param>
+    /// <param name="stringTableName">The name of the string table (optional).</param>
+    /// <param name="tableColumnName">The name of the table column (optional).</param>
+    /// <param name="fileType">The type of the file (optional).</param>
+    /// <returns>True if the file was loaded successfully, otherwise false.</returns>
     public async Task<bool> LoadFile(string filter, string? stringTableName = null, string? tableColumnName = null, string? fileType = null)
     {
         OpenFileDialog openFileDialog = new()
@@ -90,6 +109,14 @@ public partial class DataTableManager : ObservableObject
         return false;
     }
 
+    /// <summary>
+    /// Loads a file from the specified path.
+    /// </summary>
+    /// <param name="fileName">The name of the file to load.</param>
+    /// <param name="stringTableName">The name of the string table (optional).</param>
+    /// <param name="tableColumnName">The name of the table column (optional).</param>
+    /// <param name="fileType">The type of the file (optional).</param>
+    /// <returns>True if the file was loaded successfully, otherwise false.</returns>
     public async Task<bool> LoadFileFromPath(string fileName, string? stringTableName = null, string? tableColumnName = null, string? fileType = null)
     {
         string tableFolder = GetTableFolderPath();
@@ -110,6 +137,15 @@ public partial class DataTableManager : ObservableObject
         return await LoadFileAs(filePath, stringTableName, tableColumnName, fileType, tableFolder);
     }
 
+    /// <summary>
+    /// Loads a file from the specified path and sets it as the current file.
+    /// </summary>
+    /// <param name="file">The path to the file.</param>
+    /// <param name="stringTableName">The name of the string table (optional).</param>
+    /// <param name="tableColumnName">The name of the table column (optional).</param>
+    /// <param name="fileType">The type of the file (optional).</param>
+    /// <param name="baseFolder">The base folder for the file (optional).</param>
+    /// <returns>True if the file was loaded successfully, otherwise false.</returns>
     public async Task<bool> LoadFileAs(string file, string? stringTableName = null, string? tableColumnName = null, string? fileType = null, string? baseFolder = null)
     {
         try
@@ -146,6 +182,10 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Gets the folder path for the table from the registry settings.
+    /// </summary>
+    /// <returns>The folder path for the table.</returns>
     private static string GetTableFolderPath()
     {
         string tableFolder = RegistrySettingsHelper.GetTableFolder();
@@ -168,6 +208,14 @@ public partial class DataTableManager : ObservableObject
         return tableFolder;
     }
 
+    /// <summary>
+    /// Validates if the table contains the specified column.
+    /// </summary>
+    /// <param name="table">The DataTable to validate.</param>
+    /// <param name="tableColumnName">The name of the column to check.</param>
+    /// <param name="fileName">The name of the file.</param>
+    /// <param name="fileType">The type of the file.</param>
+    /// <returns>True if the table is valid, otherwise false.</returns>
     private static bool IsValidTable(DataTable? table, string? tableColumnName, string fileName, string? fileType)
     {
         if (table != null && tableColumnName != null && !table.Columns.Contains(tableColumnName))
@@ -179,6 +227,13 @@ public partial class DataTableManager : ObservableObject
         return true;
     }
 
+    /// <summary>
+    /// Gets the file path for the string table.
+    /// </summary>
+    /// <param name="file">The path to the file.</param>
+    /// <param name="stringTableName">The name of the string table.</param>
+    /// <param name="baseFolder">The base folder for the file.</param>
+    /// <returns>The file path for the string table.</returns>
     private static string? GetStringFilePath(string file, string? stringTableName, string? baseFolder)
     {
         if (stringTableName == null)
@@ -188,7 +243,7 @@ public partial class DataTableManager : ObservableObject
 
         string? directory = baseFolder ?? Path.GetDirectoryName(file);
 
-        
+
         if (directory != null)
         {
             string? stringFilePath = FindFileInSubdirectories(directory, stringTableName);
@@ -205,6 +260,12 @@ public partial class DataTableManager : ObservableObject
         return null;
     }
 
+    /// <summary>
+    /// Sets the current file and updates the file commands.
+    /// </summary>
+    /// <param name="file">The path to the file.</param>
+    /// <param name="fileName">The name of the file.</param>
+    /// <param name="stringFilePath">The path to the string file.</param>
     private void SetCurrentFile(string file, string fileName, string? stringFilePath)
     {
         CurrentFile = file;
@@ -219,7 +280,12 @@ public partial class DataTableManager : ObservableObject
         OnCanExecuteFileCommandChanged();
     }
 
-
+    /// <summary>
+    /// Finds a file in the specified directory and its subdirectories.
+    /// </summary>
+    /// <param name="directory">The directory to search.</param>
+    /// <param name="fileName">The name of the file to find.</param>
+    /// <returns>The path to the file if found, otherwise null.</returns>
     private static string? FindFileInSubdirectories(string directory, string fileName)
     {
         foreach (var file in Directory.EnumerateFiles(directory, fileName, SearchOption.AllDirectories))
@@ -230,6 +296,9 @@ public partial class DataTableManager : ObservableObject
         return null;
     }
 
+    /// <summary>
+    /// Sets the folder path for the table using a folder dialog.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(CanExecuteSetTableFolderCommand))]
     public void SetTableFolder()
     {
@@ -251,11 +320,20 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Determines if the SetTableFolder command can be executed.
+    /// </summary>
+    /// <returns>True if the command can be executed, otherwise false.</returns>
     private bool CanExecuteSetTableFolderCommand()
     {
         return DataTable == null;
     }
 
+    /// <summary>
+    /// Loads the specified DataTable and optional string DataTable.
+    /// </summary>
+    /// <param name="dataTable">The DataTable to load.</param>
+    /// <param name="stringDataTable">The string DataTable to load (optional).</param>
     private void LoadTable(DataTable dataTable, DataTable? stringDataTable = null)
     {
         if (dataTable != null)
@@ -288,6 +366,11 @@ public partial class DataTableManager : ObservableObject
     private int _changesCounter = 0;
     private const int ChangesBeforeSave = 10;
 
+    /// <summary>
+    /// Handles changes to the DataTable and saves temporary files after a certain number of changes.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The event data.</param>
     private async void DataTableChanged(object sender, EventArgs e)
     {
         HasChanges = true;
@@ -311,6 +394,10 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Closes the current file, prompting the user to save changes if necessary.
+    /// </summary>
+    /// <returns>True if the file was closed successfully, otherwise false.</returns>
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public async Task<bool> CloseFile()
     {
@@ -349,6 +436,9 @@ public partial class DataTableManager : ObservableObject
         return true;
     }
 
+    /// <summary>
+    /// Clears the current file and resets the DataTable and related properties.
+    /// </summary>
     public void ClearFile()
     {
         if (DataTable != null)
@@ -380,11 +470,18 @@ public partial class DataTableManager : ObservableObject
         OnCanExecuteFileCommandChanged();
     }
 
+    /// <summary>
+    /// Determines if file commands can be executed.
+    /// </summary>
+    /// <returns>True if file commands can be executed, otherwise false.</returns>
     private bool CanExecuteFileCommand()
     {
         return DataTable != null;
     }
 
+    /// <summary>
+    /// Updates the execution state of file commands.
+    /// </summary>
     private void OnCanExecuteFileCommandChanged()
     {
         SaveFileCommand.NotifyCanExecuteChanged();
@@ -403,6 +500,9 @@ public partial class DataTableManager : ObservableObject
 
     #region Save
 
+    /// <summary>
+    /// Saves the current DataTable to the current file.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(HasChanges))]
     public async Task SaveFile()
     {
@@ -413,7 +513,7 @@ public partial class DataTableManager : ObservableObject
                 await _fileManager.DataTableToRHFileAsync(CurrentFile, DataTable);
                 FileManager.ClearTempFile(CurrentFileName!);
             }
-            
+
             if (DataTableString != null && CurrentStringFile != null)
             {
                 await _fileManager.DataTableToRHFileAsync(CurrentStringFile, DataTableString);
@@ -447,7 +547,7 @@ public partial class DataTableManager : ObservableObject
                 string? directory = Path.GetDirectoryName(file);
                 await _fileManager.DataTableToRHFileAsync(file, DataTable);
                 FileManager.ClearTempFile(CurrentFileName);
-                
+
                 if (DataTableString != null && CurrentStringFileName != null && directory != null)
                 {
                     string stringFilePath = Path.Combine(directory, CurrentStringFileName);
@@ -465,6 +565,9 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Saves the current DataTable as a MIP file.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public async Task SaveFileAsMIP()
     {
@@ -499,6 +602,9 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Saves the current DataTable as an XML file.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public async Task SaveFileAsXML()
     {
@@ -533,6 +639,9 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Saves the current DataTable as an XLSX file.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public async Task SaveFileAsXLSX()
     {
@@ -571,6 +680,10 @@ public partial class DataTableManager : ObservableObject
 
     #region Close
 
+    /// <summary>
+    /// Closes the specified window.
+    /// </summary>
+    /// <param name="window">The window to close.</param>
     [RelayCommand]
     public static void CloseWindow(Window window)
     {
@@ -589,6 +702,12 @@ public partial class DataTableManager : ObservableObject
 
     #region Search
 
+    /// <summary>
+    /// Opens the search dialog.
+    /// </summary>
+    /// <param name="owner">The owner window.</param>
+    /// <param name="parameter">The search parameter.</param>
+    /// <param name="selectionUnit">The selection unit for the DataGrid.</param>
     public void OpenSearchDialog(Window owner, string? parameter, DataGridSelectionUnit selectionUnit)
     {
         if (_searchDialog == null || !_searchDialog.IsVisible)
@@ -612,6 +731,11 @@ public partial class DataTableManager : ObservableObject
         _searchDialog.SearchTabControl.SelectedIndex = parameter == "Find" ? 0 : 1;
     }
 
+    /// <summary>
+    /// Searches for the specified text in the DataTable.
+    /// </summary>
+    /// <param name="searchText">The text to search for.</param>
+    /// <param name="matchCase">Whether to match case.</param>
     private void Search(string searchText, bool matchCase)
     {
         if (string.IsNullOrWhiteSpace(searchText) || DataTable == null)
@@ -709,6 +833,12 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Replaces the specified text in the DataTable.
+    /// </summary>
+    /// <param name="searchText">The text to search for.</param>
+    /// <param name="replaceText">The text to replace with.</param>
+    /// <param name="matchCase">Whether to match case.</param>
     private void Replace(string searchText, string replaceText, bool matchCase)
     {
         if (string.IsNullOrEmpty(searchText) || DataTable == null)
@@ -738,7 +868,7 @@ public partial class DataTableManager : ObservableObject
                 });
                 _redoStack.Clear();
                 OnCanExecuteChangesChanged();
-                
+
                 _searchDialog?.ShowMessage(string.Format(Resources.DataTableManagerSearchReplaceMessage, rowIndex + 1, colIndex + 1), Brushes.Green);
                 lastFoundCell = null;
                 return;
@@ -748,6 +878,12 @@ public partial class DataTableManager : ObservableObject
         Search(searchText, matchCase);
     }
 
+    /// <summary>
+    /// Replaces all occurrences of the specified text in the DataTable.
+    /// </summary>
+    /// <param name="searchText">The text to search for.</param>
+    /// <param name="replaceText">The text to replace with.</param>
+    /// <param name="matchCase">Whether to match case.</param>
     public void ReplaceAll(string searchText, string replaceText, bool matchCase)
     {
         if (string.IsNullOrEmpty(searchText) || DataTable == null)
@@ -801,7 +937,11 @@ public partial class DataTableManager : ObservableObject
         _searchDialog?.ShowMessage(string.Format(Resources.DataTableManagerReplaceCountMessage, replaceCount), Brushes.Green);
     }
 
-
+    /// <summary>
+    /// Counts the number of matches for the specified text in the DataTable.
+    /// </summary>
+    /// <param name="searchText">The text to search for.</param>
+    /// <param name="matchCase">Whether to match case.</param>
     public void CountMatches(string searchText, bool matchCase)
     {
         if (string.IsNullOrEmpty(searchText) || DataTable == null)
@@ -818,6 +958,9 @@ public partial class DataTableManager : ObservableObject
 
     #region Row
 
+    /// <summary>
+    /// Adds a new row to the DataTable.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public void AddNewRow()
     {
@@ -831,6 +974,9 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Duplicates the selected row in the DataTable.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(CanExecuteSelectedRowCommand))]
     public void DuplicateSelectedRow()
     {
@@ -846,6 +992,9 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Deletes the selected row from the DataTable.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(CanExecuteSelectedRowCommand))]
     public void DeleteSelectedRow()
     {
@@ -863,11 +1012,18 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Determines if the selected row command can be executed.
+    /// </summary>
+    /// <returns>True if the selected row command can be executed, otherwise false.</returns>
     private bool CanExecuteSelectedRowCommand()
     {
         return SelectedItem != null;
     }
 
+    /// <summary>
+    /// Updates the execution state of selected row commands.
+    /// </summary>
     private void OnCanExecuteSelectedRowCommandChanged()
     {
         DuplicateSelectedRowCommand.NotifyCanExecuteChanged();
@@ -875,6 +1031,11 @@ public partial class DataTableManager : ObservableObject
     }
 
     #region Helpers
+
+    /// <summary>
+    /// Adds a new row to the specified DataTable.
+    /// </summary>
+    /// <param name="dataTable">The DataTable to add a new row to.</param>
     private void AddRow(DataTable? dataTable)
     {
         if (dataTable == null) return;
@@ -904,6 +1065,12 @@ public partial class DataTableManager : ObservableObject
         OnCanExecuteChangesChanged();
     }
 
+    /// <summary>
+    /// Duplicates the selected row in the specified DataTable.
+    /// </summary>
+    /// <param name="dataTable">The DataTable to duplicate the row in.</param>
+    /// <param name="selectedItem">The selected row to duplicate.</param>
+    /// <returns>The duplicated DataRowView, or null if the operation fails.</returns>
     private DataRowView? DuplicateSelectedRow(DataTable? dataTable, DataRowView? selectedItem)
     {
         if (dataTable == null || selectedItem == null) return null;
@@ -944,6 +1111,12 @@ public partial class DataTableManager : ObservableObject
         return SelectedItem;
     }
 
+    /// <summary>
+    /// Deletes the selected row from the specified DataTable.
+    /// </summary>
+    /// <param name="dataTable">The DataTable to delete the row from.</param>
+    /// <param name="selectedItem">The selected row to delete.</param>
+    /// <returns>The new selected DataRowView, or null if the operation fails.</returns>
     private DataRowView? DeleteSelectedRow(DataTable? dataTable, DataRowView? selectedItem)
     {
         if (dataTable == null || selectedItem == null) return null;
@@ -1001,6 +1174,13 @@ public partial class DataTableManager : ObservableObject
         return selectedItem;
     }
 
+    /// <summary>
+    /// Adds a new row to the specified DataTable with the given ID and edit history.
+    /// </summary>
+    /// <param name="dataTable">The DataTable to add the new row to.</param>
+    /// <param name="newID">The ID for the new row.</param>
+    /// <param name="editHistory">The edit history to record the addition.</param>
+    /// <returns>The newly added DataRow.</returns>
     private static DataRow AddNewRow(DataTable dataTable, int newID, EditHistory editHistory)
     {
         DataRow newRow = dataTable.NewRow();
@@ -1030,6 +1210,12 @@ public partial class DataTableManager : ObservableObject
         return newRow;
     }
 
+    /// <summary>
+    /// Removes the specified row from the DataTable and records the edit history.
+    /// </summary>
+    /// <param name="dataTable">The DataTable to remove the row from.</param>
+    /// <param name="row">The DataRow to remove.</param>
+    /// <param name="editHistory">The edit history to record the removal.</param>
     private static void RemoveRow(DataTable dataTable, DataRow row, EditHistory editHistory)
     {
         int rowIndex = dataTable.Rows.IndexOf(row);
@@ -1045,6 +1231,12 @@ public partial class DataTableManager : ObservableObject
         });
     }
 
+    /// <summary>
+    /// Duplicates the specified row in the DataTable.
+    /// </summary>
+    /// <param name="originalRow">The original DataRow to duplicate.</param>
+    /// <param name="dataTable">The DataTable to add the duplicated row to.</param>
+    /// <returns>The duplicated DataRow.</returns>
     private static DataRow DuplicateRow(DataRow originalRow, DataTable dataTable)
     {
         DataRow duplicate = dataTable.NewRow();
@@ -1052,6 +1244,13 @@ public partial class DataTableManager : ObservableObject
         return duplicate;
     }
 
+    /// <summary>
+    /// Updates and adds the duplicated row to the DataTable with the given ID and edit history.
+    /// </summary>
+    /// <param name="duplicateRow">The duplicated DataRow to add.</param>
+    /// <param name="dataTable">The DataTable to add the duplicated row to.</param>
+    /// <param name="newID">The ID for the duplicated row.</param>
+    /// <param name="editHistory">The edit history to record the addition.</param>
     private static void UpdateAndAddRow(DataRow duplicateRow, DataTable dataTable, int newID, EditHistory editHistory)
     {
         dataTable.Rows.Add(duplicateRow);
@@ -1070,6 +1269,12 @@ public partial class DataTableManager : ObservableObject
         });
     }
 
+    /// <summary>
+    /// Gets the DataRowView by ID from the specified DataTable.
+    /// </summary>
+    /// <param name="dataTable">The DataTable to search.</param>
+    /// <param name="selectedItem">The selected DataRowView to match the ID.</param>
+    /// <returns>The matching DataRowView, or null if not found.</returns>
     private static DataRowView? GetRowViewById(DataTable dataTable, DataRowView selectedItem)
     {
         int nID = (int)selectedItem["nID"];
@@ -1077,6 +1282,11 @@ public partial class DataTableManager : ObservableObject
                          .FirstOrDefault(rowView => (int)rowView["nID"] == nID);
     }
 
+    /// <summary>
+    /// Creates an EditHistory object with the specified action.
+    /// </summary>
+    /// <param name="action">The EditAction to record.</param>
+    /// <returns>The created EditHistory object.</returns>
     private static EditHistory CreateEditHistory(EditAction action)
     {
         return new EditHistory
@@ -1085,6 +1295,11 @@ public partial class DataTableManager : ObservableObject
         };
     }
 
+    /// <summary>
+    /// Gets the default value for the specified type.
+    /// </summary>
+    /// <param name="type">The type to get the default value for.</param>
+    /// <returns>The default value for the type.</returns>
     private static object GetDefaultValue(Type type)
     {
         if (type == typeof(int))
@@ -1098,6 +1313,10 @@ public partial class DataTableManager : ObservableObject
         else return 0;
     }
 
+    /// <summary>
+    /// Gets the maximum ID value from the DataTable and DataTableString.
+    /// </summary>
+    /// <returns>The maximum ID value.</returns>
     public int GetMaxId()
     {
         int newID = 1;
@@ -1118,24 +1337,36 @@ public partial class DataTableManager : ObservableObject
 
         return newID;
     }
+
     #endregion
+
 
     #endregion
 
     #region Edit History
 
+    /// <summary>
+    /// Undoes the last change made to the DataTable.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(CanUndo))]
     public void UndoChanges()
     {
         ApplyChanges(isUndo: true);
     }
 
+    /// <summary>
+    /// Redoes the last undone change to the DataTable.
+    /// </summary>
     [RelayCommand(CanExecute = nameof(CanRedo))]
     public void RedoChanges()
     {
         ApplyChanges(isUndo: false);
     }
 
+    /// <summary>
+    /// Applies changes to the DataTable, either undoing or redoing them.
+    /// </summary>
+    /// <param name="isUndo">Whether to undo (true) or redo (false) the changes.</param>
     public void ApplyChanges(bool isUndo)
     {
         try
@@ -1256,6 +1487,10 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Adds a list of grouped edits to the undo stack.
+    /// </summary>
+    /// <param name="groupedEdits">The list of grouped edits to add.</param>
     public void AddGroupedEdits(List<EditHistory> groupedEdits)
     {
         if (groupedEdits.Count > 0)
@@ -1271,6 +1506,13 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Records an edit to the DataTable.
+    /// </summary>
+    /// <param name="row">The row index of the edit.</param>
+    /// <param name="column">The column index of the edit.</param>
+    /// <param name="oldValue">The old value before the edit.</param>
+    /// <param name="newValue">The new value after the edit.</param>
     public void RecordEdit(int row, int column, object? oldValue, object? newValue)
     {
         _undoStack.Push(new EditHistory
@@ -1290,6 +1532,9 @@ public partial class DataTableManager : ObservableObject
     private bool _isGroupingEdits;
     private readonly List<EditHistory> _currentGroupedEdits = [];
 
+    /// <summary>
+    /// Starts grouping edits together.
+    /// </summary>
     public void StartGroupingEdits()
     {
         if (!_isGroupingEdits)
@@ -1299,6 +1544,9 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Ends grouping edits together.
+    /// </summary>
     public void EndGroupingEdits()
     {
         if (_isGroupingEdits)
@@ -1311,6 +1559,10 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Updates the value of the specified column in the selected item.
+    /// </summary>
+    /// <param name="parameter">A tuple containing the new value and the column name.</param>
     [RelayCommand]
     private void UpdateItemValue((object? newValue, string column) parameter)
     {
@@ -1319,6 +1571,10 @@ public partial class DataTableManager : ObservableObject
         UpdateItemValue(SelectedItem, newValue, column);
     }
 
+    /// <summary>
+    /// Updates the value of the specified column in the selected string item.
+    /// </summary>
+    /// <param name="parameter">A tuple containing the new value and the column name.</param>
     [RelayCommand]
     private void UpdateItemStringValue((object? newValue, string column) parameter)
     {
@@ -1327,6 +1583,12 @@ public partial class DataTableManager : ObservableObject
         UpdateItemValue(SelectedItemString, newValue, column);
     }
 
+    /// <summary>
+    /// Updates the value of the specified column in the given DataRowView.
+    /// </summary>
+    /// <param name="item">The DataRowView to update.</param>
+    /// <param name="newValue">The new value to set.</param>
+    /// <param name="column">The column to update.</param>
     private void UpdateItemValue(DataRowView? item, object? newValue, string column)
     {
         if (item != null && item.Row.Table.Columns.Contains(column))
@@ -1409,6 +1671,12 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Determines if two values are equal.
+    /// </summary>
+    /// <param name="value1">The first value to compare.</param>
+    /// <param name="value2">The second value to compare.</param>
+    /// <returns>True if the values are equal, otherwise false.</returns>
     private static bool AreValuesEqual(object? value1, object? value2)
     {
         if (value1 == null || value2 == null)
@@ -1431,11 +1699,21 @@ public partial class DataTableManager : ObservableObject
         return Equals(value1, value2);
     }
 
+    /// <summary>
+    /// Updates the value of the specified column in the selected item.
+    /// </summary>
+    /// <param name="newValue">The new value to set.</param>
+    /// <param name="column">The column to update.</param>
     public void UpdateSelectedItemValue(object? newValue, string column)
     {
         UpdateItemValue(SelectedItem, newValue, column);
     }
 
+    /// <summary>
+    /// Updates the value of the specified column in the selected string item.
+    /// </summary>
+    /// <param name="newValue">The new value to set.</param>
+    /// <param name="column">The column to update.</param>
     public void UpdateSelectedItemStringValue(object? newValue, string column)
     {
         UpdateItemValue(SelectedItemString, newValue, column);
@@ -1446,6 +1724,9 @@ public partial class DataTableManager : ObservableObject
     private bool CanUndo() => _undoStack.Count > 0;
     private bool CanRedo() => _redoStack.Count > 0;
 
+    /// <summary>
+    /// Updates the execution state of undo and redo commands.
+    /// </summary>
     public void OnCanExecuteChangesChanged()
     {
         UndoChangesCommand.NotifyCanExecuteChanged();
@@ -1455,6 +1736,13 @@ public partial class DataTableManager : ObservableObject
 
     #region Filter
 
+    /// <summary>
+    /// Applies a filter to the DataTable based on the specified filter parts and search text.
+    /// </summary>
+    /// <param name="filterParts">The list of filter parts to apply.</param>
+    /// <param name="columns">The columns to search in.</param>
+    /// <param name="searchText">The text to search for.</param>
+    /// <param name="matchCase">Whether to match case.</param>
     public void ApplyFileDataFilter(List<string> filterParts, string[] columns, string? searchText, bool matchCase)
     {
         try
@@ -1492,7 +1780,7 @@ public partial class DataTableManager : ObservableObject
         {
             RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
-        
+
     }
 
     #endregion

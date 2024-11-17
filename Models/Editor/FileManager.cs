@@ -4,12 +4,20 @@ using static RHToolkit.Models.MIP.MIPCoder;
 
 namespace RHToolkit.Models.Editor
 {
+    /// <summary>
+    /// Manages file operations including reading, writing, and converting rh data to files.
+    /// </summary>
     public class FileManager
     {
         private static readonly string _appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
         private static readonly string _backupDirectory = Path.Combine(_appDataPath, "RHToolkit", "RHEditor", "backup");
         private readonly DataTableCryptor _dataTableCryptor = new();
 
+        /// <summary>
+        /// Converts an RH file to a DataTable.
+        /// </summary>
+        /// <param name="sourceFile">The path to the source RH file.</param>
+        /// <returns>A DataTable containing the data from the RH file.</returns>
         public async Task<DataTable?> RHFileToDataTableAsync(string sourceFile)
         {
             using FileStream sourceFileStream = File.OpenRead(sourceFile);
@@ -27,12 +35,22 @@ namespace RHToolkit.Models.Editor
             return _dataTableCryptor.RhToDataTable(sourceBytes);
         }
 
+        /// <summary>
+        /// Converts a DataTable to an RH file.
+        /// </summary>
+        /// <param name="file">The path to the destination RH file.</param>
+        /// <param name="fileData">The DataTable containing the data to write.</param>
         public async Task DataTableToRHFileAsync(string file, DataTable fileData)
         {
             byte[] encryptedData = _dataTableCryptor.DataTableToRh(fileData);
             await File.WriteAllBytesAsync(file, encryptedData);
         }
 
+        /// <summary>
+        /// Saves a temporary backup of a DataTable to a file.
+        /// </summary>
+        /// <param name="fileName">The name of the file to save.</param>
+        /// <param name="fileData">The DataTable containing the data to save.</param>
         public async Task SaveTempFile(string fileName, DataTable fileData)
         {
             if (fileData == null || fileName == null) return;
@@ -73,6 +91,10 @@ namespace RHToolkit.Models.Editor
             }
         }
 
+        /// <summary>
+        /// Clears temporary backup files for a specified file name.
+        /// </summary>
+        /// <param name="fileName">The name of the file whose backups should be cleared.</param>
         public static void ClearTempFile(string? fileName)
         {
             if (fileName == null) return;
@@ -98,6 +120,12 @@ namespace RHToolkit.Models.Editor
             }
         }
 
+        /// <summary>
+        /// Compresses a DataTable to a MIP file.
+        /// </summary>
+        /// <param name="fileData">The DataTable containing the data to compress.</param>
+        /// <param name="file">The path to the destination MIP file.</param>
+        /// <param name="compressionMode">The compression mode to use.</param>
         public async Task CompressToMipAsync(DataTable fileData, string file, MIPCompressionMode compressionMode)
         {
             if (compressionMode == MIPCompressionMode.Compress)
@@ -110,6 +138,11 @@ namespace RHToolkit.Models.Editor
             }
         }
 
+        /// <summary>
+        /// Exports a DataTable to an XML file.
+        /// </summary>
+        /// <param name="fileData">The DataTable containing the data to export.</param>
+        /// <param name="file">The path to the destination XML file.</param>
         public static async Task ExportToXMLAsync(DataTable fileData, string file)
         {
             byte[] xmlData = DataTableCryptor.DataTableToXML(fileData);
@@ -117,6 +150,11 @@ namespace RHToolkit.Models.Editor
             await File.WriteAllBytesAsync(file, xmlData);
         }
 
+        /// <summary>
+        /// Exports a DataTable to an XLSX file.
+        /// </summary>
+        /// <param name="fileData">The DataTable containing the data to export.</param>
+        /// <param name="file">The path to the destination XLSX file.</param>
         public static async Task ExportToXLSXAsync(DataTable fileData, string file)
         {
             byte[] xlsxData = DataTableCryptor.DataTableToXLSX(fileData);

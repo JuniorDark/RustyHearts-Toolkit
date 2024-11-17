@@ -7,6 +7,9 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Services
 {
+    /// <summary>
+    /// Provides database services for database management.
+    /// </summary>
     public class DatabaseService(ISqlDatabaseService databaseService, IGMDatabaseService gmDatabaseService) : IDatabaseService
     {
         private readonly ISqlDatabaseService _sqlDatabaseService = databaseService;
@@ -17,6 +20,10 @@ namespace RHToolkit.Services
         #region Character
 
         #region Write
+        /// <summary>
+        /// Updates character data.
+        /// </summary>
+        /// <param name="characterData">The new character data.</param>
         public async Task UpdateCharacterDataAsync(NewCharacterData characterData)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -54,6 +61,12 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Updates the character name.
+        /// </summary>
+        /// <param name="characterId">The character ID.</param>
+        /// <param name="characterName">The new character name.</param>
+        /// <returns>The number of affected rows.</returns>
         public async Task<int> UpdateCharacterNameAsync(Guid characterId, string characterName)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -74,6 +87,11 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Deletes a character.
+        /// </summary>
+        /// <param name="authId">The authentication ID.</param>
+        /// <param name="characterId">The character ID.</param>
         public async Task DeleteCharacterAsync(Guid authId, Guid characterId)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -98,6 +116,10 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Restores a deleted character.
+        /// </summary>
+        /// <param name="characterId">The character ID.</param>
         public async Task RestoreCharacterAsync(Guid characterId)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -127,6 +149,11 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Updates the character class and resets skills.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="newCharacterClass">The new character class.</param>
         public async Task UpdateCharacterClassAsync(CharacterData characterData, int newCharacterClass)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -240,6 +267,11 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Updates the character job and resets skills.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="newCharacterJob">The new character job.</param>
         public async Task UpdateCharacterJobAsync(CharacterData characterData, int newCharacterJob)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -299,6 +331,11 @@ namespace RHToolkit.Services
 
         #region Read
 
+        /// <summary>
+        /// Retrieves character data by character identifier.
+        /// </summary>
+        /// <param name="characterIdentifier">The character identifier.</param>
+        /// <returns>The character data.</returns>
         public async Task<CharacterData?> GetCharacterDataAsync(string characterIdentifier)
         {
             string selectQuery = "SELECT * FROM CharacterTable WHERE [Name] = @characterIdentifier";
@@ -360,6 +397,13 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Retrieves a list of character data by character identifier.
+        /// </summary>
+        /// <param name="characterIdentifier">The character identifier.</param>
+        /// <param name="isConnect">The connection status.</param>
+        /// <param name="isDeletedCharacter">Indicates if the character is deleted.</param>
+        /// <returns>A list of character data.</returns>
         public async Task<List<CharacterData>> GetCharacterDataListAsync(string characterIdentifier, string isConnect = "", bool isDeletedCharacter = false)
         {
             string tableName = isDeletedCharacter ? "CharacterTable_DELETE" : "CharacterTable";
@@ -432,6 +476,11 @@ namespace RHToolkit.Services
             return characterDataList;
         }
 
+        /// <summary>
+        /// Checks if a character is online.
+        /// </summary>
+        /// <param name="characterName">The character name.</param>
+        /// <returns>True if the character is online, otherwise false.</returns>
         public async Task<bool> GetCharacterOnlineAsync(string characterName)
         {
             string selectQuery = "SELECT IsConnect FROM CharacterTable WHERE name = @characterName";
@@ -451,6 +500,11 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Checks if a character is online and shows a message box if true.
+        /// </summary>
+        /// <param name="characterName">The character name.</param>
+        /// <returns>True if the character is online, otherwise false.</returns>
         public async Task<bool> IsCharacterOnlineAsync(string characterName)
         {
             if (await GetCharacterOnlineAsync(characterName))
@@ -462,6 +516,11 @@ namespace RHToolkit.Services
             return false;
         }
 
+        /// <summary>
+        /// Retrieves all character names.
+        /// </summary>
+        /// <param name="isConnect">The connection status.</param>
+        /// <returns>An array of character names.</returns>
         public async Task<string[]> GetAllCharacterNamesAsync(string isConnect = "")
         {
             List<string> characterNames = [];
@@ -491,6 +550,11 @@ namespace RHToolkit.Services
             return [.. characterNames];
         }
 
+        /// <summary>
+        /// Retrieves character information by character name.
+        /// </summary>
+        /// <param name="characterName">The character name.</param>
+        /// <returns>A tuple containing character ID, auth ID, and account name.</returns>
         public async Task<(Guid? characterId, Guid? authid, string? accountName)> GetCharacterInfoAsync(string characterName)
         {
             string selectQuery = "SELECT character_id, authid, bcust_id FROM CharacterTable WHERE name = @characterName";
@@ -521,6 +585,11 @@ namespace RHToolkit.Services
 
         #region AccountInfo
 
+        /// <summary>
+        /// Retrieves account information by auth ID.
+        /// </summary>
+        /// <param name="authId">The auth ID.</param>
+        /// <returns>A DataRow containing account information.</returns>
         public async Task<DataRow?> GetUniAccountInfoAsync(Guid authId)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -535,6 +604,12 @@ namespace RHToolkit.Services
 
         #region Item
 
+        /// <summary>
+        /// Retrieves a list of items for a character.
+        /// </summary>
+        /// <param name="characterId">The character ID.</param>
+        /// <param name="tableName">The table name.</param>
+        /// <returns>An ObservableCollection of ItemData.</returns>
         public async Task<ObservableCollection<ItemData>> GetItemList(Guid characterId, string tableName)
         {
             string selectQuery = tableName switch
@@ -607,6 +682,13 @@ namespace RHToolkit.Services
             return itemList;
         }
 
+        /// <summary>
+        /// Saves inventory items for a character.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="itemDataList">The list of items to save.</param>
+        /// <param name="deletedItemDataList">The list of items to delete.</param>
+        /// <param name="tableName">The table name.</param>
         public async Task SaveInventoryItem(CharacterData characterData, ObservableCollection<ItemData>? itemDataList, ObservableCollection<ItemData>? deletedItemDataList, string tableName)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -650,6 +732,13 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Inserts a new inventory item.
+        /// </summary>
+        /// <param name="connection">The SQL connection.</param>
+        /// <param name="transaction">The SQL transaction.</param>
+        /// <param name="itemData">The item data.</param>
+        /// <param name="tableName">The table name.</param>
         public async Task InsertInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, string tableName)
         {
             try
@@ -740,6 +829,13 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Updates an existing inventory item.
+        /// </summary>
+        /// <param name="connection">The SQL connection.</param>
+        /// <param name="transaction">The SQL transaction.</param>
+        /// <param name="itemData">The item data.</param>
+        /// <param name="tableName">The table name.</param>
         public async Task UpdateInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, string tableName)
         {
             try
@@ -802,8 +898,8 @@ namespace RHToolkit.Services
                     ("@option_3_code", itemData.Option3Code),
                     ("@option_3_value", itemData.Option3Value),
                     ("@option_group", itemData.OptionGroup),
-                    ("@ReconNum", itemData.ReconstructionMax),
-                    ("@ReconState", itemData.Reconstruction),
+                    ("@ReconNum", itemData.Reconstruction),
+                    ("@ReconState", itemData.ReconstructionMax),
                     ("@socket_count", itemData.SocketCount),
                     ("@socket_1_code", itemData.Socket1Code),
                     ("@socket_1_value", itemData.Socket1Value),
@@ -825,7 +921,6 @@ namespace RHToolkit.Services
                     ("@durabilitymax", itemData.DurabilityMax),
                     ("@weight", itemData.Weight)
                 );
-
             }
             catch (Exception ex)
             {
@@ -833,26 +928,32 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Deletes an inventory item from the specified table.
+        /// </summary>
+        /// <param name="connection">The SQL connection.</param>
+        /// <param name="transaction">The SQL transaction.</param>
+        /// <param name="itemData">The item data to delete.</param>
+        /// <param name="tableName">The name of the table from which to delete the item.</param>
         public async Task DeleteInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, string tableName)
         {
             try
             {
                 await _sqlDatabaseService.ExecuteNonQueryAsync(
-                                        $"DELETE FROM {tableName} WHERE [item_uid] = @item_uid",
-                                        connection,
-                                        transaction,
-                                        ("@item_uid", itemData.ItemUid)
-                                    );
+                    $"DELETE FROM {tableName} WHERE [item_uid] = @item_uid",
+                    connection,
+                    transaction,
+                    ("@item_uid", itemData.ItemUid)
+                );
 
                 await _sqlDatabaseService.ExecuteNonQueryAsync(
-                                       "DELETE FROM N_InventoryItem_DELETE WHERE [item_uid] = @item_uid AND [page_index] = @page_index",
-                                       connection,
-                                       transaction,
-                                       ("@item_uid", itemData.ItemUid),
-                                       ("@page_index", -25)
-                                   );
+                    "DELETE FROM N_InventoryItem_DELETE WHERE [item_uid] = @item_uid AND [page_index] = @page_index",
+                    connection,
+                    transaction,
+                    ("@item_uid", itemData.ItemUid),
+                    ("@page_index", -25)
+                );
                 await InsertInventoryDeleteItemAsync(connection, transaction, itemData);
-
             }
             catch (Exception ex)
             {
@@ -860,11 +961,16 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Inserts a deleted inventory item into the N_InventoryItem_DELETE table.
+        /// </summary>
+        /// <param name="connection">The SQL connection.</param>
+        /// <param name="transaction">The SQL transaction.</param>
+        /// <param name="itemData">The item data to insert.</param>
         public async Task InsertInventoryDeleteItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData)
         {
             try
             {
-
                 await _sqlDatabaseService.ExecuteNonQueryAsync(
                     $"INSERT INTO N_InventoryItem_DELETE (" +
                     "item_uid, character_id, auth_id, page_index, slot_index, code, use_cnt, remain_time, " +
@@ -929,7 +1035,6 @@ namespace RHToolkit.Services
                     ("@durabilitymax", itemData.DurabilityMax),
                     ("@weight", itemData.Weight)
                 );
-
             }
             catch (Exception ex)
             {
@@ -937,7 +1042,13 @@ namespace RHToolkit.Services
             }
         }
 
-        //Pet
+        /// <summary>
+        /// Inserts a new inventory item for a pet.
+        /// </summary>
+        /// <param name="connection">The SQL connection.</param>
+        /// <param name="transaction">The SQL transaction.</param>
+        /// <param name="itemData">The item data to insert.</param>
+        /// <param name="petId">The pet ID.</param>
         public async Task InsertPetInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, Guid petId)
         {
             try
@@ -1004,7 +1115,6 @@ namespace RHToolkit.Services
                     ("@durabilitymax", itemData.DurabilityMax),
                     ("@weight", itemData.Weight)
                 );
-
             }
             catch (Exception ex)
             {
@@ -1012,6 +1122,12 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Updates an existing inventory item for a pet.
+        /// </summary>
+        /// <param name="connection">The SQL connection.</param>
+        /// <param name="transaction">The SQL transaction.</param>
+        /// <param name="itemData">The item data to update.</param>
         public async Task UpdatePetInventoryItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData)
         {
             try
@@ -1097,18 +1213,21 @@ namespace RHToolkit.Services
                     ("@durabilitymax", itemData.DurabilityMax),
                     ("@weight", itemData.Weight)
                 );
-
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message, ex);
             }
         }
-
         #endregion
 
         #region Character Title
 
+        /// <summary>
+        /// Reads the list of character titles.
+        /// </summary>
+        /// <param name="characterId">The character ID.</param>
+        /// <returns>A DataTable containing the character titles.</returns>
         public async Task<DataTable?> ReadCharacterTitleListAsync(Guid characterId)
         {
             DataTable dataTable = new();
@@ -1148,9 +1267,13 @@ namespace RHToolkit.Services
             {
                 return null;
             }
-
         }
 
+        /// <summary>
+        /// Reads the equipped title of a character.
+        /// </summary>
+        /// <param name="characterId">The character ID.</param>
+        /// <returns>A DataRow containing the equipped title.</returns>
         public async Task<DataRow?> ReadCharacterEquipTitleAsync(Guid characterId)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1160,6 +1283,12 @@ namespace RHToolkit.Services
             return dataTable.Rows.Count > 0 ? dataTable.Rows[0] : null;
         }
 
+        /// <summary>
+        /// Checks if a character has a specific title.
+        /// </summary>
+        /// <param name="characterId">The character ID.</param>
+        /// <param name="titleID">The title ID.</param>
+        /// <returns>True if the character has the title, otherwise false.</returns>
         public async Task<bool> CharacterHasTitle(Guid characterId, int titleID)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1176,6 +1305,13 @@ namespace RHToolkit.Services
             return titleCount > 0;
         }
 
+        /// <summary>
+        /// Adds a title to a character.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="titleId">The title ID.</param>
+        /// <param name="remainTime">The remaining time for the title.</param>
+        /// <param name="expireTime">The expiration time for the title.</param>
         public async Task AddCharacterTitleAsync(CharacterData characterData, int titleId, int remainTime, int expireTime)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1203,6 +1339,11 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Equips a title for a character.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="titleId">The title ID.</param>
         public async Task EquipCharacterTitleAsync(CharacterData characterData, Guid titleId)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1227,6 +1368,11 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Unequips a title for a character.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="titleId">The title ID.</param>
         public async Task UnequipCharacterTitleAsync(CharacterData characterData, Guid titleId)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1250,6 +1396,11 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Deletes a title from a character.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="titleUid">The title UID.</param>
         public async Task DeleteCharacterTitleAsync(CharacterData characterData, Guid titleUid)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1278,6 +1429,11 @@ namespace RHToolkit.Services
 
         #region Fortune
 
+        /// <summary>
+        /// Reads the fortune of a character.
+        /// </summary>
+        /// <param name="characterId">The character ID.</param>
+        /// <returns>A DataRow containing the fortune data.</returns>
         public async Task<DataRow?> ReadCharacterFortuneAsync(Guid characterId)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1287,6 +1443,14 @@ namespace RHToolkit.Services
             return dataTable.Rows.Count > 0 ? dataTable.Rows[0] : null;
         }
 
+        /// <summary>
+        /// Updates the fortune of a character.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="fortune">The fortune value.</param>
+        /// <param name="selectedFortuneID1">The first selected fortune ID.</param>
+        /// <param name="selectedFortuneID2">The second selected fortune ID.</param>
+        /// <param name="selectedFortuneID3">The third selected fortune ID.</param>
         public async Task UpdateFortuneAsync(CharacterData characterData, int fortune, int selectedFortuneID1, int selectedFortuneID2, int selectedFortuneID3)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1315,6 +1479,14 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Removes the fortune of a character.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="fortuneState">The fortune state.</param>
+        /// <param name="fortuneID1">The first fortune ID.</param>
+        /// <param name="fortuneID2">The second fortune ID.</param>
+        /// <param name="fortuneID3">The third fortune ID.</param>
         public async Task RemoveFortuneAsync(CharacterData characterData, int fortuneState, int fortuneID1, int fortuneID2, int fortuneID3)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1349,6 +1521,19 @@ namespace RHToolkit.Services
 
         #region Sanction
 
+        /// <summary>
+        /// Applies a sanction to a character.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="operationType">The operation type.</param>
+        /// <param name="sanctionUid">The sanction UID.</param>
+        /// <param name="sanctionKind">The sanction kind.</param>
+        /// <param name="reasonDetails">The reason details.</param>
+        /// <param name="releaser">The releaser.</param>
+        /// <param name="comment">The comment.</param>
+        /// <param name="sanctionType">The sanction type.</param>
+        /// <param name="sanctionPeriod">The sanction period.</param>
+        /// <param name="sanctionCount">The sanction count.</param>
         public async Task CharacterSanctionAsync(CharacterData characterData, SanctionOperationType operationType, Guid sanctionUid, int sanctionKind, string reasonDetails, string releaser, string comment, int sanctionType, int sanctionPeriod, int sanctionCount)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1392,6 +1577,11 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Reads the list of sanctions for a character.
+        /// </summary>
+        /// <param name="characterId">The character ID.</param>
+        /// <returns>A DataTable containing the sanctions.</returns>
         public async Task<DataTable> ReadCharacterSanctionListAsync(Guid characterId)
         {
             DataTable dataTable = new();
@@ -1449,6 +1639,11 @@ namespace RHToolkit.Services
             return dataTable;
         }
 
+        /// <summary>
+        /// Gets the start and end times of a sanction.
+        /// </summary>
+        /// <param name="sanctionUid">The sanction UID.</param>
+        /// <returns>A tuple containing the start and end times.</returns>
         public async Task<(DateTime startTime, DateTime endTime)> GetSanctionTimesAsync(Guid sanctionUid)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1472,6 +1667,11 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Checks if a character has an active sanction.
+        /// </summary>
+        /// <param name="characterId">The character ID.</param>
+        /// <returns>True if the character has an active sanction, otherwise false.</returns>
         public async Task<bool> CharacterHasSanctionAsync(Guid characterId)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1490,6 +1690,12 @@ namespace RHToolkit.Services
         #endregion
 
         #region Guild
+
+        /// <summary>
+        /// Gets the name of a guild by its ID.
+        /// </summary>
+        /// <param name="guildId">The guild ID.</param>
+        /// <returns>The name of the guild.</returns>
         public async Task<string?> GetGuildNameAsync(Guid guildId)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1500,18 +1706,30 @@ namespace RHToolkit.Services
             object? result = await _sqlDatabaseService.ExecuteScalarAsync(selectQuery, connection, parameters);
             return result != null ? result.ToString() : Resources.NoGuild;
         }
+
         #endregion
 
         #region Mail
 
+        /// <summary>
+        /// Sends mail to multiple recipients.
+        /// </summary>
+        /// <param name="sender">The sender's name.</param>
+        /// <param name="message">The message content.</param>
+        /// <param name="gold">The amount of gold to send.</param>
+        /// <param name="itemCharge">The item charge.</param>
+        /// <param name="returnDays">The return days.</param>
+        /// <param name="recipients">The list of recipients.</param>
+        /// <param name="itemDataList">The list of items to send.</param>
+        /// <returns>A tuple containing the lists of successful and failed recipients.</returns>
         public async Task<(List<string> successfulRecipients, List<string> failedRecipients)> SendMailAsync(
-        string sender,
-        string? message,
-        int gold,
-        int itemCharge,
-        int returnDays,
-        string[] recipients,
-        List<ItemData> itemDataList)
+            string sender,
+            string? message,
+            int gold,
+            int itemCharge,
+            int returnDays,
+            string[] recipients,
+            List<ItemData> itemDataList)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
             using var transaction = connection.BeginTransaction();
@@ -1601,9 +1819,23 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Inserts a new mail record.
+        /// </summary>
+        /// <param name="connection">The SQL connection.</param>
+        /// <param name="transaction">The SQL transaction.</param>
+        /// <param name="senderAuthId">The sender's auth ID.</param>
+        /// <param name="senderCharacterId">The sender's character ID.</param>
+        /// <param name="mailSender">The mail sender's name.</param>
+        /// <param name="recipient">The recipient's name.</param>
+        /// <param name="content">The mail content.</param>
+        /// <param name="gold">The amount of gold to send.</param>
+        /// <param name="returnDay">The return day.</param>
+        /// <param name="reqGold">The required gold.</param>
+        /// <param name="mailId">The mail ID.</param>
+        /// <param name="createType">The create type.</param>
         public async Task InsertMailAsync(SqlConnection connection, SqlTransaction transaction, Guid? senderAuthId, Guid? senderCharacterId, string mailSender, string recipient, string content, int gold, int returnDay, int reqGold, Guid mailId, int createType)
         {
-
             try
             {
                 await _sqlDatabaseService.ExecuteProcedureAsync(
@@ -1628,6 +1860,16 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Inserts a new mail item record.
+        /// </summary>
+        /// <param name="connection">The SQL connection.</param>
+        /// <param name="transaction">The SQL transaction.</param>
+        /// <param name="itemData">The item data.</param>
+        /// <param name="recipientAuthId">The recipient's auth ID.</param>
+        /// <param name="recipientCharacterId">The recipient's character ID.</param>
+        /// <param name="mailId">The mail ID.</param>
+        /// <param name="slotIndex">The slot index.</param>
         public async Task InsertMailItemAsync(SqlConnection connection, SqlTransaction transaction, ItemData itemData, Guid? recipientAuthId, Guid? recipientCharacterId, Guid mailId, int slotIndex)
         {
             try
@@ -1687,6 +1929,11 @@ namespace RHToolkit.Services
         #endregion
 
         #region Coupon
+
+        /// <summary>
+        /// Reads the list of coupons.
+        /// </summary>
+        /// <returns>A DataTable containing the coupons.</returns>
         public async Task<DataTable?> ReadCouponListAsync()
         {
             DataTable dataTable = new();
@@ -1741,6 +1988,11 @@ namespace RHToolkit.Services
             return dataTable;
         }
 
+        /// <summary>
+        /// Checks if a coupon exists.
+        /// </summary>
+        /// <param name="couponCode">The coupon code.</param>
+        /// <returns>True if the coupon exists, otherwise false.</returns>
         public async Task<bool> CouponExists(string couponCode)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1756,6 +2008,12 @@ namespace RHToolkit.Services
             return couponCount > 0;
         }
 
+        /// <summary>
+        /// Adds a new coupon.
+        /// </summary>
+        /// <param name="couponCode">The coupon code.</param>
+        /// <param name="validDate">The valid date.</param>
+        /// <param name="itemData">The item data.</param>
         public async Task AddCouponAsync(string couponCode, DateTime validDate, ItemData itemData)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1785,6 +2043,10 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Deletes a coupon.
+        /// </summary>
+        /// <param name="couponNumber">The coupon number.</param>
         public async Task DeleteCouponAsync(int couponNumber)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
@@ -1807,11 +2069,19 @@ namespace RHToolkit.Services
                 throw new Exception($"Error deleting coupon: {ex.Message}", ex);
             }
         }
+
         #endregion
 
         #endregion
 
         #region GMRustyHearts
+
+        /// <summary>
+        /// Logs a GM audit action.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="action">The action performed.</param>
+        /// <param name="auditMessage">The audit message.</param>
         public async Task GMAuditAsync(CharacterData characterData, string action, string auditMessage)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("GMRustyHearts");
@@ -1845,6 +2115,14 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Logs a GM audit action for mail.
+        /// </summary>
+        /// <param name="accountName">The account name.</param>
+        /// <param name="characterId">The character ID.</param>
+        /// <param name="characterName">The character name.</param>
+        /// <param name="action">The action performed.</param>
+        /// <param name="auditMessage">The audit message.</param>
         public async Task GMAuditMailAsync(string accountName, Guid? characterId, string characterName, string action, string auditMessage)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("GMRustyHearts");
@@ -1881,6 +2159,15 @@ namespace RHToolkit.Services
         #endregion
 
         #region RustyHearts_Log
+
+        /// <summary>
+        /// Logs a sanction action.
+        /// </summary>
+        /// <param name="characterData">The character data.</param>
+        /// <param name="sanctionUid">The sanction UID.</param>
+        /// <param name="startTime">The start time of the sanction.</param>
+        /// <param name="endTime">The end time of the sanction.</param>
+        /// <param name="reason">The reason for the sanction.</param>
         public async Task SanctionLogAsync(CharacterData characterData, Guid sanctionUid, DateTime startTime, DateTime endTime, string reason)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts_Log");
@@ -1919,6 +2206,13 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Updates a sanction log.
+        /// </summary>
+        /// <param name="sanctionUid">The sanction UID.</param>
+        /// <param name="releaser">The releaser.</param>
+        /// <param name="comment">The comment.</param>
+        /// <param name="isRelease">Indicates if the sanction is released.</param>
         public async Task UpdateSanctionLogAsync(Guid sanctionUid, string releaser, string comment, int isRelease)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts_Log");
@@ -1944,9 +2238,16 @@ namespace RHToolkit.Services
                 throw new Exception(ex.Message, ex);
             }
         }
+
         #endregion
 
-        #region RustyHeats_Auth
+        #region RustyHearts_Auth
+
+        /// <summary>
+        /// Retrieves account data by account identifier.
+        /// </summary>
+        /// <param name="accountIdentifier">The account identifier.</param>
+        /// <returns>The account data.</returns>
         public async Task<AccountData?> GetAccountDataAsync(string accountIdentifier)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts_Auth");
@@ -1985,6 +2286,11 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Retrieves the cash mileage of an account.
+        /// </summary>
+        /// <param name="accountName">The account name.</param>
+        /// <returns>The cash mileage.</returns>
         public async Task<int> GetAccountCashMileageAsync(string accountName)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts_Auth");
@@ -1999,10 +2305,16 @@ namespace RHToolkit.Services
 
             return mileage;
         }
+
         #endregion
 
-        #region RustyHeats_Account
+        #region RustyHearts_Account
 
+        /// <summary>
+        /// Retrieves account information by account name.
+        /// </summary>
+        /// <param name="accountName">The account name.</param>
+        /// <returns>A DataTable containing the account information.</returns>
         public async Task<DataTable?> GetAccountInfoAsync(string accountName)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts_Account");
@@ -2021,6 +2333,11 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Retrieves the cash balance of an account.
+        /// </summary>
+        /// <param name="accountName">The account name.</param>
+        /// <returns>The cash balance.</returns>
         public async Task<long> GetAccountCashAsync(string accountName)
         {
             using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts_Account");
@@ -2035,7 +2352,7 @@ namespace RHToolkit.Services
 
             return zen;
         }
+
         #endregion
     }
-
 }

@@ -3,8 +3,15 @@ using System.Resources;
 
 namespace RHToolkit.Models.Localization;
 
+/// <summary>
+/// Manages localization settings and resources for the application.
+/// </summary>
 public static class LocalizationManager
 {
+    /// <summary>
+    /// Loads localized strings based on the specified language code.
+    /// </summary>
+    /// <param name="lang">The language code to load.</param>
     public static void LoadLocalizedStrings(string lang)
     {
         CultureInfo cultureInfo;
@@ -31,6 +38,10 @@ public static class LocalizationManager
         Resources.Culture = cultureInfo;
     }
 
+    /// <summary>
+    /// Gets the current application language from the registry.
+    /// </summary>
+    /// <returns>The current language code.</returns>
     public static string GetCurrentLanguage()
     {
         var languageCode = RegistrySettingsHelper.GetAppLanguage();
@@ -38,6 +49,9 @@ public static class LocalizationManager
         return languageCode ?? "en-US";
     }
 
+    /// <summary>
+    /// Sets the current application language by loading localized strings.
+    /// </summary>
     public static void SetCurrentLanguage()
     {
         var currentLanguage = GetCurrentLanguage();
@@ -45,4 +59,3 @@ public static class LocalizationManager
         LoadLocalizedStrings(currentLanguage);
     }
 }
-

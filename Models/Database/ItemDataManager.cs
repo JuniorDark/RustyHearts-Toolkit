@@ -8,6 +8,9 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Models.Database;
 
+/// <summary>
+/// Manages item data operations and filtering.
+/// </summary>
 public partial class ItemDataManager : ObservableObject
 {
     private readonly IFrameService _frameService;
@@ -16,6 +19,13 @@ public partial class ItemDataManager : ObservableObject
     private readonly System.Timers.Timer _itemFilterUpdateTimer;
     private readonly System.Timers.Timer _optionFilterUpdateTimer;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ItemDataManager"/> class.
+    /// </summary>
+    /// <param name="cachedDataManager">The cached data manager.</param>
+    /// <param name="gmDatabaseService">The GM database service.</param>
+    /// <param name="frameService">The frame service.</param>
+    /// <param name="itemDataViewModel">The item data view model.</param>
     public ItemDataManager(CachedDataManager cachedDataManager, IGMDatabaseService gmDatabaseService, IFrameService frameService, ItemDataViewModel itemDataViewModel)
     {
         _frameService = frameService;
@@ -57,6 +67,12 @@ public partial class ItemDataManager : ObservableObject
         _optionView.Filter = FilterOption;
     }
 
+    /// <summary>
+    /// Initializes a collection of inventory items.
+    /// </summary>
+    /// <param name="itemCount">The number of items to initialize.</param>
+    /// <param name="pageIndex">The page index for the items.</param>
+    /// <returns>An observable collection of inventory items.</returns>
     public static ObservableCollection<InventoryItem> InitializeCollection(int itemCount, int pageIndex)
     {
         var collection = new ObservableCollection<InventoryItem>();
@@ -77,11 +93,24 @@ public partial class ItemDataManager : ObservableObject
     private ItemDataViewModel _itemDataViewModel;
 
     #region ItemData
+
+    /// <summary>
+    /// Checks if an item ID is invalid.
+    /// </summary>
+    /// <param name="itemID">The item ID to check.</param>
+    /// <returns>True if the item ID is invalid, otherwise false.</returns>
     public bool IsInvalidItemID(int itemID)
     {
         return _cachedDataManager.CachedItemDataList == null || !_cachedDataManager.CachedItemDataList.Any(item => item.ItemId == itemID);
     }
 
+    /// <summary>
+    /// Creates a new item based on character data and new item data.
+    /// </summary>
+    /// <param name="characterData">The character data.</param>
+    /// <param name="newItemData">The new item data.</param>
+    /// <param name="pageIndex">The page index for the new item.</param>
+    /// <returns>The created item data.</returns>
     public static ItemData CreateNewItem(CharacterData characterData, ItemData newItemData, int pageIndex)
     {
         var newItem = new ItemData
@@ -134,6 +163,11 @@ public partial class ItemDataManager : ObservableObject
         return newItem;
     }
 
+    /// <summary>
+    /// Gets the itemdataviewmodel for a specified item.
+    /// </summary>
+    /// <param name="item">The item data.</param>
+    /// <returns>The item data view model.</returns>
     public ItemDataViewModel GetItemData(ItemData item)
     {
         // Find the corresponding ItemData in the _cachedItemDataList
@@ -240,6 +274,12 @@ public partial class ItemDataManager : ObservableObject
         return itemDataViewModel;
     }
 
+    /// <summary>
+    /// Updates existing item data with new item data.
+    /// </summary>
+    /// <param name="existingItem">The existing item data.</param>
+    /// <param name="newItem">The new item data.</param>
+    /// <returns>The updated item data.</returns>
     public static ItemData UpdateItemData(ItemData existingItem, ItemData newItem)
     {
         existingItem.IsEditedItem = !existingItem.IsNewItem;
@@ -274,6 +314,13 @@ public partial class ItemDataManager : ObservableObject
         return existingItem;
     }
 
+    /// <summary>
+    /// Gets the itemdataviewmodel for a specified item ID, slot index, and item amount.
+    /// </summary>
+    /// <param name="itemId">The item ID.</param>
+    /// <param name="slotIndex">The slot index.</param>
+    /// <param name="itemAmount">The item amount.</param>
+    /// <returns>The item data view model.</returns>
     public ItemDataViewModel? GetItemDataViewModel(int itemId, int slotIndex, int itemAmount)
     {
         if (itemId != 0)
@@ -291,6 +338,11 @@ public partial class ItemDataManager : ObservableObject
         return null;
     }
 
+    /// <summary>
+    /// Gets the real class value for a specified character class.
+    /// </summary>
+    /// <param name="charClass">The character class value.</param>
+    /// <returns>The real class value.</returns>
     public static int GetRealClass(int charClass)
     {
         return charClass switch
@@ -303,6 +355,11 @@ public partial class ItemDataManager : ObservableObject
         };
     }
 
+    /// <summary>
+    /// Gets the shop icon name for a specified icon name.
+    /// </summary>
+    /// <param name="iconName">The icon name.</param>
+    /// <returns>The shop icon name.</returns>
     public static string GetShopIcon(string iconName)
     {
         if (string.IsNullOrEmpty(iconName))
@@ -322,6 +379,11 @@ public partial class ItemDataManager : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Finds the shop image for a specified icon name.
+    /// </summary>
+    /// <param name="iconName">The icon name.</param>
+    /// <returns>The shop image name, or null if not found.</returns>
     private static string? FindShopImage(string iconName)
     {
         string shopIcon = $"shop_{iconName}";
@@ -346,6 +408,9 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<ItemData>? _itemDataItems;
 
+    /// <summary>
+    /// Populates the item data items from the cached data manager.
+    /// </summary>
     private void PopulateItemDataItems()
     {
         try
@@ -361,6 +426,9 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _optionItems;
 
+    /// <summary>
+    /// Populates the option items from the cached data manager.
+    /// </summary>
     private void PopulateOptionItems()
     {
         try
@@ -517,6 +585,10 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _subCategoryItemsFilter;
 
+    /// <summary>
+    /// Populates the category items filter based on the specified item type.
+    /// </summary>
+    /// <param name="itemType">The item type.</param>
     private void PopulateCategoryItemsFilter(ItemType itemType)
     {
         try
@@ -544,6 +616,9 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _subCategory02ItemsFilter;
 
+    /// <summary>
+    /// Populates the sub-category items filter.
+    /// </summary>
     private void PopulateSubCategoryItemsFilter()
     {
         try
@@ -624,6 +699,9 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _itemTypeItemsFilter;
 
+    /// <summary>
+    /// Populates the item type items filter.
+    /// </summary>
     private void PopulateItemTypeItemsFilter()
     {
         try
@@ -647,6 +725,9 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _classItemsFilter;
 
+    /// <summary>
+    /// Populates the class items filter.
+    /// </summary>
     private void PopulateClassItemsFilter()
     {
         try
@@ -668,6 +749,9 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _branchItemsFilter;
 
+    /// <summary>
+    /// Populates the branch items filter.
+    /// </summary>
     private void PopulateBranchItemsFilter()
     {
         try
@@ -695,6 +779,9 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _inventoryTypeItems;
 
+    /// <summary>
+    /// Populates the inventory type items filter.
+    /// </summary>
     private void PopulateInventoryTypeItemsFilter()
     {
         try
@@ -709,7 +796,6 @@ public partial class ItemDataManager : ObservableObject
                 new NameID { ID = 5, Name = Resources.Costume },
                 new NameID { ID = 6, Name = Resources.TriggerItem }
             ];
-
         }
         catch (Exception ex)
         {
@@ -727,6 +813,9 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _itemTradeFilterItems;
 
+    /// <summary>
+    /// Populates the item trade items filter.
+    /// </summary>
     private void PopulateItemTradeItemsFilter()
     {
         try
@@ -737,7 +826,6 @@ public partial class ItemDataManager : ObservableObject
                 new NameID { ID = 0, Name = Resources.Untradeable },
                 new NameID { ID = 1, Name = Resources.Tradeable }
             ];
-
         }
         catch (Exception ex)
         {
@@ -748,6 +836,9 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _socketColorItems;
 
+    /// <summary>
+    /// Populates the socket color items.
+    /// </summary>
     private void PopulateSocketColorItems()
     {
         try
@@ -763,6 +854,9 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _questConditionItems;
 
+    /// <summary>
+    /// Populates the quest condition items.
+    /// </summary>
     private void PopulateQuestConditionItems()
     {
         try
@@ -775,7 +869,6 @@ public partial class ItemDataManager : ObservableObject
                 new NameID { ID = 100, Name = "Finished" },
                 new NameID { ID = 255, Name = "Completed" }
             ];
-
         }
         catch (Exception ex)
         {
@@ -786,12 +879,14 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _questListItems;
 
+    /// <summary>
+    /// Populates the quest list items.
+    /// </summary>
     private void PopulateQuestListItems()
     {
         try
         {
             QuestListItems = _gmDatabaseService.GetQuestListItems();
-
         }
         catch (Exception ex)
         {
@@ -802,12 +897,14 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _addEffectItems;
 
+    /// <summary>
+    /// Populates the add effect items.
+    /// </summary>
     private void PopulateAddEffectItems()
     {
         try
         {
             AddEffectItems = _gmDatabaseService.GetAddEffectItems();
-
         }
         catch (Exception ex)
         {
@@ -818,12 +915,14 @@ public partial class ItemDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _npcShopItems;
 
+    /// <summary>
+    /// Populates the NPC shop items.
+    /// </summary>
     private void PopulateNpcShopItems()
     {
         try
         {
             NpcShopItems = _gmDatabaseService.GetNpcShopItems();
-
         }
         catch (Exception ex)
         {

@@ -4,10 +4,18 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Services
 {
+    /// <summary>
+    /// Provides various services related to formatting and retrieving data.
+    /// </summary>
     public class FrameService(IGMDatabaseService gmDatabaseService) : IFrameService
     {
         private readonly IGMDatabaseService _gmDatabaseService = gmDatabaseService;
 
+        /// <summary>
+        /// Gets the color associated with a branch.
+        /// </summary>
+        /// <param name="branch">The branch identifier.</param>
+        /// <returns>The color as a hex string.</returns>
         public static string GetBranchColor(int branch)
         {
             return branch switch
@@ -20,6 +28,11 @@ namespace RHToolkit.Services
             };
         }
 
+        /// <summary>
+        /// Gets the text associated with a rank.
+        /// </summary>
+        /// <param name="rank">The rank identifier.</param>
+        /// <returns>The rank text.</returns>
         public static string GetRankText(int rank)
         {
             return rank switch
@@ -33,6 +46,11 @@ namespace RHToolkit.Services
             };
         }
 
+        /// <summary>
+        /// Gets the description text for a socket color.
+        /// </summary>
+        /// <param name="colorId">The color identifier.</param>
+        /// <returns>The socket color description.</returns>
         public static string GetSocketText(int colorId)
         {
             return (SocketColor)colorId switch
@@ -48,6 +66,11 @@ namespace RHToolkit.Services
             };
         }
 
+        /// <summary>
+        /// Gets the color associated with a socket.
+        /// </summary>
+        /// <param name="colorId">The color identifier.</param>
+        /// <returns>The socket color as a hex string.</returns>
         public static string GetSocketColor(int colorId)
         {
             return (SocketColor)colorId switch
@@ -63,6 +86,11 @@ namespace RHToolkit.Services
             };
         }
 
+        /// <summary>
+        /// Gets the string associated with a string identifier.
+        /// </summary>
+        /// <param name="stringId">The string identifier.</param>
+        /// <returns>The string value.</returns>
         public string GetString(int stringId)
         {
             string stringName = _gmDatabaseService.GetString(stringId);
@@ -70,6 +98,13 @@ namespace RHToolkit.Services
             return stringName;
         }
 
+        /// <summary>
+        /// Gets the formatted option name.
+        /// </summary>
+        /// <param name="option">The option identifier.</param>
+        /// <param name="optionValue">The option value.</param>
+        /// <param name="isFixedOption">Indicates if the option is fixed.</param>
+        /// <returns>The formatted option name.</returns>
         public string GetOptionName(int option, int optionValue, bool isFixedOption = false)
         {
             string optionName = _gmDatabaseService.GetOptionName(option);
@@ -80,6 +115,11 @@ namespace RHToolkit.Services
             return option != 0 ? formattedOption : Resources.NoBuff;
         }
 
+        /// <summary>
+        /// Gets the color from an option.
+        /// </summary>
+        /// <param name="option">The option identifier.</param>
+        /// <returns>The color as a hex string.</returns>
         public string GetColorFromOption(int option)
         {
             string optionName = _gmDatabaseService.GetOptionName(option);
@@ -100,7 +140,17 @@ namespace RHToolkit.Services
             return "#ffffff";
         }
 
-        // TODO: find enhance formula
+        /// <summary>
+        /// Formats the main stat of an item.
+        /// </summary>
+        /// <param name="itemType">The item type.</param>
+        /// <param name="physicalStat">The physical stat value.</param>
+        /// <param name="magicStat">The magic stat value.</param>
+        /// <param name="jobClass">The job class identifier.</param>
+        /// <param name="weaponId">The weapon identifier.</param>
+        /// <param name="enhanceLevel">The enhance level.</param>
+        /// <param name="gearLevel">The gear level.</param>
+        /// <returns>The formatted main stat.</returns>
         public string FormatMainStat(int itemType, int physicalStat, int magicStat, int jobClass, int weaponId, int enhanceLevel, int gearLevel)
         {
             string mainStat = "";
@@ -144,6 +194,11 @@ namespace RHToolkit.Services
             return mainStat;
         }
 
+        /// <summary>
+        /// Formats the set effect of an item.
+        /// </summary>
+        /// <param name="setId">The set identifier.</param>
+        /// <returns>The formatted set effect.</returns>
         public string FormatSetEffect(int setId)
         {
             (int nSetOption00, int nSetOptionvlue00, int nSetOption01, int nSetOptionvlue01, int nSetOption02, int nSetOptionvlue02, int nSetOption03, int nSetOptionvlue03, int nSetOption04, int nSetOptionvlue04) = _gmDatabaseService.GetSetInfo(setId);
@@ -172,31 +227,63 @@ namespace RHToolkit.Services
             return setEffect;
         }
 
+        /// <summary>
+        /// Formats the sell value of an item.
+        /// </summary>
+        /// <param name="sellPrice">The sell price.</param>
+        /// <returns>The formatted sell value.</returns>
         public static string FormatSellValue(int sellPrice)
         {
             return sellPrice > 0 ? $"{Resources.SellValue}: {sellPrice:N0} {Resources.Gold}" : string.Empty;
         }
 
+        /// <summary>
+        /// Formats the required level of an item.
+        /// </summary>
+        /// <param name="levelLimit">The level limit.</param>
+        /// <returns>The formatted required level.</returns>
         public static string FormatRequiredLevel(int levelLimit)
         {
             return levelLimit != 0 ? $"{Resources.RequiredLevel}: {levelLimit}" : string.Empty;
         }
 
+        /// <summary>
+        /// Formats the item trade status.
+        /// </summary>
+        /// <param name="itemTrade">The item trade status.</param>
+        /// <returns>The formatted item trade status.</returns>
         public static string FormatItemTrade(int itemTrade)
         {
             return itemTrade == 0 ? $"{Resources.TradeUnavailable}" : string.Empty;
         }
 
+        /// <summary>
+        /// Formats the durability of an item.
+        /// </summary>
+        /// <param name="durability">The durability value.</param>
+        /// <returns>The formatted durability.</returns>
         public static string FormatDurability(int durability)
         {
             return durability > 0 ? $"{Resources.Durability}: {durability / 100}/{durability / 100}" : string.Empty;
         }
 
+        /// <summary>
+        /// Formats the weight of an item.
+        /// </summary>
+        /// <param name="weight">The weight value.</param>
+        /// <returns>The formatted weight.</returns>
         public static string FormatWeight(int weight)
         {
             return weight > 0 ? $"{weight / 1000.0:0.000}{Resources.Kg}" : string.Empty;
         }
 
+        /// <summary>
+        /// Formats the reconstruction status of an item.
+        /// </summary>
+        /// <param name="reconstruction">The reconstruction value.</param>
+        /// <param name="reconstructionMax">The maximum reconstruction value.</param>
+        /// <param name="itemBinding">The item binding status.</param>
+        /// <returns>The formatted reconstruction status.</returns>
         public static string FormatReconstruction(int reconstruction, int reconstructionMax, int itemBinding)
         {
             if (reconstructionMax > 0 && itemBinding == 1)
@@ -213,26 +300,51 @@ namespace RHToolkit.Services
             }
         }
 
+        /// <summary>
+        /// Formats the pet food status.
+        /// </summary>
+        /// <param name="petFood">The pet food status.</param>
+        /// <returns>The formatted pet food status.</returns>
         public static string FormatPetFood(int petFood)
         {
             return petFood == 0 ? $"{Resources.PetFoodDescNo}" : $"{Resources.PetFoodDescYes}";
         }
 
+        /// <summary>
+        /// Formats the color associated with pet food.
+        /// </summary>
+        /// <param name="petFood">The pet food status.</param>
+        /// <returns>The color as a hex string.</returns>
         public static string FormatPetFoodColor(int petFood)
         {
             return petFood == 0 ? "#e75151" : "#eed040";
         }
 
+        /// <summary>
+        /// Formats the augment stone value.
+        /// </summary>
+        /// <param name="value">The augment stone value.</param>
+        /// <returns>The formatted augment stone value.</returns>
         public static string FormatAugmentStone(int value)
         {
             return value > 0 ? $"{Resources.PhysicalMagicDamage} +{value}" : string.Empty;
         }
 
+        /// <summary>
+        /// Formats the augment stone level.
+        /// </summary>
+        /// <param name="value">The augment stone level.</param>
+        /// <returns>The formatted augment stone level.</returns>
         public static string FormatAugmentStoneLevel(int value)
         {
             return value > 0 ? $"{Resources.AugmentLevel} +{value}" : string.Empty;
         }
 
+        /// <summary>
+        /// Formats the cooldown value.
+        /// </summary>
+        /// <param name="value">The cooldown value.</param>
+        /// <returns>The formatted cooldown value.</returns>
         public static string FormatCooldown(float value)
         {
             return value > 0 ? string.Format(Resources.CooldownText, $"{value:F2}") : string.Empty;
@@ -243,6 +355,15 @@ namespace RHToolkit.Services
         private const string ColorTagClose = "</COLOR>";
         private const string LineBreakTag = "<br>";
 
+        /// <summary>
+        /// Formats the name ID with the given replacements.
+        /// </summary>
+        /// <param name="optionID">The option identifier.</param>
+        /// <param name="optionName">The option name.</param>
+        /// <param name="replacement01">The first replacement value.</param>
+        /// <param name="replacement02">The second replacement value.</param>
+        /// <param name="replacement03">The third replacement value.</param>
+        /// <returns>The formatted name ID.</returns>
         public static string FormatNameID(int optionID, string optionName, string replacement01, string replacement02, string replacement03)
         {
             optionName = RemoveColorTags(optionName);
@@ -342,6 +463,11 @@ namespace RHToolkit.Services
             return optionName;
         }
 
+        /// <summary>
+        /// Gets the skill name associated with an option ID.
+        /// </summary>
+        /// <param name="optionID">The option identifier.</param>
+        /// <returns>The skill name.</returns>
         private static string GetOptionSkillName(int optionID)
         {
             return optionID switch
@@ -368,6 +494,11 @@ namespace RHToolkit.Services
             };
         }
 
+        /// <summary>
+        /// Removes color tags from the input string.
+        /// </summary>
+        /// <param name="input">The input string.</param>
+        /// <returns>The string without color tags.</returns>
         private static string RemoveColorTags(string input)
         {
             int startIndex = input.IndexOf(ColorTagStart);
@@ -387,6 +518,14 @@ namespace RHToolkit.Services
             return input;
         }
 
+        /// <summary>
+        /// Formats a percentage value in the input string.
+        /// </summary>
+        /// <param name="input">The input string.</param>
+        /// <param name="placeholder">The placeholder to be replaced.</param>
+        /// <param name="replacement">The replacement value.</param>
+        /// <param name="isFixedOption">Indicates if the option is fixed.</param>
+        /// <returns>The formatted string with the percentage value.</returns>
         private static string FormatPercentage(string input, string placeholder, string replacement, bool isFixedOption = false)
         {
             if (placeholder.Contains('%') && int.TryParse(replacement, out int numericValue))
@@ -413,6 +552,11 @@ namespace RHToolkit.Services
             return input;
         }
 
+        /// <summary>
+        /// Formats the title effect for a given title ID.
+        /// </summary>
+        /// <param name="titleId">The title identifier.</param>
+        /// <returns>The formatted title effect.</returns>
         public string FormatTitleEffect(int titleId)
         {
             try

@@ -2,6 +2,9 @@
 
 public class MIP
 {
+    /// <summary>
+    /// A byte array used as a key for the XOR operation in the BytesWithCodeMip method.
+    /// </summary>
     public static readonly byte[] codeMip = [
     0x30, 0x22, 0x41, 0xa8, 0x5b, 0xa6, 0x6a, 0x49, 0xbf, 0x53, 0x35, 0xe5, 0x9e, 14, 0xec, 0xb8,
     0x5e, 0x15, 0x1f, 0xc1, 0x4f, 0xec, 0x77, 0xe8, 0xb7, 0x4e, 0x87, 230, 0xf5, 60, 0xb3, 0x43,
@@ -21,6 +24,10 @@ public class MIP
     0x11, 170, 0xb9, 0x98, 0xed, 0x21, 0x35, 0xd4, 0xc3, 0xde, 0x65, 0x54, 0x9d, 0x1c, 0xb0, 0xa9
     ];
 
+    /// <summary>
+    /// Applies a bitwise XOR operation between each byte in the input array and a corresponding byte in the codeMip array.
+    /// </summary>
+    /// <param name="toBytes">The byte array to process.</param>
     public static void BytesWithCodeMip(byte[] toBytes)
     {
         for (int i = 0; i < toBytes.Length; i++)

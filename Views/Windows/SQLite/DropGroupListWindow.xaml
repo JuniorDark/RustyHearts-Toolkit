@@ -85,7 +85,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         Foreground="White"
-                        Text="Drop Groups" />
+                        Text="{x:Static rs:Resources.DropGroup}" />
                     <ComboBox
                         Width="400"
                         Height="24"

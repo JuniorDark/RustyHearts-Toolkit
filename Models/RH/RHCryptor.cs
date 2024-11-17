@@ -6,6 +6,9 @@ public class RHCryptor
 {
     private readonly Aes _aes = Aes.Create();
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RHCryptor"/> class.
+    /// </summary>
     public RHCryptor()
     {
         byte[] bytes = Encoding.UTF8.GetBytes("gkw3iurpamv;kj20984;asdkfjat1af");
@@ -18,6 +21,13 @@ public class RHCryptor
         _aes.Padding = PaddingMode.Zeros;
     }
 
+    /// <summary>
+    /// Decrypts the specified byte array.
+    /// </summary>
+    /// <param name="toByte">The byte array to decrypt.</param>
+    /// <returns>The decrypted byte array.</returns>
+    /// <exception cref="CryptographicException">Thrown when decryption fails.</exception>
+    /// <exception cref="Exception">Thrown when a general error occurs during decryption.</exception>
     public byte[] Decrypt(byte[] toByte)
     {
         try
@@ -46,6 +56,13 @@ public class RHCryptor
         }
     }
 
+    /// <summary>
+    /// Encrypts the specified byte array.
+    /// </summary>
+    /// <param name="toByte">The byte array to encrypt.</param>
+    /// <returns>The encrypted byte array.</returns>
+    /// <exception cref="CryptographicException">Thrown when encryption fails.</exception>
+    /// <exception cref="Exception">Thrown when a general error occurs during encryption.</exception>
     public byte[] Encrypt(byte[] toByte)
     {
         try
@@ -83,5 +100,4 @@ public class RHCryptor
             throw new Exception($"{Resources.Error}: " + ex.Message, ex);
         }
     }
-
 }

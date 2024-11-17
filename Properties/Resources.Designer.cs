@@ -9745,6 +9745,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Required Learned Skills.
+        /// </summary>
+        public static string RequiredLearnedSkills {
+            get {
+                return ResourceManager.GetString("RequiredLearnedSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Required Level.
         /// </summary>
         public static string RequiredLevel {
@@ -10798,6 +10807,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active.
+        /// </summary>
+        public static string SkillActive {
+            get {
+                return ResourceManager.GetString("SkillActive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Buff.
+        /// </summary>
+        public static string SkillBuff {
+            get {
+                return ResourceManager.GetString("SkillBuff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to AP Cost.
         /// </summary>
         public static string SkillEditor_APCost {
@@ -11217,6 +11244,15 @@ namespace RHToolkit.Properties {
         public static string SkillListDatabaseDesc {
             get {
                 return ResourceManager.GetString("SkillListDatabaseDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passive.
+        /// </summary>
+        public static string SkillPassive {
+            get {
+                return ResourceManager.GetString("SkillPassive", resourceCulture);
             }
         }
         
@@ -12216,6 +12252,15 @@ namespace RHToolkit.Properties {
         public static string Unique {
             get {
                 return ResourceManager.GetString("Unique", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown Skill : ({0}).
+        /// </summary>
+        public static string UnknownSkill {
+            get {
+                return ResourceManager.GetString("UnknownSkill", resourceCulture);
             }
         }
         

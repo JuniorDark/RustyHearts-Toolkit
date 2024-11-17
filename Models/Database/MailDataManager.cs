@@ -9,6 +9,14 @@ namespace RHToolkit.Models.Database
 
         private static readonly char[] separator = [','];
 
+        /// <summary>
+        /// Retrieves the list of recipients based on the provided parameters.
+        /// </summary>
+        /// <param name="mailRecipient">The mail recipient string.</param>
+        /// <param name="sendToAllCharacters">Flag to send to all characters.</param>
+        /// <param name="sendToAllOnline">Flag to send to all online characters.</param>
+        /// <param name="sendToAllOffline">Flag to send to all offline characters.</param>
+        /// <returns>An array of recipient names.</returns>
         public async Task<string[]> GetRecipientsAsync(string? mailRecipient, bool sendToAllCharacters, bool sendToAllOnline, bool sendToAllOffline)
         {
             if (sendToAllCharacters)
@@ -48,6 +56,14 @@ namespace RHToolkit.Models.Database
             }
         }
 
+        /// <summary>
+        /// Generates a confirmation message based on the provided parameters.
+        /// </summary>
+        /// <param name="sendToAllCharacters">Flag to send to all characters.</param>
+        /// <param name="sendToAllOnline">Flag to send to all online characters.</param>
+        /// <param name="sendToAllOffline">Flag to send to all offline characters.</param>
+        /// <param name="recipients">Array of recipient names.</param>
+        /// <returns>A confirmation message string.</returns>
         public static string GetConfirmationMessage(bool sendToAllCharacters, bool sendToAllOnline, bool sendToAllOffline, string[] recipients)
         {
             return sendToAllCharacters ? string.Format(Resources.SendMailMessageAll, recipients.Length) :
@@ -56,6 +72,15 @@ namespace RHToolkit.Models.Database
                    $"{Resources.SendMailMessage}\n{string.Join(", ", recipients)}";
         }
 
+        /// <summary>
+        /// Generates a send message based on the provided parameters.
+        /// </summary>
+        /// <param name="sendToAllCharacters">Flag to send to all characters.</param>
+        /// <param name="sendToAllOnline">Flag to send to all online characters.</param>
+        /// <param name="sendToAllOffline">Flag to send to all offline characters.</param>
+        /// <param name="successfulRecipients">List of successful recipients.</param>
+        /// <param name="failedRecipients">List of failed recipients.</param>
+        /// <returns>A send message string.</returns>
         public static string GetSendMessage(bool sendToAllCharacters, bool sendToAllOnline, bool sendToAllOffline, List<string> successfulRecipients, List<string> failedRecipients)
         {
             string baseMessage = sendToAllCharacters ? string.Format(Resources.SendMailMessageAllSuccess, successfulRecipients.Count) :

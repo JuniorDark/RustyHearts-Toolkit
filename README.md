@@ -66,7 +66,7 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
 
 ### Language Settings
 
-The toolkit curently supports 2 languages. You can change the language in the `Settings` page.
+The Rusty Hearts Toolkit curently supports 2 languages, the language can be changed in the `Settings` page.
 
 #### Available Languages
 - **English (en-US)** - Default language
@@ -82,12 +82,12 @@ To set up the toolkit and generate the necessary SQLite database:
 4. Place the extracted game sprites `\ui\sprite\` in the `Resources` folder (Included by default).
 5. Navigate to the `Settings` page and set the `SQL Server` credentials.
 
-Note: After editing tables remember to rebuild the database.
+Note: After editing tables remember to rebuild the sqlite database on `SQLite Database Manager`.
 
 Sprites are avaliable on [`Resources.zip`](Resources.zip)
 
 ## Prerequisites for Development
-* Visual Studio 2022 (Any Edition - 17.9 or later)
+* Visual Studio 2022 (Any Edition - 17.12 or later)
 * Windows 10 SDK or Windows 11 SDK via Visual Studio Installer
 * .NET Core 9 SDK (9.0.100 or later)
 

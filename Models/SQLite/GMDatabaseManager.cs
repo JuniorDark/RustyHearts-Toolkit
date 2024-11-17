@@ -6,6 +6,9 @@ using System.Data.SQLite;
 
 namespace RHToolkit.Models.SQLite;
 
+/// <summary>
+/// Manages the creation and population of the GM database.
+/// </summary>
 public class GMDatabaseManager
 {
     private readonly FileManager _fileManager = new();
@@ -98,6 +101,12 @@ public class GMDatabaseManager
         "world_string",
     ];
 
+    /// <summary>
+    /// Creates the GM database by processing the required files.
+    /// </summary>
+    /// <param name="dataFolder">The folder containing the data files.</param>
+    /// <param name="reportProgress">Action to report progress messages.</param>
+    /// <param name="cancellationToken">Token to monitor for cancellation requests.</param>
     public async Task CreateGMDatabase(string dataFolder, Action<string> reportProgress, CancellationToken cancellationToken)
     {
         string resourcesFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources");
@@ -180,6 +189,13 @@ public class GMDatabaseManager
         }
     }
 
+    /// <summary>
+    /// Converts a DataTable to a SQLite table and inserts the data.
+    /// </summary>
+    /// <param name="dataTable">The DataTable to convert.</param>
+    /// <param name="dbName">The name of the SQLite database.</param>
+    /// <param name="tableName">The name of the SQLite table.</param>
+    /// <param name="reportProgress">Action to report progress messages.</param>
     private static void DataTableToSQLite(DataTable dataTable, string dbName, string tableName, Action<string> reportProgress)
     {
         string connectionString = $"Data Source={dbName};Version=3;";
@@ -190,6 +206,12 @@ public class GMDatabaseManager
         InsertDataIntoSQLiteTable(connection, dataTable, tableName, reportProgress);
     }
 
+    /// <summary>
+    /// Creates a SQLite table based on the DataTable schema.
+    /// </summary>
+    /// <param name="connection">The SQLite connection.</param>
+    /// <param name="dataTable">The DataTable containing the schema.</param>
+    /// <param name="tableName">The name of the SQLite table.</param>
     private static void CreateSQLiteTable(SQLiteConnection connection, DataTable dataTable, string tableName)
     {
         StringBuilder createTableQuery = new($"CREATE TABLE IF NOT EXISTS \"{tableName}\" (");
@@ -207,7 +229,13 @@ public class GMDatabaseManager
         command.ExecuteNonQuery();
     }
 
-
+    /// <summary>
+    /// Inserts data from a DataTable into a SQLite table.
+    /// </summary>
+    /// <param name="connection">The SQLite connection.</param>
+    /// <param name="dataTable">The DataTable containing the data.</param>
+    /// <param name="tableName">The name of the SQLite table.</param>
+    /// <param name="reportProgress">Action to report progress messages.</param>
     private static void InsertDataIntoSQLiteTable(SQLiteConnection connection, DataTable dataTable, string tableName, Action<string> reportProgress)
     {
         using SQLiteTransaction transaction = connection.BeginTransaction();
@@ -239,6 +267,11 @@ public class GMDatabaseManager
         transaction.Commit();
     }
 
+    /// <summary>
+    /// Maps a .NET data type to a SQLite data type.
+    /// </summary>
+    /// <param name="dataType">The .NET data type.</param>
+    /// <returns>The corresponding SQLite data type.</returns>
     private static string MapDataColumnTypeToSqlite(Type dataType)
     {
         return dataType.Name switch
@@ -251,5 +284,4 @@ public class GMDatabaseManager
             _ => "TEXT"
         };
     }
-
 }

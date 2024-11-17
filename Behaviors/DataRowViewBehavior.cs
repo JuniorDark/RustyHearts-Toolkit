@@ -38,6 +38,10 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         set { SetValue(SelectedItemsStringProperty, value); }
     }
 
+    /// <summary>
+    /// Called when the SelectedItemsString property changes.
+    /// Updates the selected items in the ListView.
+    /// </summary>
     private static void OnSelectedItemsStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var behavior = (DataRowViewBehavior)d;
@@ -47,6 +51,10 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         }
     }
 
+    /// <summary>
+    /// Called when the behavior is attached to an element.
+    /// Subscribes to the appropriate events based on the type of the associated object.
+    /// </summary>
     protected override void OnAttached()
     {
         base.OnAttached();
@@ -74,6 +82,10 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         }
     }
 
+    /// <summary>
+    /// Called when the behavior is detached from an element.
+    /// Unsubscribes from the events that were subscribed to in OnAttached.
+    /// </summary>
     protected override void OnDetaching()
     {
         base.OnDetaching();
@@ -101,6 +113,10 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         }
     }
 
+    /// <summary>
+    /// Handles the value changed event for various control types.
+    /// Executes the UpdateItemValueCommand with the new value and column name.
+    /// </summary>
     private void OnControlValueChanged(object sender, RoutedEventArgs e)
     {
         if (Column != null && UpdateItemValueCommand != null)
@@ -132,6 +148,10 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         }
     }
 
+    /// <summary>
+    /// Handles the selection changed event for the ListView.
+    /// Updates the selected items string and executes the UpdateItemValueCommand.
+    /// </summary>
     private void OnListViewSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (_isUpdating)
@@ -175,6 +195,9 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
         _isUpdating = false;
     }
 
+    /// <summary>
+    /// Updates the selected items in the ListView based on the SelectedItemsString property.
+    /// </summary>
     private void UpdateSelectedItems()
     {
         if (AssociatedObject is not ListView listView || listView.ItemsSource == null || _isUpdating)
@@ -224,5 +247,4 @@ public class DataRowViewBehavior : Behavior<FrameworkElement>
 
         _isUpdating = false;
     }
-
 }

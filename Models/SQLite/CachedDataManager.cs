@@ -2,6 +2,9 @@
 
 namespace RHToolkit.Models.SQLite
 {
+    /// <summary>
+    /// Manages cached data for items, options, and skills.
+    /// </summary>
     public class CachedDataManager
     {
         private readonly IGMDatabaseService _gmDatabaseService;
@@ -9,6 +12,10 @@ namespace RHToolkit.Models.SQLite
         public List<NameID>? CachedOptionItems { get; private set; }
         public List<SkillData>? CachedSkillDataList { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CachedDataManager"/> class.
+        /// </summary>
+        /// <param name="gmDatabaseService">The database service to use for fetching data.</param>
         public CachedDataManager(IGMDatabaseService gmDatabaseService)
         {
             _gmDatabaseService = gmDatabaseService;
@@ -20,6 +27,9 @@ namespace RHToolkit.Models.SQLite
             InitializeCachedLists();
         }
 
+        /// <summary>
+        /// Initializes the cached lists by fetching data from the database.
+        /// </summary>
         public void InitializeCachedLists()
         {
             string dbFilePath = SqLiteDatabaseService.GetDatabaseFilePath();
@@ -39,9 +49,7 @@ namespace RHToolkit.Models.SQLite
                 CachedSkillDataList = cachedSkillDataList;
                 // Initialize CachedOptionItems
                 CachedOptionItems = _gmDatabaseService.GetOptionItems();
-                
             }
         }
     }
-
 }

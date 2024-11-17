@@ -206,7 +206,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         HorizontalContentAlignment="Center"
-                        Content="Option Filter"
+                        Content="{x:Static rs:Resources.Filter}"
                         Style="{StaticResource ArialMSWhite}" />
                     <TextBox
                         x:Name="tbOptionSearch"

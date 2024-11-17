@@ -4518,4 +4518,19 @@
   <data name="WorldInstanceItemDropGroupList" xml:space="preserve">
     <value>World Instance Item Drop Group List</value>
   </data>
+  <data name="SkillActive" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="SkillBuff" xml:space="preserve">
+    <value>Buff</value>
+  </data>
+  <data name="SkillPassive" xml:space="preserve">
+    <value>Passive</value>
+  </data>
+  <data name="UnknownSkill" xml:space="preserve">
+    <value>Unknown Skill : ({0})</value>
+  </data>
+  <data name="RequiredLearnedSkills" xml:space="preserve">
+    <value>Required Learned Skills</value>
+  </data>
 </root>

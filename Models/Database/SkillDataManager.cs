@@ -1,6 +1,5 @@
 ﻿using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.SQLite;
-using RHToolkit.Properties;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Controls;
 using System.ComponentModel;
@@ -38,11 +37,24 @@ public partial class SkillDataManager : ObservableObject
     private SkillDataViewModel _skillDataViewModel;
 
     #region SkillData
+
+    /// <summary>
+    /// Checks if the provided skill ID is invalid.
+    /// </summary>
+    /// <param name="skillID">The skill ID to check.</param>
+    /// <returns>True if the skill ID is invalid, otherwise false.</returns>
     public bool IsInvalidID(int skillID)
     {
         return _cachedDataManager.CachedSkillDataList == null || !_cachedDataManager.CachedSkillDataList.Any(skill => skill.SkillID == skillID);
     }
 
+    /// <summary>
+    /// Retrieves the SkillDataViewModel for the specified skill type, skill ID, and skill level.
+    /// </summary>
+    /// <param name="skillType">The type of the skill.</param>
+    /// <param name="skillID">The ID of the skill.</param>
+    /// <param name="skillLevel">The level of the skill.</param>
+    /// <returns>The SkillDataViewModel for the specified skill.</returns>
     public SkillDataViewModel GetSkillDataViewModel(SkillType skillType, int skillID, int skillLevel)
     {
         var characterSkillType = GetCharacterSkillType(skillType);
@@ -83,7 +95,7 @@ public partial class SkillDataManager : ObservableObject
                 skillData = new()
                 {
                     SkillID = skillID,
-                    SkillName = $"Unknown Skill ({skillID})",
+                    SkillName = string.Format(Resources.UnknownSkill, skillID),
                     IconName = "question_icon",
                 };
             }
@@ -98,6 +110,13 @@ public partial class SkillDataManager : ObservableObject
         return skillDataViewModel;
     }
 
+    /// <summary>
+    /// Retrieves the SkillData for the specified skill type, skill ID, and skill level.
+    /// </summary>
+    /// <param name="skillType">The type of the skill.</param>
+    /// <param name="skillID">The ID of the skill.</param>
+    /// <param name="skillLevel">The level of the skill.</param>
+    /// <returns>The SkillData for the specified skill.</returns>
     public SkillData GetSkillData(SkillType skillType, int skillID, int skillLevel)
     {
         var characterSkillType = GetCharacterSkillType(skillType);
@@ -138,7 +157,7 @@ public partial class SkillDataManager : ObservableObject
                 skillData = new()
                 {
                     SkillID = skillID,
-                    SkillName = $"Unknown Skill ({skillID})",
+                    SkillName = string.Format(Resources.UnknownSkill, skillID),
                     IconName = "question_icon",
                 };
             }
@@ -155,6 +174,9 @@ public partial class SkillDataManager : ObservableObject
     [ObservableProperty]
     private List<SkillData>? _skillDataItems;
 
+    /// <summary>
+    /// Populates the SkillDataItems list with cached skill data.
+    /// </summary>
     private void PopulateSkillDataItems()
     {
         try
@@ -174,6 +196,11 @@ public partial class SkillDataManager : ObservableObject
     [ObservableProperty]
     private ICollectionView _skillDataView;
 
+    /// <summary>
+    /// Filters the skills based on the current filter criteria.
+    /// </summary>
+    /// <param name="obj">The skill data object to filter.</param>
+    /// <returns>True if the skill matches the filter criteria, otherwise false.</returns>
     private bool FilterSkills(object obj)
     {
         if (obj is SkillData skill)
@@ -233,15 +260,18 @@ public partial class SkillDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _skillTypeFilterItems;
 
+    /// <summary>
+    /// Populates the skill type filter items.
+    /// </summary>
     private void PopulateSkillTypeItemsFilter()
     {
         CharacterSkillTypeFilterItems =
         [
             new NameID { ID = 0, Name = Resources.None },
-            new NameID { ID = 1, Name = "Frantz" },
-            new NameID { ID = 2, Name = "Angela" },
-            new NameID { ID = 3, Name = "Tude" },
-            new NameID { ID = 4, Name = "Natasha" }
+            new NameID { ID = 1, Name =  Resources.Frantz },
+            new NameID { ID = 2, Name =  Resources.Angela },
+            new NameID { ID = 3, Name =  Resources.Tude },
+            new NameID { ID = 4, Name =  Resources.Natasha }
         ];
 
         CharacterSkillTypeFilter = 0;
@@ -249,9 +279,9 @@ public partial class SkillDataManager : ObservableObject
         SkillTypeFilterItems =
         [
             new NameID { ID = 0, Name = Resources.None, DisplayName = Resources.None },
-            new NameID { ID = 1, Name = "ACTIVE", DisplayName = "Active" },
-            new NameID { ID = 2, Name = "PASSIVE", DisplayName = "Passive" },
-            new NameID { ID = 3, Name = "BUFF", DisplayName = "Buff" }
+            new NameID { ID = 1, Name = "ACTIVE", DisplayName =  Resources.SkillActive },
+            new NameID { ID = 2, Name = "PASSIVE", DisplayName = Resources.SkillPassive },
+            new NameID { ID = 3, Name = "BUFF", DisplayName = Resources.SkillBuff }
         ];
 
         SkillTypeFilter = SkillTypeFilterItems.First();
@@ -262,6 +292,10 @@ public partial class SkillDataManager : ObservableObject
     [ObservableProperty]
     private List<NameID>? _characterTypeFilterItems;
 
+    /// <summary>
+    /// Populates the skill type filter items based on the character skill type.
+    /// </summary>
+    /// <param name="characterSkillType">The character skill type.</param>
     private void PopulateSkillTypeFilterItems(int characterSkillType)
     {
         try

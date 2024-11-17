@@ -4518,4 +4518,19 @@
   <data name="WorldInstanceItemDropGroupList" xml:space="preserve">
     <value>월드 인스턴스 아이템 드롭 그룹 목록</value>
   </data>
+  <data name="SkillActive" xml:space="preserve">
+    <value>활동적인</value>
+  </data>
+  <data name="SkillBuff" xml:space="preserve">
+    <value>버프</value>
+  </data>
+  <data name="SkillPassive" xml:space="preserve">
+    <value>수동적인</value>
+  </data>
+  <data name="UnknownSkill" xml:space="preserve">
+    <value>알 수 없는 스킬 : ({0})</value>
+  </data>
+  <data name="RequiredLearnedSkills" xml:space="preserve">
+    <value>필요한 학습 기술</value>
+  </data>
 </root>

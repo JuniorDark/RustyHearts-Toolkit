@@ -20,6 +20,10 @@ public class ListViewSelectionBehavior : Behavior<ListView>
         set { SetValue(SelectedItemsStringProperty, value); }
     }
 
+    /// <summary>
+    /// Called when the SelectedItemsString property changes.
+    /// Updates the selected items in the ListView.
+    /// </summary>
     private static void OnSelectedItemsStringChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var behavior = (ListViewSelectionBehavior)d;
@@ -32,18 +36,30 @@ public class ListViewSelectionBehavior : Behavior<ListView>
         }
     }
 
+    /// <summary>
+    /// Called when the behavior is attached to the ListView.
+    /// Subscribes to the SelectionChanged event.
+    /// </summary>
     protected override void OnAttached()
     {
         base.OnAttached();
         AssociatedObject.SelectionChanged += OnSelectionChanged;
     }
 
+    /// <summary>
+    /// Called when the behavior is detached from the ListView.
+    /// Unsubscribes from the SelectionChanged event.
+    /// </summary>
     protected override void OnDetaching()
     {
         base.OnDetaching();
         AssociatedObject.SelectionChanged -= OnSelectionChanged;
     }
 
+    /// <summary>
+    /// Handles the SelectionChanged event for the ListView.
+    /// Updates the SelectedItemsString property based on the currently selected items in the ListView.
+    /// </summary>
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (_isUpdating)
@@ -62,6 +78,9 @@ public class ListViewSelectionBehavior : Behavior<ListView>
         _isUpdating = false;
     }
 
+    /// <summary>
+    /// Updates the selected items in the ListView based on the SelectedItemsString property.
+    /// </summary>
     private void UpdateSelectedItems()
     {
         if (AssociatedObject.ItemsSource == null || _isUpdating)

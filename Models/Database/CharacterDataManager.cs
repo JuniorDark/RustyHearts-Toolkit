@@ -3,10 +3,18 @@ using static RHToolkit.Models.EnumService;
 
 namespace RHToolkit.Models.Database
 {
+    /// <summary>
+    /// Manages character data operations.
+    /// </summary>
     public class CharacterDataManager(IDatabaseService databaseService)
     {
         private readonly IDatabaseService _databaseService = databaseService;
 
+        /// <summary>
+        /// Gets the job items for a specified character class.
+        /// </summary>
+        /// <param name="charClass">The character class.</param>
+        /// <returns>A list of job items for the specified character class.</returns>
         public static List<NameID>? GetJobItems(CharClass charClass)
         {
             List<NameID> jobItems = charClass switch
@@ -26,6 +34,11 @@ namespace RHToolkit.Models.Database
             return null;
         }
 
+        /// <summary>
+        /// Gets the image path for a specified character class value.
+        /// </summary>
+        /// <param name="classValue">The character class value.</param>
+        /// <returns>The image path for the specified character class value.</returns>
         public static string GetClassImage(int classValue)
         {
             return classValue switch
@@ -43,6 +56,13 @@ namespace RHToolkit.Models.Database
             };
         }
 
+        /// <summary>
+        /// Generates a message describing changes in character data.
+        /// </summary>
+        /// <param name="oldData">The old character data.</param>
+        /// <param name="newData">The new character data.</param>
+        /// <param name="messageType">The type of message to generate ("audit" or "changes").</param>
+        /// <returns>A message describing the changes in character data.</returns>
         public static string GenerateCharacterDataMessage(CharacterData oldData, NewCharacterData newData, string messageType)
         {
             string message = "";
@@ -80,6 +100,12 @@ namespace RHToolkit.Models.Database
             return message;
         }
 
+        /// <summary>
+        /// Determines if there are changes between old and new character data.
+        /// </summary>
+        /// <param name="oldData">The old character data.</param>
+        /// <param name="newData">The new character data.</param>
+        /// <returns>True if there are changes, otherwise false.</returns>
         public static bool HasCharacterDataChanges(CharacterData oldData, NewCharacterData newData)
         {
             return oldData.Level != newData.Level ||
@@ -97,6 +123,5 @@ namespace RHToolkit.Models.Database
                    oldData.IsTradeEnable != newData.IsTradeEnable ||
                    oldData.IsMoveEnable != newData.IsMoveEnable;
         }
-
     }
 }
