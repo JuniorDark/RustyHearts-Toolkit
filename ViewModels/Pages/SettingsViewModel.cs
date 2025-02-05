@@ -9,7 +9,7 @@ using Wpf.Ui.Extensions;
 
 namespace RHToolkit.ViewModels.Pages;
 
-public sealed partial class SettingsViewModel(ISqlDatabaseService databaseService, INavigationService navigationService, ISnackbarService snackbarService) : ObservableObject, INavigationAware
+public sealed partial class SettingsViewModel(ISqlDatabaseService databaseService, INavigationService navigationService, ISnackbarService snackbarService) : ObservableObject
 {
     private readonly ISqlDatabaseService _databaseService = databaseService;
     private readonly INavigationService _navigationService = navigationService;

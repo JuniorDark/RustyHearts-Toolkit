@@ -1,4 +1,5 @@
-﻿using RHToolkit.Models.Database;
+﻿using RHToolkit.DependencyInjection;
+using RHToolkit.Models.Database;
 using RHToolkit.Models.Localization;
 using RHToolkit.Models.MessageBox;
 using RHToolkit.Models.SQLite;
@@ -19,12 +20,19 @@ public partial class App : Application
     private static readonly IHost _host = Host.CreateDefaultBuilder()
         .ConfigureAppConfiguration(c =>
         {
-            _ = c.SetBasePath(AppContext.BaseDirectory);
+            var basePath =
+                Path.GetDirectoryName(AppContext.BaseDirectory)
+                ?? throw new DirectoryNotFoundException(
+                    "Unable to find the base directory of the application."
+                );
+            _ = c.SetBasePath(basePath);
         })
         .ConfigureServices(
-            (_1, services) =>
+            (context, services) =>
             {
-                // App Host
+                _ = services.AddNavigationViewPageProvider();
+
+                /// App Host
                 _ = services.AddHostedService<ApplicationHostService>();
 
                 // Main window container with navigation
@@ -135,18 +143,15 @@ public partial class App : Application
                 _ = services.AddTransient<SkillWindowViewModel>();
 
             }
-        )
+    )
         .Build();
 
     /// <summary>
-    /// Gets registered service.
+    /// Gets services.
     /// </summary>
-    /// <typeparam name="T">Type of the service to get.</typeparam>
-    /// <returns>Instance of the service or <see langword="null"/>.</returns>
-    public static T GetRequiredService<T>()
-        where T : class
+    public static IServiceProvider Services
     {
-        return _host.Services.GetRequiredService<T>();
+        get { return _host.Services; }
     }
 
     /// <summary>

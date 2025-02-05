@@ -41,7 +41,6 @@
         <Setter Property="IconPlacement" Value="Left" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="bh:NumberBoxBehavior.MaintainCaret" Value="True" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type controls:NumberBox}">
@@ -121,17 +120,17 @@
                             </controls:Button.Icon>
                         </controls:Button>
                         <!--  Increment Button  -->
-                        <controls:Button
-                            x:Name="InlineIncrementButton"
+                        <RepeatButton
+                            x:Name="PART_InlineIncrementButton"
                             Grid.Column="3"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Top"
-                            Command="{Binding Path=TemplateButtonCommand, RelativeSource={RelativeSource TemplatedParent}}"
-                            CommandParameter="increment"
+                            Command="{Binding Path=PreviewKeyDownCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                            CommandParameter="Key.Up"
                             Cursor="Arrow"
                             IsTabStop="False">
-                            <controls:Button.Template>
-                                <ControlTemplate TargetType="controls:Button">
+                            <RepeatButton.Template>
+                                <ControlTemplate TargetType="RepeatButton">
                                     <Image
                                         x:Name="ArrowUp"
                                         Width="16"
@@ -150,23 +149,23 @@
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
-                            </controls:Button.Template>
-                        </controls:Button>
+                            </RepeatButton.Template>
+                        </RepeatButton>
 
                         <!--  Decrement Button  -->
-                        <controls:Button
-                            x:Name="InlineDecrementButton"
+                        <RepeatButton
+                            x:Name="PART_InlineDecrementButton"
                             Grid.Column="3"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Bottom"
                             Background="Transparent"
                             BorderBrush="Transparent"
-                            Command="{Binding Path=TemplateButtonCommand, RelativeSource={RelativeSource TemplatedParent}}"
-                            CommandParameter="decrement"
+                            Command="{Binding Path=PreviewKeyDownCommand, RelativeSource={RelativeSource TemplatedParent}}"
+                            CommandParameter="Key.Down"
                             Cursor="Arrow"
                             IsTabStop="False">
-                            <controls:Button.Template>
-                                <ControlTemplate TargetType="controls:Button">
+                            <RepeatButton.Template>
+                                <ControlTemplate TargetType="RepeatButton">
                                     <Image
                                         x:Name="ArrowDown"
                                         Width="16"
@@ -185,8 +184,8 @@
                                         </Trigger>
                                     </ControlTemplate.Triggers>
                                 </ControlTemplate>
-                            </controls:Button.Template>
-                        </controls:Button>
+                            </RepeatButton.Template>
+                        </RepeatButton>
                         <ContentControl
                             x:Name="ControlIconRight"
                             Grid.Column="2"
@@ -211,12 +210,12 @@
                             <Setter TargetName="ClearButton" Property="Margin" Value="0" />
                         </Trigger>
                         <Trigger Property="SpinButtonPlacementMode" Value="Hidden">
-                            <Setter TargetName="InlineIncrementButton" Property="Margin" Value="0" />
-                            <Setter TargetName="InlineDecrementButton" Property="Margin" Value="0" />
+                            <Setter TargetName="PART_InlineIncrementButton" Property="Margin" Value="0" />
+                            <Setter TargetName="PART_InlineDecrementButton" Property="Margin" Value="0" />
                         </Trigger>
                         <Trigger Property="SpinButtonPlacementMode" Value="Inline">
-                            <Setter TargetName="InlineIncrementButton" Property="Visibility" Value="Visible" />
-                            <Setter TargetName="InlineDecrementButton" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="PART_InlineIncrementButton" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="PART_InlineDecrementButton" Property="Visibility" Value="Visible" />
                         </Trigger>
                         <Trigger Property="IconPlacement" Value="Left">
                             <Setter TargetName="ControlIconRight" Property="Visibility" Value="Collapsed" />

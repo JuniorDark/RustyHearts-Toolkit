@@ -1,6 +1,6 @@
 ﻿using RHToolkit.ViewModels.Pages;
 using System.Windows.Controls;
-using Wpf.Ui.Controls;
+using Wpf.Ui.Abstractions.Controls;
 
 namespace RHToolkit.Views.Pages;
 
