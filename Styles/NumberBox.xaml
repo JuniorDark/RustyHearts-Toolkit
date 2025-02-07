@@ -97,7 +97,7 @@
                         </Grid>
                         <!--  Clear Button  -->
                         <controls:Button
-                            x:Name="ClearButton"
+                            x:Name="PART_ClearButton"
                             Grid.Column="2"
                             Width="16"
                             Height="16"
@@ -125,8 +125,6 @@
                             Grid.Column="3"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Top"
-                            Command="{Binding Path=PreviewKeyDownCommand, RelativeSource={RelativeSource TemplatedParent}}"
-                            CommandParameter="Key.Up"
                             Cursor="Arrow"
                             IsTabStop="False">
                             <RepeatButton.Template>
@@ -160,8 +158,6 @@
                             VerticalAlignment="Bottom"
                             Background="Transparent"
                             BorderBrush="Transparent"
-                            Command="{Binding Path=PreviewKeyDownCommand, RelativeSource={RelativeSource TemplatedParent}}"
-                            CommandParameter="Key.Down"
                             Cursor="Arrow"
                             IsTabStop="False">
                             <RepeatButton.Template>
@@ -202,12 +198,12 @@
                             <Setter TargetName="PlaceholderTextBox" Property="Visibility" Value="Collapsed" />
                         </Trigger>
                         <Trigger Property="ShowClearButton" Value="False">
-                            <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="ClearButton" Property="Margin" Value="0" />
+                            <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="PART_ClearButton" Property="Margin" Value="0" />
                         </Trigger>
                         <Trigger Property="ClearButtonEnabled" Value="False">
-                            <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="ClearButton" Property="Margin" Value="0" />
+                            <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="PART_ClearButton" Property="Margin" Value="0" />
                         </Trigger>
                         <Trigger Property="SpinButtonPlacementMode" Value="Hidden">
                             <Setter TargetName="PART_InlineIncrementButton" Property="Margin" Value="0" />
@@ -242,8 +238,8 @@
                         </MultiTrigger>
                         <Trigger Property="IsReadOnly" Value="True">
                             <Setter Property="SpinButtonPlacementMode" Value="Hidden" />
-                            <Setter TargetName="ClearButton" Property="Visibility" Value="Collapsed" />
-                            <Setter TargetName="ClearButton" Property="Margin" Value="0" />
+                            <Setter TargetName="PART_ClearButton" Property="Visibility" Value="Collapsed" />
+                            <Setter TargetName="PART_ClearButton" Property="Margin" Value="0" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="True">
                             <Setter Property="Cursor" Value="IBeam" />

@@ -3,13 +3,14 @@ using RHToolkit.Models.Localization;
 using RHToolkit.Models.UISettings;
 using RHToolkit.Services;
 using Wpf.Ui;
+using Wpf.Ui.Abstractions.Controls;
 using Wpf.Ui.Appearance;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Extensions;
 
 namespace RHToolkit.ViewModels.Pages;
 
-public sealed partial class SettingsViewModel(ISqlDatabaseService databaseService, INavigationService navigationService, ISnackbarService snackbarService) : ObservableObject
+public sealed partial class SettingsViewModel(ISqlDatabaseService databaseService, INavigationService navigationService, ISnackbarService snackbarService) : ObservableObject, INavigationAware
 {
     private readonly ISqlDatabaseService _databaseService = databaseService;
     private readonly INavigationService _navigationService = navigationService;
@@ -72,6 +73,20 @@ public sealed partial class SettingsViewModel(ISqlDatabaseService databaseServic
     [ObservableProperty]
     private NavigationViewPaneDisplayMode _currentApplicationNavigationStyle =
         NavigationViewPaneDisplayMode.Left;
+
+    public Task OnNavigatedToAsync()
+    {
+        OnNavigatedTo();
+
+        return Task.CompletedTask;
+    }
+
+    public Task OnNavigatedFromAsync()
+    {
+        OnNavigatedFrom();
+
+        return Task.CompletedTask;
+    }
 
     public void OnNavigatedTo()
     {
