@@ -84,7 +84,7 @@ namespace RHToolkit.ViewModels.Windows
                 {
                     string fileName = Path.GetFileName(openFileDialog.FileName);
 
-                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, "charactertitle_string.rh", "nSubAddEffectID", "AddEffect");
+                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, "addeffect_string.rh", "nSubAddEffectID", "AddEffect");
 
                     if (isLoaded)
                     {
