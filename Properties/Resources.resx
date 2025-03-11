@@ -4533,4 +4533,49 @@
   <data name="RequiredLearnedSkills" xml:space="preserve">
     <value>Required Learned Skills</value>
   </data>
+  <data name="PckUnpacker" xml:space="preserve">
+    <value>PCK Unpacker</value>
+  </data>
+  <data name="PCKTool_SelectFolder" xml:space="preserve">
+    <value>Select the client folder with the .pck files.</value>
+  </data>
+  <data name="PCKTool_ImportingTreeView" xml:space="preserve">
+    <value>Importing tree view...</value>
+  </data>
+  <data name="PCKTool_FileNumber" xml:space="preserve">
+    <value>Number of Files：{0}</value>
+  </data>
+  <data name="PCKTool_SelectFilesMessage" xml:space="preserve">
+    <value>Select file(s) to be unpacked first.</value>
+  </data>
+  <data name="PCKTool_Unpacking" xml:space="preserve">
+    <value>Unpacking Files...</value>
+  </data>
+  <data name="PCKTool_UnpackingFiles" xml:space="preserve">
+    <value>Unpacking Files...{0}/{1}</value>
+  </data>
+  <data name="PCKTool_UnpackingComplete" xml:space="preserve">
+    <value>Unpacking files completed.</value>
+  </data>
+  <data name="PCKTool_CancelledMessage" xml:space="preserve">
+    <value>Operation Cancelled.</value>
+  </data>
+  <data name="PCKTool_UnpackSelected" xml:space="preserve">
+    <value>Unpack Selected</value>
+  </data>
+  <data name="PCKTool_UnpackAll" xml:space="preserve">
+    <value>Unpack All</value>
+  </data>
+  <data name="PCKTool_OverrideUnpack" xml:space="preserve">
+    <value>Override Unpack</value>
+  </data>
+  <data name="PCKTool_OverrideUnpackMessage" xml:space="preserve">
+    <value>Override files in the Unpack directory.</value>
+  </data>
+  <data name="PCKTool_InvalidFileList" xml:space="preserve">
+    <value>Error decoding f00x.dat</value>
+  </data>
+  <data name="PCKTool_ClientFolder" xml:space="preserve">
+    <value>Client Folder</value>
+  </data>
 </root>

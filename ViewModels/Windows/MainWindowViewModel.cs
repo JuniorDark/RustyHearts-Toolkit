@@ -24,7 +24,16 @@ public partial class MainWindowViewModel : ObservableObject
             new NavigationViewItem(Resources.Tools, SymbolRegular.WindowDatabase24, typeof(DatabaseToolsPage)),
         }
     },
-    new NavigationViewItem(Resources.EditTools, SymbolRegular.DocumentTextToolbox24, typeof(EditToolsPage)),
+    new NavigationViewItem()
+    {
+        Content = Resources.EditTools,
+        Icon = new SymbolIcon { Symbol = SymbolRegular.DocumentTextToolbox24 },
+        MenuItemsSource = new object[]
+        {
+            new NavigationViewItem(Resources.EditTools, SymbolRegular.DocumentTextToolbox24, typeof(EditToolsPage)),
+            new NavigationViewItem(Resources.PckUnpacker, SymbolRegular.DocumentTextToolbox24, typeof(PCKToolPage)),
+        }
+    },
     new NavigationViewItem()
     {
         Content = Resources.SQLiteDatabase,
@@ -47,6 +56,6 @@ public partial class MainWindowViewModel : ObservableObject
     private ObservableCollection<MenuItem> _trayMenuItems =
     [
         new MenuItem { Header = Resources.Home, Tag = "tray_home" },
-        new MenuItem { Header = "Close", Tag = "tray_close" }
+        new MenuItem { Header = Resources.Close, Tag = "tray_close" }
     ];
 }

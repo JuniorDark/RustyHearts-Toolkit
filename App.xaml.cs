@@ -63,6 +63,8 @@ public partial class App : Application
                 _ = services.AddSingleton<GMDatabaseManagerViewModel>();
                 _ = services.AddSingleton<CouponPage>();
                 _ = services.AddSingleton<CouponViewModel>();
+                _ = services.AddSingleton<PCKToolPage>();
+                _ = services.AddSingleton<PCKToolViewModel>();
                 // All other services and viewmodels
                 _ = services.AddSingleton<ISqlDatabaseService, SqlDatabaseService>();
                 _ = services.AddSingleton<IDatabaseService, DatabaseService>();

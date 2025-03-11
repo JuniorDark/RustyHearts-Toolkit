@@ -12,8 +12,8 @@
     <PackageId>Rusty Hearts Toolkit</PackageId>
     <AssemblyName>Rusty Hearts Toolkit</AssemblyName>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyVersion>1.1.0</AssemblyVersion>
-    <FileVersion>1.1.0</FileVersion>
+    <AssemblyVersion>1.2.0</AssemblyVersion>
+    <FileVersion>1.2.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -19,6 +19,7 @@ namespace RHToolkit.Models.UISettings
         private const string DefaultSQLServer = "localhost";
         private const string DefaultSQLUser = "sa";
         private const string TableFolderValueName = "TableFolder";
+        private const string ClientFolderValueName = "ClientFolder";
 
         /// <summary>
         /// Encrypts a plain text string using the current user's data protection scope.
@@ -219,6 +220,30 @@ namespace RHToolkit.Models.UISettings
         {
             using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
             key.SetValue(TableFolderValueName, folderPath);
+        }
+
+        /// <summary>
+        /// Gets the client folder path from the registry.
+        /// </summary>
+        /// <returns>The client folder path.</returns>
+        public static string GetClientFolder()
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
+            {
+                return key.GetValue(ClientFolderValueName)?.ToString() ?? string.Empty;
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Sets the client folder path in the registry.
+        /// </summary>
+        /// <param name="folderPath">The client folder path to set.</param>
+        public static void SetClientFolder(string folderPath)
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(ClientFolderValueName, folderPath);
         }
     }
 }

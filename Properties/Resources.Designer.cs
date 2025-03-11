@@ -7711,6 +7711,141 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Operation Cancelled..
+        /// </summary>
+        public static string PCKTool_CancelledMessage {
+            get {
+                return ResourceManager.GetString("PCKTool_CancelledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Client Folder.
+        /// </summary>
+        public static string PCKTool_ClientFolder {
+            get {
+                return ResourceManager.GetString("PCKTool_ClientFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of Files：{0}.
+        /// </summary>
+        public static string PCKTool_FileNumber {
+            get {
+                return ResourceManager.GetString("PCKTool_FileNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Importing tree view....
+        /// </summary>
+        public static string PCKTool_ImportingTreeView {
+            get {
+                return ResourceManager.GetString("PCKTool_ImportingTreeView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error decoding f00x.dat.
+        /// </summary>
+        public static string PCKTool_InvalidFileList {
+            get {
+                return ResourceManager.GetString("PCKTool_InvalidFileList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override Unpack.
+        /// </summary>
+        public static string PCKTool_OverrideUnpack {
+            get {
+                return ResourceManager.GetString("PCKTool_OverrideUnpack", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override files in the Unpack directory..
+        /// </summary>
+        public static string PCKTool_OverrideUnpackMessage {
+            get {
+                return ResourceManager.GetString("PCKTool_OverrideUnpackMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select file(s) to be unpacked first..
+        /// </summary>
+        public static string PCKTool_SelectFilesMessage {
+            get {
+                return ResourceManager.GetString("PCKTool_SelectFilesMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the client folder with the .pck files..
+        /// </summary>
+        public static string PCKTool_SelectFolder {
+            get {
+                return ResourceManager.GetString("PCKTool_SelectFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unpack All.
+        /// </summary>
+        public static string PCKTool_UnpackAll {
+            get {
+                return ResourceManager.GetString("PCKTool_UnpackAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unpacking Files....
+        /// </summary>
+        public static string PCKTool_Unpacking {
+            get {
+                return ResourceManager.GetString("PCKTool_Unpacking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unpacking files completed..
+        /// </summary>
+        public static string PCKTool_UnpackingComplete {
+            get {
+                return ResourceManager.GetString("PCKTool_UnpackingComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unpacking Files...{0}/{1}.
+        /// </summary>
+        public static string PCKTool_UnpackingFiles {
+            get {
+                return ResourceManager.GetString("PCKTool_UnpackingFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unpack Selected.
+        /// </summary>
+        public static string PCKTool_UnpackSelected {
+            get {
+                return ResourceManager.GetString("PCKTool_UnpackSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PCK Unpacker.
+        /// </summary>
+        public static string PckUnpacker {
+            get {
+                return ResourceManager.GetString("PckUnpacker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Period.
         /// </summary>
         public static string Period {

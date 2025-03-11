@@ -19,6 +19,9 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
 - **Coupon Generator**: Generate unique in-game coupon codes for redeemable items rewards.
 - **Send Mail**: Send in-game mail with customizable item attachments. Save mail as templates in JSON format for easy reuse.
 
+### Pck Unpacker
+- Read and unpack `.pck` files to extract game assets.
+
 ### Table Editor Tools
 - **Table Editor**: Edit `.rh` table files directly, with options to export into various formats like XML, XLSX, and MIP.
   
@@ -37,7 +40,7 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
   - **Set Editor**: Edit item sets and their effects (setitem.rh).
   - **Skill Editor**: Edit and configure character skills.
   - **Title Editor**: Edit titles and title effects (charactertitle.rh).
-  - **World Editor**: Edit world data, including maps, dungeons, and environment settings (world.rh, dungeoninfolist.rh, mapselect_curtis.rh).
+  - **World Editor**: Edit world data (world.rh, dungeoninfolist.rh, mapselect_curtis.rh).
 
 ### Local Databases
 - **Item Database** 
