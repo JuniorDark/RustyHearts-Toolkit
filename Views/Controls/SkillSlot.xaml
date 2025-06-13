@@ -24,6 +24,7 @@
             Grid.RowSpan="2"
             Width="48"
             Height="64"
+            HorizontalAlignment="Center"
             Background="Transparent"
             BorderBrush="Transparent"
             Cursor="Hand"
