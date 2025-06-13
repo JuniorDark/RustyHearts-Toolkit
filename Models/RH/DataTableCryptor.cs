@@ -307,7 +307,7 @@ namespace RHToolkit.Models.RH
         {
             try
             {
-                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                ExcelPackage.License.SetNonCommercialPersonal("JuniorDark");
 
                 using ExcelPackage package = new();
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("sheet");
