@@ -330,6 +330,32 @@ namespace RHToolkit.Services
         }
 
         /// <summary>
+        /// Retrieves a list of unique items from the database based on the specified query.
+        /// </summary>
+        /// <param name="query">The SQL query to execute.</param>
+        /// <returns>A list of items.</returns>
+        private List<NameID> GetUniqueItemsFromQuery(string query)
+        {
+            var items = GetItemsFromQuery(query);
+
+            var uniqueItems = items
+                .GroupBy(item => item.ID)
+                .Select(group => group.First())
+                .ToList();
+
+            return uniqueItems;
+        }
+
+        /// <summary>
+        /// Retrieves a list of Rune Group items from the database.
+        /// </summary>
+        /// <returns>A list of Rune Group items.</returns>
+        public List<NameID> GetRuneGroupItems()
+        {
+            return GetUniqueItemsFromQuery("SELECT nRandomRuneGroup, wszDisc FROM randomrune");
+        }
+
+        /// <summary>
         /// Retrieves a list of title items from the database.
         /// </summary>
         /// <returns>A list of title items.</returns>
@@ -647,6 +673,37 @@ namespace RHToolkit.Services
         }
 
         /// <summary>
+        /// Retrieves a list of rare card items from the database.
+        /// </summary>
+        /// <returns>A list of rare card items.</returns>
+        public List<NameID> GetRareCardItems()
+        {
+            List<NameID> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = "SELECT nID FROM rarecardrewarditemlist";
+
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                items.Add(new NameID { ID = 0, Name = Resources.None });
+
+                while (command.Read())
+                {
+                    int id = command.GetInt32(0);
+
+                    items.Add(new NameID { ID = id, Name = id.ToString() });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+
+            return items;
+        }
+
+        /// <summary>
         /// Retrieves a list of rare card reward items from the database.
         /// </summary>
         /// <returns>A list of rare card reward items.</returns>
@@ -710,6 +767,38 @@ namespace RHToolkit.Services
                     };
 
                     items.Add(reward);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
+
+            return items;
+        }
+
+        /// <summary>
+        /// Retrieves a list of drop group list from the database based on the specified table name.
+        /// </summary>
+        /// <param name="tableName">The name of the table containing the drop group list.</param>
+        /// <returns>A list of drop group list.</returns>
+        public List<NameID> GetDropGroupList(string tableName)
+        {
+            List<NameID> items = [];
+            using var connection = _sqLiteDatabaseService.OpenSQLiteConnection();
+            try
+            {
+                string query = $"SELECT nID FROM {tableName}";
+
+                using var command = _sqLiteDatabaseService.ExecuteReader(query, connection);
+
+                items.Add(new NameID { ID = 0, Name = Resources.None });
+
+                while (command.Read())
+                {
+                    int id = command.GetInt32(0);
+
+                    items.Add(new NameID { ID = id, Name = id.ToString() });
                 }
             }
             catch (Exception ex)

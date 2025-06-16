@@ -820,6 +820,38 @@
                                             <StackPanel
                                                 Grid.Row="8"
                                                 Grid.Column="0"
+                                                Margin="5,0,0,0"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Top"
+                                                Orientation="Vertical">
+                                                <Label
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    HorizontalContentAlignment="Center"
+                                                    Content="{x:Static rs:Resources.ItemEditor_RandomRuneGroup}"
+                                                    Style="{StaticResource ArialMSWhite}" />
+                                                <ComboBox
+                                                    Width="250"
+                                                    Height="24"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding RuneGroupItems}"
+                                                    SelectedValue="{Binding DataTableManager.SelectedItem[nRuneGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                                    SelectedValuePath="ID"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}">
+                                                    <i:Interaction.Behaviors>
+                                                        <bh:DataRowViewBehavior Column="nRuneGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
+                                                    </i:Interaction.Behaviors>
+                                                </ComboBox>
+                                            </StackPanel>
+
+                                            <StackPanel
+                                                Grid.Row="9"
+                                                Grid.Column="0"
                                                 Grid.ColumnSpan="3"
                                                 Margin="0,0,0,0"
                                                 HorizontalAlignment="Left"
@@ -842,7 +874,7 @@
                                                 </ListView>
                                             </StackPanel>
                                             <StackPanel
-                                                Grid.Row="8"
+                                                Grid.Row="9"
                                                 Grid.Column="1"
                                                 Margin="0,0,0,0"
                                                 HorizontalAlignment="Left"
@@ -1356,24 +1388,10 @@
                                                 </i:Interaction.Behaviors>
                                             </ui:NumberBox>
                                         </StackPanel>
+                                        
                                         <StackPanel
                                             Grid.Row="9"
                                             Grid.Column="0"
-                                            Orientation="Vertical">
-                                            <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_RandomRuneGroup}" />
-                                            <ui:NumberBox
-                                                Width="Auto"
-                                                Maximum="2147483647"
-                                                Minimum="0"
-                                                Value="{Binding DataTableManager.SelectedItem[nRuneGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit}">
-                                                <i:Interaction.Behaviors>
-                                                    <bh:DataRowViewBehavior Column="nRuneGroup" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
-                                                </i:Interaction.Behaviors>
-                                            </ui:NumberBox>
-                                        </StackPanel>
-                                        <StackPanel
-                                            Grid.Row="9"
-                                            Grid.Column="1"
                                             Orientation="Vertical">
                                             <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_RuneType}" />
                                             <ui:NumberBox
@@ -1388,7 +1406,7 @@
                                         </StackPanel>
                                         <StackPanel
                                             Grid.Row="9"
-                                            Grid.Column="2"
+                                            Grid.Column="1"
                                             Orientation="Vertical">
                                             <TextBlock Foreground="White" Text="{x:Static rs:Resources.ItemEditor_PetCostume}" />
                                             <ui:NumberBox

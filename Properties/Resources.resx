@@ -3708,6 +3708,9 @@
   <data name="EnemyEditor_ScaleMin" xml:space="preserve">
     <value>Scale Min</value>
   </data>
+  <data name="EnemyEditor_ScaleMax" xml:space="preserve">
+    <value>Scale Max</value>
+  </data>
   <data name="EnemyEditor_PhysicalAttack" xml:space="preserve">
     <value>Physical Attack</value>
   </data>

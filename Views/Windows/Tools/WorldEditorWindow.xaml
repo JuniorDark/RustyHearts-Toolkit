@@ -1204,8 +1204,6 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
 
                             <StackPanel
@@ -1479,135 +1477,222 @@
                                 </ui:NumberBox>
                             </StackPanel>
 
-                            <StackPanel
-                                Grid.Row="7"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.GoldCard}" />
-                                <ui:NumberBox
-                                    MinWidth="150"
+                            <Grid Grid.Row="7" Grid.ColumnSpan="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <StackPanel
+                                    Grid.Row="0"
+                                    Grid.Column="0"
                                     Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
-                                    Maximum="2147483647"
-                                    Minimum="0"
-                                    Value="{Binding DataContext.DataTableManager.SelectedItem[nRareGold], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nRareGold" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
-                                    </i:Interaction.Behaviors>
-                                </ui:NumberBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="7"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.GoldCardProbability}" />
-                                <ui:NumberBox
-                                    MinWidth="150"
+                                    Orientation="Vertical">
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.GoldCard}" />
+                                    <ComboBox
+                                        Height="24"
+                                        MinWidth="200"
+                                        Margin="0,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding DataContext.RareCardItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nRareGold], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValuePath="ID"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Template="{StaticResource lb_combobox}">
+                                        <i:Interaction.Behaviors>
+                                            <bh:DataRowViewBehavior Column="nRareGold" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                        </i:Interaction.Behaviors>
+                                    </ComboBox>
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Row="0"
+                                    Grid.Column="1"
                                     Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Maximum="1"
-                                    Minimum="0"
-                                    Value="{Binding DataContext.DataTableManager.SelectedItem[fRareGoldProbability], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="fRareGoldProbability" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
-                                    </i:Interaction.Behaviors>
-                                </ui:NumberBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="8"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SilverCard}" />
-                                <ui:NumberBox
-                                    MinWidth="150"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Orientation="Vertical">
+                                    <Button
+                                        Width="200"
+                                        Margin="10,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Bottom"
+                                        Command="{Binding DataContext.OpenRareCardRewardItemListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nRareGold], RelativeSource={RelativeSource AncestorType=Window}}"
+                                        Content="{x:Static rs:Resources.Preview}"
+                                        Cursor="Hand"
+                                        Foreground="White"
+                                        Style="{StaticResource lb_def_button02}" />
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Row="0"
+                                    Grid.Column="2"
                                     Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
-                                    Maximum="2147483647"
-                                    Minimum="0"
-                                    Value="{Binding DataContext.DataTableManager.SelectedItem[nRareSilver], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nRareSilver" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
-                                    </i:Interaction.Behaviors>
-                                </ui:NumberBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="8"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.SilverCardProbability}" />
-                                <ui:NumberBox
-                                    MinWidth="150"
+                                    Orientation="Vertical">
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.GoldCardProbability}" />
+                                    <ui:NumberBox
+                                        MinWidth="150"
+                                        Margin="0,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        Maximum="1"
+                                        Minimum="0"
+                                        SmallChange="0.1"
+                                        Value="{Binding DataContext.DataTableManager.SelectedItem[fRareGoldProbability], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        <i:Interaction.Behaviors>
+                                            <bh:DataRowViewBehavior Column="fRareGoldProbability" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                        </i:Interaction.Behaviors>
+                                    </ui:NumberBox>
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Row="1"
+                                    Grid.Column="0"
                                     Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
-                                    Maximum="1"
-                                    Minimum="0"
-                                    Value="{Binding DataContext.DataTableManager.SelectedItem[fRareSilverProbability], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="fRareSilverProbability" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
-                                    </i:Interaction.Behaviors>
-                                </ui:NumberBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="9"
-                                Grid.Column="0"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.BronzeCard}" />
-                                <ui:NumberBox
-                                    MinWidth="150"
+                                    Orientation="Vertical">
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.SilverCard}" />
+                                    <ComboBox
+                                        Height="24"
+                                        MinWidth="200"
+                                        Margin="0,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding DataContext.RareCardItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nRareSilver], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValuePath="ID"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Template="{StaticResource lb_combobox}">
+                                        <i:Interaction.Behaviors>
+                                            <bh:DataRowViewBehavior Column="nRareSilver" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                        </i:Interaction.Behaviors>
+                                    </ComboBox>
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Row="1"
+                                    Grid.Column="1"
                                     Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Maximum="2147483647"
-                                    Minimum="0"
-                                    Value="{Binding DataContext.DataTableManager.SelectedItem[nRareBronze], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="nRareBronze" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
-                                    </i:Interaction.Behaviors>
-                                </ui:NumberBox>
-                            </StackPanel>
-                            <StackPanel
-                                Grid.Row="9"
-                                Grid.Column="1"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Orientation="Vertical">
-                                <TextBlock Foreground="White" Text="{x:Static rs:Resources.BronzeCardProbability}" />
-                                <ui:NumberBox
-                                    MinWidth="150"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Orientation="Vertical">
+                                    <Button
+                                        Width="200"
+                                        Margin="10,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Bottom"
+                                        Command="{Binding DataContext.OpenRareCardRewardItemListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nRareSilver], RelativeSource={RelativeSource AncestorType=Window}}"
+                                        Content="{x:Static rs:Resources.Preview}"
+                                        Cursor="Hand"
+                                        Foreground="White"
+                                        Style="{StaticResource lb_def_button02}" />
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Row="1"
+                                    Grid.Column="2"
                                     Margin="0,0,0,0"
-                                    HorizontalAlignment="Center"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
-                                    Maximum="1"
-                                    Minimum="0"
-                                    Value="{Binding DataContext.DataTableManager.SelectedItem[fRareBronzeProbability], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
-                                    <i:Interaction.Behaviors>
-                                        <bh:DataRowViewBehavior Column="fRareBronzeProbability" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
-                                    </i:Interaction.Behaviors>
-                                </ui:NumberBox>
-                            </StackPanel>
+                                    Orientation="Vertical">
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.SilverCardProbability}" />
+                                    <ui:NumberBox
+                                        MinWidth="150"
+                                        Margin="0,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        Maximum="1"
+                                        Minimum="0"
+                                        SmallChange="0.1"
+                                        Value="{Binding DataContext.DataTableManager.SelectedItem[fRareSilverProbability], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        <i:Interaction.Behaviors>
+                                            <bh:DataRowViewBehavior Column="fRareSilverProbability" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                        </i:Interaction.Behaviors>
+                                    </ui:NumberBox>
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Orientation="Vertical">
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.BronzeCard}" />
+                                    <ComboBox
+                                        Height="24"
+                                        MinWidth="200"
+                                        Margin="0,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding DataContext.RareCardItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nRareBronze], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValuePath="ID"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Template="{StaticResource lb_combobox}">
+                                        <i:Interaction.Behaviors>
+                                            <bh:DataRowViewBehavior Column="nRareBronze" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                        </i:Interaction.Behaviors>
+                                    </ComboBox>
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Orientation="Vertical">
+                                    <Button
+                                        Width="200"
+                                        Margin="10,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Bottom"
+                                        Command="{Binding DataContext.OpenRareCardRewardItemListCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nRareBronze], RelativeSource={RelativeSource AncestorType=Window}}"
+                                        Content="{x:Static rs:Resources.Preview}"
+                                        Cursor="Hand"
+                                        Foreground="White"
+                                        Style="{StaticResource lb_def_button02}" />
+                                </StackPanel>
+                                <StackPanel
+                                    Grid.Row="2"
+                                    Grid.Column="2"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Orientation="Vertical">
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.BronzeCardProbability}" />
+                                    <ui:NumberBox
+                                        MinWidth="150"
+                                        Margin="0,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        Maximum="1"
+                                        Minimum="0"
+                                        SmallChange="0.1"
+                                        Value="{Binding DataContext.DataTableManager.SelectedItem[fRareBronzeProbability], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        <i:Interaction.Behaviors>
+                                            <bh:DataRowViewBehavior Column="fRareBronzeProbability" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+                                        </i:Interaction.Behaviors>
+                                    </ui:NumberBox>
+                                </StackPanel>
+                            </Grid>
 
                             <StackPanel
-                                Grid.Row="10"
+                                Grid.Row="8"
                                 Grid.ColumnSpan="2"
                                 Margin="0,20,0,0"
                                 HorizontalAlignment="Left"
@@ -1626,18 +1711,23 @@
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
                                         Text="{x:Static rs:Resources.EventWorldItemDropGroupList}" />
-                                    <ui:NumberBox
-                                        Width="200"
+                                    <ComboBox
+                                        Height="24"
+                                        MinWidth="300"
                                         Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        Maximum="2147483647"
-                                        Minimum="0"
-                                        Value="{Binding DataContext.DataTableManager.SelectedItem[nEventWorldItemDropGroupList], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        HorizontalAlignment="Left"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding DataContext.EventWorldItemDropGroupItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nEventWorldItemDropGroupList], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValuePath="ID"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Template="{StaticResource lb_combobox}">
                                         <i:Interaction.Behaviors>
                                             <bh:DataRowViewBehavior Column="nEventWorldItemDropGroupList" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </i:Interaction.Behaviors>
-                                    </ui:NumberBox>
+                                    </ComboBox>
                                 </StackPanel>
                                 <Button
                                     Width="200"
@@ -1652,7 +1742,7 @@
                                     Style="{StaticResource lb_def_button02}" />
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="11"
+                                Grid.Row="9"
                                 Grid.ColumnSpan="2"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
@@ -1670,18 +1760,23 @@
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
                                         Text="{x:Static rs:Resources.WorldItemDropGroupList}" />
-                                    <ui:NumberBox
-                                        Width="200"
+                                    <ComboBox
+                                        Height="24"
+                                        MinWidth="300"
                                         Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        Maximum="2147483647"
-                                        Minimum="0"
-                                        Value="{Binding DataContext.DataTableManager.SelectedItem[nWorldItemDropGroupList], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        HorizontalAlignment="Left"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding DataContext.WorldItemDropGroupItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nWorldItemDropGroupList], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValuePath="ID"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Template="{StaticResource lb_combobox}">
                                         <i:Interaction.Behaviors>
                                             <bh:DataRowViewBehavior Column="nWorldItemDropGroupList" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </i:Interaction.Behaviors>
-                                    </ui:NumberBox>
+                                    </ComboBox>
                                 </StackPanel>
                                 <Button
                                     Width="200"
@@ -1696,7 +1791,7 @@
                                     Style="{StaticResource lb_def_button02}" />
                             </StackPanel>
                             <StackPanel
-                                Grid.Row="12"
+                                Grid.Row="10"
                                 Grid.ColumnSpan="2"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
@@ -1714,18 +1809,23 @@
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
                                         Text="{x:Static rs:Resources.WorldInstanceItemDropGroupList}" />
-                                    <ui:NumberBox
-                                        Width="200"
+                                    <ComboBox
+                                        Height="24"
+                                        MinWidth="300"
                                         Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        Maximum="2147483647"
-                                        Minimum="0"
-                                        Value="{Binding DataContext.DataTableManager.SelectedItem[nWorldInstanceItemDropGroupList], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        HorizontalAlignment="Left"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding DataContext.WorldInstanceItemDropGroupItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nWorldInstanceItemDropGroupList], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValuePath="ID"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Template="{StaticResource lb_combobox}">
                                         <i:Interaction.Behaviors>
                                             <bh:DataRowViewBehavior Column="nWorldInstanceItemDropGroupList" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </i:Interaction.Behaviors>
-                                    </ui:NumberBox>
+                                    </ComboBox>
                                 </StackPanel>
                                 <Button
                                     Width="200"
@@ -2212,18 +2312,18 @@
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MinimapStartX}" />
-                                <TextBox
-                                    Width="Auto"
-                                    Height="30"
-                                    Margin="0,0"
-                                    d:Text="fMinimapStartX"
-                                    FontSize="12"
-                                    Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataContext.DataTableManager.SelectedItem[fMinimapStartX], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                <ui:NumberBox
+                                    MinWidth="150"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
+                                    Minimum="-2147483647"
+                                    Value="{Binding DataContext.DataTableManager.SelectedItem[fMinimapStartX], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
                                     <i:Interaction.Behaviors>
                                         <bh:DataRowViewBehavior Column="fMinimapStartX" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                     </i:Interaction.Behaviors>
-                                </TextBox>
+                                </ui:NumberBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="3"
@@ -2234,18 +2334,18 @@
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MinimapEndX}" />
-                                <TextBox
-                                    Width="Auto"
-                                    Height="30"
-                                    Margin="0,0"
-                                    d:Text="fMinimapEndX"
-                                    FontSize="12"
-                                    Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataContext.DataTableManager.SelectedItem[fMinimapEndX], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                <ui:NumberBox
+                                    MinWidth="150"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
+                                    Minimum="-2147483647"
+                                    Value="{Binding DataContext.DataTableManager.SelectedItem[fMinimapEndX], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
                                     <i:Interaction.Behaviors>
                                         <bh:DataRowViewBehavior Column="fMinimapEndX" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                     </i:Interaction.Behaviors>
-                                </TextBox>
+                                </ui:NumberBox>
                             </StackPanel>
 
                             <StackPanel
@@ -2257,18 +2357,18 @@
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MinimapStartZ}" />
-                                <TextBox
-                                    Width="Auto"
-                                    Height="30"
-                                    Margin="0,0"
-                                    d:Text="fMinimapStartZ"
-                                    FontSize="12"
-                                    Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataContext.DataTableManager.SelectedItem[fMinimapStartZ], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                <ui:NumberBox
+                                    MinWidth="150"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
+                                    Minimum="-2147483647"
+                                    Value="{Binding DataContext.DataTableManager.SelectedItem[fMinimapStartZ], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
                                     <i:Interaction.Behaviors>
                                         <bh:DataRowViewBehavior Column="fMinimapStartZ" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                     </i:Interaction.Behaviors>
-                                </TextBox>
+                                </ui:NumberBox>
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="4"
@@ -2279,18 +2379,18 @@
                                 VerticalAlignment="Top"
                                 Orientation="Vertical">
                                 <TextBlock Foreground="White" Text="{x:Static rs:Resources.WorldEditor_MinimapEndZ}" />
-                                <TextBox
-                                    Width="Auto"
-                                    Height="30"
-                                    Margin="0,0"
-                                    d:Text="szMinimap"
-                                    FontSize="12"
-                                    Template="{StaticResource lb_textbox11}"
-                                    Text="{Binding DataContext.DataTableManager.SelectedItem[fMinimapEndZ], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                <ui:NumberBox
+                                    MinWidth="150"
+                                    Margin="0,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Top"
+                                    Maximum="2147483647"
+                                    Minimum="-2147483647"
+                                    Value="{Binding DataContext.DataTableManager.SelectedItem[fMinimapEndZ], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
                                     <i:Interaction.Behaviors>
                                         <bh:DataRowViewBehavior Column="fMinimapEndZ" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                     </i:Interaction.Behaviors>
-                                </TextBox>
+                                </ui:NumberBox>
                             </StackPanel>
 
                             <StackPanel

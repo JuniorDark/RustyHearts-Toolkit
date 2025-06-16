@@ -1593,7 +1593,7 @@
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Orientation="Vertical">
-                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ScaleMin}" />
+                                    <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ScaleMax}" />
                                     <ui:NumberBox
                                         MinWidth="150"
                                         Margin="0,0,0,0"
@@ -1663,8 +1663,8 @@
                                         Margin="0,0,0,0"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Top"
-                                        Maximum="2147483647"
-                                        Minimum="0"
+                                        Maximum="1"
+                                        Minimum="-1"
                                         Value="{Binding DataContext.DataTableManager.SelectedItem[fGlowSpeed], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
                                         <i:Interaction.Behaviors>
                                             <bh:DataRowViewBehavior Column="fGlowSpeed" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
@@ -1996,14 +1996,18 @@
                                                 VerticalAlignment="Top"
                                                 Orientation="Vertical">
                                                 <TextBlock Foreground="White" Text="{x:Static rs:Resources.EnemyEditor_ConditionResistance}" />
-                                                <TextBox
-                                                    Width="Auto"
-                                                    Height="30"
-                                                    Margin="0,0"
-                                                    d:Text="Condition Resistance"
-                                                    FontSize="12"
-                                                    Template="{StaticResource lb_textbox11}"
-                                                    Text="{Binding ConditionResistance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                <ComboBox
+                                                    Height="24"
+                                                    MinWidth="300"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalAlignment="Left"
+                                                    HorizontalContentAlignment="Left"
+                                                    VerticalContentAlignment="Center"
+                                                    IsReadOnly="True"
+                                                    ItemsSource="{Binding DataContext.ConditionResistanceItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    SelectedValue="{Binding ConditionResistance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    Style="{StaticResource ComboBoxStyle}"
+                                                    Template="{StaticResource lb_combobox}" />
                                             </StackPanel>
                                             <StackPanel
                                                 Grid.Column="1"
@@ -2804,18 +2808,23 @@
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
                                         Text="{x:Static rs:Resources.EnemyEditor_QuestItemDropGroup}" />
-                                    <ui:NumberBox
-                                        Width="200"
+                                    <ComboBox
+                                        Height="24"
+                                        MinWidth="300"
                                         Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        Maximum="2147483647"
-                                        Minimum="0"
-                                        Value="{Binding DataContext.DataTableManager.SelectedItem[nQuestItemDropGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        HorizontalAlignment="Left"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding DataContext.QuestItemDropGroupItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nQuestItemDropGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValuePath="ID"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Template="{StaticResource lb_combobox}">
                                         <i:Interaction.Behaviors>
                                             <bh:DataRowViewBehavior Column="nQuestItemDropGroup" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </i:Interaction.Behaviors>
-                                    </ui:NumberBox>
+                                    </ComboBox>
                                 </StackPanel>
                                 <Button
                                     Width="200"
@@ -2847,18 +2856,23 @@
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
                                         Text="{x:Static rs:Resources.EnemyEditor_HiddenQuestItemDropGroup}" />
-                                    <ui:NumberBox
-                                        Width="200"
+                                    <ComboBox
+                                        Height="24"
+                                        MinWidth="300"
                                         Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        Maximum="2147483647"
-                                        Minimum="0"
-                                        Value="{Binding DataContext.DataTableManager.SelectedItem[nHiddenQuestItemDropGroup00], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        HorizontalAlignment="Left"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding DataContext.QuestItemDropGroupItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nHiddenQuestItemDropGroup00], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValuePath="ID"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Template="{StaticResource lb_combobox}">
                                         <i:Interaction.Behaviors>
                                             <bh:DataRowViewBehavior Column="nHiddenQuestItemDropGroup00" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </i:Interaction.Behaviors>
-                                    </ui:NumberBox>
+                                    </ComboBox>
                                 </StackPanel>
                                 <Button
                                     Width="200"
@@ -2890,18 +2904,23 @@
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
                                         Text="{x:Static rs:Resources.EnemyEditor_ChampionItemDropGroup}" />
-                                    <ui:NumberBox
-                                        Width="200"
+                                    <ComboBox
+                                        Height="24"
+                                        MinWidth="300"
                                         Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        Maximum="2147483647"
-                                        Minimum="0"
-                                        Value="{Binding DataContext.DataTableManager.SelectedItem[nChampionItemDropGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        HorizontalAlignment="Left"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding DataContext.ChampionItemDropGroupItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nChampionItemDropGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValuePath="ID"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Template="{StaticResource lb_combobox}">
                                         <i:Interaction.Behaviors>
                                             <bh:DataRowViewBehavior Column="nChampionItemDropGroup" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </i:Interaction.Behaviors>
-                                    </ui:NumberBox>
+                                    </ComboBox>
                                 </StackPanel>
                                 <Button
                                     Width="200"
@@ -2933,18 +2952,23 @@
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
                                         Text="{x:Static rs:Resources.EnemyEditor_InstanceItemDropGroup}" />
-                                    <ui:NumberBox
-                                        Width="200"
+                                    <ComboBox
+                                        Height="24"
+                                        MinWidth="300"
                                         Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        Maximum="2147483647"
-                                        Minimum="0"
-                                        Value="{Binding DataContext.DataTableManager.SelectedItem[nInstanceItemDropGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        HorizontalAlignment="Left"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding DataContext.InstanceItemDropGroupItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nInstanceItemDropGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValuePath="ID"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Template="{StaticResource lb_combobox}">
                                         <i:Interaction.Behaviors>
                                             <bh:DataRowViewBehavior Column="nInstanceItemDropGroup" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </i:Interaction.Behaviors>
-                                    </ui:NumberBox>
+                                    </ComboBox>
                                 </StackPanel>
                                 <Button
                                     Width="200"
@@ -2976,18 +3000,23 @@
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
                                         Text="{x:Static rs:Resources.EnemyEditor_RareCardItemDropGroup}" />
-                                    <ui:NumberBox
-                                        Width="200"
+                                    <ComboBox
+                                        Height="24"
+                                        MinWidth="300"
                                         Margin="0,0,0,0"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Top"
-                                        Maximum="2147483647"
-                                        Minimum="0"
-                                        Value="{Binding DataContext.DataTableManager.SelectedItem[nRareCardItemDropGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}">
+                                        HorizontalAlignment="Left"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding DataContext.RareCardItemDropGroupItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValue="{Binding DataContext.DataTableManager.SelectedItem[nRareCardItemDropGroup], Mode=TwoWay, UpdateSourceTrigger=Explicit, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        SelectedValuePath="ID"
+                                        Style="{StaticResource ComboBoxStyle}"
+                                        Template="{StaticResource lb_combobox}">
                                         <i:Interaction.Behaviors>
                                             <bh:DataRowViewBehavior Column="nRareCardItemDropGroup" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                         </i:Interaction.Behaviors>
-                                    </ui:NumberBox>
+                                    </ComboBox>
                                 </StackPanel>
                                 <Button
                                     Width="200"
@@ -3046,7 +3075,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"
@@ -3055,14 +3084,19 @@
                                                             </MultiBinding>
                                                         </TextBlock.Text>
                                                     </TextBlock>
-                                                    <ui:NumberBox
-                                                        Width="200"
+                                                    <ComboBox
+                                                        Height="24"
+                                                        MinWidth="300"
                                                         Margin="0,0,0,0"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Top"
-                                                        Maximum="2147483647"
-                                                        Minimum="0"
-                                                        Value="{Binding ItemDropGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                        HorizontalAlignment="Left"
+                                                        HorizontalContentAlignment="Left"
+                                                        VerticalContentAlignment="Center"
+                                                        IsReadOnly="True"
+                                                        ItemsSource="{Binding DataContext.ItemDropGroupItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        SelectedValue="{Binding ItemDropGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        SelectedValuePath="ID"
+                                                        Style="{StaticResource ComboBoxStyle}"
+                                                        Template="{StaticResource lb_combobox}" />
                                                 </StackPanel>
                                                 <StackPanel
                                                     Grid.Row="0"
@@ -3078,7 +3112,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"
@@ -3127,7 +3161,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"
@@ -3136,14 +3170,19 @@
                                                             </MultiBinding>
                                                         </TextBlock.Text>
                                                     </TextBlock>
-                                                    <ui:NumberBox
-                                                        Width="200"
+                                                    <ComboBox
+                                                        Height="24"
+                                                        MinWidth="300"
                                                         Margin="0,0,0,0"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Top"
-                                                        Maximum="2147483647"
-                                                        Minimum="0"
-                                                        Value="{Binding ItemDropGroupF, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                        HorizontalAlignment="Left"
+                                                        HorizontalContentAlignment="Left"
+                                                        VerticalContentAlignment="Center"
+                                                        IsReadOnly="True"
+                                                        ItemsSource="{Binding DataContext.ItemDropGroupFItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        SelectedValue="{Binding ItemDropGroupF, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        SelectedValuePath="ID"
+                                                        Style="{StaticResource ComboBoxStyle}"
+                                                        Template="{StaticResource lb_combobox}" />
                                                 </StackPanel>
                                                 <StackPanel
                                                     Grid.Row="0"
@@ -3159,7 +3198,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"
@@ -3208,7 +3247,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"
@@ -3217,14 +3256,19 @@
                                                             </MultiBinding>
                                                         </TextBlock.Text>
                                                     </TextBlock>
-                                                    <ui:NumberBox
-                                                        Width="200"
+                                                    <ComboBox
+                                                        Height="24"
+                                                        MinWidth="300"
                                                         Margin="0,0,0,0"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Top"
-                                                        Maximum="2147483647"
-                                                        Minimum="0"
-                                                        Value="{Binding FatigueItemDropGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                        HorizontalAlignment="Left"
+                                                        HorizontalContentAlignment="Left"
+                                                        VerticalContentAlignment="Center"
+                                                        IsReadOnly="True"
+                                                        ItemsSource="{Binding DataContext.ItemDropGroupItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        SelectedValue="{Binding FatigueItemDropGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        SelectedValuePath="ID"
+                                                        Style="{StaticResource ComboBoxStyle}"
+                                                        Template="{StaticResource lb_combobox}" />
                                                 </StackPanel>
                                                 <StackPanel
                                                     Grid.Row="0"
@@ -3240,7 +3284,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"
@@ -3289,7 +3333,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"
@@ -3298,14 +3342,19 @@
                                                             </MultiBinding>
                                                         </TextBlock.Text>
                                                     </TextBlock>
-                                                    <ui:NumberBox
-                                                        Width="200"
+                                                    <ComboBox
+                                                        Height="24"
+                                                        MinWidth="300"
                                                         Margin="0,0,0,0"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Top"
-                                                        Maximum="2147483647"
-                                                        Minimum="0"
-                                                        Value="{Binding FatigueItemDropGroupF, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                        HorizontalAlignment="Left"
+                                                        HorizontalContentAlignment="Left"
+                                                        VerticalContentAlignment="Center"
+                                                        IsReadOnly="True"
+                                                        ItemsSource="{Binding DataContext.ItemDropGroupFItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        SelectedValue="{Binding FatigueItemDropGroupF, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        SelectedValuePath="ID"
+                                                        Style="{StaticResource ComboBoxStyle}"
+                                                        Template="{StaticResource lb_combobox}" />
                                                 </StackPanel>
                                                 <StackPanel
                                                     Grid.Row="0"
@@ -3321,7 +3370,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"
@@ -3370,7 +3419,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"
@@ -3379,14 +3428,19 @@
                                                             </MultiBinding>
                                                         </TextBlock.Text>
                                                     </TextBlock>
-                                                    <ui:NumberBox
-                                                        Width="200"
+                                                    <ComboBox
+                                                        Height="24"
+                                                        MinWidth="300"
                                                         Margin="0,0,0,0"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Top"
-                                                        Maximum="2147483647"
-                                                        Minimum="0"
-                                                        Value="{Binding HiddenItemDropGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                        HorizontalAlignment="Left"
+                                                        HorizontalContentAlignment="Left"
+                                                        VerticalContentAlignment="Center"
+                                                        IsReadOnly="True"
+                                                        ItemsSource="{Binding DataContext.ItemDropGroupItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        SelectedValue="{Binding HiddenItemDropGroup, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        SelectedValuePath="ID"
+                                                        Style="{StaticResource ComboBoxStyle}"
+                                                        Template="{StaticResource lb_combobox}" />
                                                 </StackPanel>
                                                 <StackPanel
                                                     Grid.Row="0"
@@ -3402,7 +3456,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"
@@ -3450,7 +3504,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"
@@ -3459,14 +3513,19 @@
                                                             </MultiBinding>
                                                         </TextBlock.Text>
                                                     </TextBlock>
-                                                    <ui:NumberBox
-                                                        Width="200"
+                                                    <ComboBox
+                                                        Height="24"
+                                                        MinWidth="300"
                                                         Margin="0,0,0,0"
-                                                        HorizontalAlignment="Center"
-                                                        VerticalAlignment="Top"
-                                                        Maximum="2147483647"
-                                                        Minimum="0"
-                                                        Value="{Binding HiddenItemDropGroupF, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                        HorizontalAlignment="Left"
+                                                        HorizontalContentAlignment="Left"
+                                                        VerticalContentAlignment="Center"
+                                                        IsReadOnly="True"
+                                                        ItemsSource="{Binding DataContext.ItemDropGroupFItems, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        SelectedValue="{Binding HiddenItemDropGroupF, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                        SelectedValuePath="ID"
+                                                        Style="{StaticResource ComboBoxStyle}"
+                                                        Template="{StaticResource lb_combobox}" />
                                                 </StackPanel>
                                                 <StackPanel
                                                     HorizontalAlignment="Left"
@@ -3481,7 +3540,7 @@
                                                         Foreground="Gold"
                                                         Style="{StaticResource ArialMS}">
                                                         <TextBlock.Text>
-                                                            <MultiBinding StringFormat="{}{0} {1}">
+                                                            <MultiBinding StringFormat="{}{1} {0}">
                                                                 <Binding
                                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                                     Path="(ItemsControl.AlternationIndex)"

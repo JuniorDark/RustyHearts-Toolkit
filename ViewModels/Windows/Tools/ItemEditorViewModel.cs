@@ -548,6 +548,9 @@ namespace RHToolkit.ViewModels.Windows
         [ObservableProperty]
         private List<NameID>? _runeBranchItems;
 
+        [ObservableProperty]
+        private List<NameID>? _runeGroupItems;
+
         private void PopulateListItems()
         {
             try
@@ -560,6 +563,7 @@ namespace RHToolkit.ViewModels.Windows
                 SetItemItems = _gmDatabaseService.GetSetItemItems();
                 PetEatItems = _gmDatabaseService.GetPetEatItems();
                 RiddleGroupItems = _gmDatabaseService.GetRiddleGroupItems();
+                RuneGroupItems = _gmDatabaseService.GetRuneGroupItems();
                 RuneBranchItems =
                 [
                     new NameID { ID = 0, Name = Resources.None },

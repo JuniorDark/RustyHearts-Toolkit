@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using RHToolkit.Messages;
+using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
@@ -36,6 +37,8 @@ namespace RHToolkit.ViewModels.Windows
                 AutoReset = false
             };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
+
+            PopulateListItems();
 
             WeakReferenceMessenger.Default.Register(this);
         }
@@ -418,6 +421,56 @@ namespace RHToolkit.ViewModels.Windows
         {
             ApplyFilter();
         }
+        #endregion
+
+        #region Comboboxes
+
+        [ObservableProperty]
+        private List<string>? _conditionResistanceItems;
+
+        [ObservableProperty]
+        private List<NameID>? _questItemDropGroupItems;
+
+        [ObservableProperty]
+        private List<NameID>? _championItemDropGroupItems;
+
+        [ObservableProperty]
+        private List<NameID>? _instanceItemDropGroupItems;
+
+        [ObservableProperty]
+        private List<NameID>? _rareCardItemDropGroupItems;
+
+        [ObservableProperty]
+        private List<NameID>? _itemDropGroupItems;
+
+        [ObservableProperty]
+        private List<NameID>? _itemDropGroupFItems;
+
+        private void PopulateListItems()
+        {
+            ConditionResistanceItems =
+            [
+                "",
+                "CONDITION_SLOW",
+                "CONDITION_STUN",
+                "CONDITION_STONE",
+                "CONDITION_FREEZE",
+                "CONDITION_HOLD",
+                "CONDITION_BLEEDING",
+                "CONDITION_SICKNESS",
+                "CONDITION_FIRE",
+                "CONDITION_LIGHTING",
+                "CONDITION_TOXICATION"
+            ];
+            QuestItemDropGroupItems = _gmDatabaseService.GetDropGroupList("questitemdropgrouplist");
+            ChampionItemDropGroupItems = _gmDatabaseService.GetDropGroupList("championitemdropgrouplist");
+            InstanceItemDropGroupItems = _gmDatabaseService.GetDropGroupList("instanceitemdropgrouplist");
+            RareCardItemDropGroupItems = _gmDatabaseService.GetDropGroupList("rarecarddropgrouplist");
+            ItemDropGroupItems = _gmDatabaseService.GetDropGroupList("itemdropgrouplist");
+            ItemDropGroupFItems = _gmDatabaseService.GetDropGroupList("itemdropgrouplist_f");
+
+        }
+
         #endregion
 
         #region DataRowViewMessage

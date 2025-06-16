@@ -3708,6 +3708,9 @@
   <data name="EnemyEditor_ScaleMin" xml:space="preserve">
     <value>최소 크기</value>
   </data>
+  <data name="EnemyEditor_ScaleMax" xml:space="preserve">
+    <value>스케일 맥스</value>
+  </data>
   <data name="EnemyEditor_PhysicalAttack" xml:space="preserve">
     <value>물리적 공격</value>
   </data>

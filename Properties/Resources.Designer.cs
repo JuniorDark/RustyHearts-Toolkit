@@ -2950,6 +2950,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scale Max.
+        /// </summary>
+        public static string EnemyEditor_ScaleMax {
+            get {
+                return ResourceManager.GetString("EnemyEditor_ScaleMax", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scale Min.
         /// </summary>
         public static string EnemyEditor_ScaleMin {

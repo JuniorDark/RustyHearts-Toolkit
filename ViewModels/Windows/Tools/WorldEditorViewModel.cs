@@ -21,21 +21,18 @@ namespace RHToolkit.ViewModels.Windows
         private readonly IGMDatabaseService _gmDatabaseService;
         private readonly System.Timers.Timer _filterUpdateTimer;
 
-        public WorldEditorViewModel(IWindowsService windowsService, IGMDatabaseService gmDatabaseService, ItemDataManager itemDataManager)
+        public WorldEditorViewModel(
+            IWindowsService windowsService,
+            IGMDatabaseService gmDatabaseService,
+            ItemDataManager itemDataManager
+        )
         {
             _token = Guid.NewGuid();
             _windowsService = windowsService;
             _gmDatabaseService = gmDatabaseService;
             _itemDataManager = itemDataManager;
-            DataTableManager = new()
-            {
-                Token = _token
-            };
-            _filterUpdateTimer = new()
-            {
-                Interval = 500,
-                AutoReset = false
-            };
+            DataTableManager = new() { Token = _token };
+            _filterUpdateTimer = new() { Interval = 500, AutoReset = false };
             _filterUpdateTimer.Elapsed += FilterUpdateTimerElapsed;
 
             PopulateListItems();
@@ -43,7 +40,7 @@ namespace RHToolkit.ViewModels.Windows
             WeakReferenceMessenger.Default.Register(this);
         }
 
-        #region Commands 
+        #region Commands
 
         #region File
 
@@ -57,14 +54,20 @@ namespace RHToolkit.ViewModels.Windows
                 if (int.TryParse(parameter, out int type))
                 {
                     string? fileName = GetFileNameFromFileType(type);
-                    if (fileName == null) return;
+                    if (fileName == null)
+                        return;
                     int fileType = GetFileTypeFromFileName(fileName);
                     string columnName = GetColumnName(fileName);
                     string? stringFileName = GetStringFileName(fileType);
 
                     WorldType = (WorldType)fileType;
 
-                    bool isLoaded = await DataTableManager.LoadFileFromPath(fileName, stringFileName, columnName, "World");
+                    bool isLoaded = await DataTableManager.LoadFileFromPath(
+                        fileName,
+                        stringFileName,
+                        columnName,
+                        "World"
+                    );
 
                     if (isLoaded)
                     {
@@ -74,7 +77,10 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage(
+                    $"{Resources.Error}: {ex.Message}",
+                    Resources.Error
+                );
             }
         }
 
@@ -85,15 +91,12 @@ namespace RHToolkit.ViewModels.Windows
             {
                 await CloseFile();
 
-                string filter = "World Files .rh|" +
-                                "world.rh;mapselect_curtis.rh;dungeoninfolist.rh;|" +
-                                "All Files (*.*)|*.*";
+                string filter =
+                    "World Files .rh|"
+                    + "world.rh;mapselect_curtis.rh;dungeoninfolist.rh;|"
+                    + "All Files (*.*)|*.*";
 
-                OpenFileDialog openFileDialog = new()
-                {
-                    Filter = filter,
-                    FilterIndex = 1
-                };
+                OpenFileDialog openFileDialog = new() { Filter = filter, FilterIndex = 1 };
 
                 if (openFileDialog.ShowDialog() == true)
                 {
@@ -102,7 +105,11 @@ namespace RHToolkit.ViewModels.Windows
 
                     if (fileType == -1)
                     {
-                        string message = string.Format(Resources.InvalidTableFileDesc, fileName, "World");
+                        string message = string.Format(
+                            Resources.InvalidTableFileDesc,
+                            fileName,
+                            "World"
+                        );
                         RHMessageBoxHelper.ShowOKMessage(message, Resources.Error);
                         return;
                     }
@@ -112,7 +119,12 @@ namespace RHToolkit.ViewModels.Windows
 
                     WorldType = (WorldType)fileType;
 
-                    bool isLoaded = await DataTableManager.LoadFileAs(openFileDialog.FileName, stringFileName, columnName, "World");
+                    bool isLoaded = await DataTableManager.LoadFileAs(
+                        openFileDialog.FileName,
+                        stringFileName,
+                        columnName,
+                        "World"
+                    );
 
                     if (isLoaded)
                     {
@@ -122,13 +134,20 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage(
+                    $"{Resources.Error}: {ex.Message}",
+                    Resources.Error
+                );
             }
         }
 
         private void IsLoaded()
         {
-            Title = string.Format(Resources.EditorTitleFileName, "World", DataTableManager.CurrentFileName);
+            Title = string.Format(
+                Resources.EditorTitleFileName,
+                "World",
+                DataTableManager.CurrentFileName
+            );
             OpenMessage = "";
             IsVisible = Visibility.Visible;
             OnCanExecuteFileCommandChanged();
@@ -181,13 +200,18 @@ namespace RHToolkit.ViewModels.Windows
         {
             try
             {
-                Window? window = Application.Current.Windows.OfType<WorldEditorWindow>().FirstOrDefault();
+                Window? window = Application
+                    .Current.Windows.OfType<WorldEditorWindow>()
+                    .FirstOrDefault();
                 Window owner = window ?? Application.Current.MainWindow;
                 DataTableManager.OpenSearchDialog(owner, parameter, DataGridSelectionUnit.FullRow);
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage(
+                    $"{Resources.Error}: {ex.Message}",
+                    Resources.Error
+                );
             }
         }
 
@@ -240,7 +264,10 @@ namespace RHToolkit.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage(
+                    $"{Resources.Error}: {ex.Message}",
+                    Resources.Error
+                );
             }
         }
         #endregion
@@ -254,12 +281,19 @@ namespace RHToolkit.ViewModels.Windows
             {
                 if (parameter != 0)
                 {
-                    _windowsService.OpenDropGroupListWindow(_token, parameter, ItemDropGroupType.EventWorldItemDropGroupList);
+                    _windowsService.OpenDropGroupListWindow(
+                        _token,
+                        parameter,
+                        ItemDropGroupType.EventWorldItemDropGroupList
+                    );
                 }
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage(
+                    $"{Resources.Error}: {ex.Message}",
+                    Resources.Error
+                );
             }
         }
         #endregion
@@ -273,12 +307,19 @@ namespace RHToolkit.ViewModels.Windows
             {
                 if (parameter != 0)
                 {
-                    _windowsService.OpenDropGroupListWindow(_token, parameter, ItemDropGroupType.WorldItemDropGroupListF);
+                    _windowsService.OpenDropGroupListWindow(
+                        _token,
+                        parameter,
+                        ItemDropGroupType.WorldItemDropGroupListF
+                    );
                 }
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage(
+                    $"{Resources.Error}: {ex.Message}",
+                    Resources.Error
+                );
             }
         }
         #endregion
@@ -292,7 +333,33 @@ namespace RHToolkit.ViewModels.Windows
             {
                 if (parameter != 0)
                 {
-                    _windowsService.OpenDropGroupListWindow(_token, parameter, ItemDropGroupType.WorldInstanceItemDropGroupList);
+                    _windowsService.OpenDropGroupListWindow(
+                        _token,
+                        parameter,
+                        ItemDropGroupType.WorldInstanceItemDropGroupList
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage(
+                    $"{Resources.Error}: {ex.Message}",
+                    Resources.Error
+                );
+            }
+        }
+        #endregion
+
+        #region Open RareCardRewardItemList
+
+        [RelayCommand]
+        private void OpenRareCardRewardItemList(int parameter)
+        {
+            try
+            {
+                if (parameter != 0)
+                {
+                    _windowsService.OpenRareCardRewardWindow(_token, parameter, null);
                 }
             }
             catch (Exception ex)
@@ -341,7 +408,12 @@ namespace RHToolkit.ViewModels.Windows
 
             if (columns.Count > 0)
             {
-                DataTableManager.ApplyFileDataFilter(filterParts, [.. columns], SearchText, MatchCase);
+                DataTableManager.ApplyFileDataFilter(
+                    filterParts,
+                    [.. columns],
+                    SearchText,
+                    MatchCase
+                );
             }
         }
 
@@ -362,6 +434,7 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private string? _searchText;
+
         partial void OnSearchTextChanged(string? value)
         {
             TriggerFilterUpdate();
@@ -369,6 +442,7 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private bool _matchCase = false;
+
         partial void OnMatchCaseChanged(bool value)
         {
             ApplyFilter();
@@ -384,7 +458,19 @@ namespace RHToolkit.ViewModels.Windows
         private List<string>? _enemyItems;
 
         [ObservableProperty]
+        private List<NameID>? _rareCardItems;
+
+        [ObservableProperty]
         private List<NameID>? _difficultyItems;
+
+        [ObservableProperty]
+        private List<NameID>? _eventWorldItemDropGroupItems;
+
+        [ObservableProperty]
+        private List<NameID>? _worldItemDropGroupItems;
+
+        [ObservableProperty]
+        private List<NameID>? _worldInstanceItemDropGroupItems;
 
         private void PopulateListItems()
         {
@@ -393,10 +479,14 @@ namespace RHToolkit.ViewModels.Windows
                 new NameID { ID = 1, Name = Resources.DifficultyNormal },
                 new NameID { ID = 2, Name = Resources.DifficultyHard },
                 new NameID { ID = 3, Name = Resources.DifficultyVeryHard },
-                new NameID { ID = 4, Name = Resources.DifficultyBlood }
+                new NameID { ID = 4, Name = Resources.DifficultyBlood },
             ];
             WorldItems = _gmDatabaseService.GetWorldNameItems();
             EnemyItems = _gmDatabaseService.GetEnemyNameItems();
+            RareCardItems = _gmDatabaseService.GetRareCardItems();
+            EventWorldItemDropGroupItems = _gmDatabaseService.GetDropGroupList("eventworlditemdropgrouplist");
+            WorldItemDropGroupItems = _gmDatabaseService.GetDropGroupList("worlditemdropgrouplist");
+            WorldInstanceItemDropGroupItems = _gmDatabaseService.GetDropGroupList("worldinstanceitemdropgrouplist");
         }
 
         #endregion
@@ -420,7 +510,6 @@ namespace RHToolkit.ViewModels.Windows
                         UpdateSelectedItem(selectedItem);
                         break;
                 }
-
             }
         }
 
@@ -466,10 +555,7 @@ namespace RHToolkit.ViewModels.Windows
                     }
                     else
                     {
-                        var preload = new WorldData
-                        {
-                            PreloadShoot = preloadShoot,
-                        };
+                        var preload = new WorldData { PreloadShoot = preloadShoot };
 
                         Application.Current.Dispatcher.Invoke(() => WorldPreload.Add(preload));
                         WorldPreloadItemPropertyChanged(preload);
@@ -497,7 +583,7 @@ namespace RHToolkit.ViewModels.Windows
                         var preload = new WorldData
                         {
                             StageClearTime = stageClearTime,
-                            StageClearPoint = stageClearPoint
+                            StageClearPoint = stageClearPoint,
                         };
 
                         Application.Current.Dispatcher.Invoke(() => WorldData.Add(preload));
@@ -538,7 +624,10 @@ namespace RHToolkit.ViewModels.Windows
             item.PropertyChanged += OnWorldStageClearItemPropertyChanged;
         }
 
-        private void OnWorldStageClearItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void OnWorldStageClearItemPropertyChanged(
+            object? sender,
+            PropertyChangedEventArgs e
+        )
         {
             if (sender is WorldData worldData)
             {
@@ -584,7 +673,7 @@ namespace RHToolkit.ViewModels.Windows
                             StageClearTime = selectType,
                             StageClearPoint = worldID,
                             Mc = menuCommand,
-                            BigSprite = bigSprite
+                            BigSprite = bigSprite,
                         };
 
                         Application.Current.Dispatcher.Invoke(() => WorldData.Add(mapSelect));
@@ -640,6 +729,7 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private DataTableManager _dataTableManager;
+
         partial void OnDataTableManagerChanged(DataTableManager value)
         {
             OnCanExecuteFileCommandChanged();
@@ -658,7 +748,6 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private ObservableCollection<WorldData> _worldPreload = [];
-
 
         #endregion
 

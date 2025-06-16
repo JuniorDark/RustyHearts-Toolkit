@@ -147,6 +147,8 @@ namespace RHToolkit.Models
             Normal = 1,
             [LocalizedDescription("Magic")]
             Magic = 2,
+            [LocalizedDescription("Magic")]
+            Magic2 = 3,
             [LocalizedDescription("Rare")]
             Rare = 4,
             [LocalizedDescription("Unique")]

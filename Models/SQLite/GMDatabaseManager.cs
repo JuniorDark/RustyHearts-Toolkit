@@ -71,6 +71,7 @@ public class GMDatabaseManager
         "petrebirth",
         "questgroup",
         "queststring",
+        "randomrune",
         "rarecardrewarditemlist",
         "rarecarddropgrouplist",
         "questitemdropgrouplist",
@@ -279,8 +280,7 @@ public class GMDatabaseManager
             "Int32" => "INTEGER",
             "Int64" => "INTEGER",
             "String" => "TEXT",
-            "Single" => "REAL",
-            "Double" => "REAL",
+            "Single" or "Double" => "REAL",
             _ => "TEXT"
         };
     }
