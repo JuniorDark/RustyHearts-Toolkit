@@ -171,9 +171,9 @@
                             Text="{x:Static rs:Resources.EditTools}"
                             TextWrapping="WrapWithOverflow" />
                         <ui:TextBlock
-                            d:Text="Table Editors"
+                            d:Text="File Editors"
                             Appearance="Secondary"
-                            Text="{x:Static rs:Resources.TableEditors}"
+                            Text="{x:Static rs:Resources.FileEditors}"
                             TextWrapping="WrapWithOverflow" />
                     </StackPanel>
                 </Grid>

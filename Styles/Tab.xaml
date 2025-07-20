@@ -143,6 +143,84 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="UniformTabs" TargetType="TabControl">
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style BasedOn="{StaticResource lb_tab}" TargetType="TabItem">
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                </Style>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid KeyboardNavigation.TabNavigation="Local">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <UniformGrid
+                            Grid.Row="0"
+                            Columns="{Binding Path=Items.Count, RelativeSource={RelativeSource TemplatedParent}}"
+                            IsItemsHost="True"
+                            Rows="1" />
+
+                        <Border
+                            Grid.Row="1"
+                            Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter Margin="4" ContentSource="SelectedContent" />
+                        </Border>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UniformTabsAuto" TargetType="TabControl">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style BasedOn="{StaticResource lb_tab}" TargetType="TabItem">
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabControl">
+                    <Grid ClipToBounds="True" SnapsToDevicePixels="True">
+                        <Grid.RowDefinitions>
+                            <!--  header row  -->
+                            <RowDefinition Height="Auto" />
+                            <!--  content row  -->
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <UniformGrid
+                            x:Name="HeaderPanel"
+                            Grid.Row="0"
+                            Columns="9"
+                            IsItemsHost="True"
+                            Rows="2" />
+
+                        <ContentPresenter
+                            x:Name="PART_SelectedContentHost"
+                            Grid.Row="1"
+                            Margin="{TemplateBinding Padding}"
+                            ContentSource="SelectedContent"
+                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!--  Custom style for TabItem 13  -->
     <ControlTemplate x:Key="lb_tab_normal_13" TargetType="TabItem">
         <Grid>

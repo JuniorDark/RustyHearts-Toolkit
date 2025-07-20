@@ -119,6 +119,15 @@
                     Header="{x:Static rs:Resources.MenuSetTableFolder}"
                     Icon="{ui:SymbolIcon FolderOpen20}" />
             </ui:MenuItem>
+            <Separator />
+            <ui:MenuItem Header="{x:Static rs:Resources.MenuHelp}" Icon="{ui:SymbolIcon ChatHelp20}">
+                <ui:HyperlinkButton
+                    Margin="8,0,0,0"
+                    Padding="4"
+                    Content="{x:Static rs:Resources.MenuAboutRH}"
+                    NavigateUri="https://juniordark.gitbook.io/rusty-hearts-files-structures/internal-files/rh-file"
+                    ToolTip="https://juniordark.gitbook.io/rusty-hearts-files-structures/internal-files/rh-file" />
+            </ui:MenuItem>
         </Menu>
         <Menu
             Grid.Row="1"

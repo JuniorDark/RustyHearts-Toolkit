@@ -1,0 +1,619 @@
+﻿<Window
+    x:Class="RHToolkit.Views.Windows.WDataEditorWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:RHToolkit.Behaviors"
+    xmlns:control="clr-namespace:RHToolkit.Views.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:RHToolkit.Utilities.Converters"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
+    x:Name="WDataWindow"
+    Title="{Binding WDataManager.Title}"
+    MinWidth="1280"
+    MinHeight="720"
+    MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
+    behaviors:WindowBehaviors.EnableDragMove="True"
+    d:DataContext="{d:DesignInstance Type=windows:WDataEditorViewModel}"
+    d:MaxHeight="720"
+    d:MaxWidth="1280"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="/Assets/ico/rhicon.ico"
+    ResizeMode="CanResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding WDataManager.LoadCommand}" Gesture="Ctrl+O" />
+        <KeyBinding Command="{Binding WDataManager.SaveFileCommand}" Gesture="Ctrl+S" />
+        <KeyBinding Command="{Binding WDataManager.SaveFileAsCommand}" Gesture="Ctrl+Alt+S" />
+        <KeyBinding Command="{Binding WDataManager.SaveFileAsMIPCommand}" Gesture="Ctrl+Shift+S" />
+        <KeyBinding Command="{Binding WDataManager.CloseFileCommand}" Gesture="Ctrl+W" />
+        <KeyBinding Command="{Binding WDataManager.UndoChangesCommand}" Gesture="Ctrl+Z" />
+        <KeyBinding Command="{Binding WDataManager.RedoChangesCommand}" Gesture="Ctrl+Shift+Z" />
+    </Window.InputBindings>
+    <ContentControl Template="{StaticResource box_red02}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <ui:TitleBar
+                x:Name="TitleBar"
+                Title="{Binding WDataManager.Title}"
+                Grid.ColumnSpan="2"
+                Height="30"
+                Margin="30,0,0,0"
+                VerticalAlignment="Center"
+                d:Title="WData Editor"
+                ButtonsForeground="White"
+                FontSize="15"
+                Foreground="White">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon
+                        Width="20"
+                        Height="20"
+                        Margin="0,-1,0,-3"
+                        Source="/Assets/ico/rhicon.ico" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+
+            <!--  File menu  -->
+            <control:WDataEditorMenu Grid.Row="1" />
+
+            <!--  Versions  -->
+            <StackPanel
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                Margin="8"
+                VerticalAlignment="Center"
+                DockPanel.Dock="Top"
+                Orientation="Horizontal"
+                Visibility="{Binding WDataManager.IsVisible}">
+                <TextBlock
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="Version:" />
+                <TextBlock
+                    Margin="4,0,12,0"
+                    Foreground="Gold"
+                    Text="{Binding WDataManager.WData.Version}" />
+
+                <TextBlock
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="EventBox Version:" />
+                <TextBlock
+                    Margin="4,0,12,0"
+                    Foreground="Gold"
+                    Text="{Binding WDataManager.WData.EventBoxVersion}" />
+
+                <TextBlock
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="AniBG Version:" />
+                <TextBlock
+                    Margin="4,0,12,0"
+                    Foreground="Gold"
+                    Text="{Binding WDataManager.WData.AniBGVersion}" />
+
+                <TextBlock
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="ItemBox Version:" />
+                <TextBlock
+                    Margin="4,0,12,0"
+                    Foreground="Gold"
+                    Text="{Binding WDataManager.WData.ItemBoxVersion}" />
+
+                <TextBlock
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="Gimmick Version:" />
+                <TextBlock
+                    Margin="4,0,0,0"
+                    Foreground="Gold"
+                    Text="{Binding WDataManager.WData.GimmickVersion}" />
+            </StackPanel>
+
+            <!--  Tabs  -->
+            <TabControl
+                Grid.Row="3"
+                Grid.ColumnSpan="2"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                BorderBrush="Gray"
+                Style="{StaticResource UniformTabs}"
+                Visibility="{Binding WDataManager.IsVisible}">
+                <TabItem Foreground="White" Header="Paths">
+                    <ScrollViewer Padding="8" VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Margin="0,4"
+                                FontWeight="Bold"
+                                Foreground="Gold"
+                                Text="Model Path:" />
+                            <TextBox
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Width="Auto"
+                                Height="40"
+                                MinWidth="300"
+                                Margin="4,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                CaretBrush="White"
+                                Foreground="Gold"
+                                Template="{StaticResource lb_textbox}"
+                                Text="{Binding WDataManager.WData.ModelPath}" />
+
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Margin="0,4"
+                                FontWeight="Bold"
+                                Foreground="Gold"
+                                Text="NavMesh Path:" />
+                            <TextBox
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Height="40"
+                                MinWidth="300"
+                                Margin="4,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                CaretBrush="White"
+                                Foreground="Gold"
+                                Template="{StaticResource lb_textbox}"
+                                Text="{Binding WDataManager.WData.NavMeshPath}" />
+
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Margin="0,4"
+                                FontWeight="Bold"
+                                Foreground="Gold"
+                                Text="NavHeight Path:" />
+                            <TextBox
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                Height="40"
+                                MinWidth="300"
+                                Margin="4,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                CaretBrush="White"
+                                Foreground="Gold"
+                                Template="{StaticResource lb_textbox}"
+                                Text="{Binding WDataManager.WData.NavHeightPath}" />
+
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Margin="0,4"
+                                FontWeight="Bold"
+                                Foreground="Gold"
+                                Text="EventBox Path:" />
+                            <TextBox
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                Height="40"
+                                MinWidth="300"
+                                Margin="4,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                CaretBrush="White"
+                                Foreground="Gold"
+                                Template="{StaticResource lb_textbox}"
+                                Text="{Binding WDataManager.WData.EventBoxPath}" />
+
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                Margin="0,4"
+                                FontWeight="Bold"
+                                Foreground="Gold"
+                                Text="MOC Path:" />
+                            <TextBox
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                Height="40"
+                                MinWidth="300"
+                                Margin="4,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                CaretBrush="White"
+                                Foreground="Gold"
+                                Template="{StaticResource lb_textbox}"
+                                Text="{Binding WDataManager.WData.MocPath}" />
+
+                            <TextBlock
+                                Grid.Row="5"
+                                Grid.Column="0"
+                                Margin="0,4"
+                                FontWeight="Bold"
+                                Foreground="Gold"
+                                Text="AniBG Path:" />
+                            <TextBox
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                Height="40"
+                                MinWidth="300"
+                                Margin="4,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                CaretBrush="White"
+                                Foreground="Gold"
+                                Template="{StaticResource lb_textbox}"
+                                Text="{Binding WDataManager.WData.AniBGPath}" />
+
+                            <TextBlock
+                                Grid.Row="7"
+                                Grid.Column="0"
+                                Margin="0,4"
+                                FontWeight="Bold"
+                                Foreground="Gold"
+                                Text="Obstacle Path:" />
+                            <TextBox
+                                Grid.Row="7"
+                                Grid.Column="1"
+                                Height="40"
+                                MinWidth="300"
+                                Margin="4,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Top"
+                                CaretBrush="White"
+                                Foreground="Gold"
+                                Template="{StaticResource lb_textbox}"
+                                Text="{Binding WDataManager.WData.ObstaclePath}" />
+                        </Grid>
+                    </ScrollViewer>
+                </TabItem>
+                <TabItem
+                    Background="Transparent"
+                    Foreground="White"
+                    Header="EventBoxes">
+                    <TabControl
+                        Background="Transparent"
+                        BorderBrush="Gold"
+                        ItemsSource="{Binding WDataManager.WData.EventBoxGroups}"
+                        Style="{StaticResource UniformTabsAuto}">
+
+                        <!--  HEADER  -->
+                        <TabControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Foreground="White" Text="{Binding Type}" />
+                            </DataTemplate>
+                        </TabControl.ItemTemplate>
+
+                        <!--  BODY  -->
+                        <TabControl.ContentTemplate>
+                            <DataTemplate>
+                                <DataGrid
+                                    x:Name="EventBoxesGrid"
+                                    Margin="4"
+                                    behaviors:DataGridAutoColumnsBehavior.EnableAutoColumns="True"
+                                    behaviors:DataGridBehavior.AdjustAutoGeneratedColumnMinWidth="True"
+                                    behaviors:DataGridBehavior.DisplayRowNumber="True"
+                                    AutoGenerateColumns="True"
+                                    CanUserAddRows="False"
+                                    ItemsSource="{Binding Boxes}"
+                                    SelectedItem="{Binding DataContext.WDataManager.SelectedItem, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Template="{StaticResource lb_datagrid}"
+                                    VirtualizingPanel.IsVirtualizing="True"
+                                    VirtualizingPanel.VirtualizationMode="Standard">
+
+                                    <!--  CONTEXT-MENU  -->
+                                    <DataGrid.ContextMenu>
+                                        <ContextMenu DataContext="{Binding DataContext, Source={x:Reference WDataWindow}}">
+
+                                            <!--  Add row  -->
+                                            <MenuItem
+                                                Command="{Binding WDataManager.AddNewRowCommand}"
+                                                CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                                Header="{x:Static rs:Resources.MenuAddRow}" />
+
+                                            <!--  Duplicate row  -->
+                                            <MenuItem
+                                                Command="{Binding WDataManager.DuplicateSelectedRowCommand}"
+                                                CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                                Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+
+                                            <!--  Delete row  -->
+                                            <MenuItem
+                                                Command="{Binding WDataManager.DeleteSelectedRowCommand}"
+                                                CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}"
+                                                Header="{x:Static rs:Resources.MenuDeleteRow}" />
+
+                                        </ContextMenu>
+                                    </DataGrid.ContextMenu>
+                                </DataGrid>
+
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </TabControl>
+                </TabItem>
+
+                <TabItem Foreground="White" Header="ItemBoxes">
+                    <DataGrid
+                        behaviors:DataGridAutoColumnsBehavior.EnableAutoColumns="True"
+                        behaviors:DataGridBehavior.AdjustAutoGeneratedColumnMinWidth="True"
+                        behaviors:DataGridBehavior.DisplayRowNumber="True"
+                        AutoGenerateColumns="True"
+                        CanUserAddRows="False"
+                        ItemsSource="{Binding WDataManager.WData.ItemBoxes}"
+                        SelectedItem="{Binding WDataManager.SelectedItem}"
+                        Template="{StaticResource lb_datagrid}"
+                        VirtualizingPanel.IsVirtualizing="True"
+                        VirtualizingPanel.VirtualizationMode="Standard">
+
+                        <!--  CONTEXT-MENU  -->
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <!--  Duplicate row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.AddNewRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuAddRow}" />
+                                <!--  Duplicate row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.DuplicateSelectedRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+
+                                <!--  Delete row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.DeleteSelectedRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuDeleteRow}" />
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Foreground="White" Header="Gimmicks">
+                    <DataGrid
+                        behaviors:DataGridAutoColumnsBehavior.EnableAutoColumns="True"
+                        behaviors:DataGridBehavior.AdjustAutoGeneratedColumnMinWidth="True"
+                        behaviors:DataGridBehavior.DisplayRowNumber="True"
+                        AutoGenerateColumns="True"
+                        CanUserAddRows="False"
+                        ItemsSource="{Binding WDataManager.WData.Gimmicks}"
+                        SelectedItem="{Binding WDataManager.SelectedItem}"
+                        Template="{StaticResource lb_datagrid}"
+                        VirtualizingPanel.IsVirtualizing="True"
+                        VirtualizingPanel.VirtualizationMode="Standard">
+
+                        <!--  CONTEXT-MENU  -->
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <!--  Duplicate row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.AddNewRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuAddRow}" />
+                                <!--  Duplicate row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.DuplicateSelectedRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+
+                                <!--  Delete row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.DeleteSelectedRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuDeleteRow}" />
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Foreground="White" Header="AniBGs">
+                    <DataGrid
+                        behaviors:DataGridAutoColumnsBehavior.EnableAutoColumns="True"
+                        behaviors:DataGridBehavior.AdjustAutoGeneratedColumnMinWidth="True"
+                        behaviors:DataGridBehavior.DisplayRowNumber="True"
+                        AutoGenerateColumns="True"
+                        CanUserAddRows="False"
+                        ItemsSource="{Binding WDataManager.WData.AniBGs}"
+                        SelectedItem="{Binding WDataManager.SelectedItem}"
+                        Template="{StaticResource lb_datagrid}"
+                        VirtualizingPanel.IsVirtualizing="True"
+                        VirtualizingPanel.VirtualizationMode="Standard">
+
+                        <!--  CONTEXT-MENU  -->
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <!--  Duplicate row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.AddNewRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuAddRow}" />
+                                <!--  Duplicate row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.DuplicateSelectedRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+
+                                <!--  Delete row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.DeleteSelectedRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuDeleteRow}" />
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Foreground="White" Header="Triggers">
+                    <DataGrid
+                        behaviors:DataGridAutoColumnsBehavior.EnableAutoColumns="True"
+                        behaviors:DataGridBehavior.AdjustAutoGeneratedColumnMinWidth="True"
+                        behaviors:DataGridBehavior.DisplayRowNumber="True"
+                        AutoGenerateColumns="True"
+                        CanUserAddRows="False"
+                        ItemsSource="{Binding WDataManager.WData.Triggers}"
+                        SelectedItem="{Binding WDataManager.SelectedItem}"
+                        Template="{StaticResource lb_datagrid}"
+                        VirtualizingPanel.IsVirtualizing="True"
+                        VirtualizingPanel.VirtualizationMode="Standard">
+
+                        <!--  CONTEXT-MENU  -->
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <!--  Duplicate row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.AddNewRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuAddRow}" />
+                                <!--  Duplicate row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.DuplicateSelectedRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+
+                                <!--  Delete row  -->
+                                <MenuItem
+                                    Command="{Binding WDataManager.DeleteSelectedRowCommand}"
+                                    CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                    Header="{x:Static rs:Resources.MenuDeleteRow}" />
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
+                </TabItem>
+
+                <TabItem Foreground="White" Header="Scenes">
+                    <TabControl
+                        Background="Transparent"
+                        BorderBrush="Gold"
+                        Style="{StaticResource UniformTabs}">
+                        <TabControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid
+                                    Columns="2"
+                                    IsItemsHost="True"
+                                    Rows="1" />
+                            </ItemsPanelTemplate>
+                        </TabControl.ItemsPanel>
+                        <TabItem Foreground="White" Header="Scenes Data">
+                            <DataGrid
+                                behaviors:DataGridAutoColumnsBehavior.EnableAutoColumns="True"
+                                behaviors:DataGridBehavior.AdjustAutoGeneratedColumnMinWidth="True"
+                                behaviors:DataGridBehavior.DisplayRowNumber="True"
+                                AutoGenerateColumns="True"
+                                CanUserAddRows="False"
+                                ItemsSource="{Binding WDataManager.WData.Scenes}"
+                                SelectedItem="{Binding WDataManager.SelectedItem}"
+                                Template="{StaticResource lb_datagrid}"
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.VirtualizationMode="Standard">
+
+                                <!--  CONTEXT-MENU  -->
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu>
+                                        <!--  Duplicate row  -->
+                                        <MenuItem
+                                            Command="{Binding WDataManager.AddNewRowCommand}"
+                                            CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Header="{x:Static rs:Resources.MenuAddRow}" />
+                                        <!--  Duplicate row  -->
+                                        <MenuItem
+                                            Command="{Binding WDataManager.DuplicateSelectedRowCommand}"
+                                            CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+
+                                        <!--  Delete row  -->
+                                        <MenuItem
+                                            Command="{Binding WDataManager.DeleteSelectedRowCommand}"
+                                            CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Header="{x:Static rs:Resources.MenuDeleteRow}" />
+                                    </ContextMenu>
+                                </DataGrid.ContextMenu>
+                            </DataGrid>
+                        </TabItem>
+                        <TabItem Foreground="White" Header="Scenes Resources">
+                            <DataGrid
+                                behaviors:DataGridAutoColumnsBehavior.EnableAutoColumns="True"
+                                behaviors:DataGridBehavior.AdjustAutoGeneratedColumnMinWidth="True"
+                                behaviors:DataGridBehavior.DisplayRowNumber="True"
+                                AutoGenerateColumns="True"
+                                CanUserAddRows="False"
+                                ItemsSource="{Binding WDataManager.WData.SceneResources}"
+                                SelectedItem="{Binding WDataManager.SelectedItem}"
+                                Template="{StaticResource lb_datagrid}"
+                                VirtualizingPanel.IsVirtualizing="True"
+                                VirtualizingPanel.VirtualizationMode="Standard">
+
+                                <!--  CONTEXT-MENU  -->
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu>
+                                        <!--  Duplicate row  -->
+                                        <MenuItem
+                                            Command="{Binding WDataManager.AddNewRowCommand}"
+                                            CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Header="{x:Static rs:Resources.MenuAddRow}" />
+                                        <!--  Duplicate row  -->
+                                        <MenuItem
+                                            Command="{Binding WDataManager.DuplicateSelectedRowCommand}"
+                                            CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Header="{x:Static rs:Resources.MenuDuplicateRow}" />
+
+                                        <!--  Delete row  -->
+                                        <MenuItem
+                                            Command="{Binding WDataManager.DeleteSelectedRowCommand}"
+                                            CommandParameter="{Binding PlacementTarget.ItemsSource, RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                            Header="{x:Static rs:Resources.MenuDeleteRow}" />
+                                    </ContextMenu>
+                                </DataGrid.ContextMenu>
+                            </DataGrid>
+                        </TabItem>
+                    </TabControl>
+                </TabItem>
+            </TabControl>
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                d:Text="Open a file"
+                FontSize="15"
+                Foreground="White"
+                Text="{x:Static rs:Resources.OpenFile}"
+                Visibility="{Binding WDataManager.IsMessageVisible}" />
+        </Grid>
+
+    </ContentControl>
+
+</Window>

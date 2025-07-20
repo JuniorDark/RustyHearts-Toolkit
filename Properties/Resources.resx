@@ -1098,11 +1098,20 @@
   <data name="MenuCloseFile" xml:space="preserve">
     <value>Close File</value>
   </data>
+  <data name="MenuAboutWData" xml:space="preserve">
+    <value>About WData File</value>
+  </data>
+  <data name="MenuAboutRH" xml:space="preserve">
+    <value>About RH File</value>
+  </data>
   <data name="MenuExit" xml:space="preserve">
     <value>Exit</value>
   </data>
   <data name="MenuEdit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="MenuHelp" xml:space="preserve">
+    <value>Help</value>
   </data>
   <data name="MenuUndo" xml:space="preserve">
     <value>Undo</value>
@@ -1147,7 +1156,7 @@
     <value>Save Equipment</value>
   </data>
   <data name="AppDesc" xml:space="preserve">
-    <value>A comprehensive toolkit for editing Rusty Hearts database and table files.</value>
+    <value>A comprehensive toolkit for editing Rusty Hearts database and files.</value>
   </data>
   <data name="DatabaseEditors" xml:space="preserve">
     <value>Database Editors</value>
@@ -1160,6 +1169,9 @@
   </data>
   <data name="TableEditors" xml:space="preserve">
     <value>Table Editors</value>
+  </data>
+  <data name="FileEditors" xml:space="preserve">
+    <value>File Editors</value>
   </data>
   <data name="NameAccount" xml:space="preserve">
     <value>Character Name/Account</value>
@@ -1262,6 +1274,9 @@
   </data>
   <data name="InvalidTableFileDesc" xml:space="preserve">
     <value>The file '{0}' is not a valid '{1}' file.</value>
+  </data>
+  <data name="InvalidFileDesc" xml:space="preserve">
+    <value>The selected file is not a valid '{0}' file.</value>
   </data>
   <data name="EditorTitle" xml:space="preserve">
     <value>{0} Editor</value>
@@ -1718,6 +1733,9 @@
   </data>
   <data name="TableEditorTitle" xml:space="preserve">
     <value>RH Table Editor</value>
+  </data>
+  <data name="WDataEditorTitle" xml:space="preserve">
+    <value>WData Editor</value>
   </data>
   <data name="TableEditorDesc" xml:space="preserve">
     <value>Edit .rh table files</value>
@@ -4580,5 +4598,8 @@
   </data>
   <data name="PCKTool_ClientFolder" xml:space="preserve">
     <value>Client Folder</value>
+  </data>
+  <data name="WDataEditorDesc" xml:space="preserve">
+    <value>Edit .wdata files</value>
   </data>
 </root>

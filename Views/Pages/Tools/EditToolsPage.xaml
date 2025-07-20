@@ -23,7 +23,8 @@
         <StackPanel Grid.Row="0" Margin="0,0,0,0">
             <ui:TextBlock
                 FontTypography="Title"
-                Text="{x:Static rs:Resources.TableEditors}"
+                Foreground="White"
+                Text="{x:Static rs:Resources.FileEditors}"
                 TextWrapping="WrapWithOverflow" />
             <Border
                 Margin="0,12,0,0"
@@ -72,6 +73,7 @@
         <StackPanel Grid.Row="1" Margin="0,0,0,0">
             <ui:TextBlock
                 FontTypography="Title"
+                Foreground="White"
                 Text="{x:Static rs:Resources.TableEditorsDedicated}"
                 TextWrapping="WrapWithOverflow" />
             <Border

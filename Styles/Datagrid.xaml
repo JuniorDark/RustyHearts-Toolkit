@@ -80,18 +80,6 @@
         </ContentControl>
     </ControlTemplate>
 
-    <!--  Style for DataGridCell  -->
-    <Style TargetType="DataGridCell">
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="White" />
-        <Style.Triggers>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="Blue" />
-                <Setter Property="Foreground" Value="Gold" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
     <!--  Style for DataGridColumnHeader  -->
     <Style TargetType="DataGridColumnHeader">
         <Setter Property="Background" Value="Blue" />

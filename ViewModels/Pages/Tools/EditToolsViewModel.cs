@@ -14,6 +14,7 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
     private WindowCard[] _windowCards =
     [
         new(Resources.TableEditorTitle, Resources.TableEditorDesc, SymbolRegular.DocumentEdit24, "rheditor"),
+        new(Resources.WDataEditorTitle, Resources.WDataEditorDesc, SymbolRegular.DocumentEdit24, "wdataeditor"),
     ];
 
     [ObservableProperty]
@@ -56,6 +57,9 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
             {
                 case "rheditor":
                     windowsProviderService.Show<RHEditorWindow>(true);
+                    break;
+                case "wdataeditor":
+                    windowsProviderService.Show<WDataEditorWindow>(true);
                     break;
                 case "cashshopeditor":
                     windowsProviderService.Show<CashShopEditorWindow>(true);

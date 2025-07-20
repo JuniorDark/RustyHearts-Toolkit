@@ -1098,11 +1098,20 @@
   <data name="MenuCloseFile" xml:space="preserve">
     <value>파일 닫기</value>
   </data>
+  <data name="MenuAboutWData" xml:space="preserve">
+    <value>WData 파일 정보</value>
+  </data>
+  <data name="MenuAboutRH" xml:space="preserve">
+    <value>RH 파일 정보</value>
+  </data>
   <data name="MenuExit" xml:space="preserve">
     <value>출구</value>
   </data>
   <data name="MenuEdit" xml:space="preserve">
     <value>편집하다</value>
+  </data>
+  <data name="MenuHelp" xml:space="preserve">
+    <value>돕다</value>
   </data>
   <data name="MenuUndo" xml:space="preserve">
     <value>되돌리기</value>
@@ -1160,6 +1169,9 @@
   </data>
   <data name="TableEditors" xml:space="preserve">
     <value>테이블 편집기</value>
+  </data>
+  <data name="FileEditors" xml:space="preserve">
+    <value>파일 편집기</value>
   </data>
   <data name="NameAccount" xml:space="preserve">
     <value>캐릭터 이름/계정</value>
@@ -1262,6 +1274,9 @@
   </data>
   <data name="InvalidTableFileDesc" xml:space="preserve">
     <value>파일 '{0}'은 유효한 '{1}' 파일이 아닙니다.</value>
+  </data>
+  <data name="InvalidFileDesc" xml:space="preserve">
+    <value>선택한 파일은 유효한 '{0}' 파일이 아닙니다.</value>
   </data>
   <data name="EditorTitle" xml:space="preserve">
     <value>{0} 편집자</value>
@@ -1719,6 +1734,9 @@
   <data name="TableEditorTitle" xml:space="preserve">
     <value>RH 테이블 편집기</value>
   </data>
+  <data name="WDataEditorTitle" xml:space="preserve">
+    <value>WData 편집기</value>
+  </data>
   <data name="TableEditorDesc" xml:space="preserve">
     <value>.rh 표 파일 편집</value>
   </data>
@@ -1804,7 +1822,7 @@
     <value>타이틀 편집기</value>
   </data>
   <data name="TitleEditorDesc" xml:space="preserve">
-    <value>charactertitle .rh 테이블 파일을 편집하세요</value>
+    <value>.rh 테이블 파일을 편집하세요</value>
   </data>
   <data name="WorldEditorTitle" xml:space="preserve">
     <value>월드 에디터</value>
@@ -4580,5 +4598,8 @@
   </data>
   <data name="PCKTool_ClientFolder" xml:space="preserve">
     <value>클라이언트 폴더</value>
+  </data>
+  <data name="WDataEditorDesc" xml:space="preserve">
+    <value>.wdata 표 파일 편집</value>
   </data>
 </root>

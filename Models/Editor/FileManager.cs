@@ -161,5 +161,19 @@ namespace RHToolkit.Models.Editor
 
             await File.WriteAllBytesAsync(file, xlsxData);
         }
+
+        /// <summary>
+        /// Compresses a byte array to a MIP file.
+        /// </summary>
+        /// <param name="fileData">The Wdata containing the data to compress.</param>
+        /// <param name="file">The path to the destination MIP file.</param>
+        /// <param name="compressionMode">The compression mode to use.</param>
+        public static async Task CompressFileToMipAsync(byte[] fileData, string file)
+        {
+            // Compress file
+            byte[] compressedData = CompressFileZlibAsync(fileData);
+
+            await File.WriteAllBytesAsync(file, compressedData);
+        }
     }
 }

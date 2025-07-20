@@ -448,7 +448,7 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A comprehensive toolkit for editing Rusty Hearts database and table files..
+        ///   Looks up a localized string similar to A comprehensive toolkit for editing Rusty Hearts database and files..
         /// </summary>
         public static string AppDesc {
             get {
@@ -3481,6 +3481,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File Editors.
+        /// </summary>
+        public static string FileEditors {
+            get {
+                return ResourceManager.GetString("FileEditors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter.
         /// </summary>
         public static string Filter {
@@ -3990,6 +3999,15 @@ namespace RHToolkit.Properties {
         public static string InvalidCharacter {
             get {
                 return ResourceManager.GetString("InvalidCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected file is not a valid &apos;{0}&apos; file..
+        /// </summary>
+        public static string InvalidFileDesc {
+            get {
+                return ResourceManager.GetString("InvalidFileDesc", resourceCulture);
             }
         }
         
@@ -5443,6 +5461,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About RH File.
+        /// </summary>
+        public static string MenuAboutRH {
+            get {
+                return ResourceManager.GetString("MenuAboutRH", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About WData File.
+        /// </summary>
+        public static string MenuAboutWData {
+            get {
+                return ResourceManager.GetString("MenuAboutWData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add New Row.
         /// </summary>
         public static string MenuAddRow {
@@ -5556,6 +5592,15 @@ namespace RHToolkit.Properties {
         public static string MenuFind {
             get {
                 return ResourceManager.GetString("MenuFind", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string MenuHelp {
+            get {
+                return ResourceManager.GetString("MenuHelp", resourceCulture);
             }
         }
         
@@ -12567,6 +12612,24 @@ namespace RHToolkit.Properties {
         public static string WaterResistance {
             get {
                 return ResourceManager.GetString("WaterResistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit .wdata files.
+        /// </summary>
+        public static string WDataEditorDesc {
+            get {
+                return ResourceManager.GetString("WDataEditorDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WData Editor.
+        /// </summary>
+        public static string WDataEditorTitle {
+            get {
+                return ResourceManager.GetString("WDataEditorTitle", resourceCulture);
             }
         }
         
