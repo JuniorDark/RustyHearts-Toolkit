@@ -1,6 +1,6 @@
 ﻿using RHToolkit.Models.RH;
 using System.Data;
-using static RHToolkit.Models.MIP.MIPCoder;
+using static RHToolkit.Models.Crypto.ZLibHelper;
 
 namespace RHToolkit.Models.Editor
 {
@@ -126,9 +126,9 @@ namespace RHToolkit.Models.Editor
         /// <param name="fileData">The DataTable containing the data to compress.</param>
         /// <param name="file">The path to the destination MIP file.</param>
         /// <param name="compressionMode">The compression mode to use.</param>
-        public async Task CompressToMipAsync(DataTable fileData, string file, MIPCompressionMode compressionMode)
+        public async Task CompressToMipAsync(DataTable fileData, string file, ZLibOperationMode compressionMode)
         {
-            if (compressionMode == MIPCompressionMode.Compress)
+            if (compressionMode == ZLibOperationMode.Compress)
             {
                 byte[] encryptedData = _dataTableCryptor.DataTableToRh(fileData);
                 // Compress file

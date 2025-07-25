@@ -164,7 +164,19 @@ public sealed class CollectionHistory : IDisposable
 
         Snapshot(obj);
         obj.PropertyChanged += OnItemChanged;
+
+        foreach (var prop in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        {
+            if (!prop.CanRead || !prop.CanWrite) continue;
+            if (prop.GetIndexParameters().Length > 0) continue;
+
+            var value = prop.GetValue(obj);
+            if (value is INotifyPropertyChanged nested && !_observed.Contains(nested))
+                Hook(nested);
+        }
     }
+
+
     private void Unhook(INotifyPropertyChanged obj)
     {
         if (!_observed.Remove(obj)) return;
@@ -215,8 +227,12 @@ public sealed class CollectionHistory : IDisposable
     {
         var dict = new Dictionary<string, object?>();
         foreach (var p in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
-            if (p.CanRead && p.CanWrite)
-                dict[p.Name] = DeepClone(p.GetValue(obj));
+        {
+            if (!p.CanRead || !p.CanWrite) continue;
+            if (p.GetIndexParameters().Length > 0) continue;
+            dict[p.Name] = DeepClone(p.GetValue(obj));
+        }
         _snapshots[obj] = dict;
     }
+
 }

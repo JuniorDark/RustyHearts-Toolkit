@@ -20,6 +20,7 @@ namespace RHToolkit.Models.UISettings
         private const string DefaultSQLUser = "sa";
         private const string TableFolderValueName = "TableFolder";
         private const string ClientFolderValueName = "ClientFolder";
+        private const string FilesToPackFolderValueName = "FilesToPackFolder";
 
         /// <summary>
         /// Encrypts a plain text string using the current user's data protection scope.
@@ -244,6 +245,30 @@ namespace RHToolkit.Models.UISettings
         {
             using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
             key.SetValue(ClientFolderValueName, folderPath);
+        }
+
+        /// <summary>
+        /// Gets the files folder path from the registry.
+        /// </summary>
+        /// <returns>The files folder path.</returns>
+        public static string GetFilesToPackFolder()
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
+            {
+                return key.GetValue(FilesToPackFolderValueName)?.ToString() ?? string.Empty;
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Sets the files folder path in the registry.
+        /// </summary>
+        /// <param name="folderPath">The files folder path to set.</param>
+        public static void SetFilesToPackFolder(string folderPath)
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(FilesToPackFolderValueName, folderPath);
         }
     }
 }

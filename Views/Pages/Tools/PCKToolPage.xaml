@@ -10,7 +10,7 @@
     Title="Pck Tool"
     d:DataContext="{d:DesignInstance local:PCKToolPage,
                                      IsDesignTimeCreatable=False}"
-    d:DesignHeight="600"
+    d:DesignHeight="720"
     d:DesignWidth="1280"
     mc:Ignorable="d">
     <Grid>
@@ -19,70 +19,130 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock
-            Grid.Row="0"
-            Margin="0,0,0,0"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            FontSize="20"
-            Foreground="White"
-            Text="{x:Static rs:Resources.PCKTool_ClientFolder}" />
         <StackPanel
-            Grid.Row="1"
+            Grid.Row="0"
             Margin="0,5"
             HorizontalAlignment="Center"
             Orientation="Horizontal">
+            <TextBlock
+                Grid.Row="2"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                FontSize="20"
+                Foreground="White"
+                Text="{x:Static rs:Resources.PCKTool_ClientFolder}" />
             <TextBox
                 Width="400"
-                Height="35"
+                Height="40"
                 Margin="10,0"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Background="Black"
                 BorderThickness="0"
                 Foreground="White"
+                IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
                 Tag="{x:Static rs:Resources.SelectFolder}"
                 Template="{StaticResource lb_textbox}"
-                Text="{Binding ViewModel.SelectedFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                Text="{Binding ViewModel.SelectedClientFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             <Button
                 Width="150"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
                 Background="Transparent"
-                Command="{Binding ViewModel.SelectFolderCommand}"
+                Command="{Binding ViewModel.SelectClientFolderCommand}"
                 Content="{x:Static rs:Resources.SelectFolder}"
                 Cursor="Hand"
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
         </StackPanel>
-        <Grid
-            Grid.Row="2"
+        <StackPanel
+            Grid.Row="1"
             HorizontalAlignment="Center"
-            VerticalAlignment="Top">
+            VerticalAlignment="Top"
+            Orientation="Horizontal">
+            <Button
+                Width="150"
+                Margin="10,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                Command="{Binding ViewModel.ReadFileListCommand}"
+                Content="{x:Static rs:Resources.Read}"
+                Cursor="Hand"
+                Foreground="White"
+                Style="{StaticResource lb_def_button02}" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="2"
+            Margin="0,5"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <TextBlock
+                Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                FontSize="20"
+                Foreground="White"
+                Text="{x:Static rs:Resources.PCKTool_FileFolder}" />
+            <TextBox
+                Width="400"
+                Height="40"
+                Margin="10,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Black"
+                BorderThickness="0"
+                Foreground="White"
+                IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
+                Tag="{x:Static rs:Resources.SelectFolder}"
+                Template="{StaticResource lb_textbox}"
+                Text="{Binding ViewModel.SelectedFilesToPackFolder, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button
+                Width="150"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                Command="{Binding ViewModel.SelectFilesToPackFolderCommand}"
+                Content="{x:Static rs:Resources.SelectFolder}"
+                Cursor="Hand"
+                Foreground="White"
+                Style="{StaticResource lb_def_button02}" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="3"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Orientation="Horizontal">
+            <Button
+                Width="150"
+                Margin="10,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Transparent"
+                Command="{Binding ViewModel.PackFilesToPCKCommand}"
+                Content="{x:Static rs:Resources.PCKTool_PackFiles}"
+                Cursor="Hand"
+                Foreground="White"
+                Style="{StaticResource lb_def_button02}" />
+        </StackPanel>
+        <Grid
+            Grid.Row="4"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Visibility="{Binding ViewModel.IsUnpackControlsVisible}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackPanel
-                Grid.Row="0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Orientation="Horizontal">
-                <Button
-                    Width="150"
-                    Margin="10,10"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Background="Transparent"
-                    Command="{Binding ViewModel.ReadFileListCommand}"
-                    Content="{x:Static rs:Resources.Read}"
-                    Cursor="Hand"
-                    Foreground="White"
-                    Style="{StaticResource lb_def_button02}" />
-            </StackPanel>
-            <StackPanel
-                Grid.Row="1"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Top"
                 Orientation="Horizontal"
@@ -114,72 +174,100 @@
                     Cursor="Hand"
                     Foreground="White"
                     Style="{StaticResource lb_def_button02}" />
-            </StackPanel>
-        </Grid>
-        <Grid
-            Grid.Row="3"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <StackPanel
-                Grid.Row="0"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Orientation="Vertical"
-                Visibility="{Binding ViewModel.IsUnpackControlsVisible}">
-                <TreeView
-                    Width="800"
-                    Height="300"
-                    HorizontalAlignment="Left"
-                    BorderBrush="Gray"
-                    BorderThickness="2"
-                    ItemsSource="{Binding ViewModel.PckTreeView}">
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                            <StackPanel Orientation="Horizontal">
-                                <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}" Template="{StaticResource lb_checkbox}" />
-                                <TextBlock Margin="-95,6,0,0" Text="{Binding Name}" />
-                            </StackPanel>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
-            </StackPanel>
-            <StackPanel
-                Grid.Row="1"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Top"
-                Orientation="Horizontal"
-                Visibility="{Binding ViewModel.IsProgressBarVisible}">
-                <ProgressBar
-                    Width="200"
-                    Height="20"
-                    Maximum="{Binding ViewModel.ProgressBarMaximumValue, UpdateSourceTrigger=PropertyChanged}"
-                    Minimum="{Binding ViewModel.ProgressBarMiniumValue, UpdateSourceTrigger=PropertyChanged}"
-                    Value="{Binding ViewModel.ProgressBarValue, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock
-                    Margin="10,10"
-                    VerticalAlignment="Center"
-                    d:Text="Message"
-                    FontSize="12"
-                    Foreground="Gold"
-                    Text="{Binding ViewModel.ProgressMessage}" />
                 <Button
                     Width="150"
                     Margin="10,10"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Background="Transparent"
-                    Command="{Binding ViewModel.CancelOperationCommand}"
-                    Content="{x:Static rs:Resources.Cancel}"
+                    Command="{Binding ViewModel.OpenUnpackDirectoryCommand}"
+                    Content="{x:Static rs:Resources.PCKTool_UnpackDirectory}"
                     Cursor="Hand"
                     Foreground="White"
-                    Style="{StaticResource lb_def_button02}"
-                    Visibility="{Binding ViewModel.IsCancelVisible}" />
+                    Style="{StaticResource lb_def_button02}" />
             </StackPanel>
         </Grid>
-
+        <StackPanel
+            Grid.Row="5"
+            Margin="0,5"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal"
+            Visibility="{Binding ViewModel.IsUnpackControlsVisible}">
+            <TextBlock
+                Margin="0,0,0,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                FontSize="20"
+                Foreground="White"
+                Text="{x:Static rs:Resources.Filter}" />
+            <TextBox
+                Width="400"
+                Height="40"
+                Margin="10,0"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Background="Black"
+                BorderThickness="0"
+                Foreground="White"
+                Tag="{x:Static rs:Resources.Search}"
+                Template="{StaticResource lb_textbox}"
+                Text="{Binding ViewModel.SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        </StackPanel>
+        <StackPanel
+            Grid.Row="6"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Orientation="Vertical"
+            Visibility="{Binding ViewModel.IsUnpackControlsVisible}">
+            <TreeView
+                Width="800"
+                Height="350"
+                HorizontalAlignment="Left"
+                BorderBrush="Gray"
+                BorderThickness="2"
+                ItemsSource="{Binding ViewModel.PckTreeView}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding IsChecked, Mode=TwoWay}" Template="{StaticResource lb_checkbox}" />
+                            <TextBlock Margin="-95,6,0,0" Text="{Binding Name}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </StackPanel>
+        <TextBlock
+            Grid.Row="7"
+            Margin="10,10"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            d:Text="Message"
+            FontSize="15"
+            Foreground="Gold"
+            Text="{Binding ViewModel.ProgressMessage}"
+            Visibility="{Binding ViewModel.IsProgressMessageVisible}" />
+        <ProgressBar
+            Grid.Row="8"
+            Width="250"
+            Height="30"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Maximum="{Binding ViewModel.ProgressBarMaximumValue, UpdateSourceTrigger=PropertyChanged}"
+            Minimum="{Binding ViewModel.ProgressBarMiniumValue, UpdateSourceTrigger=PropertyChanged}"
+            Visibility="{Binding ViewModel.IsProgressBarVisible}"
+            Value="{Binding ViewModel.ProgressBarValue, UpdateSourceTrigger=PropertyChanged}" />
+        <Button
+            Grid.Row="9"
+            Width="200"
+            Margin="10,10"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Background="Transparent"
+            Command="{Binding ViewModel.CancelOperationCommand}"
+            Content="{x:Static rs:Resources.Cancel}"
+            Cursor="Hand"
+            Foreground="White"
+            Style="{StaticResource lb_def_button02}"
+            Visibility="{Binding ViewModel.IsCancelVisible}" />
     </Grid>
 </Page>

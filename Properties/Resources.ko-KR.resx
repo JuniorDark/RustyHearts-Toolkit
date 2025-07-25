@@ -4554,8 +4554,8 @@
   <data name="RequiredLearnedSkills" xml:space="preserve">
     <value>필요한 학습 기술</value>
   </data>
-  <data name="PckUnpacker" xml:space="preserve">
-    <value>PCK 언패커</value>
+  <data name="PckTool_Title" xml:space="preserve">
+    <value>PCK 도구</value>
   </data>
   <data name="PCKTool_SelectFolder" xml:space="preserve">
     <value>.pck 파일이 있는 클라이언트 폴더를 선택하세요.</value>
@@ -4566,17 +4566,32 @@
   <data name="PCKTool_FileNumber" xml:space="preserve">
     <value>파일 개수：{0}</value>
   </data>
+  <data name="PCKTool_CreateNewMessage" xml:space="preserve">
+    <value>기존 파일 목록을 찾을 수 없습니다. '{0}'개의 파일로 새 pck 아카이브를 만드시겠습니까?</value>
+  </data>
+  <data name="PCKTool_UpdateMessage" xml:space="preserve">
+    <value>현재 pck 파일에 '{0}'개의 파일이 있습니다. '{1}'개의 새/변경된 파일을 압축하시겠습니까?</value>
+  </data>
   <data name="PCKTool_SelectFilesMessage" xml:space="preserve">
     <value>먼저 추출할 파일을 선택하세요.</value>
   </data>
   <data name="PCKTool_Unpacking" xml:space="preserve">
     <value>파일 추출 중...</value>
   </data>
+  <data name="PCKTool_CheckingFiles" xml:space="preserve">
+    <value>파일을 확인하는 중...</value>
+  </data>
+  <data name="PCKTool_Packing" xml:space="preserve">
+    <value>파일 포장: {0}/{1}</value>
+  </data>
   <data name="PCKTool_UnpackingFiles" xml:space="preserve">
-    <value>파일 추출 중...{0}/{1}</value>
+    <value>파일 압축 해제: {0}/{1}</value>
   </data>
   <data name="PCKTool_UnpackingComplete" xml:space="preserve">
     <value>파일 추출이 완료되었습니다.</value>
+  </data>
+  <data name="PCKTool_PackingComplete" xml:space="preserve">
+    <value>{0}개의 파일 압축이 완료되었습니다.</value>
   </data>
   <data name="PCKTool_CancelledMessage" xml:space="preserve">
     <value>작업이 취소되었습니다.</value>
@@ -4587,19 +4602,34 @@
   <data name="PCKTool_UnpackAll" xml:space="preserve">
     <value>모두 추출</value>
   </data>
+  <data name="PCKTool_PackFiles" xml:space="preserve">
+    <value>팩 파일</value>
+  </data>
   <data name="PCKTool_OverrideUnpack" xml:space="preserve">
     <value>추출 덮어쓰기</value>
+  </data>
+  <data name="PCKTool_NoFilesMessage" xml:space="preserve">
+    <value>선택한 폴더가 비어 있습니다.</value>
   </data>
   <data name="PCKTool_OverrideUnpackMessage" xml:space="preserve">
     <value>추출 디렉토리에 있는 기존 파일을 덮어씁니다.</value>
   </data>
   <data name="PCKTool_InvalidFileList" xml:space="preserve">
-    <value>f00x.dat를 디코딩하는 동안 오류가 발생했습니다.</value>
+    <value>f00X.dat를 읽는 중 오류가 발생했습니다. 파일이 비어 있거나 손상되었습니다.</value>
   </data>
   <data name="PCKTool_ClientFolder" xml:space="preserve">
     <value>클라이언트 폴더</value>
   </data>
+  <data name="PCKTool_UnpackDirectory" xml:space="preserve">
+    <value>출력 디렉토리 열기</value>
+  </data>
+  <data name="PCKTool_FileFolder" xml:space="preserve">
+    <value>파일 폴더</value>
+  </data>
   <data name="WDataEditorDesc" xml:space="preserve">
     <value>.wdata 표 파일 편집</value>
+  </data>
+  <data name="PCKTool_NoFilesToPack" xml:space="preserve">
+    <value>짐을 싸실 필요 없습니다. 모든 파일이 이미 최신 상태입니다.</value>
   </data>
 </root>

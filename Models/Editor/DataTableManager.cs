@@ -6,7 +6,7 @@ using RHToolkit.Models.UISettings;
 using RHToolkit.Views.Windows;
 using System.Data;
 using System.Windows.Controls;
-using static RHToolkit.Models.MIP.MIPCoder;
+using static RHToolkit.Models.Crypto.ZLibHelper;
 
 namespace RHToolkit.Models.Editor;
 
@@ -19,7 +19,6 @@ public partial class DataTableManager : ObservableObject
     private readonly Stack<EditHistory> _undoStack = new();
     private readonly Stack<EditHistory> _redoStack = new();
     private readonly FileManager _fileManager = new();
-    private readonly DataTableCryptor _dataTableCryptor = new();
     private DataGridSelectionUnit? _selectionUnit = null;
     private Point? lastFoundCell = null;
 
@@ -311,7 +310,7 @@ public partial class DataTableManager : ObservableObject
                 string newFolderPath = openFolderDialog.FolderName;
                 RegistrySettingsHelper.SetTableFolder(newFolderPath);
 
-                RHMessageBoxHelper.ShowOKMessage(Resources.DataTableManagerFolderSetMessage, Resources.Success);
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.DataTableManagerFolderSetMessage, newFolderPath), Resources.Success);
             }
         }
         catch (Exception ex)
@@ -586,13 +585,13 @@ public partial class DataTableManager : ObservableObject
             {
                 string file = saveFileDialog.FileName;
                 string? directory = Path.GetDirectoryName(file);
-                await _fileManager.CompressToMipAsync(DataTable, file, MIPCompressionMode.Compress);
+                await _fileManager.CompressToMipAsync(DataTable, file, ZLibOperationMode.Compress);
 
                 if (DataTableString != null && CurrentStringFileName != null && directory != null)
                 {
                     string stringFileName = CurrentStringFileName + ".mip";
                     string stringFilePath = Path.Combine(directory, stringFileName);
-                    await _fileManager.CompressToMipAsync(DataTableString, stringFilePath, MIPCompressionMode.Compress);
+                    await _fileManager.CompressToMipAsync(DataTableString, stringFilePath, ZLibOperationMode.Compress);
                 }
             }
             catch (Exception ex)
@@ -1075,41 +1074,67 @@ public partial class DataTableManager : ObservableObject
     {
         if (dataTable == null || selectedItem == null) return null;
 
-        int newID = GetMaxId();
+        // Get original row's index and nID
+        var originalRow = selectedItem.Row;
+        int originalIndex = dataTable.Rows.IndexOf(originalRow);
+        int originalID = originalRow.Table.Columns.Contains("nID") ? Convert.ToInt32(originalRow["nID"]) : -1;
+
+        // Try to assign newID = originalID + 1 if not already used
+        int newID = originalID + 1;
+        var usedIDs = dataTable.AsEnumerable().Select(row => row.Field<int>("nID")).ToHashSet();
+        while (usedIDs.Contains(newID)) newID++;
+
         EditHistory editHistory = CreateEditHistory(EditAction.RowInsert);
 
-        // Duplicate row in DataTable
-        var duplicate = DuplicateRow(selectedItem.Row, dataTable);
-        UpdateAndAddRow(duplicate, dataTable, newID, editHistory);
+        // Duplicate the row
+        var duplicate = DuplicateRow(originalRow, dataTable);
+        duplicate["nID"] = newID;
 
-        // Add a corresponding row to DataTableString with the same newID
+        // Insert directly below the original row
+        int insertIndex = originalIndex + 1;
+        dataTable.Rows.InsertAt(duplicate, insertIndex);
+
+        // Track the edit
+        editHistory.GroupedEdits.Add(new EditHistory
+        {
+            Row = insertIndex,
+            AffectedRow = duplicate,
+            Action = EditAction.RowInsert,
+            NewValue = duplicate.ItemArray
+        });
+
+        // Handle DataTableString if needed
         if (DataTableString != null && DataTableString.Columns.Contains("nID"))
         {
             var selectedItemString = GetRowViewById(DataTableString, selectedItem);
             if (selectedItemString != null)
             {
                 var duplicateStringRow = DuplicateRow(selectedItemString.Row, DataTableString);
-                UpdateAndAddRow(duplicateStringRow, DataTableString, newID, editHistory);
+                duplicateStringRow["nID"] = newID;
+                DataTableString.Rows.InsertAt(duplicateStringRow, DataTableString.Rows.IndexOf(selectedItemString.Row) + 1);
+
+                editHistory.GroupedEdits.Add(new EditHistory
+                {
+                    Row = DataTableString.Rows.IndexOf(duplicateStringRow),
+                    AffectedRow = duplicateStringRow,
+                    Action = EditAction.RowInsert,
+                    NewValue = duplicateStringRow.ItemArray
+                });
             }
         }
 
-        if (dataTable.DefaultView.Count > 0)
-        {
-            SelectedItem = dataTable.DefaultView[^1];
-        }
-        else
-        {
-            SelectedItem = null;
-        }
+        // Set new selection
+        SelectedItem = dataTable.DefaultView.Cast<DataRowView>()
+            .FirstOrDefault(row => Convert.ToInt32(row["nID"]) == newID);
 
         OnPropertyChanged(nameof(dataTable));
-
         _undoStack.Push(editHistory);
         _redoStack.Clear();
         OnCanExecuteChangesChanged();
 
         return SelectedItem;
     }
+
 
     /// <summary>
     /// Deletes the selected row from the specified DataTable.

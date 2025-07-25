@@ -31,7 +31,7 @@ public partial class MainWindowViewModel : ObservableObject
         MenuItemsSource = new object[]
         {
             new NavigationViewItem(Resources.EditTools, SymbolRegular.DocumentTextToolbox24, typeof(EditToolsPage)),
-            new NavigationViewItem(Resources.PckUnpacker, SymbolRegular.DocumentTextToolbox24, typeof(PCKToolPage)),
+            new NavigationViewItem(Resources.PckTool_Title, SymbolRegular.DocumentTextToolbox24, typeof(PCKToolPage)),
         }
     },
     new NavigationViewItem()

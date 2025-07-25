@@ -19,8 +19,24 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
 - **Coupon Generator**: Generate unique in-game coupon codes for redeemable items rewards.
 - **Send Mail**: Send in-game mail with customizable item attachments. Save mail as templates in JSON format for easy reuse.
 
-### Pck Unpacker
+### PCK Tools
 - Read and unpack `.pck` files to extract game assets.
+- Pack and write assets back into `.pck` files.
+
+### File Editor Tools
+- **WData Editor**: A specialized tool designed for editing `.wdata` files used by the game. 
+`.wdata` files are binary containers that encapsulate all runtime data for a map, packaging map resources and configurations into a single versioned file.
+
+.wdata files bundle together the following map and world data used by the game engine at runtime:
+
+- What Models and navigation meshes (navmeshes) to load
+- Path to scripts controlling game logic
+- Interactive volumes known as EventBoxes (spawn points for NPCs and enemies, triggers, portals, camera zones, etc.)
+- Animated background objects (AniBG)
+- Item containers (ItemBoxes)
+- Gimmicks like traps and interactive objects (GimmickBox)
+- Scripting triggers, including events, conditions, and actions 
+- Cutscene data, such as Scenes and Scene Resources
 
 ### Table Editor Tools
 - **Table Editor**: Edit `.rh` table files directly, with options to export into various formats like XML, XLSX, and MIP.

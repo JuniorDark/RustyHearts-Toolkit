@@ -1,0 +1,195 @@
+﻿using static RHToolkit.Models.Crypto.CRC32;
+using static RHToolkit.Models.Crypto.ZLibHelper;
+
+namespace RHToolkit.Models.PCK;
+
+/// <summary>
+/// Handles writing PCK files and the f00X.dat file.
+/// </summary>
+public class PCKWriter
+{
+    private static ReaderWriterLockSlim[]? _pckArchiveLocks;
+
+    /// <summary>
+    /// Writes PCK files based on the provided dictionary of files to pack.
+    /// </summary>
+    /// <param name="gameDirectory"></param>
+    /// <param name="filesToPackDict"></param>
+    /// <param name="progress"></param>
+    /// <param name="createArchivesIfMissing"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    public static async Task WritePCKFilesAsync(
+    string gameDirectory,
+    SortedDictionary<string, string> filesToPackDict,
+    IProgress<(string file, int pos, int count)> progress,
+    bool createArchivesIfMissing,
+    CancellationToken ct)
+    {
+        var pckFilesList = await Task
+            .Run(() => PCKReader.ReadPCKFileListAsync(gameDirectory, ct), ct)
+            .ConfigureAwait(false);
+
+        if (pckFilesList.Count == 0 && createArchivesIfMissing)
+            await CreateEmptyArchives(gameDirectory, ct);
+
+        var pckDict = new SortedDictionary<string, PCKFile>();
+        foreach (var pf in pckFilesList)
+            pckDict.Add(pf.Name, pf);
+
+        try
+        {
+            await Task.Run(async () =>
+            {
+                _pckArchiveLocks = [.. Enumerable.Range(0, 10).Select(_ => new ReaderWriterLockSlim())];
+
+                int pos = 0, count = filesToPackDict.Count;
+
+                foreach (var (relPath, fullPath) in filesToPackDict)
+                {
+                    ct.ThrowIfCancellationRequested();
+                    pos++;
+                    progress.Report((relPath, pos, count));
+
+                    byte archive = GetArchiveNumberFromName(relPath);
+
+                    var fileData = await File.ReadAllBytesAsync(fullPath, ct);
+                    uint hash = await ComputeCrc32HashAsync(fullPath, ct);
+
+                    int offset;
+                    // Check if the file already exists in the PCK dictionary
+                    if (pckDict.TryGetValue(relPath, out var existing))
+                    {
+                        offset = fileData.Length > existing.FileSize
+                            ? WriteToPCKArchive(gameDirectory, fileData, archive, true, 0)
+                            : WriteToPCKArchive(gameDirectory, fileData, archive, false, (int)existing.Offset);
+
+                        existing.FileSize = fileData.Length;
+                        existing.Hash = hash;
+                        existing.Offset = (uint)offset;
+                    }
+                    // If it doesn't exist, create a new entry
+                    else
+                    {
+                        offset = WriteToPCKArchive(gameDirectory, fileData, archive, true, 0);
+                        pckDict[relPath] = new PCKFile(relPath, archive, fileData.Length, hash, offset);
+                    }
+                }
+
+                await WriteF00XDAT(gameDirectory, pckDict);
+            }, ct).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            await WriteF00XDAT(gameDirectory, pckDict);
+            throw;
+        }
+    }
+
+
+    /// <summary>
+    /// Calculates the archive number based on the file name using the DJB2 hash algorithm.
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns>The archive number (0-9) derived from the file name.</returns>
+    private static byte GetArchiveNumberFromName(string name)
+    {
+        uint pckNum = 5381;
+        foreach (char c in name)
+            pckNum = (byte)c + 33 * pckNum;
+        return (byte)(pckNum % 10);
+    }
+
+    /// <summary>
+    /// Creates empty PCK archive files in the specified directory.
+    /// </summary>
+    /// <param name="dir"></param>
+    /// <param name="ct"></param>
+    private static async Task CreateEmptyArchives(string dir, CancellationToken ct)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            string pckPath = Path.Combine(dir, $"00{i}.pck");
+            if (!File.Exists(pckPath))
+            {
+                await File.WriteAllBytesAsync(pckPath, [], ct);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Writes the f00X.dat file containing the list of PCK files.
+    /// </summary>
+    /// <param name="directory"></param>
+    /// <param name="dicPckFile"></param>
+    public static async Task WriteF00XDAT(string directory, SortedDictionary<string, PCKFile> dicPckFile)
+    {
+        byte[]? bufferF00XDAT = null;
+        using (MemoryStream streamF00X = new())
+        {
+            using BinaryWriter writerF00X = new(streamF00X);
+
+            foreach (KeyValuePair<string, PCKFile> kvFile in dicPckFile)
+            {
+                var pckFile = kvFile.Value;
+
+                writerF00X.Write((ushort)kvFile.Key.Length);
+                writerF00X.Write(Encoding.Unicode.GetBytes(kvFile.Key));
+                writerF00X.Write(pckFile.Archive);
+                writerF00X.Write((uint)pckFile.FileSize);
+                writerF00X.Write(pckFile.Hash);
+                writerF00X.Write((ulong)pckFile.Offset);
+            }
+            writerF00X.Flush();
+            bufferF00XDAT = streamF00X.ToArray();
+        }
+
+        byte[] compressedData = CompressFileZlibAsync(bufferF00XDAT);
+
+        string pathF00XDAT = Path.Combine(directory, "f00X.dat");
+        if (File.Exists(pathF00XDAT + ".old"))
+        {
+            File.Delete(pathF00XDAT + ".old");
+        }
+        if (File.Exists(pathF00XDAT))
+        {
+            File.Move(pathF00XDAT, pathF00XDAT + ".old");
+        }
+
+        await File.WriteAllBytesAsync(pathF00XDAT, compressedData);
+    }
+
+    /// <summary>
+    /// Writes a byte array to a PCK archive file at the specified offset or at the end of the file.
+    /// Uses a write lock to ensure thread safety when accessing the archive.
+    /// </summary>
+    /// <param name="fileBytes"></param>
+    /// <param name="archiveNum"></param>
+    /// <param name="eof"></param>
+    /// <param name="offset"></param>
+    /// <returns>The position in the file where the data was written.</returns>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    public static int WriteToPCKArchive(string directory, byte[] fileBytes, byte archiveNum, bool eof, long offset)
+    {
+        if (archiveNum < 0 || archiveNum >= _pckArchiveLocks!.Length)
+            throw new ArgumentOutOfRangeException(nameof(archiveNum), "Archive number must be between 0 and 9.");
+
+        _pckArchiveLocks[archiveNum].EnterWriteLock();
+        try
+        {
+            string filePath = Path.Combine(directory, $"00{archiveNum}.pck");
+
+            using FileStream fileStream = new(filePath, FileMode.Open, FileAccess.Write, FileShare.None);
+
+            fileStream.Seek(eof ? 0 : offset, eof ? SeekOrigin.End : SeekOrigin.Begin);
+            int position = (int)fileStream.Position;
+
+            fileStream.Write(fileBytes, 0, fileBytes.Length);
+            return position;
+        }
+        finally
+        {
+            _pckArchiveLocks[archiveNum].ExitWriteLock();
+        }
+    }
+}

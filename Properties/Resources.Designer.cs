@@ -7774,11 +7774,38 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checking files....
+        /// </summary>
+        public static string PCKTool_CheckingFiles {
+            get {
+                return ResourceManager.GetString("PCKTool_CheckingFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Client Folder.
         /// </summary>
         public static string PCKTool_ClientFolder {
             get {
                 return ResourceManager.GetString("PCKTool_ClientFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existing filelist not found. Create new pck archives with &apos;{0}&apos; files?.
+        /// </summary>
+        public static string PCKTool_CreateNewMessage {
+            get {
+                return ResourceManager.GetString("PCKTool_CreateNewMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Files Folder.
+        /// </summary>
+        public static string PCKTool_FileFolder {
+            get {
+                return ResourceManager.GetString("PCKTool_FileFolder", resourceCulture);
             }
         }
         
@@ -7801,11 +7828,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error decoding f00x.dat.
+        ///   Looks up a localized string similar to Error reading f00X.dat. File is empty or corrupted..
         /// </summary>
         public static string PCKTool_InvalidFileList {
             get {
                 return ResourceManager.GetString("PCKTool_InvalidFileList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected folder is empty..
+        /// </summary>
+        public static string PCKTool_NoFilesMessage {
+            get {
+                return ResourceManager.GetString("PCKTool_NoFilesMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing to pack. All files are already up-to-date..
+        /// </summary>
+        public static string PCKTool_NoFilesToPack {
+            get {
+                return ResourceManager.GetString("PCKTool_NoFilesToPack", resourceCulture);
             }
         }
         
@@ -7828,6 +7873,33 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pack Files.
+        /// </summary>
+        public static string PCKTool_PackFiles {
+            get {
+                return ResourceManager.GetString("PCKTool_PackFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Packing Files: {0}/{1}.
+        /// </summary>
+        public static string PCKTool_Packing {
+            get {
+                return ResourceManager.GetString("PCKTool_Packing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Finished packing {0} files..
+        /// </summary>
+        public static string PCKTool_PackingComplete {
+            get {
+                return ResourceManager.GetString("PCKTool_PackingComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select file(s) to be unpacked first..
         /// </summary>
         public static string PCKTool_SelectFilesMessage {
@@ -7846,11 +7918,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PCK Tools.
+        /// </summary>
+        public static string PckTool_Title {
+            get {
+                return ResourceManager.GetString("PckTool_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unpack All.
         /// </summary>
         public static string PCKTool_UnpackAll {
             get {
                 return ResourceManager.GetString("PCKTool_UnpackAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Unpack Directory.
+        /// </summary>
+        public static string PCKTool_UnpackDirectory {
+            get {
+                return ResourceManager.GetString("PCKTool_UnpackDirectory", resourceCulture);
             }
         }
         
@@ -7873,7 +7963,7 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unpacking Files...{0}/{1}.
+        ///   Looks up a localized string similar to Unpacking Files: {0}/{1}.
         /// </summary>
         public static string PCKTool_UnpackingFiles {
             get {
@@ -7891,11 +7981,11 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PCK Unpacker.
+        ///   Looks up a localized string similar to The current pck files have &apos;{0}&apos; files. Pack &apos;{1}&apos; new/changed files?.
         /// </summary>
-        public static string PckUnpacker {
+        public static string PCKTool_UpdateMessage {
             get {
-                return ResourceManager.GetString("PckUnpacker", resourceCulture);
+                return ResourceManager.GetString("PCKTool_UpdateMessage", resourceCulture);
             }
         }
         

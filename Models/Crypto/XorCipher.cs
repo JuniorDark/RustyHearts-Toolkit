@@ -1,11 +1,11 @@
-﻿namespace RHToolkit.Models.MIP;
+﻿namespace RHToolkit.Models.Crypto;
 
-public class MIP
+public class XorCipher
 {
     /// <summary>
-    /// A byte array used as a key for the XOR operation in the BytesWithCodeMip method.
+    /// A byte array used as a key for the XOR operation.
     /// </summary>
-    public static readonly byte[] codeMip = [
+    public static readonly byte[] xorKey = [
     0x30, 0x22, 0x41, 0xa8, 0x5b, 0xa6, 0x6a, 0x49, 0xbf, 0x53, 0x35, 0xe5, 0x9e, 14, 0xec, 0xb8,
     0x5e, 0x15, 0x1f, 0xc1, 0x4f, 0xec, 0x77, 0xe8, 0xb7, 0x4e, 0x87, 230, 0xf5, 60, 0xb3, 0x43,
     0xcc, 0x53, 0x36, 0xac, 90, 0x77, 0xb8, 0xdd, 0x30, 0x74, 140, 0x4a, 0x9a, 0x9b, 0xbc, 10,
@@ -25,15 +25,22 @@ public class MIP
     ];
 
     /// <summary>
-    /// Applies a bitwise XOR operation between each byte in the input array and a corresponding byte in the codeMip array.
+    /// Applies an XOR cipher to the given byte array using a predefined key.
     /// </summary>
-    /// <param name="toBytes">The byte array to process.</param>
-    public static void BytesWithCodeMip(byte[] toBytes)
+    /// <param name="input></param>
+    /// <returns>A new byte array with the XOR operation applied.</returns>
+    public static byte[] Xor(byte[] input)
     {
-        for (int i = 0; i < toBytes.Length; i++)
-        {
-            toBytes[i] = (byte)(toBytes[i] ^ codeMip[i & 0xff]);
-        }
-    }
+        var output = new byte[input.Length];
+        int keyIndex = 0;
+        int keyLength = xorKey.Length;
 
+        for (int i = 0; i < input.Length; i++)
+        {
+            output[i] = (byte)(input[i] ^ xorKey[keyIndex]);
+            if (++keyIndex == keyLength) keyIndex = 0;
+        }
+
+        return output;
+    }
 }

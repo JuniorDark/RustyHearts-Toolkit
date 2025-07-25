@@ -4554,8 +4554,8 @@
   <data name="RequiredLearnedSkills" xml:space="preserve">
     <value>Required Learned Skills</value>
   </data>
-  <data name="PckUnpacker" xml:space="preserve">
-    <value>PCK Unpacker</value>
+  <data name="PckTool_Title" xml:space="preserve">
+    <value>PCK Tools</value>
   </data>
   <data name="PCKTool_SelectFolder" xml:space="preserve">
     <value>Select the client folder with the .pck files.</value>
@@ -4566,17 +4566,32 @@
   <data name="PCKTool_FileNumber" xml:space="preserve">
     <value>Number of Files：{0}</value>
   </data>
+  <data name="PCKTool_CreateNewMessage" xml:space="preserve">
+    <value>Existing filelist not found. Create new pck archives with '{0}' files?</value>
+  </data>
+  <data name="PCKTool_UpdateMessage" xml:space="preserve">
+    <value>The current pck files have '{0}' files. Pack '{1}' new/changed files?</value>
+  </data>
   <data name="PCKTool_SelectFilesMessage" xml:space="preserve">
     <value>Select file(s) to be unpacked first.</value>
   </data>
   <data name="PCKTool_Unpacking" xml:space="preserve">
     <value>Unpacking Files...</value>
   </data>
+  <data name="PCKTool_CheckingFiles" xml:space="preserve">
+    <value>Checking files...</value>
+  </data>
+  <data name="PCKTool_Packing" xml:space="preserve">
+    <value>Packing Files: {0}/{1}</value>
+  </data>
   <data name="PCKTool_UnpackingFiles" xml:space="preserve">
-    <value>Unpacking Files...{0}/{1}</value>
+    <value>Unpacking Files: {0}/{1}</value>
   </data>
   <data name="PCKTool_UnpackingComplete" xml:space="preserve">
     <value>Unpacking files completed.</value>
+  </data>
+  <data name="PCKTool_PackingComplete" xml:space="preserve">
+    <value>Finished packing {0} files.</value>
   </data>
   <data name="PCKTool_CancelledMessage" xml:space="preserve">
     <value>Operation Cancelled.</value>
@@ -4587,19 +4602,34 @@
   <data name="PCKTool_UnpackAll" xml:space="preserve">
     <value>Unpack All</value>
   </data>
+  <data name="PCKTool_PackFiles" xml:space="preserve">
+    <value>Pack Files</value>
+  </data>
   <data name="PCKTool_OverrideUnpack" xml:space="preserve">
     <value>Override Unpack</value>
+  </data>
+  <data name="PCKTool_NoFilesMessage" xml:space="preserve">
+    <value>The selected folder is empty.</value>
   </data>
   <data name="PCKTool_OverrideUnpackMessage" xml:space="preserve">
     <value>Override files in the Unpack directory.</value>
   </data>
   <data name="PCKTool_InvalidFileList" xml:space="preserve">
-    <value>Error decoding f00x.dat</value>
+    <value>Error reading f00X.dat. File is empty or corrupted.</value>
   </data>
   <data name="PCKTool_ClientFolder" xml:space="preserve">
     <value>Client Folder</value>
   </data>
+  <data name="PCKTool_UnpackDirectory" xml:space="preserve">
+    <value>Open Unpack Directory</value>
+  </data>
+  <data name="PCKTool_FileFolder" xml:space="preserve">
+    <value>Files Folder</value>
+  </data>
   <data name="WDataEditorDesc" xml:space="preserve">
     <value>Edit .wdata files</value>
+  </data>
+  <data name="PCKTool_NoFilesToPack" xml:space="preserve">
+    <value>Nothing to pack. All files are already up-to-date.</value>
   </data>
 </root>
