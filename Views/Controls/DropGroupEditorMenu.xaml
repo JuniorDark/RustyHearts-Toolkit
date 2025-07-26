@@ -29,74 +29,124 @@
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="1"
                         Header="itemdropgrouplist_f.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+1" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="2"
                         Header="itemdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+2" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="3"
                         Header="championitemdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+3" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="4"
                         Header="eventworlditemdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+4" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="5"
                         Header="instanceitemdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+5" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="6"
                         Header="questitemdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+6" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="7"
                         Header="worldinstanceitemdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+7" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="8"
                         Header="worlditemdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+8" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="9"
                         Header="worlditemdropgrouplist_fatigue.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+Shift+9" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="10"
                         Header="riddleboxdropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+1" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="11"
                         Header="rarecarddropgrouplist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+2" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                     <MenuItem
                         Command="{Binding LoadFileCommand}"
                         CommandParameter="12"
                         Header="rarecardrewarditemlist.rh"
-                        Icon="{ui:SymbolIcon DocumentAdd24}"
-                        InputGestureText="Ctrl+3" />
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                </MenuItem>
+                <MenuItem Header="{x:Static rs:Resources.MenuLoadFilesFromPCK}" Icon="{ui:SymbolIcon DocumentAdd24}">
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="1"
+                        Header="itemdropgrouplist_f.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="2"
+                        Header="itemdropgrouplist.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="3"
+                        Header="championitemdropgrouplist.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="4"
+                        Header="eventworlditemdropgrouplist.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="5"
+                        Header="instanceitemdropgrouplist.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="6"
+                        Header="questitemdropgrouplist.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="7"
+                        Header="worldinstanceitemdropgrouplist.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="8"
+                        Header="worlditemdropgrouplist.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="9"
+                        Header="worlditemdropgrouplist_fatigue.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="10"
+                        Header="riddleboxdropgrouplist.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="11"
+                        Header="rarecarddropgrouplist.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="12"
+                        Header="rarecardrewarditemlist.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}" />
                 </MenuItem>
                 <MenuItem
                     Command="{Binding DataTableManager.SaveFileCommand}"
@@ -184,6 +234,10 @@
                 <MenuItem
                     Command="{Binding DataTableManager.SetTableFolderCommand}"
                     Header="{x:Static rs:Resources.MenuSetTableFolder}"
+                    Icon="{ui:SymbolIcon FolderOpen20}" />
+                <MenuItem
+                    Command="{Binding DataTableManager.SetClientFolderCommand}"
+                    Header="{x:Static rs:Resources.MenuSetClientFolder}"
                     Icon="{ui:SymbolIcon FolderOpen20}" />
             </ui:MenuItem>
         </Menu>

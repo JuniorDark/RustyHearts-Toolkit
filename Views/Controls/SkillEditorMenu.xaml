@@ -164,6 +164,124 @@
                             InputGestureText="Ctrl+Alt+9" />
                     </MenuItem>
                 </MenuItem>
+                <MenuItem Header="{x:Static rs:Resources.MenuLoadFilesFromPCK}" Icon="{ui:SymbolIcon DocumentAdd24}">
+                    <MenuItem Header="{x:Static rs:Resources.SkillFile}" Icon="{ui:SymbolIcon DocumentSave24}">
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="frantzskill.rh"
+                            Header="frantzskill.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="angelaskill.rh"
+                            Header="angelaskill.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="tudeskill.rh"
+                            Header="tudeskill.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="natashaskill.rh"
+                            Header="natashaskill.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    </MenuItem>
+                    <MenuItem Header="{x:Static rs:Resources.SkillTreeFile}" Icon="{ui:SymbolIcon DocumentSave24}">
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="frantzskilltree.rh"
+                            Header="frantzskilltree.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="angelaskilltree.rh"
+                            Header="angelaskilltree.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="tudeskilltree.rh"
+                            Header="tudeskilltree.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="natashaskilltree.rh"
+                            Header="natashaskilltree.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="frantzavatar01skilltree.rh"
+                            Header="frantzavatar01skilltree.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="frantzavatar02skilltree.rh"
+                            Header="frantzavatar02skilltree.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="angelaavatar01skilltree.rh"
+                            Header="angelaavatar01skilltree.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="tudeavatar01skilltree.rh"
+                            Header="tudeavatar01skilltree.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="natashaavatar01skilltree.rh"
+                            Header="natashaavatar01skilltree.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    </MenuItem>
+                    <MenuItem Header="{x:Static rs:Resources.SkillTreeUIFile}" Icon="{ui:SymbolIcon DocumentSave24}">
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="frantzmyskillui.rh"
+                            Header="frantzmyskillui.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="angelamyskillui.rh"
+                            Header="angelamyskillui.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="tudemyskillui.rh"
+                            Header="tudemyskillui.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="natashamyskillui.rh"
+                            Header="natashamyskillui.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="frantzavatar01myskillui.rh"
+                            Header="frantzavatar01myskillui.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="frantzavatar02myskillui.rh"
+                            Header="frantzavatar02myskillui.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="angelaavatar01myskillui.rh"
+                            Header="angelaavatar01myskillui.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="tudeavatar01myskillui.rh"
+                            Header="tudeavatar01myskillui.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                        <MenuItem
+                            Command="{Binding LoadFileFromPCKCommand}"
+                            CommandParameter="natasha_avatar01_myskillui.rh"
+                            Header="natasha_avatar01_myskillui.rh"
+                            Icon="{ui:SymbolIcon DocumentAdd24}" />
+                    </MenuItem>
+                </MenuItem>
                 <MenuItem
                     Command="{Binding DataTableManager.SaveFileCommand}"
                     Header="{x:Static rs:Resources.MenuSave}"
@@ -250,6 +368,10 @@
                 <MenuItem
                     Command="{Binding DataTableManager.SetTableFolderCommand}"
                     Header="{x:Static rs:Resources.MenuSetTableFolder}"
+                    Icon="{ui:SymbolIcon FolderOpen20}" />
+                <MenuItem
+                    Command="{Binding DataTableManager.SetClientFolderCommand}"
+                    Header="{x:Static rs:Resources.MenuSetClientFolder}"
                     Icon="{ui:SymbolIcon FolderOpen20}" />
             </ui:MenuItem>
         </Menu>

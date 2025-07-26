@@ -86,7 +86,6 @@ public partial class Cue : ObservableObject
     [ObservableProperty] private uint _ID;
     [ObservableProperty] private float _Start;
     [ObservableProperty] private float _End;
-    [ObservableProperty] private float _Delay;
 }
 
 public partial class SoundRecord : ObservableObject

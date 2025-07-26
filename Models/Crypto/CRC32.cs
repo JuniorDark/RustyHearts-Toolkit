@@ -48,6 +48,20 @@ public class CRC32
         return (uint)num;
     }
 
+    /// <summary>
+    /// Computes the CRC32 hash of a byte array.
+    /// </summary>
+    /// <param name="toBytes"></param>
+    /// <returns>CRC32 hash as a 32-bit unsigned integer.</returns>
+    public static uint ComputeCrc32Hash(byte[] toBytes)
+    {
+        int num = -1;
+        for (int i = 0; i < toBytes.Length; i++)
+        {
+            num = (int)Crc32Table[num & 0xff ^ toBytes[i]] ^ num >> 8 & 0xffffff;
+        }
+        return (uint)num;
+    }
 
     /// <summary>
     /// Get the CRC32 hash of a file.

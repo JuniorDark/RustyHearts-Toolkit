@@ -1,4 +1,5 @@
-﻿using static RHToolkit.Models.Crypto.CRC32;
+﻿using System.Data;
+using static RHToolkit.Models.Crypto.CRC32;
 using static RHToolkit.Models.Crypto.ZLibHelper;
 
 namespace RHToolkit.Models.PCK;
@@ -9,6 +10,15 @@ namespace RHToolkit.Models.PCK;
 public class PCKWriter
 {
     private static ReaderWriterLockSlim[]? _pckArchiveLocks;
+
+    /// <summary>
+    /// Initializes the PCK archive locks.
+    /// </summary>
+    /// <param name="count"></param>
+    public static void InitializePCKArchiveLocks(int count = 10)
+    {
+        _pckArchiveLocks = [.. Enumerable.Range(0, count).Select(_ => new ReaderWriterLockSlim())];
+    }
 
     /// <summary>
     /// Writes PCK files based on the provided dictionary of files to pack.
@@ -26,22 +36,17 @@ public class PCKWriter
     bool createArchivesIfMissing,
     CancellationToken ct)
     {
-        var pckFilesList = await Task
-            .Run(() => PCKReader.ReadPCKFileListAsync(gameDirectory, ct), ct)
-            .ConfigureAwait(false);
+        var pckDict = await PCKReader.GetPCKSortedDictionaryAsync(gameDirectory);
 
-        if (pckFilesList.Count == 0 && createArchivesIfMissing)
+        if (pckDict.Count == 0 && createArchivesIfMissing)
             await CreateEmptyArchives(gameDirectory, ct);
-
-        var pckDict = new SortedDictionary<string, PCKFile>();
-        foreach (var pf in pckFilesList)
-            pckDict.Add(pf.Name, pf);
 
         try
         {
             await Task.Run(async () =>
             {
-                _pckArchiveLocks = [.. Enumerable.Range(0, 10).Select(_ => new ReaderWriterLockSlim())];
+                if (_pckArchiveLocks == null || _pckArchiveLocks.Length == 0)
+                    InitializePCKArchiveLocks();
 
                 int pos = 0, count = filesToPackDict.Count;
 
@@ -85,7 +90,6 @@ public class PCKWriter
             throw;
         }
     }
-
 
     /// <summary>
     /// Calculates the archive number based on the file name using the DJB2 hash algorithm.
@@ -190,6 +194,64 @@ public class PCKWriter
         finally
         {
             _pckArchiveLocks[archiveNum].ExitWriteLock();
+        }
+    }
+
+    /// <summary>
+    /// Saves a rh file byte array to the PCK archive.
+    /// </summary>
+    /// <param name="gameDirectory"></param>
+    /// <param name="fileNameInPck"></param>
+    /// <param name="fileData"></param>
+    /// <exception cref="FileNotFoundException"></exception>
+    public static async Task SaveRHToPCKAsync(string gameDirectory, string fileNameInPck, byte[] fileData)
+    {
+        if (_pckArchiveLocks is null || _pckArchiveLocks.Length == 0)
+            InitializePCKArchiveLocks();
+
+        var pckDict = await PCKReader.GetPCKSortedDictionaryAsync(gameDirectory);
+
+        var fileEntryPair = pckDict.FirstOrDefault(f =>
+        string.Equals(Path.GetFileName(f.Value.Name), fileNameInPck, StringComparison.OrdinalIgnoreCase));
+        if (fileEntryPair.Value is null)
+            throw new FileNotFoundException(string.Format(Resources.PCKTool_FileNotFoundInList, fileNameInPck));
+
+        var fileEntry = fileEntryPair.Value;
+        string archivePath = Path.Combine(gameDirectory, $"{fileEntry.Archive:D3}.pck");
+
+        if (!File.Exists(archivePath))
+            throw new FileNotFoundException(string.Format(Resources.PCKTool_ArchiveNotFound, archivePath));
+
+        var archiveIndex = fileEntry.Archive;
+        var archiveLock = _pckArchiveLocks![archiveIndex];
+        
+        try
+        {
+            archiveLock.EnterWriteLock();
+
+            using FileStream fs = new(archivePath, FileMode.Open, FileAccess.Write, FileShare.None);
+
+            if (fileData.Length > fileEntry.FileSize)
+            {
+                fs.Seek(0, SeekOrigin.End); // Append
+                fileEntry.Offset = fs.Position;
+            }
+            else
+            {
+                fs.Seek(fileEntry.Offset, SeekOrigin.Begin); // Overwrite
+            }
+
+            await fs.WriteAsync(fileData);
+
+            // Update file entry
+            fileEntry.FileSize = fileData.Length;
+            fileEntry.Hash = ComputeCrc32Hash(fileData);
+
+            await WriteF00XDAT(gameDirectory, pckDict);
+        }
+        finally
+        {
+            archiveLock.ExitWriteLock();
         }
     }
 }

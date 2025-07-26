@@ -118,6 +118,35 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        [RelayCommand]
+        private async Task LoadFileFromPCK(string? parameter)
+        {
+            try
+            {
+                await CloseFile();
+
+                if (int.TryParse(parameter, out int dropGroupType))
+                {
+                    string? fileName = GetFileNameFromShopType(dropGroupType);
+                    if (fileName == null) return;
+
+                    SetShopProperties(dropGroupType);
+                    string columnName = GetColumnName(fileName);
+
+                    bool isLoaded = await DataTableManager.LoadFileFromPCK(fileName, null);
+
+                    if (isLoaded)
+                    {
+                        IsLoaded();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            }
+        }
+
         private void IsLoaded()
         {
             var title = GetTitleFromShopType(NpcShopType);

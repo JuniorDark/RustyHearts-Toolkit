@@ -62,7 +62,7 @@
                 FontSize="15"
                 Foreground="White" />
 
-            <control:EditorMenu Grid.Row="1" />
+            <control:RHEditorMenu Grid.Row="1" />
 
             <DataGrid
                 x:Name="dataGridView"

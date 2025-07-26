@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using RHToolkit.Messages;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.PCK;
 using RHToolkit.Models.RH;
 using RHToolkit.Models.UISettings;
 using RHToolkit.Views.Windows;
@@ -40,7 +41,7 @@ public partial class DataTableManager : ObservableObject
         {
             string? tableFolder = GetTableFolderPath();
 
-            if (tableFolder != null)
+            if (tableFolder is not null)
             {
                 string newFileName = tableName + "(new).rh";
                 string filePath = Path.Combine(tableFolder, newFileName);
@@ -49,7 +50,7 @@ public partial class DataTableManager : ObservableObject
                 DataTable? stringTable = null;
                 string? newStringFileName = null;
 
-                if (stringTableName != null && stringColumns != null)
+                if (stringTableName is not null && stringColumns is not null)
                 {
                     stringTable = DataTableCryptor.CreateDataTable(stringColumns);
                     newStringFileName = stringTableName + "(new).rh";
@@ -58,13 +59,13 @@ public partial class DataTableManager : ObservableObject
 
                 var table = DataTableCryptor.CreateDataTable(columns);
 
-                if (table != null)
+                if (table is not null)
                 {
                     LoadTable(table, stringTable);
                     CurrentFile = filePath;
                     CurrentFileName = newFileName;
 
-                    if (stringTable != null)
+                    if (stringTable is not null)
                     {
                         CurrentStringFile = stringFilePath;
                         CurrentStringFileName = newStringFileName;
@@ -160,12 +161,12 @@ public partial class DataTableManager : ObservableObject
             string? stringFilePath = GetStringFilePath(file, stringTableName, baseFolder);
             DataTable? stringTable = null;
 
-            if (stringFilePath != null)
+            if (stringFilePath is not null)
             {
                 stringTable = await _fileManager.RHFileToDataTableAsync(stringFilePath);
             }
 
-            if (table != null)
+            if (table is not null)
             {
                 LoadTable(table, stringTable);
                 SetCurrentFile(file, fileName, stringFilePath);
@@ -182,9 +183,52 @@ public partial class DataTableManager : ObservableObject
     }
 
     /// <summary>
+    /// Loads a file from a PCK archive.
+    /// </summary>
+    /// <param name="fileNameInPck"></param>
+    /// <param name="stringTableName"></param>
+    public async Task<bool> LoadFileFromPCK(string fileNameInPck, string? stringTableName = null)
+    {
+        try
+        {
+            var gameDirectory = GetClientFolderPath();
+
+            if (string.IsNullOrEmpty(gameDirectory))
+            {
+                return false;
+            }
+
+            var fileData = await PCKReader.LoadRHFromPCKAsync(gameDirectory, fileNameInPck);
+            var table = _fileManager.RHFileDataToDataTableAsync(fileData);
+
+            if (!IsValidTable(table, null, fileNameInPck, null))
+                return false;
+
+            DataTable? stringTable = null;
+            if (stringTableName is not null)
+            {
+                var fileStringData = await PCKReader.LoadRHFromPCKAsync(gameDirectory, stringTableName);
+                stringTable = _fileManager.RHFileDataToDataTableAsync(fileStringData);
+            }
+
+            LoadTable(table, stringTable);
+            CurrentFileName = fileNameInPck;
+            CurrentStringFileName = stringTableName;
+            IsPCKMode = true;
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.DataTableManagerLoadFileError}: {ex.Message}\n{ex.StackTrace}", Resources.Error);
+            return false;
+        }
+    }
+
+    /// <summary>
     /// Gets the folder path for the table from the registry settings.
     /// </summary>
-    /// <returns>The folder path for the table.</returns>
+    /// <returns>The folder path for the table folder.</returns>
     private static string GetTableFolderPath()
     {
         string tableFolder = RegistrySettingsHelper.GetTableFolder();
@@ -208,6 +252,32 @@ public partial class DataTableManager : ObservableObject
     }
 
     /// <summary>
+    /// Gets the folder path for the client from the registry settings.
+    /// </summary>
+    /// <returns>The folder path for the client.</returns>
+    private static string GetClientFolderPath()
+    {
+        string clientFolder = RegistrySettingsHelper.GetClientFolder();
+
+        if (string.IsNullOrEmpty(clientFolder) || !Directory.Exists(clientFolder))
+        {
+            var openFolderDialog = new OpenFolderDialog();
+
+            if (openFolderDialog.ShowDialog() == true)
+            {
+                clientFolder = openFolderDialog.FolderName;
+                RegistrySettingsHelper.SetClientFolder(clientFolder);
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
+
+        return clientFolder;
+    }
+
+    /// <summary>
     /// Validates if the table contains the specified column.
     /// </summary>
     /// <param name="table">The DataTable to validate.</param>
@@ -217,7 +287,7 @@ public partial class DataTableManager : ObservableObject
     /// <returns>True if the table is valid, otherwise false.</returns>
     private static bool IsValidTable(DataTable? table, string? tableColumnName, string fileName, string? fileType)
     {
-        if (table != null && tableColumnName != null && !table.Columns.Contains(tableColumnName))
+        if (table is not null && tableColumnName is not null && !table.Columns.Contains(tableColumnName))
         {
             string message = string.Format(Resources.InvalidTableFileDesc, fileName, fileType);
             RHMessageBoxHelper.ShowOKMessage(message, Resources.Error);
@@ -235,15 +305,14 @@ public partial class DataTableManager : ObservableObject
     /// <returns>The file path for the string table.</returns>
     private static string? GetStringFilePath(string file, string? stringTableName, string? baseFolder)
     {
-        if (stringTableName == null)
+        if (stringTableName is null)
         {
             return null;
         }
 
         string? directory = baseFolder ?? Path.GetDirectoryName(file);
 
-
-        if (directory != null)
+        if (directory is not null)
         {
             string? stringFilePath = FindFileInSubdirectories(directory, stringTableName);
 
@@ -270,7 +339,7 @@ public partial class DataTableManager : ObservableObject
         CurrentFile = file;
         CurrentFileName = fileName;
 
-        if (stringFilePath != null)
+        if (stringFilePath is not null)
         {
             CurrentStringFile = stringFilePath;
             CurrentStringFileName = Path.GetFileName(stringFilePath);
@@ -298,7 +367,7 @@ public partial class DataTableManager : ObservableObject
     /// <summary>
     /// Sets the folder path for the table using a folder dialog.
     /// </summary>
-    [RelayCommand(CanExecute = nameof(CanExecuteSetTableFolderCommand))]
+    [RelayCommand(CanExecute = nameof(CanExecuteSetFolderCommand))]
     public void SetTableFolder()
     {
         try
@@ -320,12 +389,36 @@ public partial class DataTableManager : ObservableObject
     }
 
     /// <summary>
-    /// Determines if the SetTableFolder command can be executed.
+    /// Sets the folder path for the client using a folder dialog.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanExecuteSetFolderCommand))]
+    public void SetClientFolder()
+    {
+        try
+        {
+            var openFolderDialog = new OpenFolderDialog();
+
+            if (openFolderDialog.ShowDialog() == true)
+            {
+                string newFolderPath = openFolderDialog.FolderName;
+                RegistrySettingsHelper.SetClientFolder(newFolderPath);
+
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.DataTableManagerFolderSetMessage, newFolderPath), Resources.Success);
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+        }
+    }
+
+    /// <summary>
+    /// Checks if the SetFolder command can be executed.
     /// </summary>
     /// <returns>True if the command can be executed, otherwise false.</returns>
-    private bool CanExecuteSetTableFolderCommand()
+    private bool CanExecuteSetFolderCommand()
     {
-        return DataTable == null;
+        return DataTable is null;
     }
 
     /// <summary>
@@ -335,7 +428,7 @@ public partial class DataTableManager : ObservableObject
     /// <param name="stringDataTable">The string DataTable to load (optional).</param>
     private void LoadTable(DataTable dataTable, DataTable? stringDataTable = null)
     {
-        if (dataTable != null)
+        if (dataTable is not null)
         {
             DataTable = dataTable;
 
@@ -344,7 +437,7 @@ public partial class DataTableManager : ObservableObject
             DataTable.RowDeleted += DataTableChanged;
         }
 
-        if (stringDataTable != null)
+        if (stringDataTable is not null)
         {
             DataTableString = stringDataTable;
 
@@ -353,7 +446,7 @@ public partial class DataTableManager : ObservableObject
             DataTableString.RowDeleted += DataTableChanged;
         }
 
-        if (DataTable != null && DataTable.Rows.Count > 0)
+        if (DataTable is not null && DataTable.Rows.Count > 0)
         {
             SelectedItem = DataTable.DefaultView[0];
         }
@@ -381,7 +474,7 @@ public partial class DataTableManager : ObservableObject
                 _changesCounter = 0;
                 await _fileManager.SaveTempFile(CurrentFileName!, DataTable!);
 
-                if (DataTableString != null && CurrentStringFileName != null)
+                if (DataTableString is not null && CurrentStringFileName is not null)
                 {
                     await _fileManager.SaveTempFile(CurrentStringFileName, DataTableString);
                 }
@@ -400,11 +493,11 @@ public partial class DataTableManager : ObservableObject
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public async Task<bool> CloseFile()
     {
-        if (DataTable == null) return true;
+        if (DataTable is null) return true;
 
         if (HasChanges)
         {
-            string message = CurrentStringFileName != null
+            string message = CurrentStringFileName is not null
             ? $"{Resources.DataTableManagerSaveFileMessage} '{CurrentFileName}' | '{CurrentStringFileName}' ?"
             : $"{Resources.DataTableManagerSaveFileMessage} '{CurrentFileName}' ?";
 
@@ -440,13 +533,13 @@ public partial class DataTableManager : ObservableObject
     /// </summary>
     public void ClearFile()
     {
-        if (DataTable != null)
+        if (DataTable is not null)
         {
             DataTable.TableNewRow -= DataTableChanged;
             DataTable.RowChanged -= DataTableChanged;
             DataTable.RowDeleted -= DataTableChanged;
         }
-        if (DataTableString != null)
+        if (DataTableString is not null)
         {
             DataTableString.TableNewRow -= DataTableChanged;
             DataTableString.RowChanged -= DataTableChanged;
@@ -464,6 +557,7 @@ public partial class DataTableManager : ObservableObject
         SelectedItem = null;
         SelectedItemString = null;
         HasChanges = false;
+        IsPCKMode = false;
         _undoStack.Clear();
         _redoStack.Clear();
         OnCanExecuteFileCommandChanged();
@@ -475,7 +569,7 @@ public partial class DataTableManager : ObservableObject
     /// <returns>True if file commands can be executed, otherwise false.</returns>
     private bool CanExecuteFileCommand()
     {
-        return DataTable != null;
+        return DataTable is not null;
     }
 
     /// <summary>
@@ -493,6 +587,7 @@ public partial class DataTableManager : ObservableObject
         RedoChangesCommand.NotifyCanExecuteChanged();
         CloseFileCommand.NotifyCanExecuteChanged();
         SetTableFolderCommand.NotifyCanExecuteChanged();
+        SetClientFolderCommand.NotifyCanExecuteChanged();
     }
 
     #endregion
@@ -507,17 +602,23 @@ public partial class DataTableManager : ObservableObject
     {
         try
         {
-            if (DataTable != null && CurrentFile != null)
+            if (IsPCKMode)
             {
-                await _fileManager.DataTableToRHFileAsync(CurrentFile, DataTable);
-                FileManager.ClearTempFile(CurrentFileName!);
+                await SaveFileToPCK();
             }
-
-            if (DataTableString != null && CurrentStringFile != null)
+            else
             {
-                await _fileManager.DataTableToRHFileAsync(CurrentStringFile, DataTableString);
-            }
+                if (DataTable is not null && CurrentFile is not null)
+                {
+                    await _fileManager.DataTableToRHFileAsync(CurrentFile, DataTable);
+                    FileManager.ClearTempFile(CurrentFileName!);
+                }
 
+                if (DataTableString is not null && CurrentStringFile is not null)
+                {
+                    await _fileManager.DataTableToRHFileAsync(CurrentStringFile, DataTableString);
+                }
+            }
             HasChanges = false;
         }
         catch (Exception ex)
@@ -526,10 +627,41 @@ public partial class DataTableManager : ObservableObject
         }
     }
 
+    public async Task SaveFileToPCK()
+    {
+        try
+        {
+            var gameDirectory = RegistrySettingsHelper.GetClientFolder();
+
+            if (string.IsNullOrEmpty(gameDirectory))
+            {
+                return;
+            }
+
+            if (DataTable is not null && CurrentFileName is not null)
+            {
+                byte[] fileData = await _fileManager.DataTableDataToRHFileAsync(DataTable);
+                await PCKWriter.SaveRHToPCKAsync(gameDirectory, CurrentFileName, fileData);
+            }
+
+            if (DataTableString is not null && CurrentStringFileName is not null)
+            {
+                byte[] fileData = await _fileManager.DataTableDataToRHFileAsync(DataTableString);
+                await PCKWriter.SaveRHToPCKAsync(gameDirectory, CurrentStringFileName, fileData);
+            }
+
+            HasChanges = false;
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.DataTableManagerSaveFileErrorMessage}: {ex.Message}\n {ex.StackTrace}", Resources.Error);
+        }
+    }
+
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public async Task SaveFileAs()
     {
-        if (DataTable == null || CurrentFileName == null) return;
+        if (DataTable is null || CurrentFileName is null) return;
 
         SaveFileDialog saveFileDialog = new()
         {
@@ -547,7 +679,7 @@ public partial class DataTableManager : ObservableObject
                 await _fileManager.DataTableToRHFileAsync(file, DataTable);
                 FileManager.ClearTempFile(CurrentFileName);
 
-                if (DataTableString != null && CurrentStringFileName != null && directory != null)
+                if (DataTableString is not null && CurrentStringFileName is not null && directory is not null)
                 {
                     string stringFilePath = Path.Combine(directory, CurrentStringFileName);
                     await _fileManager.DataTableToRHFileAsync(stringFilePath, DataTableString);
@@ -570,7 +702,7 @@ public partial class DataTableManager : ObservableObject
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public async Task SaveFileAsMIP()
     {
-        if (DataTable == null || CurrentFileName == null) return;
+        if (DataTable is null || CurrentFileName is null) return;
 
         SaveFileDialog saveFileDialog = new()
         {
@@ -587,7 +719,7 @@ public partial class DataTableManager : ObservableObject
                 string? directory = Path.GetDirectoryName(file);
                 await _fileManager.CompressToMipAsync(DataTable, file, ZLibOperationMode.Compress);
 
-                if (DataTableString != null && CurrentStringFileName != null && directory != null)
+                if (DataTableString is not null && CurrentStringFileName is not null && directory is not null)
                 {
                     string stringFileName = CurrentStringFileName + ".mip";
                     string stringFilePath = Path.Combine(directory, stringFileName);
@@ -607,7 +739,7 @@ public partial class DataTableManager : ObservableObject
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public async Task SaveFileAsXML()
     {
-        if (DataTable == null || CurrentFileName == null) return;
+        if (DataTable is null || CurrentFileName is null) return;
 
         SaveFileDialog saveFileDialog = new()
         {
@@ -624,7 +756,7 @@ public partial class DataTableManager : ObservableObject
                 string? directory = Path.GetDirectoryName(file);
                 await FileManager.ExportToXMLAsync(DataTable, file);
 
-                if (DataTableString != null && CurrentStringFileName != null && directory != null)
+                if (DataTableString is not null && CurrentStringFileName is not null && directory is not null)
                 {
                     string stringFileName = CurrentStringFileName + ".xml";
                     string stringFilePath = Path.Combine(directory, stringFileName);
@@ -644,7 +776,7 @@ public partial class DataTableManager : ObservableObject
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public async Task SaveFileAsXLSX()
     {
-        if (DataTable == null || CurrentFileName == null) return;
+        if (DataTable is null || CurrentFileName is null) return;
 
         SaveFileDialog saveFileDialog = new()
         {
@@ -661,7 +793,7 @@ public partial class DataTableManager : ObservableObject
                 string? directory = Path.GetDirectoryName(file);
                 await FileManager.ExportToXLSXAsync(DataTable, file);
 
-                if (DataTableString != null && CurrentStringFileName != null && directory != null)
+                if (DataTableString is not null && CurrentStringFileName is not null && directory is not null)
                 {
                     string stringFileName = CurrentStringFileName + ".xlsx";
                     string stringFilePath = Path.Combine(directory, stringFileName);
@@ -709,7 +841,7 @@ public partial class DataTableManager : ObservableObject
     /// <param name="selectionUnit">The selection unit for the DataGrid.</param>
     public void OpenSearchDialog(Window owner, string? parameter, DataGridSelectionUnit selectionUnit)
     {
-        if (_searchDialog == null || !_searchDialog.IsVisible)
+        if (_searchDialog is null || !_searchDialog.IsVisible)
         {
             _searchDialog = new SearchDialog
             {
@@ -737,7 +869,7 @@ public partial class DataTableManager : ObservableObject
     /// <param name="matchCase">Whether to match case.</param>
     private void Search(string searchText, bool matchCase)
     {
-        if (string.IsNullOrWhiteSpace(searchText) || DataTable == null)
+        if (string.IsNullOrWhiteSpace(searchText) || DataTable is null)
             return;
 
         StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
@@ -751,7 +883,7 @@ public partial class DataTableManager : ObservableObject
         int startRowIndex = 0;
         int startColIndex = 0;
 
-        if (lastFoundCell != null)
+        if (lastFoundCell is not null)
         {
             // Start the search from the next cell after the last found cell
             startRowIndex = (int)lastFoundCell.Value.X;
@@ -840,12 +972,12 @@ public partial class DataTableManager : ObservableObject
     /// <param name="matchCase">Whether to match case.</param>
     private void Replace(string searchText, string replaceText, bool matchCase)
     {
-        if (string.IsNullOrEmpty(searchText) || DataTable == null)
+        if (string.IsNullOrEmpty(searchText) || DataTable is null)
             return;
 
         StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
-        if (lastFoundCell != null)
+        if (lastFoundCell is not null)
         {
             int rowIndex = (int)lastFoundCell.Value.X;
             int colIndex = (int)lastFoundCell.Value.Y;
@@ -885,7 +1017,7 @@ public partial class DataTableManager : ObservableObject
     /// <param name="matchCase">Whether to match case.</param>
     public void ReplaceAll(string searchText, string replaceText, bool matchCase)
     {
-        if (string.IsNullOrEmpty(searchText) || DataTable == null)
+        if (string.IsNullOrEmpty(searchText) || DataTable is null)
             return;
 
         StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
@@ -926,7 +1058,7 @@ public partial class DataTableManager : ObservableObject
             });
             _redoStack.Clear();
 
-            if (SelectedItem != null)
+            if (SelectedItem is not null)
             {
                 SelectedItem = DataTable.DefaultView[0];
             }
@@ -943,12 +1075,12 @@ public partial class DataTableManager : ObservableObject
     /// <param name="matchCase">Whether to match case.</param>
     public void CountMatches(string searchText, bool matchCase)
     {
-        if (string.IsNullOrEmpty(searchText) || DataTable == null)
+        if (string.IsNullOrEmpty(searchText) || DataTable is null)
             return;
 
         StringComparison comparison = matchCase ? StringComparison.Ordinal : StringComparison.OrdinalIgnoreCase;
 
-        int count = DataTable.Rows.Cast<DataRow>().Sum(row => row.ItemArray.Count(item => item != null && item.ToString()?.Contains(searchText, comparison) == true));
+        int count = DataTable.Rows.Cast<DataRow>().Sum(row => row.ItemArray.Count(item => item is not null && item.ToString()?.Contains(searchText, comparison) == true));
 
         _searchDialog?.ShowMessage(string.Format(Resources.DataTableManagerCountMessage, count), Brushes.LightBlue);
     }
@@ -999,7 +1131,7 @@ public partial class DataTableManager : ObservableObject
     {
         try
         {
-            if (SelectedItem == null || DataTable == null) return;
+            if (SelectedItem is null || DataTable is null) return;
 
             var newSelectedItem = DeleteSelectedRow(DataTable, SelectedItem);
 
@@ -1017,7 +1149,7 @@ public partial class DataTableManager : ObservableObject
     /// <returns>True if the selected row command can be executed, otherwise false.</returns>
     private bool CanExecuteSelectedRowCommand()
     {
-        return SelectedItem != null;
+        return SelectedItem is not null;
     }
 
     /// <summary>
@@ -1037,14 +1169,14 @@ public partial class DataTableManager : ObservableObject
     /// <param name="dataTable">The DataTable to add a new row to.</param>
     private void AddRow(DataTable? dataTable)
     {
-        if (dataTable == null) return;
+        if (dataTable is null) return;
 
         int newID = GetMaxId();
         EditHistory editHistory = CreateEditHistory(EditAction.RowInsert);
 
         AddNewRow(dataTable, newID, editHistory);
         // Add a new row to DataTableString if it exists
-        if (DataTableString != null)
+        if (DataTableString is not null)
         {
             AddNewRow(DataTableString, newID, editHistory);
         }
@@ -1072,7 +1204,7 @@ public partial class DataTableManager : ObservableObject
     /// <returns>The duplicated DataRowView, or null if the operation fails.</returns>
     private DataRowView? DuplicateSelectedRow(DataTable? dataTable, DataRowView? selectedItem)
     {
-        if (dataTable == null || selectedItem == null) return null;
+        if (dataTable is null || selectedItem is null) return null;
 
         // Get original row's index and nID
         var originalRow = selectedItem.Row;
@@ -1104,10 +1236,10 @@ public partial class DataTableManager : ObservableObject
         });
 
         // Handle DataTableString if needed
-        if (DataTableString != null && DataTableString.Columns.Contains("nID"))
+        if (DataTableString is not null && DataTableString.Columns.Contains("nID"))
         {
             var selectedItemString = GetRowViewById(DataTableString, selectedItem);
-            if (selectedItemString != null)
+            if (selectedItemString is not null)
             {
                 var duplicateStringRow = DuplicateRow(selectedItemString.Row, DataTableString);
                 duplicateStringRow["nID"] = newID;
@@ -1144,15 +1276,15 @@ public partial class DataTableManager : ObservableObject
     /// <returns>The new selected DataRowView, or null if the operation fails.</returns>
     private DataRowView? DeleteSelectedRow(DataTable? dataTable, DataRowView? selectedItem)
     {
-        if (dataTable == null || selectedItem == null) return null;
+        if (dataTable is null || selectedItem is null) return null;
 
         EditHistory editHistory = CreateEditHistory(EditAction.RowDelete);
 
         // Delete row from DataTableString if it exists
-        if (DataTableString != null && DataTableString.Columns.Contains("nID"))
+        if (DataTableString is not null && DataTableString.Columns.Contains("nID"))
         {
             var selectedItemString = GetRowViewById(DataTableString, selectedItem);
-            if (selectedItemString != null)
+            if (selectedItemString is not null)
             {
                 RemoveRow(DataTableString, selectedItemString.Row, editHistory);
             }
@@ -1346,14 +1478,14 @@ public partial class DataTableManager : ObservableObject
     {
         int newID = 1;
 
-        if (DataTable != null && DataTable.Rows.Count > 0 && DataTable.Columns.Contains("nID"))
+        if (DataTable is not null && DataTable.Rows.Count > 0 && DataTable.Columns.Contains("nID"))
         {
             var maxIdTable1 = DataTable.AsEnumerable()
                                     .Max(row => row.Field<int>("nID"));
             newID = maxIdTable1 + 1;
         }
 
-        if (DataTableString != null && DataTableString.Rows.Count > 0 && DataTableString.Columns.Contains("nID"))
+        if (DataTableString is not null && DataTableString.Rows.Count > 0 && DataTableString.Columns.Contains("nID"))
         {
             var maxIdTable2 = DataTableString.AsEnumerable()
                                     .Max(row => row.Field<int>("nID"));
@@ -1408,7 +1540,7 @@ public partial class DataTableManager : ObservableObject
 
                 foreach (var groupedEdit in edit.GroupedEdits)
                 {
-                    if (groupedEdit.AffectedRow != null)
+                    if (groupedEdit.AffectedRow is not null)
                     {
                         var table = groupedEdit.AffectedRow.Table;
                         switch (groupedEdit.Action)
@@ -1479,13 +1611,13 @@ public partial class DataTableManager : ObservableObject
                 OnPropertyChanged(nameof(DataTableString));
                 OnCanExecuteChangesChanged();
 
-                if (lastAffectedItem != null)
+                if (lastAffectedItem is not null)
                 {
                     if (lastAffectedItem.Row.Table == SelectedItem?.Row.Table)
                     {
                         SelectedItem = lastAffectedItem;
                     }
-                    else if (lastAffectedItem.Row.Table == SelectedItemString?.Row.Table && DataTable != null)
+                    else if (lastAffectedItem.Row.Table == SelectedItemString?.Row.Table && DataTable is not null)
                     {
                         SelectedItem = GetRowViewById(DataTable, lastAffectedItem);
                     }
@@ -1616,13 +1748,13 @@ public partial class DataTableManager : ObservableObject
     /// <param name="column">The column to update.</param>
     private void UpdateItemValue(DataRowView? item, object? newValue, string column)
     {
-        if (item != null && item.Row.Table.Columns.Contains(column))
+        if (item is not null && item.Row.Table.Columns.Contains(column))
         {
             var currentValue = item[column];
 
             var columnType = item.Row.Table.Columns[column]?.DataType;
 
-            if (newValue == null || string.IsNullOrWhiteSpace(newValue.ToString()))
+            if (newValue is null || string.IsNullOrWhiteSpace(newValue.ToString()))
             {
                 if (columnType == typeof(int) || columnType == typeof(Single))
                 {
@@ -1668,7 +1800,7 @@ public partial class DataTableManager : ObservableObject
                     SelectedItem = null;
                     SelectedItem = item;
                 }
-                else if (item.Row.Table == SelectedItemString?.Row.Table && DataTable != null)
+                else if (item.Row.Table == SelectedItemString?.Row.Table && DataTable is not null)
                 {
                     SelectedItem = null;
                     SelectedItem = GetRowViewById(DataTable, item);
@@ -1704,7 +1836,7 @@ public partial class DataTableManager : ObservableObject
     /// <returns>True if the values are equal, otherwise false.</returns>
     private static bool AreValuesEqual(object? value1, object? value2)
     {
-        if (value1 == null || value2 == null)
+        if (value1 is null || value2 is null)
         {
             return Equals(value1, value2);
         }
@@ -1772,7 +1904,7 @@ public partial class DataTableManager : ObservableObject
     {
         try
         {
-            if (DataTable != null)
+            if (DataTable is not null)
             {
                 // Text search filter
                 if (!string.IsNullOrEmpty(searchText))
@@ -1832,6 +1964,9 @@ public partial class DataTableManager : ObservableObject
     private bool _hasChanges = false;
 
     [ObservableProperty]
+    private bool _isPCKMode = false;
+
+    [ObservableProperty]
     private int _selectedRow;
 
     [ObservableProperty]
@@ -1849,7 +1984,7 @@ public partial class DataTableManager : ObservableObject
 
     partial void OnSelectedItemChanged(DataRowView? value)
     {
-        if (value != null && DataTableString != null && DataTableString.Columns.Contains("nID"))
+        if (value is not null && DataTableString is not null && DataTableString.Columns.Contains("nID"))
         {
             SelectedItemString = GetRowViewById(DataTableString, value);
         }
@@ -1869,6 +2004,7 @@ public partial class DataTableManager : ObservableObject
     [ObservableProperty]
     private DataRowView? _selectedItemString;
 
+    [ObservableProperty] private string? _selectedClientFolder = RegistrySettingsHelper.GetClientFolder();
     #endregion
 
 }

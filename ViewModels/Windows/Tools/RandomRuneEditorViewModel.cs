@@ -101,6 +101,26 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        [RelayCommand]
+        private async Task LoadFileFromPCK()
+        {
+            try
+            {
+                await CloseFile();
+
+                bool isLoaded = await DataTableManager.LoadFileFromPCK("randomrune.rh", null);
+
+                if (isLoaded)
+                {
+                    IsLoaded();
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            }
+        }
+
         private void IsLoaded()
         {
             Title = string.Format(Resources.EditorTitleFileName, "Random Rune", DataTableManager.CurrentFileName);

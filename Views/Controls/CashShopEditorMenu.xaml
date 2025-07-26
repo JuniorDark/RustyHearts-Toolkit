@@ -35,6 +35,11 @@
                     Icon="{ui:SymbolIcon DocumentAdd24}"
                     InputGestureText="Ctrl+O" />
                 <MenuItem
+                    Command="{Binding LoadFileFromPCKCommand}"
+                    Header="{x:Static rs:Resources.MenuLoadFileFromPCK}"
+                    Icon="{ui:SymbolIcon DocumentAdd24}"
+                    InputGestureText="Ctrl+P" />
+                <MenuItem
                     Command="{Binding CreateFileCommand}"
                     Header="{x:Static rs:Resources.MenuCreateNew}"
                     Icon="{ui:SymbolIcon DocumentAdd24}"
@@ -125,6 +130,10 @@
                 <MenuItem
                     Command="{Binding DataTableManager.SetTableFolderCommand}"
                     Header="{x:Static rs:Resources.MenuSetTableFolder}"
+                    Icon="{ui:SymbolIcon FolderOpen20}" />
+                <MenuItem
+                    Command="{Binding DataTableManager.SetClientFolderCommand}"
+                    Header="{x:Static rs:Resources.MenuSetClientFolder}"
                     Icon="{ui:SymbolIcon FolderOpen20}" />
             </ui:MenuItem>
         </Menu>

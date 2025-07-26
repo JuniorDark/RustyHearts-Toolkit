@@ -949,7 +949,7 @@ public static class WDataReader
             }
             int cueCnt = br.ReadInt32();
             for (int c = 0; c < cueCnt; c++)
-                e.Cues.Add(new Cue { Delay = br.ReadSingle(), Name = ReadWString(br), ID = br.ReadUInt32(), Start = br.ReadSingle() });
+                e.Cues.Add(new Cue { End = br.ReadSingle(), Name = ReadWString(br), ID = br.ReadUInt32(), Start = br.ReadSingle() });
             int soundCnt = br.ReadInt32();
             for (int s = 0; s < soundCnt; s++)
                 e.Sounds.Add(new SoundRecord

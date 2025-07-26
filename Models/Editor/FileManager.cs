@@ -47,6 +47,27 @@ namespace RHToolkit.Models.Editor
         }
 
         /// <summary>
+        /// Converts a byte array representing an RH file to a DataTable.
+        /// </summary>
+        /// <param name="sourceBytes"></param>
+        /// <returns>A DataTable containing the data from the RH file represented by the byte array.</returns>
+        public DataTable RHFileDataToDataTableAsync(byte[] sourceBytes)
+        {
+            return _dataTableCryptor.RhToDataTable(sourceBytes);
+        }
+
+        /// <summary>
+        /// Converts a DataTable to a byte array representing an RH file.
+        /// </summary>
+        /// <param name="fileData"></param>
+        /// <returns>A byte array containing the data from the DataTable in RH file format.</returns>
+        public async Task<byte[]> DataTableDataToRHFileAsync(DataTable fileData)
+        {
+            byte[] encryptedData = _dataTableCryptor.DataTableToRh(fileData);
+            return await Task.FromResult(encryptedData);
+        }
+
+        /// <summary>
         /// Saves a temporary backup of a DataTable to a file.
         /// </summary>
         /// <param name="fileName">The name of the file to save.</param>

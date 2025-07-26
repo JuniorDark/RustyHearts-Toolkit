@@ -123,6 +123,36 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        [RelayCommand]
+        private async Task LoadFileFromPCK(string? parameter)
+        {
+            try
+            {
+                await CloseFile();
+
+                if (int.TryParse(parameter, out int unionPackageType))
+                {
+                    string? fileName = GetFileName(unionPackageType);
+                    if (fileName == null) return;
+
+                    string? stringFileName = GetStringFileName(unionPackageType);
+                    PackageTeplateType = unionPackageType;
+                    string columnName = GetColumnName(fileName);
+
+                    bool isLoaded = await DataTableManager.LoadFileFromPCK(fileName, stringFileName);
+
+                    if (isLoaded)
+                    {
+                        IsLoaded();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            }
+        }
+
         private static string GetFileName(int unionPackageType)
         {
             return unionPackageType switch

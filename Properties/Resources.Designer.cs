@@ -1456,7 +1456,7 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Table folder has been set to &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Folder has been set to &apos;{0}&apos;.
         /// </summary>
         public static string DataTableManagerFolderSetMessage {
             get {
@@ -5605,6 +5605,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load From PCK.
+        /// </summary>
+        public static string MenuLoadFileFromPCK {
+            get {
+                return ResourceManager.GetString("MenuLoadFileFromPCK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Load From PCK....
+        /// </summary>
+        public static string MenuLoadFilesFromPCK {
+            get {
+                return ResourceManager.GetString("MenuLoadFilesFromPCK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Drop Group File....
         /// </summary>
         public static string MenuOpenDropGroupFile {
@@ -5614,7 +5632,7 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open File....
+        ///   Looks up a localized string similar to Open File.
         /// </summary>
         public static string MenuOpenFile {
             get {
@@ -5623,7 +5641,7 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open ....
+        ///   Looks up a localized string similar to Open From....
         /// </summary>
         public static string MenuOpenList {
             get {
@@ -5668,11 +5686,20 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save As ....
+        ///   Looks up a localized string similar to Save As....
         /// </summary>
         public static string MenuSaveAs {
             get {
                 return ResourceManager.GetString("MenuSaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Client Folder.
+        /// </summary>
+        public static string MenuSetClientFolder {
+            get {
+                return ResourceManager.GetString("MenuSetClientFolder", resourceCulture);
             }
         }
         
@@ -7765,11 +7792,29 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Archive file &apos;{0}&apos; not found..
+        /// </summary>
+        public static string PCKTool_ArchiveNotFound {
+            get {
+                return ResourceManager.GetString("PCKTool_ArchiveNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Operation Cancelled..
         /// </summary>
         public static string PCKTool_CancelledMessage {
             get {
                 return ResourceManager.GetString("PCKTool_CancelledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not read full file from PCK archive..
+        /// </summary>
+        public static string PCKTool_CantReadFile {
+            get {
+                return ResourceManager.GetString("PCKTool_CantReadFile", resourceCulture);
             }
         }
         
@@ -7806,6 +7851,15 @@ namespace RHToolkit.Properties {
         public static string PCKTool_FileFolder {
             get {
                 return ResourceManager.GetString("PCKTool_FileFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File &apos;{0}&apos; not found in f00X.dat..
+        /// </summary>
+        public static string PCKTool_FileNotFoundInList {
+            get {
+                return ResourceManager.GetString("PCKTool_FileNotFoundInList", resourceCulture);
             }
         }
         

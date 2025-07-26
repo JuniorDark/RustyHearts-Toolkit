@@ -11,7 +11,7 @@ public class PCKReader
     /// Reads the PCK file list 'f00X.dat' from the specified directory.
     /// </summary>
     /// <returns>A list of PCKFile objects representing the files in the PCK archive.</returns>
-    public static async Task<List<PCKFile>> ReadPCKFileListAsync(string gameDirectory, CancellationToken ct)
+    public static async Task<List<PCKFile>> ReadPCKFileListAsync(string gameDirectory, CancellationToken ct = default)
     {
         string pckFileList = Path.Combine(gameDirectory, "f00X.dat");
 
@@ -63,6 +63,20 @@ public class PCKReader
         }
 
         return listPck;
+    }
+
+    /// <summary>
+    /// Reads the PCK file list and returns a sorted dictionary of PCKFile objects.
+    /// </summary>
+    /// <param name="gameDirectory"></param>
+    /// <returns>A sorted dictionary where the key is the file name and the value is the PCKFile object.</returns>
+    public static async Task<SortedDictionary<string, PCKFile>> GetPCKSortedDictionaryAsync(string gameDirectory)
+    {
+        var pckFilesList = await ReadPCKFileListAsync(gameDirectory);
+        var pckDict = new SortedDictionary<string, PCKFile>();
+        foreach (var pf in pckFilesList)
+            pckDict[pf.Name] = pf;
+        return pckDict;
     }
 
     /// <summary>
@@ -138,4 +152,27 @@ public class PCKReader
             }
         }
     }
+
+    public static async Task<byte[]> LoadRHFromPCKAsync(string gameDirectory, string fileNameInPck)
+    {
+        var pckFiles = await ReadPCKFileListAsync(gameDirectory);
+        var fileEntry = pckFiles.FirstOrDefault(f =>
+        string.Equals(Path.GetFileName(f.Name), fileNameInPck, StringComparison.OrdinalIgnoreCase)) ?? throw new FileNotFoundException(string.Format(Resources.PCKTool_FileNotFoundInList, fileNameInPck));
+        string archivePath = Path.Combine(gameDirectory, $"{fileEntry.Archive:D3}.pck");
+
+        if (!File.Exists(archivePath))
+            throw new FileNotFoundException(string.Format(Resources.PCKTool_ArchiveNotFound, archivePath));
+
+        byte[] buffer = new byte[fileEntry.FileSize];
+
+        using FileStream fs = new(archivePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+        fs.Seek(fileEntry.Offset, SeekOrigin.Begin);
+        int read = await fs.ReadAsync(buffer.AsMemory(0, fileEntry.FileSize));
+
+        if (read != fileEntry.FileSize)
+            throw new InvalidDataException(Resources.PCKTool_CantReadFile);
+
+        return buffer;
+    }
+
 }

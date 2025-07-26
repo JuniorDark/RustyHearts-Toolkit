@@ -142,6 +142,37 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        [RelayCommand]
+        private async Task LoadFileFromPCK(string? parameter)
+        {
+            try
+            {
+                await CloseFile();
+
+                if (int.TryParse(parameter, out int dropGroupType))
+                {
+                    string? fileName = GetFileNameFromQuestType(dropGroupType);
+                    if (fileName == null) return;
+                    int questType = GetQuestTypeFromFileName(fileName);
+                    string columnName = GetColumnName(fileName);
+                    string? stringFileName = GetStringFileName(questType);
+
+                    QuestType = (QuestType)questType;
+
+                    bool isLoaded = await DataTableManager.LoadFileFromPCK(fileName, stringFileName);
+
+                    if (isLoaded)
+                    {
+                        IsLoaded();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            }
+        }
+
         private void IsLoaded()
         {
             Title = string.Format(Resources.EditorTitleFileName, "Quest", DataTableManager.CurrentFileName);

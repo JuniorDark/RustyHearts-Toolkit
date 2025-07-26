@@ -50,6 +50,32 @@
                         Icon="{ui:SymbolIcon DocumentAdd24}"
                         InputGestureText="Ctrl+Shift+4" />
                 </MenuItem>
+                <MenuItem Header="{x:Static rs:Resources.MenuLoadFilesFromPCK}" Icon="{ui:SymbolIcon DocumentAdd24}">
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="1"
+                        Header="itemlist.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}"
+                        InputGestureText="Ctrl+1" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="2"
+                        Header="itemlist_costume.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}"
+                        InputGestureText="Ctrl+2" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="3"
+                        Header="itemlist_armor.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}"
+                        InputGestureText="Ctrl+3" />
+                    <MenuItem
+                        Command="{Binding LoadFileFromPCKCommand}"
+                        CommandParameter="4"
+                        Header="itemlist_weapon.rh"
+                        Icon="{ui:SymbolIcon DocumentAdd24}"
+                        InputGestureText="Ctrl+4" />
+                </MenuItem>
                 <MenuItem
                     Command="{Binding DataTableManager.SaveFileCommand}"
                     Header="{x:Static rs:Resources.MenuSave}"
@@ -136,6 +162,10 @@
                 <MenuItem
                     Command="{Binding DataTableManager.SetTableFolderCommand}"
                     Header="{x:Static rs:Resources.MenuSetTableFolder}"
+                    Icon="{ui:SymbolIcon FolderOpen20}" />
+                <MenuItem
+                    Command="{Binding DataTableManager.SetClientFolderCommand}"
+                    Header="{x:Static rs:Resources.MenuSetClientFolder}"
                     Icon="{ui:SymbolIcon FolderOpen20}" />
             </ui:MenuItem>
         </Menu>

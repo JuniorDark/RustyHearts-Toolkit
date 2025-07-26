@@ -510,7 +510,7 @@ public static class WDataWriter
                     bw.Write(sd.BlendTime);
             }
             bw.Write(e.Cues.Count);
-            foreach (var c in e.Cues) { bw.Write(c.Delay); WriteWString(bw, c.Name); bw.Write(c.ID); bw.Write(c.Start); }
+            foreach (var c in e.Cues) { bw.Write(c.End); WriteWString(bw, c.Name); bw.Write(c.ID); bw.Write(c.Start); }
             bw.Write(e.Sounds.Count);
             foreach (var s in e.Sounds)
             {

@@ -20,26 +20,15 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
 - **Send Mail**: Send in-game mail with customizable item attachments. Save mail as templates in JSON format for easy reuse.
 
 ### PCK Tools
+- **PCK Tools**: A specialized tool designed for working with [.pck](https://juniordark.gitbook.io/rusty-hearts-files-structures/external-files/pck-file) files, which are the primary container format for Rusty Hearts, containing almost all of the asset files for the game.
 - Read and unpack `.pck` files to extract game assets.
 - Pack and write assets back into `.pck` files.
 
 ### File Editor Tools
-- **WData Editor**: A specialized tool designed for editing `.wdata` files used by the game. 
-`.wdata` files are binary containers that encapsulate all runtime data for a map, packaging map resources and configurations into a single versioned file.
-
-.wdata files bundle together the following map and world data used by the game engine at runtime:
-
-- What Models and navigation meshes (navmeshes) to load
-- Path to scripts controlling game logic
-- Interactive volumes known as EventBoxes (spawn points for NPCs and enemies, triggers, portals, camera zones, etc.)
-- Animated background objects (AniBG)
-- Item containers (ItemBoxes)
-- Gimmicks like traps and interactive objects (GimmickBox)
-- Scripting triggers, including events, conditions, and actions 
-- Cutscene data, such as Scenes and Scene Resources
+- **WData Editor**: A specialized tool designed for editing [.wdata](https://juniordark.gitbook.io/rusty-hearts-files-structures/wdata-file) files, which are binary containers that encapsulate all runtime data for a map, packaging map resources and configurations into a single versioned file.
 
 ### Table Editor Tools
-- **Table Editor**: Edit `.rh` table files directly, with options to export into various formats like XML, XLSX, and MIP.
+- **Table Editor**: Edit [.rh](https://juniordark.gitbook.io/rusty-hearts-files-structures/internal-files/rh-file) table files directly, with options to export into various formats like XML, XLSX, and MIP.
   
 - **Dedicated Table Editors**:
   - **AddEffect Editor**: Edit buffs and effects (addeffect.rh).

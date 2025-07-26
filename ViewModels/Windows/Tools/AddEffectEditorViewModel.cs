@@ -98,6 +98,26 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        [RelayCommand]
+        private async Task LoadFileFromPCK()
+        {
+            try
+            {
+                await CloseFile();
+
+                bool isLoaded = await DataTableManager.LoadFileFromPCK("addeffect.rh", "addeffect_string.rh");
+
+                if (isLoaded)
+                {
+                    IsLoaded();
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            }
+        }
+
         private void IsLoaded()
         {
             Title = string.Format(Resources.EditorTitleFileName, "Add Effect", DataTableManager.CurrentFileName);

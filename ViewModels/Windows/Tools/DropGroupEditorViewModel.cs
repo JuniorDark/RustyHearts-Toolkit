@@ -126,6 +126,35 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        [RelayCommand]
+        private async Task LoadFileFromPCK(string? parameter)
+        {
+            try
+            {
+                await CloseFile();
+
+                if (int.TryParse(parameter, out int dropGroupType))
+                {
+                    string? fileName = GetFileNameFromDropGroupType(dropGroupType);
+                    if (fileName == null) return;
+
+                    string columnName = GetColumnName(fileName);
+                    SetDropGroupProperties(dropGroupType);
+
+                    bool isLoaded = await DataTableManager.LoadFileFromPCK(fileName);
+
+                    if (isLoaded)
+                    {
+                        IsLoaded();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            }
+        }
+
         private void IsLoaded()
         {
             Title = string.Format(Resources.EditorTitleFileName, "Drop Group", DataTableManager.CurrentFileName);

@@ -1075,13 +1075,13 @@
     <value>File</value>
   </data>
   <data name="MenuOpenList" xml:space="preserve">
-    <value>Open ...</value>
+    <value>Open From...</value>
   </data>
   <data name="MenuSave" xml:space="preserve">
     <value>Save</value>
   </data>
   <data name="MenuSaveAs" xml:space="preserve">
-    <value>Save As ...</value>
+    <value>Save As...</value>
   </data>
   <data name="MenuExportAs" xml:space="preserve">
     <value>Export As...</value>
@@ -1139,6 +1139,9 @@
   </data>
   <data name="MenuSetTableFolder" xml:space="preserve">
     <value>Set Table Folder</value>
+  </data>
+  <data name="MenuSetClientFolder" xml:space="preserve">
+    <value>Set Client Folder</value>
   </data>
   <data name="Account" xml:space="preserve">
     <value>Account</value>
@@ -1936,7 +1939,7 @@
     <value>The file '{0}' does not exist in the same directory as {1}.</value>
   </data>
   <data name="DataTableManagerFolderSetMessage" xml:space="preserve">
-    <value>Table folder has been set to '{0}'</value>
+    <value>Folder has been set to '{0}'</value>
   </data>
   <data name="ReducePhysicalDamage" xml:space="preserve">
     <value>Reduce Physical Damage</value>
@@ -2710,7 +2713,13 @@
     <value>Open Drop Group File...</value>
   </data>
   <data name="MenuOpenFile" xml:space="preserve">
-    <value>Open File...</value>
+    <value>Open File</value>
+  </data>
+  <data name="MenuLoadFileFromPCK" xml:space="preserve">
+    <value>Load From PCK</value>
+  </data>
+  <data name="MenuLoadFilesFromPCK" xml:space="preserve">
+    <value>Load From PCK...</value>
   </data>
   <data name="PackageEditor_LevelMax" xml:space="preserve">
     <value>Level Max</value>
@@ -4631,5 +4640,14 @@
   </data>
   <data name="PCKTool_NoFilesToPack" xml:space="preserve">
     <value>Nothing to pack. All files are already up-to-date.</value>
+  </data>
+  <data name="PCKTool_ArchiveNotFound" xml:space="preserve">
+    <value>Archive file '{0}' not found.</value>
+  </data>
+  <data name="PCKTool_FileNotFoundInList" xml:space="preserve">
+    <value>File '{0}' not found in f00X.dat.</value>
+  </data>
+  <data name="PCKTool_CantReadFile" xml:space="preserve">
+    <value>Could not read full file from PCK archive.</value>
   </data>
 </root>

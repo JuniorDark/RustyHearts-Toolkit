@@ -1140,6 +1140,9 @@
   <data name="MenuSetTableFolder" xml:space="preserve">
     <value>Table 폴더 선택</value>
   </data>
+  <data name="MenuSetClientFolder" xml:space="preserve">
+    <value>클라이언트 폴더 선택</value>
+  </data>
   <data name="Account" xml:space="preserve">
     <value>계정</value>
   </data>
@@ -1936,7 +1939,7 @@
     <value>파일 '{0}'이 {1}과 같은 디렉토리에 없습니다.</value>
   </data>
   <data name="DataTableManagerFolderSetMessage" xml:space="preserve">
-    <value>테이블 폴더가 '{0}'(으)로 설정되었습니다.</value>
+    <value>폴더가 '{0}'로 설정되었습니다.</value>
   </data>
   <data name="ReducePhysicalDamage" xml:space="preserve">
     <value>물리적 피해 감소</value>
@@ -2711,6 +2714,12 @@
   </data>
   <data name="MenuOpenFile" xml:space="preserve">
     <value>파일 열기...</value>
+  </data>
+  <data name="MenuLoadFileFromPCK" xml:space="preserve">
+    <value>PCK에서 로드</value>
+  </data>
+  <data name="MenuLoadFilesFromPCK" xml:space="preserve">
+    <value>PCK에서 로드...</value>
   </data>
   <data name="PackageEditor_LevelMax" xml:space="preserve">
     <value>레벨 최대</value>
@@ -4631,5 +4640,14 @@
   </data>
   <data name="PCKTool_NoFilesToPack" xml:space="preserve">
     <value>짐을 싸실 필요 없습니다. 모든 파일이 이미 최신 상태입니다.</value>
+  </data>
+  <data name="PCKTool_ArchiveNotFound" xml:space="preserve">
+    <value>보관 파일 '{0}'을 찾을 수 없습니다.</value>
+  </data>
+  <data name="PCKTool_FileNotFoundInList" xml:space="preserve">
+    <value>f00X.dat에서 파일 '{0}'을 찾을 수 없습니다.</value>
+  </data>
+  <data name="PCKTool_CantReadFile" xml:space="preserve">
+    <value>PCK 아카이브에서 전체 파일을 읽을 수 없습니다.</value>
   </data>
 </root>

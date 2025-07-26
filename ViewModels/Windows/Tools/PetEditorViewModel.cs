@@ -112,6 +112,26 @@ namespace RHToolkit.ViewModels.Windows
             }
         }
 
+        [RelayCommand]
+        private async Task LoadFileFromPCK()
+        {
+            try
+            {
+                await CloseFile();
+
+                bool isLoaded = await DataTableManager.LoadFileFromPCK("pet.rh", "pet_string.rh");
+
+                if (isLoaded)
+                {
+                    IsLoaded();
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            }
+        }
+
         private static string? GetFileName(int petType)
         {
             return petType switch
