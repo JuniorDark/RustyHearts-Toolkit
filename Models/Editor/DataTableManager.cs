@@ -198,7 +198,7 @@ public partial class DataTableManager : ObservableObject
                 return false;
             }
 
-            var fileData = await PCKReader.LoadRHFromPCKAsync(gameDirectory, fileNameInPck);
+            var fileData = await PCKReader.LoadFileFromPCKAsync(gameDirectory, fileNameInPck);
             var table = _fileManager.RHFileDataToDataTableAsync(fileData);
 
             if (!IsValidTable(table, null, fileNameInPck, null))
@@ -207,7 +207,7 @@ public partial class DataTableManager : ObservableObject
             DataTable? stringTable = null;
             if (stringTableName is not null)
             {
-                var fileStringData = await PCKReader.LoadRHFromPCKAsync(gameDirectory, stringTableName);
+                var fileStringData = await PCKReader.LoadFileFromPCKAsync(gameDirectory, stringTableName);
                 stringTable = _fileManager.RHFileDataToDataTableAsync(fileStringData);
             }
 
@@ -641,13 +641,13 @@ public partial class DataTableManager : ObservableObject
             if (DataTable is not null && CurrentFileName is not null)
             {
                 byte[] fileData = await _fileManager.DataTableDataToRHFileAsync(DataTable);
-                await PCKWriter.SaveRHToPCKAsync(gameDirectory, CurrentFileName, fileData);
+                await PCKWriter.SaveFileToPCKAsync(gameDirectory, CurrentFileName, fileData);
             }
 
             if (DataTableString is not null && CurrentStringFileName is not null)
             {
                 byte[] fileData = await _fileManager.DataTableDataToRHFileAsync(DataTableString);
-                await PCKWriter.SaveRHToPCKAsync(gameDirectory, CurrentStringFileName, fileData);
+                await PCKWriter.SaveFileToPCKAsync(gameDirectory, CurrentStringFileName, fileData);
             }
 
             HasChanges = false;

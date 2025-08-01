@@ -353,24 +353,31 @@ public partial class WDataManager : ObservableObject
     {
         if (collectionObj is not IList list) return;
 
-        // 1) Is this one of the EventBoxGroup→Boxes collections?
-        var group = WData!.EventBoxGroups.FirstOrDefault(g => ReferenceEquals(g.Boxes, list));
+        try
+        {
+            // 1) Is this one of the EventBoxGroup→Boxes collections?
+            var group = WData!.EventBoxGroups.FirstOrDefault(g => ReferenceEquals(g.Boxes, list));
 
-        if (group != null)
-        {
-            // a) Create the correct derived box for this tab
-            var newBox = CreateEventBox(group.Type);
-            newBox.Type = group.Type;
-            list.Add(newBox);
-            SelectedItem = newBox;
+            if (group != null)
+            {
+                // a) Create the correct derived box for this tab
+                var newBox = CreateEventBox(group.Type);
+                newBox.Type = group.Type;
+                list.Add(newBox);
+                SelectedItem = newBox;
+            }
+            else
+            {
+                // b) Fallback: non‑EventBox lists (ItemBoxes, Gimmicks, …)
+                var itemType = list.GetType().GetGenericArguments()[0];
+                var newItem = Activator.CreateInstance(itemType)!;
+                list.Add(newItem);
+                SelectedItem = newItem;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            // b) Fallback: non‑EventBox lists (ItemBoxes, Gimmicks, …)
-            var itemType = list.GetType().GetGenericArguments()[0];
-            var newItem = Activator.CreateInstance(itemType)!;
-            list.Add(newItem);
-            SelectedItem = newItem;
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -381,11 +388,18 @@ public partial class WDataManager : ObservableObject
     [RelayCommand(CanExecute = nameof(CanExecuteSelectedRowCommand))]
     private void DuplicateSelectedRow(object? collectionObj)
     {
-        if (collectionObj is IList list && SelectedItem is not null)
+        try
         {
-            var clone = DeepClone(SelectedItem);
-            list.Add(clone);
-            SelectedItem = clone;
+            if (collectionObj is IList list && SelectedItem is not null)
+            {
+                var clone = DeepClone(SelectedItem);
+                list.Add(clone);
+                SelectedItem = clone;
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 
@@ -396,11 +410,18 @@ public partial class WDataManager : ObservableObject
     [RelayCommand(CanExecute = nameof(CanExecuteSelectedRowCommand))]
     private void DeleteSelectedRow(object? collectionObj)
     {
-        if (collectionObj is IList list && SelectedItem is not null)
+        try
         {
-            int idx = list.IndexOf(SelectedItem);
-            if (idx >= 0) list.RemoveAt(idx);
-            SelectedItem = null;
+            if (collectionObj is IList list && SelectedItem is not null)
+            {
+                int idx = list.IndexOf(SelectedItem);
+                if (idx >= 0) list.RemoveAt(idx);
+                SelectedItem = null;
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
         }
     }
 

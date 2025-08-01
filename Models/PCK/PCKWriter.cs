@@ -7,17 +7,47 @@ namespace RHToolkit.Models.PCK;
 /// <summary>
 /// Handles writing PCK files and the f00X.dat file.
 /// </summary>
-public class PCKWriter
+public sealed class PCKWriter : IDisposable
 {
     private static ReaderWriterLockSlim[]? _pckArchiveLocks;
+    private bool _disposed;
 
     /// <summary>
     /// Initializes the PCK archive locks.
     /// </summary>
-    /// <param name="count"></param>
     public static void InitializePCKArchiveLocks(int count = 10)
     {
-        _pckArchiveLocks = [.. Enumerable.Range(0, count).Select(_ => new ReaderWriterLockSlim())];
+        DisposePCKArchiveLocks();
+
+        _pckArchiveLocks = [.. Enumerable.Range(0, count).Select(_ => new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion))];
+    }
+
+    /// <summary>
+    /// Disposes the archive locks to release unmanaged resources.
+    /// </summary>
+    public static void DisposePCKArchiveLocks()
+    {
+        if (_pckArchiveLocks != null)
+        {
+            foreach (var rwLock in _pckArchiveLocks)
+            {
+                rwLock?.Dispose();
+            }
+
+            _pckArchiveLocks = null;
+        }
+    }
+
+    /// <summary>
+    /// Disposes this writer and its shared resources.
+    /// </summary>
+    public void Dispose()
+    {
+        if (_disposed) return;
+
+        DisposePCKArchiveLocks();
+        _disposed = true;
+        GC.SuppressFinalize(this);
     }
 
     /// <summary>
@@ -58,7 +88,10 @@ public class PCKWriter
 
                     byte archive = GetArchiveNumberFromName(relPath);
 
-                    var fileData = await File.ReadAllBytesAsync(fullPath, ct);
+                    using FileStream fs = File.OpenRead(fullPath);
+                    using MemoryStream ms = new();
+                    await fs.CopyToAsync(ms);
+                    byte[] fileData = ms.ToArray();
                     uint hash = await ComputeCrc32HashAsync(fullPath, ct);
 
                     int offset;
@@ -175,25 +208,27 @@ public class PCKWriter
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     public static int WriteToPCKArchive(string directory, byte[] fileBytes, byte archiveNum, bool eof, long offset)
     {
-        if (archiveNum < 0 || archiveNum >= _pckArchiveLocks!.Length)
-            throw new ArgumentOutOfRangeException(nameof(archiveNum), "Archive number must be between 0 and 9.");
+        if (_pckArchiveLocks == null || archiveNum >= _pckArchiveLocks.Length)
+            throw new InvalidOperationException("PCK archive locks not initialized.");
 
-        _pckArchiveLocks[archiveNum].EnterWriteLock();
+        var rwLock = _pckArchiveLocks[archiveNum];
+
+        rwLock.EnterWriteLock();
         try
         {
             string filePath = Path.Combine(directory, $"00{archiveNum}.pck");
 
-            using FileStream fileStream = new(filePath, FileMode.Open, FileAccess.Write, FileShare.None);
-
+            using FileStream fileStream = new(filePath, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
             fileStream.Seek(eof ? 0 : offset, eof ? SeekOrigin.End : SeekOrigin.Begin);
             int position = (int)fileStream.Position;
 
             fileStream.Write(fileBytes, 0, fileBytes.Length);
+            fileStream.Flush();
             return position;
         }
         finally
         {
-            _pckArchiveLocks[archiveNum].ExitWriteLock();
+            rwLock.ExitWriteLock();
         }
     }
 
@@ -204,15 +239,18 @@ public class PCKWriter
     /// <param name="fileNameInPck"></param>
     /// <param name="fileData"></param>
     /// <exception cref="FileNotFoundException"></exception>
-    public static async Task SaveRHToPCKAsync(string gameDirectory, string fileNameInPck, byte[] fileData)
+    public static async Task SaveFileToPCKAsync(string gameDirectory, string fileNameInPck, byte[] fileData)
     {
         if (_pckArchiveLocks is null || _pckArchiveLocks.Length == 0)
             InitializePCKArchiveLocks();
 
+        // Get the existing file list
         var pckDict = await PCKReader.GetPCKSortedDictionaryAsync(gameDirectory);
 
+        // Match by exact file name only
         var fileEntryPair = pckDict.FirstOrDefault(f =>
-        string.Equals(Path.GetFileName(f.Value.Name), fileNameInPck, StringComparison.OrdinalIgnoreCase));
+            string.Equals(Path.GetFileName(f.Value.Name), fileNameInPck, StringComparison.Ordinal));
+
         if (fileEntryPair.Value is null)
             throw new FileNotFoundException(string.Format(Resources.PCKTool_FileNotFoundInList, fileNameInPck));
 
@@ -222,36 +260,18 @@ public class PCKWriter
         if (!File.Exists(archivePath))
             throw new FileNotFoundException(string.Format(Resources.PCKTool_ArchiveNotFound, archivePath));
 
-        var archiveIndex = fileEntry.Archive;
-        var archiveLock = _pckArchiveLocks![archiveIndex];
-        
-        try
-        {
-            archiveLock.EnterWriteLock();
+        // Write the new file data to the archive
+        int newOffset = fileData.Length > fileEntry.FileSize
+            ? WriteToPCKArchive(gameDirectory, fileData, fileEntry.Archive, eof: true, offset: 0)
+            : WriteToPCKArchive(gameDirectory, fileData, fileEntry.Archive, eof: false, offset: fileEntry.Offset);
 
-            using FileStream fs = new(archivePath, FileMode.Open, FileAccess.Write, FileShare.None);
+        // Update the metadata
+        fileEntry.Offset = newOffset;
+        fileEntry.FileSize = fileData.Length;
+        fileEntry.Hash = ComputeCrc32Hash(fileData);
 
-            if (fileData.Length > fileEntry.FileSize)
-            {
-                fs.Seek(0, SeekOrigin.End); // Append
-                fileEntry.Offset = fs.Position;
-            }
-            else
-            {
-                fs.Seek(fileEntry.Offset, SeekOrigin.Begin); // Overwrite
-            }
-
-            await fs.WriteAsync(fileData);
-
-            // Update file entry
-            fileEntry.FileSize = fileData.Length;
-            fileEntry.Hash = ComputeCrc32Hash(fileData);
-
-            await WriteF00XDAT(gameDirectory, pckDict);
-        }
-        finally
-        {
-            archiveLock.ExitWriteLock();
-        }
+        // Save updated f00X.dat
+        await WriteF00XDAT(gameDirectory, pckDict);
     }
+
 }

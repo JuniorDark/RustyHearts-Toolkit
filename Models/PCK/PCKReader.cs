@@ -3,62 +3,152 @@
 namespace RHToolkit.Models.PCK;
 
 /// <summary>
-/// Provides methods to read PCK files.
+/// Provides methods to read and unpack PCK files.
 /// </summary>
-public class PCKReader
+public sealed class PCKReader(string gameDirectory) : IDisposable
 {
+    private readonly Dictionary<int, FileStream> _pckArchives = [];
+    private readonly Dictionary<int, BinaryReader> _readers = [];
+    private readonly string _gameDirectory = gameDirectory ?? throw new ArgumentNullException(nameof(gameDirectory));
+    private bool _disposed;
+
     /// <summary>
-    /// Reads the PCK file list 'f00X.dat' from the specified directory.
+    /// Loads and opens all PCK archives in the given game directory.
     /// </summary>
-    /// <returns>A list of PCKFile objects representing the files in the PCK archive.</returns>
+    public void OpenArchives(CancellationToken ct = default)
+    {
+        foreach (string pckFile in Directory.GetFiles(_gameDirectory, "*.pck"))
+        {
+            ct.ThrowIfCancellationRequested();
+
+            int key = int.Parse(Path.GetFileNameWithoutExtension(pckFile));
+            if (_pckArchives.ContainsKey(key)) continue;
+
+            var fs = new FileStream(pckFile, FileMode.Open, FileAccess.Read, FileShare.Read);
+            var br = new BinaryReader(fs);
+
+            _pckArchives[key] = fs;
+            _readers[key] = br;
+        }
+    }
+
+    /// <summary>
+    /// Extracts files from the PCK list into the PckOutput folder.
+    /// </summary>
+    public void UnpackPCK(List<PCKFile> listPckFile, bool replaceUnpack, IProgress<(int pos, int count)> progress, CancellationToken ct)
+    {
+        OpenArchives(ct);
+
+        int count = listPckFile.Count;
+        for (int i = 0; i < count; i++)
+        {
+            ct.ThrowIfCancellationRequested();
+
+            var pckFile = listPckFile[i];
+            progress.Report((i + 1, count));
+
+            try
+            {
+                string filePath = Path.Combine(_gameDirectory, "PckOutput", pckFile.Name);
+                string? dirPath = Path.GetDirectoryName(filePath);
+
+                if (string.IsNullOrWhiteSpace(dirPath))
+                    throw new InvalidOperationException("Output directory path is null.");
+
+                Directory.CreateDirectory(dirPath);
+
+                bool canWrite = !File.Exists(filePath) || replaceUnpack;
+                if (!canWrite) continue;
+
+                BinaryReader br = _readers[pckFile.Archive];
+                br.BaseStream.Seek(pckFile.Offset, SeekOrigin.Begin);
+
+                byte[] fileBytes = br.ReadBytes(pckFile.FileSize);
+                ct.ThrowIfCancellationRequested();
+
+                using FileStream outFs = new(filePath, FileMode.Create, FileAccess.Write);
+                outFs.Write(fileBytes, 0, fileBytes.Length);
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{Resources.Error}: {pckFile.Name}\n{ex.Message}", ex);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Releases all file resources used by the reader.
+    /// </summary>
+    public void Dispose()
+    {
+        if (_disposed) return;
+
+        foreach (var br in _readers.Values)
+            br.Dispose();
+        foreach (var fs in _pckArchives.Values)
+            fs.Dispose();
+
+        _readers.Clear();
+        _pckArchives.Clear();
+
+        _disposed = true;
+        GC.SuppressFinalize(this);
+    }
+
+    /// <summary>
+    /// Reads the PCK file list from the f00X.dat file and returns a list of PCKFile objects.
+    /// </summary>
+    /// <param name="gameDirectory"></param>
+    /// <param name="ct"></param>
+    /// <returns>List of PCKFile objects.</returns>
+    /// <exception cref="InvalidDataException"></exception>
+    /// <exception cref="Exception"></exception>
     public static async Task<List<PCKFile>> ReadPCKFileListAsync(string gameDirectory, CancellationToken ct = default)
     {
         string pckFileList = Path.Combine(gameDirectory, "f00X.dat");
 
         if (!File.Exists(pckFileList))
-        {
             return [];
-        }
 
         byte[] compressedBytes = await File.ReadAllBytesAsync(pckFileList, ct);
-
         if (compressedBytes.Length == 0) return [];
 
         byte[] decompressedBytes = DecompressFileZlibAsync(compressedBytes);
-        if (decompressedBytes.Length == 0) throw new InvalidDataException($"{Resources.PCKTool_InvalidFileList}");
+        if (decompressedBytes.Length == 0)
+            throw new InvalidDataException($"{Resources.PCKTool_InvalidFileList}");
 
-        List<PCKFile> listPck = new(100000);
-        using (MemoryStream ms = new(decompressedBytes, 0, decompressedBytes.Length, false))
+        var listPck = new List<PCKFile>(100000);
+        using MemoryStream ms = new(decompressedBytes);
+        using BinaryReader br = new(ms);
+
+        while (br.BaseStream.Position < br.BaseStream.Length)
         {
-            using BinaryReader br = new(ms);
-            while (br.BaseStream.Position < br.BaseStream.Length)
+            string? name = null;
+            try
             {
-                string? name = null;
-                try
-                {
-                    ushort len = br.ReadUInt16();
-                    byte[] byteName = br.ReadBytes(len * 2);
+                ct.ThrowIfCancellationRequested();
 
-                    name = Encoding.Unicode.GetString(byteName); // File name
-                    byte archive = br.ReadByte(); // Which pck archive is it in
-                    int size = br.ReadInt32(); // Size of the file
-                    uint hash = br.ReadUInt32(); // crc32 hash
-                    long offset = br.ReadInt64(); // Offset in the pck file
+                ushort len = br.ReadUInt16();
+                byte[] byteName = br.ReadBytes(len * 2);
+                name = Encoding.Unicode.GetString(byteName); // File name
 
-                    if (name.Length > 0)
-                    {
-                        PCKFile file = new(name, archive, size, hash, offset);
-                        listPck.Add(file);
-                    }
-                }
-                catch (OperationCanceledException)
+                byte archive = br.ReadByte(); // Which pck archive is it in
+                int size = br.ReadInt32(); // Size of the file
+                uint hash = br.ReadUInt32(); // crc32 hash
+                long offset = br.ReadInt64(); // Offset in the pck file
+
+                if (!string.IsNullOrWhiteSpace(name))
                 {
-                    throw;
+                    listPck.Add(new PCKFile(name, archive, size, hash, offset));
                 }
-                catch (Exception ex)
-                {
-                    throw new Exception($"{Resources.Error} {name}\n{ex}");
-                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"{Resources.Error} {name}\n{ex.Message}", ex);
             }
         }
 
@@ -69,7 +159,7 @@ public class PCKReader
     /// Reads the PCK file list and returns a sorted dictionary of PCKFile objects.
     /// </summary>
     /// <param name="gameDirectory"></param>
-    /// <returns>A sorted dictionary where the key is the file name and the value is the PCKFile object.</returns>
+    /// <returns>SortedDictionary with file names as keys and PCKFile objects as values.</returns>
     public static async Task<SortedDictionary<string, PCKFile>> GetPCKSortedDictionaryAsync(string gameDirectory)
     {
         var pckFilesList = await ReadPCKFileListAsync(gameDirectory);
@@ -80,84 +170,19 @@ public class PCKReader
     }
 
     /// <summary>
-    /// Unpacks the PCK files to the specified directory.
+    /// Loads a file from the PCK archive.
     /// </summary>
-    /// <param name="listPckFile"></param>
-    public static void UnpackPCK(List<PCKFile> listPckFile, bool replaceUnpack, string gameDirectory, IProgress<(int pos, int count)> progress, CancellationToken ct)
-    {
-        Dictionary<int, FileStream> pckArchives = [];
-        Dictionary<int, BinaryReader> readers = [];
-
-        try
-        {
-            string[] pckFiles = Directory.GetFiles(gameDirectory, "*.pck");
-
-            foreach (string pckFile in pckFiles)
-            {
-                ct.ThrowIfCancellationRequested();
-
-                FileStream ofs = new(pckFile, FileMode.Open, FileAccess.Read);
-                BinaryReader obr = new(ofs);
-                int key = int.Parse(Path.GetFileNameWithoutExtension(pckFile));
-                pckArchives.Add(key, ofs);
-                readers.Add(key, obr);
-            }
-
-            int count = listPckFile.Count;
-            for (int i = 0; i < count; i++)
-            {
-                ct.ThrowIfCancellationRequested();
-
-                PCKFile pckFile = listPckFile[i];
-                progress.Report((pos: i + 1, count));
-
-                try
-                {
-                    string filePath = Path.Combine(gameDirectory, "PckOutput", pckFile.Name);
-                    Directory.CreateDirectory(Path.GetDirectoryName(filePath) ?? throw new InvalidOperationException("Directory path is null"));
-
-                    bool canWrite = !File.Exists(filePath) || replaceUnpack;
-
-                    if (canWrite)
-                    {
-                        using FileStream ofs = new(filePath, FileMode.Create, FileAccess.Write);
-                        using BinaryWriter bw = new(ofs);
-
-                        BinaryReader br = readers[pckFile.Archive];
-                        br.BaseStream.Position = pckFile.Offset;
-                        byte[] fileBytes = br.ReadBytes(pckFile.FileSize);
-
-                        ct.ThrowIfCancellationRequested();
-
-                        bw.Write(fileBytes);
-                        bw.Flush();
-                    }
-                }
-                catch (OperationCanceledException)
-                {
-                    throw;
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"{Resources.Error}: {pckFile.Name}\n{ex}");
-                }
-            }
-        }
-        finally
-        {
-            foreach (var kvp in pckArchives)
-            {
-                kvp.Value.Close();
-                kvp.Value.Dispose();
-            }
-        }
-    }
-
-    public static async Task<byte[]> LoadRHFromPCKAsync(string gameDirectory, string fileNameInPck)
+    /// <param name="gameDirectory"></param>
+    /// <param name="fileNameInPck"></param>
+    /// <returns></returns>
+    /// <exception cref="FileNotFoundException"></exception>
+    /// <exception cref="InvalidDataException"></exception>
+    public static async Task<byte[]> LoadFileFromPCKAsync(string gameDirectory, string fileNameInPck)
     {
         var pckFiles = await ReadPCKFileListAsync(gameDirectory);
         var fileEntry = pckFiles.FirstOrDefault(f =>
-        string.Equals(Path.GetFileName(f.Name), fileNameInPck, StringComparison.OrdinalIgnoreCase)) ?? throw new FileNotFoundException(string.Format(Resources.PCKTool_FileNotFoundInList, fileNameInPck));
+            string.Equals(Path.GetFileName(f.Name), fileNameInPck, StringComparison.OrdinalIgnoreCase)) ??
+            throw new FileNotFoundException(string.Format(Resources.PCKTool_FileNotFoundInList, fileNameInPck));
         string archivePath = Path.Combine(gameDirectory, $"{fileEntry.Archive:D3}.pck");
 
         if (!File.Exists(archivePath))
@@ -174,5 +199,4 @@ public class PCKReader
 
         return buffer;
     }
-
 }

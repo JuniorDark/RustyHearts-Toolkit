@@ -148,7 +148,9 @@ public partial class PCKToolViewModel : ObservableObject
                 ProgressBarValue = t.pos;
                 ReportProgress(string.Format(Resources.PCKTool_UnpackingFiles, t.pos, t.count));
             });
-            await Task.Run(() => PCKReader.UnpackPCK(_toUnpack!, ReplaceUnpackFile, SelectedClientFolder, progress, _cts!.Token));
+
+            using var pckReader = new PCKReader(SelectedClientFolder);
+            await Task.Run(() => pckReader.UnpackPCK(_toUnpack!, ReplaceUnpackFile, progress, _cts!.Token));
             ReportProgress(Resources.PCKTool_UnpackingComplete);
             await Task.Delay(3000);
             ReportProgress(string.Format(Resources.PCKTool_FileNumber, _allPckFiles?.Count ?? 0));
@@ -192,7 +194,7 @@ public partial class PCKToolViewModel : ObservableObject
             ReportProgress(Resources.PCKTool_CheckingFiles);
 
             var existingFiles = await PCKReader.ReadPCKFileListAsync(SelectedClientFolder, CancellationToken.None);
-            var pckMap = existingFiles.ToDictionary(p => p.Name, p => p, StringComparer.OrdinalIgnoreCase);
+            var pckMap = existingFiles.ToDictionary(p => p.Name, p => p, StringComparer.Ordinal);
 
             var filesToPack = await PCKManager.EnumerateAndFilterFilesToPackAsync(
                 SelectedFilesToPackFolder,
@@ -226,12 +228,15 @@ public partial class PCKToolViewModel : ObservableObject
                 ReportProgress(string.Format(Resources.PCKTool_Packing, t.pos, t.count));
             });
 
-            await PCKWriter.WritePCKFilesAsync(
+            using (var writer = new PCKWriter())
+            {
+                await PCKWriter.WritePCKFilesAsync(
                 SelectedClientFolder,
                 filesToPack,
                 progress,
                 create,
                 _cts.Token);
+            }
 
             ReportProgress(string.Format(Resources.PCKTool_PackingComplete, filesToPack.Count));
         }
