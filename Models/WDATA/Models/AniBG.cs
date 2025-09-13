@@ -38,4 +38,5 @@ public partial class AniBG : ObservableObject
     [ObservableProperty] private Vector3 _Scale = new ();
     [ObservableProperty] private Quaternion _Rotation = new();
     [ObservableProperty] private Vector3 _Extents = new();
+    [ObservableProperty] private bool _isVisible = false;
 }
