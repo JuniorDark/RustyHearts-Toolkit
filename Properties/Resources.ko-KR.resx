@@ -4581,6 +4581,9 @@
   <data name="PCKTool_UpdateMessage" xml:space="preserve">
     <value>현재 pck 파일에 '{0}'개의 파일이 있습니다. '{1}'개의 새/변경된 파일을 압축하시겠습니까?</value>
   </data>
+  <data name="ModelTool_ExportMessage" xml:space="preserve">
+    <value>{0}개의 파일을 내보내시겠습니까?</value>
+  </data>
   <data name="PCKTool_SelectFilesMessage" xml:space="preserve">
     <value>먼저 추출할 파일을 선택하세요.</value>
   </data>
@@ -4593,6 +4596,18 @@
   <data name="PCKTool_Packing" xml:space="preserve">
     <value>파일 포장: {0}/{1}</value>
   </data>
+  <data name="ModelTool_ExportingFiles" xml:space="preserve">
+    <value>파일 {0} 내보내기 : {1}/{2}</value>
+  </data>
+  <data name="ModelTool_NoFiles" xml:space="preserve">
+    <value>내보낼 파일이 없습니다</value>
+  </data>
+  <data name="ModelTool_ReadingFiles" xml:space="preserve">
+    <value>파일 읽기</value>
+  </data>
+  <data name="ModelTool_ExportedFilesMessage" xml:space="preserve">
+    <value>'{0}' 파일 내보내기가 완료되었습니다.</value>
+  </data>
   <data name="PCKTool_UnpackingFiles" xml:space="preserve">
     <value>파일 압축 해제: {0}/{1}</value>
   </data>
@@ -4602,7 +4617,7 @@
   <data name="PCKTool_PackingComplete" xml:space="preserve">
     <value>{0}개의 파일 압축이 완료되었습니다.</value>
   </data>
-  <data name="PCKTool_CancelledMessage" xml:space="preserve">
+  <data name="OperationCancelledMessage" xml:space="preserve">
     <value>작업이 취소되었습니다.</value>
   </data>
   <data name="PCKTool_UnpackSelected" xml:space="preserve">

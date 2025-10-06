@@ -2,7 +2,7 @@
 using Microsoft.Win32;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Models.MMP;
+using RHToolkit.Models.Model3D.MMP;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Windows.Media.Media3D;
@@ -61,7 +61,7 @@ public partial class WDataManager : ObservableObject
         catch (Exception ex)
         {
             RHMessageBoxHelper.ShowOKMessage(
-                $"{Resources.Error}: {ex.Message}", Resources.Error);
+                $"Error loading {CurrentFileName}: {ex.Message}\n {ex.StackTrace}", Resources.Error);
             return false;
         }
     }
@@ -168,19 +168,35 @@ public partial class WDataManager : ObservableObject
 
             var mmp = await MMPReader.ReadAsync(mmpPath).ConfigureAwait(false);
 
+            if (mmp.Version < 6)
+                throw new NotSupportedException($"MMP version '{mmp.Version}' is not supported.");
+
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
                 Scene3D.Clear();
 
                 Camera = CreateDefaultCamera();
 
-                foreach (var node in MmpToHelix.CreateNodes(mmp))
+                var startPoint = WData!.EventBoxGroups
+                        .FirstOrDefault(g => g.Type == EventBoxType.StartPointBox)?
+                        .Boxes.OfType<StartPointBox>()
+                        .FirstOrDefault();
+
+
+                if (startPoint is not null)
+                {
+                    StopCameraAnimation();
+                    FocusCamera(startPoint);
+                }
+
+                foreach (var node in MMPToHelix.CreateMMPNodes(mmp))
                     Scene3D.Add(node);
             });
+
         }
         catch (Exception ex)
         {
-            RHMessageBoxHelper.ShowOKMessage($"MMP load error: {ex.Message}", Resources.Error);
+            throw new Exception(ex.Message);
         }
     }
 
@@ -255,7 +271,7 @@ public partial class WDataManager : ObservableObject
         FarPlaneDistance = 500000
     };
 
-    #region Camera focus animation
+    #region Camera focus
 
     // animation state
     private bool _camAnimating;
@@ -304,8 +320,6 @@ public partial class WDataManager : ObservableObject
         Camera.UpDirection = new Vector3D(0, 1, 0);
     }
 
-    #endregion
-
     /// <summary>
     /// Moves the camera to frame <paramref name="e"/> and makes it visible.
     /// </summary>
@@ -336,6 +350,8 @@ public partial class WDataManager : ObservableObject
 
         StartCameraAnimation(dest, target, TimeSpan.FromMilliseconds(1000));
     }
+
+    #endregion
 
     #endregion
 

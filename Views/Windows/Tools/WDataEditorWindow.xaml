@@ -141,24 +141,30 @@
 
                 <hx:Viewport3DX
                     x:Name="View"
-                    Grid.Row="1"
-                    Grid.Column="0"
                     Width="Auto"
                     Height="520"
-                    MinWidth="500"
+                    MinWidth="720"
                     VerticalAlignment="Top"
-                    BackgroundColor="White"
+                    BackgroundColor="Gray"
                     Camera="{Binding WDataManager.Camera}"
                     EffectsManager="{Binding WDataManager.EffectsManager}"
-                    IsShadowMappingEnabled="True"
                     RotateAroundMouseDownPoint="True"
                     ShowCoordinateSystem="True"
                     UseDefaultGestures="False"
                     ZoomAroundMouseDownPoint="True">
                     <hx:ItemsModel3D ItemsSource="{Binding WDataManager.Scene3D}" />
 
-                    <hx:AmbientLight3D Color="#414141" />
-                    <hx:DirectionalLight3D Direction="50, -200, -100" />
+                    <!--  Low ambient so shading has contrast  -->
+                    <hx:AmbientLight3D Color="#202020" />
+
+                    <!--  Key: warm, from above/front-left  -->
+                    <hx:DirectionalLight3D Direction="-0.35,-0.80,-0.42" Color="White" />
+
+                    <!--  Fill: cool, softer, from above/right to open shadows  -->
+                    <hx:DirectionalLight3D Direction="0.55,-0.45,0.70" Color="#66C7D9FF" />
+
+                    <!--  Rim: subtle back light to pop silhouettes  -->
+                    <hx:DirectionalLight3D Direction="0.00,0.25, -1.00" Color="#4CB0C8FF" />
 
                     <hx:Viewport3DX.InputBindings>
                         <KeyBinding Key="B" Command="hx:ViewportCommands.BackView" />

@@ -4581,6 +4581,9 @@
   <data name="PCKTool_UpdateMessage" xml:space="preserve">
     <value>The current pck files have '{0}' files. Pack '{1}' new/changed files?</value>
   </data>
+  <data name="ModelTool_ExportMessage" xml:space="preserve">
+    <value>Do you want to export '{0}' files?</value>
+  </data>
   <data name="PCKTool_SelectFilesMessage" xml:space="preserve">
     <value>Select file(s) to be unpacked first.</value>
   </data>
@@ -4593,6 +4596,18 @@
   <data name="PCKTool_Packing" xml:space="preserve">
     <value>Packing Files: {0}/{1}</value>
   </data>
+  <data name="ModelTool_ExportingFiles" xml:space="preserve">
+    <value>Exporting file {0} : {1}/{2}</value>
+  </data>
+  <data name="ModelTool_NoFiles" xml:space="preserve">
+    <value>No files to export</value>
+  </data>
+  <data name="ModelTool_ReadingFiles" xml:space="preserve">
+    <value>Reading Files</value>
+  </data>
+  <data name="ModelTool_ExportedFilesMessage" xml:space="preserve">
+    <value>Finished exporting '{0}' files</value>
+  </data>
   <data name="PCKTool_UnpackingFiles" xml:space="preserve">
     <value>Unpacking Files: {0}/{1}</value>
   </data>
@@ -4602,7 +4617,7 @@
   <data name="PCKTool_PackingComplete" xml:space="preserve">
     <value>Finished packing {0} files.</value>
   </data>
-  <data name="PCKTool_CancelledMessage" xml:space="preserve">
+  <data name="OperationCancelledMessage" xml:space="preserve">
     <value>Operation Cancelled.</value>
   </data>
   <data name="PCKTool_UnpackSelected" xml:space="preserve">

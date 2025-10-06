@@ -32,6 +32,7 @@ public partial class MainWindowViewModel : ObservableObject
         {
             new NavigationViewItem(Resources.EditTools, SymbolRegular.DocumentTextToolbox24, typeof(EditToolsPage)),
             new NavigationViewItem(Resources.PckTool_Title, SymbolRegular.DocumentTextToolbox24, typeof(PCKToolPage)),
+            new NavigationViewItem("Model Tools", SymbolRegular.DocumentTextToolbox24, typeof(ModelToolsPage)),
         }
     },
     new NavigationViewItem()

@@ -5767,6 +5767,51 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Finished exporting &apos;{0}&apos; files.
+        /// </summary>
+        public static string ModelTool_ExportedFilesMessage {
+            get {
+                return ResourceManager.GetString("ModelTool_ExportedFilesMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exporting file {0} : {1}/{2}.
+        /// </summary>
+        public static string ModelTool_ExportingFiles {
+            get {
+                return ResourceManager.GetString("ModelTool_ExportingFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to export &apos;{0}&apos; files?.
+        /// </summary>
+        public static string ModelTool_ExportMessage {
+            get {
+                return ResourceManager.GetString("ModelTool_ExportMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No files to export.
+        /// </summary>
+        public static string ModelTool_NoFiles {
+            get {
+                return ResourceManager.GetString("ModelTool_NoFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reading Files.
+        /// </summary>
+        public static string ModelTool_ReadingFiles {
+            get {
+                return ResourceManager.GetString("ModelTool_ReadingFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MP Cost: {0}.
         /// </summary>
         public static string MPCostText {
@@ -7162,6 +7207,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Operation Cancelled..
+        /// </summary>
+        public static string OperationCancelledMessage {
+            get {
+                return ResourceManager.GetString("OperationCancelledMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Elemental Damage.
         /// </summary>
         public static string OptionAllElementalDamage {
@@ -7797,15 +7851,6 @@ namespace RHToolkit.Properties {
         public static string PCKTool_ArchiveNotFound {
             get {
                 return ResourceManager.GetString("PCKTool_ArchiveNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Operation Cancelled..
-        /// </summary>
-        public static string PCKTool_CancelledMessage {
-            get {
-                return ResourceManager.GetString("PCKTool_CancelledMessage", resourceCulture);
             }
         }
         
