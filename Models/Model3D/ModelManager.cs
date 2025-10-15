@@ -1,4 +1,4 @@
-﻿using RHToolkit.Models.Model3D.MMP;
+﻿using RHToolkit.Models.Model3D.Map;
 using System.Collections.Concurrent;
 
 namespace RHToolkit.Models.Model3D;
@@ -115,7 +115,8 @@ public class ModelManager
                         string outputFile = Path.Combine(outputDirectory, fileName);
                         Directory.CreateDirectory(Path.GetDirectoryName(outputFile)!);
 
-                        MMPExporterAspose.ExportMmpToFbx(mmpModel, outputFile);
+                        var exporter = new MMPExporterAspose();
+                        await exporter.ExportMmpToFbx(mmpModel, outputFile);
                         summary.AddExported();
                     }
                     catch (OperationCanceledException) { throw; }

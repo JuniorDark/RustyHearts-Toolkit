@@ -1,11 +1,11 @@
 ﻿using Assimp;
+using static RHToolkit.Models.Model3D.Map.MMP;
+using Matrix4x4 = Assimp.Matrix4x4;
 using MDEntry = Assimp.Metadata.Entry;
 using MDType = Assimp.MetaDataType;
-using static RHToolkit.Models.Model3D.MMP.MMP;
-using Matrix4x4 = Assimp.Matrix4x4;
 using Num = System.Numerics;
 
-namespace RHToolkit.Models.Model3D.MMP;
+namespace RHToolkit.Models.Model3D.Map;
 
 /// <summary>
 /// Exports an MMP model to FBX (via Assimp)

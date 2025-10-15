@@ -1,10 +1,11 @@
 ﻿using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.Model3D.Map;
 using RHToolkit.Models.Model3D.MGM;
-using RHToolkit.Models.Model3D.MMP;
+using System.Numerics;
 using System.Windows.Media.Media3D;
-using static RHToolkit.Models.Model3D.MMP.MMP;
+using static RHToolkit.Models.Model3D.Map.MMP;
 using PerspectiveCamera = HelixToolkit.Wpf.SharpDX.PerspectiveCamera;
 
 namespace RHToolkit.Models.Model3D;
@@ -15,7 +16,7 @@ namespace RHToolkit.Models.Model3D;
 public partial class ModelViewManager : ObservableObject
 {
     private const string FileDialogFilter =
-    "Rusty Hearts Models (*.MMP;*.MGM)|*.mmp;*.mgm|MMP Models (*.MMP)|*.mmp|MGM Models (*.MGM)|*.mgm|All Files (*.*)|*.*";
+    "Rusty Hearts Models (*.MMP;*.MGM;*.NAVI)|*.mmp;*.mgm;*.navi|Map Models (*.MMP)|*.mmp|MGM Models (*.MGM)|*.mgm|Navigation Mesh (*.NAVI)|*.navi|All Files (*.*)|*.*";
 
     #region File
 
@@ -61,7 +62,7 @@ public partial class ModelViewManager : ObservableObject
         catch (Exception ex)
         {
             RHMessageBoxHelper.ShowOKMessage(
-                $"Error loading {CurrentFileName}: {ex.Message}\n {ex.StackTrace}", Resources.Error);
+                $"Error loading {CurrentFileName}: {ex.Message}", Resources.Error);
             ClearFile();
             return false;
         }
@@ -90,7 +91,6 @@ public partial class ModelViewManager : ObservableObject
             ExportAsCommand.NotifyCanExecuteChanged();
             ImportFromFbxCommand.NotifyCanExecuteChanged();
         });
-        
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ public partial class ModelViewManager : ObservableObject
     /// <returns>True if file commands can be executed, otherwise false.</returns>
     private bool CanExecuteFileCommand()
     {
-        return MmpModel is not null;
+        return MmpModel is not null || NaviModel is not null;
     }
     #endregion
 
@@ -122,7 +122,8 @@ public partial class ModelViewManager : ObservableObject
         {
             try
             {
-                await Task.Run(() => MMPExporterAspose.ExportMmpToFbx(MmpModel, dlg.FileName));
+                var exporter = new MMPExporterAspose();
+                await exporter.ExportMmpToFbx(MmpModel, dlg.FileName);
                 RHMessageBoxHelper.ShowOKMessage($"Exported MMP → FBX:\n{dlg.FileName}", "FBX Exporter");
             }
             catch (Exception ex)
@@ -175,10 +176,7 @@ public partial class ModelViewManager : ObservableObject
 
         try
         {
-            await Task.Run(() =>
-            {
-                MMPWriter.RebuildFromFbx(mmpPath, fbxPath, outMmpPath);
-            });
+            await MMPWriter.RebuildFromFbx(mmpPath, fbxPath, outMmpPath);
 
             RHMessageBoxHelper.ShowOKMessage($"Exported FBX → MMP:\n{outMmpPath}", "MMP Exporter");
         }
@@ -195,8 +193,31 @@ public partial class ModelViewManager : ObservableObject
     [ObservableProperty]
     private ObservableElement3DCollection _Scene3D = [];
 
+    private static PerspectiveCamera CreateDefaultCamera() => new()
+    {
+        Position = new Point3D(0, 0, 0),
+        LookDirection = new Vector3D(-5, -12, -5),
+        UpDirection = new Vector3D(0, 1, 0),
+        NearPlaneDistance = 0.5,
+        FarPlaneDistance = 500000
+    };
+
+    [ObservableProperty]
+    private PerspectiveCamera _Camera = new()
+    {
+        Position = new Point3D(0, 2000, 0),
+        LookDirection = new Vector3D(-5, -12, -5),
+        UpDirection = new Vector3D(0, 1, 0),
+        NearPlaneDistance = 0.5,
+        FarPlaneDistance = 500000
+    };
+
     [ObservableProperty]
     private IEffectsManager _EffectsManager = new DefaultEffectsManager();
+
+    private Element3D? _wireframeModel;        // LineGeometryModel3D
+    private Element3D? _naviDebugGroup;        // GroupModel3D (portals + labels)
+    private IReadOnlyDictionary<uint, Matrix4x4>? _worldByHash;
 
     private async Task LoadModelAsync(string filePath)
     {
@@ -207,19 +228,24 @@ public partial class ModelViewManager : ObservableObject
 
         switch (ext)
         {
+            case ".height":
+                {
+                    Message = "Loading model...";
+                    var height = await HeightReader.ReadAsync(filePath).ConfigureAwait(false);
+                    MgmModel = null;
+                    MmpModel = null;
+                    NaviModel = null;
+                    break;
+                }
             case ".mgm":
                 {
-                    ClearFile();
-                    throw new NotImplementedException($"MGM IS NOT SUPPORTED YET!!!");
+                    Message = "Loading MGM model...";
+                    var mgm = await MGMReader.ReadAsync(filePath).ConfigureAwait(false);
+                    MgmModel = mgm;
+                    MmpModel = null;
+                    NaviModel = null;
+                    break;
                 }
-            //case ".mgm":
-            //    {
-            //        Message = "Loading MGM model...";
-            //        var mgm = await MGMReader.ReadAsync(filePath).ConfigureAwait(false);
-            //        MgmModel = mgm;
-            //        MmpModel = null;
-            //        break;
-            //    }
             case ".mmp":
                 {
                     Message = "Loading MMP model...";
@@ -227,7 +253,23 @@ public partial class ModelViewManager : ObservableObject
                     if (mmp.Version < 6)
                         throw new NotSupportedException($"MMP version '{mmp.Version}' is not supported.");
                     MmpModel = mmp;
+                    var naviPath = Path.ChangeExtension(filePath, ".navi");
+                    if (File.Exists(naviPath))
+                    {
+                        NaviModel = await NaviReader.ReadAsync(naviPath).ConfigureAwait(false);
+                    }
                     MgmModel = null;
+                    break;
+                }
+            case ".navi":
+                {
+                    Message = "Loading NAVI model...";
+                    var navi = await NaviReader.ReadAsync(filePath).ConfigureAwait(false);
+                    var heightPath = Path.ChangeExtension(filePath, ".height");
+                    await HeightWriter.BuildFromNaviFileAsync(filePath, heightPath, 20, 50, 2);
+                    NaviModel = navi;
+                    MgmModel = null;
+                    MmpModel = null;
                     break;
                 }
             default:
@@ -244,34 +286,92 @@ public partial class ModelViewManager : ObservableObject
                 Version = MmpModel.Version;
                 foreach (var node in MMPToHelix.CreateMMPNodes(MmpModel))
                     Scene3D.Add(node);
+                LoadNavMesh();
             }
             else if (MgmModel is not null)
             {
+                IsNavMeshControlsVisible = Visibility.Hidden;
                 Version = MgmModel.Version;
                 foreach (var node in MGMToHelix.CreateMGMNodes(MgmModel))
                     Scene3D.Add(node);
             }
+            else if (NaviModel is not null)
+            {
+                Version = NaviModel.Header.Version;
+                LoadNavMesh();
+            }
         });
     }
 
-    private static PerspectiveCamera CreateDefaultCamera() => new()
+    #region NavMesh
+    private void LoadNavMesh()
     {
-        Position = new Point3D(0, 2000, 0),
-        LookDirection = new Vector3D(-5, -12, -5),
-        UpDirection = new Vector3D(0, 1, 0),
-        NearPlaneDistance = 0.5,
-        FarPlaneDistance = 500000
-    };
+        if (NaviModel is not null)
+        {
+            IsNavMeshControlsVisible = Visibility.Visible;
+            _wireframeModel = null;
+            _naviDebugGroup = null;
+            float alpha;
 
-    [ObservableProperty]
-    private PerspectiveCamera _Camera = new()
+            if (MmpModel is not null)
+            {
+                alpha = 0.0f;
+                _worldByHash = MmpModel.Nodes
+                   .GroupBy(n => n.NameHash)
+                   .ToDictionary(g => g.Key, g => g.First().MWorld);
+            }
+            else
+            {
+                alpha = 0.25f;
+                _worldByHash = NaviModel.Nodes
+                    .GroupBy(n => n.NameKey)
+                    .ToDictionary(g => g.Key, g => g.First().MWorld);
+            }
+
+            // base mesh(es)
+            foreach (var meshGroup in NaviToHelix.CreateNaviNodes(NaviModel, _worldByHash, alpha))
+                Scene3D.Add(meshGroup);
+
+            // apply current toggles
+            EnsureWireframe();
+            EnsureNaviDebug();
+            ApplyWireframeVisibility(ShowWireframe);
+            ApplyNaviDebugVisibility(ShowNaviDebug);
+        }
+    }
+
+    // ===== builders =====
+    private void EnsureWireframe()
     {
-        Position = new Point3D(0, 2000, 0),
-        LookDirection = new Vector3D(-5, -12, -5),
-        UpDirection = new Vector3D(0, 1, 0),
-        NearPlaneDistance = 0.5,
-        FarPlaneDistance = 500000
-    };
+        if (_wireframeModel != null || NaviModel is null) return;
+        _wireframeModel = NaviToHelix.CreateNavTrianglesWireframe(
+            NaviModel, _worldByHash
+        );
+    }
+
+    private void EnsureNaviDebug()
+    {
+        if (_naviDebugGroup != null || NaviModel is null) return;
+        _naviDebugGroup = NaviToHelix.CreateNavOverlay(
+            NaviModel, _worldByHash
+        );
+    }
+
+    // ===== add/remove helpers =====
+    private void ApplyWireframeVisibility(bool visible)
+    {
+        if (_wireframeModel == null) return;
+        if (visible && !Scene3D.Contains(_wireframeModel)) Scene3D.Add(_wireframeModel);
+        if (!visible && Scene3D.Contains(_wireframeModel)) Scene3D.Remove(_wireframeModel);
+    }
+
+    private void ApplyNaviDebugVisibility(bool visible)
+    {
+        if (_naviDebugGroup == null) return;
+        if (visible && !Scene3D.Contains(_naviDebugGroup)) Scene3D.Add(_naviDebugGroup);
+        if (!visible && Scene3D.Contains(_naviDebugGroup)) Scene3D.Remove(_naviDebugGroup);
+    }
+    #endregion
 
     #endregion
 
@@ -341,6 +441,9 @@ public partial class ModelViewManager : ObservableObject
     private Visibility _isMessageVisible = Visibility.Visible;
 
     [ObservableProperty]
+    private Visibility _isNavMeshControlsVisible = Visibility.Hidden;
+
+    [ObservableProperty]
     private MmpModel? _mmpModel;
     partial void OnMmpModelChanged(MmpModel? value)
     {
@@ -349,6 +452,12 @@ public partial class ModelViewManager : ObservableObject
     [ObservableProperty]
     private MgmModel? _mgmModel;
     partial void OnMgmModelChanged(MgmModel? value)
+    {
+        OnCanExecuteFileCommandChanged();
+    }
+    [ObservableProperty]
+    private NaviMeshFile? _naviModel;
+    partial void OnNaviModelChanged(NaviMeshFile? value)
     {
         OnCanExecuteFileCommandChanged();
     }
@@ -364,6 +473,21 @@ public partial class ModelViewManager : ObservableObject
 
     [ObservableProperty]
     private int _version;
+
+    [ObservableProperty]
+    private bool _showWireframe;
+    partial void OnShowWireframeChanged(bool value)
+    {
+        EnsureWireframe();
+        ApplyWireframeVisibility(value);
+    }
+    [ObservableProperty]
+    private bool _showNaviDebug;
+    partial void OnShowNaviDebugChanged(bool value)
+    {
+        EnsureNaviDebug();
+        ApplyNaviDebugVisibility(value);
+    }
 
     #endregion
 }

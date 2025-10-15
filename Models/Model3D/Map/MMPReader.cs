@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
-using static RHToolkit.Models.Model3D.MMP.MMP;
+using static RHToolkit.Models.Model3D.Map.MMP;
 
-namespace RHToolkit.Models.Model3D.MMP
+namespace RHToolkit.Models.Model3D.Map
 {
     /// <summary>
     /// Reader for MMP (Multi-Mesh Package) map files.
@@ -60,11 +60,7 @@ namespace RHToolkit.Models.Model3D.MMP
                 switch (type)
                 {
                     case 1:
-                        // If any object in the file is type 4, skip parsing materials for now.
-                        if (hasType4)
-                            _ = br.ReadBytes(size);
-                        else
-                            ReadMaterials(br, model, version, size);
+                        ReadMaterials(br, model, version, size);
                         break;
                     case 3: ReadNodeTransformData(br, model, version, size); break;
                     case 4: _ = br.ReadBytes(size); break; // unknown, found on entrance_04.mmp
@@ -455,7 +451,7 @@ namespace RHToolkit.Models.Model3D.MMP
                 AltNodeName = objectNodeName2,
                 NodeNameHash = objectNodeNameHash,
                 AltNodeNameHash = objectNodeName2Hash,
-                GeometryBounds = new GeometryBounds { Min = objMin, Max = objMax, Size = objSize, SphereRadius = objRadius, Center = objCenter }
+                GeometryBounds = new MMP.GeometryBounds { Min = objMin, Max = objMax, Size = objSize, SphereRadius = objRadius, Center = objCenter }
             };
 
             // meshes in this node
@@ -506,7 +502,7 @@ namespace RHToolkit.Models.Model3D.MMP
                     Vertices = new MmpVertex[vertexCount],
                     Indices = new ushort[faceCount * 3],
                     Material = model.Materials.FirstOrDefault(m => m.Id == materialId),
-                    GeometryBounds = new GeometryBounds { Min = pMin, Max = pMax, Size = pSize, SphereRadius = pRadius, Center = pCenter }
+                    GeometryBounds = new MMP.GeometryBounds { Min = pMin, Max = pMax, Size = pSize, SphereRadius = pRadius, Center = pCenter }
                 };
 
                 // --- decode indices ---

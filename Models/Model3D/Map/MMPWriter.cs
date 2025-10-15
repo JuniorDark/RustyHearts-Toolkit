@@ -1,8 +1,7 @@
 ﻿using Assimp;
-using System.Diagnostics;
 using Num = System.Numerics;
 
-namespace RHToolkit.Models.Model3D.MMP;
+namespace RHToolkit.Models.Model3D.Map;
 
 /// <summary>
 /// MMP file writer (currently rebuild type 3/19 from FBX + original MMP for type 1 material)
@@ -13,7 +12,7 @@ public static class MMPWriter
     private static readonly Encoding ASCII = Encoding.ASCII;
     private readonly record struct Chunk(int Type, byte[] Data);
 
-    public static void RebuildFromFbx(string originalMmpPath, string fbxPath, string outMmpPath)
+    public static async Task RebuildFromFbx(string originalMmpPath, string fbxPath, string outMmpPath)
     {
         try
         {
@@ -47,19 +46,40 @@ public static class MMPWriter
 
             // -- import FBX and build type-3 (node) + type-19 (mesh) chunks ---
             var ctx = new AssimpContext();
-            var scene = ctx.ImportFile(fbxPath, PostProcessSteps.FlipWindingOrder | PostProcessSteps.FlipUVs | PostProcessSteps.ImproveCacheLocality);
-
-            var ai = new AssimpContext();
-            foreach (var desc in ai.GetSupportedExportFormats())
-                Debug.Write($"\n{desc.FormatId} -> {desc.Description}");
+            var scene = ctx.ImportFile(fbxPath, PostProcessSteps.FlipWindingOrder 
+                | PostProcessSteps.FlipUVs 
+                | PostProcessSteps.ImproveCacheLocality 
+                | PostProcessSteps.JoinIdenticalVertices);
 
             var fileStem = Path.GetFileNameWithoutExtension(fbxPath);
             var container = scene.RootNode.Children.FirstOrDefault(n => n.Name == fileStem) ?? scene.RootNode;
 
+            // --- Find navi node
+            var naviNodes = new List<Assimp.Node>();
+            void Walk(Assimp.Node n)
+            {
+                bool isNavi = n.Metadata != null && n.Metadata.TryGetValue("navi:isNavMesh", out var _);
+                if (isNavi) naviNodes.Add(n);
+                foreach (var c in n.Children) Walk(c);
+            }
+            Walk(container);
+
+            // If present, build a .navi next to output MMP
+            if (naviNodes.Count > 0)
+            {
+                var outNaviPath = Path.ChangeExtension(outMmpPath, ".navi");
+                NaviWriter.WriteFromFbxNode(scene, naviNodes[0], outNaviPath);
+            }
+
             foreach (var objNode in container.Children)
             {
-                var partPairs = CollectParts(scene, objNode);
+                // Skip navi nodes
+                if (objNode.Metadata != null && objNode.Metadata.TryGetValue("navi:isNavMesh", out var _))
+                {
+                    continue;
+                }
 
+                var partPairs = CollectParts(scene, objNode);
                 outChunks.Add(new Chunk(3, BuildType3FromNode(objNode, version)));
                 outChunks.Add(new Chunk(19, BuildType19FromNode(objNode, partPairs)));
             }
@@ -95,15 +115,27 @@ public static class MMPWriter
             for (int i = 0; i < outChunks.Count; i++) bw.Write(newTypes[i]);
 
             File.WriteAllBytes(outMmpPath, outMs.ToArray());
+
+            //  Write .height file
+            var naviPath = Path.ChangeExtension(outMmpPath, ".navi");
+            var heightPath = Path.ChangeExtension(outMmpPath, ".height");
+            await HeightWriter.BuildFromNaviFileAsync(naviPath, heightPath, 20, 50, 2);
+
+
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"Failed to rebuild MMP from FBX: {fbxPath}: {ex.Message}", ex);
+            throw new Exception($"Failed to rebuild MMP from FBX: {fbxPath}: {ex.Message}", ex);
         }
     }
 
     // ---------------- mesh & node helpers (Assimp) ----------------
-
+    /// <summary>
+    /// Collect all parts (meshes) under the given object node, recursively.
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <param name="objNode"></param>
+    /// <returns> List of (Node, Mesh) pairs </returns>
     private static List<(Node part, Mesh mesh)> CollectParts(Scene scene, Node objNode)
     {
         var parts = new List<(Node, Mesh)>();
@@ -118,58 +150,6 @@ public static class MMPWriter
         }
         Walk(objNode);
         return parts;
-    }
-
-    private static int GetRequiredIntMeta(Assimp.Node node, string key)
-    {
-        if (node.Metadata != null && node.Metadata.TryGetValue(key, out Assimp.Metadata.Entry entry))
-        {
-            var data = GetMetaDataObject(entry);
-            if (data != null)
-            {
-                switch (data)
-                {
-                    case int i: return i;
-                    case long l: return checked((int)l);
-                    case uint ui: return checked((int)ui);
-                    case ulong ul: return checked((int)ul);
-                    case short s: return s;
-                    case ushort us: return us;
-                    case byte b: return b;
-                    case sbyte sb: return sb;
-                    case float f: return checked((int)f);
-                    case double d: return checked((int)d);
-                    case bool bo: return bo ? 1 : 0;
-                    case string str:
-                        if (int.TryParse(str, out var v)) return v;
-                        break;
-                }
-            }
-            throw new InvalidDataException($"Metadata '{key}' on node '{node.Name}' exists but is not a valid integer.");
-        }
-
-        throw new InvalidDataException($"Required metadata '{key}' missing on node '{node.Name}'.");
-    }
-
-    private static string GetRequiredStringMeta(Assimp.Node node, string key)
-    {
-        if (node.Metadata != null && node.Metadata.TryGetValue(key, out Assimp.Metadata.Entry entry))
-        {
-            var data = GetMetaDataObject(entry);
-            if (data is null) return string.Empty;
-            if (data is string s) return s;
-            throw new InvalidDataException(
-                $"Metadata '{key}' on node '{node.Name}' exists but is not a string (got {data.GetType().Name}).");
-        }
-
-        throw new InvalidDataException($"Required metadata '{key}' missing on node '{node.Name}'.");
-    }
-
-    private static object? GetMetaDataObject(Assimp.Metadata.Entry entry)
-    {
-        var t = entry.GetType();
-        var prop = t.GetProperty("Data") ?? t.GetProperty("Value");
-        return prop?.GetValue(entry);
     }
 
     #region Type-19 Mesh Builder
@@ -237,12 +217,12 @@ public static class MMPWriter
     // ---------- Step 1: write the header (names + hashes) ----------
     private static void WriteType19Header(BinaryWriter bw, string objectName, string objectName2)
     {
-        WriteUtf16Len(bw, objectName);
-        WriteUtf16Len(bw, objectName2);
-        bw.Write(HashName(objectName));
-        bw.Write(HashName(objectName2));
-        WriteUtf16Body(bw, objectName);
-        WriteUtf16Body(bw, objectName2);
+        ModelHelpers.WriteUtf16Len(bw, objectName);
+        ModelHelpers.WriteUtf16Len(bw, objectName2);
+        bw.Write(ModelHelpers.HashName(objectName));
+        bw.Write(ModelHelpers.HashName(objectName2));
+        ModelHelpers.WriteUtf16Body(bw, objectName);
+        ModelHelpers.WriteUtf16Body(bw, objectName2);
     }
 
     // ---------- Step 2: build all parts and compute the object AABB ----------
@@ -291,12 +271,12 @@ public static class MMPWriter
         var m = System.Text.RegularExpressions.Regex.Match(subName, @"^(.*?)(\.\d{3,})$");
         if (m.Success) subName = m.Groups[1].Value;
 
-        int materialId = GetRequiredIntMeta(partNode, "mmp:materialId");
-        int layoutTag = GetRequiredIntMeta(partNode, "mmp:vertexLayoutTag");
-        byte fl0 = (byte)GetRequiredIntMeta(partNode, "mmp:isEmissiveAdditive");
-        byte fl1 = (byte)GetRequiredIntMeta(partNode, "mmp:isAlphaBlend");
-        byte fl2 = (byte)GetRequiredIntMeta(partNode, "mmp:isEnabled");
-        int uvSets = GetRequiredIntMeta(partNode, "mmp:uvSetCount");
+        int materialId = ModelHelpers.GetIntMeta(partNode, "mmp:materialId");
+        int layoutTag = ModelHelpers.GetIntMeta(partNode, "mmp:vertexLayoutTag");
+        byte fl0 = (byte)ModelHelpers.GetIntMeta(partNode, "mmp:isEmissiveAdditive");
+        byte fl1 = (byte)ModelHelpers.GetIntMeta(partNode, "mmp:isAlphaBlend");
+        byte fl2 = (byte)ModelHelpers.GetIntMeta(partNode, "mmp:isEnabled");
+        int uvSets = ModelHelpers.GetIntMeta(partNode, "mmp:uvSetCount");
         var maxSets = Math.Min(2, mesh.TextureCoordinateChannelCount);
         if (uvSets > maxSets)
             throw new InvalidDataException(
@@ -358,7 +338,7 @@ public static class MMPWriter
         var uv0Src = mesh.TextureCoordinateChannelCount >= 1 ? mesh.TextureCoordinateChannels[0] : null;
         var uv1Src = mesh.TextureCoordinateChannelCount >= 2 ? mesh.TextureCoordinateChannels[1] : null;
 
-        var M = GetGlobalTransform(partNode);
+        var M = ModelHelpers.GetGlobalTransform(partNode);
         Num.Matrix4x4.Invert(M, out var invM);
         var invMT = Num.Matrix4x4.Transpose(invM);
 
@@ -442,7 +422,7 @@ public static class MMPWriter
         ref float objMinX, ref float objMinY, ref float objMinZ,
         ref float objMaxX, ref float objMaxY, ref float objMaxZ)
     {
-        var M = GetGlobalTransform(partNode);
+        var M = ModelHelpers.GetGlobalTransform(partNode);
 
         // 1) Find true world extents based on source geometry
         float pMinX = float.PositiveInfinity, pMinY = float.PositiveInfinity, pMinZ = float.PositiveInfinity;
@@ -517,8 +497,8 @@ public static class MMPWriter
         var (subName, materialId, layoutTag, fl0, fl1, fl2, uvSets, Pw, Nw, UV0, UV1, indices, forcedBounds) = part;
 
         // Mesh header (name)
-        WriteUtf16Len(bw, subName);
-        WriteUtf16Body(bw, subName);
+        ModelHelpers.WriteUtf16Len(bw, subName);
+        ModelHelpers.WriteUtf16Body(bw, subName);
 
         // Counts & attributes
         bw.Write(Pw.Count);
@@ -571,7 +551,6 @@ public static class MMPWriter
         radius = 0.5f * MathF.Sqrt(sx * sx + sy * sy + sz * sz);
     }
 
-
     private static void WriteVertexStream(
         BinaryWriter bw, int layoutTag, int uvSets,
         List<Num.Vector3> Pw, List<Num.Vector3> Nw,
@@ -616,110 +595,6 @@ public static class MMPWriter
         if (p.X > maxX) maxX = p.X; if (p.Y > maxY) maxY = p.Y; if (p.Z > maxZ) maxZ = p.Z;
     }
 
-    #endregion
-
-    #region Type 3 Node Builder
-    // ---------------- Type-3: transform chunk ----------------
-    private static byte[] BuildType3FromNode(Node objNode, int version)
-    {
-        using var ms = new MemoryStream();
-        using var bw = new BinaryWriter(ms, Encoding.ASCII, leaveOpen: true);
-
-        string objectName = objNode.Name;
-        string objectName2 = GetRequiredStringMeta(objNode, "mmp:nodeGroupName");
-
-        // ---- names + hashes (object, group, object) ----
-        WriteUtf16Len(bw, objectName);
-        WriteUtf16Len(bw, objectName2);
-        WriteUtf16Len(bw, objectName);
-        bw.Write(HashName(objectName));
-        bw.Write(HashName(objectName2));
-        bw.Write(HashName(objectName));
-        WriteUtf16Body(bw, objectName);
-        WriteUtf16Body(bw, objectName2);
-        WriteUtf16Body(bw, objectName);
-
-        // flags
-        int kind = GetRequiredIntMeta(objNode, "mmp:nodeKind");
-        int flag = GetRequiredIntMeta(objNode, "mmp:nodeFlag");
-        bw.Write(kind);
-        bw.Write(flag);
-
-        bw.Write(0); bw.Write(0); bw.Write(0); bw.Write(0);   // unk1..unk4
-        bw.Write((byte)0);                                    // b1
-        if (version >= 7) bw.Write((byte)0);                  // b2
-
-        // ---- Matrices: world, bind (inverse world), world dup ----
-        var world = GetGlobalTransform(objNode);
-        Num.Matrix4x4.Invert(world, out var bind);
-        var worldDup = world;
-
-        // Write matrices in row-major order
-        WriteMatrix(bw, world);
-        WriteMatrix(bw, bind);
-        WriteMatrix(bw, worldDup);
-
-        // ---- Decompose world to TRS ----
-        Num.Matrix4x4.Decompose(world, out var sc, out var rot, out var tr);
-        bw.Write(tr.X); bw.Write(tr.Y); bw.Write(tr.Z);
-        bw.Write(rot.X); bw.Write(rot.Y); bw.Write(rot.Z); bw.Write(rot.W);
-        bw.Write(sc.X); bw.Write(sc.Y); bw.Write(sc.Z);
-
-        return ms.ToArray();
-    }
-
-    #endregion
-
-    #region Matrices Helpers
-
-    /// <summary>
-    /// Write a 4x4 matrix in row-major order
-    /// </summary>
-    /// <param name="bw"></param>
-    /// <param name="m"></param>
-    private static void WriteMatrix(BinaryWriter bw, Num.Matrix4x4 m)
-    {
-        bw.Write(m.M11); bw.Write(m.M12); bw.Write(m.M13); bw.Write(m.M14);
-        bw.Write(m.M21); bw.Write(m.M22); bw.Write(m.M23); bw.Write(m.M24);
-        bw.Write(m.M31); bw.Write(m.M32); bw.Write(m.M33); bw.Write(m.M34);
-        bw.Write(m.M41); bw.Write(m.M42); bw.Write(m.M43); bw.Write(m.M44);
-    }
-
-    /// <summary>
-    /// convert Assimp matrix to System.Numerics matrix
-    /// </summary>
-    /// <param name="a"></param>
-    /// <returns></returns>
-    private static Num.Matrix4x4 FromAssimp(Assimp.Matrix4x4 a)
-    {
-        // Assimp uses row-major order, so direct mapping
-        return new Num.Matrix4x4(
-            a.A1, a.B1, a.C1, a.D1,
-            a.A2, a.B2, a.C2, a.D2,
-            a.A3, a.B3, a.C3, a.D3,
-            a.A4, a.B4, a.C4, a.D4
-        );
-    }
-
-    /// <summary>
-    /// Get global transform of a node by accumulating local transforms up the hierarchy
-    /// </summary>
-    /// <param name="node"></param>
-    /// <returns></returns>
-    private static Num.Matrix4x4 GetGlobalTransform(Node node)
-    {
-        var global = Num.Matrix4x4.Identity;
-        for (var current = node; current != null; current = current.Parent)
-        {
-            var local = FromAssimp(current.Transform);
-            global = Num.Matrix4x4.Multiply(local, global);
-        }
-        return global;
-    }
-
-    #endregion
-
-    #region Helpers
     /// <summary>
     /// Compute vertex stride from layout tag and UV set count
     /// </summary>
@@ -734,22 +609,58 @@ public static class MMPWriter
         if (vertexLayoutTag == 0 && uvSetCount == 2) return 40;
         throw new InvalidDataException($"Unknown vertex layout: tag={vertexLayoutTag}, uv={uvSetCount}");
     }
-
-    // ---- string helpers ----
-    static void WriteUtf16Len(BinaryWriter bw, string s) => bw.Write(s?.Length ?? 0);
-    static void WriteUtf16Body(BinaryWriter bw, string s) { if (!string.IsNullOrEmpty(s)) bw.Write(Encoding.Unicode.GetBytes(s)); }
-
-    /// <summary>
-    /// Calculate the hash of a name string (ASCII, case-sensitive)
-    /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns>
-    public static uint HashName(string s)
-    {
-        uint h = 0;
-        foreach (byte b in Encoding.ASCII.GetBytes(s))
-            h = unchecked(h * 31 + b);
-        return h;
-    }
     #endregion
+
+    #region Type 3 Node Builder
+    // ---------------- Type-3: transform chunk ----------------
+    private static byte[] BuildType3FromNode(Node objNode, int version)
+    {
+        using var ms = new MemoryStream();
+        using var bw = new BinaryWriter(ms, Encoding.ASCII, leaveOpen: true);
+
+        string objectName = objNode.Name;
+        string objectName2 = ModelHelpers.GetStringMeta(objNode, "mmp:nodeGroupName");
+
+        // ---- names + hashes (object, group, object) ----
+        ModelHelpers.WriteUtf16Len(bw, objectName);
+        ModelHelpers.WriteUtf16Len(bw, objectName2);
+        ModelHelpers.WriteUtf16Len(bw, objectName);
+        bw.Write(ModelHelpers.HashName(objectName));
+        bw.Write(ModelHelpers.HashName(objectName2));
+        bw.Write(ModelHelpers.HashName(objectName));
+        ModelHelpers.WriteUtf16Body(bw, objectName);
+        ModelHelpers.WriteUtf16Body(bw, objectName2);
+        ModelHelpers.WriteUtf16Body(bw, objectName);
+
+        // flags
+        int kind = ModelHelpers.GetIntMeta(objNode, "mmp:nodeKind");
+        int flag = ModelHelpers.GetIntMeta(objNode, "mmp:nodeFlag");
+        bw.Write(kind);
+        bw.Write(flag);
+
+        bw.Write(0); bw.Write(0); bw.Write(0); bw.Write(0);   // unk1..unk4
+        bw.Write((byte)0);                                    // b1
+        if (version >= 7) bw.Write((byte)0);                  // b2
+
+        // ---- Matrices: world, bind (inverse world), world dup ----
+        var world = ModelHelpers.GetGlobalTransform(objNode);
+        Num.Matrix4x4.Invert(world, out var bind);
+        var worldDup = world;
+
+        // Write matrices in row-major order
+        ModelHelpers.WriteMatrix(bw, world);
+        ModelHelpers.WriteMatrix(bw, bind);
+        ModelHelpers.WriteMatrix(bw, worldDup);
+
+        // ---- Decompose world to TRS ----
+        Num.Matrix4x4.Decompose(world, out var sc, out var rot, out var tr);
+        bw.Write(tr.X); bw.Write(tr.Y); bw.Write(tr.Z);
+        bw.Write(rot.X); bw.Write(rot.Y); bw.Write(rot.Z); bw.Write(rot.W);
+        bw.Write(sc.X); bw.Write(sc.Y); bw.Write(sc.Z);
+
+        return ms.ToArray();
+    }
+
+    #endregion
+
 }

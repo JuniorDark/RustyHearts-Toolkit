@@ -69,23 +69,37 @@
             <!--  File menu  -->
             <control:ModelViewMenu Grid.Row="1" />
 
-            <!--  Versions  -->
+            <!--  Version  -->
             <StackPanel
                 Grid.Row="2"
                 Grid.ColumnSpan="2"
-                Margin="8"
-                VerticalAlignment="Center"
+                VerticalAlignment="Top"
                 DockPanel.Dock="Top"
                 Orientation="Horizontal"
                 Visibility="{Binding IsVisible}">
                 <TextBlock
+                    VerticalAlignment="Center"
                     FontWeight="Bold"
                     Foreground="White"
                     Text="Version:" />
                 <TextBlock
                     Margin="4,0,12,0"
+                    VerticalAlignment="Center"
                     Foreground="Gold"
                     Text="{Binding Version}" />
+                <CheckBox
+                    Margin="10,0"
+                    Content="Nav Mesh Wireframe"
+                    IsChecked="{Binding ShowWireframe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="Nav Mesh Wireframe"
+                    Visibility="{Binding IsNavMeshControlsVisible}" />
+                <CheckBox
+                    Content="Nav Mesh Octree"
+                    IsChecked="{Binding ShowNaviDebug, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="Debug View"
+                    Visibility="{Binding IsNavMeshControlsVisible}" />
             </StackPanel>
 
             <!--  3D Scene  -->

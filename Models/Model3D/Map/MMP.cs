@@ -1,11 +1,11 @@
 ﻿using System.Numerics;
 
-namespace RHToolkit.Models.Model3D.MMP;
+namespace RHToolkit.Models.Model3D.Map;
 
 /// <summary>
 /// Core classes for MMP Models.
 /// </summary>
-public class MMP
+public static class MMP
 {
     // ---------- Common Structs ----------
     /// <summary>

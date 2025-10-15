@@ -1,8 +1,8 @@
 ﻿using HelixToolkit.Wpf.SharpDX;
-using static RHToolkit.Models.Model3D.MMP.MMP;
+using static RHToolkit.Models.Model3D.Map.MMP;
 using SDX = SharpDX;
 
-namespace RHToolkit.Models.Model3D.MMP;
+namespace RHToolkit.Models.Model3D.Map;
 
 public static class MMPToHelix
 {

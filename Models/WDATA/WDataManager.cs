@@ -2,7 +2,7 @@
 using Microsoft.Win32;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Models.Model3D.MMP;
+using RHToolkit.Models.Model3D.Map;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Windows.Media.Media3D;

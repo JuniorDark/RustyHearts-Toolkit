@@ -1,28 +1,27 @@
 ﻿using Aspose.ThreeD;
 using Aspose.ThreeD.Formats;
-using static RHToolkit.Models.Model3D.MMP.MMP;
+using static RHToolkit.Models.Model3D.Map.MMP;
 using A3D = Aspose.ThreeD;
 using A3DE = Aspose.ThreeD.Entities;
 using A3DS = Aspose.ThreeD.Shading;
 using AU = Aspose.ThreeD.Utilities;
 using Num = System.Numerics;
 
-namespace RHToolkit.Models.Model3D.MMP;
+namespace RHToolkit.Models.Model3D.Map;
 
 /// <summary>
 /// Exports an MMP model to FBX using Aspose.3D (Trial Version).
 /// </summary>
-public static class MMPExporterAspose
+public class MMPExporterAspose
 {
     /// <summary>
     /// Exports the given MMP model to an FBX file.
     /// </summary>
     /// <param name="mmp"></param>
     /// <param name="outFilePath"></param>
-    /// <param name="generateTangents"></param>
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="InvalidOperationException"></exception>
-    public static void ExportMmpToFbx(MmpModel mmp, string outFilePath)
+    public async Task ExportMmpToFbx(MmpModel mmp, string outFilePath)
     {
         ArgumentNullException.ThrowIfNull(mmp);
         if (string.IsNullOrWhiteSpace(outFilePath)) throw new ArgumentException("Output path is empty.", nameof(outFilePath));
@@ -332,6 +331,61 @@ public static class MMPExporterAspose
             }
         }
 
+        // --- Attach NAVI mesh into FBX ---
+        try
+        {
+            var mmpDir = Path.GetDirectoryName(outFilePath)!;
+            var mmpStem = Path.GetFileNameWithoutExtension(outFilePath);
+            var naviPath = Path.Combine(mmpDir, mmpStem + ".navi");
+            if (File.Exists(naviPath))
+            {
+                var navi = await NaviReader.ReadAsync(naviPath);
+                // Map class-3: NodeHash -> MWorld
+                var worldByHash = navi.Nodes.GroupBy(n => n.NameKey)
+                                            .ToDictionary(g => g.Key, g => g.First().MWorld);
+
+                var naviXform = new Dictionary<uint, NaviNodeXform>();
+                foreach (var nx in navi.Nodes)
+                    if (nx.NameKey != 0) naviXform[nx.NameKey] = nx;
+
+                foreach (var e in navi.Entries)
+                {
+                    if(!naviXform.TryGetValue(e.NameKey, out var nx))
+                    throw new InvalidOperationException($"No matching Type-3 node found for object '{e.Name}' (hash: {e.NameKey}).");
+
+                    var naviNode = new A3D.Node("_NavigationMesh_");
+
+                    mmpNode.AddChildNode(naviNode);
+
+                    var mesh = new A3DE.Mesh();
+
+                    // Prepare world→local for geometry bake
+                    Num.Matrix4x4.Invert(nx.MWorld, out var invWorld);
+
+                    foreach (var v in e.Vertices)
+                    {
+                        var pLocal = Num.Vector3.Transform(new Num.Vector3(v.X, v.Y, v.Z), invWorld);
+                        mesh.ControlPoints.Add(new AU.Vector4(pLocal.X, pLocal.Y, pLocal.Z, 1));
+                    }
+
+                    for (int i = 0; i < e.Indices.Length; i++)
+                        mesh.CreatePolygon(e.Indices[i].A, e.Indices[i].B, e.Indices[i].C);
+
+                    naviNode.CreateChildNode(e.Name ?? "NavMesh", mesh);
+                    // Metadata
+                    naviNode.SetProperty("navi:isNavMesh", 1);
+                    naviNode.SetProperty("navi:version", navi.Header.Version);
+                    naviNode.SetProperty("navi:name", e.Name);
+                    naviNode.SetProperty("navi:nodeKind", nx.Kind);
+                    naviNode.SetProperty("navi:nodeFlag", nx.Flag);
+
+                    naviNode.Transform.TransformMatrix = ToAspose(nx.MWorld);
+                }
+            }
+        }
+        catch { /* non-fatal if NAVI is missing */ }
+
+
         // --- Save FBX ---
         var fbxOpts = new FbxSaveOptions(FileFormat.FBX7600Binary);
         scene.Save(outFilePath, fbxOpts);
@@ -352,6 +406,7 @@ public static class MMPExporterAspose
             m.M41, m.M42, m.M43, m.M44
         );
     }
+
 
     #region Material / Shader Helpers
     private static MmpTexture? Texture(MmpMaterial? m, string slotExact)
