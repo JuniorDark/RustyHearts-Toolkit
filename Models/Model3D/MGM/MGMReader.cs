@@ -1,8 +1,4 @@
-﻿using RHToolkit.Models.Model3D.MMP;
-using SharpDX.DXGI;
-using System;
-using System.Diagnostics;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace RHToolkit.Models.Model3D.MGM;
 
@@ -145,17 +141,7 @@ public struct MgmVertex
     public Vector3? Bitangent;    // Optional if stored explicitly
     public Vector4? Weights;      // Skin weights (optional)
     public Byte4? BoneIdxU8;     // Skin indices as 4xU8 (optional)
-    public UShort4? BoneIdxU16;   // Skin indices as 4xU16 (optional, rare)
-}
-
-[Flags]
-public enum MgmVertexFeatures : uint
-{
-    UV1 = 1 << 0,  // has a secondary UV set
-    Tangent = 1 << 1,  // has tangent (and maybe bitangent)
-    Skinning = 1 << 2,  // has weights+indices
-    BoneIdxU16 = 1 << 3,  // skin indices are 16-bit (else 8-bit)
-    // add more as you learn (colors, extra UVs, etc.)
+    public UShort4? BoneIdxU16;   // Skin indices as 4xU16
 }
 
 public readonly struct Byte4(byte x, byte y, byte z, byte w)
@@ -164,7 +150,6 @@ public readonly struct Byte4(byte x, byte y, byte z, byte w)
 public readonly struct UShort4(ushort x, ushort y, ushort z, ushort w)
 { public readonly ushort X = x, Y = y, Z = z, W = w;
 }
-
 
 public sealed class MgmMesh
 {
@@ -229,7 +214,7 @@ public sealed class MgmEdgeDef
 }
 
 
-public sealed class MgmRawSection { public int Type; public byte[] Data = Array.Empty<byte>(); }
+public sealed class MgmRawSection { public int Type; public byte[] Data = []; }
 
 // ---------- Reader ----------
 public static class MGMReader
@@ -282,8 +267,8 @@ public static class MGMReader
                 case 2: model.BonesPoses.Add(ReadType2_BonePose(br, size)); break;
                 case 3: model.Bones.Add(ReadType3_Bones(br, size)); break;
                 case 4: model.Dummies.Add(ReadType4_Dummy(br, size)); break;
-                case 5: model.Meshes.Add(ReadType5_Mesh(br, size, model)); break;
-                case 6: model.Meshes.Add(ReadType6_Mesh(br, size, version)); break;
+                case 5: ReadType5_Meshes(br, size, model); break;
+                case 6: ReadType6_Meshes(br, size, model); break;
                 case 7: model.MeshMetadata.Add(ReadType7_MeshMeta(br, size)); break;
                 case 17: model.Colliders.Add(ReadType17_Collider(br, size)); break;
                 case 18: model.Edges.Add(ReadType18_Edge(br, size)); break;
@@ -522,162 +507,293 @@ public static class MGMReader
         };
     }
 
-    private static MgmMesh ReadType5_Mesh(BinaryReader br, int size, MgmModel model)
+    // ---- Type 5 (Static meshes: container of N submeshes, 32B stride) ----
+    private static void ReadType5_Meshes(BinaryReader br, int size, MgmModel model)
     {
         long start = br.BaseStream.Position;
 
         int nameLen = br.ReadInt32();
-        int altLen = br.ReadInt32();
+        int dummyLen = br.ReadInt32();
         uint nameHash = br.ReadUInt32();
-        uint altHash = br.ReadUInt32();
+        uint dummyHash = br.ReadUInt32();
         string name = ReadUtf16String(br, nameLen);
-        string altName = ReadUtf16String(br, altLen);
+        string dummyName = ReadUtf16String(br, dummyLen);
 
-        int layoutTag = br.ReadInt32();
-        int matLen = br.ReadInt32();
-        string matName = ReadUtf16String(br, matLen);
+        int subMeshCount = br.ReadInt32();
 
-        int verticesCount = br.ReadInt32();
-        int trianglesCount = br.ReadInt32();
-
-        int flag = br.ReadInt32();
-
-        byte[] flags = br.ReadBytes(4);
-        int materialId = br.ReadInt32();
-
-        var mesh = new MgmMesh
+        for (int i = 0; i < subMeshCount; i++)
         {
-            Name = name,
-            AltName = altName,
-            NameHash = nameHash,
-            AltNameHash = altHash,
-            MaterialName = matName,
-            VertexCount = verticesCount,
-            TriangleCount = trianglesCount,
-            Flags = flags,
-            Flag = flag,
-            MaterialId = materialId,
-            Material = model.Materials.FirstOrDefault(m => m.Id == materialId),
-            Vertices = new MgmVertex[verticesCount],
-            Indices = new ushort[trianglesCount * 3],
-        };
+            int subNameLen = br.ReadInt32();
+            string subName = ReadUtf16String(br, subNameLen);
 
-        // Continue
+            int vertexCount = br.ReadInt32();
+            int triCount = br.ReadInt32();
+            int meshType = br.ReadInt32(); // 0 = regular mesh
 
-        int consumed = (int)(br.BaseStream.Position - start);
-        int remain = Math.Max(0, size - consumed);
+            // flags
+            byte isEmissiveAdditive = br.ReadByte();  // 1 = additive/emissive path
+            byte isAlphaBlend = br.ReadByte();  // 1 = alpha-blend path
+            byte isEnabled = br.ReadByte();  // 1 = visible/enabled?
 
+            // material & UVs
+            int uvSetCount = br.ReadInt32(); 
+            int materialIndex = br.ReadInt32();
 
-        return mesh;
-    }
+            int stride = ComputeStrideForMGM(meshType, uvSetCount); // bytes per vertex
 
-    static int ComputeStrideForMGM(int layoutTag, int flag, byte[] flags, out MgmVertexFeatures features)
-    {
-        // Baseline assumptions by layout "family"
-        // layoutTag == 0 : P,N,UV0 only (static-like)
-        // layoutTag == 1 : P,N,UV0 + maybe UV1/tangent (weapons/props)
-        // layoutTag == 2 : billboards/particles (small stride)
-        // layoutTag == 3 : character/skinned (weights/indices)
+            // Bounds block: center(3), radius, min(3), max(3)
+            var pCenter = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+            var pRadius = br.ReadSingle();
+            var pMin = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+            var pMax = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+            var pSize = pMax - pMin;
 
-        features = 0;
+            // Read raw buffers
+            byte[] vtxBytes = br.ReadBytes(checked(vertexCount * stride));
+            byte[] idxBytes = br.ReadBytes(checked(triCount * 3 * 2)); // ushort * (triangles*3)
 
-        // Fold the small flag fields into a simple bitmask we can pattern-match on.
-        // Example convention (adjust once you confirm):
-        // flags[2] bit0 => UV1, bit1 => Tangent, bit2 => Skinning, bit3 => BoneIdxU16
-        if (flags?.Length >= 3)
-        {
-            byte f = flags[2];
-            if ((f & 0x01) != 0) features |= MgmVertexFeatures.UV1;
-            if ((f & 0x02) != 0) features |= MgmVertexFeatures.Tangent;
-            if ((f & 0x04) != 0) features |= MgmVertexFeatures.Skinning;
-            if ((f & 0x08) != 0) features |= MgmVertexFeatures.BoneIdxU16;
+            // Build mesh
+            var mesh = new MgmMesh
+            {
+                Name = subName,
+                AltName = dummyName,
+                VertexCount = vertexCount,
+                TriangleCount = triCount,
+                MaterialId = materialIndex,
+                Material = model.Materials.FirstOrDefault(m => m.Id == materialIndex),
+                Vertices = new MgmVertex[vertexCount],
+                Indices = new ushort[triCount * 3]
+            };
+
+            // Indices
+            Buffer.BlockCopy(idxBytes, 0, mesh.Indices, 0, idxBytes.Length);
+
+            // Vertices (P,N,UV0)
+            for (int v = 0; v < vertexCount; v++)
+            {
+                int o = v * stride;
+
+                var pos = new Vector3
+                {
+                    X = BitConverter.ToSingle(vtxBytes, o + 0),
+                    Y = BitConverter.ToSingle(vtxBytes, o + 4),
+                    Z = BitConverter.ToSingle(vtxBytes, o + 8)
+                };
+                var nor = new Vector3
+                {
+                    X = BitConverter.ToSingle(vtxBytes, o + 12),
+                    Y = BitConverter.ToSingle(vtxBytes, o + 16),
+                    Z = BitConverter.ToSingle(vtxBytes, o + 20)
+                };
+
+                Vector2 uv0, uv1 = default;
+
+                switch (stride)
+                {
+                    case 32: // single UV set
+                        uv0.X = BitConverter.ToSingle(vtxBytes, o + 24);
+                        uv0.Y = BitConverter.ToSingle(vtxBytes, o + 28);
+                        break;
+                    case 40: // two UV sets, UV0 base; UV1
+                        uv0.X = BitConverter.ToSingle(vtxBytes, o + 24);
+                        uv0.Y = BitConverter.ToSingle(vtxBytes, o + 28);
+                        uv1.X = BitConverter.ToSingle(vtxBytes, o + 32);
+                        uv1.Y = BitConverter.ToSingle(vtxBytes, o + 36);
+                        break;
+                    default:
+                        uv0 = default;
+                        break;
+                }
+
+                mesh.Vertices[v] = new MgmVertex
+                {
+                    Position = pos,
+                    Normal = nor,
+                    UV0 = uv0,
+                    UV1 = (stride == 40) ? uv1 : null
+                };
+            }
+
+            model.Meshes.Add(mesh);
         }
 
-        // Some assets also duplicate a bit in flags[3] or in "flag".
-        // You can OR in extra bits here if you discover them:
-        // if ((flag & 0x100) != 0) features |= MgmVertexFeatures.Tangent;
-
-        // Base strides by family
-        int stride;
-        switch (layoutTag)
-        {
-            default:
-            case 0: // P,N,UV0 (MMP-like static)
-                stride = 12 + 12 + 8; // 32
-                break;
-
-            case 1: // P,N,UV0 + optional UV1/tangent
-                stride = 12 + 12 + 8; // start at 32
-                if (features.HasFlag(MgmVertexFeatures.UV1)) stride += 8;   // 40
-                if (features.HasFlag(MgmVertexFeatures.Tangent)) stride += 16;  // +tangent(vec4) => 56
-                break;
-
-            case 2: // small/billboard/point-light like (seen as 28 in MMP)
-                    // You might see P(12) + UV0(8) + packed normal(4) + extra(4) => 28
-                    // Keep as 28 unless you find otherwise.
-                stride = 28;
-                break;
-
-            case 3: // skinned
-                    // Start with P,N,UV0
-                stride = 12 + 12 + 8; // 32
-                if (features.HasFlag(MgmVertexFeatures.UV1)) stride += 8;   // 40
-                if (features.HasFlag(MgmVertexFeatures.Tangent)) stride += 16;  // 56
-
-                // skin block: prefer 4x weights (float) + 4x indices (U8 or U16)
-                // (Some games use half/byte weights—adjust if you find it.)
-                stride += 16; // weights as 4*float
-                if (features.HasFlag(MgmVertexFeatures.BoneIdxU16)) stride += 8;  // 4*ushort
-                else stride += 4;  // 4*byte
-                break;
-        }
-
-        return stride;
+        long read = br.BaseStream.Position - start;
+        if (read != size)
+            throw new InvalidDataException($"Type 5: expected {size} bytes, read {read}.");
     }
-
 
     // ---- Type 6 (Skinned Meshes) ----
-    private static MgmMesh ReadType6_Mesh(BinaryReader br, int size, int version)
+    private static void ReadType6_Meshes(BinaryReader br, int size, MgmModel model)
     {
         long start = br.BaseStream.Position;
 
         int nameLen = br.ReadInt32();
-        int altLen = br.ReadInt32();
+        int dummyLen = br.ReadInt32();
         uint nameHash = br.ReadUInt32();
-        uint altHash = br.ReadUInt32();
+        uint dummyHash = br.ReadUInt32();
         string name = ReadUtf16String(br, nameLen);
-        string altName = ReadUtf16String(br, altLen);
+        string dummyName = ReadUtf16String(br, dummyLen);
 
-        int layoutTag = br.ReadInt32();
-        int matLen = br.ReadInt32();
-        string matName = ReadUtf16String(br, matLen);
+        int meshCount = br.ReadInt32();
 
-        int verticesCount = br.ReadInt32();
-        int trianglesCount = br.ReadInt32();
-
-        int flag = br.ReadInt32();
-
-        byte[] flags = br.ReadBytes(4);
-        int materialId = br.ReadInt32();
-
-        var mesh = new MgmMesh
+        for (int i = 0; i < meshCount; i++)
         {
-            Name = name,
-            AltName = altName,
-            NameHash = nameHash,
-            AltNameHash = altHash,
-            MaterialName = matName,
+            int subNameLen = br.ReadInt32();
+            string subName = ReadUtf16String(br, subNameLen);
 
-            VertexCount = verticesCount,
-            TriangleCount = trianglesCount,
+            int vertexCount = br.ReadInt32();
+            int triCount = br.ReadInt32();
+            int vertexLayoutTag = br.ReadInt32();
+
+            // ---- flags (3 bytes) + 1 pad byte (alignment) ----
+            byte isEmissiveAdditive = br.ReadByte();
+            byte isAlphaBlend = br.ReadByte();
+            byte isEnabled = br.ReadByte();
+
+            // ---- material & layout ----
+            int uvSetCount = br.ReadInt32();
+            int materialIndex = br.ReadInt32();
+            int meshType = br.ReadInt32();
+
+            // ---- bounds ----
+            var pCenter = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+            var pRadius = br.ReadSingle();
+            var pMin = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+            var pMax = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+
+            int stride = ComputeStrideForMGM(meshType, uvSetCount);
+
+            // ---- buffers ----
+            byte[] vtxBytes = br.ReadBytes(checked(vertexCount * stride));
+            byte[] idxBytes = br.ReadBytes(checked(triCount * 3 * 2));
+
+            var mesh = new MgmMesh
+            {
+                Name = subName,
+                AltName = dummyName,
+                VertexCount = vertexCount,
+                TriangleCount = triCount,
+                MaterialId = materialIndex,
+                Material = model.Materials.FirstOrDefault(m => m.Id == materialIndex),
+                Vertices = new MgmVertex[vertexCount],
+                Indices = new ushort[triCount * 3],
+                Flags = [isEmissiveAdditive, isAlphaBlend, isEnabled]
+            };
+
+            Buffer.BlockCopy(idxBytes, 0, mesh.Indices, 0, idxBytes.Length);
+
+            for (int v = 0; v < vertexCount; v++)
+            {
+                int o = v * stride;
+
+                // Base: P(12) + N(12) + UV0(8)
+                var pos = new Vector3(
+                    BitConverter.ToSingle(vtxBytes, o + 0),
+                    BitConverter.ToSingle(vtxBytes, o + 4),
+                    BitConverter.ToSingle(vtxBytes, o + 8));
+
+                var nor = new Vector3(
+                    BitConverter.ToSingle(vtxBytes, o + 12),
+                    BitConverter.ToSingle(vtxBytes, o + 16),
+                    BitConverter.ToSingle(vtxBytes, o + 20));
+
+                var uv0 = new Vector2(
+                    BitConverter.ToSingle(vtxBytes, o + 24),
+                    BitConverter.ToSingle(vtxBytes, o + 28));
+
+                Vector2? uv1 = null;
+                int cur = 32;
+
+                if (uvSetCount == 2)
+                {
+                    uv1 = new Vector2(
+                        BitConverter.ToSingle(vtxBytes, o + cur + 0),
+                        BitConverter.ToSingle(vtxBytes, o + cur + 4));
+                    cur += 8;
+                }
+
+                Vector4? weights = null;
+                UShort4? boneIdx = null;
+
+                switch (meshType)
+                {
+                    case 0:
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        {
+                            // Half4 weights
+                            float w0 = (float)BitConverter.Int16BitsToHalf(unchecked((short)BitConverter.ToUInt16(vtxBytes, o + cur + 0)));
+                            float w1 = (float)BitConverter.Int16BitsToHalf(unchecked((short)BitConverter.ToUInt16(vtxBytes, o + cur + 2)));
+                            float w2 = (float)BitConverter.Int16BitsToHalf(unchecked((short)BitConverter.ToUInt16(vtxBytes, o + cur + 4)));
+                            float w3 = (float)BitConverter.Int16BitsToHalf(unchecked((short)BitConverter.ToUInt16(vtxBytes, o + cur + 6)));
+                            weights = new Vector4(w0, w1, w2, w3);
+                            cur += 8;
+
+                            boneIdx = new UShort4(
+                                BitConverter.ToUInt16(vtxBytes, o + cur + 0),
+                                BitConverter.ToUInt16(vtxBytes, o + cur + 2),
+                                BitConverter.ToUInt16(vtxBytes, o + cur + 4),
+                                BitConverter.ToUInt16(vtxBytes, o + cur + 6));
+                            cur += 8;
+                            break;
+                        }
+
+                    case 4:
+                        {
+                            // Float4 weights
+                            weights = new Vector4(
+                                BitConverter.ToSingle(vtxBytes, o + cur + 0),
+                                BitConverter.ToSingle(vtxBytes, o + cur + 4),
+                                BitConverter.ToSingle(vtxBytes, o + cur + 8),
+                                BitConverter.ToSingle(vtxBytes, o + cur + 12));
+                            cur += 16;
+
+                            boneIdx = new UShort4(
+                                BitConverter.ToUInt16(vtxBytes, o + cur + 0),
+                                BitConverter.ToUInt16(vtxBytes, o + cur + 2),
+                                BitConverter.ToUInt16(vtxBytes, o + cur + 4),
+                                BitConverter.ToUInt16(vtxBytes, o + cur + 6));
+                            cur += 8;
+                            break;
+                        }
+
+                    default:
+                        throw new InvalidDataException($"Unknown meshType={meshType}");
+                }
+
+                mesh.Vertices[v] = new MgmVertex
+                {
+                    Position = pos,
+                    Normal = nor,
+                    UV0 = uv0,
+                    UV1 = uv1,
+                    Weights = weights,
+                    BoneIdxU16 = boneIdx
+                };
+            }
+
+            model.Meshes.Add(mesh);
+        }
+
+        long read = br.BaseStream.Position - start;
+        if (read != size)
+            throw new InvalidDataException($"Type 6: expected {size} bytes, read {read}.");
+    }
+
+    private static int ComputeStrideForMGM(int meshType, int uvSetCount)
+    {
+        // Base = P(12) + N(12) + UV0(8) = 32
+        return meshType switch
+        {
+            0 or 1 => uvSetCount == 2 ? 40 : 32,         // static-like
+            2 => 28,                                 // billboards/particles
+            3 => uvSetCount == 2 ? (32 + 8 + 8 + 8) : (32 + 8 + 8),   // Half4 + U16x4  -> 56 / 48
+            4 => uvSetCount == 2 ? (32 + 8 + 16 + 8) : (32 + 16 + 8), // Float4 + U16x4 -> 64 / 56
+            _ => throw new InvalidDataException($"Unknown meshType={meshType}, uvSetCount={uvSetCount}")
         };
-
-        //more data
-
-        int consumed = (int)(br.BaseStream.Position - start);
-        int remain = Math.Max(0, size - consumed);
-
-        return mesh;
     }
 
     // ---- Type 7 (Mesh metadata) ----
@@ -709,7 +825,6 @@ public static class MGMReader
             AuxAnglesDeg = p
         };
     }
-
 
     // ---- Type 17 (Collider) ----
     private static MgmCollider ReadType17_Collider(BinaryReader br, int size)

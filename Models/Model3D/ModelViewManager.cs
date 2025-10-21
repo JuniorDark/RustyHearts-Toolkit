@@ -195,8 +195,8 @@ public partial class ModelViewManager : ObservableObject
 
     private static PerspectiveCamera CreateDefaultCamera() => new()
     {
-        Position = new Point3D(0, 0, 0),
-        LookDirection = new Vector3D(-5, -12, -5),
+        Position = new Point3D(0, 140, -200),
+        LookDirection = new Vector3D(-10, -243, 1250),
         UpDirection = new Vector3D(0, 1, 0),
         NearPlaneDistance = 0.5,
         FarPlaneDistance = 500000
@@ -265,8 +265,8 @@ public partial class ModelViewManager : ObservableObject
                 {
                     Message = "Loading NAVI model...";
                     var navi = await NaviReader.ReadAsync(filePath).ConfigureAwait(false);
-                    var heightPath = Path.ChangeExtension(filePath, ".height");
-                    await HeightWriter.BuildFromNaviFileAsync(filePath, heightPath, 20, 50, 2);
+                    //var heightPath = Path.ChangeExtension(filePath, ".height");
+                    //await HeightWriter.BuildFromNaviFileAsync(filePath, heightPath, 20, 50, 2);
                     NaviModel = navi;
                     MgmModel = null;
                     MmpModel = null;

@@ -54,12 +54,12 @@ public class MGMToHelix
                 }
 
                 // Normal (Bump)
-                var normalPath = ResolveTexturePath(model.BaseDirectory,
-                    Texture(mat, "BumpMap")?.TexturePath, null);
-                if (!string.IsNullOrEmpty(normalPath) && File.Exists(normalPath))
-                {
-                    try { phong.NormalMap = new MemoryStream(File.ReadAllBytes(normalPath)); } catch { }
-                }
+                //var normalPath = ResolveTexturePath(model.BaseDirectory,
+                //    Texture(mat, "BumpMap")?.TexturePath, null);
+                //if (!string.IsNullOrEmpty(normalPath) && File.Exists(normalPath))
+                //{
+                //    try { phong.NormalMap = new MemoryStream(File.ReadAllBytes(normalPath)); } catch { }
+                //}
 
                 // Diffuse color multiplier
                 var pDiffuse = Shader(mat, "Diffuse");

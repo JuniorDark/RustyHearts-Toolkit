@@ -176,78 +176,61 @@ public class MMPExporterAspose
                 var meshName = string.IsNullOrWhiteSpace(part.MeshName) ? "Mesh" : part.MeshName;
                 var uvScale = GetTexScale(part.Material);
 
-                // --- Special case: VertexLayoutTag 2 = billboard quad ---
-                if (part.VertexLayoutTag == 2)
+                // Prepare world→local for geometry bake
+                Num.Matrix4x4.Invert(nx.MWorld, out var invWorld);
+                var invWorldT = Num.Matrix4x4.Transpose(invWorld);
+
+                // --- MeshType 2 = billboard quad ---
+                if (part.MeshType == 2)
                 {
-                    // Use OBJECT bounds in world; localize by dividing scale
-                    var worldW = obj.GeometryBounds.Size.X;
-                    var worldH = obj.GeometryBounds.Size.Y;
+                    var mesh = new A3DE.Mesh { Name = meshName };
 
-                    // Guard degenerate bounds
-                    if (!(worldW > 0)) worldW = 1f;
-                    if (!(worldH > 0)) worldH = 1f;
+                    var p0 = part.Vertices![0].Position;
+                    var p0Local4 = Num.Vector4.Transform(new Num.Vector4(p0.X, p0.Y, p0.Z, 1), invWorld);
+                    var p0Local = new AU.Vector4(p0Local4.X, p0Local4.Y, p0Local4.Z, 1);
 
-                    var halfW_local = 0.5f * worldW / (sx == 0 ? 1f : sx);
-                    var halfH_local = 0.5f * worldH / (sy == 0 ? 1f : sy);
+                    mesh.ControlPoints.Add(p0Local);
+                    mesh.ControlPoints.Add(p0Local);
+                    mesh.ControlPoints.Add(p0Local);
+                    mesh.ControlPoints.Add(p0Local);
 
-                    var mesh = new A3DE.Mesh();
-                    mesh.ControlPoints.AddRange(
-                    [
-                    new AU.Vector4(-halfW_local, -halfH_local, 0, 1),
-                    new AU.Vector4( halfW_local, -halfH_local, 0, 1),
-                    new AU.Vector4( halfW_local,  halfH_local, 0, 1),
-                    new AU.Vector4(-halfW_local,  halfH_local, 0, 1),
-                    ]);
+                    for (int i = 0; i < part.Indices!.Length; i += 3)
+                        mesh.CreatePolygon(part.Indices[i], part.Indices[i + 1], part.Indices[i + 2]);
 
-                    // Triangles (0,1,2) (2,3,0)
-                    mesh.CreatePolygon(0, 1, 2);
-                    mesh.CreatePolygon(2, 3, 0);
-
-                    // +Z normals
                     var nrm = new A3DE.VertexElementNormal
                     {
                         MappingMode = A3DE.MappingMode.ControlPoint,
                         ReferenceMode = A3DE.ReferenceMode.Direct
                     };
-                    nrm.Data.Add(new AU.Vector4(0, 0, 1, 0));
-                    nrm.Data.Add(new AU.Vector4(0, 0, 1, 0));
-                    nrm.Data.Add(new AU.Vector4(0, 0, 1, 0));
-                    nrm.Data.Add(new AU.Vector4(0, 0, 1, 0));
+                    foreach (var v in part.Vertices!)
+                        nrm.Data.Add(new AU.Vector4(v.Normal.X, v.Normal.Y, v.Normal.Z, 0));
                     mesh.VertexElements.Add(nrm);
 
-                    // UV0
                     var uv0 = new A3DE.VertexElementUV
                     {
-                        Name = "UV0",
                         MappingMode = A3DE.MappingMode.ControlPoint,
                         ReferenceMode = A3DE.ReferenceMode.Direct
                     };
-                    uv0.Data.Add(new AU.Vector4(0 * uvScale.X, 0 * uvScale.Y, 0, 0));
-                    uv0.Data.Add(new AU.Vector4(1 * uvScale.X, 0 * uvScale.Y, 0, 0));
-                    uv0.Data.Add(new AU.Vector4(1 * uvScale.X, 1 * uvScale.Y, 0, 0));
-                    uv0.Data.Add(new AU.Vector4(0 * uvScale.X, 1 * uvScale.Y, 0, 0));
+                    foreach (var v in part.Vertices!)
+                        uv0.Data.Add(new AU.Vector4(v.UV0.X, v.UV0.Y, 0, 0));
                     mesh.VertexElements.Add(uv0);
 
+                    var node = objNode.CreateChildNode(meshName, mesh);
+                    node.Material = GetOrCreateMaterial(part.Material);
 
-                    var pNode = objNode.CreateChildNode(meshName, mesh);
-                    pNode.Material = GetOrCreateMaterial(part.Material);
-
-                    pNode.SetProperty("mmp:vertexLayoutTag", part.VertexLayoutTag); // 2
-                    pNode.SetProperty("mmp:isEmissiveAdditive", (int)part.AdditiveEmissive);
-                    pNode.SetProperty("mmp:isAlphaBlend", (int)part.AlphaBlend);
-                    pNode.SetProperty("mmp:isEnabled", (int)part.Enabled);
-                    pNode.SetProperty("mmp:uvSetCount", 1);
-                    pNode.SetProperty("mmp:materialId", part.MaterialId);
+                    // metadata
+                    node.SetProperty("mmp:meshType", part.MeshType); // 2
+                    node.SetProperty("mmp:isEmissiveAdditive", (int)part.AdditiveEmissive);
+                    node.SetProperty("mmp:isAlphaBlend", (int)part.AlphaBlend);
+                    node.SetProperty("mmp:isEnabled", (int)part.Enabled);
+                    node.SetProperty("mmp:uvSetCount", part.UVSetCount);
+                    node.SetProperty("mmp:materialIdx", part.MaterialIdx);
 
                     continue;
                 }
 
                 // --- Regular mesh path ---
                 var verts = part.Vertices;
-
-                // Prepare world→local for geometry bake
-                Num.Matrix4x4.Invert(nx.MWorld, out var invWorld);
-                var invWorldT = Num.Matrix4x4.Transpose(invWorld);
 
                 // Locals for tangent build
                 var localPos = new Num.Vector3[verts.Length];
@@ -269,12 +252,15 @@ public class MMPExporterAspose
                     localNrm[i] = n3;
                     nrmLocal.Add(new AU.Vector4(n3.X, n3.Y, n3.Z, 0));
 
-                    // UV0 with V flip for DCCs
+                    // UV0 with V flip
                     var t0 = verts[i].UV0;
                     localUV0[i] = new Num.Vector2(t0.X * uvScale.X, (1.0f - t0.Y) * uvScale.Y);
                 }
 
-                var meshR = new A3DE.Mesh();
+                var meshR = new A3DE.Mesh
+                {
+                    Name = meshName
+                };
                 meshR.ControlPoints.AddRange(cp);
 
                 // Indices
@@ -318,16 +304,15 @@ public class MMPExporterAspose
                     meshR.VertexElements.Add(uv1Elem);
                 }
 
-
                 var partNode = objNode.CreateChildNode(meshName, meshR);
                 partNode.Material = GetOrCreateMaterial(part.Material);
 
-                partNode.SetProperty("mmp:vertexLayoutTag", part.VertexLayoutTag);
+                partNode.SetProperty("mmp:meshType", part.MeshType); // 0=regular, 2=billboard
                 partNode.SetProperty("mmp:isEmissiveAdditive", (int)part.AdditiveEmissive);
                 partNode.SetProperty("mmp:isAlphaBlend", (int)part.AlphaBlend);
                 partNode.SetProperty("mmp:isEnabled", (int)part.Enabled);
                 partNode.SetProperty("mmp:uvSetCount", part.UVSetCount);
-                partNode.SetProperty("mmp:materialId", part.MaterialId);
+                partNode.SetProperty("mmp:materialIdx", part.MaterialIdx);
             }
         }
 
@@ -357,7 +342,10 @@ public class MMPExporterAspose
 
                     mmpNode.AddChildNode(naviNode);
 
-                    var mesh = new A3DE.Mesh();
+                    var mesh = new A3DE.Mesh
+                    {
+                        Name = e.Name
+                    };
 
                     // Prepare world→local for geometry bake
                     Num.Matrix4x4.Invert(nx.MWorld, out var invWorld);
@@ -406,7 +394,6 @@ public class MMPExporterAspose
             m.M41, m.M42, m.M43, m.M44
         );
     }
-
 
     #region Material / Shader Helpers
     private static MmpTexture? Texture(MmpMaterial? m, string slotExact)

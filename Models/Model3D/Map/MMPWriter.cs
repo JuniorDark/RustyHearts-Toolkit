@@ -1,4 +1,5 @@
 ﻿using Assimp;
+using System.Text.RegularExpressions;
 using Num = System.Numerics;
 
 namespace RHToolkit.Models.Model3D.Map;
@@ -47,8 +48,7 @@ public static class MMPWriter
             // -- import FBX and build type-3 (node) + type-19 (mesh) chunks ---
             var ctx = new AssimpContext();
             var scene = ctx.ImportFile(fbxPath, PostProcessSteps.FlipWindingOrder 
-                | PostProcessSteps.FlipUVs 
-                | PostProcessSteps.ImproveCacheLocality 
+                | PostProcessSteps.FlipUVs  
                 | PostProcessSteps.JoinIdenticalVertices);
 
             var fileStem = Path.GetFileNameWithoutExtension(fbxPath);
@@ -160,7 +160,7 @@ public static class MMPWriter
     /// </summary>
     /// <param name="SubName"></param>
     /// <param name="MaterialId"></param>
-    /// <param name="LayoutTag"></param>
+    /// <param name="meshType"></param>
     /// <param name="FlagAdditive"></param>
     /// <param name="FlagAlpha"></param>
     /// <param name="FlagEnabled"></param>
@@ -174,7 +174,7 @@ public static class MMPWriter
     private readonly record struct PartData(
         string SubName,
         int MaterialId,
-        int LayoutTag,
+        int meshType,
         byte FlagAdditive,
         byte FlagAlpha,
         byte FlagEnabled,
@@ -268,11 +268,10 @@ public static class MMPWriter
     {
         string subName = partNode.Name ?? "Mesh";
         // strip FBX auto-suffixes like ".001"
-        var m = System.Text.RegularExpressions.Regex.Match(subName, @"^(.*?)(\.\d{3,})$");
-        if (m.Success) subName = m.Groups[1].Value;
+        subName = Regex.Replace(subName, @"^(.*?\d)(0+\d{2,})$", "$1");
 
-        int materialId = ModelHelpers.GetIntMeta(partNode, "mmp:materialId");
-        int layoutTag = ModelHelpers.GetIntMeta(partNode, "mmp:vertexLayoutTag");
+        int materialId = ModelHelpers.GetIntMeta(partNode, "mmp:materialIdx");
+        int meshType = ModelHelpers.GetIntMeta(partNode, "mmp:meshType");
         byte fl0 = (byte)ModelHelpers.GetIntMeta(partNode, "mmp:isEmissiveAdditive");
         byte fl1 = (byte)ModelHelpers.GetIntMeta(partNode, "mmp:isAlphaBlend");
         byte fl2 = (byte)ModelHelpers.GetIntMeta(partNode, "mmp:isEnabled");
@@ -292,9 +291,9 @@ public static class MMPWriter
 
         (float minX, float minY, float minZ, float maxX, float maxY, float maxZ, bool useZero)? forcedBounds = null;
 
-        if (layoutTag == 2)
+        if (meshType == 2)
         {
-            // Billboard/corona
+            // Billboard
             forcedBounds = BuildBillboard(partNode, mesh, Pw, Nw, UV0, indices,
                                           ref objMinX, ref objMinY, ref objMinZ, ref objMaxX, ref objMaxY, ref objMaxZ);
         }
@@ -305,12 +304,12 @@ public static class MMPWriter
                              ref objMinX, ref objMinY, ref objMinZ, ref objMaxX, ref objMaxY, ref objMaxZ);
         }
 
-        return new PartData(subName, materialId, layoutTag, fl0, fl1, fl2, uvSets, Pw, Nw, UV0, UV1, indices, forcedBounds);
+        return new PartData(subName, materialId, meshType, fl0, fl1, fl2, uvSets, Pw, Nw, UV0, UV1, indices, forcedBounds);
     }
 
     // ---------- Step 2a: regular mesh path ----------
     /// <summary>
-    /// Build a regular mesh (layoutTag 0 or 1) with world-space positions and normals, deterministic reindexing
+    /// Build a regular mesh (meshType 0) with world-space positions and normals, deterministic reindexing
     /// </summary>
     /// <param name="partNode"></param>
     /// <param name="mesh"></param>
@@ -327,81 +326,97 @@ public static class MMPWriter
     /// <param name="objMaxY"></param>
     /// <param name="objMaxZ"></param>
     private static void BuildRegularMesh(
-        Node partNode, Mesh mesh, int uvSets,
-        List<Num.Vector3> Pw, List<Num.Vector3> Nw,
-        List<Num.Vector2> UV0, List<Num.Vector2> UV1, List<ushort> indices,
-        ref float objMinX, ref float objMinY, ref float objMinZ,
-        ref float objMaxX, ref float objMaxY, ref float objMaxZ)
+    Node partNode, Mesh mesh, int uvSets,
+    List<Num.Vector3> Pw, List<Num.Vector3> Nw,
+    List<Num.Vector2> UV0, List<Num.Vector2> UV1, List<ushort> indices,
+    ref float objMinX, ref float objMinY, ref float objMinZ,
+    ref float objMaxX, ref float objMaxY, ref float objMaxZ)
     {
         var vpos = mesh.Vertices;
         var vnrms = mesh.HasNormals ? mesh.Normals : null;
         var uv0Src = mesh.TextureCoordinateChannelCount >= 1 ? mesh.TextureCoordinateChannels[0] : null;
         var uv1Src = mesh.TextureCoordinateChannelCount >= 2 ? mesh.TextureCoordinateChannels[1] : null;
 
+        // World transform and proper normal transform
         var M = ModelHelpers.GetGlobalTransform(partNode);
         Num.Matrix4x4.Invert(M, out var invM);
         var invMT = Num.Matrix4x4.Transpose(invM);
 
-        // Deterministic vertex deduplication key (quantized position, normal, UVs)
-        static uint Q(float f, float scale = 1e6f) => (uint)MathF.Round(f * scale);
+        int baseIndex = Pw.Count;
 
-        var vmap = new Dictionary<(uint, uint, uint, uint, uint, uint, uint, uint, uint, uint), int>(capacity: vpos.Count);
-
-        int AddVertex(int srcIndex)
+        // 1) Emit ALL vertices
+        for (int i = 0; i < vpos.Count; i++)
         {
-            var pL = vpos[srcIndex];
+            // Position → world
+            var pL = vpos[i];
             var pw4 = Num.Vector4.Transform(new Num.Vector4(pL.X, pL.Y, pL.Z, 1), M);
             var pw = new Num.Vector3(pw4.X, pw4.Y, pw4.Z);
+            Pw.Add(pw);
 
-            var n0 = (vnrms != null && srcIndex < vnrms.Count) ? vnrms[srcIndex] : new Assimp.Vector3D(0, 1, 0);
+            // Normal → world (inverse-transpose of M)
+            Assimp.Vector3D n0;
+            if (vnrms != null && i < vnrms.Count)
+                n0 = vnrms[i];
+            else
+                n0 = new Assimp.Vector3D(0, 1, 0);
+
             var nw4 = Num.Vector4.Transform(new Num.Vector4(n0.X, n0.Y, n0.Z, 0), invMT);
             var nw = new Num.Vector3(nw4.X, nw4.Y, nw4.Z);
-
-            var t0 = (uv0Src != null && srcIndex < uv0Src.Count) ? uv0Src[srcIndex] : default;
-            var t1 = (uv1Src != null && srcIndex < uv1Src.Count) ? uv1Src[srcIndex] : default;
-
-            var uv0 = new Num.Vector2(t0.X, t0.Y);
-            var uv1 = uvSets == 2 ? new Num.Vector2(t1.X, t1.Y) : default;
-
-            var key = (
-            Q(pw.X), Q(pw.Y), Q(pw.Z),
-            Q(nw.X), Q(nw.Y), Q(nw.Z),
-            Q(uv0.X), Q(uv0.Y),
-            uvSets == 2 ? Q(uv1.X) : 0u,
-            uvSets == 2 ? Q(uv1.Y) : 0u
-            );
-
-            // Check for existing vertex
-            if (vmap.TryGetValue(key, out int idx))
-                return idx;
-
-            idx = Pw.Count;
-            Pw.Add(pw);
+            if (nw != default)
+            {
+                var len = MathF.Sqrt(nw.X * nw.X + nw.Y * nw.Y + nw.Z * nw.Z);
+                if (len > 1e-20f) nw /= len;
+            }
             Nw.Add(nw);
+
+            // UV0
+            Num.Vector2 uv0 = default;
+            if (uv0Src != null && i < uv0Src.Count)
+            {
+                var t0 = uv0Src[i];
+                uv0 = new Num.Vector2(t0.X, t0.Y);
+            }
             UV0.Add(uv0);
-            if (uvSets == 2) UV1.Add(uv1);
-            vmap[key] = idx;
-            return idx;
+
+            // UV1
+            if (uvSets == 2)
+            {
+                Num.Vector2 uv1 = default;
+                if (uv1Src != null && i < uv1Src.Count)
+                {
+                    var t1 = uv1Src[i];
+                    uv1 = new Num.Vector2(t1.X, t1.Y);
+                }
+                UV1.Add(uv1);
+            }
+
+            // Expand object AABB with this emitted world-space vertex
+            if (pw.X < objMinX) objMinX = pw.X; if (pw.Y < objMinY) objMinY = pw.Y; if (pw.Z < objMinZ) objMinZ = pw.Z;
+            if (pw.X > objMaxX) objMaxX = pw.X; if (pw.Y > objMaxY) objMaxY = pw.Y; if (pw.Z > objMaxZ) objMaxZ = pw.Z;
         }
 
-        // Build indices with deduplicated vertices
+        // 2) Emit indices as-is, offset by baseIndex
         foreach (var f in mesh.Faces)
         {
-            if (f.IndexCount < 3) continue;
-            int a = AddVertex(f.Indices[0]);
-            int b = AddVertex(f.Indices[1]);
-            int c = AddVertex(f.Indices[2]);
-            indices.Add((ushort)a); indices.Add((ushort)b); indices.Add((ushort)c);
-        }
+            if (f.IndexCount < 3) continue; // skip lines/points
 
-        // Contribute to OBJECT bounds with all emitted vertices
-        for (int i = 0; i < Pw.Count; i++)
-            ExpandAabb(Pw[i], ref objMinX, ref objMinY, ref objMinZ, ref objMaxX, ref objMaxY, ref objMaxZ);
+            // Triangulate n-gons
+            for (int k = 2; k < f.Indices.Count; k++)
+            {
+                int a = f.Indices[0];
+                int b = f.Indices[k - 1];
+                int c = f.Indices[k];
+
+                indices.Add((ushort)(baseIndex + a));
+                indices.Add((ushort)(baseIndex + b));
+                indices.Add((ushort)(baseIndex + c));
+            }
+        }
     }
 
-    // ---------- Step 2b: billboard/corona path (layoutTag == 2) ----------
+    // ---------- Step 2b: billboard path (meshType == 2) ----------
     /// <summary>
-    /// Build a billboard/corona (layoutTag 2) with world-space positions and normals, deterministic reindexing
+    /// Build a billboard/corona (meshType 2) with world-space positions and normals, deterministic reindexing
     /// </summary>
     /// <param name="partNode"></param>
     /// <param name="mesh"></param>
@@ -417,54 +432,51 @@ public static class MMPWriter
     /// <param name="objMaxZ"></param>
     /// <returns></returns>
     private static (float, float, float, float, float, float, bool) BuildBillboard(
-        Node partNode, Mesh mesh,
-        List<Num.Vector3> Pw, List<Num.Vector3> Nw, List<Num.Vector2> UV0, List<ushort> indices,
-        ref float objMinX, ref float objMinY, ref float objMinZ,
-        ref float objMaxX, ref float objMaxY, ref float objMaxZ)
+    Node partNode, Mesh mesh,
+    List<Num.Vector3> Pw, List<Num.Vector3> Nw, List<Num.Vector2> UV0, List<ushort> indices,
+    ref float objMinX, ref float objMinY, ref float objMinZ,
+    ref float objMaxX, ref float objMaxY, ref float objMaxZ)
     {
         var M = ModelHelpers.GetGlobalTransform(partNode);
 
-        // 1) Find true world extents based on source geometry
-        float pMinX = float.PositiveInfinity, pMinY = float.PositiveInfinity, pMinZ = float.PositiveInfinity;
-        float pMaxX = float.NegativeInfinity, pMaxY = float.NegativeInfinity, pMaxZ = float.NegativeInfinity;
+        // All billboard vertices share the same center position
+        var pL = mesh.Vertices[0];
+        var center4 = Num.Vector4.Transform(new Num.Vector4(pL.X, pL.Y, pL.Z, 1), M);
+        var center = new Num.Vector3(center4.X, center4.Y, center4.Z);
 
-        foreach (var f in mesh.Faces)
+        // Determine bounding box
+        float pMinX = center.X, pMaxX = center.X;
+        float pMinY = center.Y, pMaxY = center.Y;
+        float pMinZ = center.Z, pMaxZ = center.Z;
+
+        // Push vertex data (positions are all center, but normals and UVs differ)
+        for (int i = 0; i < mesh.Vertices.Count; i++)
         {
-            if (f.IndexCount < 3) continue;
-            for (int k = 0; k < 3; k++)
-            {
-                int src = f.Indices[k];
-                var pL = mesh.Vertices[src];
-                var pw4 = Num.Vector4.Transform(new Num.Vector4(pL.X, pL.Y, pL.Z, 1), M);
-                var pw = new Num.Vector3(pw4.X, pw4.Y, pw4.Z);
-                if (pw.X < pMinX) pMinX = pw.X; if (pw.Y < pMinY) pMinY = pw.Y; if (pw.Z < pMinZ) pMinZ = pw.Z;
-                if (pw.X > pMaxX) pMaxX = pw.X; if (pw.Y > pMaxY) pMaxY = pw.Y; if (pw.Z > pMaxZ) pMaxZ = pw.Z;
-            }
+            Pw.Add(center);
+
+            var n = mesh.Normals[i];
+            Nw.Add(new Num.Vector3(n.X, n.Y, n.Z));
+
+            var uv = mesh.TextureCoordinateChannels[0][i];
+            UV0.Add(new Num.Vector2(uv.X, uv.Y));
         }
 
-        // 2) Contribute to OBJECT bounds with true extents
+        // Push all 6 original indices (two triangles)
+        foreach (var f in mesh.Faces)
+        {
+            for (int i = 0; i < f.IndexCount; i++)
+                indices.Add((ushort)f.Indices[i]);
+        }
+
+        // Update global object bounds
         objMinX = MathF.Min(objMinX, pMinX); objMinY = MathF.Min(objMinY, pMinY); objMinZ = MathF.Min(objMinZ, pMinZ);
         objMaxX = MathF.Max(objMaxX, pMaxX); objMaxY = MathF.Max(objMaxY, pMaxY); objMaxZ = MathF.Max(objMaxZ, pMaxZ);
 
-        // 3) Billboard center and scalar S (stored in Normal.Z)
-        var center = new Num.Vector3(0.5f * (pMinX + pMaxX), 0.5f * (pMinY + pMaxY), 0.5f * (pMinZ + pMaxZ));
-        float halfX = 0.5f * (pMaxX - pMinX);
-        float S = halfX; // originals use single scalar; X half matches
 
-        // 4) Emit vertices in original expected order; all positions = center; UV ignored
-        Pw.Add(center); Nw.Add(new Num.Vector3(1, 1, -S)); UV0.Add(default); // v0
-        Pw.Add(center); Nw.Add(new Num.Vector3(0, 1, -S)); UV0.Add(default); // v1
-        Pw.Add(center); Nw.Add(new Num.Vector3(1, 0, +S)); UV0.Add(default); // v2
-        Pw.Add(center); Nw.Add(new Num.Vector3(0, 0, +S)); UV0.Add(default); // v3
-
-        // 5) Indices as in originals
-        indices.Add(2); indices.Add(3); indices.Add(1);
-        indices.Add(1); indices.Add(0); indices.Add(2);
-
-        // 6) Per-part bounds to replicate original billboard style
+        // Z bounds only needed for billboard height tracking
         float minZ = pMinZ;
-        float maxZ = float.Epsilon; // not zero
-        return (center.X, center.Y, minZ, center.X, center.Y, maxZ, false);
+        float maxZ = pMaxZ;
+        return (center.X, center.Y, minZ, center.X, center.Y, maxZ, true);
     }
 
     // ---------- Step 3: object/world bounds ----------
@@ -494,7 +506,7 @@ public static class MMPWriter
     /// <param name="part"></param>
     private static void WriteMeshBlock(BinaryWriter bw, PartData part)
     {
-        var (subName, materialId, layoutTag, fl0, fl1, fl2, uvSets, Pw, Nw, UV0, UV1, indices, forcedBounds) = part;
+        var (subName, materialId, meshType, fl0, fl1, fl2, uvSets, Pw, Nw, UV0, UV1, indices, forcedBounds) = part;
 
         // Mesh header (name)
         ModelHelpers.WriteUtf16Len(bw, subName);
@@ -503,7 +515,7 @@ public static class MMPWriter
         // Counts & attributes
         bw.Write(Pw.Count);
         bw.Write(indices.Count / 3);
-        bw.Write(layoutTag);
+        bw.Write(meshType);
         bw.Write(fl0); bw.Write(fl1); bw.Write(fl2);
         bw.Write(uvSets);
         bw.Write(materialId);
@@ -516,7 +528,7 @@ public static class MMPWriter
         bw.Write(pMax.X); bw.Write(pMax.Y); bw.Write(pMax.Z);
 
         // Vertex stream
-        WriteVertexStream(bw, layoutTag, uvSets, Pw, Nw, UV0, UV1);
+        WriteVertexStream(bw, meshType, uvSets, Pw, Nw, UV0, UV1);
 
         // Indices (ushort)
         var ib = new byte[indices.Count * 2];
@@ -552,11 +564,11 @@ public static class MMPWriter
     }
 
     private static void WriteVertexStream(
-        BinaryWriter bw, int layoutTag, int uvSets,
+        BinaryWriter bw, int meshType, int uvSets,
         List<Num.Vector3> Pw, List<Num.Vector3> Nw,
         List<Num.Vector2> UV0, List<Num.Vector2> UV1)
     {
-        int stride = ComputeStride(layoutTag, uvSets);
+        int stride = ComputeStride(meshType, uvSets);
         using var vms = new MemoryStream(Pw.Count * stride);
         using var vbw = new BinaryWriter(vms, Encoding.ASCII, leaveOpen: true);
 
@@ -567,14 +579,13 @@ public static class MMPWriter
             vbw.Write(p.X); vbw.Write(p.Y); vbw.Write(p.Z);
             vbw.Write(n.X); vbw.Write(n.Y); vbw.Write(n.Z);
 
-            if (layoutTag == 2)
+            if (meshType == 2)
             {
-                vbw.Write(0f); // pad to 28 bytes/vertex
+                vbw.Write(UV0[i].X);
             }
             else
             {
-                var t0 = UV0[i];
-                vbw.Write(t0.X); vbw.Write(t0.Y);
+                vbw.Write(UV0[i].X); vbw.Write(UV0[i].Y);
                 if (uvSets == 2)
                 {
                     var t1 = (i < UV1.Count) ? UV1[i] : default;
@@ -596,18 +607,18 @@ public static class MMPWriter
     }
 
     /// <summary>
-    /// Compute vertex stride from layout tag and UV set count
+    /// Compute vertex stride from mesh type and UV set count
     /// </summary>
-    /// <param name="vertexLayoutTag"></param>
+    /// <param name="meshType"></param>
     /// <param name="uvSetCount"></param>
     /// <returns></returns>
     /// <exception cref="InvalidDataException"></exception>
-    public static int ComputeStride(int vertexLayoutTag, int uvSetCount)
+    public static int ComputeStride(int meshType, int uvSetCount)
     {
-        if (vertexLayoutTag == 2) return 28;
-        if (vertexLayoutTag == 0 && uvSetCount == 1) return 32;
-        if (vertexLayoutTag == 0 && uvSetCount == 2) return 40;
-        throw new InvalidDataException($"Unknown vertex layout: tag={vertexLayoutTag}, uv={uvSetCount}");
+        if (meshType == 2) return 28;
+        if (meshType == 0 && uvSetCount == 1) return 32;
+        if (meshType == 0 && uvSetCount == 2) return 40;
+        throw new InvalidDataException($"Unknown layout: meshType={meshType}, uv={uvSetCount}");
     }
     #endregion
 

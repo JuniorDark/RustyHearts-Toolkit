@@ -492,12 +492,12 @@ namespace RHToolkit.Models.Model3D.Map
                 var mesh = new MmpMesh
                 {
                     MeshName = meshName,
-                    VertexLayoutTag = vertexLayoutTag,
+                    MeshType = vertexLayoutTag,
                     UVSetCount = uvSetCount,
                     AdditiveEmissive = isEmissiveAdditive,
                     AlphaBlend = isAlphaBlend,
                     Enabled = isEnabled,
-                    MaterialId = materialId,
+                    MaterialIdx = materialId,
                     Stride = stride,
                     Vertices = new MmpVertex[vertexCount],
                     Indices = new ushort[faceCount * 3],
@@ -530,6 +530,10 @@ namespace RHToolkit.Models.Model3D.Map
 
                     switch (stride)
                     {
+                       case 28: // billboard
+                            uv0.X = BitConverter.ToSingle(vtxBytes, o + 24);
+                            uv0.Y = default;
+                            break;
                         case 32: // single UV set
                             uv0.X = BitConverter.ToSingle(vtxBytes, o + 24);
                             uv0.Y = BitConverter.ToSingle(vtxBytes, o + 28);

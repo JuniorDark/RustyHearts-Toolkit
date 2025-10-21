@@ -113,7 +113,7 @@ public static class MMPExporter
                 var meshName = string.IsNullOrWhiteSpace(part.MeshName) ? "Mesh" : part.MeshName;
 
                 // --- Special case: VertexLayoutTag 2 = billboard quad ---
-                if (part.VertexLayoutTag == 2)
+                if (part.MeshType == 2)
                 {
                     // Use OBJECT bounds in world; localize by dividing scale
                     var worldW = obj.GeometryBounds.Size.X;
@@ -238,12 +238,12 @@ public static class MMPExporter
                 var partNode = new Node(meshName) { Transform = Matrix4x4.Identity };
                 partNode.MeshIndices.Add(meshIdx);
                 objNode.Children.Add(partNode);
-                SetNodeMeta(partNode, "mmp:vertexLayoutTag", part.VertexLayoutTag);
+                SetNodeMeta(partNode, "mmp:vertexLayoutTag", part.MeshType);
                 SetNodeMeta(partNode, "mmp:isEmissiveAdditive", (int)part.AdditiveEmissive);
                 SetNodeMeta(partNode, "mmp:isAlphaBlend", (int)part.AlphaBlend);
                 SetNodeMeta(partNode, "mmp:isEnabled", (int)part.Enabled);
                 SetNodeMeta(partNode, "mmp:uvSetCount", 1);
-                SetNodeMeta(partNode, "mmp:materialId", part.MaterialId);
+                SetNodeMeta(partNode, "mmp:materialId", part.MaterialIdx);
             }
         }
 

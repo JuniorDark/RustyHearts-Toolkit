@@ -119,6 +119,7 @@
                     EffectsManager="{Binding EffectsManager}"
                     RotateAroundMouseDownPoint="True"
                     ShowCoordinateSystem="True"
+                    ShowTriangleCountInfo="True"
                     UseDefaultGestures="False"
                     ZoomAroundMouseDownPoint="True">
                     <hx:ItemsModel3D ItemsSource="{Binding Scene3D}" />

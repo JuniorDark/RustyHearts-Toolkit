@@ -68,14 +68,14 @@ public static class MMP
         /// </summary>
         public string MeshName { get; set; } = string.Empty;
         /// <summary>
-        /// The material ID used by this mesh.
+        /// Index of the material applied to the mesh.
         /// </summary>
-        public int MaterialId { get; set; }
+        public int MaterialIdx { get; set; }
         public MmpMaterial? Material { get; set; }
         /// <summary>
-        /// Tag associated with the vertex layout.
+        /// The type of the mesh, which may indicate different rendering or processing methods.
         /// </summary>
-        public int VertexLayoutTag { get; set; }
+        public int MeshType { get; set; }
         /// <summary>
         /// Additive emissive value, which determines the intensity of the emissive effect.
         /// </summary>
