@@ -1,4 +1,5 @@
 ﻿using HelixToolkit.Wpf.SharpDX;
+using static RHToolkit.Models.Model3D.ModelMaterial;
 using SDX = SharpDX;
 
 namespace RHToolkit.Models.Model3D.MGM;
@@ -18,11 +19,77 @@ public class MGMToHelix
                 new SDX.Vector3(-v.Normal.X, v.Normal.Y, v.Normal.Z))); // flip X for LH coord
 
             // Base UVs
-            var (x, y) = GetTexScale(mesh.Material); // (u1,v1,u2,v2) -> use (u1,v1) for UV0 tiling
+            var txtScale = GetTexScale(mesh.Material); // (u1,v1,u2,v2) -> use (u1,v1) for UV0 tiling
             var texcoords = new Vector2Collection(mesh.Vertices.Select(v =>
-                new SDX.Vector2(v.UV0.X * x, v.UV0.Y * y)));
+                new SDX.Vector2(v.UV0.X * txtScale.X, v.UV0.Y * txtScale.Y)));
 
+            // Build indices (original order first)
             var indices = new IntCollection(mesh.Indices.Select(i => (int)i));
+
+            // ---- Ensure winding matches normals (prevents backface holes) ----
+            static bool NeedsReverse(Vector3Collection pos, Vector3Collection nrm, IntCollection idx)
+            {
+                int neg = 0, total = 0;
+                for (int i = 0; i + 2 < idx.Count; i += 3)
+                {
+                    var i0 = idx[i]; var i1 = idx[i + 1]; var i2 = idx[i + 2];
+                    var p0 = pos[i0]; var p1 = pos[i1]; var p2 = pos[i2];
+
+                    // face normal from geometry
+                    var e1 = p1 - p0;
+                    var e2 = p2 - p0;
+                    var fn = SDX.Vector3.Cross(e1, e2);
+
+                    // average of vertex normals on the tri
+                    var an = nrm[i0] + nrm[i1] + nrm[i2];
+
+                    // if the dot is negative, winding is opposite of normals
+                    if (SDX.Vector3.Dot(fn, an) < 0) neg++;
+                    total++;
+                }
+                // If most triangles disagree with their normals, reverse
+                return neg > total * 0.6f;
+            }
+
+            if (NeedsReverse(positions, normals, indices))
+            {
+                for (int i = 0; i + 2 < indices.Count; i += 3)
+                {
+                    (indices[i + 2], indices[i + 1]) = (indices[i + 1], indices[i + 2]);
+                }
+            }
+
+            // --- Tangents ---
+            bool hasTangents = mesh.Vertices.All(v => v.Tangent.HasValue);
+
+            Vector3Collection tangents, bitangents;
+
+            if (hasTangents)
+            {
+                tangents = new Vector3Collection(mesh.Vertices.Select(v =>
+                {
+                    var t = v.Tangent.GetValueOrDefault(); // System.Numerics.Vector4
+                    return new SDX.Vector3(-t.X, t.Y, t.Z); // SharpDX.Vector3
+                }));
+
+                bitangents = new Vector3Collection(mesh.Vertices.Select(v =>
+                {
+                    var n = new SDX.Vector3(-v.Normal.X, v.Normal.Y, v.Normal.Z);
+                    var t = v.Tangent.GetValueOrDefault();
+                    float handed = t.W >= 0f ? 1f : -1f;
+                    handed = -handed; // flip because we mirrored X
+                    var t3 = new SDX.Vector3(-t.X, t.Y, t.Z);
+                    var n3 = new SDX.Vector3(-v.Normal.X, v.Normal.Y, v.Normal.Z);
+                    var b3 = SDX.Vector3.Cross(n3, t3) * handed;
+                    float w = t.W >= 0f ? 1f : -1f;         // handedness from .W
+                    return SDX.Vector3.Cross(n, t3) * w;    // bitangent = (N x T) * w
+                }));
+            }
+            else
+            {
+                // Fallback generator when tangents aren't present in the file
+                (tangents, bitangents) = GenerateTangents(positions, normals, texcoords, indices);
+            }
 
             var meshGeom = new MeshGeometry3D
             {
@@ -30,6 +97,8 @@ public class MGMToHelix
                 Normals = normals,
                 TextureCoordinates = texcoords,
                 Indices = indices,
+                Tangents = tangents,
+                BiTangents = bitangents
             };
 
             var meshModel = new MeshGeometryModel3D
@@ -45,21 +114,12 @@ public class MGMToHelix
 
                 // --- TEXTURES ---
                 // Diffuse
-                var diffusePath = ResolveTexturePath(model.BaseDirectory,
-                    Texture(mat, "DiffuseMap")?.TexturePath,
-                    mat.Name);
+                var diffusePath = ResolveTextureAbsolute(model.BaseDirectory,
+                    Texture(mat, "DiffuseMap")?.TexturePath);
                 if (!string.IsNullOrEmpty(diffusePath) && File.Exists(diffusePath))
                 {
                     try { phong.DiffuseMap = new MemoryStream(File.ReadAllBytes(diffusePath)); } catch { }
                 }
-
-                // Normal (Bump)
-                //var normalPath = ResolveTexturePath(model.BaseDirectory,
-                //    Texture(mat, "BumpMap")?.TexturePath, null);
-                //if (!string.IsNullOrEmpty(normalPath) && File.Exists(normalPath))
-                //{
-                //    try { phong.NormalMap = new MemoryStream(File.ReadAllBytes(normalPath)); } catch { }
-                //}
 
                 // Diffuse color multiplier
                 var pDiffuse = Shader(mat, "Diffuse");
@@ -93,53 +153,51 @@ public class MGMToHelix
                     phong.AmbientColor = new SDX.Color4(0.25f, 0.25f, 0.25f, 1f);
                 }
 
-                // Water color (when present) – acts as a tint over diffuse
-                var pWater = Shader(mat, "WaterColor");
-                if (pWater != null)
+                // --- SPECULAR / SHININESS ---
+                var pSpec = Shader(mat, "Specular");
+                if (pSpec != null)
                 {
-                    var w = pWater.Payload;
-                    var dc = phong.DiffuseColor;
-                    phong.DiffuseColor = new SDX.Color4(
-                        Clamp01(dc.Red * w.X),
-                        Clamp01(dc.Green * w.Y),
-                        Clamp01(dc.Blue * w.Z),
-                        Clamp01(dc.Alpha * (w.W <= 0 ? 1f : w.W)));
+                    var s = pSpec.Payload;
+                    phong.SpecularColor = new SDX.Color4(Clamp01(s.X), Clamp01(s.Y), Clamp01(s.Z), 1f);
                 }
-
-                // SunFactor / SunPower 
-                float specIntensity = 0.15f;
-                float shininess = 32f;
-                var pSun = Shader(mat, "SunFactor");
-                if (pSun != null) specIntensity = Clamp01(pSun.Payload.Y); // use Y as spec weight
-                var pSunPow = Shader(mat, "SunPower");
-                if (pSunPow != null && pSunPow.Payload.X > 0) shininess = SDX.MathUtil.Clamp(pSunPow.Payload.X, 4f, 128f);
-
-                phong.SpecularColor = new SDX.Color4(specIntensity, specIntensity, specIntensity, 1f);
-                phong.SpecularShininess = shininess;
+                else
+                {
+                    phong.SpecularColor = new SDX.Color4(0f, 0f, 0f, 1f);
+                }
 
                 // --- TRANSPARENCY ---
                 bool isTransparent = false;
                 float alpha = phong.DiffuseColor.Alpha;
 
+                // Mesh flag
+                if (mesh.Flags != null && mesh.Flags.Length > 1 && mesh.Flags[1] == 1)
+                    isTransparent = true;
+
+                // Explicit blend on
                 var pAlphaBlend = Shader(mat, "AlphaBlending");
-                if (pAlphaBlend != null && pAlphaBlend.Payload.X >= 0.5f) isTransparent = true;
+                if (pAlphaBlend != null && pAlphaBlend.Payload.X >= 0.5f)
+                    isTransparent = true;
 
-                var pAlphaType = Shader(mat, "AlphaType"); // 0=opaque, 1=alpha, 2=add? (engine-specific)
-                int alphaType = (pAlphaType != null) ? (int)System.Math.Round(pAlphaType.Payload.X) : 0;
-                if (alphaType >= 1) isTransparent = true; // treat >=1 as blended
-
+                // Constant alpha
                 var pAlphaVal = Shader(mat, "AlphaValue");
-                if (pAlphaVal != null && pAlphaVal.Payload.X > 0)
+                if (pAlphaVal != null)
                 {
-                    alpha = SDX.MathUtil.Clamp(pAlphaVal.Payload.X, 0.0f, 1.0f);
+                    alpha = SharpDX.MathUtil.Clamp(pAlphaVal.Payload.X, 0f, 1f);
                     if (alpha < 0.999f) isTransparent = true;
                 }
 
-                // Apply final alpha to DiffuseColor
-                var dc0 = phong.DiffuseColor;
-                phong.DiffuseColor = new SDX.Color4(dc0.Red, dc0.Green, dc0.Blue, alpha);
+                bool hasAlphaControl = pAlphaVal != null;
+                if (!isTransparent && hasAlphaControl && (pAlphaBlend == null || pAlphaBlend.Payload.X < 0.5f))
+                {
+                    isTransparent = true; // treat as cutout; avoids depth holes
+                }
 
-                // --- DOUBLESIDED / CULLING ---
+                // Apply alpha
+                var dc = phong.DiffuseColor;
+                phong.DiffuseColor = new SharpDX.Color4(dc.Red, dc.Green, dc.Blue, alpha);
+                meshModel.IsTransparent = isTransparent;
+
+                // Culling only from Twoside
                 var pTwoSide = Shader(mat, "Twoside");
                 if (pTwoSide != null && pTwoSide.Payload.X >= 0.5f)
                     meshModel.CullMode = SharpDX.Direct3D11.CullMode.None;
@@ -159,65 +217,69 @@ public class MGMToHelix
         }
     }
 
-    private static MgmShader? Shader(MgmMaterial m, string slotPrefix)
-        => m.Shaders.FirstOrDefault(s => s.Slot.StartsWith(slotPrefix, StringComparison.OrdinalIgnoreCase));
-
-    private static MgmTexture? Texture(MgmMaterial m, string slotExact)
-        => m.Textures.FirstOrDefault(t => t.Slot.Equals(slotExact, StringComparison.OrdinalIgnoreCase));
-
-    // TexScale payload → (u1, v1, u2, v2). We use u1,v1 for UV0 tiling.
-    private static (float x, float y) GetTexScale(MgmMaterial? m)
+    private static (Vector3Collection tangents, Vector3Collection bitangents)
+    GenerateTangents(Vector3Collection positions, Vector3Collection normals,
+                 Vector2Collection uvs, IntCollection indices)
     {
-        if (m == null) return (1f, 1f);
-        var ts = Shader(m, "TexScale");
-        if (ts == null) return (1f, 1f);
-        var p = ts.Payload;
-        float ux = (p.X == 0) ? 1f : p.X;
-        float vy = (p.Y == 0) ? 1f : p.Y;
-        ux = SDX.MathUtil.Clamp(ux, 0.01f, 20f);
-        vy = SDX.MathUtil.Clamp(vy, 0.01f, 20f);
-        return (ux, vy);
-    }
+        int vcount = positions.Count;
+        var tan1 = new SDX.Vector3[vcount];
+        var tan2 = new SDX.Vector3[vcount];
 
-    private static float Clamp01(float v) => v < 0 ? 0 : (v > 1 ? 1 : v);
-
-    /// <summary>
-    /// Resolve relative texture paths against the MMP folder.
-    /// ".\\texture\\foo.dds"  => BaseDir\\texture\\foo.dds
-    /// "..\\..\\WaterTexture\\wave1.dds" => BaseDir\\..\\..\\WaterTexture\\wave1.dds  (normalized)
-    /// If refPath is null, we try BaseDir\\<materialName>.dds and BaseDir\\texture\\<materialName>.dds
-    /// </summary>
-    private static string? ResolveTexturePath(string baseDir, string? refPath, string? materialNameFallback)
-    {
-        if (!string.IsNullOrWhiteSpace(refPath))
+        for (int i = 0; i < indices.Count; i += 3)
         {
-            var norm = refPath.Replace('/', Path.DirectorySeparatorChar)
-                              .Replace('\\', Path.DirectorySeparatorChar);
-            var combined = Path.GetFullPath(Path.Combine(baseDir, norm));
-            if (File.Exists(combined)) return combined;
+            int i0 = indices[i + 0], i1 = indices[i + 1], i2 = indices[i + 2];
 
-            // also try BaseDir/texture/<file>
-            var fileOnly = Path.GetFileName(norm);
-            if (!string.IsNullOrEmpty(fileOnly))
-            {
-                var alt = Path.GetFullPath(Path.Combine(baseDir, "texture", fileOnly));
-                if (File.Exists(alt)) return alt;
-            }
+            var p0 = positions[i0]; var p1 = positions[i1]; var p2 = positions[i2];
+            var w0 = uvs[i0]; var w1 = uvs[i1]; var w2 = uvs[i2];
+
+            float x1 = p1.X - p0.X, x2 = p2.X - p0.X;
+            float y1 = p1.Y - p0.Y, y2 = p2.Y - p0.Y;
+            float z1 = p1.Z - p0.Z, z2 = p2.Z - p0.Z;
+
+            float s1 = w1.X - w0.X, s2 = w2.X - w0.X;
+            float t1 = w1.Y - w0.Y, t2 = w2.Y - w0.Y;
+
+            float r = (s1 * t2 - s2 * t1);
+            if (System.Math.Abs(r) < 1e-8f) r = 1e-8f;
+            r = 1.0f / r;
+
+            var sdir = new SDX.Vector3(
+                (t2 * x1 - t1 * x2) * r,
+                (t2 * y1 - t1 * y2) * r,
+                (t2 * z1 - t1 * z2) * r);
+
+            var tdir = new SDX.Vector3(
+                (s1 * x2 - s2 * x1) * r,
+                (s1 * y2 - s2 * y1) * r,
+                (s1 * z2 - s2 * z1) * r);
+
+            tan1[i0] += sdir; tan1[i1] += sdir; tan1[i2] += sdir;
+            tan2[i0] += tdir; tan2[i1] += tdir; tan2[i2] += tdir;
         }
 
-        if (!string.IsNullOrWhiteSpace(materialNameFallback))
+        var tangents = new Vector3Collection(vcount);
+        var bitangents = new Vector3Collection(vcount);
+
+        for (int v = 0; v < vcount; v++)
         {
-            var file = materialNameFallback.EndsWith(".dds", System.StringComparison.OrdinalIgnoreCase)
-                ? materialNameFallback
-                : materialNameFallback + ".dds";
+            var n = normals[v];
+            var t = tan1[v];
 
-            var p1 = Path.GetFullPath(Path.Combine(baseDir, file));
-            if (File.Exists(p1)) return p1;
+            // Gram–Schmidt orthonormalize
+            var nDotT = SDX.Vector3.Dot(n, t);
+            var tang = SDX.Vector3.Normalize(t - nDotT * n);
 
-            var p2 = Path.GetFullPath(Path.Combine(baseDir, "texture", file));
-            if (File.Exists(p2)) return p2;
+            // Calculate handedness (w) and bitangent
+            var bitan = SDX.Vector3.Cross(n, tang);
+            float w = (SDX.Vector3.Dot(bitan, tan2[v]) < 0.0f) ? -1.0f : 1.0f;
+            bitan *= w;
+
+            tangents.Add(tang);
+            bitangents.Add(bitan);
         }
 
-        return null;
+        return (tangents, bitangents);
     }
+
+    
 }

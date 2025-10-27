@@ -1,5 +1,6 @@
 ﻿using Assimp;
 using static RHToolkit.Models.Model3D.Map.MMP;
+using static RHToolkit.Models.Model3D.ModelMaterial;
 using Matrix4x4 = Assimp.Matrix4x4;
 using MDEntry = Assimp.Metadata.Entry;
 using MDType = Assimp.MetaDataType;
@@ -8,7 +9,7 @@ using Num = System.Numerics;
 namespace RHToolkit.Models.Model3D.Map;
 
 /// <summary>
-/// Exports an MMP model to FBX (via Assimp)
+/// Exports an MMP model to FBX (via Assimp), No metadata exported.
 /// </summary>
 public static class MMPExporter
 {
@@ -39,7 +40,7 @@ public static class MMPExporter
 
         // --- Material cache (Phong-ish) ---
         var matCache = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase); // MaterialIndex in scene.Materials
-        int GetOrCreateMaterial(MmpMaterial? m, byte additive, byte alpha)
+        int GetOrCreateMaterial(ModelMaterial? m, byte additive, byte alpha)
         {
             var key = m?.MaterialName ?? "_Fallback";
             if (matCache.TryGetValue(key, out var found)) return found;
@@ -51,14 +52,14 @@ public static class MMPExporter
             };
 
             // Textures (best-effort)
-            var diffuseRel = ResolveTexture(outDir, Texture(m, "DiffuseMap")?.TexturePath, m?.MaterialName);
+            var diffuseRel = ResolveTextureAbsolute(mmp.BaseDirectory, Texture(m, "DiffuseMap")?.TexturePath);
             if (!string.IsNullOrWhiteSpace(diffuseRel))
                 mat.TextureDiffuse = new TextureSlot(
                     diffuseRel, TextureType.Diffuse, 0,
                     TextureMapping.FromUV, 0, 1.0f, TextureOperation.Add,
                     TextureWrapMode.Wrap, TextureWrapMode.Wrap, 0);
 
-            var normalRel = ResolveTexture(outDir, Texture(m, "BumpMap")?.TexturePath, null);
+            var normalRel = ResolveTextureAbsolute(mmp.BaseDirectory, Texture(m, "BumpMap")?.TexturePath);
             if (!string.IsNullOrWhiteSpace(normalRel))
                 mat.TextureNormal = new TextureSlot(
                     normalRel, TextureType.Normals, 0,
@@ -73,7 +74,7 @@ public static class MMPExporter
         }
 
         // Map Type-3 transforms by hash (required for world→local conversion)
-        var xformByHash = new Dictionary<uint, MmpNodeXform>();
+        var xformByHash = new Dictionary<uint, ModelNodeXform>();
         foreach (var nx in mmp.Nodes)
             if (nx.NameHash != 0) xformByHash[nx.NameHash] = nx;
 
@@ -304,79 +305,5 @@ public static class MMPExporter
             D4 = m.M44
         };
     }
-
-    private static MmpTexture? Texture(MmpMaterial? m, string slotExact)
-        => m?.Textures.FirstOrDefault(t =>
-            t.Slot.Equals(slotExact, StringComparison.OrdinalIgnoreCase));
-
-    private static string? ResolveTexture(string outDir, string? refPath, string? materialNameFallback)
-    {
-        // Normalize separators to the platform first
-        static string Norm(string s) => s
-            .Replace('/', Path.DirectorySeparatorChar)
-            .Replace('\\', Path.DirectorySeparatorChar);
-
-        // Try the referenced path first
-        if (!string.IsNullOrWhiteSpace(refPath))
-        {
-            var norm = Norm(refPath.Trim());
-
-            if (norm.StartsWith("." + Path.DirectorySeparatorChar))
-            {
-                var rel = norm.Substring(2);
-                var abs = Path.GetFullPath(Path.Combine(outDir, rel));
-                return File.Exists(abs) ? rel.Replace(Path.DirectorySeparatorChar, '/') : null;
-            }
-
-            if (norm.StartsWith(".." + Path.DirectorySeparatorChar))
-            {
-                var abs = Path.GetFullPath(Path.Combine(outDir, norm));
-                return File.Exists(abs) ? norm.Replace(Path.DirectorySeparatorChar, '/') : null;
-            }
-
-            if (Path.IsPathRooted(norm))
-            {
-                var abs = Path.GetFullPath(norm);
-                if (File.Exists(abs))
-                {
-                    var rel = Path.GetRelativePath(outDir, abs);
-                    return rel.Replace(Path.DirectorySeparatorChar, '/');
-                }
-            }
-            else
-            {
-                var abs = Path.GetFullPath(Path.Combine(outDir, norm));
-                if (File.Exists(abs))
-                    return norm.Replace(Path.DirectorySeparatorChar, '/');
-            }
-
-            var fo = Path.GetFileName(norm);
-            if (!string.IsNullOrEmpty(fo))
-            {
-                var alt = Path.GetFullPath(Path.Combine(outDir, "texture", fo));
-                if (File.Exists(alt))
-                    return ("texture/" + fo).Replace('\\', '/');
-            }
-        }
-
-        // Fallback by material name → texture/<material>.dds next to FBX
-        if (!string.IsNullOrWhiteSpace(materialNameFallback))
-        {
-            var file = materialNameFallback.EndsWith(".dds", StringComparison.OrdinalIgnoreCase)
-                ? materialNameFallback
-                : materialNameFallback + ".dds";
-
-            var abs1 = Path.GetFullPath(Path.Combine(outDir, "texture", file));
-            if (File.Exists(abs1))
-                return ("texture/" + file).Replace('\\', '/');
-
-            var abs2 = Path.GetFullPath(Path.Combine(outDir, file));
-            if (File.Exists(abs2))
-                return file.Replace('\\', '/');
-        }
-
-        return null;
-    }
-
     #endregion
 }

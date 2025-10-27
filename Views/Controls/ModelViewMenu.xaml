@@ -47,21 +47,21 @@
                     Command="{Binding ExportAsCommand}"
                     Header="Export Current File to FBX"
                     Icon="{ui:SymbolIcon DocumentSave24}"
-                    InputGestureText="Ctrl+Shift+S" />
+                    InputGestureText="Ctrl+S" />
                 <MenuItem
                     Command="{Binding ImportFromFbxCommand}"
                     Header="Export FBX to MMP"
                     Icon="{ui:SymbolIcon DocumentSave24}"
-                    InputGestureText="Ctrl+Alt+S" />
+                    InputGestureText="Ctrl+Shift+S" />
             </ui:MenuItem>
             <Separator />
-            <ui:MenuItem Header="{x:Static rs:Resources.MenuHelp}" Icon="{ui:SymbolIcon ChatHelp20}">
+            <ui:MenuItem Header="About" Icon="{ui:SymbolIcon ChatHelp20}">
                 <ui:HyperlinkButton
                     Margin="8,0,0,0"
                     Padding="4"
-                    Content="{x:Static rs:Resources.MenuAboutWData}"
-                    NavigateUri="https://juniordark.gitbook.io/rusty-hearts-files-structures/wdata-file"
-                    ToolTip="https://juniordark.gitbook.io/rusty-hearts-files-structures/wdata-file" />
+                    Content="File Formats"
+                    NavigateUri="https://juniordark.gitbook.io/rusty-hearts-files-structures"
+                    ToolTip="https://juniordark.gitbook.io/rusty-hearts-files-structures" />
             </ui:MenuItem>
         </Menu>
         <Menu

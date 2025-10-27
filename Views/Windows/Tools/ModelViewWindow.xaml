@@ -32,6 +32,8 @@
     <Window.InputBindings>
         <KeyBinding Command="{Binding LoadCommand}" Gesture="Ctrl+O" />
         <KeyBinding Command="{Binding CloseFileCommand}" Gesture="Ctrl+W" />
+        <KeyBinding Command="{Binding ExportAsCommand}" Gesture="Ctrl+S" />
+        <KeyBinding Command="{Binding ImportFromFbxCommand}" Gesture="Ctrl+Shift+S" />
     </Window.InputBindings>
     <ContentControl Template="{StaticResource box_violet02}">
         <Grid>
@@ -95,11 +97,17 @@
                     ToolTip="Nav Mesh Wireframe"
                     Visibility="{Binding IsNavMeshControlsVisible}" />
                 <CheckBox
+                    Margin="10,0"
                     Content="Nav Mesh Octree"
                     IsChecked="{Binding ShowNaviDebug, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}"
                     ToolTip="Debug View"
                     Visibility="{Binding IsNavMeshControlsVisible}" />
+                <CheckBox
+                    Content="Export with Embed Textures"
+                    IsChecked="{Binding EmbedTextures, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="Embed Textures in the fbx" />
             </StackPanel>
 
             <!--  3D Scene  -->

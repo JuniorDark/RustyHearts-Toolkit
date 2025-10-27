@@ -99,7 +99,7 @@ public partial class ModelViewManager : ObservableObject
     /// <returns>True if file commands can be executed, otherwise false.</returns>
     private bool CanExecuteFileCommand()
     {
-        return MmpModel is not null || NaviModel is not null;
+        return MmpModel is not null || MgmModel is not null || NaviModel is not null;
     }
     #endregion
 
@@ -107,7 +107,7 @@ public partial class ModelViewManager : ObservableObject
     [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
     public async Task ExportAs()
     {
-        if (MmpModel is null || CurrentFile is null) return;
+        if (CurrentFile is null) return;
 
         string fileName = Path.GetFileNameWithoutExtension(CurrentFile);
 
@@ -122,9 +122,18 @@ public partial class ModelViewManager : ObservableObject
         {
             try
             {
-                var exporter = new MMPExporterAspose();
-                await exporter.ExportMmpToFbx(MmpModel, dlg.FileName);
-                RHMessageBoxHelper.ShowOKMessage($"Exported MMP → FBX:\n{dlg.FileName}", "FBX Exporter");
+                if (MgmModel is not null)
+                {
+                    var mgmexporter = new MGMExporterAspose();
+                    await mgmexporter.ExportMgmToFbx(MgmModel, dlg.FileName, EmbedTextures);
+                    RHMessageBoxHelper.ShowOKMessage($"Exported MGM → FBX:\n{dlg.FileName}", "FBX Exporter");
+                }
+                else if (MmpModel is  not null)
+                {
+                    var exporter = new MMPExporterAspose();
+                    await exporter.ExportMmpToFbx(MmpModel, dlg.FileName, EmbedTextures);
+                    RHMessageBoxHelper.ShowOKMessage($"Exported MMP → FBX:\n{dlg.FileName}", "FBX Exporter");
+                }
             }
             catch (Exception ex)
             {
@@ -228,6 +237,7 @@ public partial class ModelViewManager : ObservableObject
 
         switch (ext)
         {
+            // for debugging purposes
             case ".height":
                 {
                     Message = "Loading model...";
@@ -250,8 +260,6 @@ public partial class ModelViewManager : ObservableObject
                 {
                     Message = "Loading MMP model...";
                     var mmp = await MMPReader.ReadAsync(filePath).ConfigureAwait(false);
-                    if (mmp.Version < 6)
-                        throw new NotSupportedException($"MMP version '{mmp.Version}' is not supported.");
                     MmpModel = mmp;
                     var naviPath = Path.ChangeExtension(filePath, ".navi");
                     if (File.Exists(naviPath))
@@ -290,7 +298,7 @@ public partial class ModelViewManager : ObservableObject
             }
             else if (MgmModel is not null)
             {
-                IsNavMeshControlsVisible = Visibility.Hidden;
+                IsNavMeshControlsVisible = Visibility.Collapsed;
                 Version = MgmModel.Version;
                 foreach (var node in MGMToHelix.CreateMGMNodes(MgmModel))
                     Scene3D.Add(node);
@@ -324,7 +332,7 @@ public partial class ModelViewManager : ObservableObject
             {
                 alpha = 0.25f;
                 _worldByHash = NaviModel.Nodes
-                    .GroupBy(n => n.NameKey)
+                    .GroupBy(n => n.NameHash)
                     .ToDictionary(g => g.Key, g => g.First().MWorld);
             }
 
@@ -441,7 +449,7 @@ public partial class ModelViewManager : ObservableObject
     private Visibility _isMessageVisible = Visibility.Visible;
 
     [ObservableProperty]
-    private Visibility _isNavMeshControlsVisible = Visibility.Hidden;
+    private Visibility _isNavMeshControlsVisible = Visibility.Collapsed;
 
     [ObservableProperty]
     private MmpModel? _mmpModel;
@@ -489,5 +497,6 @@ public partial class ModelViewManager : ObservableObject
         ApplyNaviDebugVisibility(value);
     }
 
+    [ObservableProperty] private bool _embedTextures;
     #endregion
 }

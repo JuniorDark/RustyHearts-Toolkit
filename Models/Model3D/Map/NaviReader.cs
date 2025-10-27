@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using static RHToolkit.Models.Model3D.ModelExtensions;
 
 namespace RHToolkit.Models.Model3D.Map;
 
@@ -55,7 +56,7 @@ public static class NaviReader
 
             switch (type)
             {
-                case 3: ReadNodeTransform(br, model, model.Header.Version, size); break;
+                case 3: model.Nodes.Add(ModelSharedTypeReader.ReadNodeTransformData(br, size, model.Header.Version)); break;
                 case 8:
                     ReadOctree(br, model, size);
                     break;
@@ -75,202 +76,7 @@ public static class NaviReader
         return model;
     }
 
-    // ---------- Readers ----------
-
-    /// <summary>
-    /// Reads a transform node (ClassID 3).
-    /// </summary>
-    /// <param name="br"></param>
-    /// <param name="model"></param>
-    /// <param name="version"></param>
-    /// <param name="size"></param>
-    /// <exception cref="InvalidDataException"></exception>
-    private static void ReadNodeTransform(BinaryReader br, NaviMeshFile model, int version, int size)
-    {
-        long start = br.BaseStream.Position;
-
-        // node name lengths & keys
-        int nameLen = br.ReadInt32();
-        int groupNameLen = br.ReadInt32();
-        int name2Len = br.ReadInt32();
-
-        uint nameKey = br.ReadUInt32();
-        uint groupNameKey = br.ReadUInt32();
-        uint name2Key = br.ReadUInt32();
-
-        string name = ModelHelpers.ReadUtf16String(br, nameLen);
-        string groupName = ModelHelpers.ReadUtf16String(br, groupNameLen);
-        string name2 = ModelHelpers.ReadUtf16String(br, name2Len);
-
-        // flags
-        int kind = br.ReadInt32();
-        int flag = br.ReadInt32();
-
-        // unknown counts, usually 0
-        int unk1 = br.ReadInt32();
-        int unk2 = br.ReadInt32();
-        int unk3 = br.ReadInt32();
-        int unk4 = br.ReadInt32();
-
-        // byte flags, usually 0
-        byte b1 = br.ReadByte();
-        byte b2 = 0;
-
-        if (version >= 7)
-        {
-            b2 = br.ReadByte();
-        }
-
-        // transformation matrices (4x4 each, row-major)
-        float[] worldRestMatrix = ModelHelpers.ReadFloats(br, 16);
-        float[] bindPoseGlobalMatrix = ModelHelpers.ReadFloats(br, 16);
-        float[] worldRestMatrixDuplicate = ModelHelpers.ReadFloats(br, 16);
-
-        // Pose block: T(3) → R(4) → S(3)
-        Vector3 translation = new(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
-        Quaternion rotation = new(br.ReadSingle(), br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
-        Vector3 scale = new(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
-
-        // unknown data blocks
-        if (unk1 > 0)
-        {
-            if (version >= 8)
-            {
-                byte unk01 = br.ReadByte();
-                byte[] b01 = br.ReadBytes(unk1 * 2);
-                if (unk01 > 0)
-                {
-                    byte[] b02 = br.ReadBytes(12 * unk1);
-                }
-                else
-                {
-                    byte[] b03 = br.ReadBytes(6 * unk1);
-                }
-            }
-            else
-            {
-                byte[] b04 = br.ReadBytes(16 * unk1);
-
-            }
-        }
-
-        if (unk2 > 0)
-        {
-            if (version >= 8)
-            {
-                byte[] b05 = br.ReadBytes(2 * unk2);
-                byte[] b06 = br.ReadBytes(8 * unk2);
-            }
-            else
-            {
-                byte[] b07 = br.ReadBytes(20 * unk2);
-            }
-        }
-
-        if (unk3 > 0)
-        {
-            if (version >= 8)
-            {
-                byte[] b08 = br.ReadBytes(2 * unk3);
-                byte[] b09 = br.ReadBytes(6 * unk3);
-            }
-            else
-            {
-                byte[] b10 = br.ReadBytes(16 * unk3);
-            }
-        }
-
-        if (unk4 > 0)
-        {
-            if (version >= 8)
-            {
-                byte[] b11 = br.ReadBytes(2 * unk4);
-                byte[] b12 = br.ReadBytes(2 * unk4);
-            }
-            else
-            {
-                byte[] b13 = br.ReadBytes(8 * unk4);
-            }
-        }
-
-        if (b1 > 0)
-        {
-            int unk15 = br.ReadInt32();
-            if (unk15 > 0)
-            {
-                int unk01 = br.ReadInt32();
-                if (version < 8)
-                {
-                    byte[] b14 = br.ReadBytes(32 * unk15);
-                }
-                else
-                {
-                    for (int j = 0; j < unk15; j++)
-                    {
-                        float unk16 = br.ReadSingle();
-                        if (j > 0 && unk16 == -1.0f)
-                        {
-                            int unk02 = br.ReadInt32();
-                            byte[] b15 = br.ReadBytes(12);
-                        }
-                        else
-                        {
-                            byte[] b16 = br.ReadBytes(28);
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            if (b2 > 0)
-            {
-                int unk17 = br.ReadInt32();
-                if (unk17 > 0)
-                {
-                    byte[] b17 = br.ReadBytes(16 * unk17);
-                }
-            }
-        }
-        model.Nodes.Add(new NaviNodeXform
-        {
-            Name = name,
-            NameKey = nameKey,
-            GroupName = groupName,
-            GroupKey = groupNameKey,
-            SubName = name2,
-            SubNameKey = name2Key,
-            Kind = kind,
-            Flag = flag,
-            MWorld = new Matrix4x4(
-                worldRestMatrix[0], worldRestMatrix[1], worldRestMatrix[2], worldRestMatrix[3],
-                worldRestMatrix[4], worldRestMatrix[5], worldRestMatrix[6], worldRestMatrix[7],
-                worldRestMatrix[8], worldRestMatrix[9], worldRestMatrix[10], worldRestMatrix[11],
-                worldRestMatrix[12], worldRestMatrix[13], worldRestMatrix[14], worldRestMatrix[15]
-            ),
-            MBind = new Matrix4x4(
-                bindPoseGlobalMatrix[0], bindPoseGlobalMatrix[1], bindPoseGlobalMatrix[2], bindPoseGlobalMatrix[3],
-                bindPoseGlobalMatrix[4], bindPoseGlobalMatrix[5], bindPoseGlobalMatrix[6], bindPoseGlobalMatrix[7],
-                bindPoseGlobalMatrix[8], bindPoseGlobalMatrix[9], bindPoseGlobalMatrix[10], bindPoseGlobalMatrix[11],
-                bindPoseGlobalMatrix[12], bindPoseGlobalMatrix[13], bindPoseGlobalMatrix[14], bindPoseGlobalMatrix[15]
-            ),
-            MWorldDup = new Matrix4x4(
-                worldRestMatrixDuplicate[0], worldRestMatrixDuplicate[1], worldRestMatrixDuplicate[2], worldRestMatrixDuplicate[3],
-                worldRestMatrixDuplicate[4], worldRestMatrixDuplicate[5], worldRestMatrixDuplicate[6], worldRestMatrixDuplicate[7],
-                worldRestMatrixDuplicate[8], worldRestMatrixDuplicate[9], worldRestMatrixDuplicate[10], worldRestMatrixDuplicate[11],
-                worldRestMatrixDuplicate[12], worldRestMatrixDuplicate[13], worldRestMatrixDuplicate[14], worldRestMatrixDuplicate[15]
-            ),
-            Translation = translation,
-            Rotation = rotation,
-            Scale = scale
-        });
-
-        long read = br.BaseStream.Position - start;
-        if (read != size)
-            throw new InvalidDataException($"Type 3 {name}: expected {size} bytes, read {read}.");
-
-        //Debug.Write($"\nobject={objectName}, kind={kind}, flag={flag}, unks={unk1}, {unk2}, {unk3}, {unk4}");
-    }
+    #region Readers
 
     /// <summary>
     /// Reads an octree node and its children (if any).
@@ -288,10 +94,10 @@ public static class NaviReader
         var width = br.ReadSingle();
 
         // Bounds block: center(3), radius, min(3), max(3)
-        var objCenter = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+        var objCenter = BinaryReaderExtensions.ReadVector3(br);
         var objRadius = br.ReadSingle();
-        var objMin = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
-        var objMax = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
+        var objMin = BinaryReaderExtensions.ReadVector3(br);
+        var objMax = BinaryReaderExtensions.ReadVector3(br);
         var objSize = objMax - objMin;
 
         var node = new NaviMeshOctree
@@ -349,8 +155,8 @@ public static class NaviReader
         {
             nNameKey = br.ReadUInt32();
             nParentNameKey = br.ReadUInt32();
-            szName = ModelHelpers.ReadAsciiFixed(br, 512);
-            szParentName = ModelHelpers.ReadAsciiFixed(br, 512);
+            szName = BinaryReaderExtensions.ReadUnicode256Count(br);
+            szParentName = BinaryReaderExtensions.ReadUnicode256Count(br);
         }
         else
         {
@@ -358,8 +164,8 @@ public static class NaviReader
             int nParentNameLen = br.ReadInt32();
             nNameKey = br.ReadUInt32();
             nParentNameKey = br.ReadUInt32();
-            szName = ModelHelpers.ReadUtf16String(br, nNameLen);
-            szParentName = ModelHelpers.ReadUtf16String(br, nParentNameLen);
+            szName = BinaryReaderExtensions.ReadUtf16String(br, nNameLen);
+            szParentName = BinaryReaderExtensions.ReadUtf16String(br, nParentNameLen);
         }
 
         var n = new NaviMeshEntry
@@ -394,14 +200,14 @@ public static class NaviReader
         model.Entries.Add(n);
     }
 }
+#endregion
 
-// ==================== Data Models ====================
 #region Data Models
 public sealed class NaviMeshFile
 {
     public NaviHeader Header { get; set; } = new();
     public List<NaviMeshOctree> Octrees { get; } = [];
-    public List<NaviNodeXform> Nodes { get; set; } = [];
+    public List<ModelNodeXform> Nodes { get; set; } = [];
     public List<NaviMeshEntry> Entries { get; } = [];
 }
 
@@ -447,38 +253,6 @@ public sealed class NaviMeshEntry
 }
 
 /// <summary>
-/// A transform node, including name, group, kind, flags, and transformation matrices.
-/// </summary>
-public sealed class NaviNodeXform
-{
-    public string Name { get; set; } = string.Empty;
-    public uint NameKey { get; set; }
-    public string GroupName { get; set; } = string.Empty;
-    public uint GroupKey { get; set; }
-    public string SubName { get; set; } = string.Empty;
-    public uint SubNameKey { get; set; }
-    public int Kind { get; set; } // 16 for navi
-    public int Flag { get; set; } // 1
-    /// <summary>
-    /// World rest matrix (4x4).
-    /// </summary>
-    public Matrix4x4 MWorld;
-    /// <summary>
-    /// Bind pose global matrix (4x4). Often the inverse of MWorld.
-    /// </summary>
-    public Matrix4x4 MBind;
-    /// <summary>
-    /// Duplicate of world rest matrix (4x4).
-    /// </summary>
-    public Matrix4x4 MWorldDup;
-    /// <summary>
-    /// Pose block: Translation (3), Rotation (4), Scale (3).
-    /// </summary>
-    public Vector3 Translation, Scale;
-    public Quaternion Rotation;
-}
-
-/// <summary>
 /// Triangle by vertex indices.
 /// </summary>
 public struct D3DIndexNum
@@ -499,15 +273,4 @@ public struct D3DXPLANE
     public float D;
 }
 
-/// <summary>
-/// Axis-aligned bounding box and derived properties.
-/// </summary>
-public struct GeometryBounds
-{
-    public Vector3 Min;
-    public Vector3 Max;
-    public Vector3 Size;       // Max - Min
-    public Vector3 Center;     // (Min + Max) / 2
-    public float SphereRadius;
-}
 #endregion

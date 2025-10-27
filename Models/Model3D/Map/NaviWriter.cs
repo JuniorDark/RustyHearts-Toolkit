@@ -20,9 +20,9 @@ public static class NaviWriter
             throw new InvalidDataException("Mesh has no triangulated geometry.");
 
         // 2) Build blobs
-        string navName = ModelHelpers.GetStringMeta(navNode, "navi:name") ?? navNode.Name;
-        uint navNameKey = ModelHelpers.HashName(navName);
-        int version = ModelHelpers.GetIntMeta(navNode, "navi:version");
+        string navName = ModelExtensions.GetStringMeta(navNode, "navi:name") ?? navNode.Name;
+        uint navNameKey = ModelExtensions.HashName(navName);
+        int version = ModelExtensions.GetIntMeta(navNode, "navi:version");
 
         var class16 = WriteType16Mesh(version, navName, navNameKey, positions, triangles);
         var class3 = WriteType3Transform(navNode, navName, navNameKey, version);
@@ -83,7 +83,7 @@ public static class NaviWriter
         var triangles = new List<(int A, int B, int C)>();
 
         var meshNode = navRoot.Children.First(); // "NM_Plane01"
-        var meshWorld = ModelHelpers.GetGlobalTransform(meshNode);
+        var meshWorld = ModelExtensions.GetGlobalTransform(meshNode);
 
         foreach (int mi in meshNode.MeshIndices)
         {
@@ -132,13 +132,13 @@ public static class NaviWriter
         bw.Write(nameKey);
 
         // strings
-        ModelHelpers.WriteUtf16String(bw, name);
-        ModelHelpers.WriteUtf16String(bw, string.Empty);
-        ModelHelpers.WriteUtf16String(bw, name);
+        BinaryWriterExtensions.WriteUtf16String(bw, name);
+        BinaryWriterExtensions.WriteUtf16String(bw, string.Empty);
+        BinaryWriterExtensions.WriteUtf16String(bw, name);
 
         // flags
-        int kind = ModelHelpers.GetIntMeta(node, "navi:nodeKind");
-        int flag = ModelHelpers.GetIntMeta(node, "navi:nodeFlag");
+        int kind = ModelExtensions.GetIntMeta(node, "navi:nodeKind");
+        int flag = ModelExtensions.GetIntMeta(node, "navi:nodeFlag");
         bw.Write(kind);
         bw.Write(flag);
 
@@ -147,20 +147,20 @@ public static class NaviWriter
         if (version >= 7) bw.Write((byte)0);                  // b2
 
         // ---- Matrices: world, bind (inverse world), world dup ----
-        var world = ModelHelpers.GetGlobalTransform(node);
+        var world = ModelExtensions.GetGlobalTransform(node);
         Num.Matrix4x4.Invert(world, out var bind);
         var worldDup = world;
 
         // Write matrices in row-major order
-        ModelHelpers.WriteMatrix(bw, world);
-        ModelHelpers.WriteMatrix(bw, bind);
-        ModelHelpers.WriteMatrix(bw, worldDup);
+        BinaryWriterExtensions.WriteMatrix(bw, world);
+        BinaryWriterExtensions.WriteMatrix(bw, bind);
+        BinaryWriterExtensions.WriteMatrix(bw, worldDup);
 
         // ---- Decompose world to TRS ----
         Num.Matrix4x4.Decompose(world, out var sc, out var rot, out var tr);
-        bw.Write(tr.X); bw.Write(tr.Y); bw.Write(tr.Z);
-        bw.Write(rot.X); bw.Write(rot.Y); bw.Write(rot.Z); bw.Write(rot.W);
-        bw.Write(sc.X); bw.Write(sc.Y); bw.Write(sc.Z);
+        BinaryWriterExtensions.WriteVector3(bw, tr);
+        BinaryWriterExtensions.WriteQuaternion(bw, rot);
+        BinaryWriterExtensions.WriteVector3(bw, sc);
 
         return ms.ToArray();
     }
@@ -186,8 +186,8 @@ public static class NaviWriter
         {
             bw.Write(nodeKey);
             bw.Write(0);
-            ModelHelpers.WriteAsciiFixed(bw, name ?? string.Empty, 512);
-            ModelHelpers.WriteAsciiFixed(bw, string.Empty, 512);
+            BinaryWriterExtensions.WriteAsciiFixed(bw, name ?? string.Empty, 512);
+            BinaryWriterExtensions.WriteAsciiFixed(bw, string.Empty, 512);
         }
         else
         {
@@ -199,8 +199,8 @@ public static class NaviWriter
             bw.Write(nodeKey);
             bw.Write(0);
 
-            ModelHelpers.WriteUtf16String(bw, name ?? string.Empty);
-            ModelHelpers.WriteUtf16String(bw, string.Empty);
+            BinaryWriterExtensions.WriteUtf16String(bw, name ?? string.Empty);
+            BinaryWriterExtensions.WriteUtf16String(bw, string.Empty);
         }
 
         // Counts

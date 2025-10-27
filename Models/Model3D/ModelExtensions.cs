@@ -6,8 +6,30 @@ namespace RHToolkit.Models.Model3D;
 /// <summary>
 /// Helper functions for working with 3D models
 /// </summary>
-public class ModelHelpers
+public class ModelExtensions
 {
+    /// <summary>
+    /// AABB (axis-aligned bounding box) information for geometry.
+    /// </summary>
+    public struct GeometryBounds
+    {
+        public Num.Vector3 Min;
+        public Num.Vector3 Max;
+        public Num.Vector3 Size;       // Max - Min
+        public Num.Vector3 Center;     // (Min + Max) / 2
+        public float SphereRadius;
+    }
+
+    #region Model helpers
+    public static int ComputeMMPStride(int meshType, int uvSetCount)
+    {
+        if (meshType == 2) return 28;
+        if (meshType == 0 && uvSetCount == 1) return 32;
+        if (meshType == 0 && uvSetCount == 2) return 40;
+        throw new InvalidDataException($"Unknown layout: meshType={meshType}, uv={uvSetCount}");
+    }
+    #endregion
+
     #region Matrix helpers
     /// <summary>
     /// Get global transform of a node by accumulating local transforms up the hierarchy
@@ -41,47 +63,23 @@ public class ModelHelpers
         );
     }
 
+    #endregion
+
+    #region String readers
+
     /// <summary>
-    /// Write a 4x4 matrix in row-major order
+    /// Reads a null-terminated ASCII string from the given byte array.
     /// </summary>
-    /// <param name="bw"></param>
-    /// <param name="m"></param>
-    public static void WriteMatrix(BinaryWriter bw, Num.Matrix4x4 m)
+    /// <param name="bytes"></param>
+    /// <returns>The read string, or the entire byte array as a string if no null terminator is found. </returns>
+    public static string ReadAsciiZ(byte[] bytes)
     {
-        bw.Write(m.M11); bw.Write(m.M12); bw.Write(m.M13); bw.Write(m.M14);
-        bw.Write(m.M21); bw.Write(m.M22); bw.Write(m.M23); bw.Write(m.M24);
-        bw.Write(m.M31); bw.Write(m.M32); bw.Write(m.M33); bw.Write(m.M34);
-        bw.Write(m.M41); bw.Write(m.M42); bw.Write(m.M43); bw.Write(m.M44);
+        int len = Array.IndexOf<byte>(bytes, 0);
+        return Encoding.ASCII.GetString(bytes, 0, len >= 0 ? len : bytes.Length);
     }
     #endregion
 
-    #region Read arrays
-
-    /// <summary>Reads a UTF-16LE string of the specified character count.</summary>
-    public static string ReadUtf16String(BinaryReader br, int charCount)
-        => charCount <= 0 ? string.Empty : Encoding.Unicode.GetString(br.ReadBytes(charCount * 2));
-
-    /// <summary> Reads an array of <see cref="float"/> values.</summary>
-    public static float[] ReadFloats(BinaryReader br, int n)
-    {
-        float[] a = new float[n];
-        for (int i = 0; i < n; i++) a[i] = br.ReadSingle();
-        return a;
-    }
-
-    /// <summary> Reads a fixed-length ASCII string, trimming any trailing nulls.
-    public static string ReadAsciiFixed(BinaryReader br, int length)
-    {
-        var bytes = br.ReadBytes(length);
-        // Trim any trailing zeros; keep ASCII
-        int end = Array.FindLastIndex(bytes, b => b != 0) + 1;
-        if (end <= 0) return string.Empty;
-        return Encoding.ASCII.GetString(bytes, 0, end);
-    }
-
-    #endregion
-
-    #region Write arrays
+    #region String helpers
     /// <summary> Compute a simple hash of a name string, suitable for use as an identifier.
     public static uint HashName(string s)
     {
@@ -90,41 +88,6 @@ public class ModelHelpers
             h = unchecked(h * 31 + b);
         return h;
     }
-
-    /// <summary> Write the length of a UTF-16LE string in characters.
-    public static void WriteUtf16Len(BinaryWriter bw, string s) => bw.Write(s?.Length ?? 0);
-    public static void WriteUtf16Body(BinaryWriter bw, string s) { if (!string.IsNullOrEmpty(s)) bw.Write(Encoding.Unicode.GetBytes(s)); }
-
-    /// <summary> Write a UTF-16LE string with length prefix characters.</summary>
-    public static void WriteUtf16String(BinaryWriter bw, string s)
-    {
-        if (s.Length == 0) return;
-        bw.Write(Encoding.Unicode.GetBytes(s));
-    }
-
-    /// <summary> Write a fixed-length ASCII string, padding with zeros or truncating as needed.</summary>
-    public static void WriteAsciiFixed(BinaryWriter bw, string s, int width)
-    {
-        var bytes = Encoding.ASCII.GetBytes(s ?? string.Empty);
-        if (bytes.Length >= width)
-        {
-            bw.Write(bytes, 0, width);
-            return;
-        }
-
-        bw.Write(bytes);
-        // pad with zeros
-        Span<byte> pad = stackalloc byte[Math.Min(1024, width - bytes.Length)];
-        pad.Clear();
-        int remain = width - bytes.Length;
-        while (remain > 0)
-        {
-            int chunk = Math.Min(pad.Length, remain);
-            bw.Write(pad.Slice(0, chunk));
-            remain -= chunk;
-        }
-    }
-
     #endregion
 
     #region Metadata helpers

@@ -99,8 +99,16 @@
                 Foreground="White"
                 Style="{StaticResource lb_def_button02}" />
         </StackPanel>
-        <Button
+        <CheckBox
             Grid.Row="2"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Content="Embed Textures"
+            IsChecked="{Binding ViewModel.EmbedTextures, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            Template="{StaticResource lb_checkbox}"
+            ToolTip="Embed Textures in the fbx" />
+        <Button
+            Grid.Row="3"
             Width="150"
             Margin="10,10"
             HorizontalAlignment="Center"
@@ -112,7 +120,7 @@
             Foreground="White"
             Style="{StaticResource lb_def_button02}" />
         <TextBlock
-            Grid.Row="3"
+            Grid.Row="4"
             Margin="10,10"
             HorizontalAlignment="Center"
             VerticalAlignment="Top"
@@ -122,7 +130,7 @@
             Text="{Binding ViewModel.ProgressMessage}"
             Visibility="{Binding ViewModel.IsProgressMessageVisible}" />
         <ProgressBar
-            Grid.Row="4"
+            Grid.Row="5"
             Width="250"
             Height="30"
             HorizontalAlignment="Center"
@@ -132,7 +140,7 @@
             Visibility="{Binding ViewModel.IsProgressBarVisible}"
             Value="{Binding ViewModel.ProgressBarValue, UpdateSourceTrigger=PropertyChanged}" />
         <Button
-            Grid.Row="5"
+            Grid.Row="6"
             Width="200"
             Margin="10,10"
             HorizontalAlignment="Center"

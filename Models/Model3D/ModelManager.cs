@@ -1,4 +1,5 @@
 ﻿using RHToolkit.Models.Model3D.Map;
+using RHToolkit.Models.Model3D.MGM;
 using System.Collections.Concurrent;
 
 namespace RHToolkit.Models.Model3D;
@@ -18,27 +19,31 @@ public sealed class ExportSummary(int total)
     public void AddSkipped(string file, string reason) => SkippedFiles.Add((file, reason));
 }
 
-public class ModelManager
+public enum ModelKind { MMP, MGM }
+
+public static class ModelManager
 {
     /// <summary>
-    /// Enumerates files in the specified directory.
+    /// Enumerates .mmp and .mgm files in the specified directory.
     /// </summary>
     /// <param name="baseDir"></param>
-    /// <param name="pckMap"></param>
     /// <param name="ct"></param>
-    /// <returns>A sorted dictionary where the key is the relative file path and the value is the full file path.</returns>
-    public static async Task<SortedDictionary<string, string>> EnumerateFilesToExportAsync(
-    string baseDir,
-    CancellationToken ct)
+    /// <returns>
+    /// A sorted dictionary where the key is the relative file path and the value is (full path, kind).
+    /// </returns>
+    public static async Task<SortedDictionary<string, (string FullPath, ModelKind Kind)>> EnumerateFilesToExportAsync(
+        string baseDir,
+        CancellationToken ct)
     {
-        var dictionary = new ConcurrentDictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var dictionary = new ConcurrentDictionary<string, (string FullPath, ModelKind Kind)>(StringComparer.OrdinalIgnoreCase);
 
         var files = await Task.Run(() =>
         {
             return Directory.EnumerateFiles(baseDir, "*", SearchOption.AllDirectories)
                 .Where(file =>
                 {
-                    return file.EndsWith(".mmp", StringComparison.OrdinalIgnoreCase);
+                    return file.EndsWith(".mmp", StringComparison.OrdinalIgnoreCase) ||
+                           file.EndsWith(".mgm", StringComparison.OrdinalIgnoreCase);
                 })
                 .ToList();
         }, ct).ConfigureAwait(false);
@@ -51,13 +56,14 @@ public class ModelManager
         {
             try
             {
-                var rel = Path.GetRelativePath(baseDir, file);
                 var info = new FileInfo(file);
-
                 if (info.Length == 0)
                     return new ValueTask();
 
-                dictionary[rel] = file;
+                var rel = Path.GetRelativePath(baseDir, file);
+                var kind = GetKindFromExtension(file);
+
+                dictionary[rel] = (file, kind);
             }
             catch (OperationCanceledException)
             {
@@ -67,24 +73,24 @@ public class ModelManager
             return new ValueTask();
         });
 
-        return new SortedDictionary<string, string>(dictionary, StringComparer.OrdinalIgnoreCase);
+        return new SortedDictionary<string, (string FullPath, ModelKind Kind)>(dictionary, StringComparer.OrdinalIgnoreCase);
     }
 
+    private static ModelKind GetKindFromExtension(string path)
+        => Path.GetExtension(path).Equals(".mmp", StringComparison.OrdinalIgnoreCase) ? ModelKind.MMP : ModelKind.MGM;
+
     /// <summary>
-    /// Exports the specified files to FBX format.
+    /// Exports the specified files to FBX format, placing outputs into MMP/ and MGM/ subfolders.
     /// </summary>
     /// <param name="outputDirectory"></param>
-    /// <param name="filesToExportDict"></param>
-    /// <param name="generateTangents"></param>
-    /// <param name="embedTextures"></param>
+    /// <param name="filesToExportDict">Key: relative input path. Value: (full path, kind).</param>
     /// <param name="progress"></param>
     /// <param name="ct"></param>
-    /// <returns></returns>
     public static async Task<ExportSummary> ExportFilesAsync(
-    string outputDirectory,
-    SortedDictionary<string, string> filesToExportDict,
-    IProgress<(string file, int pos, int count)> progress,
-    CancellationToken ct)
+        string outputDirectory,
+        SortedDictionary<string, (string FullPath, ModelKind Kind)> filesToExportDict,
+        IProgress<(string file, int pos, int count)> progress, bool embedTextures,
+        CancellationToken ct)
     {
         var summary = new ExportSummary(filesToExportDict.Count);
 
@@ -94,7 +100,7 @@ public class ModelManager
             {
                 int pos = 0, count = filesToExportDict.Count;
 
-                foreach (var (relPath, fullPath) in filesToExportDict)
+                foreach (var (relPath, entry) in filesToExportDict)
                 {
                     ct.ThrowIfCancellationRequested();
                     pos++;
@@ -102,28 +108,45 @@ public class ModelManager
 
                     try
                     {
-                        var mmpModel = await MMPReader.ReadAsync(fullPath).ConfigureAwait(false);
+                        // Choose reader + output subfolder based on kind
+                        string subfolder;
+                        string outputRel = Path.ChangeExtension(relPath, ".fbx");
 
-                        if (mmpModel.Version < 6)
+                        switch (entry.Kind)
                         {
-                            summary.AddSkipped(relPath, $"Unsupported version ({mmpModel.Version})");
-                            continue;
+                            case ModelKind.MMP:
+                                {
+                                    var mmpModel = await MMPReader.ReadAsync(entry.FullPath).ConfigureAwait(false);
+                                    subfolder = "MMP";
+                                    string outputFile = Path.Combine(outputDirectory, subfolder, outputRel);
+                                    Directory.CreateDirectory(Path.GetDirectoryName(outputFile)!);
+
+                                    var exporter = new MMPExporterAspose();
+                                    await exporter.ExportMmpToFbx(mmpModel, outputFile, embedTextures).ConfigureAwait(false);
+                                    break;
+                                }
+                            case ModelKind.MGM:
+                                {
+                                    var mgmModel = await MGMReader.ReadAsync(entry.FullPath).ConfigureAwait(false);
+                                    subfolder = "MGM";
+                                    string outputFile = Path.Combine(outputDirectory, subfolder, outputRel);
+                                    Directory.CreateDirectory(Path.GetDirectoryName(outputFile)!);
+
+                                    var exporter = new MGMExporterAspose();
+                                    await exporter.ExportMgmToFbx(mgmModel, outputFile, embedTextures).ConfigureAwait(false);
+                                    break;
+                                }
+
+                            default:
+                                throw new NotSupportedException($"Unsupported file for '{relPath}'.");
                         }
 
-                        // Ensure subfolders exist
-                        string fileName = Path.ChangeExtension(relPath, ".fbx");
-                        string outputFile = Path.Combine(outputDirectory, fileName);
-                        Directory.CreateDirectory(Path.GetDirectoryName(outputFile)!);
-
-                        var exporter = new MMPExporterAspose();
-                        await exporter.ExportMmpToFbx(mmpModel, outputFile);
                         summary.AddExported();
                     }
                     catch (OperationCanceledException) { throw; }
                     catch (Exception ex)
                     {
-                        // Keep going; record the failure
-                        summary.SkippedFiles.Add((relPath, ex.Message));
+                        summary.AddSkipped(relPath, ex.Message);
                     }
                 }
             }, ct).ConfigureAwait(false);
@@ -135,5 +158,4 @@ public class ModelManager
 
         return summary;
     }
-
 }

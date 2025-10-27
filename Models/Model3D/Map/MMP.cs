@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using static RHToolkit.Models.Model3D.ModelExtensions;
 
 namespace RHToolkit.Models.Model3D.Map;
 
@@ -7,28 +8,16 @@ namespace RHToolkit.Models.Model3D.Map;
 /// </summary>
 public static class MMP
 {
-    // ---------- Common Structs ----------
     /// <summary>
-    /// AABB (axis-aligned bounding box) information for geometry.
+    /// Header information for MMP models.
     /// </summary>
-    public struct GeometryBounds
+    public sealed class MmpHeader
     {
-        public Vector3 Min;
-        public Vector3 Max;
-        public Vector3 Size;       // Max - Min
-        public Vector3 Center;     // (Min + Max) / 2
-        public float SphereRadius;
-    }
-
-    public struct RgbaColor
-    {
-        public float R, G, B, A;
-    }
-
-    public struct LightBasis
-    {
-        public float G0, G1, G2, G3, G4, G5, G6, G7, G8, G9, G10, G11, G12, G13;
-        public RgbaColor Tint;
+        public int Version { get; set; }
+        public int NumObjects { get; set; }
+        public int[] Index { get; set; } = [];
+        public int[] Length { get; set; } = [];
+        public int[] TypeId { get; set; } = [];
     }
 
     /// <summary>
@@ -38,10 +27,10 @@ public static class MMP
     {
         public int Version { get; set; }
         public string BaseDirectory { get; set; } = string.Empty;
-        public List<MmpMaterial> Materials { get; set; } = [];
-        public List<MmpNodeXform> Nodes { get; set; } = [];
+        public MmpHeader Header { get; set; } = new();
+        public List<ModelMaterial> Materials { get; set; } = [];
+        public List<ModelNodeXform> Nodes { get; set; } = [];
         public List<MmpObjectGroup> Objects { get; set; } = [];
-
     }
 
     // ---------- Geometry ----------
@@ -71,7 +60,7 @@ public static class MMP
         /// Index of the material applied to the mesh.
         /// </summary>
         public int MaterialIdx { get; set; }
-        public MmpMaterial? Material { get; set; }
+        public ModelMaterial? Material { get; set; }
         /// <summary>
         /// The type of the mesh, which may indicate different rendering or processing methods.
         /// </summary>
@@ -119,103 +108,5 @@ public static class MMP
         public Vector3 Normal { get; set; }
         public Vector2 UV0 { get; set; }
         public Vector2? UV1 { get; set; }
-    }
-
-    // ---------- Materials ----------
-    /// <summary>
-    /// WIP
-    /// A material definition, including shader parameters, texture references, and light references.
-    /// </summary>
-    public sealed class MmpMaterial
-    {
-        public int Id { get; set; }
-        public string MaterialName { get; set; } = string.Empty;
-        public string ShaderName { get; set; } = string.Empty;
-        public int MaterialFlags { get; set; }
-        public byte MaterialVariant { get; set; }
-        public List<MmpShader> Shaders { get; set; } = [];
-        public List<MmpTexture> Textures { get; set; } = [];
-        public List<MmpLight> Lights { get; set; } = [];
-    }
-
-    /// <summary>
-    /// WIP
-    /// A shader parameter set.
-    /// </summary>
-    public sealed class MmpShader
-    {
-        /// <summary>
-        /// The name of the shader parameter slot.
-        /// </summary>
-        public string Slot { get; set; } = string.Empty;
-
-        public Quaternion Base { get; set; }    // Values[0..3]
-        public float Scalar { get; set; } // Values[4]
-        public Quaternion Payload { get; set; } // Values[5..8]
-    }
-
-    /// <summary>
-    /// A texture reference, including texture ID, sampler state, UV source/transform, and shader parameters.
-    /// </summary>
-    public sealed class MmpTexture
-    {
-        public string Slot { get; set; } = string.Empty;
-        public uint TextureId { get; set; }
-        public uint SamplerStateId { get; set; }
-        public uint UVSourceOrTransformId { get; set; }
-        public ushort ShaderParamOffsetBytes { get; set; }
-        public ushort ShaderParamSizeBytes { get; set; }
-        public byte[] RawPayload { get; set; } = [];
-        public string? TexturePath { get; set; }
-    }
-
-    /// <summary>
-    /// A light reference, including semantic name, light block indices, offsets, sizes, and basis functions.
-    /// </summary>
-    public sealed class MmpLight
-    {
-        public string Semantic { get; set; } = string.Empty;   // usually "Light_Direction"
-
-        public uint LightBlockIndex0 { get; set; }
-        public uint LightBlockIndex1 { get; set; }
-        public uint LightBlockIndex2 { get; set; }
-
-        public ushort LightBlockOffsetBytes { get; set; }
-        public ushort LightBlockSizeBytes { get; set; }
-
-        public LightBasis Basis { get; set; }
-    }
-
-    // ---------- NodeXform ----------
-    /// <summary>
-    /// A transform node, including name, group, kind, flags, and transformation matrices.
-    /// </summary>
-    public sealed class MmpNodeXform
-    {
-        public string Name { get; set; } = string.Empty;
-        public uint NameHash { get; set; }
-        public string GroupName { get; set; } = string.Empty;
-        public uint GroupHash { get; set; }
-        public string SubName { get; set; } = string.Empty;
-        public uint SubNameHash { get; set; }
-        public int Kind { get; set; } // 5,4
-        public int Flag { get; set; } // 1
-        /// <summary>
-        /// World rest matrix (4x4).
-        /// </summary>
-        public Matrix4x4 MWorld;
-        /// <summary>
-        /// Bind pose global matrix (4x4). Often the inverse of MWorld.
-        /// </summary>
-        public Matrix4x4 MBind;
-        /// <summary>
-        /// Duplicate of world rest matrix (4x4).
-        /// </summary>
-        public Matrix4x4 MWorldDup;
-        /// <summary>
-        /// Pose block: Translation (3), Rotation (4), Scale (3).
-        /// </summary>
-        public Vector3 Translation, Scale;
-        public Quaternion Rotation;
     }
 }

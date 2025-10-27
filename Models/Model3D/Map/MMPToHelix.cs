@@ -1,5 +1,6 @@
 ﻿using HelixToolkit.Wpf.SharpDX;
 using static RHToolkit.Models.Model3D.Map.MMP;
+using static RHToolkit.Models.Model3D.ModelMaterial;
 using SDX = SharpDX;
 
 namespace RHToolkit.Models.Model3D.Map;
@@ -21,9 +22,9 @@ public static class MMPToHelix
                     new SDX.Vector3(-v.Normal.X, v.Normal.Y, v.Normal.Z))); // flip X for LH coord
 
                 // Base UVs
-                var (x, y) = GetTexScale(part.Material); // (u1,v1,u2,v2) -> use (u1,v1) for UV0 tiling
+                var txtScale = GetTexScale(part.Material); // (u1,v1,u2,v2) -> use (u1,v1) for UV0 tiling
                 var texcoords = new Vector2Collection(part.Vertices.Select(v =>
-                    new SDX.Vector2(v.UV0.X * x, v.UV0.Y * y)));
+                    new SDX.Vector2(v.UV0.X * txtScale.X, v.UV0.Y * txtScale.Y)));
 
                 var indices = new IntCollection(part.Indices.Select(i => (int)i));
 
@@ -48,17 +49,16 @@ public static class MMPToHelix
 
                     // --- TEXTURES ---
                     // Diffuse
-                    var diffusePath = ResolveTexturePath(model.BaseDirectory,
-                        Texture(mat, "DiffuseMap")?.TexturePath,
-                        mat.MaterialName);
+                    var diffusePath = ResolveTextureAbsolute(model.BaseDirectory,
+                    Texture(mat, "DiffuseMap")?.TexturePath);
                     if (!string.IsNullOrEmpty(diffusePath) && File.Exists(diffusePath))
                     {
                         try { phong.DiffuseMap = new MemoryStream(File.ReadAllBytes(diffusePath)); } catch { }
                     }
 
                     // Normal (Bump)
-                    var normalPath = ResolveTexturePath(model.BaseDirectory,
-                        Texture(mat, "BumpMap")?.TexturePath, null);
+                    var normalPath = ResolveTextureAbsolute(model.BaseDirectory,
+                        Texture(mat, "BumpMap")?.TexturePath);
                     if (!string.IsNullOrEmpty(normalPath) && File.Exists(normalPath))
                     {
                         try { phong.NormalMap = new MemoryStream(File.ReadAllBytes(normalPath)); } catch { }
@@ -127,7 +127,7 @@ public static class MMPToHelix
                     var pAlphaBlend = Shader(mat, "AlphaBlending");
                     if (pAlphaBlend != null && pAlphaBlend.Payload.X >= 0.5f) isTransparent = true;
 
-                    var pAlphaType = Shader(mat, "AlphaType"); // 0=opaque, 1=alpha, 2=add? (engine-specific)
+                    var pAlphaType = Shader(mat, "AlphaType");
                     int alphaType = (pAlphaType != null) ? (int)System.Math.Round(pAlphaType.Payload.X) : 0;
                     if (alphaType >= 1) isTransparent = true; // treat >=1 as blended
 
@@ -161,68 +161,5 @@ public static class MMPToHelix
 
             yield return group;
         }
-    }
-
-    // ---------- helpers ----------
-    private static MmpShader? Shader(MmpMaterial m, string slotPrefix)
-        => m.Shaders.FirstOrDefault(s => s.Slot.StartsWith(slotPrefix, StringComparison.OrdinalIgnoreCase));
-
-    private static MmpTexture? Texture(MmpMaterial m, string slotExact)
-        => m.Textures.FirstOrDefault(t => t.Slot.Equals(slotExact, StringComparison.OrdinalIgnoreCase));
-
-    // TexScale payload → (u1, v1, u2, v2). We use u1,v1 for UV0 tiling.
-    private static (float x, float y) GetTexScale(MmpMaterial? m)
-    {
-        if (m == null) return (1f, 1f);
-        var ts = Shader(m, "TexScale");
-        if (ts == null) return (1f, 1f);
-        var p = ts.Payload;
-        float ux = (p.X == 0) ? 1f : p.X;
-        float vy = (p.Y == 0) ? 1f : p.Y;
-        ux = SDX.MathUtil.Clamp(ux, 0.01f, 20f);
-        vy = SDX.MathUtil.Clamp(vy, 0.01f, 20f);
-        return (ux, vy);
-    }
-
-    private static float Clamp01(float v) => v < 0 ? 0 : (v > 1 ? 1 : v);
-
-    /// <summary>
-    /// Resolve relative texture paths against the MMP folder.
-    /// ".\\texture\\foo.dds"  => BaseDir\\texture\\foo.dds
-    /// "..\\..\\WaterTexture\\wave1.dds" => BaseDir\\..\\..\\WaterTexture\\wave1.dds  (normalized)
-    /// If refPath is null, we try BaseDir\\<materialName>.dds and BaseDir\\texture\\<materialName>.dds
-    /// </summary>
-    private static string? ResolveTexturePath(string baseDir, string? refPath, string? materialNameFallback)
-    {
-        if (!string.IsNullOrWhiteSpace(refPath))
-        {
-            var norm = refPath.Replace('/', Path.DirectorySeparatorChar)
-                              .Replace('\\', Path.DirectorySeparatorChar);
-            var combined = Path.GetFullPath(Path.Combine(baseDir, norm));
-            if (File.Exists(combined)) return combined;
-
-            // also try BaseDir/texture/<file>
-            var fileOnly = Path.GetFileName(norm);
-            if (!string.IsNullOrEmpty(fileOnly))
-            {
-                var alt = Path.GetFullPath(Path.Combine(baseDir, "texture", fileOnly));
-                if (File.Exists(alt)) return alt;
-            }
-        }
-
-        if (!string.IsNullOrWhiteSpace(materialNameFallback))
-        {
-            var file = materialNameFallback.EndsWith(".dds", System.StringComparison.OrdinalIgnoreCase)
-                ? materialNameFallback
-                : materialNameFallback + ".dds";
-
-            var p1 = Path.GetFullPath(Path.Combine(baseDir, file));
-            if (File.Exists(p1)) return p1;
-
-            var p2 = Path.GetFullPath(Path.Combine(baseDir, "texture", file));
-            if (File.Exists(p2)) return p2;
-        }
-
-        return null;
     }
 }

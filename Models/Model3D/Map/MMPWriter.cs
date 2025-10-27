@@ -48,11 +48,19 @@ public static class MMPWriter
             // -- import FBX and build type-3 (node) + type-19 (mesh) chunks ---
             var ctx = new AssimpContext();
             var scene = ctx.ImportFile(fbxPath, PostProcessSteps.FlipWindingOrder 
-                | PostProcessSteps.FlipUVs  
-                | PostProcessSteps.JoinIdenticalVertices);
+            | PostProcessSteps.FlipUVs | PostProcessSteps.JoinIdenticalVertices);
 
             var fileStem = Path.GetFileNameWithoutExtension(fbxPath);
             var container = scene.RootNode.Children.FirstOrDefault(n => n.Name == fileStem) ?? scene.RootNode;
+
+            var flipX = new Assimp.Matrix4x4(
+                -1, 0, 0, 0,
+                 0, 1, 0, 0,
+                 0, 0, 1, 0,
+                 0, 0, 0, 1);
+
+            // Pre-multiply so all children inherit the reflection
+            container.Transform = flipX * container.Transform;
 
             // --- Find navi node
             var naviNodes = new List<Assimp.Node>();
@@ -217,12 +225,12 @@ public static class MMPWriter
     // ---------- Step 1: write the header (names + hashes) ----------
     private static void WriteType19Header(BinaryWriter bw, string objectName, string objectName2)
     {
-        ModelHelpers.WriteUtf16Len(bw, objectName);
-        ModelHelpers.WriteUtf16Len(bw, objectName2);
-        bw.Write(ModelHelpers.HashName(objectName));
-        bw.Write(ModelHelpers.HashName(objectName2));
-        ModelHelpers.WriteUtf16Body(bw, objectName);
-        ModelHelpers.WriteUtf16Body(bw, objectName2);
+        bw.Write(objectName.Length);
+        bw.Write(objectName2.Length);
+        bw.Write(ModelExtensions.HashName(objectName));
+        bw.Write(ModelExtensions.HashName(objectName2));
+        BinaryWriterExtensions.WriteUtf16String(bw, objectName);
+        BinaryWriterExtensions.WriteUtf16String(bw, objectName2);
     }
 
     // ---------- Step 2: build all parts and compute the object AABB ----------
@@ -270,12 +278,12 @@ public static class MMPWriter
         // strip FBX auto-suffixes like ".001"
         subName = Regex.Replace(subName, @"^(.*?\d)(0+\d{2,})$", "$1");
 
-        int materialId = ModelHelpers.GetIntMeta(partNode, "mmp:materialIdx");
-        int meshType = ModelHelpers.GetIntMeta(partNode, "mmp:meshType");
-        byte fl0 = (byte)ModelHelpers.GetIntMeta(partNode, "mmp:isEmissiveAdditive");
-        byte fl1 = (byte)ModelHelpers.GetIntMeta(partNode, "mmp:isAlphaBlend");
-        byte fl2 = (byte)ModelHelpers.GetIntMeta(partNode, "mmp:isEnabled");
-        int uvSets = ModelHelpers.GetIntMeta(partNode, "mmp:uvSetCount");
+        int materialId = ModelExtensions.GetIntMeta(partNode, "mmp:materialIdx");
+        int meshType = ModelExtensions.GetIntMeta(partNode, "mmp:meshType");
+        byte fl0 = (byte)ModelExtensions.GetIntMeta(partNode, "mmp:isEmissiveAdditive");
+        byte fl1 = (byte)ModelExtensions.GetIntMeta(partNode, "mmp:isAlphaBlend");
+        byte fl2 = (byte)ModelExtensions.GetIntMeta(partNode, "mmp:isEnabled");
+        int uvSets = ModelExtensions.GetIntMeta(partNode, "mmp:uvSetCount");
         var maxSets = Math.Min(2, mesh.TextureCoordinateChannelCount);
         if (uvSets > maxSets)
             throw new InvalidDataException(
@@ -338,7 +346,7 @@ public static class MMPWriter
         var uv1Src = mesh.TextureCoordinateChannelCount >= 2 ? mesh.TextureCoordinateChannels[1] : null;
 
         // World transform and proper normal transform
-        var M = ModelHelpers.GetGlobalTransform(partNode);
+        var M = ModelExtensions.GetGlobalTransform(partNode);
         Num.Matrix4x4.Invert(M, out var invM);
         var invMT = Num.Matrix4x4.Transpose(invM);
 
@@ -437,7 +445,7 @@ public static class MMPWriter
     ref float objMinX, ref float objMinY, ref float objMinZ,
     ref float objMaxX, ref float objMaxY, ref float objMaxZ)
     {
-        var M = ModelHelpers.GetGlobalTransform(partNode);
+        var M = ModelExtensions.GetGlobalTransform(partNode);
 
         // All billboard vertices share the same center position
         var pL = mesh.Vertices[0];
@@ -494,8 +502,8 @@ public static class MMPWriter
 
         bw.Write(ctrX); bw.Write(ctrY); bw.Write(ctrZ);
         bw.Write(rad);
-        bw.Write(min.X); bw.Write(min.Y); bw.Write(min.Z);
-        bw.Write(max.X); bw.Write(max.Y); bw.Write(max.Z);
+        BinaryWriterExtensions.WriteVector3(bw, min);
+        BinaryWriterExtensions.WriteVector3(bw, max);
     }
 
     // ---------- Step 5: write each mesh (header → bounds → vertex stream → indices) ----------
@@ -509,8 +517,8 @@ public static class MMPWriter
         var (subName, materialId, meshType, fl0, fl1, fl2, uvSets, Pw, Nw, UV0, UV1, indices, forcedBounds) = part;
 
         // Mesh header (name)
-        ModelHelpers.WriteUtf16Len(bw, subName);
-        ModelHelpers.WriteUtf16Body(bw, subName);
+        bw.Write(subName.Length);
+        BinaryWriterExtensions.WriteUtf16String(bw, subName);
 
         // Counts & attributes
         bw.Write(Pw.Count);
@@ -568,7 +576,7 @@ public static class MMPWriter
         List<Num.Vector3> Pw, List<Num.Vector3> Nw,
         List<Num.Vector2> UV0, List<Num.Vector2> UV1)
     {
-        int stride = ComputeStride(meshType, uvSets);
+        int stride = ModelExtensions.ComputeMMPStride(meshType, uvSets);
         using var vms = new MemoryStream(Pw.Count * stride);
         using var vbw = new BinaryWriter(vms, Encoding.ASCII, leaveOpen: true);
 
@@ -576,8 +584,8 @@ public static class MMPWriter
         {
             var p = Pw[i];
             var n = Nw[i];
-            vbw.Write(p.X); vbw.Write(p.Y); vbw.Write(p.Z);
-            vbw.Write(n.X); vbw.Write(n.Y); vbw.Write(n.Z);
+            BinaryWriterExtensions.WriteVector3(bw, p);
+            BinaryWriterExtensions.WriteVector3(bw, n);
 
             if (meshType == 2)
             {
@@ -585,11 +593,10 @@ public static class MMPWriter
             }
             else
             {
-                vbw.Write(UV0[i].X); vbw.Write(UV0[i].Y);
+                BinaryWriterExtensions.WriteVector2(bw, UV0[i]);
                 if (uvSets == 2)
                 {
-                    var t1 = (i < UV1.Count) ? UV1[i] : default;
-                    vbw.Write(t1.X); vbw.Write(t1.Y);
+                    BinaryWriterExtensions.WriteVector2(bw, UV1[i]);
                 }
             }
         }
@@ -606,20 +613,7 @@ public static class MMPWriter
         if (p.X > maxX) maxX = p.X; if (p.Y > maxY) maxY = p.Y; if (p.Z > maxZ) maxZ = p.Z;
     }
 
-    /// <summary>
-    /// Compute vertex stride from mesh type and UV set count
-    /// </summary>
-    /// <param name="meshType"></param>
-    /// <param name="uvSetCount"></param>
-    /// <returns></returns>
-    /// <exception cref="InvalidDataException"></exception>
-    public static int ComputeStride(int meshType, int uvSetCount)
-    {
-        if (meshType == 2) return 28;
-        if (meshType == 0 && uvSetCount == 1) return 32;
-        if (meshType == 0 && uvSetCount == 2) return 40;
-        throw new InvalidDataException($"Unknown layout: meshType={meshType}, uv={uvSetCount}");
-    }
+    
     #endregion
 
     #region Type 3 Node Builder
@@ -630,22 +624,22 @@ public static class MMPWriter
         using var bw = new BinaryWriter(ms, Encoding.ASCII, leaveOpen: true);
 
         string objectName = objNode.Name;
-        string objectName2 = ModelHelpers.GetStringMeta(objNode, "mmp:nodeGroupName");
+        string objectName2 = ModelExtensions.GetStringMeta(objNode, "mmp:nodeGroupName");
 
         // ---- names + hashes (object, group, object) ----
-        ModelHelpers.WriteUtf16Len(bw, objectName);
-        ModelHelpers.WriteUtf16Len(bw, objectName2);
-        ModelHelpers.WriteUtf16Len(bw, objectName);
-        bw.Write(ModelHelpers.HashName(objectName));
-        bw.Write(ModelHelpers.HashName(objectName2));
-        bw.Write(ModelHelpers.HashName(objectName));
-        ModelHelpers.WriteUtf16Body(bw, objectName);
-        ModelHelpers.WriteUtf16Body(bw, objectName2);
-        ModelHelpers.WriteUtf16Body(bw, objectName);
+        bw.Write(objectName.Length);
+        bw.Write(objectName2.Length);
+        bw.Write(objectName.Length);
+        bw.Write(ModelExtensions.HashName(objectName));
+        bw.Write(ModelExtensions.HashName(objectName2));
+        bw.Write(ModelExtensions.HashName(objectName));
+        BinaryWriterExtensions.WriteUtf16String(bw, objectName);
+        BinaryWriterExtensions.WriteUtf16String(bw, objectName2);
+        BinaryWriterExtensions.WriteUtf16String(bw, objectName);
 
         // flags
-        int kind = ModelHelpers.GetIntMeta(objNode, "mmp:nodeKind");
-        int flag = ModelHelpers.GetIntMeta(objNode, "mmp:nodeFlag");
+        int kind = ModelExtensions.GetIntMeta(objNode, "mmp:nodeKind");
+        int flag = ModelExtensions.GetIntMeta(objNode, "mmp:nodeFlag");
         bw.Write(kind);
         bw.Write(flag);
 
@@ -654,24 +648,23 @@ public static class MMPWriter
         if (version >= 7) bw.Write((byte)0);                  // b2
 
         // ---- Matrices: world, bind (inverse world), world dup ----
-        var world = ModelHelpers.GetGlobalTransform(objNode);
+        var world = ModelExtensions.GetGlobalTransform(objNode);
         Num.Matrix4x4.Invert(world, out var bind);
         var worldDup = world;
 
         // Write matrices in row-major order
-        ModelHelpers.WriteMatrix(bw, world);
-        ModelHelpers.WriteMatrix(bw, bind);
-        ModelHelpers.WriteMatrix(bw, worldDup);
+        BinaryWriterExtensions.WriteMatrix(bw, world);
+        BinaryWriterExtensions.WriteMatrix(bw, bind);
+        BinaryWriterExtensions.WriteMatrix(bw, worldDup);
 
         // ---- Decompose world to TRS ----
         Num.Matrix4x4.Decompose(world, out var sc, out var rot, out var tr);
-        bw.Write(tr.X); bw.Write(tr.Y); bw.Write(tr.Z);
-        bw.Write(rot.X); bw.Write(rot.Y); bw.Write(rot.Z); bw.Write(rot.W);
-        bw.Write(sc.X); bw.Write(sc.Y); bw.Write(sc.Z);
+        BinaryWriterExtensions.WriteVector3(bw, tr);
+        BinaryWriterExtensions.WriteQuaternion(bw, rot);
+        BinaryWriterExtensions.WriteVector3(bw, sc);
 
         return ms.ToArray();
     }
 
     #endregion
-
 }
