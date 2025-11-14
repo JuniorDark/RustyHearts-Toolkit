@@ -3,6 +3,79 @@ using static RHToolkit.Models.Model3D.ModelExtensions;
 
 namespace RHToolkit.Models.Model3D.Map;
 
+#region Data Models
+public sealed class NaviMeshFile
+{
+    public NaviHeader Header { get; set; } = new();
+    public List<NaviMeshOctree> Octrees { get; } = [];
+    public List<ModelNodeXform> Nodes { get; set; } = [];
+    public List<NaviMeshEntry> Entries { get; } = [];
+}
+
+/// <summary>
+/// File header information, including version, object count, and tables of offsets, sizes, and class IDs.
+/// </summary>
+public sealed class NaviHeader
+{
+    public int Version { get; set; }
+    public int NumObjects { get; set; }
+    public int[] Index { get; set; } = [];
+    public int[] Length { get; set; } = [];
+    public int[] ClassId { get; set; } = [];
+}
+
+/// <summary>
+/// An octree node, including index, subdivision flag, width, bounds, planes, and triangle indices.
+/// </summary>
+public sealed class NaviMeshOctree
+{
+    public int OctreeIndex { get; set; }
+    public bool Subdivided { get; set; }
+    public float Width { get; set; }
+    public GeometryBounds GeometryBounds { get; set; }
+    public D3DXPLANE[] Plane { get; set; } = [];
+    public int NaviIndexCount { get; set; }
+    public List<int> Indices { get; set; } = [];
+}
+
+/// <summary>
+/// A navigation mesh entry, including name, parent, vertices, and triangle indices.
+/// </summary>
+public sealed class NaviMeshEntry
+{
+    public string Name { get; set; } = string.Empty;
+    public string ParentName { get; set; } = string.Empty;
+    public uint NameKey { get; set; }
+    public uint ParentNameKey { get; set; }
+    public int VertexCount { get; set; }
+    public int IndexCount { get; set; }
+    public Vector3[] Vertices { get; set; } = [];
+    public D3DIndexNum[] Indices { get; set; } = [];
+}
+
+/// <summary>
+/// Triangle by vertex indices.
+/// </summary>
+public struct D3DIndexNum
+{
+    public int A;
+    public int B;
+    public int C;
+}
+
+/// <summary>
+/// Plane equation: Ax + By + Cz + D = 0
+/// </summary>
+public struct D3DXPLANE
+{
+    public float A;
+    public float B;
+    public float C;
+    public float D;
+}
+
+#endregion
+
 /// <summary>
 /// Reader for NAVI (navigation mesh) files.
 /// </summary>
@@ -12,10 +85,16 @@ public static class NaviReader
 
     public static async Task<NaviMeshFile> ReadAsync(string path, CancellationToken ct = default)
     {
-        byte[] bytes = await File.ReadAllBytesAsync(path, ct).ConfigureAwait(false);
-        using var ms = new MemoryStream(bytes, writable: false);
-        using var br = new BinaryReader(ms, Encoding.ASCII, leaveOpen: false);
-        return ReadNavi(br);
+        await using var fs = new FileStream(
+            path,
+            FileMode.Open,
+            FileAccess.Read,
+            FileShare.Read,
+            bufferSize: 64 * 1024,
+            useAsync: true);
+
+        using var br = new BinaryReader(fs, Encoding.ASCII, leaveOpen: false);
+        return await Task.Run(() => ReadNavi(br), ct);
     }
 
     /// <summary>
@@ -54,23 +133,32 @@ public static class NaviReader
             br.BaseStream.Seek(off, SeekOrigin.Begin);
             long start = br.BaseStream.Position;
 
-            switch (type)
+            try
             {
-                case 3: model.Nodes.Add(ModelSharedTypeReader.ReadNodeTransformData(br, size, model.Header.Version)); break;
-                case 8:
-                    ReadOctree(br, model, size);
-                    break;
-                case 16:
-                    ReadMeshEntry(br, model, size);
-                    break;
-                default:
-                    _ = br.ReadBytes(size);
-                    break;
-            }
+                switch (type)
+                {
+                    case 3: model.Nodes.Add(ModelSharedTypeReader.ReadNodeTransformData(br, size, model.Header.Version)); break;
+                    case 8:
+                        ReadOctree(br, model, size);
+                        break;
+                    case 16:
+                        ReadMeshEntry(br, model, size);
+                        break;
+                    default:
+                        throw new NotSupportedException($"Unknown/Unsupported NAVI object type: {type} (at index {i})");
+                }
 
-            long read = br.BaseStream.Position - start;
-            if (read != size)
-                throw new InvalidDataException($"ClassID {type}: expected {size} bytes, read {read}.");
+                int consumed = (int)(br.BaseStream.Position - start);
+                int remain = Math.Max(0, size - consumed);
+
+                long read = br.BaseStream.Position - start;
+                if (remain != 0)
+                    throw new InvalidDataException($"Type {type}: expected {size} bytes, read {read}.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Type {type}: Error on Position: 0x{br.BaseStream.Position:X8}: {ex}");
+            }
         }
 
         return model;
@@ -181,9 +269,7 @@ public static class NaviReader
         n.Vertices = new Vector3[n.VertexCount];
         for (int i = 0; i < n.VertexCount; i++)
         {
-            n.Vertices[i] = new Vector3(
-                br.ReadSingle(), br.ReadSingle(), br.ReadSingle()
-            );
+            n.Vertices[i] = BinaryReaderExtensions.ReadVector3(br);
         }
 
         n.Indices = new D3DIndexNum[n.IndexCount];
@@ -200,77 +286,4 @@ public static class NaviReader
         model.Entries.Add(n);
     }
 }
-#endregion
-
-#region Data Models
-public sealed class NaviMeshFile
-{
-    public NaviHeader Header { get; set; } = new();
-    public List<NaviMeshOctree> Octrees { get; } = [];
-    public List<ModelNodeXform> Nodes { get; set; } = [];
-    public List<NaviMeshEntry> Entries { get; } = [];
-}
-
-/// <summary>
-/// File header information, including version, object count, and tables of offsets, sizes, and class IDs.
-/// </summary>
-public sealed class NaviHeader
-{
-    public int Version { get; set; }
-    public int NumObjects { get; set; }
-    public int[] Index { get; set; } = [];
-    public int[] Length { get; set; } = [];
-    public int[] ClassId { get; set; } = [];
-}
-
-/// <summary>
-/// An octree node, including index, subdivision flag, width, bounds, planes, and triangle indices.
-/// </summary>
-public sealed class NaviMeshOctree
-{
-    public int OctreeIndex { get; set; }
-    public bool Subdivided { get; set; }
-    public float Width { get; set; }
-    public GeometryBounds GeometryBounds { get; set; }
-    public D3DXPLANE[] Plane { get; set; } = [];
-    public int NaviIndexCount { get; set; }
-    public List<int> Indices { get; set; } = [];
-}
-
-/// <summary>
-/// A navigation mesh entry, including name, parent, vertices, and triangle indices.
-/// </summary>
-public sealed class NaviMeshEntry
-{
-    public string Name { get; set; } = string.Empty;
-    public string ParentName { get; set; } = string.Empty;
-    public uint NameKey { get; set; }
-    public uint ParentNameKey { get; set; }
-    public int VertexCount { get; set; }
-    public int IndexCount { get; set; }
-    public Vector3[] Vertices { get; set; } = [];
-    public D3DIndexNum[] Indices { get; set; } = [];
-}
-
-/// <summary>
-/// Triangle by vertex indices.
-/// </summary>
-public struct D3DIndexNum
-{
-    public int A;
-    public int B;
-    public int C;
-}
-
-/// <summary>
-/// Plane equation: Ax + By + Cz + D = 0
-/// </summary>
-public struct D3DXPLANE
-{
-    public float A;
-    public float B;
-    public float C;
-    public float D;
-}
-
 #endregion

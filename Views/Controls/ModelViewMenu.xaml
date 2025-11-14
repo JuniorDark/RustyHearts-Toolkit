@@ -35,6 +35,19 @@
                     Icon="{ui:SymbolIcon DocumentDismiss24}"
                     InputGestureText="Ctrl+W" />
                 <Separator />
+                <MenuItem Header="{x:Static rs:Resources.MenuExportAs}" Icon="{ui:SymbolIcon DocumentSave24}">
+                    <MenuItem
+                        Command="{Binding ExportAsCommand}"
+                        Header="Export Current File to FBX"
+                        Icon="{ui:SymbolIcon DocumentSave24}"
+                        InputGestureText="Ctrl+S" />
+                    <MenuItem
+                        Command="{Binding ImportFromFbxCommand}"
+                        Header="Export FBX to MMP (WIP)"
+                        Icon="{ui:SymbolIcon DocumentSave24}"
+                        InputGestureText="Ctrl+Shift+S" />
+                </MenuItem>
+                <Separator />
                 <MenuItem
                     Command="{Binding CloseWindowCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
@@ -42,17 +55,47 @@
                     Icon="{ui:SymbolIcon ArrowExit20}" />
             </ui:MenuItem>
             <Separator />
-            <ui:MenuItem Header="{x:Static rs:Resources.MenuExportAs}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
-                <MenuItem
-                    Command="{Binding ExportAsCommand}"
-                    Header="Export Current File to FBX"
-                    Icon="{ui:SymbolIcon DocumentSave24}"
-                    InputGestureText="Ctrl+S" />
-                <MenuItem
-                    Command="{Binding ImportFromFbxCommand}"
-                    Header="Export FBX to MMP"
-                    Icon="{ui:SymbolIcon DocumentSave24}"
-                    InputGestureText="Ctrl+Shift+S" />
+            <ui:MenuItem Header="Draw" Icon="{ui:SymbolIcon DocumentSplitHint20}">
+                <CheckBox
+                    Content="Display Mesh"
+                    IsChecked="{Binding ShowMeshSolid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="Display textured meshes" />
+                <CheckBox
+                    Content="Display Bones"
+                    IsChecked="{Binding ShowBones, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="Display armature" />
+                <CheckBox
+                    Content="Display Wireframe"
+                    IsChecked="{Binding ShowMeshWireframe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="Display Mesh Wireframe" />
+                <CheckBox
+                    Content="Nav Mesh Wireframe"
+                    IsChecked="{Binding ShowNaviWireframe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="Nav Mesh Wireframe"
+                    Visibility="{Binding IsNavMeshControlsVisible}" />
+                <CheckBox
+                    Content="Nav Mesh Octree"
+                    IsChecked="{Binding ShowNaviDebug, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="Debug View"
+                    Visibility="{Binding IsNavMeshControlsVisible}" />
+            </ui:MenuItem>
+            <Separator />
+            <ui:MenuItem Header="Export Options" Icon="{ui:SymbolIcon DocumentSplitHint20}">
+                <CheckBox
+                    Content="Embed Textures"
+                    IsChecked="{Binding EmbedTextures, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="Embed Textures in the fbx" />
+                <CheckBox
+                    Content="Export Animations (WIP)"
+                    IsChecked="{Binding ExportAnimation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="Export animations (.ds, .ma)" />
             </ui:MenuItem>
             <Separator />
             <ui:MenuItem Header="About" Icon="{ui:SymbolIcon ChatHelp20}">
@@ -80,6 +123,11 @@
                 Icon="{ui:SymbolIcon DocumentDismiss24,
                                      Filled=True}"
                 ToolTip="{x:Static rs:Resources.MenuCloseFile}" />
+            <MenuItem
+                Command="{Binding ExportAsCommand}"
+                Icon="{ui:SymbolIcon DocumentSave24,
+                                     Filled=True}"
+                ToolTip="{x:Static rs:Resources.MenuExportAs}" />
             <Separator />
         </Menu>
     </Grid>

@@ -27,6 +27,10 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
 ### File Editor Tools
 - **WData Editor**: A specialized tool designed for editing [.wdata](https://juniordark.gitbook.io/rusty-hearts-files-structures/wdata-file) files, which are binary containers that encapsulate all runtime data for a map, packaging map resources and configurations into a single versioned file.
 
+### Model Tools
+- **Model Tools**: A specialized tool designed for exporting 3D models map files (`.mmp`) and models (`.mgm`) to fbx. 
+- **Model Viewer**: View 3D models (`.mmp`,`.mgm`), with option to export to FBX format.
+
 ### Table Editor Tools
 - **Table Editor**: Edit [.rh](https://juniordark.gitbook.io/rusty-hearts-files-structures/internal-files/rh-file) table files directly, with options to export into various formats like XML, XLSX, and MIP.
   
@@ -130,7 +134,7 @@ This project is possible due to the following NuGet packages:
 
 - [CommunityToolkit.Mvvm](https://www.nuget.org/packages/CommunityToolkit.Mvvm)
 - [EPPlus](https://www.nuget.org/packages/EPPlus)
-- [HelixToolkit.Wpf.SharpDX](https://www.nuget.org/packages/HelixToolkit.Wpf.SharpDX)
+- [HelixToolkit](https://www.nuget.org/packages/HelixToolkit)
 - [Microsoft.Data.SqlClient](https://www.nuget.org/packages/Microsoft.Data.SqlClient)
 - [Microsoft.Extensions.DependencyInjection](https://www.nuget.org/packages/Microsoft.Extensions.DependencyInjection)
 - [Microsoft.Extensions.Hosting](https://www.nuget.org/packages/Microsoft.Extensions.Hosting)

@@ -3,7 +3,7 @@ using static RHToolkit.Models.Model3D.ModelExtensions;
 
 namespace RHToolkit.Models.Model3D.MGM;
 
-// ---------- Root ----------
+#region Data Models
 /// <summary>
 /// Header information for MGM models.
 /// </summary>
@@ -26,7 +26,7 @@ public sealed class MgmModel
     public List<MgmBone> Bones { get; set; } = [];         // type 3
     public List<MgmDummy> Dummies { get; set; } = [];      // type 4
     public List<MgmMesh> Meshes { get; set; } = [];        // type 5,6
-    public List<MgmMeshMeta> MeshMetadata { get; set; } = []; // type 7
+    public List<MgmBoundingVolume> BoundingVolumes { get; set; } = []; // type 7
     public List<MgmCollider> Colliders { get; set; } = []; // type 17
     public List<MgmEdgeDef> Edges { get; set; } = [];      // type 18
     public List<MgmHitbox> Hitboxes { get; set; } = []; // type 24
@@ -58,7 +58,8 @@ public sealed class MgmBone
     public MgmBoneType BoneType { get; set; }
     public int BoneFlag { get; set; }
     public int[] Reserved { get; set; } = [4];
-    public ushort U0 { get; set; }
+    public byte Flag1 { get; set; }
+    public byte Flag2 { get; set; }
 
     // Matrices
     public Matrix4x4 GlobalRestPoseMatrix { get; set; }
@@ -121,15 +122,22 @@ public sealed class MgmMesh
     public ushort[] Indices { get; set; } = [];
 }
 
-public sealed class MgmMeshMeta
+public sealed class MgmBoundingVolume
 {
     public string Name { get; set; } = string.Empty;   // e.g., "Main"
     public uint NameHash { get; set; }
-    public byte VariantFlag { get; set; }
-    // Local pose (T(3) → R(4) → P(3), angles in degrees)
-    public Vector3 Translation { get; set; }     // T_x, T_y, T_z
-    public Vector4 RotAnglesDeg { get; set; }    // R0, R1, R2, R3
-    public Vector3 AuxAnglesDeg { get; set; }    // P0, P1, P2
+    public bool IsMain { get; set; }
+
+    // Bounding sphere center
+    public Vector3 Center { get; set; }
+
+    // Bounding sphere radius
+    public float Radius { get; set; }
+
+    // Axis-aligned bounding box
+    public Vector3 AabbMin { get; set; }
+    public Vector3 AabbMax { get; set; }
+
 }
 
 public sealed class MgmCollider // type 17
@@ -175,25 +183,24 @@ public sealed class MgmEdgeDef
     public float Bias { get; set; }
 }
 
+#endregion
 
-// ---------- Reader ----------
-public static class MGMReader
+public class MGMReader
 {
     private const string HEADER = "DoBal";
 
     public static async Task<MgmModel> ReadAsync(string path, CancellationToken ct = default)
     {
-        using var fs = File.OpenRead(path);
-        return await ReadAsync(fs, Path.GetDirectoryName(path)!, ct).ConfigureAwait(false);
-    }
+        var baseDir = Path.GetDirectoryName(path)!;
+        var fileBytes = await File.ReadAllBytesAsync(path, ct).ConfigureAwait(false);
 
-    public static async Task<MgmModel> ReadAsync(Stream stream, string baseDir, CancellationToken ct = default)
-    {
-        using var ms = new MemoryStream();
-        await stream.CopyToAsync(ms, ct).ConfigureAwait(false);
-        ms.Position = 0;
-        using var br = new BinaryReader(ms, Encoding.ASCII, leaveOpen: true);
-        return ReadMGM(br, baseDir);
+        return await Task.Run(() =>
+        {
+            ct.ThrowIfCancellationRequested();
+            using var memoryStream = new MemoryStream(fileBytes);
+            using var br = new BinaryReader(memoryStream, Encoding.ASCII, leaveOpen: false);
+            return ReadMGM(br, baseDir);
+        }, ct);
     }
 
     private static MgmModel ReadMGM(BinaryReader br, string baseDir)
@@ -242,7 +249,7 @@ public static class MGMReader
                     case 4: model.Dummies.Add(ReadType4_Dummy(br, size, version)); break;
                     case 5: ReadType5_Meshes(br, size, model); break;
                     case 6: ReadType6_Meshes(br, size, model); break;
-                    case 7: model.MeshMetadata.Add(ReadType7_MeshMeta(br, size, version)); break;
+                    case 7: model.BoundingVolumes.Add(ReadType7_BoundingVolume(br, size, version)); break;
                     case 15: ReadType15(br, size, version); break;
                     case 17: model.Colliders.Add(ReadType17_Collider(br, size, version)); break;
                     case 18: model.Edges.Add(ReadType18_Edge(br, size, version)); break;
@@ -251,16 +258,15 @@ public static class MGMReader
                         throw new NotSupportedException($"Unknown/Unsupported MGM object type: {type} (at index {i})");
                 }
 
-                int consumed = (int)(br.BaseStream.Position - start);
-                int remain = Math.Max(0, size - consumed);
-
                 long read = br.BaseStream.Position - start;
-                if (remain != 0)
-                    throw new InvalidDataException($"Type {type}: expected {size} bytes, read {read}.");
+                if (read != size)
+                {
+                    throw new InvalidDataException($"Type {type}: expected {size} bytes, but read {read}.");
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception($"Type {type}: Error on Position: 0x{br.BaseStream.Position:X8}: {ex}");
+                throw new Exception($"Failed to read MGM object type {type} at offset 0x{br.BaseStream.Position:X8}: {ex}");
             }
         }
 
@@ -269,13 +275,13 @@ public static class MGMReader
 
     #region Type Readers
 
-    // ---- Type 3 (Bone Pose) ----
+    // ---- Type 2 (Bone Pose) ----
     private static MgmBonePose ReadType2_BonePose(BinaryReader br, int size, int version)
     {
         long start = br.BaseStream.Position;
 
         string name, parentName;
-        uint nameHash = 0, parentHash = 0;
+        uint nameHash, parentHash;
         if (version >= 6)
         {
             int nLen = br.ReadInt32();
@@ -343,20 +349,32 @@ public static class MGMReader
 
         int boneType = br.ReadInt32();
         int boneFlag = br.ReadInt32();
+        int value1 = br.ReadInt32();
+        int value2 = br.ReadInt32();
         int value3 = br.ReadInt32();
         int value4 = br.ReadInt32();
-        int value5 = br.ReadInt32();
-        int value6 = br.ReadInt32();
 
-        ushort u1 = br.ReadUInt16();
+        byte flag1 = 0;
+        byte flag2 = 0;
 
-        var matrix1 = BinaryReaderExtensions.ReadMatrix4x4(br);
-        var matrix2 = BinaryReaderExtensions.ReadMatrix4x4(br);
-        var matrix3 = BinaryReaderExtensions.ReadMatrix4x4(br);
+        if (version >= 7)
+        {
+            flag1 = br.ReadByte();
+            flag2 = br.ReadByte();
 
-        var pos = BinaryReaderExtensions.ReadVector3(br);
-        var rot = BinaryReaderExtensions.ReadQuaternion(br);
-        var scl = BinaryReaderExtensions.ReadVector3(br);
+        }
+        else
+        {
+            flag1 = br.ReadByte();
+        }
+
+        var globalRestPoseMatrix = BinaryReaderExtensions.ReadMatrix4x4(br);
+        var inverseGlobalRestPoseMatrix = BinaryReaderExtensions.ReadMatrix4x4(br);
+        var localRestPoseMatrix = BinaryReaderExtensions.ReadMatrix4x4(br);
+
+        var localTranslation = BinaryReaderExtensions.ReadVector3(br);
+        var localRotation = BinaryReaderExtensions.ReadQuaternion(br);
+        var localScale = BinaryReaderExtensions.ReadVector3(br);
 
         return new MgmBone
         {
@@ -368,15 +386,15 @@ public static class MGMReader
             NameAliasHash = hNameAlias,
             BoneType = (MgmBoneType)boneType,
             BoneFlag = boneFlag,
-            Reserved = [value3, value4, value5, value6],
-            U0 = u1,
-            GlobalRestPoseMatrix = matrix1,
-            InverseGlobalRestPoseMatrix = matrix2,
-            LocalRestPoseMatrix = matrix3,
-            LocalTranslation = pos,
-            LocalRotation = rot,
-            LocalScale = scl
-
+            Reserved = [value1, value2, value3, value4],
+            Flag1 = flag1,
+            Flag2 = flag2,
+            GlobalRestPoseMatrix = globalRestPoseMatrix,
+            InverseGlobalRestPoseMatrix = inverseGlobalRestPoseMatrix,
+            LocalRestPoseMatrix = localRestPoseMatrix,
+            LocalTranslation = localTranslation,
+            LocalRotation = localRotation,
+            LocalScale = localScale
         };
     }
 
@@ -386,7 +404,7 @@ public static class MGMReader
         long start = br.BaseStream.Position;
 
         string name, targetName;
-        uint nameHash = 0, targetHash = 0;
+        uint nameHash, targetHash;
         if (version >= 6)
         {
             int nameLen = br.ReadInt32();
@@ -494,7 +512,7 @@ public static class MGMReader
                 AltName = dummyName,
                 VertexCount = vertexCount,
                 TriangleCount = triCount,
-                Flags = [isEmissiveAdditive, isAlphaBlend, isEnabled ],
+                Flags = [isEmissiveAdditive, isAlphaBlend, isEnabled],
                 MaterialId = materialIndex,
                 Material = model.Materials.FirstOrDefault(m => m.Id == materialIndex),
                 Vertices = new MgmVertex[vertexCount],
@@ -754,24 +772,23 @@ public static class MGMReader
 
     private static int ComputeStrideForMGM(int meshType, int uvSetCount)
     {
-        if (uvSetCount <= 1)
+        if (meshType == 0) // Standard mesh
         {
-            return meshType != 0 ? 44 : 32;
+            return uvSetCount > 1 ? 40 : 32;
         }
-        else
+        else // Skinned or other mesh types that include tangents
         {
-            return meshType == 0 ? 40 : 44;
+            return 44;
         }
-        throw new InvalidDataException($"Unknown layout: meshType={meshType}, uv={uvSetCount}");
     }
 
-    // ---- Type 7 (Mesh metadata) ----
-    private static MgmMeshMeta ReadType7_MeshMeta(BinaryReader br, int size, int version)
+    // ---- Type 7 (Bounding Volume) ----
+    private static MgmBoundingVolume ReadType7_BoundingVolume(BinaryReader br, int size, int version)
     {
         long start = br.BaseStream.Position;
 
         string name;
-        uint nameHash = 0;
+        uint nameHash;
         if (version >= 6)
         {
             int nameLen = br.ReadInt32();
@@ -784,20 +801,17 @@ public static class MGMReader
             name = BinaryReaderExtensions.ReadUnicode256Count(br);
         }
 
-        byte flag = br.ReadByte();
+        byte isMain = br.ReadByte();
 
-        var t = BinaryReaderExtensions.ReadVector3(br);
-        var r = BinaryReaderExtensions.ReadVector4(br);
-        var p = BinaryReaderExtensions.ReadVector3(br);
-
-        return new MgmMeshMeta
+        return new MgmBoundingVolume
         {
             Name = name,
             NameHash = nameHash,
-            VariantFlag = flag,
-            Translation = t,
-            RotAnglesDeg = r,
-            AuxAnglesDeg = p
+            IsMain = isMain == 1,
+            Center = BinaryReaderExtensions.ReadVector3(br),
+            Radius = br.ReadSingle(),
+            AabbMin = BinaryReaderExtensions.ReadVector3(br),
+            AabbMax = BinaryReaderExtensions.ReadVector3(br)
         };
     }
 
@@ -970,6 +984,57 @@ public static class MGMReader
             TargetHash = targetHash,
             GeometryBounds = new GeometryBounds { Min = objMin, Max = objMax, Size = objSize, SphereRadius = objRadius, Center = objCenter }
         };
+    }
+
+    public static void ValidateMgmModel(MgmModel mgm)
+    {
+        if (mgm.Meshes == null)
+            throw new InvalidDataException("MGM has no mesh array.");
+
+        foreach (var mesh in mgm.Meshes)
+        {
+            var meshName = string.IsNullOrWhiteSpace(mesh.Name) ? "Mesh" : mesh.Name;
+
+            if (mesh.Vertices == null || mesh.Vertices.Length == 0)
+                continue;
+
+            var verts = mesh.Vertices;
+            var indices = mesh.Indices;
+
+            if (indices == null || indices.Length < 3)
+                continue;
+
+            for (int i = 0; i < indices.Length; i++)
+            {
+                int idx = indices[i];
+                if (idx < 0 || idx >= verts.Length)
+                {
+                    throw new InvalidDataException(
+                        $"Mesh '{meshName}' has index {idx} (at {i}) outside vertex range [0, {verts.Length - 1}].");
+                }
+            }
+
+            if (mgm.Bones != null && mgm.Bones.Count > 0)
+            {
+                var usedBoneIndices =
+                    verts.Where(v => v.BoneIdxU16.HasValue)
+                         .SelectMany(v =>
+                         {
+                             var (X, Y, Z, W) = v.BoneIdxU16!.Value;
+                             return new[] { X, Y, Z, W };
+                         })
+                         .Where(i => i >= 0);
+
+                foreach (var bi in usedBoneIndices)
+                {
+                    if (bi >= mgm.Bones.Count)
+                    {
+                        throw new InvalidDataException(
+                            $"Mesh '{meshName}' has bone index {bi} outside bones array [0, {mgm.Bones.Count - 1}].");
+                    }
+                }
+            }
+        }
     }
 
     #endregion

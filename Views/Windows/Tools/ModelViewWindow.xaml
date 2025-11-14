@@ -46,6 +46,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
             <ui:TitleBar
@@ -71,7 +72,7 @@
             <!--  File menu  -->
             <control:ModelViewMenu Grid.Row="1" />
 
-            <!--  Version  -->
+            <!--  Model Info  -->
             <StackPanel
                 Grid.Row="2"
                 Grid.ColumnSpan="2"
@@ -80,34 +81,49 @@
                 Orientation="Horizontal"
                 Visibility="{Binding IsVisible}">
                 <TextBlock
+                    Margin="5,0"
                     VerticalAlignment="Center"
                     FontWeight="Bold"
                     Foreground="White"
                     Text="Version:" />
                 <TextBlock
-                    Margin="4,0,12,0"
+                    Margin="4,0,10,0"
                     VerticalAlignment="Center"
                     Foreground="Gold"
                     Text="{Binding Version}" />
-                <CheckBox
-                    Margin="10,0"
-                    Content="Nav Mesh Wireframe"
-                    IsChecked="{Binding ShowWireframe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    Template="{StaticResource lb_checkbox}"
-                    ToolTip="Nav Mesh Wireframe"
-                    Visibility="{Binding IsNavMeshControlsVisible}" />
-                <CheckBox
-                    Margin="10,0"
-                    Content="Nav Mesh Octree"
-                    IsChecked="{Binding ShowNaviDebug, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    Template="{StaticResource lb_checkbox}"
-                    ToolTip="Debug View"
-                    Visibility="{Binding IsNavMeshControlsVisible}" />
-                <CheckBox
-                    Content="Export with Embed Textures"
-                    IsChecked="{Binding EmbedTextures, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                    Template="{StaticResource lb_checkbox}"
-                    ToolTip="Embed Textures in the fbx" />
+                <TextBlock
+                    Margin="5,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="Objects:" />
+                <TextBlock
+                    Margin="4,0,10,0"
+                    VerticalAlignment="Center"
+                    Foreground="Gold"
+                    Text="{Binding ObjectCount}" />
+                <TextBlock
+                    Margin="5,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="Materials:" />
+                <TextBlock
+                    Margin="4,0,10,0"
+                    VerticalAlignment="Center"
+                    Foreground="Gold"
+                    Text="{Binding MaterialCount}" />
+                <TextBlock
+                    Margin="5,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="Bones:" />
+                <TextBlock
+                    Margin="4,0,10,0"
+                    VerticalAlignment="Center"
+                    Foreground="Gold"
+                    Text="{Binding BoneCount}" />
             </StackPanel>
 
             <!--  3D Scene  -->
@@ -125,9 +141,8 @@
                     BackgroundColor="Gray"
                     Camera="{Binding Camera}"
                     EffectsManager="{Binding EffectsManager}"
-                    RotateAroundMouseDownPoint="True"
+                    RotateAroundMouseDownPoint="False"
                     ShowCoordinateSystem="True"
-                    ShowTriangleCountInfo="True"
                     UseDefaultGestures="False"
                     ZoomAroundMouseDownPoint="True">
                     <hx:ItemsModel3D ItemsSource="{Binding Scene3D}" />

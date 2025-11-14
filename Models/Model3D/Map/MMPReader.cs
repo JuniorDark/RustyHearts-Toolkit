@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using System.Runtime.InteropServices;
 using static RHToolkit.Models.Model3D.Map.MMP;
 using static RHToolkit.Models.Model3D.ModelExtensions;
 
@@ -7,16 +8,22 @@ namespace RHToolkit.Models.Model3D.Map
     /// <summary>
     /// Reader for MMP map files.
     /// </summary>
-    public static class MMPReader
+    public class MMPReader
     {
         private const string FILE_HEADER = "DoBal";
 
         public static async Task<MmpModel> ReadAsync(string path, CancellationToken ct = default)
         {
-            byte[] bytes = await File.ReadAllBytesAsync(path, ct).ConfigureAwait(false);
-            using var ms = new MemoryStream(bytes, writable: false);
-            using var br = new BinaryReader(ms, Encoding.ASCII, leaveOpen: false);
-            return ReadMMP(br, Path.GetDirectoryName(path)!);
+            var baseDir = Path.GetDirectoryName(path)!;
+            var fileBytes = await File.ReadAllBytesAsync(path, ct).ConfigureAwait(false);
+            
+            return await Task.Run(() =>
+            {
+                ct.ThrowIfCancellationRequested();
+                using var memoryStream = new MemoryStream(fileBytes);
+                using var br = new BinaryReader(memoryStream, Encoding.ASCII, leaveOpen: false);
+                return ReadMMP(br, baseDir);
+            }, ct);
         }
 
         private static MmpModel ReadMMP(BinaryReader br, string baseDir)
@@ -71,16 +78,14 @@ namespace RHToolkit.Models.Model3D.Map
                         case 19: ReadGeometryNodes(br, model, size, model.Header.Version); break;
                         default: throw new NotSupportedException($"Unknown/Unsupported MMP object type: {type} (at index {i})");
                     }
-                    int consumed = (int)(br.BaseStream.Position - start);
-                    int remain = Math.Max(0, size - consumed);
-
+                    
                     long read = br.BaseStream.Position - start;
-                    if (remain != 0)
-                        throw new InvalidDataException($"Type {type}: expected {size} bytes, read {read}.");
+                    if (read != size)
+                        throw new InvalidDataException($"Type {type}: expected {size} bytes, but read {read}.");
                 }
                 catch (Exception ex)
                 {
-                    throw new Exception($"Type {type}: Error on Position: 0x{br.BaseStream.Position:X8}: {ex}");
+                    throw new Exception($"Failed to read MMP object type {type} at offset 0x{br.BaseStream.Position:X8}: {ex}");
                 }
             }
             return model;
@@ -92,7 +97,6 @@ namespace RHToolkit.Models.Model3D.Map
         private static void ReadGeometryNodes(BinaryReader br, MmpModel model, int size, int version)
         {
             long start = br.BaseStream.Position;
-            int consumed, remain;
 
             // node name lengths & hashes
             string objectNodeName, objectNodeName2;
@@ -185,43 +189,27 @@ namespace RHToolkit.Models.Model3D.Map
                 Buffer.BlockCopy(idxBytes, 0, mesh.Indices, 0, idxBytes.Length);
 
                 // --- decode vertices ---
+                var vtxSpan = vtxBytes.AsSpan();
                 for (int v = 0; v < vertexCount; v++)
                 {
-                    int o = v * stride;
+                    var o = v * stride;
+                    var vertexSpan = vtxSpan.Slice(o);
 
-                    var pos = new Vector3
-                    {
-                        X = BitConverter.ToSingle(vtxBytes, o + 0),
-                        Y = BitConverter.ToSingle(vtxBytes, o + 4),
-                        Z = BitConverter.ToSingle(vtxBytes, o + 8)
-                    };
-                    var nor = new Vector3
-                    {
-                        X = BitConverter.ToSingle(vtxBytes, o + 12),
-                        Y = BitConverter.ToSingle(vtxBytes, o + 16),
-                        Z = BitConverter.ToSingle(vtxBytes, o + 20)
-                    };
-
-                    Vector2 uv0, uv1 = default;
+                    var pos = MemoryMarshal.Read<Vector3>(vertexSpan);
+                    var nor = MemoryMarshal.Read<Vector3>(vertexSpan.Slice(12));
+                    Vector2 uv0 = default, uv1 = default;
 
                     switch (stride)
                     {
                         case 28: // billboard
-                            uv0.X = BitConverter.ToSingle(vtxBytes, o + 24);
-                            uv0.Y = default;
+                            uv0.X = MemoryMarshal.Read<float>(vertexSpan.Slice(24));
                             break;
                         case 32: // single UV set
-                            uv0.X = BitConverter.ToSingle(vtxBytes, o + 24);
-                            uv0.Y = BitConverter.ToSingle(vtxBytes, o + 28);
+                            uv0 = MemoryMarshal.Read<Vector2>(vertexSpan.Slice(24));
                             break;
-                        case 40: // two UV sets, UV0 base; UV1 (lightmap)
-                            uv0.X = BitConverter.ToSingle(vtxBytes, o + 24);
-                            uv0.Y = BitConverter.ToSingle(vtxBytes, o + 28);
-                            uv1.X = BitConverter.ToSingle(vtxBytes, o + 32);
-                            uv1.Y = BitConverter.ToSingle(vtxBytes, o + 36);
-                            break;
-                        default:
-                            uv0 = default;
+                        case 40: // two UV sets
+                            uv0 = MemoryMarshal.Read<Vector2>(vertexSpan.Slice(24));
+                            uv1 = MemoryMarshal.Read<Vector2>(vertexSpan.Slice(32));
                             break;
                     }
 
@@ -237,13 +225,18 @@ namespace RHToolkit.Models.Model3D.Map
                 obj.Meshes.Add(mesh);
             }
 
-            consumed = (int)(br.BaseStream.Position - start);
-            remain = Math.Max(0, size - consumed);
             long read = br.BaseStream.Position - start;
             if (read != size)
-                throw new InvalidDataException($"Type 19: {objectNodeName}: expected {size} bytes, read {read}.");
+                throw new InvalidDataException($"Type 19: {objectNodeName}: expected {size} bytes, but read {read}.");
 
             model.Objects.Add(obj);
+        }
+
+        private static int ComputeMMPStride(int meshType, int uvSetCount)
+        {
+            if (meshType == 2) return 28; // Billboard
+            if (uvSetCount > 1) return 40; // P, N, UV0, UV1
+            return 32; // P, N, UV0
         }
 
         #endregion

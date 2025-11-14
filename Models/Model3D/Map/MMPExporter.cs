@@ -1,77 +1,82 @@
-﻿using Assimp;
+﻿using HelixToolkit.Maths;
+using SharpAssimp;
+using System.Numerics;
 using static RHToolkit.Models.Model3D.Map.MMP;
 using static RHToolkit.Models.Model3D.ModelMaterial;
-using Matrix4x4 = Assimp.Matrix4x4;
-using MDEntry = Assimp.Metadata.Entry;
-using MDType = Assimp.MetaDataType;
-using Num = System.Numerics;
 
 namespace RHToolkit.Models.Model3D.Map;
 
 /// <summary>
-/// Exports an MMP model to FBX (via Assimp), No metadata exported.
+/// Exports an MMP model to FBX (via Assimp).
 /// </summary>
-public static class MMPExporter
+public class MMPExporter
 {
-    /// <summary>
-    /// Exports the given MMP model to an FBX file.
-    /// </summary>
-    public static void ExportMmpToFbx(MmpModel mmp, string outFilePath, bool generateTangents, bool embedTextures)
+    public static async Task ExportMmpToFbx(MmpModel mmp, string outFilePath, bool embedTextures = false, bool copyTextures = false,
+    CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(mmp);
         if (string.IsNullOrWhiteSpace(outFilePath))
             throw new ArgumentException("Output path is empty.", nameof(outFilePath));
 
-        var outDir = Path.GetDirectoryName(outFilePath)!;
-        Directory.CreateDirectory(outDir);
+        Scene? scene = null;
+        try
+        {
+            ct.ThrowIfCancellationRequested();
 
-        var fileName = Path.GetFileNameWithoutExtension(outFilePath);
+            var outDir = Path.GetDirectoryName(outFilePath)!;
+            Directory.CreateDirectory(outDir);
 
-        // --- Assimp scene root ---
+            var fileName = Path.GetFileNameWithoutExtension(outFilePath);
+
+            // Base scene + root node
+            scene = CreateScene(fileName, mmp, out var mmpNode);
+
+            // Populate MMP meshes/materials
+            BuildMmpObjects(scene, mmp, mmpNode, embedTextures, copyTextures, outDir);
+
+            // Attach NAVI (navigation mesh) if present
+            await AttachNaviAsync(scene, mmpNode, outFilePath, ct);
+
+            SaveScene(scene, outFilePath);
+        }
+        finally
+        {
+            scene?.Clear();
+        }
+    }
+
+    #region Save
+    private static void SaveScene(Scene scene, string outFilePath)
+    {
+        var steps =
+                 PostProcessSteps.MakeLeftHanded |
+                 PostProcessSteps.FlipUVs |
+                 PostProcessSteps.FlipWindingOrder;
+
+        using var assimpContext = new AssimpContext();
+        assimpContext.ExportFile(scene, outFilePath, "fbx", steps);
+    }
+
+    #endregion
+
+    private static Scene CreateScene(string fileName, MmpModel mmp, out Node mmpNode)
+    {
         var scene = new Scene
         {
             RootNode = new Node("Root")
         };
 
-        var mmpNode = new Node(fileName);
+        mmpNode = new Node(fileName);
         scene.RootNode.Children.Add(mmpNode);
         SetNodeMeta(mmpNode, "mmp:version", mmp.Version);
 
+        return scene;
+    }
 
+    private static void BuildMmpObjects(Scene scene, MmpModel mmp, Node mmpNode, bool embedTextures, bool copyTextures, string outDir)
+    {
         // --- Material cache (Phong-ish) ---
-        var matCache = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase); // MaterialIndex in scene.Materials
-        int GetOrCreateMaterial(ModelMaterial? m, byte additive, byte alpha)
-        {
-            var key = m?.MaterialName ?? "_Fallback";
-            if (matCache.TryGetValue(key, out var found)) return found;
-
-            var mat = new Material
-            {
-                Name = key,
-                ColorDiffuse = new Color4D(1, 1, 1, 1)
-            };
-
-            // Textures (best-effort)
-            var diffuseRel = ResolveTextureAbsolute(mmp.BaseDirectory, Texture(m, "DiffuseMap")?.TexturePath);
-            if (!string.IsNullOrWhiteSpace(diffuseRel))
-                mat.TextureDiffuse = new TextureSlot(
-                    diffuseRel, TextureType.Diffuse, 0,
-                    TextureMapping.FromUV, 0, 1.0f, TextureOperation.Add,
-                    TextureWrapMode.Wrap, TextureWrapMode.Wrap, 0);
-
-            var normalRel = ResolveTextureAbsolute(mmp.BaseDirectory, Texture(m, "BumpMap")?.TexturePath);
-            if (!string.IsNullOrWhiteSpace(normalRel))
-                mat.TextureNormal = new TextureSlot(
-                    normalRel, TextureType.Normals, 0,
-                    TextureMapping.FromUV, 0, 1.0f, TextureOperation.Add,
-                    TextureWrapMode.Wrap, TextureWrapMode.Wrap, 0);
-
-
-            scene.Materials.Add(mat);
-            var idx = scene.Materials.Count - 1;
-            matCache[key] = idx;
-            return idx;
-        }
+        var matCache = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
 
         // Map Type-3 transforms by hash (required for world→local conversion)
         var xformByHash = new Dictionary<uint, ModelNodeXform>();
@@ -91,20 +96,24 @@ public static class MMPExporter
             // Node carries WORLD transform; geometry baked to local (invWorld)
             var objNode = new Node(objName)
             {
-                Transform = ToAssimp(nx.MWorld)
+                Transform = Matrix4x4.Transpose(nx.MWorld)
             };
             mmpNode.Children.Add(objNode);
             SetNodeMeta(objNode, "mmp:nodeGroupName", obj.AltNodeName ?? "");
             SetNodeMeta(objNode, "mmp:nodeKind", nx.Kind);
             SetNodeMeta(objNode, "mmp:nodeFlag", nx.Flag);
 
-            // Precompute world scale magnitude (billboard sizing)
-            Num.Matrix4x4.Decompose(nx.MWorld, out var worldScale, out _, out _);
+            // Precompute world scale magnitude (billboard sizing, kept for parity)
+            Matrix4x4.Decompose(nx.MWorld, out var worldScale, out _, out _);
             var sx = worldScale.X == 0 ? 1f : MathF.Abs(worldScale.X);
             var sy = worldScale.Y == 0 ? 1f : MathF.Abs(worldScale.Y);
 
             // --- Mesh parts ---
             if (obj.Meshes == null || obj.Meshes.Count == 0) continue;
+
+            // Prepare world→local for geometry bake (once per object)
+            Matrix4x4.Invert(nx.MWorld, out var invWorld);
+            var invWorldT = Matrix4x4.Transpose(invWorld);
 
             foreach (var part in obj.Meshes)
             {
@@ -112,101 +121,98 @@ public static class MMPExporter
                 if (part.Indices == null || part.Indices.Length < 3) continue;
 
                 var meshName = string.IsNullOrWhiteSpace(part.MeshName) ? "Mesh" : part.MeshName;
+                var verts = part.Vertices;
 
-                // --- Special case: VertexLayoutTag 2 = billboard quad ---
+                // --- MeshType 2 = billboard quad  ---
                 if (part.MeshType == 2)
                 {
-                    // Use OBJECT bounds in world; localize by dividing scale
-                    var worldW = obj.GeometryBounds.Size.X;
-                    var worldH = obj.GeometryBounds.Size.Y;
+                    if (verts.Length == 0)
+                        continue;
 
-                    if (!(worldW > 0)) worldW = 1f;
-                    if (!(worldH > 0)) worldH = 1f;
+                    var meshBillboard = new Mesh(PrimitiveType.Triangle) { Name = meshName };
 
-                    var halfW_local = 0.5f * worldW / (sx == 0 ? 1f : sx);
-                    var halfH_local = 0.5f * worldH / (sy == 0 ? 1f : sy);
+                    // Use first vertex position, baked to local, replicated for quad
+                    var p0Local = Vector3.Transform(verts[0].Position, invWorld);
 
-                    var mesh = new Mesh(PrimitiveType.Triangle)
+                    for (int i = 0; i < 4; i++)
                     {
-                        Name = meshName
-                    };
+                        var src = verts[Math.Min(i, verts.Length - 1)];
 
-                    // positions
-                    mesh.Vertices.Add(new Vector3D(-halfW_local, -halfH_local, 0));
-                    mesh.Vertices.Add(new Vector3D(halfW_local, -halfH_local, 0));
-                    mesh.Vertices.Add(new Vector3D(halfW_local, halfH_local, 0));
-                    mesh.Vertices.Add(new Vector3D(-halfW_local, halfH_local, 0));
+                        // position
+                        meshBillboard.Vertices.Add(p0Local);
 
-                    // normals (+Z)
-                    mesh.Normals.Add(new Vector3D(0, 0, 1));
-                    mesh.Normals.Add(new Vector3D(0, 0, 1));
-                    mesh.Normals.Add(new Vector3D(0, 0, 1));
-                    mesh.Normals.Add(new Vector3D(0, 0, 1));
+                        // normal
+                        var n4 = Vector4.Transform(new Vector4(src.Normal, 0), invWorldT);
+                        var n3 = new Vector3(n4.X, n4.Y, n4.Z);
+                        if (n3.LengthSquared() > 1e-20f) n3 = Vector3.Normalize(n3);
+                        meshBillboard.Normals.Add(n3);
 
-                    // UV0
-                    mesh.TextureCoordinateChannels[0].Add(new Vector3D(0, 0, 0));
-                    mesh.TextureCoordinateChannels[0].Add(new Vector3D(1, 0, 0));
-                    mesh.TextureCoordinateChannels[0].Add(new Vector3D(1, 1, 0));
-                    mesh.TextureCoordinateChannels[0].Add(new Vector3D(0, 1, 0));
-                    mesh.UVComponentCount[0] = 2;
+                        // UV0
+                        var t0 = src.UV0;
+                        meshBillboard.TextureCoordinateChannels[0].Add(new Vector3(t0.X, t0.Y, 0));
+                    }
+                    meshBillboard.UVComponentCount[0] = 2;
 
-                    // triangles (0,1,2) (2,3,0)
-                    mesh.Faces.Add(new Face([0, 1, 2]));
-                    mesh.Faces.Add(new Face([2, 3, 0]));
-
-                    // material
-                    mesh.MaterialIndex = GetOrCreateMaterial(part.Material, part.AdditiveEmissive, part.AlphaBlend);
-
-                    // track mesh & bind to node
-                    meshes.Add(mesh);
-                    var bmeshIdx = meshes.Count - 1;
-
-                    // create a child node for this mesh
-                    var bpartNode = new Node(meshName)
+                    // Indices
+                    for (int i = 0; i + 2 < part.Indices.Length; i += 3)
                     {
-                        Transform = Matrix4x4.Identity   // geometry already baked to local
-                    };
-                    bpartNode.MeshIndices.Add(bmeshIdx);
+                        var face = new Face();
+                        face.Indices.Add(part.Indices[i]);
+                        face.Indices.Add(part.Indices[i + 1]);
+                        face.Indices.Add(part.Indices[i + 2]);
+                        meshBillboard.Faces.Add(face);
+                    }
 
-                    // hang it under the object node
-                    objNode.Children.Add(bpartNode);
+                    meshBillboard.MaterialIndex = GetOrCreateMaterial(
+                    scene, mmp, matCache,
+                    part.Material, embedTextures, copyTextures, outDir);
+
+
+                    meshes.Add(meshBillboard);
+                    var meshIdx = meshes.Count - 1;
+
+                    var billboardNode = new Node(meshName) { Transform = Matrix4x4.Identity };
+                    billboardNode.MeshIndices.Add(meshIdx);
+                    objNode.Children.Add(billboardNode);
+
+                    SetNodeMeta(billboardNode, "mmp:meshType", part.MeshType);
+                    SetNodeMeta(billboardNode, "mmp:vertexLayoutTag", part.MeshType);
+                    SetNodeMeta(billboardNode, "mmp:isEmissiveAdditive", (int)part.AdditiveEmissive);
+                    SetNodeMeta(billboardNode, "mmp:isAlphaBlend", (int)part.AlphaBlend);
+                    SetNodeMeta(billboardNode, "mmp:isEnabled", (int)part.Enabled);
+                    SetNodeMeta(billboardNode, "mmp:uvSetCount", part.UVSetCount);
+                    SetNodeMeta(billboardNode, "mmp:materialId", part.MaterialIdx);
 
                     continue;
                 }
 
                 // --- Regular mesh path ---
-                var verts = part.Vertices;
-
-                // Prepare world→local for geometry bake
-                Num.Matrix4x4.Invert(nx.MWorld, out var invWorld);
-                var invWorldT = Num.Matrix4x4.Transpose(invWorld);
+                var meshR = new Mesh(PrimitiveType.Triangle) { Name = meshName };
 
                 // Locals for tangent build
-                var localPos = new Num.Vector3[verts.Length];
-                var localNrm = new Num.Vector3[verts.Length];
-                var localUV0 = new Num.Vector2[verts.Length];
-
-                var meshR = new Mesh(PrimitiveType.Triangle) { Name = meshName };
+                var localPos = new Vector3[verts.Length];
+                var localNrm = new Vector3[verts.Length];
+                var localUV0 = new Vector2[verts.Length];
 
                 for (int i = 0; i < verts.Length; i++)
                 {
                     // position
-                    var pL = Num.Vector3.Transform(verts[i].Position, invWorld);
+                    var pL = Vector3.Transform(verts[i].Position, invWorld);
                     localPos[i] = pL;
-                    meshR.Vertices.Add(new Vector3D(pL.X, pL.Y, pL.Z));
+                    meshR.Vertices.Add(new Vector3(pL.X, pL.Y, pL.Z));
 
                     // normal
-                    var n4 = Num.Vector4.Transform(new Num.Vector4(verts[i].Normal, 0), invWorldT);
-                    var n3 = new Num.Vector3(n4.X, n4.Y, n4.Z);
-                    if (n3.LengthSquared() > 1e-20f) n3 = Num.Vector3.Normalize(n3);
+                    var n4 = Vector4.Transform(new Vector4(verts[i].Normal, 0), invWorldT);
+                    var n3 = new Vector3(n4.X, n4.Y, n4.Z);
+                    if (n3.LengthSquared() > 1e-20f) n3 = Vector3.Normalize(n3);
                     localNrm[i] = n3;
-                    meshR.Normals.Add(new Vector3D(n3.X, n3.Y, n3.Z));
+                    meshR.Normals.Add(new Vector3(n3.X, n3.Y, n3.Z));
 
                     // UV0
                     var t0 = verts[i].UV0;
-                    var uv = new Num.Vector2(t0.X, t0.Y);
+                    var uv = new Vector2(t0.X, t0.Y);
                     localUV0[i] = uv;
-                    meshR.TextureCoordinateChannels[0].Add(new Vector3D(uv.X, uv.Y, 0));
+                    meshR.TextureCoordinateChannels[0].Add(new Vector3(uv.X, uv.Y, 0));
                 }
                 meshR.UVComponentCount[0] = 2;
 
@@ -216,7 +222,7 @@ public static class MMPExporter
                     for (int i = 0; i < verts.Length; i++)
                     {
                         var uv1 = verts[i].UV1 ?? default;
-                        meshR.TextureCoordinateChannels[1].Add(new Vector3D(uv1.X, uv1.Y, 0));
+                        meshR.TextureCoordinateChannels[1].Add(new Vector3(uv1.X, uv1.Y, 0));
                     }
                     meshR.UVComponentCount[1] = 2;
                 }
@@ -231,79 +237,239 @@ public static class MMPExporter
                     meshR.Faces.Add(face);
                 }
 
-                meshR.MaterialIndex = GetOrCreateMaterial(part.Material, part.AdditiveEmissive, part.AlphaBlend);
+                meshR.MaterialIndex = GetOrCreateMaterial(
+                scene, mmp, matCache,
+                part.Material, embedTextures, copyTextures, outDir);
 
                 meshes.Add(meshR);
-                var meshIdx = meshes.Count - 1;
+                var meshIndex = meshes.Count - 1;
 
                 var partNode = new Node(meshName) { Transform = Matrix4x4.Identity };
-                partNode.MeshIndices.Add(meshIdx);
+                partNode.MeshIndices.Add(meshIndex);
                 objNode.Children.Add(partNode);
+
+                SetNodeMeta(partNode, "mmp:meshType", part.MeshType);
                 SetNodeMeta(partNode, "mmp:vertexLayoutTag", part.MeshType);
                 SetNodeMeta(partNode, "mmp:isEmissiveAdditive", (int)part.AdditiveEmissive);
                 SetNodeMeta(partNode, "mmp:isAlphaBlend", (int)part.AlphaBlend);
                 SetNodeMeta(partNode, "mmp:isEnabled", (int)part.Enabled);
-                SetNodeMeta(partNode, "mmp:uvSetCount", 1);
+                SetNodeMeta(partNode, "mmp:uvSetCount", part.UVSetCount);
                 SetNodeMeta(partNode, "mmp:materialId", part.MaterialIdx);
             }
         }
+    }
 
-        // --- Export FBX ---
-        using var ctx = new AssimpContext();
+    private static async Task AttachNaviAsync(Scene scene, Node mmpNode, string outFilePath, CancellationToken ct)
+    {
+        try
+        {
+            var mmpDir = Path.GetDirectoryName(outFilePath)!;
+            var mmpStem = Path.GetFileNameWithoutExtension(outFilePath);
+            var naviPath = Path.Combine(mmpDir, mmpStem + ".navi");
+            if (!File.Exists(naviPath))
+                return;
 
-        var steps = PostProcessSteps.FlipUVs | PostProcessSteps.MakeLeftHanded;
-        ctx.ExportFile(scene, outFilePath, "fbx", steps);
+            var navi = await NaviReader.ReadAsync(naviPath, ct);
+
+            var naviXform = new Dictionary<uint, ModelNodeXform>();
+            foreach (var nx in navi.Nodes)
+                if (nx.NameHash != 0) naviXform[nx.NameHash] = nx;
+
+            // Ensure we have at least one material to bind the nav mesh to
+            if (scene.Materials.Count == 0)
+            {
+                var navMat = new Material
+                {
+                    Name = "_NavigationMesh",
+                    ColorDiffuse = new Color4(0.2f, 0.8f, 0.2f, 1.0f)
+                };
+                scene.Materials.Add(navMat);
+            }
+            var navMaterialIndex = scene.Materials.Count - 1;
+
+            var meshes = scene.Meshes;
+
+            foreach (var e in navi.Entries)
+            {
+                if (!naviXform.TryGetValue(e.NameKey, out var nx))
+                    throw new InvalidOperationException($"No matching Type-3 node found for navi entry '{e.Name}' (hash: {e.NameKey}).");
+
+                // Nav root node carries WORLD transform, geometry baked to local
+                var navRoot = new Node("_NavigationMesh_")
+                {
+                    Transform = Matrix4x4.Transpose(nx.MWorld)
+                };
+                mmpNode.Children.Add(navRoot);
+
+                Matrix4x4.Invert(nx.MWorld, out var invWorld);
+
+                var mesh = new Mesh(PrimitiveType.Triangle)
+                {
+                    Name = e.Name ?? "NavMesh"
+                };
+
+                foreach (var v in e.Vertices)
+                {
+                    var pLocal = Vector3.Transform(new Vector3(v.X, v.Y, v.Z), invWorld);
+                    mesh.Vertices.Add(pLocal);
+                }
+
+                foreach (var tri in e.Indices)
+                {
+                    var face = new Face();
+                    face.Indices.Add(tri.A);
+                    face.Indices.Add(tri.B);
+                    face.Indices.Add(tri.C);
+                    mesh.Faces.Add(face);
+                }
+
+                mesh.MaterialIndex = navMaterialIndex;
+
+                meshes.Add(mesh);
+                var meshIdx = meshes.Count - 1;
+
+                var navChild = new Node(e.Name ?? "NavMesh") { Transform = Matrix4x4.Identity };
+                navChild.MeshIndices.Add(meshIdx);
+                navRoot.Children.Add(navChild);
+
+                SetNodeMeta(navRoot, "navi:isNavMesh", 1);
+                SetNodeMeta(navRoot, "navi:version", navi.Header.Version);
+                SetNodeMeta(navRoot, "navi:name", e.Name ?? string.Empty);
+                SetNodeMeta(navRoot, "navi:nodeKind", nx.Kind);
+                SetNodeMeta(navRoot, "navi:nodeFlag", nx.Flag);
+            }
+        }
+        catch
+        {
+            // NAVI support is best-effort; failures should not break mesh export
+        }
     }
 
     #region Helpers
 
-    static void SetNodeMeta(Assimp.Node node, string key, object? value)
+    private static void SetNodeMeta(Node node, string key, object? value)
     {
         node.Metadata[key] = ToEntry(value);
     }
 
-    static MDEntry ToEntry(object? value)
+    private static Metadata.Entry ToEntry(object? value)
     {
         return value switch
         {
-            bool b => new MDEntry(MDType.Bool, b),
-            int i => new MDEntry(MDType.Int32, i),
-            uint ui => new MDEntry(MDType.UInt64, (ulong)ui),
-            float f => new MDEntry(MDType.Float, f),
-            double d => new MDEntry(MDType.Double, d),
-            string s => new MDEntry(MDType.String, s),
-            null => new MDEntry(MDType.String, ""),
-            _ => new MDEntry(MDType.String, value.ToString() ?? ""),
+            bool b => new Metadata.Entry(MetaDataType.Bool, b),
+            int i => new Metadata.Entry(MetaDataType.Int32, i),
+            uint ui => new Metadata.Entry(MetaDataType.UInt64, (ulong)ui),
+            float f => new Metadata.Entry(MetaDataType.Float, f),
+            double d => new Metadata.Entry(MetaDataType.Double, d),
+            string s => new Metadata.Entry(MetaDataType.String, s),
+            null => new Metadata.Entry(MetaDataType.String, ""),
+            _ => new Metadata.Entry(MetaDataType.String, value.ToString() ?? ""),
         };
     }
 
-    /// <summary>
-    /// Converts a System.Numerics.Matrix4x4 to an Assimp.Matrix4x4
-    /// </summary>
-    /// <param name="m"></param>
-    /// <returns></returns>
-    private static Matrix4x4 ToAssimp(Num.Matrix4x4 m)
+    private static int GetOrCreateMaterial(
+    Scene scene,
+    MmpModel mmp,
+    Dictionary<string, int> matCache,
+    ModelMaterial? m,
+    bool embedTextures,
+    bool copyTextures,
+    string outDir)
     {
-        // Assimp uses row-major; translation is the 4th *column* (A4,B4,C4)
-        return new Matrix4x4
+        var key = m?.MaterialName ?? "_Fallback";
+        if (matCache.TryGetValue(key, out var found)) return found;
+
+        var mat = new Material
         {
-            A1 = m.M11,
-            A2 = m.M12,
-            A3 = m.M13,
-            A4 = m.M41,
-            B1 = m.M21,
-            B2 = m.M22,
-            B3 = m.M23,
-            B4 = m.M42,
-            C1 = m.M31,
-            C2 = m.M32,
-            C3 = m.M33,
-            C4 = m.M43,
-            D1 = m.M14,
-            D2 = m.M24,
-            D3 = m.M34,
-            D4 = m.M44
+            Name = key,
+            ColorDiffuse = new Color4(1, 1, 1, 1)
         };
+
+        // Textures
+        var diffuseAbs = ResolveTextureAbsolute(mmp.BaseDirectory, Texture(m, "DiffuseMap")?.TexturePath);
+        if (!string.IsNullOrWhiteSpace(diffuseAbs) && File.Exists(diffuseAbs))
+        {
+            mat.TextureDiffuse = MakeTextureSlot(
+                scene, outDir, diffuseAbs, embedTextures, copyTextures, TextureType.Diffuse);
+        }
+
+        var normalAbs = ResolveTextureAbsolute(mmp.BaseDirectory, Texture(m, "BumpMap")?.TexturePath);
+        if (!string.IsNullOrWhiteSpace(normalAbs) && File.Exists(normalAbs))
+        {
+            mat.TextureNormal = MakeTextureSlot(
+                scene, outDir, normalAbs, embedTextures, copyTextures, TextureType.Normals);
+        }
+
+        scene.Materials.Add(mat);
+        var idx = scene.Materials.Count - 1;
+        matCache[key] = idx;
+        return idx;
     }
+
+    private static TextureSlot MakeTextureSlot(
+    Scene scene,
+    string outDir,
+    string absPath,
+    bool embedTextures,
+    bool copyTextures,
+    TextureType texType)
+    {
+        var slot = new TextureSlot
+        {
+            TextureType = texType,
+            Mapping = TextureMapping.FromUV,
+            UVIndex = 0,
+            BlendFactor = 1.0f,
+            WrapModeU = TextureWrapMode.Wrap,
+            WrapModeV = TextureWrapMode.Wrap,
+            Flags = 0
+        };
+
+        if (embedTextures)
+        {
+            var ext = Path.GetExtension(absPath).ToLowerInvariant().TrimStart('.');
+            var data = File.ReadAllBytes(absPath);
+
+            var index = scene.Textures.Count;
+            var embName = $"*{index}.{ext}";
+
+            var emb = new EmbeddedTexture(ext, data)
+            {
+                Filename = embName
+            };
+
+            scene.Textures.Add(emb);
+            slot.FilePath = embName;
+        }
+        else if (copyTextures)
+        {
+            var texName = Path.GetFileName(absPath);
+            const string textureDir = "texture";
+            var dest = Path.Combine(outDir, textureDir, texName);
+
+            var destDir = Path.GetDirectoryName(dest);
+            if (!string.IsNullOrEmpty(destDir) && !Directory.Exists(destDir))
+                Directory.CreateDirectory(destDir);
+
+            try
+            {
+                File.Copy(absPath, dest, overwrite: false);
+            }
+            catch (IOException)
+            {
+                // ignore if file already exists
+            }
+
+            slot.FilePath = dest;
+        }
+        else
+        {
+            slot.FilePath = absPath;
+        }
+
+        return slot;
+    }
+
+
     #endregion
 }

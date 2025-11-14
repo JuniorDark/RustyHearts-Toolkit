@@ -2,75 +2,7 @@
 
 namespace RHToolkit.Models.Model3D.Map;
 
-/// <summary>
-/// Reader for .height files used by the game engine for quick height lookups.
-/// </summary>
-public static class HeightReader
-{
-    public static async Task<NaviHeightFile> ReadAsync(string path, CancellationToken ct = default)
-    {
-        byte[] bytes = await File.ReadAllBytesAsync(path, ct).ConfigureAwait(false);
-        using var ms = new MemoryStream(bytes, writable: false);
-        using var br = new BinaryReader(ms, Encoding.ASCII, leaveOpen: false);
-        return Read(br);
-    }
-
-    public static NaviHeightFile Read(BinaryReader br)
-    {
-        long start = br.BaseStream.Position;
-
-        int version = br.ReadInt32();
-
-        int stepXZ = 0, stepY = 0;
-        if (version >= 2)
-        {
-            stepXZ = br.ReadInt32();   // nHeightStep (X/Z)
-            stepY = br.ReadInt32();   // nHeightStepY
-        }
-
-        int minX = br.ReadInt32();
-        int minY = br.ReadInt32();
-        int minZ = br.ReadInt32();
-
-        int nNum = br.ReadInt32(); // MaxY entries
-        int nNum2 = br.ReadInt32(); // Full entries
-
-        var file = new NaviHeightFile
-        {
-            Version = version,
-            HeightStepXZ = stepXZ,
-            HeightStepY = stepY,
-            Min = new Vector3(minX, minY, minZ),
-            MaxY = new Dictionary<ulong, NaviHeightEntry>(nNum),
-            Full = new Dictionary<ulong, NaviHeightEntry>(nNum2)
-        };
-
-        // Read MaxY table (nNum entries)
-        for (int i = 0; i < nNum; i++)
-        {
-            ulong key = br.ReadUInt64();
-            ushort octIdx = br.ReadUInt16();
-            ushort navIdx = br.ReadUInt16();
-            float height = br.ReadSingle();
-            file.MaxY[key] = new NaviHeightEntry(octIdx, navIdx, height);
-        }
-
-        // Read Full table (nNum2 entries)
-        for (int i = 0; i < nNum2; i++)
-        {
-            ulong key = br.ReadUInt64();
-            ushort octIdx = br.ReadUInt16();
-            ushort navIdx = br.ReadUInt16();
-            float height = br.ReadSingle();
-            file.Full[key] = new NaviHeightEntry(octIdx, navIdx, height);
-        }
-
-        return file;
-    }
-}
-
-// ===== Models + helpers =====
-
+#region Data Models
 public sealed class NaviHeightFile
 {
     public int Version { get; set; }
@@ -139,4 +71,76 @@ public readonly struct NaviHeightEntry(ushort oct, ushort nav, float h)
 
     public void Deconstruct(out ushort oct, out ushort nav, out float h)
     { oct = OctreeIndex; nav = NaviIndex; h = Height; }
+}
+#endregion
+
+/// <summary>
+/// Reader for .height files used by the game engine for quick height lookups.
+/// </summary>
+public static class HeightReader
+{
+    public static async Task<NaviHeightFile> ReadAsync(string path, CancellationToken ct = default)
+    {
+        await using var fs = new FileStream(
+            path,
+            FileMode.Open,
+            FileAccess.Read,
+            FileShare.Read,
+            bufferSize: 64 * 1024,
+            useAsync: true);
+
+        using var br = new BinaryReader(fs, Encoding.ASCII, leaveOpen: false);
+        return await Task.Run(() => ReadHeight(br), ct);
+    }
+
+    public static NaviHeightFile ReadHeight(BinaryReader br)
+    {
+        int version = br.ReadInt32();
+
+        int nHeightStep = 0, nHeightStepY = 0;
+        if (version >= 2)
+        {
+            nHeightStep = br.ReadInt32();   // nHeightStep (X/Z)
+            nHeightStepY = br.ReadInt32();   // nHeightStepY
+        }
+
+        int minX = br.ReadInt32();
+        int minY = br.ReadInt32();
+        int minZ = br.ReadInt32();
+
+        int maxYCount = br.ReadInt32(); // MaxY entries
+        int fullCount = br.ReadInt32(); // Full entries
+
+        var file = new NaviHeightFile
+        {
+            Version = version,
+            HeightStepXZ = nHeightStep,
+            HeightStepY = nHeightStepY,
+            Min = new Vector3(minX, minY, minZ),
+            MaxY = new Dictionary<ulong, NaviHeightEntry>(maxYCount),
+            Full = new Dictionary<ulong, NaviHeightEntry>(fullCount)
+        };
+
+        // Read MaxY table (maxYCount entries)
+        for (int i = 0; i < maxYCount; i++)
+        {
+            ulong key = br.ReadUInt64();
+            ushort octIdx = br.ReadUInt16();
+            ushort navIdx = br.ReadUInt16();
+            float height = br.ReadSingle();
+            file.MaxY[key] = new NaviHeightEntry(octIdx, navIdx, height);
+        }
+
+        // Read Full table (fullCount entries)
+        for (int i = 0; i < fullCount; i++)
+        {
+            ulong key = br.ReadUInt64();
+            ushort octIdx = br.ReadUInt16();
+            ushort navIdx = br.ReadUInt16();
+            float height = br.ReadSingle();
+            file.Full[key] = new NaviHeightEntry(octIdx, navIdx, height);
+        }
+
+        return file;
+    }
 }

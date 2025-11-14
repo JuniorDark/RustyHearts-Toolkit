@@ -1,7 +1,10 @@
-﻿using HelixToolkit.Wpf.SharpDX;
+﻿using HelixToolkit;
+using HelixToolkit.Maths;
+using HelixToolkit.SharpDX;
+using HelixToolkit.Wpf.SharpDX;
+using System.Numerics;
 using static RHToolkit.Models.Model3D.Map.MMP;
 using static RHToolkit.Models.Model3D.ModelMaterial;
-using SDX = SharpDX;
 
 namespace RHToolkit.Models.Model3D.Map;
 
@@ -17,14 +20,14 @@ public static class MMPToHelix
             {
                 // geometry
                 var positions = new Vector3Collection(part.Vertices.Select(v =>
-                    new SDX.Vector3(-v.Position.X, v.Position.Y, v.Position.Z))); // flip X for LH coord
+                    new Vector3(-v.Position.X, v.Position.Y, v.Position.Z))); // flip X for LH coord
                 var normals = new Vector3Collection(part.Vertices.Select(v =>
-                    new SDX.Vector3(-v.Normal.X, v.Normal.Y, v.Normal.Z))); // flip X for LH coord
+                    new Vector3(-v.Normal.X, v.Normal.Y, v.Normal.Z))); // flip X for LH coord
 
                 // Base UVs
                 var txtScale = GetTexScale(part.Material); // (u1,v1,u2,v2) -> use (u1,v1) for UV0 tiling
                 var texcoords = new Vector2Collection(part.Vertices.Select(v =>
-                    new SDX.Vector2(v.UV0.X * txtScale.X, v.UV0.Y * txtScale.Y)));
+                    new Vector2(v.UV0.X * txtScale.X, v.UV0.Y * txtScale.Y)));
 
                 var indices = new IntCollection(part.Indices.Select(i => (int)i));
 
@@ -69,7 +72,7 @@ public static class MMPToHelix
                     if (pDiffuse != null)
                     {
                         var c = pDiffuse.Payload;
-                        phong.DiffuseColor = new SDX.Color4(
+                        phong.DiffuseColor = new Color4(
                             Clamp01(c.X <= 0 ? 1f : c.X),
                             Clamp01(c.Y <= 0 ? 1f : c.Y),
                             Clamp01(c.Z <= 0 ? 1f : c.Z),
@@ -77,7 +80,7 @@ public static class MMPToHelix
                     }
                     else
                     {
-                        phong.DiffuseColor = new SDX.Color4(1, 1, 1, 1);
+                        phong.DiffuseColor = new Color4(1, 1, 1, 1);
                     }
 
                     // Ambient
@@ -85,7 +88,7 @@ public static class MMPToHelix
                     if (pAmbient != null)
                     {
                         var a = pAmbient.Payload;
-                        phong.AmbientColor = new SDX.Color4(
+                        phong.AmbientColor = new Color4(
                             Clamp01(a.X) * 0.6f,
                             Clamp01(a.Y) * 0.6f,
                             Clamp01(a.Z) * 0.6f,
@@ -93,7 +96,7 @@ public static class MMPToHelix
                     }
                     else
                     {
-                        phong.AmbientColor = new SDX.Color4(0.25f, 0.25f, 0.25f, 1f);
+                        phong.AmbientColor = new Color4(0.25f, 0.25f, 0.25f, 1f);
                     }
 
                     // Water color (when present) – acts as a tint over diffuse
@@ -102,7 +105,7 @@ public static class MMPToHelix
                     {
                         var w = pWater.Payload;
                         var dc = phong.DiffuseColor;
-                        phong.DiffuseColor = new SDX.Color4(
+                        phong.DiffuseColor = new Color4(
                             Clamp01(dc.Red * w.X),
                             Clamp01(dc.Green * w.Y),
                             Clamp01(dc.Blue * w.Z),
@@ -115,9 +118,9 @@ public static class MMPToHelix
                     var pSun = Shader(mat, "SunFactor");
                     if (pSun != null) specIntensity = Clamp01(pSun.Payload.Y); // use Y as spec weight
                     var pSunPow = Shader(mat, "SunPower");
-                    if (pSunPow != null && pSunPow.Payload.X > 0) shininess = SDX.MathUtil.Clamp(pSunPow.Payload.X, 4f, 128f);
+                    if (pSunPow != null && pSunPow.Payload.X > 0) shininess = MathUtil.Clamp(pSunPow.Payload.X, 4f, 128f);
 
-                    phong.SpecularColor = new SDX.Color4(specIntensity, specIntensity, specIntensity, 1f);
+                    phong.SpecularColor = new Color4(specIntensity, specIntensity, specIntensity, 1f);
                     phong.SpecularShininess = shininess;
 
                     // --- TRANSPARENCY ---
@@ -134,13 +137,13 @@ public static class MMPToHelix
                     var pAlphaVal = Shader(mat, "AlphaValue");
                     if (pAlphaVal != null && pAlphaVal.Payload.X > 0)
                     {
-                        alpha = SDX.MathUtil.Clamp(pAlphaVal.Payload.X, 0.0f, 1.0f);
+                        alpha = MathUtil.Clamp(pAlphaVal.Payload.X, 0.0f, 1.0f);
                         if (alpha < 0.999f) isTransparent = true;
                     }
 
                     // Apply final alpha to DiffuseColor
                     var dc0 = phong.DiffuseColor;
-                    phong.DiffuseColor = new SDX.Color4(dc0.Red, dc0.Green, dc0.Blue, alpha);
+                    phong.DiffuseColor = new Color4(dc0.Red, dc0.Green, dc0.Blue, alpha);
 
                     // --- DOUBLESIDED / CULLING ---
                     var pTwoSide = Shader(mat, "Twoside");

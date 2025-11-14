@@ -175,6 +175,7 @@ public class BinaryReaderExtensions
 
     #endregion
 
+    #region Debugging
     public static int ReadSmartInt32(BinaryReader br)
     {
         long pos = br.BaseStream.Position;
@@ -200,4 +201,6 @@ public class BinaryReaderExtensions
 
         return asInt;
     }
+
+    #endregion
 }

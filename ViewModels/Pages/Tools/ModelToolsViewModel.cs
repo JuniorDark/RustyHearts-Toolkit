@@ -79,11 +79,20 @@ public partial class ModelToolsViewModel : ObservableObject
             var summary = await ModelManager.ExportFilesAsync(
                 OutputFolder,
                 filesToExport,
-                progress, EmbedTextures,
+                progress, EmbedTextures, CopyTextures,
                 _cts.Token);
 
             // Counts
-            ReportProgress($"Exported {summary.Exported}/{summary.Total}. Skipped {summary.Skipped}.");
+            string countMessage;
+            if (_cts.IsCancellationRequested)
+            {
+                countMessage = $"Operation cancelled. Exported {summary.Exported}/{summary.Total}. Skipped {summary.Skipped}.";
+            }
+            else
+            {
+                countMessage = $"Exported {summary.Exported}/{summary.Total}. Skipped {summary.Skipped}.";
+            }
+            ReportProgress(countMessage);
 
             // Show skipped list (if any)
             if (summary.Skipped > 0)
@@ -100,7 +109,7 @@ public partial class ModelToolsViewModel : ObservableObject
 
                 var text = "Skipped files:\n" + string.Join(Environment.NewLine, lines);
 
-                RHMessageBoxHelper.ShowOKMessage(text, $"Exported {summary.Exported}/{summary.Total}. Skipped {summary.Skipped}.");
+                RHMessageBoxHelper.ShowOKMessage(text, countMessage);
 
                 try
                 {
@@ -109,11 +118,6 @@ public partial class ModelToolsViewModel : ObservableObject
                 }
                 catch { }
             }
-        }
-        catch (OperationCanceledException)
-        {
-            ReportProgress(Resources.OperationCancelledMessage);
-            ResetUI();
         }
         catch (Exception ex)
         {
@@ -146,7 +150,9 @@ public partial class ModelToolsViewModel : ObservableObject
     }
     private void EndBusy()
     {
+        _cts?.Dispose();
         _cts = null;
+
         IsCancelVisible = Visibility.Hidden;
         IsTextBoxEnabled = true;
         NotifyCanExecuteCommands();
@@ -202,6 +208,15 @@ public partial class ModelToolsViewModel : ObservableObject
     [ObservableProperty] private int _progressBarMaximumValue;
     [ObservableProperty] private bool _isTextBoxEnabled = true;
     [ObservableProperty] private bool _embedTextures;
+    partial void OnEmbedTexturesChanged(bool value)
+    {
+        if (value) CopyTextures = false;
+    }
+    [ObservableProperty] private bool _copyTextures;
+    partial void OnCopyTexturesChanged(bool value)
+    {
+        if (value) EmbedTextures = false;
+    }
 
     #endregion
 }

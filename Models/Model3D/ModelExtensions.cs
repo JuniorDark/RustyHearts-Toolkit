@@ -1,4 +1,4 @@
-﻿using Assimp;
+﻿using SharpAssimp;
 using Num = System.Numerics;
 
 namespace RHToolkit.Models.Model3D;
@@ -41,26 +41,10 @@ public class ModelExtensions
         var global = Num.Matrix4x4.Identity;
         for (var current = node; current != null; current = current.Parent)
         {
-            var local = FromAssimp(current.Transform);
+            var local = current.Transform;
             global = Num.Matrix4x4.Multiply(local, global);
         }
         return global;
-    }
-
-    /// <summary>
-    /// convert Assimp matrix to System.Numerics matrix
-    /// </summary>
-    /// <param name="a"></param>
-    /// <returns></returns>
-    public static Num.Matrix4x4 FromAssimp(Assimp.Matrix4x4 a)
-    {
-        // Assimp uses row-major order, so direct mapping
-        return new Num.Matrix4x4(
-            a.A1, a.B1, a.C1, a.D1,
-            a.A2, a.B2, a.C2, a.D2,
-            a.A3, a.B3, a.C3, a.D3,
-            a.A4, a.B4, a.C4, a.D4
-        );
     }
 
     #endregion
@@ -91,9 +75,9 @@ public class ModelExtensions
     #endregion
 
     #region Metadata helpers
-    public static int GetIntMeta(Assimp.Node node, string key)
+    public static int GetIntMeta(Node node, string key)
     {
-        if (node.Metadata != null && node.Metadata.TryGetValue(key, out Assimp.Metadata.Entry entry))
+        if (node.Metadata != null && node.Metadata.TryGetValue(key, out Metadata.Entry entry))
         {
             var data = GetMetaDataObject(entry);
             if (data != null)
@@ -122,9 +106,9 @@ public class ModelExtensions
         throw new InvalidDataException($"Required metadata '{key}' missing on node '{node.Name}'.");
     }
 
-    public static string GetStringMeta(Assimp.Node node, string key)
+    public static string GetStringMeta(Node node, string key)
     {
-        if (node.Metadata != null && node.Metadata.TryGetValue(key, out Assimp.Metadata.Entry entry))
+        if (node.Metadata != null && node.Metadata.TryGetValue(key, out Metadata.Entry entry))
         {
             var data = GetMetaDataObject(entry);
             if (data is null) return string.Empty;
@@ -136,7 +120,7 @@ public class ModelExtensions
         throw new InvalidDataException($"Required metadata '{key}' missing on node '{node.Name}'.");
     }
 
-    public static object? GetMetaDataObject(Assimp.Metadata.Entry entry)
+    public static object? GetMetaDataObject(Metadata.Entry entry)
     {
         var t = entry.GetType();
         var prop = t.GetProperty("Data") ?? t.GetProperty("Value");

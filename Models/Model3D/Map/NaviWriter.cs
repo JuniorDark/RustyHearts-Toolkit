@@ -1,4 +1,4 @@
-﻿using Assimp;
+﻿using SharpAssimp;
 using Num = System.Numerics;
 
 namespace RHToolkit.Models.Model3D.Map;

@@ -1,5 +1,4 @@
 ﻿using System.Numerics;
-using A3DS = Aspose.ThreeD.Shading;
 
 namespace RHToolkit.Models.Model3D;
 
@@ -110,43 +109,24 @@ public class ModelMaterial
         if (string.IsNullOrWhiteSpace(texturePath)) return null;
 
         // Normalize separators and trim quotes/whitespace
-        var p = texturePath.Trim().Trim('"', '\'')
+        var raw = texturePath.Trim().Trim('"', '\'')
             .Replace('/', Path.DirectorySeparatorChar)
             .Replace('\\', Path.DirectorySeparatorChar);
 
-        // If already absolute, use as-is; otherwise resolve against the *model's* base directory
-        var candidate = Path.IsPathRooted(p) ? p : Path.GetFullPath(Path.Combine(baseDir, p));
+        // Resolve to absolute path
+        var candidate = Path.IsPathRooted(raw) ? raw : Path.GetFullPath(Path.Combine(baseDir, raw));
 
-        return File.Exists(candidate) ? candidate : null;
-    }
+        // 1) Try exactly as provided
+        if (File.Exists(candidate)) return candidate;
 
-    /// <summary>
-    /// Creates an Aspose.ThreeD texture, either embedded or as a file reference.
-    /// </summary>
-    /// <param name="outDir"></param>
-    /// <param name="pathRelOrAbs"></param>
-    /// <param name="embed"></param>
-    /// <returns> The created texture.</returns>
-    public static A3DS.Texture MakeTexture(string outDir, string pathRelOrAbs, bool embed)
-    {
-        var tex = new A3DS.Texture();
-        if (embed)
+        // 2) If not .dds, try swapping to .dds
+        var ext = Path.GetExtension(candidate);
+        if (!ext.Equals(".dds", StringComparison.OrdinalIgnoreCase))
         {
-            var abs = Path.IsPathRooted(pathRelOrAbs)
-                ? Path.GetFullPath(pathRelOrAbs)
-                : Path.GetFullPath(Path.Combine(outDir, pathRelOrAbs));
+            var ddsCandidate = Path.ChangeExtension(candidate, ".dds");
+            if (File.Exists(ddsCandidate)) return ddsCandidate;
+        }
 
-            tex.FileName = Path.GetFileName(abs);
-            if (File.Exists(abs))
-                tex.Content = File.ReadAllBytes(abs);
-            else
-                tex.FileName = pathRelOrAbs;
-        }
-        else
-        {
-            tex.FileName = pathRelOrAbs;
-        }
-        return tex;
+        return null;
     }
-
 }

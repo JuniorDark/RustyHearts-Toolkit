@@ -1,9 +1,8 @@
-﻿using HelixToolkit.Wpf.SharpDX;
-using SharpDX;
-using MeshGeometry3D = HelixToolkit.Wpf.SharpDX.MeshGeometry3D;
+﻿using HelixToolkit;
+using HelixToolkit.Maths;
+using HelixToolkit.SharpDX;
+using HelixToolkit.Wpf.SharpDX;
 using Num = System.Numerics;
-using SDX = SharpDX;
-using TextInfo = HelixToolkit.Wpf.SharpDX.TextInfo;
 
 namespace RHToolkit.Models.Model3D.Map
 {
@@ -32,7 +31,7 @@ namespace RHToolkit.Models.Model3D.Map
                 var positions = new Vector3Collection(obj.Vertices.Select(v =>
                 {
                     var p = Num.Vector3.Transform(new Num.Vector3(v.X, v.Y, v.Z), world);
-                    return new SDX.Vector3(-p.X, p.Y, p.Z);
+                    return new Num.Vector3(-p.X, p.Y, p.Z);
                 }));
 
                 var indices = new IntCollection(obj.Indices.SelectMany(t => new[] { t.A, t.C, t.B }));
@@ -100,9 +99,9 @@ namespace RHToolkit.Models.Model3D.Map
                     var c = Xform(new Num.Vector3(verts[tri.C].X, verts[tri.C].Y, verts[tri.C].Z));
 
                     // Edges in RH
-                    lb.AddLine(new SDX.Vector3(a.X, a.Y, a.Z), new SDX.Vector3(b.X, b.Y, b.Z));
-                    lb.AddLine(new SDX.Vector3(b.X, b.Y, b.Z), new SDX.Vector3(c.X, c.Y, c.Z));
-                    lb.AddLine(new SDX.Vector3(c.X, c.Y, c.Z), new SDX.Vector3(a.X, a.Y, a.Z));
+                    lb.AddLine(new Num.Vector3(a.X, a.Y, a.Z), new Num.Vector3(b.X, b.Y, b.Z));
+                    lb.AddLine(new Num.Vector3(b.X, b.Y, b.Z), new Num.Vector3(c.X, c.Y, c.Z));
+                    lb.AddLine(new Num.Vector3(c.X, c.Y, c.Z), new Num.Vector3(a.X, a.Y, a.Z));
                 }
             }
 
@@ -122,8 +121,8 @@ namespace RHToolkit.Models.Model3D.Map
             var tColor = Colors.Yellow;
 
             // Accumulate across all entries for fewer draw calls
-            var allPortalPoints = new List<SDX.Vector3>(); // red dots (shared-edge midpoints)
-            var allCenters = new List<(SDX.Vector3 pos, int id)>();  // triangle centers + ID
+            var allPortalPoints = new List<Num.Vector3>(); // red dots (shared-edge midpoints)
+            var allCenters = new List<(Num.Vector3 pos, int id)>();  // triangle centers + ID
             int runningTriId = 0;
 
             foreach (var entry in model.Entries)
@@ -136,10 +135,10 @@ namespace RHToolkit.Models.Model3D.Map
                             ? m : Num.Matrix4x4.Identity;
 
                 // Helper: bake world(LH) then flip X => RH
-                static SDX.Vector3 Bake(Num.Vector3 p, in Num.Matrix4x4 w)
+                static Num.Vector3 Bake(Num.Vector3 p, in Num.Matrix4x4 w)
                 {
                     var v = Num.Vector3.Transform(p, w);
-                    return new SDX.Vector3(-v.X, v.Y, v.Z);
+                    return new Num.Vector3(-v.X, v.Y, v.Z);
                 }
 
                 // 1) Build edge map: (min,max) vertex index -> number of incident triangles
@@ -208,10 +207,10 @@ namespace RHToolkit.Models.Model3D.Map
             var textGeom = new BillboardText3D();
             foreach (var (pos, id) in allCenters)
             {
-                var ti = new TextInfo
+                var ti = new HelixToolkit.SharpDX.TextInfo
                 {
                     Text = id.ToString(CultureInfo.InvariantCulture),
-                    Origin = new SDX.Vector3(pos.X + 20f, pos.Y + 20f, pos.Z),
+                    Origin = new Num.Vector3(pos.X + 20f, pos.Y + 20f, pos.Z),
                     Foreground = tColor.ToColor4(),
                     Scale = 0.5f
                 };

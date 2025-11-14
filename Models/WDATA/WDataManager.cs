@@ -1,4 +1,5 @@
-﻿using HelixToolkit.Wpf.SharpDX;
+﻿using HelixToolkit.SharpDX;
+using HelixToolkit.Wpf.SharpDX;
 using Microsoft.Win32;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;

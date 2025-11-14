@@ -1,4 +1,4 @@
-﻿using Assimp;
+﻿using SharpAssimp;
 using System.Text.RegularExpressions;
 using Num = System.Numerics;
 
@@ -7,7 +7,7 @@ namespace RHToolkit.Models.Model3D.Map;
 /// <summary>
 /// MMP file writer (currently rebuild type 3/19 from FBX + original MMP for type 1 material)
 /// </summary>
-public static class MMPWriter
+public static partial class MMPWriter
 {
     private const string Header = "DoBal";
     private static readonly Encoding ASCII = Encoding.ASCII;
@@ -47,24 +47,15 @@ public static class MMPWriter
 
             // -- import FBX and build type-3 (node) + type-19 (mesh) chunks ---
             var ctx = new AssimpContext();
-            var scene = ctx.ImportFile(fbxPath, PostProcessSteps.FlipWindingOrder 
+            var scene = ctx.ImportFile(fbxPath, PostProcessSteps.MakeLeftHanded | PostProcessSteps.FlipWindingOrder 
             | PostProcessSteps.FlipUVs | PostProcessSteps.JoinIdenticalVertices);
 
             var fileStem = Path.GetFileNameWithoutExtension(fbxPath);
             var container = scene.RootNode.Children.FirstOrDefault(n => n.Name == fileStem) ?? scene.RootNode;
 
-            var flipX = new Assimp.Matrix4x4(
-                -1, 0, 0, 0,
-                 0, 1, 0, 0,
-                 0, 0, 1, 0,
-                 0, 0, 0, 1);
-
-            // Pre-multiply so all children inherit the reflection
-            container.Transform = flipX * container.Transform;
-
             // --- Find navi node
-            var naviNodes = new List<Assimp.Node>();
-            void Walk(Assimp.Node n)
+            var naviNodes = new List<Node>();
+            void Walk(Node n)
             {
                 bool isNavi = n.Metadata != null && n.Metadata.TryGetValue("navi:isNavMesh", out var _);
                 if (isNavi) naviNodes.Add(n);
@@ -168,7 +159,7 @@ public static class MMPWriter
     /// </summary>
     /// <param name="SubName"></param>
     /// <param name="MaterialId"></param>
-    /// <param name="meshType"></param>
+    /// <param name="MeshType"></param>
     /// <param name="FlagAdditive"></param>
     /// <param name="FlagAlpha"></param>
     /// <param name="FlagEnabled"></param>
@@ -182,7 +173,7 @@ public static class MMPWriter
     private readonly record struct PartData(
         string SubName,
         int MaterialId,
-        int meshType,
+        int MeshType,
         byte FlagAdditive,
         byte FlagAlpha,
         byte FlagEnabled,
@@ -276,7 +267,7 @@ public static class MMPWriter
     {
         string subName = partNode.Name ?? "Mesh";
         // strip FBX auto-suffixes like ".001"
-        subName = Regex.Replace(subName, @"^(.*?\d)(0+\d{2,})$", "$1");
+        subName = Name().Replace(subName, "$1");
 
         int materialId = ModelExtensions.GetIntMeta(partNode, "mmp:materialIdx");
         int meshType = ModelExtensions.GetIntMeta(partNode, "mmp:meshType");
@@ -362,11 +353,11 @@ public static class MMPWriter
             Pw.Add(pw);
 
             // Normal → world (inverse-transpose of M)
-            Assimp.Vector3D n0;
+            Num.Vector3 n0;
             if (vnrms != null && i < vnrms.Count)
                 n0 = vnrms[i];
             else
-                n0 = new Assimp.Vector3D(0, 1, 0);
+                n0 = new Num.Vector3(0, 1, 0);
 
             var nw4 = Num.Vector4.Transform(new Num.Vector4(n0.X, n0.Y, n0.Z, 0), invMT);
             var nw = new Num.Vector3(nw4.X, nw4.Y, nw4.Z);
@@ -665,6 +656,9 @@ public static class MMPWriter
 
         return ms.ToArray();
     }
+
+    [GeneratedRegex(@"^(.*?\d)(0+\d{2,})$")]
+    private static partial Regex Name();
 
     #endregion
 }

@@ -2,9 +2,11 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Windows.Media.Media3D;
-using SDX = SharpDX;
 using Material = HelixToolkit.Wpf.SharpDX.Material;
-using MeshGeometry3D = HelixToolkit.Wpf.SharpDX.MeshGeometry3D;
+using MeshGeometry3D = HelixToolkit.SharpDX.MeshGeometry3D;
+using HelixToolkit.Geometry;
+using HelixToolkit.SharpDX;
+using System.Numerics;
 
 namespace RHToolkit.Models.WDATA;
 
@@ -278,7 +280,7 @@ public sealed class ObbOverlayManager<T> where T : class, IObbEntity
     {
         if (_unitBox != null) return;
         var mb = new MeshBuilder();
-        mb.AddBox(SDX.Vector3.Zero, 1, 1, 1);
+        mb.AddBox(Vector3.Zero, 1, 1, 1);
         _unitBox = mb.ToMeshGeometry3D();
     }
 
@@ -289,7 +291,7 @@ public sealed class ObbOverlayManager<T> where T : class, IObbEntity
             Math.Max(1e-6, e.Extents.X * 2 * e.Scale.X),
             Math.Max(1e-6, e.Extents.Y * 2 * e.Scale.Y),
             Math.Max(1e-6, e.Extents.Z * 2 * e.Scale.Z)));
-        var q = new Quaternion(e.Rotation.X, e.Rotation.Y, e.Rotation.Z, e.Rotation.W);
+        var q = new System.Windows.Media.Media3D.Quaternion(e.Rotation.X, e.Rotation.Y, e.Rotation.Z, e.Rotation.W);
         tg.Children.Add(new RotateTransform3D(new QuaternionRotation3D(q)));
         tg.Children.Add(new TranslateTransform3D(e.Position.X, e.Position.Y, e.Position.Z));
         tg.Children.Add(new ScaleTransform3D(-1, 1, 1));
