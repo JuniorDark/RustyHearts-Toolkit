@@ -38,14 +38,14 @@
                 <MenuItem Header="{x:Static rs:Resources.MenuExportAs}" Icon="{ui:SymbolIcon DocumentSave24}">
                     <MenuItem
                         Command="{Binding ExportAsCommand}"
-                        Header="Export Current File to FBX"
+                        Header="{x:Static rs:Resources.ModelViewMenuExportCurrentFileToFBX}"
                         Icon="{ui:SymbolIcon DocumentSave24}"
                         InputGestureText="Ctrl+S" />
-                    <MenuItem
+                    <!--<MenuItem
                         Command="{Binding ImportFromFbxCommand}"
                         Header="Export FBX to MMP (WIP)"
                         Icon="{ui:SymbolIcon DocumentSave24}"
-                        InputGestureText="Ctrl+Shift+S" />
+                        InputGestureText="Ctrl+Shift+S" />-->
                 </MenuItem>
                 <Separator />
                 <MenuItem
@@ -55,56 +55,56 @@
                     Icon="{ui:SymbolIcon ArrowExit20}" />
             </ui:MenuItem>
             <Separator />
-            <ui:MenuItem Header="Draw" Icon="{ui:SymbolIcon DocumentSplitHint20}">
+            <ui:MenuItem Header="{x:Static rs:Resources.ModelViewMenuDraw}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
                 <CheckBox
-                    Content="Display Mesh"
+                    Content="{x:Static rs:Resources.ModelViewMenuDisplayMesh}"
                     IsChecked="{Binding ShowMeshSolid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}"
-                    ToolTip="Display textured meshes" />
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuDisplayMeshTooltip}" />
                 <CheckBox
-                    Content="Display Bones"
+                    Content="{x:Static rs:Resources.ModelViewMenuDisplayBones}"
                     IsChecked="{Binding ShowBones, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}"
-                    ToolTip="Display armature" />
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuDisplayBonesTooltip}" />
                 <CheckBox
-                    Content="Display Wireframe"
+                    Content="{x:Static rs:Resources.ModelViewMenuDisplayWireframe}"
                     IsChecked="{Binding ShowMeshWireframe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}"
-                    ToolTip="Display Mesh Wireframe" />
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuDisplayWireframeTooltip}" />
                 <CheckBox
-                    Content="Nav Mesh Wireframe"
+                    Content="{x:Static rs:Resources.ModelViewMenuNavMeshWireframe}"
                     IsChecked="{Binding ShowNaviWireframe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}"
-                    ToolTip="Nav Mesh Wireframe"
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuNavMeshWireframeTooltip}"
                     Visibility="{Binding IsNavMeshControlsVisible}" />
                 <CheckBox
-                    Content="Nav Mesh Octree"
+                    Content="{x:Static rs:Resources.ModelViewMenuNavMeshOctree}"
                     IsChecked="{Binding ShowNaviDebug, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}"
-                    ToolTip="Debug View"
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuNavMeshOctreeTooltip}"
                     Visibility="{Binding IsNavMeshControlsVisible}" />
             </ui:MenuItem>
             <Separator />
-            <ui:MenuItem Header="Export Options" Icon="{ui:SymbolIcon DocumentSplitHint20}">
+            <ui:MenuItem Header="{x:Static rs:Resources.ModelViewMenuExportOptions}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
                 <CheckBox
-                    Content="Embed Textures"
+                    Content="{x:Static rs:Resources.EmbedTextures}"
                     IsChecked="{Binding EmbedTextures, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}"
-                    ToolTip="Embed Textures in the fbx" />
+                    ToolTip="{x:Static rs:Resources.EmbedTexturesTooltip}" />
                 <CheckBox
-                    Content="Export Animations (WIP)"
+                    Content="{x:Static rs:Resources.ModelViewMenuExportAnimations}"
                     IsChecked="{Binding ExportAnimation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}"
-                    ToolTip="Export animations (.ds, .ma)" />
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuExportAnimationsTooltip}" />
             </ui:MenuItem>
             <Separator />
-            <ui:MenuItem Header="About" Icon="{ui:SymbolIcon ChatHelp20}">
+            <ui:MenuItem Header="{x:Static rs:Resources.About}" Icon="{ui:SymbolIcon ChatHelp20}">
                 <ui:HyperlinkButton
                     Margin="8,0,0,0"
                     Padding="4"
-                    Content="File Formats"
-                    NavigateUri="https://juniordark.gitbook.io/rusty-hearts-files-structures"
-                    ToolTip="https://juniordark.gitbook.io/rusty-hearts-files-structures" />
+                    Content="{x:Static rs:Resources.MenuFileFormats}"
+                    NavigateUri="https://juniordark.gitbook.io/rusty-hearts-files-structures/internal-files/3d-models"
+                    ToolTip="https://juniordark.gitbook.io/rusty-hearts-files-structures/internal-files/3d-models" />
             </ui:MenuItem>
         </Menu>
         <Menu

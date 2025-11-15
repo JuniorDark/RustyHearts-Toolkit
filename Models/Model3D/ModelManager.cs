@@ -12,7 +12,7 @@ public sealed class ExportSummary(int total)
     public int Exported => _exported;
     private int _exported;
     public int Skipped => SkippedFiles.Count;
-    public ConcurrentBag<SkippedFile> SkippedFiles { get; } = new();
+    public ConcurrentBag<SkippedFile> SkippedFiles { get; } = [];
 
     public void AddExported() => Interlocked.Increment(ref _exported);
     public void AddSkipped(string file, string reason) => SkippedFiles.Add(new(file, reason));

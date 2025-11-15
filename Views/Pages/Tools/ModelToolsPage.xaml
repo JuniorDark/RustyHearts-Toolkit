@@ -38,7 +38,7 @@
                 VerticalAlignment="Top"
                 FontSize="20"
                 Foreground="White"
-                Text="Models Folder" />
+                Text="{x:Static rs:Resources.ModelsFolder}" />
             <TextBox
                 Width="400"
                 Height="40"
@@ -74,7 +74,7 @@
                 VerticalAlignment="Top"
                 FontSize="20"
                 Foreground="White"
-                Text="Output Folder" />
+                Text="{x:Static rs:Resources.OutputFolder}" />
             <TextBox
                 Width="400"
                 Height="40"
@@ -107,7 +107,7 @@
             d:Text="Export Options"
             FontSize="15"
             Foreground="Gold"
-            Text="Export Options" />
+            Text="{x:Static rs:Resources.ExportOptions}" />
         <StackPanel
             Grid.Row="3"
             Margin="0,5"
@@ -116,19 +116,19 @@
             <CheckBox
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Content="Embed Textures"
+                Content="{x:Static rs:Resources.EmbedTextures}"
                 IsChecked="{Binding ViewModel.EmbedTextures, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
                 Template="{StaticResource lb_checkbox}"
-                ToolTip="Embed Textures in the fbx" />
+                ToolTip="{x:Static rs:Resources.EmbedTexturesTooltip}" />
             <CheckBox
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                Content="Copy Textures"
+                Content="{x:Static rs:Resources.CopyTextures}"
                 IsChecked="{Binding ViewModel.CopyTextures, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
                 Template="{StaticResource lb_checkbox}"
-                ToolTip="Copy Textures to the output directory" />
+                ToolTip="{x:Static rs:Resources.CopyTexturesTooltip}" />
         </StackPanel>
         <Button
             Grid.Row="4"
@@ -138,7 +138,7 @@
             VerticalAlignment="Center"
             Background="Transparent"
             Command="{Binding ViewModel.ExportFilesCommand}"
-            Content="Export To FBX"
+            Content="{x:Static rs:Resources.ExportToFBX}"
             Cursor="Hand"
             Foreground="White"
             Style="{StaticResource lb_def_button02}" />

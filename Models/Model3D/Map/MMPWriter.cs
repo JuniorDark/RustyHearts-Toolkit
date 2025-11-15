@@ -51,7 +51,25 @@ public static partial class MMPWriter
             | PostProcessSteps.FlipUVs | PostProcessSteps.JoinIdenticalVertices);
 
             var fileStem = Path.GetFileNameWithoutExtension(fbxPath);
-            var container = scene.RootNode.Children.FirstOrDefault(n => n.Name == fileStem) ?? scene.RootNode;
+
+            Node? rootNode = scene.RootNode;
+            Node container;
+            if (rootNode != null)
+            {
+                var children = rootNode.Children;
+                if (children != null)
+                {
+                    container = children.FirstOrDefault(n => n != null && n.Name == fileStem) ?? rootNode;
+                }
+                else
+                {
+                    container = rootNode;
+                }
+            }
+            else
+            {
+                throw new InvalidDataException("Scene.RootNode is null.");
+            }
 
             // --- Find navi node
             var naviNodes = new List<Node>();
@@ -119,7 +137,6 @@ public static partial class MMPWriter
             var naviPath = Path.ChangeExtension(outMmpPath, ".navi");
             var heightPath = Path.ChangeExtension(outMmpPath, ".height");
             await HeightWriter.BuildFromNaviFileAsync(naviPath, heightPath, 20, 50, 2);
-
 
         }
         catch (Exception ex)
@@ -542,7 +559,7 @@ public static partial class MMPWriter
     {
         if (forced.HasValue)
         {
-            var (minX, minY, minZ, maxX, maxY, maxZ, useZero) = forced.Value;
+            var (minX, minY, minZ, maxX, maxY, maxZ, _) = forced.Value;
             min = new Num.Vector3(minX, minY, minZ);
             max = new Num.Vector3(maxX, maxY, maxZ);
         }

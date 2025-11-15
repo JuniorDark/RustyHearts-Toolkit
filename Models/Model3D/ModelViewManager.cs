@@ -20,7 +20,7 @@ namespace RHToolkit.Models.Model3D;
 public partial class ModelViewManager : ObservableObject
 {
     private const string FileDialogFilter =
-    "Rusty Hearts Models (*.MMP;*.MGM;*.NAVI;*.MA)|*.mmp;*.mgm;*.navi;*.ma|Map Models (*.MMP)|*.mmp|MGM Models (*.MGM)|*.mgm|Navigation Mesh (*.NAVI)|*.navi|All Files (*.*)|*.*";
+    "Rusty Hearts Models (*.MMP;*.MGM;*.NAVI)|*.mmp;*.mgm;*.navi|Map Models (*.MMP)|*.mmp|MGM Models (*.MGM)|*.mgm|Navigation Mesh (*.NAVI)|*.navi|All Files (*.*)|*.*";
 
     #region File
 
@@ -66,7 +66,7 @@ public partial class ModelViewManager : ObservableObject
         catch (Exception ex)
         {
             RHMessageBoxHelper.ShowOKMessage(
-                $"Error loading {CurrentFileName}: {ex.Message}", Resources.Error);
+                string.Format(Resources.ErrorLoadingFile, CurrentFileName, ex.Message), Resources.Error);
             ClearFile();
             return false;
         }
@@ -77,7 +77,7 @@ public partial class ModelViewManager : ObservableObject
     /// </summary>
     public void IsLoaded()
     {
-        Title = $"3D Model Viewer '{CurrentFileName}'";
+        Title = string.Format(Resources.ModelViewerTitle, CurrentFileName);
         IsMessageVisible = Visibility.Hidden;
         Message = string.Empty;
         IsVisible = Visibility.Visible;
@@ -129,17 +129,17 @@ public partial class ModelViewManager : ObservableObject
                 if (MgmModel is not null)
                 {
                     await MGMExporter.ExportMgmToFbx(MgmModel, dlg.FileName, EmbedTextures, ExportAnimation);
-                    RHMessageBoxHelper.ShowOKMessage($"Exported MGM → FBX:\n{dlg.FileName}", "FBX Exporter");
+                    RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.ModelViewerExportedMgmToFbx, dlg.FileName), Resources.ModelViewerFbxExporterTitle);
                 }
                 else if (MmpModel is  not null)
                 {
                     await MMPExporter.ExportMmpToFbx(MmpModel, dlg.FileName, EmbedTextures);
-                    RHMessageBoxHelper.ShowOKMessage($"Exported MMP → FBX:\n{dlg.FileName}", "FBX Exporter");
+                    RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.ModelViewerExportedMmpToFbx, dlg.FileName), Resources.ModelViewerFbxExporterTitle);
                 }
             }
             catch (Exception ex)
             {
-                RHMessageBoxHelper.ShowOKMessage($"Error exporting file: {ex.Message}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.ModelViewerExportError, ex.Message), Resources.Error);
             }
         }
     }
@@ -243,7 +243,7 @@ public partial class ModelViewManager : ObservableObject
         {
             case ".mgm":
                 {
-                    Message = "Loading MGM model...";
+                    Message = string.Format(Resources.ModelViewerLoadingModel, "MGM");
                     var mgm = await MGMReader.ReadAsync(filePath).ConfigureAwait(false);
                     MgmModel = mgm;
                     MmpModel = null;
@@ -252,7 +252,7 @@ public partial class ModelViewManager : ObservableObject
                 }
             case ".mmp":
                 {
-                    Message = "Loading MMP model...";
+                    Message = string.Format(Resources.ModelViewerLoadingModel, "MMP");
                     var mmp = await MMPReader.ReadAsync(filePath).ConfigureAwait(false);
                     MmpModel = mmp;
                     var naviPath = Path.ChangeExtension(filePath, ".navi");
@@ -265,7 +265,7 @@ public partial class ModelViewManager : ObservableObject
                 }
             case ".navi":
                 {
-                    Message = "Loading NAVI model...";
+                    Message = string.Format(Resources.ModelViewerLoadingModel, "Navi"); ;
                     var navi = await NaviReader.ReadAsync(filePath).ConfigureAwait(false);
                     //var heightPath = Path.ChangeExtension(filePath, ".height");
                     //await HeightWriter.BuildFromNaviFileAsync(filePath, heightPath, 20, 50, 2);
@@ -275,7 +275,7 @@ public partial class ModelViewManager : ObservableObject
                     break;
                 }
             default:
-                throw new NotSupportedException($"Unsupported file extension: {ext}");
+                throw new NotSupportedException(string.Format(Resources.ModelViewerUnsupportedExtension, ext));
         }
 
         await Application.Current.Dispatcher.InvokeAsync(() =>
@@ -653,7 +653,7 @@ public partial class ModelViewManager : ObservableObject
         IsVisible = Visibility.Hidden;
         Message = Resources.OpenFile;
         IsMessageVisible = Visibility.Visible;
-        Title = "3D Model Viewer";
+        Title = Resources.ModelViewerTitleDefault;
         OnCanExecuteFileCommandChanged();
     }
     #endregion
@@ -683,7 +683,7 @@ public partial class ModelViewManager : ObservableObject
     #region Properties
 
     [ObservableProperty]
-    private string _title = "Model Viewer";
+    private string _title = Resources.ModelViewerTitleDefault;
 
     [ObservableProperty]
     private Visibility _isVisible = Visibility.Collapsed;

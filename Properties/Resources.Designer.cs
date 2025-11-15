@@ -19,7 +19,7 @@ namespace RHToolkit.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -1150,6 +1150,24 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy Textures.
+        /// </summary>
+        public static string CopyTextures {
+            get {
+                return ResourceManager.GetString("CopyTextures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy Textures to the output directory.
+        /// </summary>
+        public static string CopyTexturesTooltip {
+            get {
+                return ResourceManager.GetString("CopyTexturesTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Costume.
         /// </summary>
         public static string Costume {
@@ -1938,6 +1956,24 @@ namespace RHToolkit.Properties {
         public static string EffectPackage {
             get {
                 return ResourceManager.GetString("EffectPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Embed Textures.
+        /// </summary>
+        public static string EmbedTextures {
+            get {
+                return ResourceManager.GetString("EmbedTextures", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Embed Textures in the fbx.
+        /// </summary>
+        public static string EmbedTexturesTooltip {
+            get {
+                return ResourceManager.GetString("EmbedTexturesTooltip", resourceCulture);
             }
         }
         
@@ -3418,6 +3454,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error loading {0}: {1}.
+        /// </summary>
+        public static string ErrorLoadingFile {
+            get {
+                return ResourceManager.GetString("ErrorLoadingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Event World Item Drop Group List.
         /// </summary>
         public static string EventWorldItemDropGroupList {
@@ -3441,6 +3486,24 @@ namespace RHToolkit.Properties {
         public static string ExpireTime {
             get {
                 return ResourceManager.GetString("ExpireTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Options.
+        /// </summary>
+        public static string ExportOptions {
+            get {
+                return ResourceManager.GetString("ExportOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export To FBX.
+        /// </summary>
+        public static string ExportToFBX {
+            get {
+                return ResourceManager.GetString("ExportToFBX", resourceCulture);
             }
         }
         
@@ -5587,6 +5650,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File Formats.
+        /// </summary>
+        public static string MenuFileFormats {
+            get {
+                return ResourceManager.GetString("MenuFileFormats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Find....
         /// </summary>
         public static string MenuFind {
@@ -5767,6 +5839,51 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bones.
+        /// </summary>
+        public static string ModelInfoBones {
+            get {
+                return ResourceManager.GetString("ModelInfoBones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Materials.
+        /// </summary>
+        public static string ModelInfoMaterials {
+            get {
+                return ResourceManager.GetString("ModelInfoMaterials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Objects.
+        /// </summary>
+        public static string ModelInfoObjects {
+            get {
+                return ResourceManager.GetString("ModelInfoObjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        public static string ModelInfoVersion {
+            get {
+                return ResourceManager.GetString("ModelInfoVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Models Folder.
+        /// </summary>
+        public static string ModelsFolder {
+            get {
+                return ResourceManager.GetString("ModelsFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Finished exporting &apos;{0}&apos; files.
         /// </summary>
         public static string ModelTool_ExportedFilesMessage {
@@ -5808,6 +5925,213 @@ namespace RHToolkit.Properties {
         public static string ModelTool_ReadingFiles {
             get {
                 return ResourceManager.GetString("ModelTool_ReadingFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported MGM → FBX: {0}.
+        /// </summary>
+        public static string ModelViewerExportedMgmToFbx {
+            get {
+                return ResourceManager.GetString("ModelViewerExportedMgmToFbx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exported MMP → FBX: {0}.
+        /// </summary>
+        public static string ModelViewerExportedMmpToFbx {
+            get {
+                return ResourceManager.GetString("ModelViewerExportedMmpToFbx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error exporting file {0}: {1}.
+        /// </summary>
+        public static string ModelViewerExportError {
+            get {
+                return ResourceManager.GetString("ModelViewerExportError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to FBX Exporter.
+        /// </summary>
+        public static string ModelViewerFbxExporterTitle {
+            get {
+                return ResourceManager.GetString("ModelViewerFbxExporterTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading {0} model....
+        /// </summary>
+        public static string ModelViewerLoadingModel {
+            get {
+                return ResourceManager.GetString("ModelViewerLoadingModel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3D Model Viewer &apos;{0}&apos;.
+        /// </summary>
+        public static string ModelViewerTitle {
+            get {
+                return ResourceManager.GetString("ModelViewerTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3D Model Viewer.
+        /// </summary>
+        public static string ModelViewerTitleDefault {
+            get {
+                return ResourceManager.GetString("ModelViewerTitleDefault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsupported file extension: {0}.
+        /// </summary>
+        public static string ModelViewerUnsupportedExtension {
+            get {
+                return ResourceManager.GetString("ModelViewerUnsupportedExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display Bones.
+        /// </summary>
+        public static string ModelViewMenuDisplayBones {
+            get {
+                return ResourceManager.GetString("ModelViewMenuDisplayBones", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display armature.
+        /// </summary>
+        public static string ModelViewMenuDisplayBonesTooltip {
+            get {
+                return ResourceManager.GetString("ModelViewMenuDisplayBonesTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display Mesh.
+        /// </summary>
+        public static string ModelViewMenuDisplayMesh {
+            get {
+                return ResourceManager.GetString("ModelViewMenuDisplayMesh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display textured meshes.
+        /// </summary>
+        public static string ModelViewMenuDisplayMeshTooltip {
+            get {
+                return ResourceManager.GetString("ModelViewMenuDisplayMeshTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display Wireframe.
+        /// </summary>
+        public static string ModelViewMenuDisplayWireframe {
+            get {
+                return ResourceManager.GetString("ModelViewMenuDisplayWireframe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display mesh wireframe.
+        /// </summary>
+        public static string ModelViewMenuDisplayWireframeTooltip {
+            get {
+                return ResourceManager.GetString("ModelViewMenuDisplayWireframeTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Draw.
+        /// </summary>
+        public static string ModelViewMenuDraw {
+            get {
+                return ResourceManager.GetString("ModelViewMenuDraw", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Animations (WIP).
+        /// </summary>
+        public static string ModelViewMenuExportAnimations {
+            get {
+                return ResourceManager.GetString("ModelViewMenuExportAnimations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export animations (.ds).
+        /// </summary>
+        public static string ModelViewMenuExportAnimationsTooltip {
+            get {
+                return ResourceManager.GetString("ModelViewMenuExportAnimationsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Current File to FBX.
+        /// </summary>
+        public static string ModelViewMenuExportCurrentFileToFBX {
+            get {
+                return ResourceManager.GetString("ModelViewMenuExportCurrentFileToFBX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Options.
+        /// </summary>
+        public static string ModelViewMenuExportOptions {
+            get {
+                return ResourceManager.GetString("ModelViewMenuExportOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display NavMesh Octree.
+        /// </summary>
+        public static string ModelViewMenuNavMeshOctree {
+            get {
+                return ResourceManager.GetString("ModelViewMenuNavMeshOctree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display navigation mesh octree.
+        /// </summary>
+        public static string ModelViewMenuNavMeshOctreeTooltip {
+            get {
+                return ResourceManager.GetString("ModelViewMenuNavMeshOctreeTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display NavMesh Wireframe.
+        /// </summary>
+        public static string ModelViewMenuNavMeshWireframe {
+            get {
+                return ResourceManager.GetString("ModelViewMenuNavMeshWireframe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show navigation mesh wireframe.
+        /// </summary>
+        public static string ModelViewMenuNavMeshWireframeTooltip {
+            get {
+                return ResourceManager.GetString("ModelViewMenuNavMeshWireframeTooltip", resourceCulture);
             }
         }
         
@@ -7491,6 +7815,15 @@ namespace RHToolkit.Properties {
         public static string Outerwear {
             get {
                 return ResourceManager.GetString("Outerwear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Output Folder.
+        /// </summary>
+        public static string OutputFolder {
+            get {
+                return ResourceManager.GetString("OutputFolder", resourceCulture);
             }
         }
         

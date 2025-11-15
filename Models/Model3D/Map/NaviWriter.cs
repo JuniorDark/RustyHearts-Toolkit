@@ -82,7 +82,8 @@ public static class NaviWriter
         var positions = new List<Num.Vector3>();
         var triangles = new List<(int A, int B, int C)>();
 
-        var meshNode = navRoot.Children.First(); // "NM_Plane01"
+        var meshNode = navRoot.Children.FirstOrDefault() ?? throw new InvalidDataException("navRoot.Children is empty; cannot extract mesh."); // "NM_Plane01"
+
         var meshWorld = ModelExtensions.GetGlobalTransform(meshNode);
 
         foreach (int mi in meshNode.MeshIndices)

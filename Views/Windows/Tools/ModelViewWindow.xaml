@@ -85,7 +85,7 @@
                     VerticalAlignment="Center"
                     FontWeight="Bold"
                     Foreground="White"
-                    Text="Version:" />
+                    Text="{x:Static rs:Resources.ModelInfoVersion}" />
                 <TextBlock
                     Margin="4,0,10,0"
                     VerticalAlignment="Center"
@@ -96,7 +96,7 @@
                     VerticalAlignment="Center"
                     FontWeight="Bold"
                     Foreground="White"
-                    Text="Objects:" />
+                    Text="{x:Static rs:Resources.ModelInfoObjects}" />
                 <TextBlock
                     Margin="4,0,10,0"
                     VerticalAlignment="Center"
@@ -107,7 +107,7 @@
                     VerticalAlignment="Center"
                     FontWeight="Bold"
                     Foreground="White"
-                    Text="Materials:" />
+                    Text="{x:Static rs:Resources.ModelInfoMaterials}" />
                 <TextBlock
                     Margin="4,0,10,0"
                     VerticalAlignment="Center"
@@ -118,7 +118,7 @@
                     VerticalAlignment="Center"
                     FontWeight="Bold"
                     Foreground="White"
-                    Text="Bones:" />
+                    Text="{x:Static rs:Resources.ModelInfoBones}" />
                 <TextBlock
                     Margin="4,0,10,0"
                     VerticalAlignment="Center"
