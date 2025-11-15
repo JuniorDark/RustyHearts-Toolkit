@@ -62,6 +62,7 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
 <details>
   <summary>Click to expand preview images</summary>
   
+  ![image](preview/preview01.png)
   ![image](preview/preview02.png)
   ![image](preview/preview03.png)
   ![image](preview/preview04.png)
@@ -73,6 +74,8 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
   ![image](preview/preview10.png)
   ![image](preview/preview11.png)
   ![image](preview/preview12.png)
+  ![image](preview/preview13.png)
+  ![image](preview/preview14.png)
   
 </details>
 
@@ -99,9 +102,9 @@ Note: After editing tables remember to rebuild the sqlite database on `SQLite Da
 Sprites are avaliable on [`Resources.zip`](Resources.zip)
 
 ## Prerequisites for Development
-* Visual Studio 2022 (Any Edition - 17.12 or later)
-* Windows 10 SDK or Windows 11 SDK via Visual Studio Installer
-* .NET Core 9 SDK (9.0.100 or later)
+* Visual Studio 2026 (Any Edition - 18.0 or later)
+* Windows 11 SDK via Visual Studio Installer
+* .NET 10 SDK (10.0.100 or later)
 
 ## Building
 
@@ -109,8 +112,8 @@ If you wish to build the project yourself, follow these steps:
 
 ### Step 1
 
-Install the [.NET 9.0 (or higher) SDK](https://dotnet.microsoft.com/download/dotnet/9.0).
-Make sure your SDK version is higher or equal to the required version specified. 
+Install the [.NET 10.0 (or higher) SDK](https://dotnet.microsoft.com/download/dotnet/10.0).
+Make sure your SDK version is higher or equal to the required version specified.
 
 ### Step 2
 

@@ -5,17 +5,17 @@ updates:
     directories:
       - /
     schedule:
-      interval: weekly
+      interval: monthly
     labels: []
   - package-ecosystem: github-actions
     directories:
       - /
     schedule:
-      interval: weekly
+      interval: monthly
     labels: []
   - package-ecosystem: nuget
     directories:
       - /
     schedule:
-      interval: weekly
+      interval: monthly
     labels: []
