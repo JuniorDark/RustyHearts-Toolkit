@@ -205,9 +205,9 @@
                         <UniformGrid
                             x:Name="HeaderPanel"
                             Grid.Row="0"
-                            Columns="9"
+                            Columns="5"
                             IsItemsHost="True"
-                            Rows="2" />
+                            Rows="4" />
 
                         <ContentPresenter
                             x:Name="PART_SelectedContentHost"

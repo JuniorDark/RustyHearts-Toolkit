@@ -21,6 +21,8 @@ namespace RHToolkit.Models.UISettings
         private const string TableFolderValueName = "TableFolder";
         private const string ClientFolderValueName = "ClientFolder";
         private const string FilesToPackFolderValueName = "FilesToPackFolder";
+        private const string InputFolderValueName = "InputFolder";
+        private const string OutputFolderValueName = "OutputFolder";
 
         /// <summary>
         /// Encrypts a plain text string using the current user's data protection scope.
@@ -269,6 +271,54 @@ namespace RHToolkit.Models.UISettings
         {
             using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
             key.SetValue(FilesToPackFolderValueName, folderPath);
+        }
+
+        /// <summary>
+        /// Gets the input folder path from the registry.
+        /// </summary>
+        /// <returns>The files folder path.</returns>
+        public static string GetInputFolder()
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
+            {
+                return key.GetValue(InputFolderValueName)?.ToString() ?? string.Empty;
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Sets the input folder path in the registry.
+        /// </summary>
+        /// <param name="folderPath">The files folder path to set.</param>
+        public static void SetInputFolder(string folderPath)
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(InputFolderValueName, folderPath);
+        }
+
+        /// <summary>
+        /// Gets the output folder path from the registry.
+        /// </summary>
+        /// <returns>The files folder path.</returns>
+        public static string GetOutputFolder()
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
+            {
+                return key.GetValue(OutputFolderValueName)?.ToString() ?? string.Empty;
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Sets the output folder path in the registry.
+        /// </summary>
+        /// <param name="folderPath">The files folder path to set.</param>
+        public static void SetOutputFolder(string folderPath)
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(OutputFolderValueName, folderPath);
         }
     }
 }

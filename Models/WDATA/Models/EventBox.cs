@@ -39,6 +39,7 @@ public partial class EventBox : ObservableObject
     [ObservableProperty] private Quaternion _Rotation = new();
     [ObservableProperty] private Vector3 _Extents = new();
     [ObservableProperty] private EventBoxType _Type;
+    [ObservableProperty] private bool _isVisible = false;
 }
 
 /// <summary>

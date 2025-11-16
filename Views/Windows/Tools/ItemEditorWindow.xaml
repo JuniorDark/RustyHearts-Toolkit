@@ -1388,7 +1388,7 @@
                                                 </i:Interaction.Behaviors>
                                             </ui:NumberBox>
                                         </StackPanel>
-                                        
+
                                         <StackPanel
                                             Grid.Row="9"
                                             Grid.Column="0"

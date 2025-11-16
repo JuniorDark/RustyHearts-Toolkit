@@ -1,0 +1,193 @@
+﻿<Window
+    x:Class="RHToolkit.Views.Windows.ModelViewWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:behaviors="clr-namespace:RHToolkit.Behaviors"
+    xmlns:control="clr-namespace:RHToolkit.Views.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:hx="http://helix-toolkit.org/wpf/SharpDX"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:RHToolkit.Utilities.Converters"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:RHToolkit.Models.Model3D"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
+    x:Name="ModelView"
+    Title="{Binding Title}"
+    MinWidth="1280"
+    MinHeight="720"
+    MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
+    behaviors:WindowBehaviors.EnableDragMove="True"
+    d:DataContext="{d:DesignInstance Type=models:ModelViewManager}"
+    d:MaxHeight="720"
+    d:MaxWidth="1280"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Icon="/Assets/ico/rhicon.ico"
+    ResizeMode="CanResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding LoadCommand}" Gesture="Ctrl+O" />
+        <KeyBinding Command="{Binding CloseFileCommand}" Gesture="Ctrl+W" />
+        <KeyBinding Command="{Binding ExportAsCommand}" Gesture="Ctrl+S" />
+        <KeyBinding Command="{Binding ImportFromFbxCommand}" Gesture="Ctrl+Shift+S" />
+    </Window.InputBindings>
+    <ContentControl Template="{StaticResource box_violet02}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <ui:TitleBar
+                x:Name="TitleBar"
+                Title="{Binding Title}"
+                Grid.ColumnSpan="2"
+                Height="30"
+                Margin="30,0,0,0"
+                VerticalAlignment="Center"
+                d:Title="Model Viewer"
+                ButtonsForeground="White"
+                FontSize="15"
+                Foreground="White">
+                <ui:TitleBar.Icon>
+                    <ui:ImageIcon
+                        Width="20"
+                        Height="20"
+                        Margin="0,-1,0,-3"
+                        Source="/Assets/ico/rhicon.ico" />
+                </ui:TitleBar.Icon>
+            </ui:TitleBar>
+
+            <!--  File menu  -->
+            <control:ModelViewMenu Grid.Row="1" />
+
+            <!--  Model Info  -->
+            <StackPanel
+                Grid.Row="2"
+                Grid.ColumnSpan="2"
+                VerticalAlignment="Top"
+                DockPanel.Dock="Top"
+                Orientation="Horizontal"
+                Visibility="{Binding IsVisible}">
+                <TextBlock
+                    Margin="5,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="{x:Static rs:Resources.ModelInfoVersion}" />
+                <TextBlock
+                    Margin="4,0,10,0"
+                    VerticalAlignment="Center"
+                    Foreground="Gold"
+                    Text="{Binding Version}" />
+                <TextBlock
+                    Margin="5,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="{x:Static rs:Resources.ModelInfoObjects}" />
+                <TextBlock
+                    Margin="4,0,10,0"
+                    VerticalAlignment="Center"
+                    Foreground="Gold"
+                    Text="{Binding ObjectCount}" />
+                <TextBlock
+                    Margin="5,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="{x:Static rs:Resources.ModelInfoMaterials}" />
+                <TextBlock
+                    Margin="4,0,10,0"
+                    VerticalAlignment="Center"
+                    Foreground="Gold"
+                    Text="{Binding MaterialCount}" />
+                <TextBlock
+                    Margin="5,0"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="{x:Static rs:Resources.ModelInfoBones}" />
+                <TextBlock
+                    Margin="4,0,10,0"
+                    VerticalAlignment="Center"
+                    Foreground="Gold"
+                    Text="{Binding BoneCount}" />
+            </StackPanel>
+
+            <!--  3D Scene  -->
+            <Grid
+                Grid.Row="3"
+                Grid.ColumnSpan="2"
+                VerticalAlignment="Top"
+                Visibility="{Binding IsVisible}">
+                <hx:Viewport3DX
+                    x:Name="View"
+                    Width="Auto"
+                    Height="520"
+                    MinWidth="500"
+                    VerticalAlignment="Top"
+                    BackgroundColor="Gray"
+                    Camera="{Binding Camera}"
+                    EffectsManager="{Binding EffectsManager}"
+                    RotateAroundMouseDownPoint="False"
+                    ShowCoordinateSystem="True"
+                    UseDefaultGestures="False"
+                    ZoomAroundMouseDownPoint="True">
+                    <hx:ItemsModel3D ItemsSource="{Binding Scene3D}" />
+
+                    <!--  Low ambient so shading has contrast  -->
+                    <hx:AmbientLight3D Color="#202020" />
+
+                    <!--  Key: warm, from above/front-left  -->
+                    <hx:DirectionalLight3D Direction="-0.35,-0.80,-0.42" Color="White" />
+
+                    <!--  Fill: cool, softer, from above/right to open shadows  -->
+                    <hx:DirectionalLight3D Direction="0.55,-0.45,0.70" Color="#66C7D9FF" />
+
+                    <!--  Rim: subtle back light to pop silhouettes  -->
+                    <hx:DirectionalLight3D Direction="0.00,0.25, -1.00" Color="#4CB0C8FF" />
+
+                    <hx:Viewport3DX.InputBindings>
+                        <KeyBinding Key="B" Command="hx:ViewportCommands.BackView" />
+                        <KeyBinding Key="F" Command="hx:ViewportCommands.FrontView" />
+                        <KeyBinding Key="U" Command="hx:ViewportCommands.TopView" />
+                        <KeyBinding Key="D" Command="hx:ViewportCommands.BottomView" />
+                        <KeyBinding Key="L" Command="hx:ViewportCommands.LeftView" />
+                        <KeyBinding Key="R" Command="hx:ViewportCommands.RightView" />
+                        <KeyBinding Command="hx:ViewportCommands.ZoomExtents" Gesture="Control+E" />
+                        <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="RightClick" />
+                        <MouseBinding Command="hx:ViewportCommands.Zoom" Gesture="MiddleClick" />
+                        <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="LeftClick" />
+                    </hx:Viewport3DX.InputBindings>
+
+                </hx:Viewport3DX>
+
+            </Grid>
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.ColumnSpan="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                d:Text="Open a file"
+                FontSize="15"
+                Foreground="White"
+                Text="{Binding Message}"
+                Visibility="{Binding IsMessageVisible}" />
+        </Grid>
+
+    </ContentControl>
+
+</Window>

@@ -4581,6 +4581,9 @@
   <data name="PCKTool_UpdateMessage" xml:space="preserve">
     <value>현재 pck 파일에 '{0}'개의 파일이 있습니다. '{1}'개의 새/변경된 파일을 압축하시겠습니까?</value>
   </data>
+  <data name="ModelTool_ExportMessage" xml:space="preserve">
+    <value>{0}개의 파일을 내보내시겠습니까?</value>
+  </data>
   <data name="PCKTool_SelectFilesMessage" xml:space="preserve">
     <value>먼저 추출할 파일을 선택하세요.</value>
   </data>
@@ -4593,6 +4596,18 @@
   <data name="PCKTool_Packing" xml:space="preserve">
     <value>파일 포장: {0}/{1}</value>
   </data>
+  <data name="ModelTool_ExportingFiles" xml:space="preserve">
+    <value>파일 {0} 내보내기 : {1}/{2}</value>
+  </data>
+  <data name="ModelTool_NoFiles" xml:space="preserve">
+    <value>내보낼 파일이 없습니다</value>
+  </data>
+  <data name="ModelTool_ReadingFiles" xml:space="preserve">
+    <value>파일 읽기</value>
+  </data>
+  <data name="ModelTool_ExportedFilesMessage" xml:space="preserve">
+    <value>'{0}' 파일 내보내기가 완료되었습니다.</value>
+  </data>
   <data name="PCKTool_UnpackingFiles" xml:space="preserve">
     <value>파일 압축 해제: {0}/{1}</value>
   </data>
@@ -4602,7 +4617,7 @@
   <data name="PCKTool_PackingComplete" xml:space="preserve">
     <value>{0}개의 파일 압축이 완료되었습니다.</value>
   </data>
-  <data name="PCKTool_CancelledMessage" xml:space="preserve">
+  <data name="OperationCancelledMessage" xml:space="preserve">
     <value>작업이 취소되었습니다.</value>
   </data>
   <data name="PCKTool_UnpackSelected" xml:space="preserve">
@@ -4649,5 +4664,116 @@
   </data>
   <data name="PCKTool_CantReadFile" xml:space="preserve">
     <value>PCK 아카이브에서 전체 파일을 읽을 수 없습니다.</value>
+  </data>
+  <data name="ModelInfoVersion" xml:space="preserve">
+    <value>버전</value>
+  </data>
+  <data name="ModelInfoObjects" xml:space="preserve">
+    <value>사물</value>
+  </data>
+  <data name="ModelInfoMaterials" xml:space="preserve">
+    <value>물질적인</value>
+  </data>
+  <data name="ModelInfoBones" xml:space="preserve">
+    <value>뼈</value>
+  </data>
+  <data name="ModelViewMenuExportCurrentFileToFBX" xml:space="preserve">
+    <value>현재 파일을 FBX로 내보내기</value>
+  </data>
+  <data name="ModelViewMenuDraw" xml:space="preserve">
+    <value>그리다</value>
+  </data>
+  <data name="ModelViewMenuDisplayMesh" xml:space="preserve">
+    <value>디스플레이 메시</value>
+  </data>
+  <data name="ModelViewMenuDisplayMeshTooltip" xml:space="preserve">
+    <value>텍스처 메시 표시</value>
+  </data>
+  <data name="ModelViewMenuDisplayBones" xml:space="preserve">
+    <value>디스플레이 본즈</value>
+  </data>
+  <data name="ModelViewMenuDisplayBonesTooltip" xml:space="preserve">
+    <value>디스플레이 본즈</value>
+  </data>
+  <data name="ModelViewMenuDisplayWireframe" xml:space="preserve">
+    <value>와이어프레임 표시</value>
+  </data>
+  <data name="ModelViewMenuDisplayWireframeTooltip" xml:space="preserve">
+    <value>메시 와이어프레임 표시</value>
+  </data>
+  <data name="ModelViewMenuNavMeshOctree" xml:space="preserve">
+    <value>NavMesh Octree 표시</value>
+  </data>
+  <data name="ModelViewMenuNavMeshWireframe" xml:space="preserve">
+    <value>NavMesh 와이어프레임 표시</value>
+  </data>
+  <data name="ModelViewMenuNavMeshWireframeTooltip" xml:space="preserve">
+    <value>탐색 메시 와이어프레임 표시</value>
+  </data>
+  <data name="ModelViewMenuNavMeshOctreeTooltip" xml:space="preserve">
+    <value>디스플레이 네비게이션 메시 옥트리</value>
+  </data>
+  <data name="ModelViewMenuExportOptions" xml:space="preserve">
+    <value>내보내기 옵션</value>
+  </data>
+  <data name="EmbedTextures" xml:space="preserve">
+    <value>텍스처 삽입</value>
+  </data>
+  <data name="EmbedTexturesTooltip" xml:space="preserve">
+    <value>fbx에 텍스처 삽입</value>
+  </data>
+  <data name="ModelViewMenuExportAnimations" xml:space="preserve">
+    <value>애니메이션 내보내기(WIP)</value>
+  </data>
+  <data name="ModelViewMenuExportAnimationsTooltip" xml:space="preserve">
+    <value>애니메이션 내보내기(.ds)</value>
+  </data>
+  <data name="MenuFileFormats" xml:space="preserve">
+    <value>파일 형식</value>
+  </data>
+  <data name="ModelsFolder" xml:space="preserve">
+    <value>모델 폴더</value>
+  </data>
+  <data name="OutputFolder" xml:space="preserve">
+    <value>출력 폴더</value>
+  </data>
+  <data name="ExportOptions" xml:space="preserve">
+    <value>내보내기 옵션</value>
+  </data>
+  <data name="CopyTextures" xml:space="preserve">
+    <value>텍스처 복사</value>
+  </data>
+  <data name="CopyTexturesTooltip" xml:space="preserve">
+    <value>텍스처를 출력 디렉토리에 복사합니다.</value>
+  </data>
+  <data name="ExportToFBX" xml:space="preserve">
+    <value>FBX로 내보내기</value>
+  </data>
+  <data name="ModelViewerTitle" xml:space="preserve">
+    <value>3D 모델 뷰어 '{0}'</value>
+  </data>
+  <data name="ModelViewerFbxExporterTitle" xml:space="preserve">
+    <value>FBX 내보내기</value>
+  </data>
+  <data name="ErrorLoadingFile" xml:space="preserve">
+    <value>{0}을(를) 로드하는 중 오류가 발생했습니다: {1}</value>
+  </data>
+  <data name="ModelViewerExportedMgmToFbx" xml:space="preserve">
+    <value>MGM → FBX로 내보냈습니다: {0}</value>
+  </data>
+  <data name="ModelViewerExportedMmpToFbx" xml:space="preserve">
+    <value>MMP → FBX로 내보냄: {0}</value>
+  </data>
+  <data name="ModelViewerExportError" xml:space="preserve">
+    <value>파일 {0}을(를) 내보내는 중 오류가 발생했습니다: {1}</value>
+  </data>
+  <data name="ModelViewerLoadingModel" xml:space="preserve">
+    <value>{0} 모델을 로드하는 중...</value>
+  </data>
+  <data name="ModelViewerUnsupportedExtension" xml:space="preserve">
+    <value>지원되지 않는 파일 확장자: {0}</value>
+  </data>
+  <data name="ModelViewerTitleDefault" xml:space="preserve">
+    <value>3D 모델 뷰어</value>
   </data>
 </root>

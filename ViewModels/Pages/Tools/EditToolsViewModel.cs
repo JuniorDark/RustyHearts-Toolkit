@@ -15,6 +15,7 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
     [
         new(Resources.TableEditorTitle, Resources.TableEditorDesc, SymbolRegular.DocumentEdit24, "rheditor"),
         new(Resources.WDataEditorTitle, Resources.WDataEditorDesc, SymbolRegular.DocumentEdit24, "wdataeditor"),
+        new("3D Model Viewer", "View and Export 3D Models", SymbolRegular.DocumentEdit24, "modelview"),
     ];
 
     [ObservableProperty]
@@ -60,6 +61,9 @@ public partial class EditToolsViewModel(ISqLiteDatabaseService sqLiteDatabaseSer
                     break;
                 case "wdataeditor":
                     windowsProviderService.Show<WDataEditorWindow>(true);
+                    break;
+                case "modelview":
+                    windowsProviderService.Show<ModelViewWindow>(true);
                     break;
                 case "cashshopeditor":
                     windowsProviderService.Show<CashShopEditorWindow>(true);

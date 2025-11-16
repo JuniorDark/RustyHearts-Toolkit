@@ -157,7 +157,7 @@ public partial class PCKToolViewModel : ObservableObject
         }
         catch (OperationCanceledException)
         {
-            ReportProgress(Resources.PCKTool_CancelledMessage);
+            ReportProgress(Resources.OperationCancelledMessage);
             await Task.Delay(3000);
             ReportProgress(string.Format(Resources.PCKTool_FileNumber, _allPckFiles?.Count ?? 0));
         }
@@ -242,7 +242,7 @@ public partial class PCKToolViewModel : ObservableObject
         }
         catch (OperationCanceledException)
         {
-            ReportProgress(Resources.PCKTool_CancelledMessage);
+            ReportProgress(Resources.OperationCancelledMessage);
             ResetUI();
         }
         catch (Exception ex)
