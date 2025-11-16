@@ -2,6 +2,7 @@
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Localization;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.Model3D;
 using RHToolkit.Models.SQLite;
 using RHToolkit.Services;
 using RHToolkit.Services.Contracts;
@@ -65,6 +66,8 @@ public partial class App : Application
                 _ = services.AddSingleton<CouponViewModel>();
                 _ = services.AddSingleton<PCKToolPage>();
                 _ = services.AddSingleton<PCKToolViewModel>();
+                _ = services.AddSingleton<ModelToolsPage>();
+                _ = services.AddSingleton<ModelToolsViewModel>();
                 // All other services and viewmodels
                 _ = services.AddSingleton<ISqlDatabaseService, SqlDatabaseService>();
                 _ = services.AddSingleton<IDatabaseService, DatabaseService>();
@@ -102,6 +105,8 @@ public partial class App : Application
                 _ = services.AddTransient<RHEditorViewModel>();
                 _ = services.AddTransient<WDataEditorWindow>();
                 _ = services.AddTransient<WDataEditorViewModel>();
+                _ = services.AddTransient<ModelViewWindow>();
+                _ = services.AddTransient<ModelViewManager>();
                 _ = services.AddTransient<CashShopEditorWindow>();
                 _ = services.AddTransient<CashShopEditorViewModel>();
                 _ = services.AddTransient<SetItemEditorWindow>();

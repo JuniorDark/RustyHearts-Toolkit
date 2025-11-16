@@ -169,6 +169,7 @@ public sealed class CollectionHistory : IDisposable
         {
             if (!prop.CanRead || !prop.CanWrite) continue;
             if (prop.GetIndexParameters().Length > 0) continue;
+            if (ShouldIgnoreProperty(prop)) continue;
 
             var value = prop.GetValue(obj);
             if (value is INotifyPropertyChanged nested && !_observed.Contains(nested))
@@ -193,18 +194,23 @@ public sealed class CollectionHistory : IDisposable
     {
         if (_replaying) return;
         if (sender is not INotifyPropertyChanged npc) return;
+        if (e.PropertyName is null) return;
+
+        if (ShouldIgnoreProperty(e.PropertyName)) return;
+
         if (!_snapshots.TryGetValue(npc, out var map)) return;
 
-        var pi = sender!.GetType().GetProperty(e.PropertyName!);
-        var now = pi!.GetValue(sender);
-        map.TryGetValue(e.PropertyName!, out var before);
+        var pi = sender.GetType().GetProperty(e.PropertyName);
+        if (pi is null || !pi.CanRead || !pi.CanWrite) return;
 
+        var now = pi.GetValue(sender);
+        map.TryGetValue(e.PropertyName, out var before);
         if (Equals(now, before)) return;
 
-        Push(new CellChange(sender!, pi!, before, now));
-
-        map[e.PropertyName!] = DeepClone(now);
+        Push(new CellChange(sender, pi, before, now));
+        map[e.PropertyName] = DeepClone(now);
     }
+
 
     /// <summary>
     /// Creates a deep clone of an object using JSON serialization.
@@ -230,9 +236,16 @@ public sealed class CollectionHistory : IDisposable
         {
             if (!p.CanRead || !p.CanWrite) continue;
             if (p.GetIndexParameters().Length > 0) continue;
+            if (ShouldIgnoreProperty(p)) continue;
+
             dict[p.Name] = DeepClone(p.GetValue(obj));
         }
         _snapshots[obj] = dict;
     }
 
+    private static bool ShouldIgnoreProperty(string name)
+    => string.Equals(name, "IsVisible", StringComparison.Ordinal);
+
+    private static bool ShouldIgnoreProperty(PropertyInfo pi)
+        => ShouldIgnoreProperty(pi.Name);
 }

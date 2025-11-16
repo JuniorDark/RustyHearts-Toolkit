@@ -4581,6 +4581,9 @@
   <data name="PCKTool_UpdateMessage" xml:space="preserve">
     <value>The current pck files have '{0}' files. Pack '{1}' new/changed files?</value>
   </data>
+  <data name="ModelTool_ExportMessage" xml:space="preserve">
+    <value>Do you want to export '{0}' files?</value>
+  </data>
   <data name="PCKTool_SelectFilesMessage" xml:space="preserve">
     <value>Select file(s) to be unpacked first.</value>
   </data>
@@ -4593,6 +4596,18 @@
   <data name="PCKTool_Packing" xml:space="preserve">
     <value>Packing Files: {0}/{1}</value>
   </data>
+  <data name="ModelTool_ExportingFiles" xml:space="preserve">
+    <value>Exporting file {0} : {1}/{2}</value>
+  </data>
+  <data name="ModelTool_NoFiles" xml:space="preserve">
+    <value>No files to export</value>
+  </data>
+  <data name="ModelTool_ReadingFiles" xml:space="preserve">
+    <value>Reading Files</value>
+  </data>
+  <data name="ModelTool_ExportedFilesMessage" xml:space="preserve">
+    <value>Finished exporting '{0}' files</value>
+  </data>
   <data name="PCKTool_UnpackingFiles" xml:space="preserve">
     <value>Unpacking Files: {0}/{1}</value>
   </data>
@@ -4602,7 +4617,7 @@
   <data name="PCKTool_PackingComplete" xml:space="preserve">
     <value>Finished packing {0} files.</value>
   </data>
-  <data name="PCKTool_CancelledMessage" xml:space="preserve">
+  <data name="OperationCancelledMessage" xml:space="preserve">
     <value>Operation Cancelled.</value>
   </data>
   <data name="PCKTool_UnpackSelected" xml:space="preserve">
@@ -4649,5 +4664,116 @@
   </data>
   <data name="PCKTool_CantReadFile" xml:space="preserve">
     <value>Could not read full file from PCK archive.</value>
+  </data>
+  <data name="ModelInfoVersion" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="ModelInfoObjects" xml:space="preserve">
+    <value>Objects</value>
+  </data>
+  <data name="ModelInfoMaterials" xml:space="preserve">
+    <value>Materials</value>
+  </data>
+  <data name="ModelInfoBones" xml:space="preserve">
+    <value>Bones</value>
+  </data>
+  <data name="ModelViewMenuExportCurrentFileToFBX" xml:space="preserve">
+    <value>Export Current File to FBX</value>
+  </data>
+  <data name="ModelViewMenuDraw" xml:space="preserve">
+    <value>Draw</value>
+  </data>
+  <data name="ModelViewMenuDisplayMesh" xml:space="preserve">
+    <value>Display Mesh</value>
+  </data>
+  <data name="ModelViewMenuDisplayMeshTooltip" xml:space="preserve">
+    <value>Display textured meshes</value>
+  </data>
+  <data name="ModelViewMenuDisplayBones" xml:space="preserve">
+    <value>Display Bones</value>
+  </data>
+  <data name="ModelViewMenuDisplayBonesTooltip" xml:space="preserve">
+    <value>Display armature</value>
+  </data>
+  <data name="ModelViewMenuDisplayWireframe" xml:space="preserve">
+    <value>Display Wireframe</value>
+  </data>
+  <data name="ModelViewMenuDisplayWireframeTooltip" xml:space="preserve">
+    <value>Display mesh wireframe</value>
+  </data>
+  <data name="ModelViewMenuNavMeshOctree" xml:space="preserve">
+    <value>Display NavMesh Octree</value>
+  </data>
+  <data name="ModelViewMenuNavMeshWireframe" xml:space="preserve">
+    <value>Display NavMesh Wireframe</value>
+  </data>
+  <data name="ModelViewMenuNavMeshWireframeTooltip" xml:space="preserve">
+    <value>Show navigation mesh wireframe</value>
+  </data>
+  <data name="ModelViewMenuNavMeshOctreeTooltip" xml:space="preserve">
+    <value>Display navigation mesh octree</value>
+  </data>
+  <data name="ModelViewMenuExportOptions" xml:space="preserve">
+    <value>Export Options</value>
+  </data>
+  <data name="EmbedTextures" xml:space="preserve">
+    <value>Embed Textures</value>
+  </data>
+  <data name="EmbedTexturesTooltip" xml:space="preserve">
+    <value>Embed Textures in the fbx</value>
+  </data>
+  <data name="ModelViewMenuExportAnimations" xml:space="preserve">
+    <value>Export Animations (WIP)</value>
+  </data>
+  <data name="ModelViewMenuExportAnimationsTooltip" xml:space="preserve">
+    <value>Export animations (.ds)</value>
+  </data>
+  <data name="MenuFileFormats" xml:space="preserve">
+    <value>File Formats</value>
+  </data>
+  <data name="ModelsFolder" xml:space="preserve">
+    <value>Models Folder</value>
+  </data>
+  <data name="OutputFolder" xml:space="preserve">
+    <value>Output Folder</value>
+  </data>
+  <data name="ExportOptions" xml:space="preserve">
+    <value>Export Options</value>
+  </data>
+  <data name="CopyTextures" xml:space="preserve">
+    <value>Copy Textures</value>
+  </data>
+  <data name="CopyTexturesTooltip" xml:space="preserve">
+    <value>Copy Textures to the output directory</value>
+  </data>
+  <data name="ExportToFBX" xml:space="preserve">
+    <value>Export To FBX</value>
+  </data>
+  <data name="ModelViewerTitle" xml:space="preserve">
+    <value>3D Model Viewer '{0}'</value>
+  </data>
+  <data name="ModelViewerFbxExporterTitle" xml:space="preserve">
+    <value>FBX Exporter</value>
+  </data>
+  <data name="ErrorLoadingFile" xml:space="preserve">
+    <value>Error loading {0}: {1}</value>
+  </data>
+  <data name="ModelViewerExportedMgmToFbx" xml:space="preserve">
+    <value>Exported MGM → FBX: {0}</value>
+  </data>
+  <data name="ModelViewerExportedMmpToFbx" xml:space="preserve">
+    <value>Exported MMP → FBX: {0}</value>
+  </data>
+  <data name="ModelViewerExportError" xml:space="preserve">
+    <value>Error exporting file {0}: {1}</value>
+  </data>
+  <data name="ModelViewerLoadingModel" xml:space="preserve">
+    <value>Loading {0} model...</value>
+  </data>
+  <data name="ModelViewerUnsupportedExtension" xml:space="preserve">
+    <value>Unsupported file extension: {0}</value>
+  </data>
+  <data name="ModelViewerTitleDefault" xml:space="preserve">
+    <value>3D Model Viewer</value>
   </data>
 </root>

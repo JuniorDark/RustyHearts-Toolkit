@@ -1,0 +1,134 @@
+﻿<UserControl
+    x:Class="RHToolkit.Views.Controls.ModelViewMenu"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:RHToolkit.Views.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="clr-namespace:RHToolkit.Models.Model3D"
+    xmlns:rs="clr-namespace:RHToolkit.Properties"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
+    d:DataContext="{d:DesignInstance Type=models:ModelViewManager}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Menu
+            Grid.Row="0"
+            VerticalAlignment="Top"
+            FontSize="14"
+            Foreground="White">
+            <ui:MenuItem Header="{x:Static rs:Resources.MenuFile}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
+                <MenuItem
+                    Command="{Binding LoadCommand}"
+                    Header="{x:Static rs:Resources.MenuOpenFile}"
+                    Icon="{ui:SymbolIcon DocumentAdd24}"
+                    InputGestureText="Ctrl+O" />
+                <MenuItem
+                    Command="{Binding CloseFileCommand}"
+                    Header="{x:Static rs:Resources.MenuCloseFile}"
+                    Icon="{ui:SymbolIcon DocumentDismiss24}"
+                    InputGestureText="Ctrl+W" />
+                <Separator />
+                <MenuItem Header="{x:Static rs:Resources.MenuExportAs}" Icon="{ui:SymbolIcon DocumentSave24}">
+                    <MenuItem
+                        Command="{Binding ExportAsCommand}"
+                        Header="{x:Static rs:Resources.ModelViewMenuExportCurrentFileToFBX}"
+                        Icon="{ui:SymbolIcon DocumentSave24}"
+                        InputGestureText="Ctrl+S" />
+                    <!--<MenuItem
+                        Command="{Binding ImportFromFbxCommand}"
+                        Header="Export FBX to MMP (WIP)"
+                        Icon="{ui:SymbolIcon DocumentSave24}"
+                        InputGestureText="Ctrl+Shift+S" />-->
+                </MenuItem>
+                <Separator />
+                <MenuItem
+                    Command="{Binding CloseWindowCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+                    Header="{x:Static rs:Resources.MenuExit}"
+                    Icon="{ui:SymbolIcon ArrowExit20}" />
+            </ui:MenuItem>
+            <Separator />
+            <ui:MenuItem Header="{x:Static rs:Resources.ModelViewMenuDraw}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
+                <CheckBox
+                    Content="{x:Static rs:Resources.ModelViewMenuDisplayMesh}"
+                    IsChecked="{Binding ShowMeshSolid, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuDisplayMeshTooltip}" />
+                <CheckBox
+                    Content="{x:Static rs:Resources.ModelViewMenuDisplayBones}"
+                    IsChecked="{Binding ShowBones, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuDisplayBonesTooltip}" />
+                <CheckBox
+                    Content="{x:Static rs:Resources.ModelViewMenuDisplayWireframe}"
+                    IsChecked="{Binding ShowMeshWireframe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuDisplayWireframeTooltip}" />
+                <CheckBox
+                    Content="{x:Static rs:Resources.ModelViewMenuNavMeshWireframe}"
+                    IsChecked="{Binding ShowNaviWireframe, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuNavMeshWireframeTooltip}"
+                    Visibility="{Binding IsNavMeshControlsVisible}" />
+                <CheckBox
+                    Content="{x:Static rs:Resources.ModelViewMenuNavMeshOctree}"
+                    IsChecked="{Binding ShowNaviDebug, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuNavMeshOctreeTooltip}"
+                    Visibility="{Binding IsNavMeshControlsVisible}" />
+            </ui:MenuItem>
+            <Separator />
+            <ui:MenuItem Header="{x:Static rs:Resources.ModelViewMenuExportOptions}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
+                <CheckBox
+                    Content="{x:Static rs:Resources.EmbedTextures}"
+                    IsChecked="{Binding EmbedTextures, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="{x:Static rs:Resources.EmbedTexturesTooltip}" />
+                <CheckBox
+                    Content="{x:Static rs:Resources.ModelViewMenuExportAnimations}"
+                    IsChecked="{Binding ExportAnimation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuExportAnimationsTooltip}" />
+            </ui:MenuItem>
+            <Separator />
+            <ui:MenuItem Header="{x:Static rs:Resources.About}" Icon="{ui:SymbolIcon ChatHelp20}">
+                <ui:HyperlinkButton
+                    Margin="8,0,0,0"
+                    Padding="4"
+                    Content="{x:Static rs:Resources.MenuFileFormats}"
+                    NavigateUri="https://juniordark.gitbook.io/rusty-hearts-files-structures/internal-files/3d-models"
+                    ToolTip="https://juniordark.gitbook.io/rusty-hearts-files-structures/internal-files/3d-models" />
+            </ui:MenuItem>
+        </Menu>
+        <Menu
+            Grid.Row="1"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            FontSize="14"
+            Foreground="White">
+            <MenuItem
+                Command="{Binding LoadCommand}"
+                Icon="{ui:SymbolIcon DocumentAdd24,
+                                     Filled=True}"
+                ToolTip="{x:Static rs:Resources.MenuOpenFile}" />
+            <MenuItem
+                Command="{Binding CloseFileCommand}"
+                Icon="{ui:SymbolIcon DocumentDismiss24,
+                                     Filled=True}"
+                ToolTip="{x:Static rs:Resources.MenuCloseFile}" />
+            <MenuItem
+                Command="{Binding ExportAsCommand}"
+                Icon="{ui:SymbolIcon DocumentSave24,
+                                     Filled=True}"
+                ToolTip="{x:Static rs:Resources.MenuExportAs}" />
+            <Separator />
+        </Menu>
+    </Grid>
+</UserControl>
