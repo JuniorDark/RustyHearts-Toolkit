@@ -425,10 +425,37 @@ public class MMPExporter
             Flags = 0
         };
 
+        // Check if the file is a DDS file
+        bool isDds = Path.GetExtension(absPath).Equals(".dds", StringComparison.OrdinalIgnoreCase);
+
         if (embedTextures)
         {
-            var ext = Path.GetExtension(absPath).ToLowerInvariant().TrimStart('.');
-            var data = File.ReadAllBytes(absPath);
+            byte[] data;
+            string ext;
+
+            if (isDds)
+            {
+                // Convert DDS to PNG
+                var ddsData = File.ReadAllBytes(absPath);
+                var pngData = TextureConverter.ConvertDdsToPngData(ddsData);
+                
+                if (pngData != null)
+                {
+                    data = pngData;
+                    ext = "png";
+                }
+                else
+                {
+                    // Fallback to original DDS if conversion fails
+                    data = ddsData;
+                    ext = Path.GetExtension(absPath).ToLowerInvariant().TrimStart('.');
+                }
+            }
+            else
+            {
+                ext = Path.GetExtension(absPath).ToLowerInvariant().TrimStart('.');
+                data = File.ReadAllBytes(absPath);
+            }
 
             var index = scene.Textures.Count;
             var embName = $"*{index}.{ext}";
@@ -443,21 +470,35 @@ public class MMPExporter
         }
         else if (copyTextures)
         {
-            var texName = Path.GetFileName(absPath);
             const string textureDir = "texture";
-            var dest = Path.Combine(outDir, textureDir, texName);
+            var destDir = Path.Combine(outDir, textureDir);
 
-            var destDir = Path.GetDirectoryName(dest);
             if (!string.IsNullOrEmpty(destDir) && !Directory.Exists(destDir))
                 Directory.CreateDirectory(destDir);
 
-            try
+            string dest;
+            
+            if (isDds)
             {
-                File.Copy(absPath, dest, overwrite: false);
+                // Convert DDS to PNG
+                var texNameWithoutExt = Path.GetFileNameWithoutExtension(absPath);
+                dest = Path.Combine(destDir, texNameWithoutExt + ".png");
+                
+                if (!TextureConverter.ConvertDdsToPng(absPath, dest))
+                {
+                    // Fallback to copying the original DDS if conversion fails
+                    var texName = Path.GetFileName(absPath);
+                    dest = Path.Combine(destDir, texName);
+                    try { File.Copy(absPath, dest, overwrite: false); }
+                    catch (IOException) { }
+                }
             }
-            catch (IOException)
+            else
             {
-                // ignore if file already exists
+                var texName = Path.GetFileName(absPath);
+                dest = Path.Combine(destDir, texName);
+                try { File.Copy(absPath, dest, overwrite: false); }
+                catch (IOException) { }
             }
 
             slot.FilePath = dest;
