@@ -1842,11 +1842,11 @@ namespace RHToolkit.Services
                         continue;
                     }
 
-                    string auditMessage = "";
+                    StringBuilder auditMessageBuilder = new();
 
                     if (gold > 0)
                     {
-                        auditMessage += $"[<font color=blue>{Resources.GMAuditAttachGold} - {gold}</font>]<br></font>";
+                        auditMessageBuilder.Append($"[<font color=blue>{Resources.GMAuditAttachGold} - {gold}</font>]<br></font>");
                     }
 
                     await InsertMailAsync(connection, transaction, senderAuthId, senderCharacterId, sender, currentRecipient, message, gold, returnDays, itemCharge, mailId, createType);
@@ -1857,12 +1857,13 @@ namespace RHToolkit.Services
                         {
                             if (itemData.ItemId != 0)
                             {
-                                auditMessage += $"[<font color=blue>{Resources.GMAuditAttachItem} - {itemData.ItemId} ({itemData.ItemAmount})</font>]<br></font>";
+                                auditMessageBuilder.Append($"[<font color=blue>{Resources.GMAuditAttachItem} - {itemData.ItemId} ({itemData.ItemAmount})</font>]<br></font>");
                                 await InsertMailItemAsync(connection, transaction, itemData, recipientAuthId, recipientCharacterId, mailId, itemData.SlotIndex);
                             }
                         }
                     }
 
+                    string auditMessage = auditMessageBuilder.ToString();
                     await GMAuditMailAsync(recipientAccountName!, recipientCharacterId, currentRecipient, Resources.SendMail, $"<font color=blue>{Resources.SendMail}</font>]<br><font color=red>{Resources.Sender}: RHToolkit: {senderCharacterId}, {Resources.Recipient}: {currentRecipient}, GUID:{{{recipientCharacterId}}}<br></font>" + auditMessage);
 
                     successfulRecipients.Add(currentRecipient);
