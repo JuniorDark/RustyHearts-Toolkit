@@ -179,20 +179,21 @@ namespace RHToolkit.Services
                         ("@character_id", characterData.CharacterID)
                     );
 
-                    // Remove skills from quickslot
+                    // Remove skills from quickslot - optimize by batching all updates into a single query
+                    List<string> setColumns = [];
                     for (int i = 1; i <= 26; i++)
                     {
-                        string typeColumn = $"type_{i:D2}";
-                        string itemIdColumn = $"item_id_{i:D2}";
-
-                        await _sqlDatabaseService.ExecuteNonQueryAsync(
-                            $"UPDATE QuickSlotExTable SET {typeColumn} = 0, {itemIdColumn} = @emptyGuid WHERE character_id = @character_id",
-                            connection,
-                            skillTransaction,
-                            ("@character_id", characterData.CharacterID),
-                            ("@emptyGuid", Guid.Empty)
-                        );
+                        setColumns.Add($"type_{i:D2} = 0");
+                        setColumns.Add($"item_id_{i:D2} = @emptyGuid");
                     }
+
+                    await _sqlDatabaseService.ExecuteNonQueryAsync(
+                        $"UPDATE QuickSlotExTable SET {string.Join(", ", setColumns)} WHERE character_id = @character_id",
+                        connection,
+                        skillTransaction,
+                        ("@character_id", characterData.CharacterID),
+                        ("@emptyGuid", Guid.Empty)
+                    );
 
                     skillTransaction.Commit();
                 }
@@ -296,20 +297,21 @@ namespace RHToolkit.Services
                     ("@character_id", characterData.CharacterID)
                 );
 
-                // Remove skills from quickslot
+                // Remove skills from quickslot - optimize by batching all updates into a single query
+                List<string> setColumns = [];
                 for (int i = 1; i <= 26; i++)
                 {
-                    string typeColumn = $"type_{i:D2}";
-                    string itemIdColumn = $"item_id_{i:D2}";
-
-                    await _sqlDatabaseService.ExecuteNonQueryAsync(
-                        $"UPDATE QuickSlotExTable SET {typeColumn} = 0, {itemIdColumn} = @emptyGuid WHERE character_id = @character_id",
-                        connection,
-                        transaction,
-                        ("@character_id", characterData.CharacterID),
-                        ("@emptyGuid", Guid.Empty)
-                    );
+                    setColumns.Add($"type_{i:D2} = 0");
+                    setColumns.Add($"item_id_{i:D2} = @emptyGuid");
                 }
+
+                await _sqlDatabaseService.ExecuteNonQueryAsync(
+                    $"UPDATE QuickSlotExTable SET {string.Join(", ", setColumns)} WHERE character_id = @character_id",
+                    connection,
+                    transaction,
+                    ("@character_id", characterData.CharacterID),
+                    ("@emptyGuid", Guid.Empty)
+                );
 
                 // Prepare mail message
                 Guid senderId = Guid.Empty;
@@ -427,6 +429,23 @@ namespace RHToolkit.Services
 
             List<CharacterData> characterDataList = [];
 
+            // Collect unique guild IDs to avoid N+1 query problem
+            HashSet<Guid> uniqueGuildIds = [];
+            foreach (DataRow row in dataTable.Rows)
+            {
+                if (row["guildid"] != DBNull.Value)
+                {
+                    uniqueGuildIds.Add((Guid)row["guildid"]);
+                }
+            }
+
+            // Fetch all guild names in a single query
+            Dictionary<Guid, string> guildNameCache = [];
+            if (uniqueGuildIds.Count > 0)
+            {
+                guildNameCache = await GetGuildNamesBatchAsync([.. uniqueGuildIds]);
+            }
+
             foreach (DataRow row in dataTable.Rows)
             {
                 var characterData = new CharacterData
@@ -461,7 +480,8 @@ namespace RHToolkit.Services
 
                 if (row["guildid"] != DBNull.Value)
                 {
-                    characterData.GuildName = await GetGuildNameAsync((Guid)row["guildid"]);
+                    Guid guildId = (Guid)row["guildid"];
+                    characterData.GuildName = guildNameCache.TryGetValue(guildId, out string? guildName) ? guildName : Resources.NoGuild;
                     characterData.HasGuild = true;
                 }
                 else
@@ -1705,6 +1725,47 @@ namespace RHToolkit.Services
 
             object? result = await _sqlDatabaseService.ExecuteScalarAsync(selectQuery, connection, parameters);
             return result != null ? result.ToString() : Resources.NoGuild;
+        }
+
+        /// <summary>
+        /// Gets the names of multiple guilds by their IDs in a single query.
+        /// </summary>
+        /// <param name="guildIds">The guild IDs.</param>
+        /// <returns>A dictionary mapping guild IDs to guild names.</returns>
+        private async Task<Dictionary<Guid, string>> GetGuildNamesBatchAsync(Guid[] guildIds)
+        {
+            Dictionary<Guid, string> guildNames = [];
+
+            if (guildIds == null || guildIds.Length == 0)
+            {
+                return guildNames;
+            }
+
+            using SqlConnection connection = await _sqlDatabaseService.OpenConnectionAsync("RustyHearts");
+
+            // Build a parameterized IN clause
+            List<string> parameterNames = [];
+            List<(string, object)> parameters = [];
+            
+            for (int i = 0; i < guildIds.Length; i++)
+            {
+                string paramName = $"@guildId{i}";
+                parameterNames.Add(paramName);
+                parameters.Add((paramName, guildIds[i]));
+            }
+
+            string selectQuery = $"SELECT guild_id, name FROM GuildTable WHERE guild_id IN ({string.Join(", ", parameterNames)})";
+
+            DataTable dataTable = await _sqlDatabaseService.ExecuteDataQueryAsync(selectQuery, connection, null, [.. parameters]);
+
+            foreach (DataRow row in dataTable.Rows)
+            {
+                Guid guildId = (Guid)row["guild_id"];
+                string guildName = row["name"]?.ToString() ?? Resources.NoGuild;
+                guildNames[guildId] = guildName;
+            }
+
+            return guildNames;
         }
 
         #endregion
