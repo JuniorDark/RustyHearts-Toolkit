@@ -30,25 +30,6 @@ public class ModelExtensions
     }
     #endregion
 
-    #region Matrix helpers
-    /// <summary>
-    /// Get global transform of a node by accumulating local transforms up the hierarchy
-    /// </summary>
-    /// <param name="node"></param>
-    /// <returns></returns>
-    public static Num.Matrix4x4 GetGlobalTransform(Node node)
-    {
-        var global = Num.Matrix4x4.Identity;
-        for (var current = node; current != null; current = current.Parent)
-        {
-            var local = current.Transform;
-            global = Num.Matrix4x4.Multiply(local, global);
-        }
-        return global;
-    }
-
-    #endregion
-
     #region String readers
 
     /// <summary>

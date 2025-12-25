@@ -467,9 +467,47 @@ namespace RHToolkit.Services
         /// Retrieves a list of field mesh items from the database.
         /// </summary>
         /// <returns>A list of field mesh items.</returns>
-        public List<NameID> GetFielMeshItems()
+        public List<NameID> GetFieldMeshItems()
         {
             return GetItemsFromQuery("SELECT nID, wszDesc FROM itemfieldmesh");
+        }
+
+        /// <summary>
+        /// retrieves the field mesh model by ID from the database.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> The field mesh model path as a string.</returns>
+        public string GetFieldMeshModelByID(int id)
+        {
+            string query = "SELECT szMdata FROM itemfieldmesh WHERE nID = @id";
+            return GetStringValueFromQuery(query, ("id", id));
+        }
+
+        /// <summary>
+        /// retrieves the NPC model by name from the database.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>The NPC model path as a string.</returns>
+        public string GetNpcModelByID(int id)
+        {
+            string query = "SELECT szModelFile FROM npc WHERE nID = @id";
+            return GetStringValueFromQuery(query, ("id", id));
+        }
+
+        /// <summary>
+        /// retrieves the NPC model by ID from the database.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns>The NPC model path as a string.</returns>
+        public string GetNpcModelByName(string name)
+        {
+            string query = @"
+            SELECT n.szModelFile
+            FROM npcinstance ni
+            INNER JOIN npc n ON n.nID = ni.nNpcID
+            WHERE ni.szName = @name";
+
+            return GetStringValueFromQuery(query, ("name", name));
         }
 
         /// <summary>

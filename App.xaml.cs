@@ -12,6 +12,7 @@ using RHToolkit.ViewModels.Windows;
 using RHToolkit.ViewModels.Windows.Database.VM;
 using RHToolkit.Views.Pages;
 using RHToolkit.Views.Windows;
+using System;
 using Wpf.Ui;
 
 namespace RHToolkit;
@@ -105,6 +106,8 @@ public partial class App : Application
                 _ = services.AddTransient<RHEditorViewModel>();
                 _ = services.AddTransient<WDataEditorWindow>();
                 _ = services.AddTransient<WDataEditorViewModel>();
+                _ = services.AddTransient<MDataEditorWindow>();
+                _ = services.AddTransient<MDataEditorViewModel>();
                 _ = services.AddTransient<ModelViewWindow>();
                 _ = services.AddTransient<ModelViewManager>();
                 _ = services.AddTransient<CashShopEditorWindow>();
@@ -137,6 +140,7 @@ public partial class App : Application
                 _ = services.AddTransient<WorldEditorViewModel>();
                 _ = services.AddTransient<SkillEditorWindow>();
                 _ = services.AddTransient<SkillEditorViewModel>();
+                _ = services.AddTransient<Scene3DManager>();
                 // SQLite services and viewmodels
                 _ = services.AddTransient<DropGroupListWindow>();
                 _ = services.AddTransient<DropGroupListViewModel>();
@@ -191,7 +195,7 @@ public partial class App : Application
         // Log the exception details
         LogException(e.Exception);
 
-        RHMessageBoxHelper.ShowOKMessage("An unexpected error occurred. Check the error log for more details.", "Error");
+        RHMessageBoxHelper.ShowOKMessage($"An unexpected error occurred: {e.Exception.Message}\nCheck the error log for more details.", "Error");
 
         // Prevent default unhandled exception processing
         e.Handled = true;

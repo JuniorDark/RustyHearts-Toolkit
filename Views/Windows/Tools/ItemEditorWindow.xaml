@@ -17,8 +17,8 @@
     MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
     bh:WindowBehaviors.EnableDragMove="True"
     d:DataContext="{d:DesignInstance Type=windows:ItemEditorViewModel}"
-    d:MaxHeight="720"
-    d:MaxWidth="1280"
+    d:MaxHeight="800"
+    d:MaxWidth="1500"
     AllowsTransparency="True"
     Background="Transparent"
     Icon="/Assets/icon/icon_cash_optionchange.png"
@@ -689,6 +689,17 @@
                                                         <bh:DataRowViewBehavior Column="nFieldItem" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                                     </i:Interaction.Behaviors>
                                                 </ComboBox>
+                                                <Button
+                                                    Width="200"
+                                                    Margin="10,0,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Bottom"
+                                                    Command="{Binding DataContext.OpenModelPreviewWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nFieldItem], RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    Content="{x:Static rs:Resources.Preview}"
+                                                    Cursor="Hand"
+                                                    Foreground="White"
+                                                    Style="{StaticResource lb_def_button02}" />
                                             </StackPanel>
 
                                             <StackPanel

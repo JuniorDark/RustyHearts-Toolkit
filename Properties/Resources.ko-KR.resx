@@ -1086,6 +1086,12 @@
   <data name="MenuExportAs" xml:space="preserve">
     <value>다른 이름으로 내보내기...</value>
   </data>
+  <data name="MenuExport" xml:space="preserve">
+    <value>다른 이름으로 내보내기...</value>
+  </data>
+  <data name="MenuImport" xml:space="preserve">
+    <value>다른 이름으로 내보내기...</value>
+  </data>
   <data name="MenuExportMIP" xml:space="preserve">
     <value>클라이언트 패치 파일(MIP)로 내보내기</value>
   </data>
@@ -1142,6 +1148,9 @@
   </data>
   <data name="MenuSetClientFolder" xml:space="preserve">
     <value>클라이언트 폴더 선택</value>
+  </data>
+  <data name="MenuSetClientAssetsFolder" xml:space="preserve">
+    <value>클라이언트 자산 폴더 설정</value>
   </data>
   <data name="Account" xml:space="preserve">
     <value>계정</value>
@@ -4677,7 +4686,7 @@
   <data name="ModelInfoBones" xml:space="preserve">
     <value>뼈</value>
   </data>
-  <data name="ModelViewMenuExportCurrentFileToFBX" xml:space="preserve">
+  <data name="ModelViewMenuExportFBX" xml:space="preserve">
     <value>현재 파일을 FBX로 내보내기</value>
   </data>
   <data name="ModelViewMenuDraw" xml:space="preserve">
@@ -4724,6 +4733,12 @@
   </data>
   <data name="ModelViewMenuExportAnimations" xml:space="preserve">
     <value>애니메이션 내보내기(WIP)</value>
+  </data>
+  <data name="ModelViewMenuExportSeparateObjects" xml:space="preserve">
+    <value>개별 객체 내보내기</value>
+  </data>
+  <data name="ModelViewMenuExportSeparateObjectsTooltip" xml:space="preserve">
+    <value>각 mmp 객체를 fbx 형식으로 내보내기</value>
   </data>
   <data name="ModelViewMenuExportAnimationsTooltip" xml:space="preserve">
     <value>애니메이션 내보내기(.ds)</value>
@@ -4775,5 +4790,32 @@
   </data>
   <data name="ModelViewerTitleDefault" xml:space="preserve">
     <value>3D 모델 뷰어</value>
+  </data>
+  <data name="ModelTool_Title" xml:space="preserve">
+    <value>모델 도구</value>
+  </data>
+  <data name="ModelViewMenuExportHeight" xml:space="preserve">
+    <value>Height 수출</value>
+  </data>
+  <data name="MenuImportMapFBX" xml:space="preserve">
+    <value>FBX 파일을 MMP 파일로 가져오기</value>
+  </data>
+  <data name="AppSettings" xml:space="preserve">
+    <value>애플리케이션 설정</value>
+  </data>
+  <data name="TableEncryptionKey" xml:space="preserve">
+    <value>RH 테이블 암호화 키</value>
+  </data>
+  <data name="VirtualFileSystemKey" xml:space="preserve">
+    <value>가상 파일 시스템 Base64 키(f00X.dat용)</value>
+  </data>
+  <data name="MenuResetCamera" xml:space="preserve">
+    <value>카메라 위치 재설정</value>
+  </data>
+  <data name="ModelViewMenuOpenModelWindow" xml:space="preserve">
+    <value>지도 모델 창 열기</value>
+  </data>
+  <data name="FileNotFoundMessage" xml:space="preserve">
+    <value>파일 '{0}'을 찾을 수 없습니다.</value>
   </data>
 </root>

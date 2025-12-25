@@ -33,13 +33,13 @@ public enum EventBoxType
 /// </summary>
 public partial class EventBox : ObservableObject
 {
+    [ObservableProperty] private bool _isVisible = false;
     [ObservableProperty] private string _Name  = string.Empty;
     [ObservableProperty] private Vector3 _Position = new();
     [ObservableProperty] private Vector3 _Scale = new();
     [ObservableProperty] private Quaternion _Rotation = new();
     [ObservableProperty] private Vector3 _Extents = new();
     [ObservableProperty] private EventBoxType _Type;
-    [ObservableProperty] private bool _isVisible = false;
 }
 
 /// <summary>
@@ -248,6 +248,7 @@ public partial class CutoffBox : EventBox
 /// </summary>
 public partial class CameraTargetBox : EventBox
 {
+    [ObservableProperty] private string _TargetName = string.Empty;
     [ObservableProperty] private int _NameTextID;
     [ObservableProperty] private bool _TargetLocalPC;
 }

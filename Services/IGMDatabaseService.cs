@@ -20,7 +20,8 @@ namespace RHToolkit.Services
         List<DropGroupList> GetDropGroupListItems(string tableName, int dropItemCount);
         List<string> GetEnemyNameItems();
         long GetExperienceFromLevel(int level);
-        List<NameID> GetFielMeshItems();
+        List<NameID> GetFieldMeshItems();
+        string GetFieldMeshModelByID(int id);
         string GetFortuneDesc(int fortuneID);
         List<NameID> GetFortuneDescItems();
         List<NameID> GetFortuneItems();
@@ -78,5 +79,7 @@ namespace RHToolkit.Services
         (int nPhysicalAttackMin, int nPhysicalAttackMax, int nMagicAttackMin, int nMagicAttackMax) GetWeaponStats(int jbClass, int weaponID);
         List<NameID> GetWorldNameItems();
         bool IsNameInNickFilter(string characterName);
+        string GetNpcModelByID(int id);
+        string GetNpcModelByName(string name);
     }
 }

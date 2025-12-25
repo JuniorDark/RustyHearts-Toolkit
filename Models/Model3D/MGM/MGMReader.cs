@@ -21,6 +21,7 @@ public sealed class MgmModel
     public int Version { get; set; }
     public MgmHeader Header { get; set; } = new();
     public string BaseDirectory { get; set; } = string.Empty;
+    public string FilePath { get; set; } = string.Empty;
     public List<ModelMaterial> Materials { get; set; } = []; // type 1
     public List<MgmBonePose> BonesPoses { get; set; } = []; // type 2
     public List<MgmBone> Bones { get; set; } = [];         // type 3
@@ -295,8 +296,8 @@ public class MGMReader
         {
             nameHash = br.ReadUInt32();
             parentHash = br.ReadUInt32();
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
-            parentName = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+            parentName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         // Pose block: T(3) → R(4) → P(3)
@@ -342,9 +343,9 @@ public class MGMReader
             hName = br.ReadUInt32();
             hParent = br.ReadUInt32();
             hNameAlias = br.ReadUInt32();
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
-            parentName = BinaryReaderExtensions.ReadUnicode256Count(br);
-            nameAlias = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+            parentName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+            nameAlias = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         int boneType = br.ReadInt32();
@@ -418,8 +419,8 @@ public class MGMReader
         {
             nameHash = br.ReadUInt32();
             targetHash = br.ReadUInt32();
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
-            targetName = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+            targetName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         // Pose block: T(3) → R(4) → P(3)
@@ -459,8 +460,8 @@ public class MGMReader
         {
             uint nameHash = br.ReadUInt32();
             uint dummyHash = br.ReadUInt32();
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
-            dummyName = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+            dummyName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         int subMeshCount = br.ReadInt32();
@@ -476,7 +477,7 @@ public class MGMReader
             }
             else
             {
-                subName = BinaryReaderExtensions.ReadUnicode256Count(br);
+                subName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
             }
 
             int vertexCount = br.ReadInt32();
@@ -514,7 +515,7 @@ public class MGMReader
                 TriangleCount = triCount,
                 Flags = [isEmissiveAdditive, isAlphaBlend, isEnabled],
                 MaterialId = materialIndex,
-                Material = model.Materials.FirstOrDefault(m => m.Id == materialIndex),
+                Material = model.Materials.FirstOrDefault(m => m.MaterialIndex == materialIndex),
                 Vertices = new MgmVertex[vertexCount],
                 Indices = new ushort[triCount * 3]
             };
@@ -592,8 +593,8 @@ public class MGMReader
         {
             uint nameHash = br.ReadUInt32();
             uint dummyHash = br.ReadUInt32();
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
-            dummyName = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+            dummyName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         int meshCount = br.ReadInt32();
@@ -617,7 +618,7 @@ public class MGMReader
             }
             else
             {
-                subName = BinaryReaderExtensions.ReadUnicode256Count(br);
+                subName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
             }
 
             int vertexCount = br.ReadInt32();
@@ -706,7 +707,7 @@ public class MGMReader
                 VertexCount = vertexCount,
                 TriangleCount = triCount,
                 MaterialId = materialIndex,
-                Material = model.Materials.FirstOrDefault(m => m.Id == materialIndex),
+                Material = model.Materials.FirstOrDefault(m => m.MaterialIndex == materialIndex),
                 Vertices = new MgmVertex[vertexCount],
                 Indices = new ushort[triCount * 3],
                 Flags = [isEmissiveAdditive, isAlphaBlend, isEnabled]
@@ -798,7 +799,7 @@ public class MGMReader
         else
         {
             nameHash = br.ReadUInt32(); ;
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         byte isMain = br.ReadByte();
@@ -831,7 +832,7 @@ public class MGMReader
         else
         {
             nameHash = br.ReadUInt32();
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         int nUnk2 = br.ReadInt32();
@@ -861,7 +862,7 @@ public class MGMReader
                         }
                         else
                         {
-                            string strUnk2 = BinaryReaderExtensions.ReadUnicode256Count(br);
+                            string strUnk2 = BinaryReaderExtensions.ReadUnicodeFixedString(br);
                         }
                         break;
                     }
@@ -899,8 +900,8 @@ public class MGMReader
         {
             nameHash = br.ReadUInt32();
             targetHash = br.ReadUInt32();
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
-            target = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+            target = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         // Pose block: T(3) → R(4) → P(3)
@@ -936,7 +937,7 @@ public class MGMReader
         else
         {
             nameHash = br.ReadUInt32(); ;
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         var flags = (MgmEdgeFlags)br.ReadUInt32();
@@ -965,8 +966,8 @@ public class MGMReader
         {
             nameHash = br.ReadUInt32();
             targetHash = br.ReadUInt32();
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
-            target = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+            target = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         // Bounds block: center(3), radius, min(3), max(3)

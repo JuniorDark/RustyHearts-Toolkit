@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using RHToolkit.Models.UISettings;
+using System.Security.Cryptography;
 
 namespace RHToolkit.Models.RH;
 
@@ -11,7 +12,9 @@ public class RHCryptor
     /// </summary>
     public RHCryptor()
     {
-        byte[] bytes = Encoding.UTF8.GetBytes("gkw3iurpamv;kj20984;asdkfjat1af");
+        var keyString = RegistrySettingsHelper.GetTableEncryptKey();
+
+        byte[] bytes = Encoding.UTF8.GetBytes(keyString);
         byte[] key = new byte[bytes.Length + 1];
         Buffer.BlockCopy(bytes, 0, key, 0, bytes.Length);
 
@@ -74,16 +77,6 @@ public class RHCryptor
                 aesInstance.IV = _aes.IV;
                 aesInstance.Mode = CipherMode.ECB;
                 aesInstance.Padding = PaddingMode.Zeros;
-
-                int x = toByte.Length % 16;
-                if (x > 0)
-                {
-                    x = 16 - x;
-                    byte[] newBytes = new byte[x + toByte.Length];
-                    Buffer.BlockCopy(toByte, 0, newBytes, 0, toByte.Length);
-                    newBytes[toByte.Length] = 0x2a;
-                    toByte = newBytes;
-                }
 
                 encryptedBytes = aesInstance.CreateEncryptor(aesInstance.Key, aesInstance.IV)
                     .TransformFinalBlock(toByte, 0, toByte.Length);

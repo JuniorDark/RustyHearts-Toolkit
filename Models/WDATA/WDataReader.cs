@@ -25,21 +25,50 @@ public static class WDataReader
 
     private static WData ReadWdata(BinaryReader br, WData? wData)
     {
-        // validation
-        if (!TryReadWData(br, out var header))
+        string header = ReadWString(br);
+
+        if (header != FILE_HEADER)
+        {
             throw new InvalidDataException($"{string.Format(Resources.InvalidFileDesc, "WData")}");
+        }
+
+        int nVersion = br.ReadInt32();
 
         wData = new WData
         {
-            Version = header.Version,
-            EventBoxVersion = header.EventBoxVersion,
-            AniBGVersion = header.AniBGVersion,
-            ItemBoxVersion = header.ItemBoxVersion,
-            GimmickVersion = header.GimmickVersion
+            Version = nVersion
         };
 
+        if (nVersion >= 7)
+        {
+            wData.EventBoxVersion = br.ReadInt32();
+            wData.AniBGVersion = br.ReadInt32();
+            wData.ItemBoxVersion = br.ReadInt32();
+        }
+        if (nVersion >= 8)
+        {
+            wData.GimmickVersion = br.ReadInt32();
+        }
+        if (nVersion >= 9)
+        {
+            wData.ScriptCount1 = br.ReadInt32();
+        }
+        if (nVersion >= 16)
+        {
+            wData.ScriptConditionCount1 = br.ReadInt32();
+        }
+        if (nVersion >= 18)
+        {
+            wData.ScriptCount2 = br.ReadInt32();
+            wData.ScriptConditionCount2 = br.ReadInt32();
+        }
+
         /* 1) Paths */
-        ReadPaths(br, wData);
+        wData.ModelPath = ReadWString(br, emptyIfDot: true);
+        wData.NavMeshPath = ReadWString(br, emptyIfDot: true);
+        if (wData.Version >= 2)
+            wData.NavHeightPath = ReadWString(br, emptyIfDot: true);
+        wData.EventBoxPath = ReadWString(br, emptyIfDot: true);
 
         /* 2) EventBoxes */
         var evBoxes = ReadEventBoxes(br, wData.EventBoxVersion, wData.Version, wData);
@@ -107,113 +136,6 @@ public static class WDataReader
         rot = new() { X = br.ReadSingle(), Y = br.ReadSingle(), Z = br.ReadSingle(), W = br.ReadSingle() };
         ext = new() { X = br.ReadSingle(), Y = br.ReadSingle(), Z = br.ReadSingle() };
     }
-
-    private static bool TryReadInt32(BinaryReader br, out int value)
-    {
-        if (br.BaseStream.Position + 4 > br.BaseStream.Length)
-        {
-            value = default;
-            return false;
-        }
-        value = br.ReadInt32();
-        return true;
-    }
-
-    private static bool SkipInt32(BinaryReader br)
-    {
-        if (br.BaseStream.Position + 4 > br.BaseStream.Length)
-            return false;
-        br.ReadInt32();
-        return true;
-    }
-    #endregion
-
-    #region Header
-
-    private readonly struct HeaderInfo(int v, int ebv, int abv, int ibv, int gmv)
-    {
-        public readonly int Version = v, EventBoxVersion = ebv, AniBGVersion = abv, ItemBoxVersion = ibv, GimmickVersion = gmv;
-    }
-
-    /// <summary>
-    /// Tries to read the *.wdata and validate that the
-    /// mandatory version fields are present. Returns <c>false</c> and
-    /// seeks back to the original position if the check fails.
-    /// </summary>
-    private static bool TryReadWData(BinaryReader br, out HeaderInfo info)
-    {
-        long start = br.BaseStream.Position;
-        info = default;
-
-        // 1) header tag
-        string header = ReadWString(br);
-        if (header != FILE_HEADER)
-        {
-            br.BaseStream.Seek(start, SeekOrigin.Begin);
-            return false;
-        }
-
-        // 2) main version
-        if (!TryReadInt32(br, out int ver))
-        {
-            Reset();
-            return false;
-        }
-
-        // 3) sub-versions
-        int ebv = 0, abv = 0, ibv = 0, gmv = 0;
-        if (ver >= 7)
-        {
-            if (!TryReadInt32(br, out ebv)
-             || !TryReadInt32(br, out abv)
-             || !TryReadInt32(br, out ibv)) { Reset(); return false; }
-        }
-        if (ver >= 8 && !TryReadInt32(br, out gmv)) { Reset(); return false; }
-        if (ver >= 9 && !SkipInt32(br)) { Reset(); return false; }
-        if (ver >= 16 && !SkipInt32(br)) { Reset(); return false; }
-        if (ver >= 18 && (!SkipInt32(br) || !SkipInt32(br))) { Reset(); return false; }
-
-        // mark where the real body begins
-        long afterHeader = br.BaseStream.Position;
-
-        // 4) peek at the ModelPath and validate it
-        string modelPath = ReadWString(br, emptyIfDot: true);
-        bool ok = string.IsNullOrEmpty(modelPath)
-               || modelPath.EndsWith(".mmp", StringComparison.OrdinalIgnoreCase);
-
-        if (!ok)
-        {
-            // not a WData file
-            Reset();
-            return false;
-        }
-
-        // rewind so the next ReadPaths call reads exactly as before
-        br.BaseStream.Seek(afterHeader, SeekOrigin.Begin);
-
-        info = new HeaderInfo(ver, ebv, abv, ibv, gmv);
-        return true;
-
-        void Reset() => br.BaseStream.Seek(start, SeekOrigin.Begin);
-    }
-
-    #endregion
-
-    #region Paths
-    /// <summary>
-    /// Reads the paths section of the WData file.
-    /// </summary>
-    /// <param name="br"></param>
-    /// <param name="m"></param>
-    private static void ReadPaths(BinaryReader br, WData wData)
-    {
-        wData.ModelPath = ReadWString(br, emptyIfDot: true);
-        wData.NavMeshPath = ReadWString(br, emptyIfDot: true);
-        if (wData.Version >= 2)
-            wData.NavHeightPath = ReadWString(br, emptyIfDot: true);
-        wData.EventBoxPath = ReadWString(br, emptyIfDot: true);
-    }
-
     #endregion
 
     #region EventBoxes
@@ -658,10 +580,10 @@ public static class WDataReader
             Scale = scl,
             Rotation = rot,
             Extents = ext,
-            Type = type,
+            Type = type
         };
         if (evVersion < 8)
-            _ = ReadWString(br);
+            box.TargetName = ReadWString(br);
         else
             box.NameTextID = br.ReadInt32();
         box.TargetLocalPC = evVersion >= 2 && br.ReadInt32() != 0;
@@ -852,7 +774,7 @@ public static class WDataReader
 
     #endregion
 
-    #region Scenes
+    #region Scenes (Client Only)
 
     private static void ReadScenes(BinaryReader br, WData m)
     {
@@ -863,12 +785,26 @@ public static class WDataReader
             float fadeIn = br.ReadSingle();
             float fadeHold = br.ReadSingle();
             float fadeOut = br.ReadSingle();
-            uint cat = br.ReadUInt32();
-            float[] scene = new float[6]; for (int j = 0; j < 6; j++) scene[j] = br.ReadSingle();
-            var pos = new Vector3 { X = br.ReadSingle(), Y = br.ReadSingle(), Z = br.ReadSingle() };
-            var rot = new Vector3 { X = br.ReadSingle(), Y = br.ReadSingle(), Z = br.ReadSingle() };
-            float fov = br.ReadSingle();
-            float asp = br.ReadSingle();
+
+            uint cat = 0;
+            float[] scene = new float[6];
+            if (m.Version >= 15)
+            {
+                cat = br.ReadUInt32();
+                for (int j = 0; j < 6; j++) scene[j] = br.ReadSingle();
+            }
+            Vector3 pos = new();
+            Vector3 rot = new();
+            float fov = 0f;
+            float asp = 0f;
+            if (m.Version >= 19)
+            {
+                pos = new Vector3 { X = br.ReadSingle(), Y = br.ReadSingle(), Z = br.ReadSingle() };
+                rot = new Vector3 { X = br.ReadSingle(), Y = br.ReadSingle(), Z = br.ReadSingle() };
+                fov = br.ReadSingle();
+                asp = br.ReadSingle();
+            }
+            
             m.Scenes.Add(new Scene
             {
                 File = path,
@@ -889,33 +825,39 @@ public static class WDataReader
             });
         }
 
-        for (int i = 0; i < count; i++)
+        if (m.Version >= 20)
         {
-            var cam = m.Scenes[i];
-            cam.Name = ReadWString(br);
-            int entryCnt = br.ReadInt32();
-            int sceneIdCnt = br.ReadInt32();
-            int rBgU = br.ReadInt32();
-            int rAniU = br.ReadInt32();
-            int rItemU = br.ReadInt32();
-            int rGimU = br.ReadInt32();
-            int nBgU = br.ReadInt32();
-            int nAniU = br.ReadInt32();
-            int nItemU = br.ReadInt32();
-            int nGimU = br.ReadInt32();
-            cam.IndexList = new List<SceneIndex>(sceneIdCnt);
-            for (int j = 0; j < sceneIdCnt; j++) cam.IndexList.Add(new SceneIndex { ID = br.ReadUInt32() });
-            for (int j = 0; j < entryCnt; j++)
-                cam.EventScenes.Add(new SceneElement { Category = br.ReadUInt32(), Key = ReadWString(br) });
-            void ReadRender(int cnt, ICollection<SceneElement> sink) { for (int n = 0; n < cnt; n++) sink.Add(new SceneElement { Category = br.ReadUInt32(), Key = ReadWString(br) }); }
-            ReadRender(rBgU, cam.RenderBgUser);
-            ReadRender(rAniU, cam.RenderAniBgUser);
-            ReadRender(rItemU, cam.RenderItemBoxUser);
-            ReadRender(rGimU, cam.RenderGimmickUser);
-            ReadRender(nBgU, cam.NoRenderBgUser);
-            ReadRender(nAniU, cam.NoRenderAniBgUser);
-            ReadRender(nItemU, cam.NoRenderItemBoxUser);
-            ReadRender(nGimU, cam.NoRenderGimmickUser);
+            for (int i = 0; i < count; i++)
+            {
+                var cam = m.Scenes[i];
+                if (m.Version >= 21)
+                {
+                    cam.Name = ReadWString(br);
+                }
+                int entryCnt = br.ReadInt32();
+                int sceneIdCnt = br.ReadInt32();
+                int rBgUCnt = br.ReadInt32();
+                int rAniUCnt = br.ReadInt32();
+                int rItemUCnt = br.ReadInt32();
+                int rGimUCnt = br.ReadInt32();
+                int nBgUCnt = br.ReadInt32();
+                int nAniUCnt = br.ReadInt32();
+                int nItemUCnt = br.ReadInt32();
+                int nGimU = br.ReadInt32();
+                cam.IndexList = new List<SceneIndex>(sceneIdCnt);
+                for (int j = 0; j < sceneIdCnt; j++) cam.IndexList.Add(new SceneIndex { ID = br.ReadUInt32() });
+                for (int j = 0; j < entryCnt; j++)
+                    cam.EventScenes.Add(new SceneElement { Category = br.ReadUInt32(), Key = ReadWString(br) });
+                void ReadRender(int cnt, ICollection<SceneElement> sink) { for (int n = 0; n < cnt; n++) sink.Add(new SceneElement { Category = (m.Version >= 22) ? br.ReadUInt32() : 0, Key = ReadWString(br) }); }
+                ReadRender(rBgUCnt, cam.RenderBgUser);
+                ReadRender(rAniUCnt, cam.RenderAniBgUser);
+                ReadRender(rItemUCnt, cam.RenderItemBoxUser);
+                ReadRender(rGimUCnt, cam.RenderGimmickUser);
+                ReadRender(nBgUCnt, cam.NoRenderBgUser);
+                ReadRender(nAniUCnt, cam.NoRenderAniBgUser);
+                ReadRender(nItemUCnt, cam.NoRenderItemBoxUser);
+                ReadRender(nGimU, cam.NoRenderGimmickUser);
+            }
         }
     }
 
@@ -940,35 +882,68 @@ public static class WDataReader
                     Motion = ReadWString(br),
                     Name = ReadWString(br),
                     EventName = ReadWString(br),
-                    Time = br.ReadUInt32(),
-                    Hold = br.ReadUInt32()
+                    Time = (m.Version >= 10) ? br.ReadUInt32() : 0,
+                    Hold = (m.Version >= 10) ? br.ReadUInt32() : 0
                 };
                 if (p < pathCnt - 1)
                     sd.BlendTime = br.ReadSingle();
                 e.Paths.Add(sd);
             }
-            int cueCnt = br.ReadInt32();
-            for (int c = 0; c < cueCnt; c++)
-                e.Cues.Add(new Cue { End = br.ReadSingle(), Name = ReadWString(br), ID = br.ReadUInt32(), Start = br.ReadSingle() });
-            int soundCnt = br.ReadInt32();
-            for (int s = 0; s < soundCnt; s++)
-                e.Sounds.Add(new SoundRecord
+
+            if (m.Version >= 11)
+            {
+                int cueCnt = br.ReadInt32();
+                for (int c = 0; c < cueCnt; c++)
+                    e.Cues.Add(new Cue { End = br.ReadSingle(), Name = ReadWString(br), ID = br.ReadUInt32(), Start = br.ReadSingle() });
+            }
+
+            if (m.Version >= 12)
+            {
+                int soundCnt = br.ReadInt32();
+                for (int s = 0; s < soundCnt; s++)
+                    e.Sounds.Add(new SoundRecord
+                    {
+                        Start = br.ReadSingle(),
+                        FadeIn = (m.Version >= 16) ? br.ReadSingle() : 0,
+                        FadeOut = (m.Version >= 16) ? br.ReadSingle() : 0,
+                        VolMax = (m.Version >= 16) ? br.ReadSingle() : 0,
+                        VolMin = (m.Version >= 16) ? br.ReadSingle() : 0,
+                        Path = ReadWString(br)
+                    });
+
+                if (m.Version >= 13)
                 {
-                    Start = br.ReadSingle(),
-                    FadeIn = br.ReadSingle(),
-                    FadeOut = br.ReadSingle(),
-                    VolMax = br.ReadSingle(),
-                    VolMin = br.ReadSingle(),
-                    Path = ReadWString(br)
-                });
-            e.Unk1 = br.ReadUInt32();
-            e.Unk2 = br.ReadUInt32();
-            e.Unk3 = br.ReadSingle();
-            e.Unk4 = br.ReadUInt32();
-            int ambientCnt = br.ReadInt32();
-            for (int a = 0; a < ambientCnt; a++)
-                e.Ambients.Add(new AmbientRecord { Start = br.ReadSingle(), Path = ReadWString(br), PlayOnStart = br.ReadInt32() != 0, Loop = br.ReadInt32() != 0 });
-            m.SceneResources.Add(e);
+                    e.Unk1 = br.ReadUInt32();
+                }
+                
+                e.Unk2 = br.ReadUInt32();
+                e.Unk3 = br.ReadSingle();
+                e.Unk4 = br.ReadUInt32();
+
+                if (m.Version <= 14)
+                {
+                    br.ReadInt32();
+                    br.ReadInt32();
+                    br.ReadInt32();
+                    br.ReadInt32();
+                    br.ReadInt32();
+                    br.ReadInt32();
+                    br.ReadInt32();
+                }
+                if (m.Version <= 13)
+                {
+                    ReadWString(br);
+                    ReadWString(br);
+                }
+            }
+
+            if (m.Version >= 17)
+            {
+                int ambientCnt = br.ReadInt32();
+                for (int a = 0; a < ambientCnt; a++)
+                    e.Ambients.Add(new AmbientRecord { Start = br.ReadSingle(), Path = ReadWString(br), PlayOnStart = br.ReadInt32() != 0, Loop = br.ReadInt32() != 0 });
+                m.SceneResources.Add(e);
+            } 
         }
     }
 

@@ -65,6 +65,7 @@ public class GMDatabaseManager
         "nick_filter",
         "npc",
         "npc_dialog",
+        "npcinstance",
         "npcinstance_string",
         "npcshop",
         "peteatitem",

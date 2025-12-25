@@ -130,7 +130,7 @@ namespace RHToolkit.Models.Model3D.Map
                 var verts = entry.Vertices;
                 var tris = entry.Indices;
 
-                // Choose LH world (class-3)
+                // Choose LH world (type-3)
                 var world = (worldByHash != null && worldByHash.TryGetValue(entry.NameKey, out var m))
                             ? m : Num.Matrix4x4.Identity;
 

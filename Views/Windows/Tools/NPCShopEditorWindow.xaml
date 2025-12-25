@@ -815,7 +815,7 @@
                                         FontSize="12"
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}"
-                                        Text="{x:Static rs:Resources.NPCShopEditor_ItemCraftCost}" />
+                                        Text="{x:Static rs:Resources.NPCShopEditor_ItemCraftCount}" />
                                     <ui:NumberBox
                                         MinWidth="200"
                                         Margin="0,0,0,0"
@@ -852,7 +852,7 @@
                                         Foreground="Gold"
                                         Style="{StaticResource ArialMS}">
                                         <TextBlock.Text>
-                                            <MultiBinding StringFormat="{}{0} {1}">
+                                            <MultiBinding StringFormat="{}{1} {0}">
                                                 <Binding
                                                     Converter="{StaticResource IndexToNumberConverter}"
                                                     Path="(ItemsControl.AlternationIndex)"

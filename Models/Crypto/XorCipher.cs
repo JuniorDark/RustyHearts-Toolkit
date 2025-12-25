@@ -1,9 +1,11 @@
-﻿namespace RHToolkit.Models.Crypto;
+﻿using RHToolkit.Models.UISettings;
+
+namespace RHToolkit.Models.Crypto;
 
 public class XorCipher
 {
     /// <summary>
-    /// A byte array used as a key for the XOR operation.
+    /// A byte array used as a key for the XOR operation (for f00X.dat).
     /// </summary>
     public static readonly byte[] xorKey = [
     0x30, 0x22, 0x41, 0xa8, 0x5b, 0xa6, 0x6a, 0x49, 0xbf, 0x53, 0x35, 0xe5, 0x9e, 14, 0xec, 0xb8,
@@ -25,19 +27,23 @@ public class XorCipher
     ];
 
     /// <summary>
-    /// Applies an XOR cipher to the given byte array using a predefined key.
+    /// Applies an XOR cipher (for f00X.dat) to the given byte array using a predefined key.
     /// </summary>
     /// <param name="input></param>
     /// <returns>A new byte array with the XOR operation applied.</returns>
     public static byte[] Xor(byte[] input)
     {
+        // Retrieve the XOR key as a base64 string from registry settings
+        var xorKeyBase64 = RegistrySettingsHelper.GetVFSKey();
+        byte[] xorKeyBytes = Convert.FromBase64String(xorKeyBase64);
+
         var output = new byte[input.Length];
         int keyIndex = 0;
-        int keyLength = xorKey.Length;
+        int keyLength = xorKeyBytes.Length;
 
         for (int i = 0; i < input.Length; i++)
         {
-            output[i] = (byte)(input[i] ^ xorKey[keyIndex]);
+            output[i] = (byte)(input[i] ^ xorKeyBytes[keyIndex]);
             if (++keyIndex == keyLength) keyIndex = 0;
         }
 

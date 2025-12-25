@@ -28,28 +28,18 @@ public class BinaryReaderExtensions
     public static string ReadUtf16String(BinaryReader br, int charCount)
         => charCount <= 0 ? string.Empty : Encoding.Unicode.GetString(br.ReadBytes(charCount * 2));
 
-    /// <summary> Reads a fixed-length ASCII string, trimming any trailing nulls.
-    public static string ReadAsciiFixed(BinaryReader br, int length)
-    {
-        var bytes = br.ReadBytes(length);
-        // Trim any trailing zeros; keep ASCII
-        int end = Array.FindLastIndex(bytes, b => b != 0) + 1;
-        if (end <= 0) return string.Empty;
-        return Encoding.ASCII.GetString(bytes, 0, end);
-    }
-
     /// <summary>
     /// Reads a null-terminated ASCII string from the given byte array.
     /// </summary>
     /// <param name="bytes"></param>
     /// <returns>The read string, or the entire byte array as a string if no null terminator is found. </returns>
-    public static string ReadAsciiZ(byte[] bytes)
+    public static string ReadAsciiZString(byte[] bytes)
     {
         int len = Array.IndexOf<byte>(bytes, 0);
         return Encoding.ASCII.GetString(bytes, 0, len >= 0 ? len : bytes.Length);
     }
 
-    public static string ReadUnicode256Count(BinaryReader br, int size = 512)
+    public static string ReadUnicodeFixedString(BinaryReader br, int size = 512)
     {
         byte[] data = br.ReadBytes(size);
         int len = 0;
@@ -61,15 +51,6 @@ public class BinaryReaderExtensions
         return Encoding.Unicode.GetString(data, 0, len);
     }
 
-    public static string? ReadUtf16ZFromBuffer(byte[] buffer)
-    {
-        for (int i = 0; i + 1 < buffer.Length; i += 2)
-        {
-            if (buffer[i] == 0 && buffer[i + 1] == 0)
-                return Encoding.Unicode.GetString(buffer, 0, i);
-        }
-        return string.Empty;
-    }
     #endregion
 
     #region Vectors

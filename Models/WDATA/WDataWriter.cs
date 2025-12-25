@@ -14,7 +14,7 @@ public static class WDataWriter
         ArgumentNullException.ThrowIfNull(wData);
 
         using var ms = new MemoryStream();
-        using var bw = new BinaryWriter(ms, Encoding.Unicode, leaveOpen: true);
+        using var bw = new BinaryWriter(ms, Encoding.Unicode, leaveOpen: false);
 
         WriteHeader(bw, wData);
         WritePaths(bw, wData);
@@ -83,9 +83,9 @@ public static class WDataWriter
             bw.Write(wData.ItemBoxVersion);
         }
         if (wData.Version >= 8) bw.Write(wData.GimmickVersion);
-        if (wData.Version >= 9) bw.Write(0);
-        if (wData.Version >= 16) bw.Write(0);
-        if (wData.Version >= 18) { bw.Write(0); bw.Write(0); }
+        if (wData.Version >= 9) bw.Write(wData.ScriptCount1);
+        if (wData.Version >= 16) bw.Write(wData.ScriptConditionCount1);
+        if (wData.Version >= 18) { bw.Write(wData.ScriptCount2); bw.Write(wData.ScriptConditionCount2); }
     }
 
     private static void WritePaths(BinaryWriter bw, WData wData)
@@ -451,23 +451,34 @@ public static class WDataWriter
             bw.Write(sc.FadeInPreview);
             bw.Write(sc.FadeHoldPreview);
             bw.Write(sc.FadeOutPreview);
-            bw.Write(sc.Category);
-            bw.Write(sc.SceneFadeIn);
-            bw.Write(sc.SceneFadeHold);
-            bw.Write(sc.SceneFadeOut);
-            bw.Write(sc.BlendTime);
-            bw.Write(sc.FogNear);
-            bw.Write(sc.FogFar);
-            bw.Write(sc.Position.X); bw.Write(sc.Position.Y); bw.Write(sc.Position.Z);
-            bw.Write(sc.Rotation.X); bw.Write(sc.Rotation.Y); bw.Write(sc.Rotation.Z);
-            bw.Write(sc.FOV);
-            bw.Write(sc.AspectRatio);
+            if (wData.Version >= 15)
+            {
+                bw.Write(sc.Category);
+                bw.Write(sc.SceneFadeIn);
+                bw.Write(sc.SceneFadeHold);
+                bw.Write(sc.SceneFadeOut);
+                bw.Write(sc.BlendTime);
+                bw.Write(sc.FogNear);
+                bw.Write(sc.FogFar);
+            }
+            if (wData.Version >= 19)
+            {
+                bw.Write(sc.Position.X); bw.Write(sc.Position.Y); bw.Write(sc.Position.Z);
+                bw.Write(sc.Rotation.X); bw.Write(sc.Rotation.Y); bw.Write(sc.Rotation.Z);
+                bw.Write(sc.FOV);
+                bw.Write(sc.AspectRatio);
+            }
         }
+
+        if (wData.Version < 20) return;
 
         // second phase
         foreach (var sc in wData.Scenes)
         {
-            WriteWString(bw, sc.Name);
+            if (wData.Version >= 21)
+            {
+                WriteWString(bw, sc.Name);
+            }
             bw.Write(sc.EventScenes.Count);
             bw.Write(sc.IndexList.Count);
             /* counts render */
@@ -481,7 +492,7 @@ public static class WDataWriter
             bw.Write(sc.NoRenderGimmickUser.Count);
             foreach (var idx in sc.IndexList) bw.Write(idx.ID);
             foreach (var es in sc.EventScenes) { bw.Write(es.Category); WriteWString(bw, es.Key); }
-            void WL(IEnumerable<SceneElement> lst) { foreach (var e in lst) { bw.Write(e.Category); WriteWString(bw, e.Key); } }
+            void WL(IEnumerable<SceneElement> lst) { foreach (var e in lst) { if (wData.Version >= 22) bw.Write(e.Category); WriteWString(bw, e.Key); } }
             WL(sc.RenderBgUser); WL(sc.RenderAniBgUser); WL(sc.RenderItemBoxUser); WL(sc.RenderGimmickUser);
             WL(sc.NoRenderBgUser); WL(sc.NoRenderAniBgUser); WL(sc.NoRenderItemBoxUser); WL(sc.NoRenderGimmickUser);
         }
@@ -504,35 +515,72 @@ public static class WDataWriter
                 WriteWString(bw, sd.Motion);
                 WriteWString(bw, sd.Name);
                 WriteWString(bw, sd.EventName);
-                bw.Write(sd.Time);
-                bw.Write(sd.Hold);
+                if (wData.Version >= 10)
+                {
+                    bw.Write(sd.Time);
+                    bw.Write(sd.Hold);
+                }
                 if (p < e.Paths.Count - 1)
                     bw.Write(sd.BlendTime);
             }
-            bw.Write(e.Cues.Count);
-            foreach (var c in e.Cues) { bw.Write(c.End); WriteWString(bw, c.Name); bw.Write(c.ID); bw.Write(c.Start); }
-            bw.Write(e.Sounds.Count);
-            foreach (var s in e.Sounds)
-            {
-                bw.Write(s.Start);
-                bw.Write(s.FadeIn);
-                bw.Write(s.FadeOut);
-                bw.Write(s.VolMax);
-                bw.Write(s.VolMin);
-                WriteWString(bw, s.Path);
-            }
-            bw.Write(e.Unk1);
-            bw.Write(e.Unk2);
-            bw.Write(e.Unk3);
-            bw.Write(e.Unk4);
 
-            bw.Write(e.Ambients.Count);
-            foreach (var a in e.Ambients)
-            { 
-                bw.Write(a.Start);
-                WriteWString(bw, a.Path);
-                bw.Write(a.PlayOnStart ? 1 : 0);
-                bw.Write(a.Loop ? 1 : 0); 
+            if (wData.Version >= 11)
+            {
+                bw.Write(e.Cues.Count);
+                foreach (var c in e.Cues) { bw.Write(c.End); WriteWString(bw, c.Name); bw.Write(c.ID); bw.Write(c.Start); }
+            }
+
+            if (wData.Version >= 12)
+            {
+                bw.Write(e.Sounds.Count);
+                foreach (var s in e.Sounds)
+                {
+                    bw.Write(s.Start);
+                    if (wData.Version >= 16)
+                    {
+                        bw.Write(s.FadeIn);
+                        bw.Write(s.FadeOut);
+                        bw.Write(s.VolMax);
+                        bw.Write(s.VolMin);
+                    }
+                    WriteWString(bw, s.Path);
+                }
+                if (wData.Version >= 13)
+                {
+                    bw.Write(e.Unk1);
+                }
+
+                bw.Write(e.Unk2);
+                bw.Write(e.Unk3);
+                bw.Write(e.Unk4);
+
+                if (wData.Version <= 14)
+                {
+                    bw.Write(0);
+                    bw.Write(0);
+                    bw.Write(0);
+                    bw.Write(0);
+                    bw.Write(0);
+                    bw.Write(0);
+                    bw.Write(0);
+                }
+                if (wData.Version <= 13)
+                {
+                    WriteWString(bw, string.Empty);
+                    WriteWString(bw, string.Empty);
+                }
+            }
+
+            if (wData.Version >= 17)
+            {
+                bw.Write(e.Ambients.Count);
+                foreach (var a in e.Ambients)
+                {
+                    bw.Write(a.Start);
+                    WriteWString(bw, a.Path);
+                    bw.Write(a.PlayOnStart ? 1 : 0);
+                    bw.Write(a.Loop ? 1 : 0);
+                }
             }
         }
     }

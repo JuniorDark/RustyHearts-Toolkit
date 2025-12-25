@@ -7,6 +7,7 @@ namespace RHToolkit.Models.WDATA;
 /// </summary>
 public partial class AniBG : ObservableObject
 {
+    [ObservableProperty] private bool _isVisible = false;
     /// <summary>Name identifier of this background.</summary>
     [ObservableProperty] private string _Name = string.Empty;
 
@@ -38,5 +39,4 @@ public partial class AniBG : ObservableObject
     [ObservableProperty] private Vector3 _Scale = new ();
     [ObservableProperty] private Quaternion _Rotation = new();
     [ObservableProperty] private Vector3 _Extents = new();
-    [ObservableProperty] private bool _isVisible = false;
 }

@@ -1839,7 +1839,6 @@
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
-
                             <StackPanel
                                 Grid.Row="0"
                                 Grid.Column="0"
@@ -1859,6 +1858,17 @@
                                         <bh:DataRowViewBehavior Column="szModelFile" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                     </i:Interaction.Behaviors>
                                 </TextBox>
+                                <Button
+                                    Width="200"
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    Command="{Binding DataContext.OpenModelPreviewWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[szModelFile], RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Content="{x:Static rs:Resources.Preview}"
+                                    Cursor="Hand"
+                                    Foreground="White"
+                                    Style="{StaticResource lb_def_button02}" />
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="0"
@@ -1879,6 +1889,17 @@
                                         <bh:DataRowViewBehavior Column="szSubModelFile" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                     </i:Interaction.Behaviors>
                                 </TextBox>
+                                <Button
+                                    Width="200"
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    Command="{Binding DataContext.OpenModelPreviewWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[szSubModelFile], RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Content="{x:Static rs:Resources.Preview}"
+                                    Cursor="Hand"
+                                    Foreground="White"
+                                    Style="{StaticResource lb_def_button02}" />
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="1"
@@ -1979,6 +2000,17 @@
                                         <bh:DataRowViewBehavior Column="szSimpleModelFile" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                     </i:Interaction.Behaviors>
                                 </TextBox>
+                                <Button
+                                    Width="200"
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    Command="{Binding DataContext.OpenModelPreviewWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[szSimpleModelFile], RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Content="{x:Static rs:Resources.Preview}"
+                                    Cursor="Hand"
+                                    Foreground="White"
+                                    Style="{StaticResource lb_def_button02}" />
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="3"
@@ -2019,6 +2051,17 @@
                                         <bh:DataRowViewBehavior Column="szDeadFX" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                     </i:Interaction.Behaviors>
                                 </TextBox>
+                                <Button
+                                    Width="200"
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    Command="{Binding DataContext.OpenModelPreviewWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[szDeadFX], RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Content="{x:Static rs:Resources.Preview}"
+                                    Cursor="Hand"
+                                    Foreground="White"
+                                    Style="{StaticResource lb_def_button02}" />
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="4"

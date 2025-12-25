@@ -126,6 +126,8 @@ public sealed partial class SettingsViewModel(ISqlDatabaseService databaseServic
         SQLServer = RegistrySettingsHelper.GetSQLServer();
         SQLUser = RegistrySettingsHelper.GetSQLUser();
         SQLPwd = RegistrySettingsHelper.GetSQLPassword();
+        TableEncryptKey = RegistrySettingsHelper.GetTableEncryptKey();
+        VFSKey = RegistrySettingsHelper.GetVFSKey();
         SqlCredentials.SQLServer = SQLServer;
         SqlCredentials.SQLUser = SQLUser;
         SqlCredentials.SQLPwd = SQLPwd;
@@ -237,5 +239,19 @@ public sealed partial class SettingsViewModel(ISqlDatabaseService databaseServic
     {
         RegistrySettingsHelper.SetSQLPassword(value);
         SqlCredentials.SQLPwd = value;
+    }
+
+    [ObservableProperty]
+    private string _tableEncryptKey = string.Empty;
+    partial void OnTableEncryptKeyChanged(string value)
+    {
+        RegistrySettingsHelper.SetTableEncryptKey(value);
+    }
+
+    [ObservableProperty]
+    private string _vFSKey = string.Empty;
+    partial void OnVFSKeyChanged(string value)
+    {
+        RegistrySettingsHelper.SetVFSKey(value);
     }
 }

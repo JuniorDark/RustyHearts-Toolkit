@@ -1,26 +1,75 @@
-﻿using HelixToolkit.Maths;
-using HelixToolkit.SharpDX;
-using HelixToolkit.Wpf.SharpDX;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
+using RHToolkit.Messages;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Models.Model3D.Animation;
 using RHToolkit.Models.Model3D.Map;
 using RHToolkit.Models.Model3D.MGM;
-using System.Numerics;
-using System.Windows.Media.Media3D;
+using RHToolkit.Models.Model3D.Model;
+using RHToolkit.Models.UISettings;
+using RHToolkit.Models.WDATA;
+using RHToolkit.Services;
 using static RHToolkit.Models.Model3D.Map.MMP;
-using static RHToolkit.Models.Model3D.MGM.MGMToHelix;
-using MeshGeometry3D = HelixToolkit.SharpDX.MeshGeometry3D;
-using PerspectiveCamera = HelixToolkit.Wpf.SharpDX.PerspectiveCamera;
 namespace RHToolkit.Models.Model3D;
 
 /// <summary>
 /// Manages the Model View Window and its functionalities.
 /// </summary>
-public partial class ModelViewManager : ObservableObject
+public partial class ModelViewManager : ObservableObject, IRecipient<ModelMessage>
 {
     private const string FileDialogFilter =
-    "Rusty Hearts Models (*.MMP;*.MGM;*.NAVI)|*.mmp;*.mgm;*.navi|Map Models (*.MMP)|*.mmp|MGM Models (*.MGM)|*.mgm|Navigation Mesh (*.NAVI)|*.navi|All Files (*.*)|*.*";
+    "Rusty Hearts Models (*.WDATA;*.MMP;*.MGM;*.NAVI)|*.wdata;*.mmp;*.mgm;*.navi|Map Data Models (*.WDATA)|*.wdata|Map Models (*.MMP)|*.mmp|MGM Models (*.MGM)|*.mgm|Navigation Mesh (*.NAVI)|*.navi|All Files (*.*)|*.*";
+    
+    private readonly IGMDatabaseService _gmDatabaseService;
+
+    /// <summary>
+    /// Parameterless constructor that resolves IGMDatabaseService from App.Services.
+    /// </summary>
+    public ModelViewManager()
+        : this(App.Services.GetRequiredService<IGMDatabaseService>())
+    {
+    }
+
+    public ModelViewManager(IGMDatabaseService gmDatabaseService)
+    {
+        _gmDatabaseService = gmDatabaseService;
+        WeakReferenceMessenger.Default.Register(this);
+    }
+
+    #region Message Receiver
+
+    /// <summary>
+    /// Receives and processes ModelMessage messages.
+    /// </summary>
+    /// <param name="message"></param>
+    public async void Receive(ModelMessage message)
+    {
+        if (message.Recipient == "ModelViewWindow" && message.Token == Token)
+        {
+            var modelData = message.Value;
+
+            if (modelData.FilePath is not null)
+            {
+                switch (modelData.Format)
+                {
+                    case ModelFormat.MMP:
+                        await LoadMMPAsync(modelData);
+                        break;
+                        case ModelFormat.MGM:
+                        await LoadMGMAsync(modelData);
+                        break;
+                    case ModelFormat.MDATA:
+                        await LoadMDataAsync(modelData);
+                        break;
+                    case ModelFormat.WDATA:
+                        await LoadWDataAsync(modelData);
+                        break;
+                        default: return;
+                }
+            }
+
+        }
+    }
+
+    #endregion
 
     #region File
 
@@ -45,7 +94,8 @@ public partial class ModelViewManager : ObservableObject
         var dlg = new OpenFileDialog
         {
             Filter = FileDialogFilter,
-            FilterIndex = 1
+            FilterIndex = 1,
+            DefaultDirectory = RegistrySettingsHelper.GetClientAssetsFolder(),
         };
 
         if (dlg.ShowDialog() != true) return false;
@@ -58,8 +108,6 @@ public partial class ModelViewManager : ObservableObject
             CurrentFileName = Path.GetFileName(dlg.FileName);
 
             await LoadModelAsync(dlg.FileName);
-
-            OnCanExecuteFileCommandChanged();
 
             return true;
         }
@@ -81,6 +129,7 @@ public partial class ModelViewManager : ObservableObject
         IsMessageVisible = Visibility.Hidden;
         Message = string.Empty;
         IsVisible = Visibility.Visible;
+        Scene3DView.FrameScene(includeBones: true);
         OnCanExecuteFileCommandChanged();
     }
 
@@ -105,10 +154,15 @@ public partial class ModelViewManager : ObservableObject
     {
         return MmpModel is not null || MgmModel is not null || NaviModel is not null;
     }
+
+    private bool CanExecuteExportFileCommand()
+    {
+        return MmpModel is not null || MgmModel is not null;
+    }
     #endregion
 
     #region Export FBX
-    [RelayCommand(CanExecute = nameof(CanExecuteFileCommand))]
+    [RelayCommand(CanExecute = nameof(CanExecuteExportFileCommand))]
     public async Task ExportAs()
     {
         if (CurrentFile is null) return;
@@ -131,10 +185,16 @@ public partial class ModelViewManager : ObservableObject
                     await MGMExporter.ExportMgmToFbx(MgmModel, dlg.FileName, EmbedTextures, ExportAnimation);
                     RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.ModelViewerExportedMgmToFbx, dlg.FileName), Resources.ModelViewerFbxExporterTitle);
                 }
-                else if (MmpModel is  not null)
+                else if (MmpModel is not null)
                 {
-                    await MMPExporter.ExportMmpToFbx(MmpModel, dlg.FileName, EmbedTextures);
-                    RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.ModelViewerExportedMmpToFbx, dlg.FileName), Resources.ModelViewerFbxExporterTitle);
+                    await MMPExporter.ExportMmpToFbx(MmpModel, dlg.FileName, EmbedTextures, copyTextures: false, ExportSeparateObjects);
+                    var message = string.Format(Resources.ModelViewerExportedMmpToFbx, dlg.FileName);
+                    if (ExportSeparateObjects)
+                    {
+                        var objectsDir = Path.Combine(Path.GetDirectoryName(dlg.FileName)!, fileName);
+                        message += $"\n\nSeparate objects exported to:\n{objectsDir}";
+                    }
+                    RHMessageBoxHelper.ShowOKMessage(message, Resources.ModelViewerFbxExporterTitle);
                 }
             }
             catch (Exception ex)
@@ -163,12 +223,18 @@ public partial class ModelViewManager : ObservableObject
         var dir = Path.GetDirectoryName(fbxPath)!;
         var baseName = Path.GetFileNameWithoutExtension(fbxPath);
 
-        // Find the original MMP with same name in the same folder
+        // Check if sidecar JSON exists (primary source for materials)
+        var sidecarPath = ModelMaterialSidecar.GetSidecarPath(fbxPath);
+        var hasSidecar = File.Exists(sidecarPath);
+
+        // Find the original MMP with same name in the same folder (fallback)
         var mmpPath = Path.Combine(dir, baseName + ".mmp");
-        if (!File.Exists(mmpPath))
+        var hasMmp = File.Exists(mmpPath);
+
+        if (!hasSidecar && !hasMmp)
         {
             RHMessageBoxHelper.ShowOKMessage(
-                $"Could not find the original MMP next to the FBX:\n{mmpPath}",
+                $"No material source found.\n\nExpected either:\n• Sidecar JSON: {sidecarPath}\n• Original MMP: {mmpPath}",
                 "Import FBX");
             return;
         }
@@ -178,7 +244,8 @@ public partial class ModelViewManager : ObservableObject
         {
             Filter = "Rusty Hearts Map File (*.mmp)|*.mmp|All Files (*.*)|*.*",
             FilterIndex = 1,
-            FileName = baseName + "_new.mmp",
+            FileName = baseName + "_new",
+            DefaultExt = ".mmp",
             InitialDirectory = dir
         };
         if (sfd.ShowDialog() != true) return;
@@ -187,9 +254,11 @@ public partial class ModelViewManager : ObservableObject
 
         try
         {
-            await MMPWriter.RebuildFromFbx(mmpPath, fbxPath, outMmpPath);
+            // Pass MMP path as fallback (can be null if sidecar exists)
+            await MMPWriter.RebuildFromFbx(hasMmp ? mmpPath : null, fbxPath, outMmpPath);
 
-            RHMessageBoxHelper.ShowOKMessage($"Exported FBX → MMP:\n{outMmpPath}", "MMP Exporter");
+            var source = hasSidecar ? "sidecar JSON" : "original MMP";
+            RHMessageBoxHelper.ShowOKMessage($"Exported FBX → MMP (materials from {source}):\n{outMmpPath}", "MMP Exporter");
         }
         catch (Exception ex)
         {
@@ -199,430 +268,550 @@ public partial class ModelViewManager : ObservableObject
 
     #endregion
 
-    #region Model View
-
-    [ObservableProperty]
-    private ObservableElement3DCollection _Scene3D = [];
-
-    private static PerspectiveCamera CreateDefaultCamera() => new()
+    #region Export Height
+    [RelayCommand(CanExecute = nameof(CanExecuteExportHeightCommand))]
+    public async Task ExportHeight()
     {
-        Position = new Point3D(0, 140, -200),
-        LookDirection = new Vector3D(-10, -243, 1250),
-        UpDirection = new Vector3D(0, 1, 0),
-        NearPlaneDistance = 0.5,
-        FarPlaneDistance = 500000
-    };
+        if (CurrentFile is null) return;
 
-    [ObservableProperty]
-    private PerspectiveCamera _Camera = new()
+        var fileName = Path.GetFileNameWithoutExtension(CurrentFile);
+
+        var sfd = new SaveFileDialog
+        {
+            Filter = "Rusty Hearts Navigation Mesh Height Map (*.height)|*.height|All Files (*.*)|*.*",
+            FilterIndex = 1,
+            FileName = fileName + "_new",
+            DefaultExt = ".height",
+            AddExtension = true,
+            InitialDirectory = Path.GetDirectoryName(CurrentFile)
+        };
+
+        if (sfd.ShowDialog() == true)
+        {
+            var outHeightPath = sfd.FileName;
+
+            try
+            {
+                var naviPath = Path.ChangeExtension(CurrentFile, ".navi");
+                await HeightWriter.BuildFromNaviFileAsync(naviPath, outHeightPath);
+                RHMessageBoxHelper.ShowOKMessage($"Exported Height:\n{outHeightPath}", "Success");
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage(
+                    string.Format(Resources.ModelViewerExportError, ex.Message),
+                    Resources.Error);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Updates the execution state of file commands.
+    /// </summary>
+    private void OnCanExecuteExportHeightCommandChanged()
     {
-        Position = new Point3D(0, 2000, 0),
-        LookDirection = new Vector3D(-5, -12, -5),
-        UpDirection = new Vector3D(0, 1, 0),
-        NearPlaneDistance = 0.5,
-        FarPlaneDistance = 500000
-    };
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            ExportHeightCommand.NotifyCanExecuteChanged();
+        });
+    }
 
-    [ObservableProperty]
-    private IEffectsManager _EffectsManager = new DefaultEffectsManager();
+    /// <summary>
+    /// Determines if file command can be executed.
+    /// </summary>
+    /// <returns>True if file commands can be executed, otherwise false.</returns>
+    private bool CanExecuteExportHeightCommand()
+    {
+        return NaviModel is not null;
+    }
+    #endregion
 
-    private readonly List<MeshGeometryModel3D> _meshModels = [];
-    private Element3D? _naviWireframeModel;        // LineGeometryModel3D
-    private Element3D? _boneModel;        // LineGeometryModel3D
-    private Element3D? _naviDebugGroup;        // GroupModel3D (portals + labels)
-    private IReadOnlyDictionary<uint, Matrix4x4>? _worldByHash;
-
+    #region Model Load
+    
     private async Task LoadModelAsync(string filePath)
     {
-        if (string.IsNullOrWhiteSpace(filePath))
-            throw new ArgumentException("File path is null or empty.", nameof(filePath));
-
         var ext = Path.GetExtension(filePath)?.ToLowerInvariant();
 
         switch (ext)
         {
+            case ".wdata":
+                {
+                    var modelType = new ModelType
+                    {
+                        Format = ModelFormat.WDATA,
+                        FilePath = filePath
+                    };
+                    await LoadWDataAsync(modelType);
+                    break;
+                }
             case ".mgm":
                 {
-                    Message = string.Format(Resources.ModelViewerLoadingModel, "MGM");
-                    var mgm = await MGMReader.ReadAsync(filePath).ConfigureAwait(false);
-                    MgmModel = mgm;
-                    MmpModel = null;
-                    NaviModel = null;
+                    var modelType = new ModelType
+                    {
+                        Format = ModelFormat.MGM,
+                        FilePath = filePath
+                    };
+                    await LoadMGMAsync(modelType);
                     break;
                 }
             case ".mmp":
                 {
-                    Message = string.Format(Resources.ModelViewerLoadingModel, "MMP");
-                    var mmp = await MMPReader.ReadAsync(filePath).ConfigureAwait(false);
-                    MmpModel = mmp;
-                    var naviPath = Path.ChangeExtension(filePath, ".navi");
-                    if (File.Exists(naviPath))
+                    var modelType = new ModelType
                     {
-                        NaviModel = await NaviReader.ReadAsync(naviPath).ConfigureAwait(false);
-                    }
-                    MgmModel = null;
+                        Format = ModelFormat.MMP,
+                        FilePath = filePath
+                    };
+
+                    await LoadMMPAsync(modelType);
                     break;
                 }
             case ".navi":
                 {
-                    Message = string.Format(Resources.ModelViewerLoadingModel, "Navi"); ;
-                    var navi = await NaviReader.ReadAsync(filePath).ConfigureAwait(false);
-                    //var heightPath = Path.ChangeExtension(filePath, ".height");
-                    //await HeightWriter.BuildFromNaviFileAsync(filePath, heightPath, 20, 50, 2);
-                    NaviModel = navi;
-                    MgmModel = null;
-                    MmpModel = null;
+                    var modelType = new ModelType
+                    {
+                        Format = ModelFormat.NAVI,
+                        FilePath = filePath
+                    };
+
+                    await LoadNaviAsync(modelType);
                     break;
                 }
             default:
                 throw new NotSupportedException(string.Format(Resources.ModelViewerUnsupportedExtension, ext));
         }
-
-        await Application.Current.Dispatcher.InvokeAsync(() =>
-        {
-            Scene3D.Clear();
-            ResetMeshCache();
-            Camera = CreateDefaultCamera();
-
-            if (MmpModel is not null)
-            {
-                Version = MmpModel.Version;
-                ObjectCount = MmpModel.Objects.Count;
-                MaterialCount = MmpModel.Materials.Count;
-                BoneCount = 0;
-
-                foreach (var node in MMPToHelix.CreateMMPNodes(MmpModel))
-                {
-                    Scene3D.Add(node);
-                    CollectMeshesFrom(node);
-                }
-
-                LoadNavMesh();
-                ApplyMeshWireframe(ShowMeshWireframe);
-            }
-            else if (MgmModel is not null)
-            {
-                MGMReader.ValidateMgmModel(MgmModel);
-
-                IsNavMeshControlsVisible = Visibility.Collapsed;
-                Version = MgmModel.Version;
-                ObjectCount = MgmModel.Meshes.Count;
-                MaterialCount = MgmModel.Materials.Count;
-                BoneCount = MgmModel.Bones.Count;
-
-                // Base MGM meshes
-                foreach (var node in MGMToHelix.CreateMGMNodes(MgmModel))
-                {
-                    Scene3D.Add(node);
-                    CollectMeshesFrom(node);
-                }
-
-                _boneModel = null;
-                EnsureBones();
-                ApplyBoneVisibility(ShowBones);
-
-                ApplyMeshWireframe(ShowMeshWireframe);
-                ApplyMeshSolidVisibility(ShowMeshSolid);
-            }
-            else if (NaviModel is not null)
-            {
-                Version = NaviModel.Header.Version;
-                LoadNavMesh();
-            }
-            FrameScene(includeBones: true);
-        });
     }
 
-    #region NavMesh
-    private void LoadNavMesh()
+    #region MMP
+    /// <summary>
+    /// Loads the MMP file and updates the 3D scene.
+    /// </summary>
+    /// <param name="wdataPath"></param>
+    /// <returns></returns>
+    private async Task LoadMMPAsync(ModelType model)
     {
-        if (NaviModel is not null)
+        Scene3DView.ClearScene();
+        Message = string.Format(Resources.ModelViewerLoadingModel, "MMP");
+        IsPlaneGridVisible = Visibility.Hidden;
+
+        var mmp = await Task.Run(() => MMPReader.ReadAsync(model.FilePath)).ConfigureAwait(true);
+        mmp.FilePath = model.FilePath;
+
+        var naviPath = Path.ChangeExtension(model.FilePath, ".navi");
+        if (File.Exists(naviPath))
         {
+            NaviModel = await Task.Run(() => NaviReader.ReadAsync(naviPath)).ConfigureAwait(true);
+        }
+
+        if (mmp is not null)
+        {
+            MgmModel = null;
+            MmpModel = mmp;
+            Scene3DView.MmpModel = mmp;
+            Version = mmp.Version;
+            ObjectCount = mmp.Objects.Count;
+            MaterialCount = mmp.Materials.Count;
+            BoneCount = 0;
+            CurrentFile = mmp.FilePath;
+            CurrentFileName = Path.GetFileName(mmp.FilePath);
+
+            foreach (var node in MMPToHelix.CreateMMPNodes(mmp))
+            {
+                Scene3DView.Scene3D.Add(node);
+                Scene3DView.CollectMeshesFrom(node);
+            }
+
+            if (NaviModel is not null)
+            {
+                Scene3DView.NaviModel = NaviModel;
+                Scene3DView.LoadNavMesh(ShowNaviWireframe, ShowNaviDebug);
+                IsNavMeshControlsVisible = Visibility.Visible;
+                Scene3DView.ApplyMeshWireframe(ShowMeshWireframe);
+            }
+
+            if (model.WData is not null)
+            {
+                var mmpDirectory = Path.GetDirectoryName(mmp.FilePath)!;
+
+                // Attach overlays
+                Scene3DView.AttachOverlays(model.WData, ClientAssetsFolder, mmpDirectory);
+
+                // Set IsVisible = true for entities that have valid model paths
+                // This triggers the overlay manager to load and display the models
+                SetVisibleForEntitiesWithModels(model.WData.AniBGs, ClientAssetsFolder, mmpDirectory);
+                SetVisibleForEntitiesWithModels(model.WData.Gimmicks, ClientAssetsFolder, mmpDirectory);
+                SetVisibleForEntitiesWithModels(model.WData.ItemBoxes, ClientAssetsFolder, mmpDirectory);
+                SetVisibleForNpcBoxes(model.WData.EventBoxGroups, ClientAssetsFolder);
+            }
+
+            Scene3DView.FrameScene(true);
+            IsLoaded();
+        }
+    }
+
+    /// <summary>
+    /// Sets IsVisible = true for entities that have valid model paths.
+    /// This triggers the overlay manager to load and display the models.
+    /// </summary>
+    /// <typeparam name="T">Entity type implementing IObbEntity with a Model property.</typeparam>
+    /// <param name="entities">Collection of entities to check.</param>
+    /// <param name="clientAssetsFolder">Client assets folder path.</param>
+    /// <param name="mmpDirectory">MMP file directory path.</param>
+    private static void SetVisibleForEntitiesWithModels<T>(
+        IEnumerable<T> entities,
+        string clientAssetsFolder,
+        string mmpDirectory) where T : IObbEntity
+    {
+        foreach (var entity in entities)
+        {
+            // Get the Model property using reflection
+            var modelProperty = typeof(T).GetProperty("Model");
+            if (modelProperty == null) continue;
+
+            var modelPathValue = modelProperty.GetValue(entity) as string;
+            if (string.IsNullOrEmpty(modelPathValue)) continue;
+
+            var modelPath = ResolveModelPath(clientAssetsFolder, mmpDirectory, modelPathValue);
+
+            if (!string.IsNullOrEmpty(modelPath) && File.Exists(modelPath))
+            {
+                // Set IsVisible to true - this triggers the overlay manager to create the node with the model
+                var isVisibleProperty = typeof(T).GetProperty("IsVisible");
+                isVisibleProperty?.SetValue(entity, true);
+            }
+        }
+    }
+
+    private static string ResolveModelPath(
+        string clientAssetsFolder,
+        string mmpDirectory,
+        string modelPath)
+    {
+        if (string.IsNullOrWhiteSpace(modelPath) || modelPath == @".\")
+            return string.Empty;
+
+        modelPath = modelPath.Replace('/', '\\');
+
+        string resolvedMdataPath;
+
+        // Case 1: .\object\... → relative to MMP directory
+        if (modelPath.StartsWith(@".\"))
+        {
+            var relative = modelPath.Substring(2); // remove ".\"
+            resolvedMdataPath = Path.Combine(mmpDirectory, relative);
+        }
+        else
+        {
+            // Case 2: ..\..\..\something → logical asset-root relative
+            while (modelPath.StartsWith(@"..\"))
+            {
+                modelPath = modelPath.Substring(3);
+            }
+
+            resolvedMdataPath = Path.Combine(clientAssetsFolder, modelPath);
+        }
+
+        // Check if the resolved path is an mdata file (or would be)
+        var mdataPath = Path.ChangeExtension(resolvedMdataPath, ".mdata");
+        if (File.Exists(mdataPath))
+        {
+            try
+            {
+                // Read the mdata file to get the MGM path
+                var mDataModel = Task.Run(() => MDataModelPathReader.ReadAsync(mdataPath)).GetAwaiter().GetResult();
+
+                if (!string.IsNullOrWhiteSpace(mDataModel.MgmPath))
+                {
+                    // Resolve the MGM path relative to the mdata file's directory
+                    return ResolveMgmPathFromMdata(clientAssetsFolder, mdataPath, mDataModel.MgmPath);
+                }
+            }
+            catch
+            {
+                // Fall back to direct MGM path if mdata reading fails
+            }
+        }
+
+        // Fall back: change extension to .mgm directly
+        return Path.ChangeExtension(resolvedMdataPath, ".mgm");
+    }
+
+    /// <summary>
+    /// Resolves the MGM path from an mdata file's MgmPath property.
+    /// </summary>
+    private static string ResolveMgmPathFromMdata(string clientAssetsFolder, string mdataFilePath, string mgmPath)
+    {
+        if (string.IsNullOrWhiteSpace(mgmPath))
+            return string.Empty;
+
+        mgmPath = mgmPath.Replace('/', '\\');
+
+        // If it's a relative path starting with .\, resolve relative to mdata directory
+        if (mgmPath.StartsWith(@".\"))
+        {
+            var mdataDir = Path.GetDirectoryName(mdataFilePath) ?? string.Empty;
+            var relative = mgmPath.Substring(2);
+            return Path.ChangeExtension(Path.Combine(mdataDir, relative), ".mgm");
+        }
+
+        // If it's a relative path with ..\ prefixes, navigate up from mdata directory
+        if (mgmPath.StartsWith(@"..\"))
+        {
+            var mdataDir = Path.GetDirectoryName(mdataFilePath) ?? string.Empty;
+
+            while (mgmPath.StartsWith(@"..\"))
+            {
+                mdataDir = Path.GetDirectoryName(mdataDir) ?? string.Empty;
+                mgmPath = mgmPath.Substring(3);
+            }
+
+            return Path.ChangeExtension(Path.Combine(mdataDir, mgmPath), ".mgm");
+        }
+
+        // If it's an absolute-style path or asset-root relative, resolve against client assets folder
+        if (!string.IsNullOrEmpty(clientAssetsFolder))
+        {
+            return Path.ChangeExtension(Path.Combine(clientAssetsFolder, mgmPath), ".mgm");
+        }
+
+        // Last resort: just ensure .mgm extension
+        return Path.ChangeExtension(mgmPath, ".mgm");
+    }
+
+    /// <summary>
+    /// Sets IsVisible = true for NpcBox entities that have valid model paths.
+    /// The NpcName is in the format: Character\NPC\npc_gunman01\npc_gunman01.mdata
+    /// </summary>
+    /// <param name="eventBoxGroups">Collection of event box groups to check.</param>
+    /// <param name="clientAssetsFolder">Client assets folder path.</param>
+    private void SetVisibleForNpcBoxes(
+        IEnumerable<EventBoxGroup> eventBoxGroups,
+        string clientAssetsFolder)
+    {
+        foreach (var group in eventBoxGroups)
+        {
+            if (group.Type != EventBoxType.NpcBox) continue;
+
+            foreach (var box in group.Boxes)
+            {
+                if (box is NpcBox npcBox)
+                {
+                    var modelPath = ResolveNpcModelPath(clientAssetsFolder, npcBox.NpcName);
+
+                    if (!string.IsNullOrEmpty(modelPath) && File.Exists(modelPath))
+                    {
+                        npcBox.IsVisible = true;
+                    }
+                }
+            }
+        }
+    }
+
+    private string ResolveNpcModelPath(string clientAssetsFolder, string? npcName)
+    {
+        if (string.IsNullOrWhiteSpace(npcName)) return string.Empty;
+
+        var npcModel = _gmDatabaseService.GetNpcModelByName(npcName);
+
+        return Path.Combine(clientAssetsFolder, npcModel);
+
+    }
+
+    #endregion
+
+    #region MGM
+
+    /// <summary>
+    /// Loads the MMP file associated with the given WData file path and updates the 3D scene.
+    /// </summary>
+    /// <param name="wdataPath"></param>
+    /// <returns></returns>
+    private async Task LoadMGMAsync(ModelType model)
+    {
+        Scene3DView.ClearScene();
+        Message = string.Format(Resources.ModelViewerLoadingModel, "MGM");
+        IsPlaneGridVisible = Visibility.Visible;
+
+        var mgm = await Task.Run(() => MGMReader.ReadAsync(model.FilePath)).ConfigureAwait(true);
+
+        if (mgm is not null)
+        {
+            MGMReader.ValidateMgmModel(mgm);
+            mgm.FilePath = model.FilePath;
+            MgmModel = mgm;
+            MmpModel = null;
+            NaviModel = null;
+            Scene3DView.MgmModel = mgm;
+            IsNavMeshControlsVisible = Visibility.Collapsed;
+            Version = mgm.Version;
+            ObjectCount = mgm.Meshes.Count;
+            MaterialCount = mgm.Materials.Count;
+            BoneCount = mgm.Bones.Count;
+            CurrentFile = mgm.FilePath;
+            CurrentFileName = Path.GetFileName(mgm.FilePath);
+
+            // Base MGM meshes
+            foreach (var node in MGMToHelix.CreateMGMNodes(mgm))
+            {
+                Scene3DView.Scene3D.Add(node);
+                Scene3DView.CollectMeshesFrom(node);
+            }
+
+            Scene3DView.BoneModel = null;
+            Scene3DView.EnsureBones();
+            Scene3DView.ApplyBoneVisibility(ShowBones);
+            Scene3DView.ApplyMeshWireframe(ShowMeshWireframe);
+            Scene3DView.ApplyMeshSolidVisibility(ShowMeshSolid);
+            Scene3DView.FrameScene(true);
+
+            IsLoaded();
+        }
+    }
+
+    #endregion
+
+    #region Navi
+    /// <summary>
+    /// Loads the Navi file associated with the and updates the 3D scene.
+    /// </summary>
+    /// <param name="model"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    private async Task LoadNaviAsync(ModelType model)
+    {
+        Scene3DView.ClearScene();
+        Message = string.Format(Resources.ModelViewerLoadingModel, "Navi");
+
+        var navi = await Task.Run(() => NaviReader.ReadAsync(model.FilePath)).ConfigureAwait(true);
+
+        if (navi is not null)
+        {
+            NaviModel = navi;
+            MgmModel = null;
+            MmpModel = null;
+            Scene3DView.NaviModel = navi;
+            Version = navi.Header.Version;
+            ObjectCount = navi.Entries.Count;
+            MaterialCount = 0;
+            BoneCount = 0;
+            Scene3DView.LoadNavMesh(ShowNaviWireframe, ShowNaviDebug);
             IsNavMeshControlsVisible = Visibility.Visible;
-            _naviWireframeModel = null;
-            _naviDebugGroup = null;
-            float alpha;
 
-            if (MmpModel is not null)
-            {
-                alpha = 0.0f;
-                _worldByHash = MmpModel.Nodes
-                   .GroupBy(n => n.NameHash)
-                   .ToDictionary(g => g.Key, g => g.First().MWorld);
-            }
-            else
-            {
-                alpha = 0.25f;
-                _worldByHash = NaviModel.Nodes
-                    .GroupBy(n => n.NameHash)
-                    .ToDictionary(g => g.Key, g => g.First().MWorld);
-            }
-
-            // base mesh(es)
-            foreach (var meshGroup in NaviToHelix.CreateNaviNodes(NaviModel, _worldByHash, alpha))
-                Scene3D.Add(meshGroup);
-
-            // apply current toggles
-            EnsureNaviWireframe();
-            EnsureNaviDebug();
-            ApplyNaviWireframeVisibility(ShowNaviWireframe);
-            ApplyNaviDebugVisibility(ShowNaviDebug);
+            IsLoaded();
         }
     }
 
-    // ===== builders =====
-    private void EnsureNaviWireframe()
-    {
-        if (_naviWireframeModel != null || NaviModel is null) return;
-        _naviWireframeModel = NaviToHelix.CreateNavTrianglesWireframe(
-            NaviModel, _worldByHash
-        );
-    }
-
-    private void EnsureNaviDebug()
-    {
-        if (_naviDebugGroup != null || NaviModel is null) return;
-        _naviDebugGroup = NaviToHelix.CreateNavOverlay(
-            NaviModel, _worldByHash
-        );
-    }
-
-    // ===== add/remove helpers =====
-    private void ApplyNaviWireframeVisibility(bool visible)
-    {
-        if (_naviWireframeModel == null) return;
-        if (visible && !Scene3D.Contains(_naviWireframeModel)) Scene3D.Add(_naviWireframeModel);
-        if (!visible && Scene3D.Contains(_naviWireframeModel)) Scene3D.Remove(_naviWireframeModel);
-    }
-
-    private void ApplyNaviDebugVisibility(bool visible)
-    {
-        if (_naviDebugGroup == null) return;
-        if (visible && !Scene3D.Contains(_naviDebugGroup)) Scene3D.Add(_naviDebugGroup);
-        if (!visible && Scene3D.Contains(_naviDebugGroup)) Scene3D.Remove(_naviDebugGroup);
-    }
     #endregion
 
-    #region Bones
-    private void EnsureBones()
-    {
-        if (_boneModel != null || MgmModel is null) return;
+    #region MData
 
-        var skel = new SkeletonOptions
+    /// <summary>
+    /// Loads the Wdata file path and updates the 3D scene.
+    /// </summary>
+    /// <param name="mdataPath"></param>
+    /// <returns></returns>
+    private async Task LoadMDataAsync(ModelType model)
+    {
+        Scene3DView.ClearScene();
+        Message = string.Format(Resources.ModelViewerLoadingModel, "MData");
+        var mdata = await Task.Run(() => MDataModelPathReader.ReadAsync(model.FilePath)).ConfigureAwait(true);
+
+        var mgmPath = mdata.MgmPath;
+        var rootDir = Path.GetDirectoryName(model.FilePath) ?? string.Empty;
+        mgmPath = Path.Combine(rootDir, Path.GetFileName(mgmPath));
+
+        if (!File.Exists(mgmPath))
         {
-            BoneRadius = 0.4,
-            ShowJoints = true,
-            JointRadius = 0.35
+            RHMessageBoxHelper.ShowOKMessage(
+                string.Format(Resources.FileNotFoundMessage, mgmPath),
+                Resources.Error
+            );
+            return;
+        }
+
+        var modelType = new ModelType
+        {
+            Format = ModelFormat.MGM,
+            FilePath = mgmPath
         };
 
-        _boneModel = CreateSkeletonModel(MgmModel, skel);
+        await LoadMGMAsync(modelType);
     }
 
-    private void ApplyBoneVisibility(bool visible)
-    {
-        if (_boneModel == null) return;
-        if (visible && !Scene3D.Contains(_boneModel)) Scene3D.Add(_boneModel);
-        if (!visible && Scene3D.Contains(_boneModel)) Scene3D.Remove(_boneModel);
-    }
     #endregion
 
-    #region Mesh Wireframe
-    private void CollectMeshesFrom(Element3D e)
-    {
-        switch (e)
-        {
-            case MeshGeometryModel3D m:
-                _meshModels.Add(m);
-                if (!_origFrontMat.ContainsKey(m)) _origFrontMat[m] = m.Material!;
-                break;
+    #region WData
 
-            case GroupModel3D g:
-                foreach (var child in g.Children)
-                    CollectMeshesFrom(child);
-                break;
+    /// <summary>
+    /// Loads the Wdata file path and updates the 3D scene.
+    /// </summary>
+    /// <param name="wdataPath"></param>
+    /// <returns></returns>
+    private async Task LoadWDataAsync(ModelType model)
+    {
+        Scene3DView.ClearScene();
+        Message = string.Format(Resources.ModelViewerLoadingModel, "WData");
+        var wdata = await Task.Run(() => WDataReader.ReadAsync(model.FilePath)).ConfigureAwait(true);
+
+        var mmpPath = wdata.ModelPath;
+        var rootDir = Path.GetDirectoryName(model.FilePath) ?? string.Empty;
+        mmpPath = Path.Combine(rootDir, Path.GetFileName(mmpPath));
+
+        if (!File.Exists(mmpPath))
+        {
+            RHMessageBoxHelper.ShowOKMessage(
+                string.Format(Resources.FileNotFoundMessage, mmpPath),
+                Resources.Error
+            );
+            return;
         }
-    }
 
-    private void ResetMeshCache()
-    {
-        _meshModels.Clear();
-        _origFrontMat.Clear();
-        _origBackMat.Clear();
-    }
-
-    private void ApplyMeshWireframe(bool wireframe)
-    {
-        foreach (var m in _meshModels)
+        var modelType = new ModelType
         {
-            m.RenderWireframe = wireframe;
-            m.WireframeColor = System.Windows.Media.Colors.Black;
-        }
-    }
-
-    private readonly Dictionary<MeshGeometryModel3D, HelixToolkit.Wpf.SharpDX.Material> _origFrontMat = [];
-    private readonly Dictionary<MeshGeometryModel3D, HelixToolkit.Wpf.SharpDX.Material> _origBackMat = [];
-
-    private HelixToolkit.Wpf.SharpDX.Material? _invisibleMat;
-
-    private HelixToolkit.Wpf.SharpDX.Material GetInvisibleMaterial()
-    {
-        return _invisibleMat ??= new PhongMaterial
-        {
-            DiffuseColor = new Color4(0, 0, 0, 0),
-            AmbientColor = new Color4(0, 0, 0, 0),
-            SpecularColor = new Color4(0, 0, 0, 0),
-            EmissiveColor = new Color4(0, 0, 0, 0),
-            ReflectiveColor = new Color4(0, 0, 0, 0)
+            Format = ModelFormat.MMP,
+            FilePath = mmpPath,
+            WData = wdata
         };
-    }
 
-    private void ApplyMeshSolidVisibility(bool showSolid)
-    {
-        var inv = GetInvisibleMaterial();
-
-        foreach (var m in _meshModels)
-        {
-            if (showSolid)
-            {
-                if (_origFrontMat.TryGetValue(m, out var f)) m.Material = f;
-            }
-            else
-            {
-                m.Material = inv;
-            }
-        }
+        await LoadMMPAsync(modelType);
     }
 
     #endregion
 
-    #region Camera
-    [RelayCommand]
-    private void ZoomExtents()
-    {
-        FrameScene(includeBones: ShowBones);
-    }
-
-    // Compute the scene bounds from the actual mesh vertex positions (respecting Transform)
-    private bool TryGetSceneBounds(out Rect3D bounds, bool includeBones = false)
-    {
-        Rect3D acc = Rect3D.Empty;
-
-        void Accumulate(Element3D e, Transform3D? parentT = null)
-        {
-            var t = Combine(parentT, (e as Element3D)?.Transform);
-
-            switch (e)
-            {
-                case MeshGeometryModel3D m when m.Geometry is MeshGeometry3D g && g.Positions != null && g.Positions.Count > 0:
-                    foreach (var v in g.Positions)
-                    {
-                        var p = new Point3D(v.X, v.Y, v.Z);
-                        if (t != null) p = t.Transform(p);
-                        if (double.IsNaN(p.X) || double.IsInfinity(p.X) ||
-                            double.IsNaN(p.Y) || double.IsInfinity(p.Y) ||
-                            double.IsNaN(p.Z) || double.IsInfinity(p.Z))
-                            continue;
-
-                        if (acc.IsEmpty) acc = new Rect3D(p, new Size3D(0, 0, 0));
-                        else acc.Union(p);
-                    }
-                    break;
-
-                case GroupModel3D g:
-                    foreach (var child in g.Children)
-                        Accumulate(child, t);
-                    break;
-
-                default:
-                    if (includeBones && e is MeshGeometryModel3D bm && bm.Geometry is MeshGeometry3D bg && bg.Positions != null)
-                    {
-                        foreach (var v in bg.Positions)
-                        {
-                            var p = new Point3D(v.X, v.Y, v.Z);
-                            if (t != null) p = t.Transform(p);
-                            if (double.IsNaN(p.X) || double.IsInfinity(p.X) ||
-                                double.IsNaN(p.Y) || double.IsInfinity(p.Y) ||
-                                double.IsNaN(p.Z) || double.IsInfinity(p.Z))
-                                continue;
-
-                            if (acc.IsEmpty) acc = new Rect3D(p, new Size3D(0, 0, 0));
-                            else acc.Union(p);
-                        }
-                    }
-                    break;
-            }
-        }
-
-        foreach (var e in Scene3D)
-            Accumulate(e);
-
-        bounds = acc;
-        return !acc.IsEmpty && acc.SizeX > 0 && acc.SizeY > 0 && acc.SizeZ > 0;
-
-        static Transform3D? Combine(Transform3D? a, Transform3D? b)
-        {
-            if (a == null) return b;
-            if (b == null) return a;
-            return new Transform3DGroup { Children = [a, b] };
-        }
-    }
-
-    // Given bounds, place the PerspectiveCamera so the whole box fits.
-    // Keeps a nice diagonal view; adjusts Near/Far and accounts for FOV.
-    private void FrameCameraToBounds(Rect3D b, double fovDegrees = 45.0, double padding = 1.0)
-    {
-        if (b.IsEmpty) return;
-
-        // center and radius
-        var center = new Point3D(b.X + b.SizeX / 2.0, b.Y + b.SizeY / 2.0, b.Z + b.SizeZ / 2.0);
-        var diag = Math.Sqrt(b.SizeX * b.SizeX + b.SizeY * b.SizeY + b.SizeZ * b.SizeZ);
-        var radius = diag * 0.5;
-
-        // keep current azimuth/elevation if you like; or pick a default diagonal
-        var dir = Camera?.LookDirection ?? new Vector3D(-1, -0.6, -1);
-        if (dir.LengthSquared == 0) dir = new Vector3D(-1, -0.6, -1);
-        dir.Normalize();
-
-        // FOV
-        var fov = (Camera?.FieldOfView > 0) ? Camera.FieldOfView : fovDegrees;
-        var fovRad = fov * Math.PI / 180.0;
-
-        // distance so sphere fits vertically
-        var distance = radius / Math.Tan(fovRad * 0.5) * padding;
-
-        // place the camera and make it FACE the center
-        var pos = center - dir * distance;
-        Camera!.Position = pos;
-        Camera.LookDirection = center - pos;   // <— always face the model
-        Camera.UpDirection = new Vector3D(0, 1, 0);
-
-        // clip planes suitable for this framing
-        SetClipPlanes(center, radius);
-    }
-
-    private void SetClipPlanes(Point3D focus, double sceneRadius)
-    {
-        // distance from camera to the focus (scene center)
-        var d = (focus - Camera.Position).Length;
-        if (d <= 0) d = sceneRadius > 0 ? sceneRadius : 1.0;
-
-        // near is a small fraction of the distance, clamped to keep precision
-        var near = Math.Max(0.01, Math.Min(d * 0.02, 5.0));   // 2% of distance, max 5 units
-                                                              // far should comfortably exceed both distance and scene size
-        var far = Math.Max(d + sceneRadius * 5.0, near + 50.0);
-
-        Camera.NearPlaneDistance = near;
-        Camera.FarPlaneDistance = far;
-    }
-
-    // Convenience: frame the current Scene3D
-    public void FrameScene(bool includeBones = false)
-    {
-        if (TryGetSceneBounds(out var bounds, includeBones))
-            FrameCameraToBounds(bounds);
-    }
     #endregion
 
+    #region Settings
+    /// <summary>
+    /// Sets the folder path for the client assets using a folder dialog.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanExecuteSetFolderCommand))]
+    public void SetClientAssetsFolder()
+    {
+        try
+        {
+            var openFolderDialog = new OpenFolderDialog();
+
+            if (openFolderDialog.ShowDialog() == true)
+            {
+                string newFolderPath = openFolderDialog.FolderName;
+                RegistrySettingsHelper.SetClientAssetsFolder(newFolderPath);
+
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.DataTableManagerFolderSetMessage, newFolderPath), Resources.Success);
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+        }
+    }
+
+    /// <summary>
+    /// Checks if the SetFolder command can be executed.
+    /// </summary>
+    /// <returns>True if the command can be executed, otherwise false.</returns>
+    private bool CanExecuteSetFolderCommand()
+    {
+        return MmpModel is null;
+    }
     #endregion
 
     #region Close File
@@ -641,20 +830,25 @@ public partial class ModelViewManager : ObservableObject
     }
 
     /// <summary>
-    /// Clears the current file and resets the Wdata and related properties.
+    /// Clears the current file and resets the model and related properties.
     /// </summary>
     public void ClearFile()
     {
-        MmpModel = null;
-        MgmModel = null;
-        NaviModel = null;
-        CurrentFile = null;
-        CurrentFileName = null;
-        IsVisible = Visibility.Hidden;
-        Message = Resources.OpenFile;
-        IsMessageVisible = Visibility.Visible;
-        Title = Resources.ModelViewerTitleDefault;
-        OnCanExecuteFileCommandChanged();
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            MmpModel = null;
+            MgmModel = null;
+            NaviModel = null;
+            CurrentFile = null;
+            CurrentFileName = null;
+            IsVisible = Visibility.Hidden;
+            Message = Resources.OpenFile;
+            IsMessageVisible = Visibility.Visible;
+            Title = Resources.ModelViewerTitleDefault;
+            Scene3DView.ClearScene();
+            OnCanExecuteFileCommandChanged();
+        });
+        
     }
     #endregion
 
@@ -682,89 +876,79 @@ public partial class ModelViewManager : ObservableObject
 
     #region Properties
 
-    [ObservableProperty]
-    private string _title = Resources.ModelViewerTitleDefault;
+    [ObservableProperty] private string _clientAssetsFolder = RegistrySettingsHelper.GetClientAssetsFolder();
+    [ObservableProperty] private Guid _token;
+    [ObservableProperty] private string _title = Resources.ModelViewerTitleDefault;
+    [ObservableProperty] private Visibility _isVisible = Visibility.Collapsed;
+    [ObservableProperty] private Visibility _isMessageVisible = Visibility.Visible;
+    [ObservableProperty] private Visibility _isNavMeshControlsVisible = Visibility.Collapsed;
+    [ObservableProperty] private Visibility _isBoneControlsVisible = Visibility.Collapsed;
+    [ObservableProperty] private Visibility _isMeshControlsVisible = Visibility.Collapsed;
+    [ObservableProperty] private Visibility _isPlaneGridVisible = Visibility.Hidden;
 
-    [ObservableProperty]
-    private Visibility _isVisible = Visibility.Collapsed;
-
-    [ObservableProperty]
-    private Visibility _isMessageVisible = Visibility.Visible;
-
-    [ObservableProperty]
-    private Visibility _isNavMeshControlsVisible = Visibility.Collapsed;
-
-    [ObservableProperty]
-    private MmpModel? _mmpModel;
+    [ObservableProperty] private MmpModel? _mmpModel;
     partial void OnMmpModelChanged(MmpModel? value)
     {
         OnCanExecuteFileCommandChanged();
     }
-    [ObservableProperty]
-    private MgmModel? _mgmModel;
+
+    [ObservableProperty] private MgmModel? _mgmModel;
     partial void OnMgmModelChanged(MgmModel? value)
     {
         OnCanExecuteFileCommandChanged();
     }
-    [ObservableProperty]
-    private NaviMeshFile? _naviModel;
+
+    [ObservableProperty] private NaviMeshFile? _naviModel;
     partial void OnNaviModelChanged(NaviMeshFile? value)
     {
-        OnCanExecuteFileCommandChanged();
+        OnCanExecuteExportHeightCommandChanged();
     }
 
-    [ObservableProperty]
-    private string? _currentFile;
-
-    [ObservableProperty]
-    private string? _currentFileName;
-
-    [ObservableProperty]
-    private string? _message = Resources.OpenFile;
-
+    [ObservableProperty] private string? _currentFile;
+    [ObservableProperty] private string? _currentFileName;
+    [ObservableProperty] private string? _message = Resources.OpenFile;
     [ObservableProperty] private int _version;
     [ObservableProperty] private int _objectCount;
     [ObservableProperty] private int _materialCount;
     [ObservableProperty] private int _boneCount;
 
-    [ObservableProperty]
-    private bool _showNaviWireframe;
+    [ObservableProperty] private Scene3DManager _scene3DView = new();
+
+    [ObservableProperty] private bool _showNaviWireframe;
     partial void OnShowNaviWireframeChanged(bool value)
     {
-        EnsureNaviWireframe();
-        ApplyNaviWireframeVisibility(value);
+        Scene3DView.EnsureNaviWireframe();
+        Scene3DView.ApplyNaviWireframeVisibility(value);
     }
-    [ObservableProperty]
-    private bool _showNaviDebug;
+
+    [ObservableProperty] private bool _showNaviDebug;
     partial void OnShowNaviDebugChanged(bool value)
     {
-        EnsureNaviDebug();
-        ApplyNaviDebugVisibility(value);
+        Scene3DView.EnsureNaviDebug();
+        Scene3DView.ApplyNaviDebugVisibility(value);
     }
 
     [ObservableProperty] private bool _showBones;
     partial void OnShowBonesChanged(bool value)
     {
-        EnsureBones();
-        ApplyBoneVisibility(value);
+        Scene3DView.EnsureBones();
+        Scene3DView.ApplyBoneVisibility(value);
     }
 
-    [ObservableProperty]
-    private bool _showMeshWireframe;
-
+    [ObservableProperty]private bool _showMeshWireframe;
     partial void OnShowMeshWireframeChanged(bool value)
     {
-        ApplyMeshWireframe(value);
+        Scene3DView.ApplyMeshWireframe(value);
     }
 
-    [ObservableProperty]
-    private bool _showMeshSolid = true;
-
+    [ObservableProperty] private bool _showMeshSolid = true;
     partial void OnShowMeshSolidChanged(bool value)
     {
-        ApplyMeshSolidVisibility(value);
+        Scene3DView.ApplyMeshSolidVisibility(value);
     }
+
     [ObservableProperty] private bool _embedTextures;
     [ObservableProperty] private bool _exportAnimation = false;
+    [ObservableProperty] private bool _exportSeparateObjects = false;
     #endregion
 }

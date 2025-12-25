@@ -1,4 +1,4 @@
-# Rusty Hearts Toolkit
+﻿# Rusty Hearts Toolkit
 
 [![License](https://img.shields.io/github/license/JuniorDark/RustyHearts-Toolkit?color=green)](LICENSE.txt)  
 [![Build](https://github.com/JuniorDark/RustyHearts-Toolkit/actions/workflows/build.yml/badge.svg)](https://github.com/JuniorDark/RustyHearts-Toolkit/actions/workflows/build.yml)  
@@ -29,7 +29,7 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
 
 ### Model Tools
 - **Model Tools**: A specialized tool designed for exporting 3D models map files (`.mmp`) and models (`.mgm`) to fbx. 
-- **Model Viewer**: View 3D models (`.mmp`,`.mgm`), with option to export to FBX format.
+- **Model Viewer**: View 3D models (`.mmp`,`.mgm`), with option to export to FBX format and import fbx back to  (`.mmp`).
 
 ### Table Editor Tools
 - **Table Editor**: Edit [.rh](https://juniordark.gitbook.io/rusty-hearts-files-structures/internal-files/rh-file) table files directly, with options to export into various formats like XML, XLSX, and MIP.
@@ -50,6 +50,74 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
   - **Skill Editor**: Edit and configure character skills.
   - **Title Editor**: Edit titles and title effects (charactertitle.rh).
   - **World Editor**: Edit world data (world.rh, dungeoninfolist.rh, mapselect_curtis.rh).
+
+## FBX → MMP (EXPERIMENTAL) Import Support
+IMPORTANT
+- This feature is experimental and intended for advanced users and expects FBX files produced by this toolkit’s exporter.
+- This feature may produce incomplete or incorrect results, always back up original MMP, NAVI files before importing.
+
+### IMPORTANT: Materials
+- On export, the toolkit generates a `.materials.json` sidecar file containing material parameters.
+- The importer uses this `.materials.json` to reconstruct materials in the `.mmp`.
+- Many material parameter meanings are currently unknown, so round-tripping relies on preserving these values.
+
+### IMPORTANT: Node Names (Required Suffix Flags)
+
+Mesh nodes in the exported FBX include a special suffix that encodes flags required to rebuild the `.mmp`. **Do not remove or rename these suffixes**.
+
+Suffix format:
+- `__K{kind}`
+- `__T{meshType}_A{IsAdditive}_B{hasAlpha}_E{isEnabled}_M{materialIdx}`
+
+Examples:
+- `NOF_wreck_cave_01__K5`
+- `ship_1__T0_A0_B1_E1_M41`
+
+### Importing Meshes/Materials From Other Maps
+
+When importing meshes/materials from other maps, you must update:
+- The `materialIdx` flag in FBX node names (`_M{materialIdx}`)
+- The material indices inside `.materials.json` to avoid index collisions
+
+### Workflow (Blender)
+
+#### 1) Export the source MMP to FBX
+- In the MMP exporter, enable **Export Separate Objects**.
+  - This produces a separate FBX per mesh node.
+
+#### 2) Bring additional meshes into a target map scene
+- In Blender, import the target map FBX.
+- Import the additional mesh FBX files.
+- Move/parent imported mesh nodes under the target map’s main/root node as needed.
+
+#### 3) Merge materials
+- Open the imported mesh `.materials.json` and copy its materials to the end of the target map `.materials.json`.
+- Update the new materials’ `MaterialIndex` values to avoid duplicates.
+- Update each imported mesh node name `_M{materialIdx}` to match the new `MaterialIndex`.
+
+#### 4) Fix texture paths
+Update `TexturePath` to be correct relative to the target map’s `texture` folder.
+
+Example:
+- Target map: `\map\lobby\palme`
+- Source map: `\map\event_dungeon\wreck_cave`
+
+Source `TexturePath` in `wreck_cave`:
+- `"TexturePath": ".\\texture\\wreckrock_08.dds"`
+
+Updated `TexturePath` for `palme`:
+- `"TexturePath": "..\\..\\event_dungeon\\wreck_cave\\texture\\wreckrock_08.dds"`
+
+#### 5) Export FBX from Blender
+- Export the scene to FBX using Blender default settings.
+
+#### 6) Import FBX back to MMP
+- In the 3D Model Viewer window, use **Import Map FBX to MMP**.
+- The import generates:
+  - a new `.mmp`
+  - a `.navi` for the updated navigation mesh
+  - a `.height` (height map generated from the `.navi`)
+
 
 ### Local Databases
 - **Item Database** 

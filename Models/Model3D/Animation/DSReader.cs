@@ -58,7 +58,7 @@ public class DSReader
 
         for (int a = 0; a < animCount; a++)
         {
-            string name = BinaryReaderExtensions.ReadUnicode256Count(br);
+            string name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
             uint blockSize = br.ReadUInt32(); // size of this animation block in bytes
             uint boneCount = br.ReadUInt32();
 
@@ -66,7 +66,7 @@ public class DSReader
 
             for (int b = 0; b < boneCount; b++)
             {
-                string partName = BinaryReaderExtensions.ReadUnicode256Count(br);
+                string partName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
                 uint frameCount = br.ReadUInt32();
 
                 var bone = new DSTrack { BoneName = partName };

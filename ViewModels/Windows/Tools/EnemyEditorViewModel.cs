@@ -1,9 +1,12 @@
-﻿using Microsoft.Win32;
+﻿
+using Microsoft.Win32;
 using RHToolkit.Messages;
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.Model3D;
+using RHToolkit.Models.UISettings;
 using RHToolkit.Services;
 using RHToolkit.ViewModels.Windows.Tools.VM;
 using RHToolkit.Views.Windows;
@@ -28,6 +31,10 @@ namespace RHToolkit.ViewModels.Windows
             _gmDatabaseService = gmDatabaseService;
             _itemDataManager = itemDataManager;
             DataTableManager = new()
+            {
+                Token = _token
+            };
+            ModelView = new ModelViewManager
             {
                 Token = _token
             };
@@ -384,6 +391,63 @@ namespace RHToolkit.ViewModels.Windows
         }
         #endregion
 
+        #region Open Model Preview Window
+
+        [RelayCommand]
+        private async Task OpenModelPreviewWindow(string parameter)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(parameter))
+                {
+
+                    string clientAssetsFolder = RegistrySettingsHelper.GetClientAssetsFolder();
+
+                    if (string.IsNullOrEmpty(clientAssetsFolder) || !Directory.Exists(clientAssetsFolder))
+                    {
+                        var openFolderDialog = new OpenFolderDialog();
+
+                        if (openFolderDialog.ShowDialog() == true)
+                        {
+                            clientAssetsFolder = openFolderDialog.FolderName;
+                            RegistrySettingsHelper.SetClientAssetsFolder(clientAssetsFolder);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
+
+                    var modelPath = Path.Combine(clientAssetsFolder, parameter.ToLower());
+
+                    if (!File.Exists(modelPath))
+                    {
+                        RHMessageBoxHelper.ShowOKMessage(
+                                    string.Format(Resources.FileNotFoundMessage, modelPath),
+                                    Resources.Error
+                                );
+                        return;
+                    }
+
+                    var modelData = new ModelType
+                    {
+                        FilePath = modelPath,
+                        Format = ModelFormat.MDATA,
+                    };
+
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        _windowsService.OpenModelViewWindow(_token, modelData, ModelView!);
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Filter
@@ -696,6 +760,9 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private ItemDataManager _itemDataManager;
+
+        [ObservableProperty]
+        private ModelViewManager? _modelView;
 
         #region SelectedItem
 

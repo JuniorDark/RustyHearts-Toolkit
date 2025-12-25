@@ -129,7 +129,7 @@ public sealed class PCKWriter : IDisposable
     /// </summary>
     /// <param name="name"></param>
     /// <returns>The archive number (0-9) derived from the file name.</returns>
-    private static byte GetArchiveNumberFromName(string name)
+    public static byte GetArchiveNumberFromName(string name)
     {
         uint pckNum = 5381;
         foreach (char c in name)

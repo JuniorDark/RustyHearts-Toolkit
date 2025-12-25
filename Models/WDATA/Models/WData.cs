@@ -16,6 +16,15 @@ public partial class WData : ObservableObject
 
     [ObservableProperty] private int _gimmickVersion = 0;
 
+    // Script count fields
+    [ObservableProperty] private int _ScriptCount1 = 0;
+
+    [ObservableProperty] private int _ScriptConditionCount1 = 0;
+
+    [ObservableProperty] private int _ScriptCount2 = 0;
+
+    [ObservableProperty] private int _ScriptConditionCount2 = 0;
+
     // Path fields
     [ObservableProperty] private string _modelPath = string.Empty;
 
@@ -45,6 +54,6 @@ public partial class WData : ObservableObject
     [ObservableProperty] private ObservableCollection<TriggerElement> _triggers = [];
 
     [ObservableProperty] private ObservableCollection<Scene> _scenes = [];
-    
+
     [ObservableProperty] private ObservableCollection<SceneResource> _sceneResources = [];
 }

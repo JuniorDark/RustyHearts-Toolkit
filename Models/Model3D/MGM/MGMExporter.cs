@@ -36,11 +36,14 @@ public class MGMExporter
 
             if (exportAnimation)
             {
-                await BuildAnimationsFromDsAsync(scene, mgm, boneNodes, ct);
-                //await BuildAnimationsFromMaAsync(scene, mgm, boneNodes, ct);
+                //await BuildAnimationsFromDsAsync(scene, mgm, boneNodes, ct);
+                await BuildAnimationsFromMaAsync(scene, mgm, boneNodes, ct);
             }
 
             SaveScene(scene, outFilePath);
+
+            // Export materials as sidecar JSON
+            await ExportMaterialSidecarAsync(mgm, outFilePath, ct);
         }
         finally
         {
@@ -119,25 +122,26 @@ public class MGMExporter
             var shDiffuse = Shader(m, "Diffuse");
             if (shDiffuse != null)
             {
-                var c = Clamp01(ToRGB(shDiffuse.Base));
-                mat.ColorDiffuse = new Color4(c.X, c.Y, c.Z, 1);
+                var c = shDiffuse.Value;
+                mat.ColorDiffuse = new Color4(c.X, c.Y, c.Z, c.Z);
             }
             var shAmbient = Shader(m, "Ambient");
             if (shAmbient != null)
             {
-                var c = Clamp01(ToRGB(shAmbient.Base));
-                mat.ColorAmbient = new Color4(c.X, c.Y, c.Z, 1);
+                var c = shAmbient.Value;
+                mat.ColorAmbient = new Color4(c.X, c.Y, c.Z, c.Z);
             }
 
             // Alpha / emissive
             var shAlphaValue = Shader(m, "AlphaValue");
             if (shAlphaValue != null)
-                mat.Opacity = Math.Clamp(shAlphaValue.Scalar, 0f, 1f);
+            {
+                mat.Opacity = Math.Clamp(shAlphaValue.Value.W, 0f, 1f);
+            }
             var shStar = Shader(m, "StarEffect");
             if (shStar != null)
             {
-                var e = Math.Clamp(shStar.Scalar, 0f, 1f);
-                mat.ColorEmissive = new Color4(e, e, e, 1);
+                mat.Opacity = Math.Clamp(shStar.Value.W, 0f, 1f);
             }
 
             scene.Materials.Add(mat);
@@ -147,6 +151,23 @@ public class MGMExporter
         }
 
         return GetOrCreateMaterialIndex;
+    }
+
+    /// <summary>
+    /// Exports material data as a sidecar JSON file.
+    /// </summary>
+    private static async Task ExportMaterialSidecarAsync(MgmModel mgm, string outFilePath, CancellationToken ct)
+    {
+        // Collect material libraries from all materials
+        var libraries = new List<MaterialLibrary>();
+        foreach (var mat in mgm.Materials)
+        {
+            libraries.AddRange(mat.Library);
+        }
+
+        var sidecar = ModelMaterialSidecar.FromMaterials(mgm.Version, libraries, mgm.Materials);
+        var sidecarPath = ModelMaterialSidecar.GetSidecarPath(outFilePath);
+        await sidecar.SaveAsync(sidecarPath, ct);
     }
 
     private static TextureSlot MakeTextureSlot(Scene scene, string outDir, string absPath, bool embedTextures, bool copyTextures, TextureType texType)
@@ -176,7 +197,7 @@ public class MGMExporter
                 // Convert DDS to PNG
                 var ddsData = File.ReadAllBytes(absPath);
                 var pngData = TextureConverter.ConvertDdsToPngData(ddsData);
-                
+
                 if (pngData != null)
                 {
                     data = pngData;
@@ -210,18 +231,18 @@ public class MGMExporter
         {
             var textureDir = "texture";
             var destDir = Path.Combine(outDir, textureDir);
-            
+
             if (!Directory.Exists(destDir))
                 Directory.CreateDirectory(destDir);
 
             string dest;
-            
+
             if (isDds)
             {
                 // Convert DDS to PNG
                 var texNameWithoutExt = Path.GetFileNameWithoutExtension(absPath);
                 dest = Path.Combine(destDir, texNameWithoutExt + ".png");
-                
+
                 if (!TextureConverter.ConvertDdsToPng(absPath, dest))
                 {
                     // Fallback to copying the original DDS if conversion fails
@@ -303,7 +324,7 @@ public class MGMExporter
         {
             var meshName = string.IsNullOrWhiteSpace(mesh.Name) ? "Mesh" : mesh.Name;
             var altName = mesh.AltName;
-            var material = mesh.Material ?? mgm.Materials.FirstOrDefault(m => m.Id == mesh.MaterialId);
+            var material = mesh.Material ?? mgm.Materials.FirstOrDefault(m => m.MaterialIndex == mesh.MaterialId);
 
             if (mesh.Vertices == null || mesh.Vertices.Length == 0) continue;
             if (mesh.Indices == null || mesh.Indices.Length < 3) continue;
@@ -440,7 +461,7 @@ public class MGMExporter
             meshNode.MeshIndices.Add(scene.Meshes.Count - 1);
         }
     }
-    
+
     static Num.Matrix4x4 GetGlobalTransform(Node node, Dictionary<Node, Num.Matrix4x4> cache)
     {
         if (cache.TryGetValue(node, out var cachedTransform))
@@ -454,7 +475,7 @@ public class MGMExporter
         {
             m = GetGlobalTransform(node.Parent, cache) * m;
         }
-        
+
         cache[node] = m;
         return m;
     }
@@ -622,7 +643,7 @@ public class MGMExporter
                 // --- Position ---
                 if (track.Position.Count > 0)
                 {
-                    foreach (var (t, p) in track.Position.Keys) 
+                    foreach (var (t, p) in track.Position.Keys)
                         ch.PositionKeys.Add(new VectorKey(t, p));
                 }
 

@@ -14,7 +14,7 @@
     xmlns:windows="clr-namespace:RHToolkit.ViewModels.Windows"
     x:Name="WDataWindow"
     Title="{Binding WDataManager.Title}"
-    MinWidth="1280"
+    MinWidth="1000"
     MinHeight="720"
     MaxHeight="{Binding Source={x:Static SystemParameters.MaximizedPrimaryScreenHeight}}"
     behaviors:WindowBehaviors.EnableDragMove="True"
@@ -128,65 +128,10 @@
                     Text="{Binding WDataManager.WData.GimmickVersion}" />
             </StackPanel>
 
-            <!--  3D Scene  -->
-            <Grid
-                Grid.Row="3"
-                Grid.Column="0"
-                VerticalAlignment="Top"
-                Visibility="{Binding WDataManager.IsVisible}">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <hx:Viewport3DX
-                    x:Name="View"
-                    Width="Auto"
-                    Height="520"
-                    MinWidth="720"
-                    VerticalAlignment="Top"
-                    BackgroundColor="Gray"
-                    Camera="{Binding WDataManager.Camera}"
-                    EffectsManager="{Binding WDataManager.EffectsManager}"
-                    RotateAroundMouseDownPoint="True"
-                    ShowCoordinateSystem="True"
-                    UseDefaultGestures="False"
-                    ZoomAroundMouseDownPoint="True">
-                    <hx:ItemsModel3D ItemsSource="{Binding WDataManager.Scene3D}" />
-
-                    <!--  Low ambient so shading has contrast  -->
-                    <hx:AmbientLight3D Color="#202020" />
-
-                    <!--  Key: warm, from above/front-left  -->
-                    <hx:DirectionalLight3D Direction="-0.35,-0.80,-0.42" Color="White" />
-
-                    <!--  Fill: cool, softer, from above/right to open shadows  -->
-                    <hx:DirectionalLight3D Direction="0.55,-0.45,0.70" Color="#66C7D9FF" />
-
-                    <!--  Rim: subtle back light to pop silhouettes  -->
-                    <hx:DirectionalLight3D Direction="0.00,0.25, -1.00" Color="#4CB0C8FF" />
-
-                    <hx:Viewport3DX.InputBindings>
-                        <KeyBinding Key="B" Command="hx:ViewportCommands.BackView" />
-                        <KeyBinding Key="F" Command="hx:ViewportCommands.FrontView" />
-                        <KeyBinding Key="U" Command="hx:ViewportCommands.TopView" />
-                        <KeyBinding Key="D" Command="hx:ViewportCommands.BottomView" />
-                        <KeyBinding Key="L" Command="hx:ViewportCommands.LeftView" />
-                        <KeyBinding Key="R" Command="hx:ViewportCommands.RightView" />
-                        <KeyBinding Command="hx:ViewportCommands.ZoomExtents" Gesture="Control+E" />
-                        <MouseBinding Command="hx:ViewportCommands.Rotate" Gesture="RightClick" />
-                        <MouseBinding Command="hx:ViewportCommands.Zoom" Gesture="MiddleClick" />
-                        <MouseBinding Command="hx:ViewportCommands.Pan" Gesture="LeftClick" />
-                    </hx:Viewport3DX.InputBindings>
-
-                </hx:Viewport3DX>
-
-            </Grid>
-
             <!--  Tabs  -->
             <Grid
                 Grid.Row="3"
-                Grid.Column="1"
+                Grid.ColumnSpan="2"
                 VerticalAlignment="Top">
                 <TabControl
                     Margin="0,0,0,0"

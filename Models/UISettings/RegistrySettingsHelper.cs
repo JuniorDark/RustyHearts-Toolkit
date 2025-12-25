@@ -18,11 +18,16 @@ namespace RHToolkit.Models.UISettings
         private const string DefaultLanguage = "English";
         private const string DefaultSQLServer = "localhost";
         private const string DefaultSQLUser = "sa";
+        private const string DefaultTableEncryptKey = "gkw3iurpamv;kj20984;asdkfjat1af";
+        private const string TableEncryptKeyValueName = "TableEncryptKey";
+        private const string DefaultVFSKey = "MCJBqFumakm/UzXlng7suF4VH8FP7Hfot06H5vU8s0PMUzasWne43TB0jEqam7wKpK27E0uM1IDOZR0IWmpvJfk/7xukchTtlyJKLriWS46Wk/Eosgs8+F2qqYITbsGpIFeyWxbPnl/UzC71yUwc7uM/KbMGcEM99ZCiQgKYUP1dTpKtrX+rYCy4Q3aPX+anGeC5tWJr1EdpNA5tpFLjZEplR/U/U16LG/0h97po+d9oqJYPiwGXWIwe77NBRCHa4PTgLc0L8FxZ1pnnARVnMuASL82i3lLO7O93Drw4ZI2022f/yGYMimDhLgBDqTecEaq5mO0hNdTD3mVUnRywqQ==";
+        private const string VFSKeyValueName = "VFSKey";
         private const string TableFolderValueName = "TableFolder";
         private const string ClientFolderValueName = "ClientFolder";
         private const string FilesToPackFolderValueName = "FilesToPackFolder";
         private const string InputFolderValueName = "InputFolder";
         private const string OutputFolderValueName = "OutputFolder";
+        private const string ClientAssetsFolderValueName = "ClientAssetsFolder";
 
         /// <summary>
         /// Encrypts a plain text string using the current user's data protection scope.
@@ -202,6 +207,55 @@ namespace RHToolkit.Models.UISettings
         }
 
         /// <summary>
+        /// Gets the table encryption key from the registry.
+        /// </summary>
+        /// <returns>The table encryption key.</returns>
+        public static string GetTableEncryptKey()
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
+            {
+                return key.GetValue(TableEncryptKeyValueName)?.ToString() ?? DefaultTableEncryptKey;
+            }
+            return DefaultTableEncryptKey;
+        }
+
+
+        /// <summary>
+        /// Sets the table encryption key in the registry.
+        /// </summary>
+        /// <param name="encryptKey">The table encryption key to set.</param>
+        public static void SetTableEncryptKey(string encryptKey)
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(TableEncryptKeyValueName, encryptKey);
+        }
+
+        /// <summary>
+        /// Sets the virtual file system (VFS) key (for f00X.dat) in the registry.
+        /// </summary>
+        /// <param name="vfsKey">The VFS key to set.</param>
+        public static void SetVFSKey(string vfsKey)
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(VFSKeyValueName, vfsKey);
+        }
+
+        /// <summary>
+        /// Gets the virtual file system (VFS) key (for f00X.dat) from the registry.
+        /// </summary>
+        /// <returns>The VFS key.</returns>
+        public static string GetVFSKey()
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
+            {
+                return key.GetValue(VFSKeyValueName)?.ToString() ?? DefaultVFSKey;
+            }
+            return DefaultVFSKey;
+        }
+
+        /// <summary>
         /// Gets the table folder path from the registry.
         /// </summary>
         /// <returns>The table folder path.</returns>
@@ -319,6 +373,30 @@ namespace RHToolkit.Models.UISettings
         {
             using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
             key.SetValue(OutputFolderValueName, folderPath);
+        }
+
+        /// <summary>
+        /// Gets the client assets folder path from the registry.
+        /// </summary>
+        /// <returns>The client assets folder path.</returns>
+        public static string GetClientAssetsFolder()
+        {
+            using var key = Registry.CurrentUser.OpenSubKey(RegistryKey);
+            if (key != null)
+            {
+                return key.GetValue(ClientAssetsFolderValueName)?.ToString() ?? string.Empty;
+            }
+            return string.Empty;
+        }
+
+        /// <summary>
+        /// Sets the client assets folder path in the registry.
+        /// </summary>
+        /// <param name="folderPath">The client assets folder path to set.</param>
+        public static void SetClientAssetsFolder(string folderPath)
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(RegistryKey);
+            key.SetValue(ClientAssetsFolderValueName, folderPath);
         }
     }
 }

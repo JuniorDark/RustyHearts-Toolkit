@@ -274,7 +274,7 @@
                                     </i:Interaction.Behaviors>
                                 </TextBox>
                             </StackPanel>
-                            <StackPanel
+                            <!--<StackPanel
                                 Grid.Row="4"
                                 Grid.Column="2"
                                 Grid.ColumnSpan="2"
@@ -295,7 +295,7 @@
                                         <bh:DataRowViewBehavior Column="wszMemo" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                     </i:Interaction.Behaviors>
                                 </TextBox>
-                            </StackPanel>
+                            </StackPanel>-->
 
                             <StackPanel
                                 Grid.Row="5"
@@ -1895,6 +1895,17 @@
                                         <bh:DataRowViewBehavior Column="szWorldFile" UpdateItemValueCommand="{Binding DataContext.DataTableManager.UpdateItemValueCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
                                     </i:Interaction.Behaviors>
                                 </TextBox>
+                                <Button
+                                    Width="200"
+                                    Margin="10,0,0,0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    Command="{Binding DataContext.OpenModelPreviewWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[szWorldFile], RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Content="{x:Static rs:Resources.Preview}"
+                                    Cursor="Hand"
+                                    Foreground="White"
+                                    Style="{StaticResource lb_def_button02}" />
                             </StackPanel>
                             <StackPanel
                                 Grid.Row="0"

@@ -40,7 +40,7 @@ public sealed class AnimTrack
     public bool HasBoundingVolumeAnim { get; set; }
 
     // Channels
-    public MaTrackData TrackData { get; set; } = new();
+    public MaTrackTransform TrackTransform { get; set; } = new();
     public AnimChannel<Vector3> Position { get; } = new();
     public bool IsRootBone { get; set; }
     public AnimChannel<Quaternion> Rotation { get; } = new();
@@ -115,29 +115,30 @@ public sealed class MaBoundingVolume
 }
 
 /// <summary>
-/// Track decompression data.
+/// Track transform data.
 /// </summary>
-public sealed class MaTrackData
+public sealed class MaTrackTransform
 {
-    public Matrix4x4 Matrix1 { get; private set; }
-    public Matrix4x4 Matrix2 { get; private set; }
-    public Matrix4x4 Matrix3 { get; private set; }
+    public Matrix4x4 LocalTransform { get; private set; }
+    public Matrix4x4 InverseTransform { get; private set; }
+    public Matrix4x4 BindPoseLocalTransform { get; private set; }
 
-    public Vector3 Vector1 { get; private set; }
-    public Quaternion Quaternion1 { get; private set; }
-    public Vector3 Vector2 { get; private set; }
+    // Decomposed BindPoseLocalTransform TRS
+    public Vector3 LocalTranslation { get; private set; }
+    public Quaternion LocalRotation { get; private set; }
+    public Vector3 LocalScale { get; private set; }
 
-    public static MaTrackData ReadFrom(BinaryReader br)
+    public static MaTrackTransform ReadFrom(BinaryReader br)
     {
-        return new MaTrackData
+        return new MaTrackTransform
         {
-            Matrix1 = BinaryReaderExtensions.ReadMatrix4x4(br),
-            Matrix2 = BinaryReaderExtensions.ReadMatrix4x4(br),
-            Matrix3 = BinaryReaderExtensions.ReadMatrix4x4(br),
+            LocalTransform = BinaryReaderExtensions.ReadMatrix4x4(br),
+            InverseTransform = BinaryReaderExtensions.ReadMatrix4x4(br),
+            BindPoseLocalTransform = BinaryReaderExtensions.ReadMatrix4x4(br),
 
-            Vector1 = BinaryReaderExtensions.ReadVector3(br),
-            Quaternion1 = BinaryReaderExtensions.ReadQuaternion(br),
-            Vector2 = BinaryReaderExtensions.ReadVector3(br),
+            LocalTranslation = BinaryReaderExtensions.ReadVector3(br),
+            LocalRotation = BinaryReaderExtensions.ReadQuaternion(br),
+            LocalScale = BinaryReaderExtensions.ReadVector3(br),
         };
     }
 }
@@ -256,9 +257,9 @@ public class MAReader
             nameHash = br.ReadUInt32();
             parentHash = br.ReadUInt32();
             aliasHash = br.ReadUInt32();
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
-            parentName = BinaryReaderExtensions.ReadUnicode256Count(br);
-            alias = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+            parentName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+            alias = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         var track = new AnimTrack
@@ -280,18 +281,18 @@ public class MAReader
         int auxCount = br.ReadInt32();
 
         // Flags
-        byte flag = br.ReadByte();
-        track.HasMoveWeight = flag != 0;
+        byte moveWeightFlag = br.ReadByte();
+        track.HasMoveWeight = moveWeightFlag != 0;
 
         if (version >= 7)
         {
-            byte boundingVolumeAniData = br.ReadByte();
-            track.HasBoundingVolumeAnim = boundingVolumeAniData != 0;
+            byte boundingVolumeAnimFlag = br.ReadByte();
+            track.HasBoundingVolumeAnim = boundingVolumeAnimFlag != 0;
         }
 
-        // track data
-        var H = MaTrackData.ReadFrom(br);
-        track.TrackData = H;
+        // track transform data
+        var trackTransform = MaTrackTransform.ReadFrom(br);
+        track.TrackTransform = trackTransform;
 
         float TickToSec(ushort t) => t * (clipLength / 65535f);
 
@@ -539,7 +540,7 @@ public class MAReader
         else
         {
             nameHash = br.ReadUInt32();
-            name = BinaryReaderExtensions.ReadUnicode256Count(br);
+            name = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
 
         byte isMain = br.ReadByte();

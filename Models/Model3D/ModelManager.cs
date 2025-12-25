@@ -78,11 +78,18 @@ public static class ModelManager
     /// <summary>
     /// Exports the specified files to FBX format, placing outputs into MMP/ and MGM/ subfolders.
     /// </summary>
+    /// <param name="outputDirectory">The output directory for exported files.</param>
+    /// <param name="filesToExportDict">Dictionary of files to export.</param>
+    /// <param name="progress">Progress reporter.</param>
+    /// <param name="embedTextures">Whether to embed textures in the FBX.</param>
+    /// <param name="copyTextures">Whether to copy textures alongside the FBX.</param>
+    /// <param name="exportSeparateObjects">For MMP files, whether to export each object as a separate FBX.</param>
+    /// <param name="ct">Cancellation token.</param>
     public static async Task<ExportSummary> ExportFilesAsync(
     string outputDirectory,
     SortedDictionary<string, (string FullPath, ModelKind Kind)> filesToExportDict,
     IProgress<(string file, int pos, int count)> progress,
-    bool embedTextures, bool copyTextures,
+    bool embedTextures, bool copyTextures, bool exportSeparateObjects,
     CancellationToken ct)
     {
         var summary = new ExportSummary(filesToExportDict.Count);
@@ -123,7 +130,7 @@ public static class ModelManager
                             case ModelKind.MMP:
                                 {
                                     var mmpModel = await MMPReader.ReadAsync(fullPath, token).ConfigureAwait(false);
-                                    await MMPExporter.ExportMmpToFbx(mmpModel, outputFile, embedTextures, copyTextures, token)
+                                    await MMPExporter.ExportMmpToFbx(mmpModel, outputFile, embedTextures, copyTextures, exportSeparateObjects, token)
                                                      .ConfigureAwait(false);
                                     break;
                                 }
@@ -156,6 +163,5 @@ public static class ModelManager
 
         return summary;
     }
-
 
 }

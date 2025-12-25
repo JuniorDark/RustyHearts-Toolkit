@@ -144,8 +144,9 @@ public static class NaviReader
                     case 16:
                         ReadMeshEntry(br, model, size);
                         break;
-                    default:
-                        throw new NotSupportedException($"Unknown/Unsupported NAVI object type: {type} (at index {i})");
+                    default: _ = br.ReadBytes(size); break;
+                        //default:
+                        //    throw new NotSupportedException($"Unknown/Unsupported NAVI object type: {type} (at index {i})");
                 }
 
                 int consumed = (int)(br.BaseStream.Position - start);
@@ -243,8 +244,8 @@ public static class NaviReader
         {
             nNameKey = br.ReadUInt32();
             nParentNameKey = br.ReadUInt32();
-            szName = BinaryReaderExtensions.ReadUnicode256Count(br);
-            szParentName = BinaryReaderExtensions.ReadUnicode256Count(br);
+            szName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+            szParentName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
         }
         else
         {

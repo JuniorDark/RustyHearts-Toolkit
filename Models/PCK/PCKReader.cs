@@ -141,9 +141,11 @@ public sealed class PCKReader(string gameDirectory) : IDisposable
                 uint hash = br.ReadUInt32(); // crc32 hash
                 long offset = br.ReadInt64(); // Offset in the pck file
 
+                byte correctArchive = PCKWriter.GetArchiveNumberFromName(name);
+
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    listPck.Add(new PCKFile(name, archive, size, hash, offset));
+                    listPck.Add(new PCKFile(name, correctArchive, size, hash, offset));
                 }
             }
             catch (Exception ex)

@@ -19,6 +19,7 @@
             Margin="0,0,0,8"
             d:Text="Appearance"
             FontTypography="BodyStrong"
+            Foreground="White"
             Text="{x:Static rs:Resources.Appearance}" />
         <ui:CardControl Margin="0,0,0,12" Icon="{ui:SymbolIcon LocalLanguage24}">
             <ui:CardControl.Header>
@@ -51,6 +52,7 @@
         <ui:TextBlock
             d:Text="SQL Settings"
             FontTypography="BodyStrong"
+            Foreground="White"
             Text="{x:Static rs:Resources.SQLSettings}" />
         <ui:CardExpander ContentPadding="0" Icon="{ui:SymbolIcon DatabaseLink24}">
             <ui:CardExpander.Header>
@@ -82,8 +84,8 @@
                     FontTypography="BodyStrong"
                     Text="{x:Static rs:Resources.SQLAddress}" />
                 <ui:TextBox
-                    Width="200"
-                    Height="35"
+                    Width="300"
+                    Height="50"
                     IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
                     PlaceholderText="{x:Static rs:Resources.SQLServer}"
                     Text="{Binding ViewModel.SQLServer, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -94,8 +96,8 @@
                     FontTypography="BodyStrong"
                     Text="{x:Static rs:Resources.SQLUser}" />
                 <ui:TextBox
-                    Width="200"
-                    Height="35"
+                    Width="300"
+                    Height="50"
                     IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
                     PlaceholderText="{x:Static rs:Resources.SQLUser}"
                     Text="{Binding ViewModel.SQLUser, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -106,8 +108,8 @@
                     FontTypography="BodyStrong"
                     Text="{x:Static rs:Resources.SQLPassword}" />
                 <ui:TextBox
-                    Width="200"
-                    Height="35"
+                    Width="300"
+                    Height="50"
                     IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
                     PlaceholderText="{x:Static rs:Resources.SQLPassword}"
                     Text="{Binding ViewModel.SQLPwd, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -123,7 +125,63 @@
             </StackPanel>
         </ui:CardExpander>
 
-        <ui:TextBlock FontTypography="BodyStrong" Text="{x:Static rs:Resources.About}" />
+        <ui:TextBlock
+            d:Text="App Settings"
+            FontTypography="BodyStrong"
+            Foreground="White"
+            Text="{x:Static rs:Resources.AppSettings}" />
+        <ui:CardExpander ContentPadding="0" Icon="{ui:SymbolIcon DocumentSettings16}">
+            <ui:CardExpander.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="51*" />
+                        <ColumnDefinition Width="307*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ui:TextBlock
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        d:Text="SQL Settings"
+                        FontTypography="Body"
+                        Text="{x:Static rs:Resources.AppSettings}" />
+                </Grid>
+            </ui:CardExpander.Header>
+            <StackPanel Orientation="Vertical">
+                <ui:TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    d:Text="Table Encryption Key"
+                    FontTypography="BodyStrong"
+                    Text="{x:Static rs:Resources.TableEncryptionKey}" />
+                <ui:TextBox
+                    Width="300"
+                    Height="50"
+                    IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
+                    Text="{Binding ViewModel.TableEncryptKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <ui:TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    d:Text="VFS Key"
+                    FontTypography="BodyStrong"
+                    Text="{x:Static rs:Resources.VirtualFileSystemKey}" />
+                <ui:TextBox
+                    Width="300"
+                    Height="50"
+                    IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
+                    Text="{Binding ViewModel.VFSKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+        </ui:CardExpander>
+
+        <ui:TextBlock
+            FontTypography="BodyStrong"
+            Foreground="White"
+            Text="{x:Static rs:Resources.About}" />
         <ui:CardExpander ContentPadding="0" Icon="{ui:ImageIcon 'pack://application:,,,/Assets/icon/gearbox.png', Width=36, Height=36}">
             <ui:CardExpander.Header>
                 <Grid>

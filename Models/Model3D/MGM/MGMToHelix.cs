@@ -28,8 +28,8 @@ namespace RHToolkit.Models.Model3D.MGM
 
         private static Element3D? BuildMeshGroup(MgmModel model, MgmMesh mesh)
         {
-            if (mesh.Vertices == null || mesh.Vertices.Count() == 0 ||
-                mesh.Indices == null || mesh.Indices.Count() == 0)
+            if (mesh.Vertices == null || mesh.Vertices.Length == 0 ||
+                mesh.Indices == null || mesh.Indices.Length == 0)
             {
                 return null;
             }
@@ -101,14 +101,13 @@ namespace RHToolkit.Models.Model3D.MGM
             var meshModel = new MeshGeometryModel3D
             {
                 Geometry = meshGeom,
-                // --- Material ---
                 Material = BuildPhongMaterial(model, mesh, out bool isTransparent),
                 IsTransparent = isTransparent
             };
 
             // Two-sided?
             var pTwoSide = Shader(mesh.Material, "Twoside");
-            if (pTwoSide != null && pTwoSide.Payload.X >= 0.5f)
+            if (pTwoSide != null && pTwoSide.Value.X >= 0.5f)
                 meshModel.CullMode = SharpDX.Direct3D11.CullMode.None;
 
             group.Children.Add(meshModel);
@@ -130,7 +129,7 @@ namespace RHToolkit.Models.Model3D.MGM
             var pDiffuse = Shader(mesh.Material, "Diffuse");
             if (pDiffuse != null)
             {
-                var c = pDiffuse.Payload;
+                var c = pDiffuse.Value;
                 phong.DiffuseColor = new Color4(
                     Clamp01(c.X <= 0 ? 1f : c.X),
                     Clamp01(c.Y <= 0 ? 1f : c.Y),
@@ -146,7 +145,7 @@ namespace RHToolkit.Models.Model3D.MGM
             var pAmbient = Shader(mesh.Material, "Ambient");
             if (pAmbient != null)
             {
-                var a = pAmbient.Payload;
+                var a = pAmbient.Value;
                 phong.AmbientColor = new Color4(
                     Clamp01(a.X) * 0.6f,
                     Clamp01(a.Y) * 0.6f,
@@ -162,7 +161,7 @@ namespace RHToolkit.Models.Model3D.MGM
             var pSpec = Shader(mesh.Material, "Specular");
             if (pSpec != null)
             {
-                var s = pSpec.Payload;
+                var s = pSpec.Value;
                 phong.SpecularColor = new Color4(Clamp01(s.X), Clamp01(s.Y), Clamp01(s.Z), 1f);
                 phong.SpecularShininess = 20f;
             }
@@ -180,18 +179,18 @@ namespace RHToolkit.Models.Model3D.MGM
                 isTransparent = true;
 
             var pAlphaBlend = Shader(mesh.Material, "AlphaBlending");
-            if (pAlphaBlend != null && pAlphaBlend.Payload.X >= 0.5f)
+            if (pAlphaBlend != null && pAlphaBlend.Value.X >= 0.5f)
                 isTransparent = true;
 
             var pAlphaVal = Shader(mesh.Material, "AlphaValue");
             if (pAlphaVal != null)
             {
-                alpha = MathUtil.Clamp(pAlphaVal.Payload.X, 0f, 1f);
+                alpha = MathUtil.Clamp(pAlphaVal.Value.X, 0f, 1f);
                 if (alpha < 0.999f) isTransparent = true;
             }
 
             bool hasAlphaControl = pAlphaVal != null;
-            if (!isTransparent && hasAlphaControl && (pAlphaBlend == null || pAlphaBlend.Payload.X < 0.5f))
+            if (!isTransparent && hasAlphaControl && (pAlphaBlend == null || pAlphaBlend.Value.X < 0.5f))
             {
                 // treat as cutout; avoids depth holes
                 isTransparent = true;

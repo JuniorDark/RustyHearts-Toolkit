@@ -35,17 +35,24 @@
                     Icon="{ui:SymbolIcon DocumentDismiss24}"
                     InputGestureText="Ctrl+W" />
                 <Separator />
-                <MenuItem Header="{x:Static rs:Resources.MenuExportAs}" Icon="{ui:SymbolIcon DocumentSave24}">
+                <MenuItem Header="{x:Static rs:Resources.MenuExport}" Icon="{ui:SymbolIcon DocumentSave24}">
                     <MenuItem
                         Command="{Binding ExportAsCommand}"
-                        Header="{x:Static rs:Resources.ModelViewMenuExportCurrentFileToFBX}"
+                        Header="{x:Static rs:Resources.ModelViewMenuExportFBX}"
                         Icon="{ui:SymbolIcon DocumentSave24}"
                         InputGestureText="Ctrl+S" />
-                    <!--<MenuItem
-                        Command="{Binding ImportFromFbxCommand}"
-                        Header="Export FBX to MMP (WIP)"
+                    <MenuItem
+                        Command="{Binding ExportHeightCommand}"
+                        Header="{x:Static rs:Resources.ModelViewMenuExportHeight}"
                         Icon="{ui:SymbolIcon DocumentSave24}"
-                        InputGestureText="Ctrl+Shift+S" />-->
+                        InputGestureText="Ctrl+Shift+H" />
+                </MenuItem>
+                <MenuItem Header="{x:Static rs:Resources.MenuImport}" Icon="{ui:SymbolIcon DocumentSave24}">
+                    <MenuItem
+                        Command="{Binding ImportFromFbxCommand}"
+                        Header="{x:Static rs:Resources.MenuImportMapFBX}"
+                        Icon="{ui:SymbolIcon DocumentSave24}"
+                        InputGestureText="Ctrl+Shift+S" />
                 </MenuItem>
                 <Separator />
                 <MenuItem
@@ -87,16 +94,29 @@
             <Separator />
             <ui:MenuItem Header="{x:Static rs:Resources.ModelViewMenuExportOptions}" Icon="{ui:SymbolIcon DocumentSplitHint20}">
                 <CheckBox
+                    Content="{x:Static rs:Resources.ModelViewMenuExportSeparateObjects}"
+                    IsChecked="{Binding ExportSeparateObjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Template="{StaticResource lb_checkbox}"
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuExportSeparateObjectsTooltip}" />
+                <CheckBox
                     Content="{x:Static rs:Resources.EmbedTextures}"
                     IsChecked="{Binding EmbedTextures, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}"
                     ToolTip="{x:Static rs:Resources.EmbedTexturesTooltip}" />
-                <CheckBox
+                <!--<CheckBox
                     Content="{x:Static rs:Resources.ModelViewMenuExportAnimations}"
                     IsChecked="{Binding ExportAnimation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Template="{StaticResource lb_checkbox}"
-                    ToolTip="{x:Static rs:Resources.ModelViewMenuExportAnimationsTooltip}" />
+                    ToolTip="{x:Static rs:Resources.ModelViewMenuExportAnimationsTooltip}" />-->
             </ui:MenuItem>
+            <Separator />
+            <ui:MenuItem Header="{x:Static rs:Resources.MenuSettings}" Icon="{ui:SymbolIcon TableSettings20}">
+                <MenuItem
+                    Command="{Binding SetClientAssetsFolderCommand}"
+                    Header="{x:Static rs:Resources.MenuSetClientAssetsFolder}"
+                    Icon="{ui:SymbolIcon FolderOpen20}" />
+            </ui:MenuItem>
+            <Separator />
             <Separator />
             <ui:MenuItem Header="{x:Static rs:Resources.About}" Icon="{ui:SymbolIcon ChatHelp20}">
                 <ui:HyperlinkButton
@@ -123,12 +143,23 @@
                 Icon="{ui:SymbolIcon DocumentDismiss24,
                                      Filled=True}"
                 ToolTip="{x:Static rs:Resources.MenuCloseFile}" />
+            <Separator />
             <MenuItem
                 Command="{Binding ExportAsCommand}"
                 Icon="{ui:SymbolIcon DocumentSave24,
                                      Filled=True}"
                 ToolTip="{x:Static rs:Resources.MenuExportAs}" />
+            <MenuItem
+                Command="{Binding ImportFromFbxCommand}"
+                Icon="{ui:SymbolIcon DocumentSave24,
+                                     Filled=True}"
+                ToolTip="{x:Static rs:Resources.MenuImportMapFBX}" />
             <Separator />
+            <MenuItem
+                Command="{Binding Scene3DView.ResetCameraPositionCommand}"
+                Icon="{ui:SymbolIcon Camera24,
+                                     Filled=True}"
+                ToolTip="{x:Static rs:Resources.MenuResetCamera}" />
         </Menu>
     </Grid>
 </UserControl>

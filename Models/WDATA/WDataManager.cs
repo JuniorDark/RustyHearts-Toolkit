@@ -1,12 +1,10 @@
-﻿using HelixToolkit.SharpDX;
-using HelixToolkit.Wpf.SharpDX;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
-using RHToolkit.Models.Model3D.Map;
+using RHToolkit.Models.Model3D;
+using RHToolkit.Services;
 using System.Collections;
-using System.Collections.Specialized;
-using System.Windows.Media.Media3D;
+using static RHToolkit.Models.Model3D.Map.MMP;
 using static RHToolkit.Models.ObservablePrimitives;
 
 namespace RHToolkit.Models.WDATA;
@@ -18,7 +16,18 @@ public partial class WDataManager : ObservableObject
 {
     private readonly CollectionHistory _history = new();
     private const string Filter = "Rusty Hearts World Data File (*.wdata)|*.wdata|All Files (*.*)|*.*";
+    
+    private readonly IWindowsService _windowsService;
+    private readonly Guid _token = Guid.NewGuid();
 
+    public WDataManager(IWindowsService windowsService)
+    {
+        _windowsService = windowsService;
+        ModelView = new ModelViewManager
+        {
+            Token = _token
+        };
+    }
 
     #region File
 
@@ -81,7 +90,6 @@ public partial class WDataManager : ObservableObject
         AttachWDataHandlers(WData);
 
         await LoadMMPAsync(file);
-        AttachOverlays();
 
         HasChanges = false;
         OnCanExecuteFileCommandChanged();
@@ -110,6 +118,7 @@ public partial class WDataManager : ObservableObject
         UndoChangesCommand.NotifyCanExecuteChanged();
         RedoChangesCommand.NotifyCanExecuteChanged();
         CloseFileCommand.NotifyCanExecuteChanged();
+        OpenModelViewWindowCommand.NotifyCanExecuteChanged();
     }
 
     /// <summary>
@@ -122,13 +131,7 @@ public partial class WDataManager : ObservableObject
     }
     #endregion
 
-    #region MMP
-
-    [ObservableProperty]
-    private ObservableElement3DCollection _Scene3D = [];
-
-    [ObservableProperty]
-    private IEffectsManager _EffectsManager = new DefaultEffectsManager();
+    #region Load MMP
 
     /// <summary>
     /// Loads the MMP file associated with the given WData file path and updates the 3D scene.
@@ -139,220 +142,63 @@ public partial class WDataManager : ObservableObject
     {
         try
         {
-            var baseDir = Path.GetDirectoryName(Path.GetFullPath(wdataPath));
+            if (WData is null) return;
 
-            string? modelPath = WData?.ModelPath;
-            string mmpPath;
-
-            if (!string.IsNullOrWhiteSpace(modelPath))
-            {
-                var fileName = Path.GetFileName(modelPath.Trim().Trim('"'));
-                if (!string.IsNullOrEmpty(baseDir) && !string.IsNullOrEmpty(fileName))
-                {
-                    mmpPath = Path.Combine(baseDir, fileName);
-                }
-                else
-                {
-                    mmpPath = Path.ChangeExtension(wdataPath, ".mmp");
-                }
-            }
-            else
-            {
-                mmpPath = Path.ChangeExtension(wdataPath, ".mmp");
-            }
+            var mmpPath = WData.ModelPath;
+            var rootDir = Path.GetDirectoryName(wdataPath) ?? string.Empty;
+            mmpPath = Path.Combine(rootDir, Path.GetFileName(mmpPath));
 
             if (!File.Exists(mmpPath))
             {
-                RHMessageBoxHelper.ShowOKMessage($"MMP file not found:\n{mmpPath}", Resources.Error);
+                RHMessageBoxHelper.ShowOKMessage(
+                    string.Format(Resources.FileNotFoundMessage, mmpPath),
+                    Resources.Error
+                );
                 return;
             }
 
-            var mmp = await MMPReader.ReadAsync(mmpPath).ConfigureAwait(false);
-
-            if (mmp.Version < 6)
-                throw new NotSupportedException($"MMP version '{mmp.Version}' is not supported.");
-
-            await Application.Current.Dispatcher.InvokeAsync(() =>
+            var modelData = new ModelType
             {
-                Scene3D.Clear();
+                FilePath = mmpPath,
+                Format = ModelFormat.MMP,
+                WData = WData
+            };
 
-                Camera = CreateDefaultCamera();
-
-                var startPoint = WData!.EventBoxGroups
-                        .FirstOrDefault(g => g.Type == EventBoxType.StartPointBox)?
-                        .Boxes.OfType<StartPointBox>()
-                        .FirstOrDefault();
-
-
-                if (startPoint is not null)
-                {
-                    StopCameraAnimation();
-                    FocusCamera(startPoint);
-                }
-
-                foreach (var node in MMPToHelix.CreateMMPNodes(mmp))
-                    Scene3D.Add(node);
-            });
-
+            _windowsService.OpenModelViewWindow(_token, modelData, ModelView!);
         }
         catch (Exception ex)
         {
             throw new Exception(ex.Message);
         }
     }
-
-    private static HelixToolkit.Wpf.SharpDX.PerspectiveCamera CreateDefaultCamera() => new()
-    {
-        Position = new Point3D(0, 3000, 0),
-        LookDirection = new Vector3D(-3, -3, -6),
-        UpDirection = new Vector3D(0, 1, 0),
-        NearPlaneDistance = 0.5,
-        FarPlaneDistance = 500000
-    };
-
-
-    private readonly ObbOverlayManager<EventBox> _eventOverlay = new("EventBoxesRoot", PhongMaterials.Orange);
-    private readonly ObbOverlayManager<AniBG> _aniOverlay = new("AniBGRoot", PhongMaterials.Yellow);
-    private readonly ObbOverlayManager<Gimmick> _gimmickOverlay = new("GimmickRoot", PhongMaterials.Blue);
-    private readonly ObbOverlayManager<ItemBox> _itemOverlay = new("ItemBoxesRoot", PhongMaterials.Green);
-
-    private void AttachOverlays()
-    {
-        _eventOverlay.AttachRoot(Scene3D);
-        _aniOverlay.AttachRoot(Scene3D);
-        _gimmickOverlay.AttachRoot(Scene3D);
-        _itemOverlay.AttachRoot(Scene3D);
-
-        // clear any previous bindings
-        _eventOverlay.ClearAll();
-        _aniOverlay.ClearAll();
-        _gimmickOverlay.ClearAll();
-        _itemOverlay.ClearAll();
-
-        if (WData?.AniBGs is not null) _aniOverlay.BindCollection(WData.AniBGs);
-        if (WData?.Gimmicks is not null) _gimmickOverlay.BindCollection(WData.Gimmicks);
-        if (WData?.ItemBoxes is not null) _itemOverlay.BindCollection(WData.ItemBoxes);
-
-        if (WData?.EventBoxGroups is not null)
-        {
-            foreach (var g in WData.EventBoxGroups)
-                if (g.Boxes is not null) _eventOverlay.BindCollection(g.Boxes);
-
-            if (WData.EventBoxGroups is INotifyCollectionChanged groupIncc)
-            {
-                groupIncc.CollectionChanged -= OnEventBoxGroupsChanged;
-                groupIncc.CollectionChanged += OnEventBoxGroupsChanged;
-            }
-        }
-    }
-
-    private void OnEventBoxGroupsChanged(object? s, NotifyCollectionChangedEventArgs e)
-    {
-        if (e.OldItems is not null)
-        {
-            foreach (EventBoxGroup g in e.OldItems)
-                if (g.Boxes is INotifyCollectionChanged oldColl)
-                    _eventOverlay.UnbindCollection(oldColl);
-        }
-        if (e.NewItems is not null)
-        {
-            foreach (EventBoxGroup g in e.NewItems)
-                if (g.Boxes is INotifyCollectionChanged newColl)
-                    _eventOverlay.BindCollection(newColl);
-        }
-    }
-
-    [ObservableProperty]
-    private HelixToolkit.Wpf.SharpDX.PerspectiveCamera _Camera = new()
-    {
-        Position = new Point3D(0, 3000, 0),
-        LookDirection = new Vector3D(-3, -3, -6),
-        UpDirection = new Vector3D(0, 1, 0),
-        NearPlaneDistance = 0.5,
-        FarPlaneDistance = 500000
-    };
-
-    #region Camera focus
-
-    // animation state
-    private bool _camAnimating;
-    private DateTime _camAnimStart;
-    private TimeSpan _camAnimDuration = TimeSpan.FromMilliseconds(700);
-    private Point3D _camFromPos, _camToPos, _camTarget;
-
-    private static double EaseOutCubic(double t) => 1 - Math.Pow(1 - t, 3);
-    private static Point3D Lerp(Point3D a, Point3D b, double t)
-        => new(a.X + (b.X - a.X) * t, a.Y + (b.Y - a.Y) * t, a.Z + (b.Z - a.Z) * t);
-
-    private void StartCameraAnimation(Point3D toPos, Point3D target, TimeSpan? duration = null)
-    {
-        _camAnimDuration = duration ?? TimeSpan.FromMilliseconds(700);
-        _camFromPos = Camera.Position;
-        _camToPos = toPos;
-        _camTarget = target;
-        _camAnimStart = DateTime.UtcNow;
-
-        if (!_camAnimating)
-        {
-            CompositionTarget.Rendering += OnCameraRendering;
-            _camAnimating = true;
-        }
-    }
-
-    private void StopCameraAnimation()
-    {
-        if (!_camAnimating) return;
-        CompositionTarget.Rendering -= OnCameraRendering;
-        _camAnimating = false;
-    }
-
-    private void OnCameraRendering(object? sender, EventArgs e)
-    {
-        double t = (DateTime.UtcNow - _camAnimStart).TotalMilliseconds / _camAnimDuration.TotalMilliseconds;
-        if (t >= 1) { t = 1; StopCameraAnimation(); }
-
-        double s = EaseOutCubic(t);
-        var pos = Lerp(_camFromPos, _camToPos, s);
-
-        Camera.Position = pos;
-
-        var look = new Vector3D(_camTarget.X - pos.X, _camTarget.Y - pos.Y, _camTarget.Z - pos.Z);
-        Camera.LookDirection = look;
-        Camera.UpDirection = new Vector3D(0, 1, 0);
-    }
-
-    /// <summary>
-    /// Moves the camera to frame <paramref name="e"/> and makes it visible.
-    /// </summary>
-    private void FocusCamera(IObbEntity e)
-    {
-        if (!e.IsVisible)
-            e.GetType().GetProperty(nameof(IObbEntity.IsVisible))?.SetValue(e, true);
-
-        var target = new Point3D(-e.Position.X, e.Position.Y, e.Position.Z);
-
-        double sx = Math.Max(1e-4, e.Extents.X * 2 * e.Scale.X);
-        double sy = Math.Max(1e-4, e.Extents.Y * 2 * e.Scale.Y);
-        double sz = Math.Max(1e-4, e.Extents.Z * 2 * e.Scale.Z);
-        double radius = 0.5 * Math.Sqrt(sx * sx + sy * sy + sz * sz);
-
-        double fov = Camera?.FieldOfView > 0 ? Camera.FieldOfView : 45.0;
-        double distFit = radius / Math.Tan(0.5 * fov * Math.PI / 180.0);
-
-        double distance = Math.Max(10.0, distFit * 8.0);
-
-        var dir = new Vector3D(1, 3, 1);
-        dir.Normalize();
-
-        var dest = new Point3D(
-            target.X + dir.X * distance,
-            target.Y + dir.Y * distance,
-            target.Z + dir.Z * distance);
-
-        StartCameraAnimation(dest, target, TimeSpan.FromMilliseconds(1000));
-    }
-
     #endregion
+
+    #region Open ModelView Window
+
+    [RelayCommand(CanExecute = nameof(CanExecuteOpenModelViewWindowCommand))]
+    private void OpenModelViewWindow()
+    {
+        try
+        {
+            var modelData = new ModelType
+            {
+                FilePath = CurrentFile!,
+                Format = ModelFormat.WDATA,
+            };
+
+            _windowsService.OpenModelViewWindow(_token, modelData, ModelView!);
+
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+        }
+    }
+
+    private bool CanExecuteOpenModelViewWindowCommand()
+    {
+        return WData is not null;
+    }
 
     #endregion
 
@@ -790,11 +636,17 @@ public partial class WDataManager : ObservableObject
     private Visibility _isMessageVisible = Visibility.Visible;
 
     [ObservableProperty]
+    private ModelViewManager? _modelView;
+
+    [ObservableProperty]
     private WData? _wData;
     partial void OnWDataChanged(WData? value)
     {
         OnCanExecuteFileCommandChanged();
     }
+
+    [ObservableProperty]
+    private MmpModel? _mmp;
 
     [ObservableProperty]
     private string? _currentFile;
@@ -814,7 +666,7 @@ public partial class WDataManager : ObservableObject
 
         if (value is IObbEntity e)
         {
-            FocusCamera(e);
+            ModelView?.Scene3DView.FocusCamera(e);
         }
     }
     #endregion

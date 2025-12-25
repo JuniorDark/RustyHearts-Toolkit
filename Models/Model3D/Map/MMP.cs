@@ -27,10 +27,13 @@ public static class MMP
     {
         public int Version { get; set; }
         public string BaseDirectory { get; set; } = string.Empty;
+        public string FilePath { get; set; } = string.Empty;
         public MmpHeader Header { get; set; } = new();
         public List<ModelMaterial> Materials { get; set; } = [];
         public List<ModelNodeXform> Nodes { get; set; } = [];
         public List<MmpObjectGroup> Objects { get; set; } = [];
+        public List<MmpGroupMetadata> GroupMetadata { get; set; } = [];
+        
     }
 
     // ---------- Geometry ----------
@@ -109,4 +112,17 @@ public static class MMP
         public Vector2 UV0 { get; set; }
         public Vector2? UV1 { get; set; }
     }
+
+    /// <summary>
+    /// Metadata for a group within the MMP model.
+    /// </summary>
+    public sealed class MmpGroupMetadata
+    {
+        public string GroupName { get; set; } = string.Empty;
+        public uint GroupHash { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public uint Hash { get; set; }
+        public GeometryBounds GeometryBounds { get; set; }
+    }
+
 }

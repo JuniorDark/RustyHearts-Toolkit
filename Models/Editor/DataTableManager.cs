@@ -413,6 +413,30 @@ public partial class DataTableManager : ObservableObject
     }
 
     /// <summary>
+    /// Sets the folder path for the client assets using a folder dialog.
+    /// </summary>
+    [RelayCommand(CanExecute = nameof(CanExecuteSetFolderCommand))]
+    public void SetClientAssetsFolder()
+    {
+        try
+        {
+            var openFolderDialog = new OpenFolderDialog();
+
+            if (openFolderDialog.ShowDialog() == true)
+            {
+                string newFolderPath = openFolderDialog.FolderName;
+                RegistrySettingsHelper.SetClientAssetsFolder(newFolderPath);
+
+                RHMessageBoxHelper.ShowOKMessage(string.Format(Resources.DataTableManagerFolderSetMessage, newFolderPath), Resources.Success);
+            }
+        }
+        catch (Exception ex)
+        {
+            RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+        }
+    }
+
+    /// <summary>
     /// Checks if the SetFolder command can be executed.
     /// </summary>
     /// <returns>True if the command can be executed, otherwise false.</returns>
@@ -588,6 +612,7 @@ public partial class DataTableManager : ObservableObject
         CloseFileCommand.NotifyCanExecuteChanged();
         SetTableFolderCommand.NotifyCanExecuteChanged();
         SetClientFolderCommand.NotifyCanExecuteChanged();
+        SetClientAssetsFolderCommand.NotifyCanExecuteChanged();
     }
 
     #endregion

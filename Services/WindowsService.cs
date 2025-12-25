@@ -2,6 +2,7 @@
 using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.Model3D;
 using RHToolkit.Views.Windows;
 using static RHToolkit.Models.EnumService;
 
@@ -391,6 +392,47 @@ public class WindowsService(WindowsProviderService windowsProviderService) : IWi
         }
 
         WeakReferenceMessenger.Default.Send(new DropGroupMessage(id, token, dropGroupType));
+    }
+    #endregion
+
+    #region Model Window
+
+    private readonly Dictionary<Guid, Window> _modelWindows = [];
+
+    /// <summary>
+    /// Opens a model window with the specified parameters.
+    /// </summary>
+    /// <param name="token">The unique token for the window.</param>
+    /// <param name="id">The ID of the model.</param>
+    public void OpenModelViewWindow(Guid token, ModelType modelType, ModelViewManager viewModel)
+    {
+        if (_modelWindows.TryGetValue(token, out Window? existingWindow))
+        {
+            if (existingWindow.WindowState == WindowState.Minimized)
+            {
+                existingWindow.WindowState = WindowState.Normal;
+            }
+
+            existingWindow.Focus();
+        }
+        else
+        {
+            var modelViewWindow = _windowsProviderService.ShowInstance<ModelViewWindow>(true);
+            if (modelViewWindow != null)
+            {
+                modelViewWindow.DataContext = viewModel;
+
+                _openWindowsCount++;
+                modelViewWindow.Closed += (sender, args) =>
+                {
+                    _modelWindows.Remove(token);
+                    _openWindowsCount--;
+                };
+                _modelWindows[token] = modelViewWindow;
+            }
+        }
+
+        WeakReferenceMessenger.Default.Send(new ModelMessage(modelType, "ModelViewWindow", token));
     }
     #endregion
 

@@ -188,6 +188,25 @@ namespace RHToolkit.Models.RH
                     }
                 }
 
+                // Add padding to align to 16-byte boundary
+                double pos = (double)writer.BaseStream.Position / 16;
+                if (!(Math.Abs(pos % 1) < (double.Epsilon * 100)))
+                {
+                    // Write padding mark
+                    writer.Write((char)0x2A);
+
+                    // Calculate remaining bytes to pad
+                    pos = (double)writer.BaseStream.Position / 16;
+                    double pos_ceil = Math.Ceiling(pos);
+                    double remain = (pos_ceil - pos) * 16;
+                    int remain2 = (int)remain;
+                    for (int x = 0; x < remain2; x++)
+                    {
+                        // Write padding byte
+                        writer.Write((char)0x00);
+                    }
+                }
+
                 writer.Flush();
                 stream.Flush();
 

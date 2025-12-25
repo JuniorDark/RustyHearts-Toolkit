@@ -127,6 +127,10 @@
                     Command="{Binding DataTableManager.SetClientFolderCommand}"
                     Header="{x:Static rs:Resources.MenuSetClientFolder}"
                     Icon="{ui:SymbolIcon FolderOpen20}" />
+                <MenuItem
+                    Command="{Binding DataTableManager.SetClientAssetsFolderCommand}"
+                    Header="{x:Static rs:Resources.MenuSetClientAssetsFolder}"
+                    Icon="{ui:SymbolIcon FolderOpen20}" />
             </ui:MenuItem>
             <Separator />
             <ui:MenuItem Header="{x:Static rs:Resources.MenuHelp}" Icon="{ui:SymbolIcon ChatHelp20}">

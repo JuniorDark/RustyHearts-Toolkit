@@ -74,7 +74,7 @@ namespace RHToolkit.Models.Model3D.Map
                     {
                         case 1: model.Materials = ModelSharedTypeReader.ReadMaterialData(br, size, version); break;
                         case 3: model.Nodes.Add(ModelSharedTypeReader.ReadNodeTransformData(br, size, version)); break;
-                        case 4: _ = br.ReadBytes(size); break; // unknown, found on entrance_04.mmp
+                        case 4: model.GroupMetadata.Add(ReadType4(br, size)); break;
                         case 19: ReadGeometryNodes(br, model, size, model.Header.Version); break;
                         default: throw new NotSupportedException($"Unknown/Unsupported MMP object type: {type} (at index {i})");
                     }
@@ -92,7 +92,41 @@ namespace RHToolkit.Models.Model3D.Map
         }
 
         #region Readers
-        
+
+        private static MmpGroupMetadata ReadType4(BinaryReader br, int size)
+        {
+            var start = br.BaseStream.Position;
+
+            int nameLen = br.ReadInt32();
+            int name2Len = br.ReadInt32();
+            uint nameHash = br.ReadUInt32();
+            uint name2Hash = br.ReadUInt32();
+
+            var meta = new MmpGroupMetadata
+            {
+                GroupName = BinaryReaderExtensions.ReadUtf16String(br, nameLen),
+                GroupHash = nameHash,
+                Name = BinaryReaderExtensions.ReadUtf16String(br, name2Len),
+                Hash = name2Hash,
+            };
+
+            // Bounds block: center(3), radius, min(3), max(3)
+            var objCenter = BinaryReaderExtensions.ReadVector3(br);
+            var objRadius = br.ReadSingle();
+            var objMin = BinaryReaderExtensions.ReadVector3(br);
+            var objMax = BinaryReaderExtensions.ReadVector3(br);
+            var objSize = objMax - objMin;
+
+            meta.GeometryBounds = new GeometryBounds { Min = objMin, Max = objMax, Size = objSize, SphereRadius = objRadius, Center = objCenter };
+
+            long read = br.BaseStream.Position - start;
+            if (read != size)
+                throw new InvalidDataException($"Type 4: {meta.Name}: expected {size} bytes, but read {read}.");
+
+            return meta;
+        }
+
+
         // ---- Type 19 reader ----
         private static void ReadGeometryNodes(BinaryReader br, MmpModel model, int size, int version)
         {
@@ -114,8 +148,8 @@ namespace RHToolkit.Models.Model3D.Map
             {
                 objectNodeNameHash = br.ReadUInt32();
                 objectNodeName2Hash = br.ReadUInt32();
-                objectNodeName = BinaryReaderExtensions.ReadUnicode256Count(br);
-                objectNodeName2 = BinaryReaderExtensions.ReadUnicode256Count(br);
+                objectNodeName = BinaryReaderExtensions.ReadUnicodeFixedString(br);
+                objectNodeName2 = BinaryReaderExtensions.ReadUnicodeFixedString(br);
             }
 
             // Bounds block: center(3), radius, min(3), max(3)
@@ -181,7 +215,7 @@ namespace RHToolkit.Models.Model3D.Map
                     Stride = stride,
                     Vertices = new MmpVertex[vertexCount],
                     Indices = new ushort[faceCount * 3],
-                    Material = model.Materials.FirstOrDefault(m => m.Id == materialIdx),
+                    Material = model.Materials.FirstOrDefault(m => m.MaterialIndex == materialIdx),
                     GeometryBounds = new GeometryBounds { Min = pMin, Max = pMax, Size = pSize, SphereRadius = pRadius, Center = pCenter }
                 };
 

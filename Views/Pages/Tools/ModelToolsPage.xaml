@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:pages="clr-namespace:RHToolkit.ViewModels.Pages"
     xmlns:rs="clr-namespace:RHToolkit.Properties"
-    Title="Model Tools"
+    Title="3D Model Tools"
     d:DataContext="{d:DesignInstance local:ModelToolsPage,
                                      IsDesignTimeCreatable=False}"
     d:DesignHeight="720"
@@ -129,6 +129,12 @@
                 IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
                 Template="{StaticResource lb_checkbox}"
                 ToolTip="{x:Static rs:Resources.CopyTexturesTooltip}" />
+            <CheckBox
+                Content="{x:Static rs:Resources.ModelViewMenuExportSeparateObjects}"
+                IsChecked="{Binding ViewModel.ExportSeparateObjects, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                IsEnabled="{Binding ViewModel.IsTextBoxEnabled}"
+                Template="{StaticResource lb_checkbox}"
+                ToolTip="{x:Static rs:Resources.ModelViewMenuExportSeparateObjectsTooltip}" />
         </StackPanel>
         <Button
             Grid.Row="4"

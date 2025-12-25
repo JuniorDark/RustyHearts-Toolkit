@@ -4,6 +4,9 @@ using RHToolkit.Models;
 using RHToolkit.Models.Database;
 using RHToolkit.Models.Editor;
 using RHToolkit.Models.MessageBox;
+using RHToolkit.Models.Model3D;
+using RHToolkit.Models.Model3D.MGM;
+using RHToolkit.Models.UISettings;
 using RHToolkit.Services;
 using RHToolkit.Views.Windows;
 using System.ComponentModel;
@@ -28,6 +31,11 @@ namespace RHToolkit.ViewModels.Windows
             _itemDataManager = itemDataManager;
 
             DataTableManager = new()
+            {
+                Token = _token
+            };
+
+            ModelView = new ModelViewManager
             {
                 Token = _token
             };
@@ -96,7 +104,8 @@ namespace RHToolkit.ViewModels.Windows
                 OpenFileDialog openFileDialog = new()
                 {
                     Filter = filter,
-                    FilterIndex = 1
+                    FilterIndex = 1,
+                    InitialDirectory = RegistrySettingsHelper.GetTableFolder(),
                 };
 
                 if (openFileDialog.ShowDialog() == true)
@@ -351,6 +360,71 @@ namespace RHToolkit.ViewModels.Windows
 
         #endregion
 
+        #region Open Model Preview Window
+
+        [RelayCommand]
+        private async Task OpenModelPreviewWindow(int parameter)
+        {
+            try
+            {
+                if (parameter != 0)
+                {
+
+                    string clientAssetsFolder = RegistrySettingsHelper.GetClientAssetsFolder();
+
+                    if (string.IsNullOrEmpty(clientAssetsFolder) || !Directory.Exists(clientAssetsFolder))
+                    {
+                        var openFolderDialog = new OpenFolderDialog();
+
+                        if (openFolderDialog.ShowDialog() == true)
+                        {
+                            clientAssetsFolder = openFolderDialog.FolderName;
+                            RegistrySettingsHelper.SetClientAssetsFolder(clientAssetsFolder);
+                        }
+                        else
+                        {
+                           return;
+                        }
+                    }
+
+                    var modelPath = _gmDatabaseService.GetFieldMeshModelByID(parameter);
+
+                    if (string.IsNullOrEmpty(modelPath))
+                    {
+                        return;
+                    }
+
+                    modelPath = Path.Combine(clientAssetsFolder, modelPath);
+
+                    if (!File.Exists(modelPath))
+                    {
+                        RHMessageBoxHelper.ShowOKMessage(
+                                    string.Format(Resources.FileNotFoundMessage, modelPath),
+                                    Resources.Error
+                                );
+                        return;
+                    }
+
+                    var modelData = new ModelType
+                    {
+                        FilePath = modelPath,
+                        Format = ModelFormat.MDATA,
+                    };
+
+                    await Application.Current.Dispatcher.InvokeAsync(() =>
+                    {
+                        _windowsService.OpenModelViewWindow(_token, modelData, ModelView!);
+                    });
+
+                }
+            }
+            catch (Exception ex)
+            {
+                RHMessageBoxHelper.ShowOKMessage($"{Resources.Error}: {ex.Message}", Resources.Error);
+            }
+        }
+        #endregion
+
         #endregion
 
         #region Filter
@@ -583,7 +657,7 @@ namespace RHToolkit.ViewModels.Windows
             try
             {
                 AuctionCategoryItems = _gmDatabaseService.GetAuctionCategoryItems();
-                FielMeshItems = _gmDatabaseService.GetFielMeshItems();
+                FielMeshItems = _gmDatabaseService.GetFieldMeshItems();
                 UnionPackageItems = _gmDatabaseService.GetUnionPackageItems();
                 CostumePackItems = _gmDatabaseService.GetCostumePackItems();
                 TitleListItems = _gmDatabaseService.GetTitleListItems();
@@ -633,6 +707,12 @@ namespace RHToolkit.ViewModels.Windows
 
         [ObservableProperty]
         private ItemDataManager _itemDataManager;
+
+        [ObservableProperty]
+        private ModelViewManager? _modelView;
+
+        [ObservableProperty]
+        private MgmModel? _mgm;
 
         #region SelectedItem
 

@@ -5,7 +5,7 @@ using Num = System.Numerics;
 namespace RHToolkit.Models.Model3D.Map;
 
 /// <summary>
-/// MMP file writer (currently rebuild type 3/19 from FBX + original MMP for type 1 material)
+/// MMP file writer (rebuilds type 3/19 from FBX + materials from JSON sidecar)
 /// </summary>
 public static partial class MMPWriter
 {
@@ -13,36 +13,64 @@ public static partial class MMPWriter
     private static readonly Encoding ASCII = Encoding.ASCII;
     private readonly record struct Chunk(int Type, byte[] Data);
 
-    public static async Task RebuildFromFbx(string originalMmpPath, string fbxPath, string outMmpPath)
+    /// <summary>
+    /// Rebuilds an MMP file from FBX.
+    /// Materials are read from the JSON sidecar file ({fbxPath}.materials.json).
+    /// If no sidecar exists and originalMmpPath is provided, falls back to reading from the original MMP.
+    /// </summary>
+    /// <param name="originalMmpPath">Optional path to original MMP for version detection and fallback material source.</param>
+    /// <param name="fbxPath">Path to the FBX file to import.</param>
+    /// <param name="outMmpPath">Path for the output MMP file.</param>
+    public static async Task RebuildFromFbx(string? originalMmpPath, string fbxPath, string outMmpPath)
     {
         try
         {
-            // --- read original MMP file table ---
-            var originalBytes = File.ReadAllBytes(originalMmpPath);
-            using var ms = new MemoryStream(originalBytes, writable: false);
-            using var br = new BinaryReader(ms, ASCII, leaveOpen: true);
-
-            var header = ASCII.GetString(br.ReadBytes(5));
-            if (header != Header) throw new InvalidDataException("Not an MMP file.");
-            int version = br.ReadInt32();
-            int objectCount = br.ReadInt32();
-
-            var offsets = new int[objectCount];
-            var sizes = new int[objectCount];
-            var types = new int[objectCount];
-            for (int i = 0; i < objectCount; i++) offsets[i] = br.ReadInt32();
-            for (int i = 0; i < objectCount; i++) sizes[i] = br.ReadInt32();
-            for (int i = 0; i < objectCount; i++) types[i] = br.ReadInt32();
-
             var outChunks = new List<Chunk>();
+            int version = 8; // latest known version
 
-            // --- copy all type-1 chunks (material data) as-is ---
-            for (int i = 0; i < objectCount; i++)
+            // --- Try to load materials from JSON sidecar ---
+            var sidecarPath = ModelMaterialSidecar.GetSidecarPath(fbxPath);
+            if (File.Exists(sidecarPath))
             {
-                if (types[i] != 1) continue;
-                ms.Position = offsets[i];
-                var data = br.ReadBytes(sizes[i]);
-                outChunks.Add(new Chunk(1, data));
+                var sidecar = await ModelMaterialSidecar.LoadAsync(sidecarPath);
+
+                // Build type-1 chunk from sidecar data
+                var (libraries, materials) = sidecar.ToMaterials();
+                var materialData = ModelMaterialWriter.WriteMaterialChunk(libraries, materials);
+                outChunks.Add(new Chunk(1, materialData));
+            }
+            else if (!string.IsNullOrEmpty(originalMmpPath) && File.Exists(originalMmpPath))
+            {
+                // --- Fallback: read original MMP file table ---
+                var originalBytes = File.ReadAllBytes(originalMmpPath);
+                using var ms = new MemoryStream(originalBytes, writable: false);
+                using var br = new BinaryReader(ms, ASCII, leaveOpen: true);
+
+                var header = ASCII.GetString(br.ReadBytes(5));
+                if (header != Header) throw new InvalidDataException("Not an MMP file.");
+                var mmpVersion = br.ReadInt32();
+                int objectCount = br.ReadInt32();
+
+                var offsets = new int[objectCount];
+                var sizes = new int[objectCount];
+                var types = new int[objectCount];
+                for (int i = 0; i < objectCount; i++) offsets[i] = br.ReadInt32();
+                for (int i = 0; i < objectCount; i++) sizes[i] = br.ReadInt32();
+                for (int i = 0; i < objectCount; i++) types[i] = br.ReadInt32();
+
+                // --- copy all type-1 chunks (material data) as-is ---
+                for (int i = 0; i < objectCount; i++)
+                {
+                    if (types[i] != 1) continue;
+                    ms.Position = offsets[i];
+                    var data = br.ReadBytes(sizes[i]);
+                    outChunks.Add(new Chunk(1, data));
+                }
+            }
+            else
+            {
+                throw new InvalidDataException(
+                    $"No material source found. Expected material sidecar at '{sidecarPath}' or original MMP at '{originalMmpPath}'.");
             }
 
             // -- import FBX and build type-3 (node) + type-19 (mesh) chunks ---
@@ -75,7 +103,7 @@ public static partial class MMPWriter
             var naviNodes = new List<Node>();
             void Walk(Node n)
             {
-                bool isNavi = n.Metadata != null && n.Metadata.TryGetValue("navi:isNavMesh", out var _);
+                bool isNavi = n.Name == "_NavigationMesh_";
                 if (isNavi) naviNodes.Add(n);
                 foreach (var c in n.Children) Walk(c);
             }
@@ -85,13 +113,13 @@ public static partial class MMPWriter
             if (naviNodes.Count > 0)
             {
                 var outNaviPath = Path.ChangeExtension(outMmpPath, ".navi");
-                NaviWriter.WriteFromFbxNode(scene, naviNodes[0], outNaviPath);
+                NaviWriter.WriteFromNode(scene, naviNodes[0], outNaviPath);
             }
 
             foreach (var objNode in container.Children)
             {
                 // Skip navi nodes
-                if (objNode.Metadata != null && objNode.Metadata.TryGetValue("navi:isNavMesh", out var _))
+                if (objNode.Name == "_NavigationMesh_")
                 {
                     continue;
                 }
@@ -136,7 +164,7 @@ public static partial class MMPWriter
             //  Write .height file
             var naviPath = Path.ChangeExtension(outMmpPath, ".navi");
             var heightPath = Path.ChangeExtension(outMmpPath, ".height");
-            await HeightWriter.BuildFromNaviFileAsync(naviPath, heightPath, 20, 50, 2);
+            await HeightWriter.BuildFromNaviFileAsync(naviPath, heightPath);
 
         }
         catch (Exception ex)
@@ -211,6 +239,13 @@ public static partial class MMPWriter
         // 1) Names & hashes
         string objectName = objNode.Name ?? "Object";
         string objectName2 = "";
+
+        var kindMatch = ObjectKindRegex().Match(objectName);
+        if (kindMatch.Success)
+        {
+            objectName = objectName.Substring(0, kindMatch.Index);
+        }
+
         WriteType19Header(bw, objectName, objectName2);
 
         // 2) Build per-part data (including vertex transforms, reindexing, flags) and accumulate object bounds
@@ -283,19 +318,36 @@ public static partial class MMPWriter
         ref float objMaxX, ref float objMaxY, ref float objMaxZ)
     {
         string subName = partNode.Name ?? "Mesh";
+        
+        int materialIdx;
+        int meshType;
+        byte fl0;
+        byte fl1;
+        byte fl2;
+
+        var metaMatch = MeshMetaRegex().Match(subName);
+        if (metaMatch.Success)
+        {
+             meshType = int.Parse(metaMatch.Groups[1].Value);
+             fl0 = byte.Parse(metaMatch.Groups[2].Value);
+             fl1 = byte.Parse(metaMatch.Groups[3].Value);
+             fl2 = byte.Parse(metaMatch.Groups[4].Value);
+             materialIdx = int.Parse(metaMatch.Groups[5].Value);
+             subName = subName.Substring(0, metaMatch.Index);
+        }
+        else
+        {
+            throw new InvalidDataException (
+                $"Node '{partNode.Name}' name is missing required mesh metadata suffix '__T{{meshType}}_A{{IsAdditive}}_B{{hasAlpha}}_E{{isEnabled}}_M{{materialIdx}}'.");
+        }
+
         // strip FBX auto-suffixes like ".001"
         subName = Name().Replace(subName, "$1");
 
-        int materialId = ModelExtensions.GetIntMeta(partNode, "mmp:materialIdx");
-        int meshType = ModelExtensions.GetIntMeta(partNode, "mmp:meshType");
-        byte fl0 = (byte)ModelExtensions.GetIntMeta(partNode, "mmp:isEmissiveAdditive");
-        byte fl1 = (byte)ModelExtensions.GetIntMeta(partNode, "mmp:isAlphaBlend");
-        byte fl2 = (byte)ModelExtensions.GetIntMeta(partNode, "mmp:isEnabled");
-        int uvSets = ModelExtensions.GetIntMeta(partNode, "mmp:uvSetCount");
-        var maxSets = Math.Min(2, mesh.TextureCoordinateChannelCount);
-        if (uvSets > maxSets)
+        var uvSets = mesh.TextureCoordinateChannelCount;
+        if (uvSets > 2)
             throw new InvalidDataException(
-                $"Node '{partNode.Name}' uvSetCount={uvSets} exceeds available channels ({maxSets}).");
+                $"Node '{partNode.Name}' uv count exceeds 2 max channels ({uvSets}).");
 
 
         // Shared accumulators
@@ -320,7 +372,7 @@ public static partial class MMPWriter
                              ref objMinX, ref objMinY, ref objMinZ, ref objMaxX, ref objMaxY, ref objMaxZ);
         }
 
-        return new PartData(subName, materialId, meshType, fl0, fl1, fl2, uvSets, Pw, Nw, UV0, UV1, indices, forcedBounds);
+        return new PartData(subName, materialIdx, meshType, fl0, fl1, fl2, uvSets, Pw, Nw, UV0, UV1, indices, forcedBounds);
     }
 
     // ---------- Step 2a: regular mesh path ----------
@@ -353,8 +405,8 @@ public static partial class MMPWriter
         var uv0Src = mesh.TextureCoordinateChannelCount >= 1 ? mesh.TextureCoordinateChannels[0] : null;
         var uv1Src = mesh.TextureCoordinateChannelCount >= 2 ? mesh.TextureCoordinateChannels[1] : null;
 
-        // World transform and proper normal transform
-        var M = ModelExtensions.GetGlobalTransform(partNode);
+        // Use full accumulated world transform from mesh node (includes partNode's own transform)
+        var M = GetWorldTransform(partNode);
         Num.Matrix4x4.Invert(M, out var invM);
         var invMT = Num.Matrix4x4.Transpose(invM);
 
@@ -453,47 +505,77 @@ public static partial class MMPWriter
     ref float objMinX, ref float objMinY, ref float objMinZ,
     ref float objMaxX, ref float objMaxY, ref float objMaxZ)
     {
-        var M = ModelExtensions.GetGlobalTransform(partNode);
+        // Use full accumulated world transform from mesh node (includes partNode's own transform)
+        var M = GetWorldTransform(partNode);
 
         // All billboard vertices share the same center position
         var pL = mesh.Vertices[0];
         var center4 = Num.Vector4.Transform(new Num.Vector4(pL.X, pL.Y, pL.Z, 1), M);
         var center = new Num.Vector3(center4.X, center4.Y, center4.Z);
 
-        // Determine bounding box
+        // Determine bounding box (billboard is a point for bounds purposes here)
         float pMinX = center.X, pMaxX = center.X;
         float pMinY = center.Y, pMaxY = center.Y;
         float pMinZ = center.Z, pMaxZ = center.Z;
 
-        // Push vertex data (positions are all center, but normals and UVs differ)
+        // Sources
+        var uv0Src = mesh.TextureCoordinateChannelCount >= 1 ? mesh.TextureCoordinateChannels[0] : null;
+        var uv1Src = mesh.TextureCoordinateChannelCount >= 2 ? mesh.TextureCoordinateChannels[1] : null;
+
+        bool hasPackedPayload =
+            uv0Src != null && uv0Src.Count >= mesh.Vertices.Count &&
+            uv1Src != null && uv1Src.Count >= mesh.Vertices.Count;
+
         for (int i = 0; i < mesh.Vertices.Count; i++)
         {
             Pw.Add(center);
 
-            var n = mesh.Normals[i];
-            Nw.Add(new Num.Vector3(n.X, n.Y, n.Z));
+            // Read UV0 (we still store it; only UV0.X is serialized for meshType 2 later)
+            Num.Vector2 uv0 = default;
+            if (uv0Src != null && i < uv0Src.Count)
+            {
+                var t0 = uv0Src[i];
+                uv0 = new Num.Vector2(t0.X, t0.Y);
+            }
+            UV0.Add(uv0);
 
-            var uv = mesh.TextureCoordinateChannels[0][i];
-            UV0.Add(new Num.Vector2(uv.X, uv.Y));
+            // Reconstruct billboard payload into Nw:
+            // packed:
+            //   payload.X = UV0.Y
+            //   payload.Y = UV1.X
+            //   payload.Z = UV1.Y
+            if (hasPackedPayload)
+            {
+                var t1 = uv1Src![i];
+                var payload = new Num.Vector3(uv0.Y, t1.X, t1.Y);
+                Nw.Add(payload);
+            }
+            else
+            {
+                // Legacy fallback: payload came from FBX normals (may be normalized by DCC tools)
+                var n = mesh.Normals[i];
+                Nw.Add(new Num.Vector3(n.X, n.Y, n.Z));
+            }
         }
 
-        // Push all 6 original indices (two triangles)
+        // Push all indices (two triangles) in the same winding
         foreach (var f in mesh.Faces)
         {
-            for (int i = 0; i < f.IndexCount; i++)
-                indices.Add((ushort)f.Indices[i]);
+            indices.Add((ushort)f.Indices[2]);
+            indices.Add((ushort)f.Indices[1]);
+            indices.Add((ushort)f.Indices[0]);
         }
 
         // Update global object bounds
         objMinX = MathF.Min(objMinX, pMinX); objMinY = MathF.Min(objMinY, pMinY); objMinZ = MathF.Min(objMinZ, pMinZ);
         objMaxX = MathF.Max(objMaxX, pMaxX); objMaxY = MathF.Max(objMaxY, pMaxY); objMaxZ = MathF.Max(objMaxZ, pMaxZ);
 
-
         // Z bounds only needed for billboard height tracking
         float minZ = pMinZ;
         float maxZ = pMaxZ;
         return (center.X, center.Y, minZ, center.X, center.Y, maxZ, true);
     }
+
 
     // ---------- Step 3: object/world bounds ----------
     /// <summary>
@@ -533,7 +615,7 @@ public static partial class MMPWriter
         bw.Write(indices.Count / 3);
         bw.Write(meshType);
         bw.Write(fl0); bw.Write(fl1); bw.Write(fl2);
-        bw.Write(uvSets);
+        bw.Write(meshType == 2 ? 1 : uvSets);
         bw.Write(materialId);
 
         // Per-part bounds
@@ -584,10 +666,6 @@ public static partial class MMPWriter
         List<Num.Vector3> Pw, List<Num.Vector3> Nw,
         List<Num.Vector2> UV0, List<Num.Vector2> UV1)
     {
-        int stride = ModelExtensions.ComputeMMPStride(meshType, uvSets);
-        using var vms = new MemoryStream(Pw.Count * stride);
-        using var vbw = new BinaryWriter(vms, Encoding.ASCII, leaveOpen: true);
-
         for (int i = 0; i < Pw.Count; i++)
         {
             var p = Pw[i];
@@ -597,7 +675,7 @@ public static partial class MMPWriter
 
             if (meshType == 2)
             {
-                vbw.Write(UV0[i].X);
+                bw.Write(UV0[i].X);
             }
             else
             {
@@ -608,8 +686,6 @@ public static partial class MMPWriter
                 }
             }
         }
-
-        bw.Write(vms.ToArray());
     }
 
     // ---------- Small helpers ----------
@@ -621,7 +697,21 @@ public static partial class MMPWriter
         if (p.X > maxX) maxX = p.X; if (p.Y > maxY) maxY = p.Y; if (p.Z > maxZ) maxZ = p.Z;
     }
 
-    
+    /// <summary>
+    /// Compute full accumulated world transform for a node by walking up the hierarchy.
+    /// </summary>
+    private static Num.Matrix4x4 GetWorldTransform(Node node)
+    {
+        var result = Num.Matrix4x4.Transpose(node.Transform);
+        var current = node.Parent;
+        while (current != null)
+        {
+            result *= Num.Matrix4x4.Transpose(current.Transform);
+            current = current.Parent;
+        }
+        return result;
+    }
+
     #endregion
 
     #region Type 3 Node Builder
@@ -632,7 +722,21 @@ public static partial class MMPWriter
         using var bw = new BinaryWriter(ms, Encoding.ASCII, leaveOpen: true);
 
         string objectName = objNode.Name;
-        string objectName2 = ModelExtensions.GetStringMeta(objNode, "mmp:nodeGroupName");
+        int kind = 5; // 5 = object node, 4 = particle node
+
+        var kindMatch = ObjectKindRegex().Match(objectName);
+        if (kindMatch.Success)
+        {
+            if (int.TryParse(kindMatch.Groups[1].Value, out int k)) kind = k;
+            objectName = objectName.Substring(0, kindMatch.Index);
+        }
+        else
+        {
+            throw new InvalidDataException (
+                $"Node '{objNode.Name}' name is missing required object type metadata suffix '__K{{kind}}'.");
+        }
+
+        string objectName2 = string.Empty;
 
         // ---- names + hashes (object, group, object) ----
         bw.Write(objectName.Length);
@@ -646,8 +750,7 @@ public static partial class MMPWriter
         BinaryWriterExtensions.WriteUtf16String(bw, objectName);
 
         // flags
-        int kind = ModelExtensions.GetIntMeta(objNode, "mmp:nodeKind");
-        int flag = ModelExtensions.GetIntMeta(objNode, "mmp:nodeFlag");
+        int flag = 1; // always 1
         bw.Write(kind);
         bw.Write(flag);
 
@@ -655,8 +758,7 @@ public static partial class MMPWriter
         bw.Write((byte)0);                                    // b1
         if (version >= 7) bw.Write((byte)0);                  // b2
 
-        // ---- Matrices: world, bind (inverse world), world dup ----
-        var world = ModelExtensions.GetGlobalTransform(objNode);
+        var world = Num.Matrix4x4.Transpose(objNode.Transform);
         Num.Matrix4x4.Invert(world, out var bind);
         var worldDup = world;
 
@@ -676,6 +778,12 @@ public static partial class MMPWriter
 
     [GeneratedRegex(@"^(.*?\d)(0+\d{2,})$")]
     private static partial Regex Name();
+
+    [GeneratedRegex(@"__K(\d+)")]
+    private static partial Regex ObjectKindRegex();
+
+    [GeneratedRegex(@"__T(\d+)_A(\d+)_B(\d+)_E(\d+)_M(\d+)")]
+    private static partial Regex MeshMetaRegex();
 
     #endregion
 }

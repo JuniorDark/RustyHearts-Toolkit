@@ -122,6 +122,11 @@
                 Icon="{ui:SymbolIcon ArrowRedo24,
                                      Filled=True}"
                 ToolTip="{x:Static rs:Resources.MenuRedo}" />
+            <MenuItem
+                Command="{Binding WDataManager.OpenModelViewWindowCommand}"
+                Icon="{ui:SymbolIcon WindowNew16,
+                                     Filled=True}"
+                ToolTip="{x:Static rs:Resources.ModelViewMenuOpenModelWindow}" />
         </Menu>
     </Grid>
 </UserControl>

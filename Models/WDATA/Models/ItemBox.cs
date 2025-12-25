@@ -7,6 +7,7 @@ namespace RHToolkit.Models.WDATA;
 /// </summary>
 public partial class ItemBox : ObservableObject
 {
+    [ObservableProperty] private bool _isVisible = false;
     /// <summary>Name identifier of this item box.</summary>
     [ObservableProperty] private string _Name = string.Empty;
 
@@ -29,8 +30,7 @@ public partial class ItemBox : ObservableObject
     /// Transform data including position, scale, rotation, and extents.
     /// </summary>
     [ObservableProperty] private Vector3 _Position = new();
-    [ObservableProperty] private Vector3 _Scale = new();
     [ObservableProperty] private Quaternion _Rotation = new();
+    [ObservableProperty] private Vector3 _Scale = new();
     [ObservableProperty] private Vector3 _Extents = new();
-    [ObservableProperty] private bool _isVisible = false;
 }

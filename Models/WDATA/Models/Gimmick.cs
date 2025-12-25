@@ -7,6 +7,7 @@ namespace RHToolkit.Models.WDATA;
 /// </summary>
 public partial class Gimmick : ObservableObject
 {
+    [ObservableProperty] private bool _isVisible = false;
     [ObservableProperty] private string _Name = string.Empty;
     [ObservableProperty] private string _Model = string.Empty;
     [ObservableProperty] private string _Motion = string.Empty;
@@ -18,8 +19,7 @@ public partial class Gimmick : ObservableObject
     [ObservableProperty] private int _TemplateID;
     [ObservableProperty] private string _ModelPath = string.Empty;
     [ObservableProperty] private Vector3 _Position = new();
-    [ObservableProperty] private Vector3 _Scale = new();
     [ObservableProperty] private Quaternion _Rotation = new();
+    [ObservableProperty] private Vector3 _Scale = new();
     [ObservableProperty] private Vector3 _Extents = new();
-    [ObservableProperty] private bool _isVisible = false;
 }

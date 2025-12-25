@@ -838,19 +838,19 @@ namespace RHToolkit.ViewModels.Windows
 
             if (selectedItem != null)
             {
-                if (SkillType == SkillType.SkillFrantz)
-                {
-                    int totalDamage = (int)selectedItem[$"nTotalDamage"];
-                    int weaponDamageSkill = (int)selectedItem[$"nWeaponeDamage_Skill"];
+                //if (SkillType == SkillType.SkillFrantz)
+                //{
+                //    int totalDamage = (int)selectedItem[$"nTotalDamage"];
+                //    int weaponDamageSkill = (int)selectedItem[$"nWeaponeDamage_Skill"];
 
-                    TotalDamage = totalDamage.ToString();
-                    WeaponDamageSkill = weaponDamageSkill.ToString();
-                }
-                else
-                {
-                    TotalDamage = (string)selectedItem[$"szTotalDamage"];
-                    WeaponDamageSkill = (string)selectedItem[$"szWeaponeDamage_Skill"];
-                }
+                //    TotalDamage = totalDamage.ToString();
+                //    WeaponDamageSkill = weaponDamageSkill.ToString();
+                //}
+                //else
+                //{
+                //    TotalDamage = (string)selectedItem[$"szTotalDamage"];
+                //    WeaponDamageSkill = (string)selectedItem[$"szWeaponeDamage_Skill"];
+                //}
                 
                 SkillMotion ??= [];
 

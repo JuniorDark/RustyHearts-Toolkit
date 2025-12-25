@@ -79,7 +79,7 @@ public partial class ModelToolsViewModel : ObservableObject
             var summary = await ModelManager.ExportFilesAsync(
                 OutputFolder,
                 filesToExport,
-                progress, EmbedTextures, CopyTextures,
+                progress, EmbedTextures, CopyTextures, ExportSeparateObjects,
                 _cts.Token);
 
             // Counts
@@ -208,6 +208,7 @@ public partial class ModelToolsViewModel : ObservableObject
     [ObservableProperty] private int _progressBarMaximumValue;
     [ObservableProperty] private bool _isTextBoxEnabled = true;
     [ObservableProperty] private bool _embedTextures;
+    [ObservableProperty] private bool _exportSeparateObjects = false;
     partial void OnEmbedTexturesChanged(bool value)
     {
         if (value) CopyTextures = false;

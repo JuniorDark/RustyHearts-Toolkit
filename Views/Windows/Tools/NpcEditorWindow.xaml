@@ -162,11 +162,12 @@
                                     Margin="5,0,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Center"
-                                    Orientation="Vertical">
+                                    Orientation="Horizontal">
                                     <TextBlock Foreground="White" Text="{x:Static rs:Resources.NPCEditor_NPCID}" />
                                     <ComboBox
                                         Width="Auto"
                                         Height="24"
+                                        MinWidth="300"
                                         DisplayMemberPath="Name"
                                         IsReadOnly="True"
                                         ItemsSource="{Binding DataContext.NpcListItems, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
@@ -178,6 +179,17 @@
                                             <bh:DataRowViewBehavior Column="nNpcID" UpdateItemValueCommand="{Binding DataTableManager.UpdateItemValueCommand}" />
                                         </i:Interaction.Behaviors>
                                     </ComboBox>
+                                    <Button
+                                        Width="200"
+                                        Margin="10,0,0,0"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Bottom"
+                                        Command="{Binding DataContext.OpenModelPreviewWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                        CommandParameter="{Binding DataContext.DataTableManager.SelectedItem[nNpcID], RelativeSource={RelativeSource AncestorType=Window}}"
+                                        Content="{x:Static rs:Resources.Preview}"
+                                        Cursor="Hand"
+                                        Foreground="White"
+                                        Style="{StaticResource lb_def_button02}" />
                                 </StackPanel>
                                 <StackPanel
                                     Grid.Row="4"

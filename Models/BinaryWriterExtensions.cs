@@ -18,6 +18,19 @@ public class BinaryWriterExtensions
         bw.Write(m.M41); bw.Write(m.M42); bw.Write(m.M43); bw.Write(m.M44);
     }
 
+    /// <summary>
+    /// Write a 4x4 matrix in column-major order
+    /// </summary>
+    /// <param name="bw"></param>
+    /// <param name="m"></param>
+    public static void WriteMatrixCM(BinaryWriter bw, Matrix4x4 m)
+    {
+        bw.Write(m.M11); bw.Write(m.M21); bw.Write(m.M31); bw.Write(m.M41);
+        bw.Write(m.M12); bw.Write(m.M22); bw.Write(m.M32); bw.Write(m.M42);
+        bw.Write(m.M13); bw.Write(m.M23); bw.Write(m.M33); bw.Write(m.M43);
+        bw.Write(m.M14); bw.Write(m.M24); bw.Write(m.M34); bw.Write(m.M44);
+    }
+
     /// <summary> Write a Vector2 </summary>
     public static void WriteVector2(BinaryWriter bw, Vector2 v)
     {

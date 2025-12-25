@@ -466,6 +466,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Application Settings.
+        /// </summary>
+        public static string AppSettings {
+            get {
+                return ResourceManager.GetString("AppSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to App Theme.
         /// </summary>
         public static string AppTheme {
@@ -3553,6 +3562,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not find file &apos;{0}&apos;..
+        /// </summary>
+        public static string FileNotFoundMessage {
+            get {
+                return ResourceManager.GetString("FileNotFoundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter.
         /// </summary>
         public static string Filter {
@@ -5605,6 +5623,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string MenuExport {
+            get {
+                return ResourceManager.GetString("MenuExport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export As....
         /// </summary>
         public static string MenuExportAs {
@@ -5673,6 +5700,24 @@ namespace RHToolkit.Properties {
         public static string MenuHelp {
             get {
                 return ResourceManager.GetString("MenuHelp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string MenuImport {
+            get {
+                return ResourceManager.GetString("MenuImport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import Map FBX to MMP.
+        /// </summary>
+        public static string MenuImportMapFBX {
+            get {
+                return ResourceManager.GetString("MenuImportMapFBX", resourceCulture);
             }
         }
         
@@ -5749,6 +5794,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset Camera Position.
+        /// </summary>
+        public static string MenuResetCamera {
+            get {
+                return ResourceManager.GetString("MenuResetCamera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string MenuSave {
@@ -5763,6 +5817,15 @@ namespace RHToolkit.Properties {
         public static string MenuSaveAs {
             get {
                 return ResourceManager.GetString("MenuSaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set Client Assets Folder.
+        /// </summary>
+        public static string MenuSetClientAssetsFolder {
+            get {
+                return ResourceManager.GetString("MenuSetClientAssetsFolder", resourceCulture);
             }
         }
         
@@ -5929,6 +5992,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Model Tools.
+        /// </summary>
+        public static string ModelTool_Title {
+            get {
+                return ResourceManager.GetString("ModelTool_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exported MGM → FBX: {0}.
         /// </summary>
         public static string ModelViewerExportedMgmToFbx {
@@ -6082,11 +6154,20 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Current File to FBX.
+        ///   Looks up a localized string similar to Export to FBX.
         /// </summary>
-        public static string ModelViewMenuExportCurrentFileToFBX {
+        public static string ModelViewMenuExportFBX {
             get {
-                return ResourceManager.GetString("ModelViewMenuExportCurrentFileToFBX", resourceCulture);
+                return ResourceManager.GetString("ModelViewMenuExportFBX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Height.
+        /// </summary>
+        public static string ModelViewMenuExportHeight {
+            get {
+                return ResourceManager.GetString("ModelViewMenuExportHeight", resourceCulture);
             }
         }
         
@@ -6096,6 +6177,24 @@ namespace RHToolkit.Properties {
         public static string ModelViewMenuExportOptions {
             get {
                 return ResourceManager.GetString("ModelViewMenuExportOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Separate Objects.
+        /// </summary>
+        public static string ModelViewMenuExportSeparateObjects {
+            get {
+                return ResourceManager.GetString("ModelViewMenuExportSeparateObjects", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export each mmp object as fbx.
+        /// </summary>
+        public static string ModelViewMenuExportSeparateObjectsTooltip {
+            get {
+                return ResourceManager.GetString("ModelViewMenuExportSeparateObjectsTooltip", resourceCulture);
             }
         }
         
@@ -6132,6 +6231,15 @@ namespace RHToolkit.Properties {
         public static string ModelViewMenuNavMeshWireframeTooltip {
             get {
                 return ResourceManager.GetString("ModelViewMenuNavMeshWireframeTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Map Model Window.
+        /// </summary>
+        public static string ModelViewMenuOpenModelWindow {
+            get {
+                return ResourceManager.GetString("ModelViewMenuOpenModelWindow", resourceCulture);
             }
         }
         
@@ -12544,6 +12652,15 @@ namespace RHToolkit.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RH Table Encryption Key.
+        /// </summary>
+        public static string TableEncryptionKey {
+            get {
+                return ResourceManager.GetString("TableEncryptionKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tactical.
         /// </summary>
         public static string TacticalSkill {
@@ -13107,6 +13224,15 @@ namespace RHToolkit.Properties {
         public static string Values {
             get {
                 return ResourceManager.GetString("Values", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Virtual File System Base64 Key (for f00X.dat).
+        /// </summary>
+        public static string VirtualFileSystemKey {
+            get {
+                return ResourceManager.GetString("VirtualFileSystemKey", resourceCulture);
             }
         }
         
