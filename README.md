@@ -51,6 +51,12 @@ To start using Rusty Hearts Toolkit, download the latest release from the [GitHu
   - **Title Editor**: Edit titles and title effects (charactertitle.rh).
   - **World Editor**: Edit world data (world.rh, dungeoninfolist.rh, mapselect_curtis.rh).
 
+### Local Databases
+- **Item Database** 
+- **Item Craft Database**
+- **Item DropGroup Database**
+- **Skill Database**
+
 ## FBX → MMP (EXPERIMENTAL) Import Support
 IMPORTANT
 - This feature is experimental and intended for advanced users and expects FBX files produced by this toolkit’s exporter.
@@ -116,14 +122,7 @@ Updated `TexturePath` for `palme`:
 - The import generates:
   - a new `.mmp`
   - a `.navi` for the updated navigation mesh
-  - a `.height` (height map generated from the `.navi`)
-
-
-### Local Databases
-- **Item Database** 
-- **Item Craft Database**
-- **Item DropGroup Database**
-- **Skill Database** 
+  - a `.height` (height map generated from the `.navi`) 
 
 ## Preview
 
