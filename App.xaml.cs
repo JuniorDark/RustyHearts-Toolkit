@@ -106,8 +106,6 @@ public partial class App : Application
                 _ = services.AddTransient<RHEditorViewModel>();
                 _ = services.AddTransient<WDataEditorWindow>();
                 _ = services.AddTransient<WDataEditorViewModel>();
-                _ = services.AddTransient<MDataEditorWindow>();
-                _ = services.AddTransient<MDataEditorViewModel>();
                 _ = services.AddTransient<ModelViewWindow>();
                 _ = services.AddTransient<ModelViewManager>();
                 _ = services.AddTransient<CashShopEditorWindow>();
